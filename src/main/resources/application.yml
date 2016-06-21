@@ -1,0 +1,77 @@
+# Server settings (ServerProperties)
+server:
+  port: 8080
+  address: 127.0.0.1
+  sessionTimeout: 30
+  contextPath: /mobile-api-dev
+
+#内网数据库
+spring:
+  datasource:
+    attribute:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/wowdsgn
+      username: root
+      password: root
+    user:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/wowdsgn
+      username: root
+      password: root
+    price:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/wowdsgn
+      username: root
+      password: root
+    stock:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/wowdsgn
+      username: root
+      password: root
+    product:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/wowdsgn
+      username: root
+      password: root
+    order:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/wowdsgn
+      username: root
+      password: root
+    marketing:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/wowdsgn
+      username: root
+      password: root
+
+#日志配置
+logging:
+  file: /Users/zhengzhiqing/IdeaProjects/mobile-api/log/mobile-api.log
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: WARN
+      hibernate: WARN
+
+
+## Tomcat specifics
+#tomcat:
+#  accessLogEnabled: false
+#  protocolHeader: x-forwarded-proto
+#  remoteIpHeader: x-forwarded-for
+#  basedir:
+#  backgroundProcessorDelay: 30 # secs
+
+# MyBatis specifics
+#mybatis:
+#  typeAliasesPackage: com.wow.attribute.model,com.wow.user.model
+#  mapperLocations: classpath:/mapper/attribute/*Mapper.xml,classpath:/mapper/user/*Mapper.xml
+
+#  config：mybatis-config.xml配置文件的路径
+#  typeHandlersPackage：扫描typeHandlers的包
+#  checkConfigLocation：检查配置文件是否存在
+#  executorType：设置执行模式（SIMPLE, REUSE, BATCH），默认为SIMPLE
+
+
+# Security specifics

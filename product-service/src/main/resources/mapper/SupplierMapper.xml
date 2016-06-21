@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.product.mapper.SupplierMapper">
+    <resultMap id="BaseResultMap" type="com.wow.product.model.Supplier">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="supplier_name" property="supplierName" jdbcType="VARCHAR"/>
+        <result column="company_name" property="companyName" jdbcType="VARCHAR"/>
+        <result column="site_url" property="siteUrl" jdbcType="VARCHAR"/>
+        <result column="supplier_area_id" property="supplierAreaId" jdbcType="INTEGER"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="ship_address" property="shipAddress" jdbcType="VARCHAR"/>
+        <result column="fax" property="fax" jdbcType="VARCHAR"/>
+        <result column="brand_id" property="brandId" jdbcType="INTEGER"/>
+        <result column="purchase_owner" property="purchaseOwner" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="contact_name" property="contactName" jdbcType="VARCHAR"/>
+        <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
+        <result column="contact_mobile" property="contactMobile" jdbcType="VARCHAR"/>
+        <result column="contact_email" property="contactEmail" jdbcType="VARCHAR"/>
+        <result column="contact_qq" property="contactQq" jdbcType="VARCHAR"/>
+        <result column="open_account_bank" property="openAccountBank" jdbcType="VARCHAR"/>
+        <result column="bank_account_no" property="bankAccountNo" jdbcType="VARCHAR"/>
+        <result column="tax_no" property="taxNo" jdbcType="VARCHAR"/>
+        <result column="pay_latency" property="payLatency" jdbcType="VARCHAR"/>
+        <result column="is_active" property="isActive" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, supplier_name, company_name, site_url, supplier_area_id, address, ship_address,
+        fax, brand_id, purchase_owner, remark, contact_name, contact_phone, contact_mobile,
+        contact_email, contact_qq, open_account_bank, bank_account_no, tax_no, pay_latency,
+        is_active, create_time, create_by, update_time, update_by, is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from supplier
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.product.model.Supplier">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into supplier (supplier_name, company_name, site_url,
+        supplier_area_id, address, ship_address,
+        fax, brand_id, purchase_owner,
+        remark, contact_name, contact_phone,
+        contact_mobile, contact_email, contact_qq,
+        open_account_bank, bank_account_no, tax_no,
+        pay_latency, is_active, create_time,
+        create_by, update_time, update_by,
+        is_deleted)
+        values (#{supplierName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{siteUrl,jdbcType=VARCHAR},
+        #{supplierAreaId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{shipAddress,jdbcType=VARCHAR},
+        #{fax,jdbcType=VARCHAR}, #{brandId,jdbcType=INTEGER}, #{purchaseOwner,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR},
+        #{contactMobile,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, #{contactQq,jdbcType=VARCHAR},
+        #{openAccountBank,jdbcType=VARCHAR}, #{bankAccountNo,jdbcType=VARCHAR}, #{taxNo,jdbcType=VARCHAR},
+        #{payLatency,jdbcType=VARCHAR}, #{isActive,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP},
+        #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+        #{isDeleted,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.product.model.Supplier">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into supplier
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="supplierName != null">
+                supplier_name,
+            </if>
+            <if test="companyName != null">
+                company_name,
+            </if>
+            <if test="siteUrl != null">
+                site_url,
+            </if>
+            <if test="supplierAreaId != null">
+                supplier_area_id,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="shipAddress != null">
+                ship_address,
+            </if>
+            <if test="fax != null">
+                fax,
+            </if>
+            <if test="brandId != null">
+                brand_id,
+            </if>
+            <if test="purchaseOwner != null">
+                purchase_owner,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="contactName != null">
+                contact_name,
+            </if>
+            <if test="contactPhone != null">
+                contact_phone,
+            </if>
+            <if test="contactMobile != null">
+                contact_mobile,
+            </if>
+            <if test="contactEmail != null">
+                contact_email,
+            </if>
+            <if test="contactQq != null">
+                contact_qq,
+            </if>
+            <if test="openAccountBank != null">
+                open_account_bank,
+            </if>
+            <if test="bankAccountNo != null">
+                bank_account_no,
+            </if>
+            <if test="taxNo != null">
+                tax_no,
+            </if>
+            <if test="payLatency != null">
+                pay_latency,
+            </if>
+            <if test="isActive != null">
+                is_active,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="supplierName != null">
+                #{supplierName,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null">
+                #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="siteUrl != null">
+                #{siteUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierAreaId != null">
+                #{supplierAreaId,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="shipAddress != null">
+                #{shipAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null">
+                #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="brandId != null">
+                #{brandId,jdbcType=INTEGER},
+            </if>
+            <if test="purchaseOwner != null">
+                #{purchaseOwner,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="contactName != null">
+                #{contactName,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhone != null">
+                #{contactPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="contactMobile != null">
+                #{contactMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="contactEmail != null">
+                #{contactEmail,jdbcType=VARCHAR},
+            </if>
+            <if test="contactQq != null">
+                #{contactQq,jdbcType=VARCHAR},
+            </if>
+            <if test="openAccountBank != null">
+                #{openAccountBank,jdbcType=VARCHAR},
+            </if>
+            <if test="bankAccountNo != null">
+                #{bankAccountNo,jdbcType=VARCHAR},
+            </if>
+            <if test="taxNo != null">
+                #{taxNo,jdbcType=VARCHAR},
+            </if>
+            <if test="payLatency != null">
+                #{payLatency,jdbcType=VARCHAR},
+            </if>
+            <if test="isActive != null">
+                #{isActive,jdbcType=BIT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

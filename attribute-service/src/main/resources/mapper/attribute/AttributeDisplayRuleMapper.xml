@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.attribute.mapper.AttributeDisplayRuleMapper">
+    <resultMap id="BaseResultMap" type="com.wow.attribute.model.AttributeDisplayRule">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="attribute_group_id" property="attributeGroupId" jdbcType="INTEGER"/>
+        <result column="attribute_id" property="attributeId" jdbcType="INTEGER"/>
+        <result column="is_filter_attribute" property="isFilterAttribute" jdbcType="BIT"/>
+        <result column="sort_order" property="sortOrder" jdbcType="TINYINT"/>
+        <result column="is_among_more" property="isAmongMore" jdbcType="BIT"/>
+        <result column="can_show_in_item_detail" property="canShowInItemDetail" jdbcType="BIT"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, attribute_group_id, attribute_id, is_filter_attribute, sort_order, is_among_more,
+        can_show_in_item_detail, is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from attribute_display_rule
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.attribute.model.AttributeDisplayRule">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into attribute_display_rule (attribute_group_id, attribute_id, is_filter_attribute,
+        sort_order, is_among_more, can_show_in_item_detail,
+        is_deleted)
+        values (#{attributeGroupId,jdbcType=INTEGER}, #{attributeId,jdbcType=INTEGER},
+        #{isFilterAttribute,jdbcType=BIT},
+        #{sortOrder,jdbcType=TINYINT}, #{isAmongMore,jdbcType=BIT}, #{canShowInItemDetail,jdbcType=BIT},
+        #{isDeleted,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.attribute.model.AttributeDisplayRule">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into attribute_display_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="attributeGroupId != null">
+                attribute_group_id,
+            </if>
+            <if test="attributeId != null">
+                attribute_id,
+            </if>
+            <if test="isFilterAttribute != null">
+                is_filter_attribute,
+            </if>
+            <if test="sortOrder != null">
+                sort_order,
+            </if>
+            <if test="isAmongMore != null">
+                is_among_more,
+            </if>
+            <if test="canShowInItemDetail != null">
+                can_show_in_item_detail,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="attributeGroupId != null">
+                #{attributeGroupId,jdbcType=INTEGER},
+            </if>
+            <if test="attributeId != null">
+                #{attributeId,jdbcType=INTEGER},
+            </if>
+            <if test="isFilterAttribute != null">
+                #{isFilterAttribute,jdbcType=BIT},
+            </if>
+            <if test="sortOrder != null">
+                #{sortOrder,jdbcType=TINYINT},
+            </if>
+            <if test="isAmongMore != null">
+                #{isAmongMore,jdbcType=BIT},
+            </if>
+            <if test="canShowInItemDetail != null">
+                #{canShowInItemDetail,jdbcType=BIT},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.price.mapper.ProductPriceChangeLogMapper">
+    <resultMap id="BaseResultMap" type="com.wow.price.model.ProductPriceChangeLog">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="product_id" property="productId" jdbcType="INTEGER"/>
+        <result column="price_type" property="priceType" jdbcType="TINYINT"/>
+        <result column="price_from" property="priceFrom" jdbcType="DECIMAL"/>
+        <result column="price_to" property="priceTo" jdbcType="DECIMAL"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.wow.price.model.ProductPriceChangeLog">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into product_price_change_log (product_id, price_type, price_from,
+        price_to, update_by, update_time
+        )
+        values (#{productId,jdbcType=INTEGER}, #{priceType,jdbcType=TINYINT}, #{priceFrom,jdbcType=DECIMAL},
+        #{priceTo,jdbcType=DECIMAL}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.price.model.ProductPriceChangeLog">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into product_price_change_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="priceType != null">
+                price_type,
+            </if>
+            <if test="priceFrom != null">
+                price_from,
+            </if>
+            <if test="priceTo != null">
+                price_to,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="priceType != null">
+                #{priceType,jdbcType=TINYINT},
+            </if>
+            <if test="priceFrom != null">
+                #{priceFrom,jdbcType=DECIMAL},
+            </if>
+            <if test="priceTo != null">
+                #{priceTo,jdbcType=DECIMAL},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

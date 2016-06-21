@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.product.mapper.ProductSummaryMapper">
+    <resultMap id="BaseResultMap" type="com.wow.product.model.ProductSummary">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="product_id" property="productId" jdbcType="INTEGER"/>
+        <result column="total_sold_num" property="totalSoldNum" jdbcType="INTEGER"/>
+        <result column="seven_days_sold_num" property="sevenDaysSoldNum" jdbcType="INTEGER"/>
+        <result column="total_comments" property="totalComments" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, product_id, total_sold_num, seven_days_sold_num, total_comments, update_time,
+        is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from product_summary
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.product.model.ProductSummary">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into product_summary (product_id, total_sold_num, seven_days_sold_num,
+        total_comments, update_time, is_deleted
+        )
+        values (#{productId,jdbcType=INTEGER}, #{totalSoldNum,jdbcType=INTEGER}, #{sevenDaysSoldNum,jdbcType=INTEGER},
+        #{totalComments,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.product.model.ProductSummary">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into product_summary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="totalSoldNum != null">
+                total_sold_num,
+            </if>
+            <if test="sevenDaysSoldNum != null">
+                seven_days_sold_num,
+            </if>
+            <if test="totalComments != null">
+                total_comments,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="totalSoldNum != null">
+                #{totalSoldNum,jdbcType=INTEGER},
+            </if>
+            <if test="sevenDaysSoldNum != null">
+                #{sevenDaysSoldNum,jdbcType=INTEGER},
+            </if>
+            <if test="totalComments != null">
+                #{totalComments,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

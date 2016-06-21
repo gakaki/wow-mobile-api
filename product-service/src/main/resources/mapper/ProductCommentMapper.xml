@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.product.mapper.ProductCommentMapper">
+    <resultMap id="BaseResultMap" type="com.wow.product.model.ProductComment">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
+        <result column="product_id" property="productId" jdbcType="INTEGER"/>
+        <result column="end_user_id" property="endUserId" jdbcType="INTEGER"/>
+        <result column="packaging_score" property="packagingScore" jdbcType="TINYINT"/>
+        <result column="delivery_speed_score" property="deliverySpeedScore" jdbcType="TINYINT"/>
+        <result column="delivery_service_attitute_score" property="deliveryServiceAttituteScore" jdbcType="TINYINT"/>
+        <result column="product_satisfaction_score" property="productSatisfactionScore" jdbcType="TINYINT"/>
+        <result column="comments" property="comments" jdbcType="VARCHAR"/>
+        <result column="comment_time" property="commentTime" jdbcType="TIMESTAMP"/>
+        <result column="is_approved" property="isApproved" jdbcType="BIT"/>
+        <result column="cs_reply" property="csReply" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, order_id, product_id, end_user_id, packaging_score, delivery_speed_score, delivery_service_attitute_score,
+        product_satisfaction_score, comments, comment_time, is_approved, cs_reply
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from product_comment
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.product.model.ProductComment">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into product_comment (order_id, product_id, end_user_id,
+        packaging_score, delivery_speed_score, delivery_service_attitute_score,
+        product_satisfaction_score, comments, comment_time,
+        is_approved, cs_reply)
+        values (#{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{endUserId,jdbcType=INTEGER},
+        #{packagingScore,jdbcType=TINYINT}, #{deliverySpeedScore,jdbcType=TINYINT},
+        #{deliveryServiceAttituteScore,jdbcType=TINYINT},
+        #{productSatisfactionScore,jdbcType=TINYINT}, #{comments,jdbcType=VARCHAR}, #{commentTime,jdbcType=TIMESTAMP},
+        #{isApproved,jdbcType=BIT}, #{csReply,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.product.model.ProductComment">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into product_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="endUserId != null">
+                end_user_id,
+            </if>
+            <if test="packagingScore != null">
+                packaging_score,
+            </if>
+            <if test="deliverySpeedScore != null">
+                delivery_speed_score,
+            </if>
+            <if test="deliveryServiceAttituteScore != null">
+                delivery_service_attitute_score,
+            </if>
+            <if test="productSatisfactionScore != null">
+                product_satisfaction_score,
+            </if>
+            <if test="comments != null">
+                comments,
+            </if>
+            <if test="commentTime != null">
+                comment_time,
+            </if>
+            <if test="isApproved != null">
+                is_approved,
+            </if>
+            <if test="csReply != null">
+                cs_reply,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="endUserId != null">
+                #{endUserId,jdbcType=INTEGER},
+            </if>
+            <if test="packagingScore != null">
+                #{packagingScore,jdbcType=TINYINT},
+            </if>
+            <if test="deliverySpeedScore != null">
+                #{deliverySpeedScore,jdbcType=TINYINT},
+            </if>
+            <if test="deliveryServiceAttituteScore != null">
+                #{deliveryServiceAttituteScore,jdbcType=TINYINT},
+            </if>
+            <if test="productSatisfactionScore != null">
+                #{productSatisfactionScore,jdbcType=TINYINT},
+            </if>
+            <if test="comments != null">
+                #{comments,jdbcType=VARCHAR},
+            </if>
+            <if test="commentTime != null">
+                #{commentTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isApproved != null">
+                #{isApproved,jdbcType=BIT},
+            </if>
+            <if test="csReply != null">
+                #{csReply,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

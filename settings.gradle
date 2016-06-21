@@ -1,0 +1,9 @@
+rootProject.name = 'mobile-api'
+include 'product-service'
+include 'user-service'
+include 'stock-service'
+include 'price-service'
+include 'attribute-service'
+include 'order-service'
+include 'marketing-service'
+

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.product.mapper.DesignerMapper">
+    <resultMap id="BaseResultMap" type="com.wow.product.model.Designer">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="designer_name" property="designerName" jdbcType="VARCHAR"/>
+        <result column="designer_sex" property="designerSex" jdbcType="TINYINT"/>
+        <result column="designer_country" property="designerCountry" jdbcType="VARCHAR"/>
+        <result column="designer_home_url" property="designerHomeUrl" jdbcType="VARCHAR"/>
+        <result column="designer_photo" property="designerPhoto" jdbcType="VARCHAR"/>
+        <result column="designer_video" property="designerVideo" jdbcType="VARCHAR"/>
+        <result column="designer_desc" property="designerDesc" jdbcType="VARCHAR"/>
+        <result column="designer_style" property="designerStyle" jdbcType="VARCHAR"/>
+        <result column="is_active" property="isActive" jdbcType="BIT"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, designer_name, designer_sex, designer_country, designer_home_url, designer_photo,
+        designer_video, designer_desc, designer_style, is_active, is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from designer
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.product.model.Designer">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into designer (designer_name, designer_sex, designer_country,
+        designer_home_url, designer_photo, designer_video,
+        designer_desc, designer_style, is_active,
+        is_deleted)
+        values (#{designerName,jdbcType=VARCHAR}, #{designerSex,jdbcType=TINYINT}, #{designerCountry,jdbcType=VARCHAR},
+        #{designerHomeUrl,jdbcType=VARCHAR}, #{designerPhoto,jdbcType=VARCHAR}, #{designerVideo,jdbcType=VARCHAR},
+        #{designerDesc,jdbcType=VARCHAR}, #{designerStyle,jdbcType=VARCHAR}, #{isActive,jdbcType=BIT},
+        #{isDeleted,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.product.model.Designer">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into designer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="designerName != null">
+                designer_name,
+            </if>
+            <if test="designerSex != null">
+                designer_sex,
+            </if>
+            <if test="designerCountry != null">
+                designer_country,
+            </if>
+            <if test="designerHomeUrl != null">
+                designer_home_url,
+            </if>
+            <if test="designerPhoto != null">
+                designer_photo,
+            </if>
+            <if test="designerVideo != null">
+                designer_video,
+            </if>
+            <if test="designerDesc != null">
+                designer_desc,
+            </if>
+            <if test="designerStyle != null">
+                designer_style,
+            </if>
+            <if test="isActive != null">
+                is_active,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="designerName != null">
+                #{designerName,jdbcType=VARCHAR},
+            </if>
+            <if test="designerSex != null">
+                #{designerSex,jdbcType=TINYINT},
+            </if>
+            <if test="designerCountry != null">
+                #{designerCountry,jdbcType=VARCHAR},
+            </if>
+            <if test="designerHomeUrl != null">
+                #{designerHomeUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="designerPhoto != null">
+                #{designerPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="designerVideo != null">
+                #{designerVideo,jdbcType=VARCHAR},
+            </if>
+            <if test="designerDesc != null">
+                #{designerDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="designerStyle != null">
+                #{designerStyle,jdbcType=VARCHAR},
+            </if>
+            <if test="isActive != null">
+                #{isActive,jdbcType=BIT},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

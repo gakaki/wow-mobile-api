@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/attribute-service/attribute-service.iml" filepath="$PROJECT_DIR$/.idea/modules/attribute-service/attribute-service.iml" group="attribute-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/attribute-service/attribute-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/attribute-service/attribute-service_main.iml" group="attribute-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/attribute-service/attribute-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/attribute-service/attribute-service_test.iml" group="attribute-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/marketing-service/marketing-service.iml" filepath="$PROJECT_DIR$/.idea/modules/marketing-service/marketing-service.iml" group="marketing-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/marketing-service/marketing-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/marketing-service/marketing-service_main.iml" group="marketing-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/marketing-service/marketing-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/marketing-service/marketing-service_test.iml" group="marketing-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mobile-api.iml" filepath="$PROJECT_DIR$/.idea/modules/mobile-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mobile-api_main.iml" filepath="$PROJECT_DIR$/.idea/modules/mobile-api_main.iml" group="mobile-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mobile-api_test.iml" filepath="$PROJECT_DIR$/.idea/modules/mobile-api_test.iml" group="mobile-api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-service/order-service.iml" filepath="$PROJECT_DIR$/.idea/modules/order-service/order-service.iml" group="order-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-service/order-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/order-service/order-service_main.iml" group="order-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-service/order-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/order-service/order-service_test.iml" group="order-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/price-service/price-service.iml" filepath="$PROJECT_DIR$/.idea/modules/price-service/price-service.iml" group="price-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/price-service/price-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/price-service/price-service_main.iml" group="price-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/price-service/price-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/price-service/price-service_test.iml" group="price-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/product-service/product-service.iml" filepath="$PROJECT_DIR$/.idea/modules/product-service/product-service.iml" group="product-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/product-service/product-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/product-service/product-service_main.iml" group="product-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/product-service/product-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/product-service/product-service_test.iml" group="product-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stock-service/stock-service.iml" filepath="$PROJECT_DIR$/.idea/modules/stock-service/stock-service.iml" group="stock-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stock-service/stock-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/stock-service/stock-service_main.iml" group="stock-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stock-service/stock-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/stock-service/stock-service_test.iml" group="stock-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service/user-service.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service/user-service.iml" group="user-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service/user-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service/user-service_main.iml" group="user-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service/user-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service/user-service_test.iml" group="user-service" />
+    </modules>
+  </component>
+</project>

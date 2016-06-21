@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.order.mapper.ReturnOrderMapper">
+    <resultMap id="BaseResultMap" type="com.wow.order.model.ReturnOrder">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="end_user_id" property="endUserId" jdbcType="INTEGER"/>
+        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
+        <result column="order_item" property="orderItem" jdbcType="INTEGER"/>
+        <result column="order_create_time" property="orderCreateTime" jdbcType="TIMESTAMP"/>
+        <result column="receiver_name" property="receiverName" jdbcType="VARCHAR"/>
+        <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR"/>
+        <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR"/>
+        <result column="return_type" property="returnType" jdbcType="TINYINT"/>
+        <result column="is_submit_by_end_user" property="isSubmitByEndUser" jdbcType="BIT"/>
+        <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP"/>
+        <result column="approve_time" property="approveTime" jdbcType="TIMESTAMP"/>
+        <result column="is_approved" property="isApproved" jdbcType="BIT"/>
+        <result column="reject_reason" property="rejectReason" jdbcType="VARCHAR"/>
+        <result column="return_order_code" property="returnOrderCode" jdbcType="VARCHAR"/>
+        <result column="need_refund" property="needRefund" jdbcType="BIT"/>
+        <result column="is_refunded" property="isRefunded" jdbcType="BIT"/>
+        <result column="is_goods_sent_back" property="isGoodsSentBack" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, end_user_id, order_id, order_item, order_create_time, receiver_name, receiver_mobile,
+        receiver_address, return_type, is_submit_by_end_user, submit_time, approve_time,
+        is_approved, reject_reason, return_order_code, need_refund, is_refunded, is_goods_sent_back,
+        create_time, create_by, update_time, update_by, is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from return_order
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.order.model.ReturnOrder">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into return_order (end_user_id, order_id, order_item,
+        order_create_time, receiver_name, receiver_mobile,
+        receiver_address, return_type, is_submit_by_end_user,
+        submit_time, approve_time, is_approved,
+        reject_reason, return_order_code, need_refund,
+        is_refunded, is_goods_sent_back, create_time,
+        create_by, update_time, update_by,
+        is_deleted)
+        values (#{endUserId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{orderItem,jdbcType=INTEGER},
+        #{orderCreateTime,jdbcType=TIMESTAMP}, #{receiverName,jdbcType=VARCHAR}, #{receiverMobile,jdbcType=VARCHAR},
+        #{receiverAddress,jdbcType=VARCHAR}, #{returnType,jdbcType=TINYINT}, #{isSubmitByEndUser,jdbcType=BIT},
+        #{submitTime,jdbcType=TIMESTAMP}, #{approveTime,jdbcType=TIMESTAMP}, #{isApproved,jdbcType=BIT},
+        #{rejectReason,jdbcType=VARCHAR}, #{returnOrderCode,jdbcType=VARCHAR}, #{needRefund,jdbcType=BIT},
+        #{isRefunded,jdbcType=BIT}, #{isGoodsSentBack,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+        #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+        #{isDeleted,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.order.model.ReturnOrder">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into return_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="endUserId != null">
+                end_user_id,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="orderItem != null">
+                order_item,
+            </if>
+            <if test="orderCreateTime != null">
+                order_create_time,
+            </if>
+            <if test="receiverName != null">
+                receiver_name,
+            </if>
+            <if test="receiverMobile != null">
+                receiver_mobile,
+            </if>
+            <if test="receiverAddress != null">
+                receiver_address,
+            </if>
+            <if test="returnType != null">
+                return_type,
+            </if>
+            <if test="isSubmitByEndUser != null">
+                is_submit_by_end_user,
+            </if>
+            <if test="submitTime != null">
+                submit_time,
+            </if>
+            <if test="approveTime != null">
+                approve_time,
+            </if>
+            <if test="isApproved != null">
+                is_approved,
+            </if>
+            <if test="rejectReason != null">
+                reject_reason,
+            </if>
+            <if test="returnOrderCode != null">
+                return_order_code,
+            </if>
+            <if test="needRefund != null">
+                need_refund,
+            </if>
+            <if test="isRefunded != null">
+                is_refunded,
+            </if>
+            <if test="isGoodsSentBack != null">
+                is_goods_sent_back,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="endUserId != null">
+                #{endUserId,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="orderItem != null">
+                #{orderItem,jdbcType=INTEGER},
+            </if>
+            <if test="orderCreateTime != null">
+                #{orderCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="receiverName != null">
+                #{receiverName,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverMobile != null">
+                #{receiverMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="receiverAddress != null">
+                #{receiverAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="returnType != null">
+                #{returnType,jdbcType=TINYINT},
+            </if>
+            <if test="isSubmitByEndUser != null">
+                #{isSubmitByEndUser,jdbcType=BIT},
+            </if>
+            <if test="submitTime != null">
+                #{submitTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="approveTime != null">
+                #{approveTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isApproved != null">
+                #{isApproved,jdbcType=BIT},
+            </if>
+            <if test="rejectReason != null">
+                #{rejectReason,jdbcType=VARCHAR},
+            </if>
+            <if test="returnOrderCode != null">
+                #{returnOrderCode,jdbcType=VARCHAR},
+            </if>
+            <if test="needRefund != null">
+                #{needRefund,jdbcType=BIT},
+            </if>
+            <if test="isRefunded != null">
+                #{isRefunded,jdbcType=BIT},
+            </if>
+            <if test="isGoodsSentBack != null">
+                #{isGoodsSentBack,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

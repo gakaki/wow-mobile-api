@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.stock.mapper.ProductVirtualStockMapper">
+    <resultMap id="BaseResultMap" type="com.wow.stock.model.ProductVirtualStock">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="product_id" property="productId" jdbcType="INTEGER"/>
+        <result column="virtual_stock_num" property="virtualStockNum" jdbcType="INTEGER"/>
+        <result column="frozen_virtual_stock_num" property="frozenVirtualStockNum" jdbcType="INTEGER"/>
+        <result column="is_active" property="isActive" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, product_id, virtual_stock_num, frozen_virtual_stock_num, is_active, create_time,
+        update_time, is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from product_virtual_stock
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.stock.model.ProductVirtualStock">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into product_virtual_stock (product_id, virtual_stock_num, frozen_virtual_stock_num,
+        is_active, create_time, update_time,
+        is_deleted)
+        values (#{productId,jdbcType=INTEGER}, #{virtualStockNum,jdbcType=INTEGER},
+        #{frozenVirtualStockNum,jdbcType=INTEGER},
+        #{isActive,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+        #{isDeleted,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.stock.model.ProductVirtualStock">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into product_virtual_stock
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="virtualStockNum != null">
+                virtual_stock_num,
+            </if>
+            <if test="frozenVirtualStockNum != null">
+                frozen_virtual_stock_num,
+            </if>
+            <if test="isActive != null">
+                is_active,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productId != null">
+                #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="virtualStockNum != null">
+                #{virtualStockNum,jdbcType=INTEGER},
+            </if>
+            <if test="frozenVirtualStockNum != null">
+                #{frozenVirtualStockNum,jdbcType=INTEGER},
+            </if>
+            <if test="isActive != null">
+                #{isActive,jdbcType=BIT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

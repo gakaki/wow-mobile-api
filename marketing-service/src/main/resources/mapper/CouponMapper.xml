@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.marketing.mapper.CouponMapper">
+    <resultMap id="BaseResultMap" type="com.wow.marketing.model.Coupon">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="coupon_type" property="couponType" jdbcType="TINYINT"/>
+        <result column="effective_from" property="effectiveFrom" jdbcType="TIMESTAMP"/>
+        <result column="effective_to" property="effectiveTo" jdbcType="TIMESTAMP"/>
+        <result column="coupon_title" property="couponTitle" jdbcType="VARCHAR"/>
+        <result column="coupon_desc" property="couponDesc" jdbcType="VARCHAR"/>
+        <result column="coupon_limit_type" property="couponLimitType" jdbcType="TINYINT"/>
+        <result column="discount_rate" property="discountRate" jdbcType="DECIMAL"/>
+        <result column="min_amount_limit" property="minAmountLimit" jdbcType="SMALLINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, coupon_type, effective_from, effective_to, coupon_title, coupon_desc, coupon_limit_type,
+        discount_rate, min_amount_limit
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from coupon
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.marketing.model.Coupon">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into coupon (coupon_type, effective_from, effective_to,
+        coupon_title, coupon_desc, coupon_limit_type,
+        discount_rate, min_amount_limit)
+        values (#{couponType,jdbcType=TINYINT}, #{effectiveFrom,jdbcType=TIMESTAMP}, #{effectiveTo,jdbcType=TIMESTAMP},
+        #{couponTitle,jdbcType=VARCHAR}, #{couponDesc,jdbcType=VARCHAR}, #{couponLimitType,jdbcType=TINYINT},
+        #{discountRate,jdbcType=DECIMAL}, #{minAmountLimit,jdbcType=SMALLINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.marketing.model.Coupon">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couponType != null">
+                coupon_type,
+            </if>
+            <if test="effectiveFrom != null">
+                effective_from,
+            </if>
+            <if test="effectiveTo != null">
+                effective_to,
+            </if>
+            <if test="couponTitle != null">
+                coupon_title,
+            </if>
+            <if test="couponDesc != null">
+                coupon_desc,
+            </if>
+            <if test="couponLimitType != null">
+                coupon_limit_type,
+            </if>
+            <if test="discountRate != null">
+                discount_rate,
+            </if>
+            <if test="minAmountLimit != null">
+                min_amount_limit,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couponType != null">
+                #{couponType,jdbcType=TINYINT},
+            </if>
+            <if test="effectiveFrom != null">
+                #{effectiveFrom,jdbcType=TIMESTAMP},
+            </if>
+            <if test="effectiveTo != null">
+                #{effectiveTo,jdbcType=TIMESTAMP},
+            </if>
+            <if test="couponTitle != null">
+                #{couponTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="couponDesc != null">
+                #{couponDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="couponLimitType != null">
+                #{couponLimitType,jdbcType=TINYINT},
+            </if>
+            <if test="discountRate != null">
+                #{discountRate,jdbcType=DECIMAL},
+            </if>
+            <if test="minAmountLimit != null">
+                #{minAmountLimit,jdbcType=SMALLINT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

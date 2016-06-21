@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.marketing.mapper.InviteeMapper">
+    <resultMap id="BaseResultMap" type="com.wow.marketing.model.Invitee">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="recommend_code" property="recommendCode" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="coupon_id" property="couponId" jdbcType="INTEGER"/>
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
+        <result column="is_registered" property="isRegistered" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, mobile, recommend_code, create_time, coupon_id, register_time, is_registered
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from invitee
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.marketing.model.Invitee">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into invitee (mobile, recommend_code, create_time,
+        coupon_id, register_time, is_registered
+        )
+        values (#{mobile,jdbcType=VARCHAR}, #{recommendCode,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{couponId,jdbcType=INTEGER}, #{registerTime,jdbcType=TIMESTAMP}, #{isRegistered,jdbcType=BIT}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.marketing.model.Invitee">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into invitee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="recommendCode != null">
+                recommend_code,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="couponId != null">
+                coupon_id,
+            </if>
+            <if test="registerTime != null">
+                register_time,
+            </if>
+            <if test="isRegistered != null">
+                is_registered,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendCode != null">
+                #{recommendCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="couponId != null">
+                #{couponId,jdbcType=INTEGER},
+            </if>
+            <if test="registerTime != null">
+                #{registerTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isRegistered != null">
+                #{isRegistered,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

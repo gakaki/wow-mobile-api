@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.product.mapper.SceneMapper">
+    <resultMap id="BaseResultMap" type="com.wow.product.model.Scene">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="scene_name" property="sceneName" jdbcType="VARCHAR"/>
+        <result column="product_id" property="productId" jdbcType="INTEGER"/>
+        <result column="scene_title" property="sceneTitle" jdbcType="VARCHAR"/>
+        <result column="scene_desc" property="sceneDesc" jdbcType="VARCHAR"/>
+        <result column="scene_img" property="sceneImg" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, scene_name, product_id, scene_title, scene_desc, scene_img, create_time, create_by,
+        update_time, update_by, is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from scene
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.product.model.Scene">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into scene (scene_name, product_id, scene_title,
+        scene_desc, scene_img, create_time,
+        create_by, update_time, update_by,
+        is_deleted)
+        values (#{sceneName,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, #{sceneTitle,jdbcType=VARCHAR},
+        #{sceneDesc,jdbcType=VARCHAR}, #{sceneImg,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+        #{isDeleted,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.product.model.Scene">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into scene
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sceneName != null">
+                scene_name,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="sceneTitle != null">
+                scene_title,
+            </if>
+            <if test="sceneDesc != null">
+                scene_desc,
+            </if>
+            <if test="sceneImg != null">
+                scene_img,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sceneName != null">
+                #{sceneName,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="sceneTitle != null">
+                #{sceneTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="sceneDesc != null">
+                #{sceneDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="sceneImg != null">
+                #{sceneImg,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

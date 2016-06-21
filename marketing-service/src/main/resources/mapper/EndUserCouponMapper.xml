@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.marketing.mapper.EndUserCouponMapper">
+    <resultMap id="BaseResultMap" type="com.wow.marketing.model.EndUserCoupon">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="end_user_id" property="endUserId" jdbcType="INTEGER"/>
+        <result column="coupon_id" property="couponId" jdbcType="INTEGER"/>
+        <result column="is_used" property="isUsed" jdbcType="BIT"/>
+        <result column="is_expired" property="isExpired" jdbcType="BIT"/>
+        <result column="bind_time" property="bindTime" jdbcType="TIMESTAMP"/>
+        <result column="used_time" property="usedTime" jdbcType="TIMESTAMP"/>
+        <result column="is_return" property="isReturn" jdbcType="BIT"/>
+        <result column="return_time" property="returnTime" jdbcType="TIMESTAMP"/>
+        <result column="bind_order_id" property="bindOrderId" jdbcType="INTEGER"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, end_user_id, coupon_id, is_used, is_expired, bind_time, used_time, is_return,
+        return_time, bind_order_id, is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from end_user_coupon
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.marketing.model.EndUserCoupon">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into end_user_coupon (end_user_id, coupon_id, is_used,
+        is_expired, bind_time, used_time,
+        is_return, return_time, bind_order_id,
+        is_deleted)
+        values (#{endUserId,jdbcType=INTEGER}, #{couponId,jdbcType=INTEGER}, #{isUsed,jdbcType=BIT},
+        #{isExpired,jdbcType=BIT}, #{bindTime,jdbcType=TIMESTAMP}, #{usedTime,jdbcType=TIMESTAMP},
+        #{isReturn,jdbcType=BIT}, #{returnTime,jdbcType=TIMESTAMP}, #{bindOrderId,jdbcType=INTEGER},
+        #{isDeleted,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.marketing.model.EndUserCoupon">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into end_user_coupon
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="endUserId != null">
+                end_user_id,
+            </if>
+            <if test="couponId != null">
+                coupon_id,
+            </if>
+            <if test="isUsed != null">
+                is_used,
+            </if>
+            <if test="isExpired != null">
+                is_expired,
+            </if>
+            <if test="bindTime != null">
+                bind_time,
+            </if>
+            <if test="usedTime != null">
+                used_time,
+            </if>
+            <if test="isReturn != null">
+                is_return,
+            </if>
+            <if test="returnTime != null">
+                return_time,
+            </if>
+            <if test="bindOrderId != null">
+                bind_order_id,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="endUserId != null">
+                #{endUserId,jdbcType=INTEGER},
+            </if>
+            <if test="couponId != null">
+                #{couponId,jdbcType=INTEGER},
+            </if>
+            <if test="isUsed != null">
+                #{isUsed,jdbcType=BIT},
+            </if>
+            <if test="isExpired != null">
+                #{isExpired,jdbcType=BIT},
+            </if>
+            <if test="bindTime != null">
+                #{bindTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="usedTime != null">
+                #{usedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isReturn != null">
+                #{isReturn,jdbcType=BIT},
+            </if>
+            <if test="returnTime != null">
+                #{returnTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="bindOrderId != null">
+                #{bindOrderId,jdbcType=INTEGER},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>

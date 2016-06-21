@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.product.mapper.BrandMapper">
+    <resultMap id="BaseResultMap" type="com.wow.product.model.Brand">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="brand_name" property="brandName" jdbcType="VARCHAR"/>
+        <result column="brand_name_first_letter" property="brandNameFirstLetter" jdbcType="CHAR"/>
+        <result column="brand_country" property="brandCountry" jdbcType="VARCHAR"/>
+        <result column="brand_home_url" property="brandHomeUrl" jdbcType="VARCHAR"/>
+        <result column="brand_logo_img" property="brandLogoImg" jdbcType="VARCHAR"/>
+        <result column="brand_video" property="brandVideo" jdbcType="VARCHAR"/>
+        <result column="brand_img" property="brandImg" jdbcType="VARCHAR"/>
+        <result column="brand_desc" property="brandDesc" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, brand_name, brand_name_first_letter, brand_country, brand_home_url, brand_logo_img,
+        brand_video, brand_img, brand_desc
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from brand
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.product.model.Brand">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into brand (brand_name, brand_name_first_letter, brand_country,
+        brand_home_url, brand_logo_img, brand_video,
+        brand_img, brand_desc)
+        values (#{brandName,jdbcType=VARCHAR}, #{brandNameFirstLetter,jdbcType=CHAR}, #{brandCountry,jdbcType=VARCHAR},
+        #{brandHomeUrl,jdbcType=VARCHAR}, #{brandLogoImg,jdbcType=VARCHAR}, #{brandVideo,jdbcType=VARCHAR},
+        #{brandImg,jdbcType=VARCHAR}, #{brandDesc,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.product.model.Brand">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="brandName != null">
+                brand_name,
+            </if>
+            <if test="brandNameFirstLetter != null">
+                brand_name_first_letter,
+            </if>
+            <if test="brandCountry != null">
+                brand_country,
+            </if>
+            <if test="brandHomeUrl != null">
+                brand_home_url,
+            </if>
+            <if test="brandLogoImg != null">
+                brand_logo_img,
+            </if>
+            <if test="brandVideo != null">
+                brand_video,
+            </if>
+            <if test="brandImg != null">
+                brand_img,
+            </if>
+            <if test="brandDesc != null">
+                brand_desc,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="brandName != null">
+                #{brandName,jdbcType=VARCHAR},
+            </if>
+            <if test="brandNameFirstLetter != null">
+                #{brandNameFirstLetter,jdbcType=CHAR},
+            </if>
+            <if test="brandCountry != null">
+                #{brandCountry,jdbcType=VARCHAR},
+            </if>
+            <if test="brandHomeUrl != null">
+                #{brandHomeUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="brandLogoImg != null">
+                #{brandLogoImg,jdbcType=VARCHAR},
+            </if>
+            <if test="brandVideo != null">
+                #{brandVideo,jdbcType=VARCHAR},
+            </if>
+            <if test="brandImg != null">
+                #{brandImg,jdbcType=VARCHAR},
+            </if>
+            <if test="brandDesc != null">
+                #{brandDesc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.product.mapper.TopicMapper">
+    <resultMap id="BaseResultMap" type="com.wow.product.model.Topic">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="topic_name" property="topicName" jdbcType="VARCHAR"/>
+        <result column="can_show" property="canShow" jdbcType="BIT"/>
+        <result column="topic_img" property="topicImg" jdbcType="VARCHAR"/>
+        <result column="topic_img_link" property="topicImgLink" jdbcType="VARCHAR"/>
+        <result column="topic_title" property="topicTitle" jdbcType="VARCHAR"/>
+        <result column="topic_desc" property="topicDesc" jdbcType="VARCHAR"/>
+        <result column="follow_num" property="followNum" jdbcType="INTEGER"/>
+        <result column="comment_num" property="commentNum" jdbcType="INTEGER"/>
+        <result column="share_num" property="shareNum" jdbcType="INTEGER"/>
+        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+        <result column="is_allow_comment" property="isAllowComment" jdbcType="BIT"/>
+        <result column="like_num" property="likeNum" jdbcType="INTEGER"/>
+        <result column="product_num_show_along_with_topic" property="productNumShowAlongWithTopic" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, topic_name, can_show, topic_img, topic_img_link, topic_title, topic_desc, follow_num,
+        comment_num, share_num, group_id, is_allow_comment, like_num, product_num_show_along_with_topic,
+        create_time, create_by, update_time, update_by, is_deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from topic
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <insert id="insert" parameterType="com.wow.product.model.Topic">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into topic (topic_name, can_show, topic_img,
+        topic_img_link, topic_title, topic_desc,
+        follow_num, comment_num, share_num,
+        group_id, is_allow_comment, like_num,
+        product_num_show_along_with_topic, create_time,
+        create_by, update_time, update_by,
+        is_deleted)
+        values (#{topicName,jdbcType=VARCHAR}, #{canShow,jdbcType=BIT}, #{topicImg,jdbcType=VARCHAR},
+        #{topicImgLink,jdbcType=VARCHAR}, #{topicTitle,jdbcType=VARCHAR}, #{topicDesc,jdbcType=VARCHAR},
+        #{followNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, #{shareNum,jdbcType=INTEGER},
+        #{groupId,jdbcType=INTEGER}, #{isAllowComment,jdbcType=BIT}, #{likeNum,jdbcType=INTEGER},
+        #{productNumShowAlongWithTopic,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+        #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+        #{isDeleted,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.wow.product.model.Topic">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into topic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="topicName != null">
+                topic_name,
+            </if>
+            <if test="canShow != null">
+                can_show,
+            </if>
+            <if test="topicImg != null">
+                topic_img,
+            </if>
+            <if test="topicImgLink != null">
+                topic_img_link,
+            </if>
+            <if test="topicTitle != null">
+                topic_title,
+            </if>
+            <if test="topicDesc != null">
+                topic_desc,
+            </if>
+            <if test="followNum != null">
+                follow_num,
+            </if>
+            <if test="commentNum != null">
+                comment_num,
+            </if>
+            <if test="shareNum != null">
+                share_num,
+            </if>
+            <if test="groupId != null">
+                group_id,
+            </if>
+            <if test="isAllowComment != null">
+                is_allow_comment,
+            </if>
+            <if test="likeNum != null">
+                like_num,
+            </if>
+            <if test="productNumShowAlongWithTopic != null">
+                product_num_show_along_with_topic,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="topicName != null">
+                #{topicName,jdbcType=VARCHAR},
+            </if>
+            <if test="canShow != null">
+                #{canShow,jdbcType=BIT},
+            </if>
+            <if test="topicImg != null">
+                #{topicImg,jdbcType=VARCHAR},
+            </if>
+            <if test="topicImgLink != null">
+                #{topicImgLink,jdbcType=VARCHAR},
+            </if>
+            <if test="topicTitle != null">
+                #{topicTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="topicDesc != null">
+                #{topicDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="followNum != null">
+                #{followNum,jdbcType=INTEGER},
+            </if>
+            <if test="commentNum != null">
+                #{commentNum,jdbcType=INTEGER},
+            </if>
+            <if test="shareNum != null">
+                #{shareNum,jdbcType=INTEGER},
+            </if>
+            <if test="groupId != null">
+                #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="isAllowComment != null">
+                #{isAllowComment,jdbcType=BIT},
+            </if>
+            <if test="likeNum != null">
+                #{likeNum,jdbcType=INTEGER},
+            </if>
+            <if test="productNumShowAlongWithTopic != null">
+                #{productNumShowAlongWithTopic,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+</mapper>
