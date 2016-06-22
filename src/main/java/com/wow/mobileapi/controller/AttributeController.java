@@ -21,6 +21,7 @@ public class AttributeController {
     private AttributeService attributeService;
 
     @RequestMapping(value = "/v1.0/attributes", method = RequestMethod.POST)
+//    @Deprecated
     public int createAttribute(@RequestBody Attribute newAttribute) {
         logger.info("start to add attribute");
         return attributeService.createAttribute(newAttribute);
@@ -32,18 +33,19 @@ public class AttributeController {
         return attributeService.getAttributeById(id);
     }
 
-    @RequestMapping(value = "/v1.0/attributes/{id}", method = RequestMethod.PUT)
-    public com.wow.attribute.model.Attribute updateAttribute(@RequestBody Attribute updatedAttribute,
-                                                             @PathVariable Integer id) {
-        logger.info("update attribute, id=" + id);
-        Attribute attribute = attributeService.getAttributeById(id);
-        attribute.setAttributeName(updatedAttribute.getAttributeName());
-        attribute.setShowName(updatedAttribute.getShowName());
-        attribute.setCreateTime(new Date());
-        attribute.setUpdateTime(new Date());
-        int updateCnt = attributeService.updateAttribute(attribute);
-        logger.info("update count=" + updateCnt);
+    @RequestMapping(value = "/v2.0/attributes/{id}", method = RequestMethod.GET)
+    public com.wow.attribute.model.Attribute findAttributeV2(@PathVariable Integer id) {
+        logger.info("get attribute, id=" + id);
         return attributeService.getAttributeById(id);
+    }
+
+    @RequestMapping(value = "/v1.0/attributes/{id}", method = RequestMethod.PUT)
+    public int updateAttribute(@RequestBody Attribute updatedAttribute, @PathVariable Integer id) {
+        logger.info("update attribute, id=" + id);
+        if (updatedAttribute.getId() == null) {
+            updatedAttribute.setId(id);
+        }
+        return attributeService.updateAttribute(updatedAttribute);
     }
 
     @RequestMapping(value = "/v1.0/attributes/{id}", method = RequestMethod.DELETE)

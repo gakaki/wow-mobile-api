@@ -44,7 +44,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int updateAttribute(Attribute attribute) {
-        return attributeMapper.updateByPrimaryKey(attribute);
+        return attributeMapper.updateByPrimaryKeySelective(attribute);
     }
 
     /**
