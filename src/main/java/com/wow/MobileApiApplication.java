@@ -24,14 +24,9 @@ public class MobileApiApplication extends WebMvcConfigurerAdapter implements Com
         SpringApplication.run(MobileApiApplication.class, args);
     }
 
-//    @Autowired
-//    private Crawler crawler;
-
     /**
      * 配置拦截器
-     *
      * @param registry
-     * @author lance
      */
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new MustLoginInterceptor()).addPathPatterns("/user/**");
@@ -43,7 +38,7 @@ public class MobileApiApplication extends WebMvcConfigurerAdapter implements Com
      */
     @Scheduled(cron = "0 0 22 * * ?")
     public void reportCurrentTime() {
-//        crawler.getBlogList(1);
+        // put your scheduler code here
     }
 
     /**
@@ -53,6 +48,6 @@ public class MobileApiApplication extends WebMvcConfigurerAdapter implements Com
      */
     public void run(String... args) {
         // Do something...
-        logger.info("mobile api application started. be ready to accept request..");
+        logger.info("Mobile api is started and be ready to accept requests from app(iOS/Android).");
     }
 }

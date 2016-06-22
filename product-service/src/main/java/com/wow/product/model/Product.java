@@ -9,7 +9,7 @@ public class Product implements Serializable {
 
     private String productName;
 
-    private Integer categoryId;
+    private String categoryId;
 
     private Integer brandId;
 
@@ -75,6 +75,16 @@ public class Product implements Serializable {
 
     private Date updateAt;
 
+    private Boolean isDeleted;
+
+    private String material;
+
+    private String style;
+
+    private String applicableScene;
+
+    private String tips;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -93,11 +103,11 @@ public class Product implements Serializable {
         this.productName = productName;
     }
 
-    public Integer getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -357,6 +367,46 @@ public class Product implements Serializable {
         this.updateAt = updateAt;
     }
 
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
+    public String getApplicableScene() {
+        return applicableScene;
+    }
+
+    public void setApplicableScene(String applicableScene) {
+        this.applicableScene = applicableScene;
+    }
+
+    public String getTips() {
+        return tips;
+    }
+
+    public void setTips(String tips) {
+        this.tips = tips;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -398,6 +448,11 @@ public class Product implements Serializable {
         sb.append(", addedAt=").append(addedAt);
         sb.append(", approvalAt=").append(approvalAt);
         sb.append(", updateAt=").append(updateAt);
+        sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", material=").append(material);
+        sb.append(", style=").append(style);
+        sb.append(", applicableScene=").append(applicableScene);
+        sb.append(", tips=").append(tips);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wow.user.mapper.AreaMapper">
-    <resultMap id="BaseResultMap" type="com.wow.user.model.Area">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="area_level" property="areaLevel" jdbcType="TINYINT"/>
-        <result column="province" property="province" jdbcType="VARCHAR"/>
-        <result column="city" property="city" jdbcType="VARCHAR"/>
-        <result column="county" property="county" jdbcType="VARCHAR"/>
-        <result column="town" property="town" jdbcType="VARCHAR"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, area_level, province, city, county, town
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from area
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.user.model.Area">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into area (area_level, province, city,
-        county, town)
-        values (#{areaLevel,jdbcType=TINYINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
-        #{county,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.user.model.Area">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into area
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="areaLevel != null">
-                area_level,
-            </if>
-            <if test="province != null">
-                province,
-            </if>
-            <if test="city != null">
-                city,
-            </if>
-            <if test="county != null">
-                county,
-            </if>
-            <if test="town != null">
-                town,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="areaLevel != null">
-                #{areaLevel,jdbcType=TINYINT},
-            </if>
-            <if test="province != null">
-                #{province,jdbcType=VARCHAR},
-            </if>
-            <if test="city != null">
-                #{city,jdbcType=VARCHAR},
-            </if>
-            <if test="county != null">
-                #{county,jdbcType=VARCHAR},
-            </if>
-            <if test="town != null">
-                #{town,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
+  <resultMap id="BaseResultMap" type="com.wow.user.model.Area">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="area_level" property="areaLevel" jdbcType="TINYINT"/>
+    <result column="province" property="province" jdbcType="VARCHAR"/>
+    <result column="city" property="city" jdbcType="VARCHAR"/>
+    <result column="county" property="county" jdbcType="VARCHAR"/>
+    <result column="town" property="town" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, area_level, province, city, county, town
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from area
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="com.wow.user.model.Area">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into area (area_level, province, city,
+    county, town)
+    values (#{areaLevel,jdbcType=TINYINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+    #{county,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.user.model.Area">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into area
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="areaLevel != null">
+        area_level,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="county != null">
+        county,
+      </if>
+      <if test="town != null">
+        town,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="areaLevel != null">
+        #{areaLevel,jdbcType=TINYINT},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null">
+        #{town,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
 </mapper>

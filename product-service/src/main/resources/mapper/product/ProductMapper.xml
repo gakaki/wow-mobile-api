@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.wow.product.model.Product">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="product_name" property="productName" jdbcType="VARCHAR"/>
-        <result column="category_id" property="categoryId" jdbcType="INTEGER"/>
+        <result column="category_id" property="categoryId" jdbcType="VARCHAR"/>
         <result column="brand_id" property="brandId" jdbcType="INTEGER"/>
         <result column="product_type" property="productType" jdbcType="TINYINT"/>
         <result column="is_combine" property="isCombine" jdbcType="BIT"/>
@@ -37,6 +37,11 @@
         <result column="added_at" property="addedAt" jdbcType="TIMESTAMP"/>
         <result column="approval_at" property="approvalAt" jdbcType="TIMESTAMP"/>
         <result column="update_at" property="updateAt" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+        <result column="material" property="material" jdbcType="VARCHAR"/>
+        <result column="style" property="style" jdbcType="VARCHAR"/>
+        <result column="applicable_scene" property="applicableScene" jdbcType="VARCHAR"/>
+        <result column="tips" property="tips" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, product_name, category_id, brand_id, product_type, is_combine, is_bundling, can_sale,
@@ -44,7 +49,7 @@
         seo_key, is_import, product_model, origin_country, origin_area_id, length, width,
         height, weight, spec_img, verbose_info, need_assemble, is_fragile, post_sale_service_desc,
         is_presale, product_status, reject_reason, on_shelf_time, added_at, approval_at,
-        update_at
+        update_at, is_deleted, material, style, applicable_scene, tips
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -67,8 +72,10 @@
         need_assemble, is_fragile, post_sale_service_desc,
         is_presale, product_status, reject_reason,
         on_shelf_time, added_at, approval_at,
-        update_at)
-        values (#{productName,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER},
+        update_at, is_deleted, material,
+        style, applicable_scene, tips
+        )
+        values (#{productName,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, #{brandId,jdbcType=INTEGER},
         #{productType,jdbcType=TINYINT}, #{isCombine,jdbcType=BIT}, #{isBundling,jdbcType=BIT},
         #{canSale,jdbcType=BIT}, #{canShow,jdbcType=BIT}, #{viewPlatform,jdbcType=TINYINT},
         #{detailDescription,jdbcType=VARCHAR}, #{shortDescription,jdbcType=VARCHAR}, #{seoTitle,jdbcType=VARCHAR},
@@ -79,7 +86,9 @@
         #{needAssemble,jdbcType=BIT}, #{isFragile,jdbcType=BIT}, #{postSaleServiceDesc,jdbcType=VARCHAR},
         #{isPresale,jdbcType=BIT}, #{productStatus,jdbcType=DECIMAL}, #{rejectReason,jdbcType=VARCHAR},
         #{onShelfTime,jdbcType=TIMESTAMP}, #{addedAt,jdbcType=TIMESTAMP}, #{approvalAt,jdbcType=TIMESTAMP},
-        #{updateAt,jdbcType=TIMESTAMP})
+        #{updateAt,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}, #{material,jdbcType=VARCHAR},
+        #{style,jdbcType=VARCHAR}, #{applicableScene,jdbcType=VARCHAR}, #{tips,jdbcType=VARCHAR}
+        )
     </insert>
     <insert id="insertSelective" parameterType="com.wow.product.model.Product">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
@@ -189,13 +198,28 @@
             <if test="updateAt != null">
                 update_at,
             </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="material != null">
+                material,
+            </if>
+            <if test="style != null">
+                style,
+            </if>
+            <if test="applicableScene != null">
+                applicable_scene,
+            </if>
+            <if test="tips != null">
+                tips,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="productName != null">
                 #{productName,jdbcType=VARCHAR},
             </if>
             <if test="categoryId != null">
-                #{categoryId,jdbcType=INTEGER},
+                #{categoryId,jdbcType=VARCHAR},
             </if>
             <if test="brandId != null">
                 #{brandId,jdbcType=INTEGER},
@@ -292,6 +316,21 @@
             </if>
             <if test="updateAt != null">
                 #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=BIT},
+            </if>
+            <if test="material != null">
+                #{material,jdbcType=VARCHAR},
+            </if>
+            <if test="style != null">
+                #{style,jdbcType=VARCHAR},
+            </if>
+            <if test="applicableScene != null">
+                #{applicableScene,jdbcType=VARCHAR},
+            </if>
+            <if test="tips != null">
+                #{tips,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

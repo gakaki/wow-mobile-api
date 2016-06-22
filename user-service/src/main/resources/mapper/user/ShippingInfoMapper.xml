@@ -1,126 +1,126 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wow.user.mapper.ShippingInfoMapper">
-    <resultMap id="BaseResultMap" type="com.wow.user.model.ShippingInfo">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="end_user_id" property="endUserId" jdbcType="INTEGER"/>
-        <result column="receiver_name" property="receiverName" jdbcType="VARCHAR"/>
-        <result column="area_id" property="areaId" jdbcType="INTEGER"/>
-        <result column="address_detail" property="addressDetail" jdbcType="VARCHAR"/>
-        <result column="address_alias" property="addressAlias" jdbcType="VARCHAR"/>
-        <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR"/>
-        <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR"/>
-        <result column="receiver_email" property="receiverEmail" jdbcType="VARCHAR"/>
-        <result column="is_default" property="isDefault" jdbcType="BIT"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, end_user_id, receiver_name, area_id, address_detail, address_alias, receiver_mobile,
-        receiver_phone, receiver_email, is_default, create_time, update_time, is_deleted
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from shipping_info
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.user.model.ShippingInfo">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into shipping_info (end_user_id, receiver_name, area_id,
-        address_detail, address_alias, receiver_mobile,
-        receiver_phone, receiver_email, is_default,
-        create_time, update_time, is_deleted
-        )
-        values (#{endUserId,jdbcType=INTEGER}, #{receiverName,jdbcType=VARCHAR}, #{areaId,jdbcType=INTEGER},
-        #{addressDetail,jdbcType=VARCHAR}, #{addressAlias,jdbcType=VARCHAR}, #{receiverMobile,jdbcType=VARCHAR},
-        #{receiverPhone,jdbcType=VARCHAR}, #{receiverEmail,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT},
-        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
-        )
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.user.model.ShippingInfo">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into shipping_info
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="endUserId != null">
-                end_user_id,
-            </if>
-            <if test="receiverName != null">
-                receiver_name,
-            </if>
-            <if test="areaId != null">
-                area_id,
-            </if>
-            <if test="addressDetail != null">
-                address_detail,
-            </if>
-            <if test="addressAlias != null">
-                address_alias,
-            </if>
-            <if test="receiverMobile != null">
-                receiver_mobile,
-            </if>
-            <if test="receiverPhone != null">
-                receiver_phone,
-            </if>
-            <if test="receiverEmail != null">
-                receiver_email,
-            </if>
-            <if test="isDefault != null">
-                is_default,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="endUserId != null">
-                #{endUserId,jdbcType=INTEGER},
-            </if>
-            <if test="receiverName != null">
-                #{receiverName,jdbcType=VARCHAR},
-            </if>
-            <if test="areaId != null">
-                #{areaId,jdbcType=INTEGER},
-            </if>
-            <if test="addressDetail != null">
-                #{addressDetail,jdbcType=VARCHAR},
-            </if>
-            <if test="addressAlias != null">
-                #{addressAlias,jdbcType=VARCHAR},
-            </if>
-            <if test="receiverMobile != null">
-                #{receiverMobile,jdbcType=VARCHAR},
-            </if>
-            <if test="receiverPhone != null">
-                #{receiverPhone,jdbcType=VARCHAR},
-            </if>
-            <if test="receiverEmail != null">
-                #{receiverEmail,jdbcType=VARCHAR},
-            </if>
-            <if test="isDefault != null">
-                #{isDefault,jdbcType=BIT},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=BIT},
-            </if>
-        </trim>
-    </insert>
+  <resultMap id="BaseResultMap" type="com.wow.user.model.ShippingInfo">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="end_user_id" property="endUserId" jdbcType="INTEGER"/>
+    <result column="receiver_name" property="receiverName" jdbcType="VARCHAR"/>
+    <result column="area_id" property="areaId" jdbcType="INTEGER"/>
+    <result column="address_detail" property="addressDetail" jdbcType="VARCHAR"/>
+    <result column="address_alias" property="addressAlias" jdbcType="VARCHAR"/>
+    <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR"/>
+    <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR"/>
+    <result column="receiver_email" property="receiverEmail" jdbcType="VARCHAR"/>
+    <result column="is_default" property="isDefault" jdbcType="BIT"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, end_user_id, receiver_name, area_id, address_detail, address_alias, receiver_mobile,
+    receiver_phone, receiver_email, is_default, create_time, update_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from shipping_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="com.wow.user.model.ShippingInfo">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into shipping_info (end_user_id, receiver_name, area_id,
+    address_detail, address_alias, receiver_mobile,
+    receiver_phone, receiver_email, is_default,
+    create_time, update_time, is_deleted
+    )
+    values (#{endUserId,jdbcType=INTEGER}, #{receiverName,jdbcType=VARCHAR}, #{areaId,jdbcType=INTEGER},
+    #{addressDetail,jdbcType=VARCHAR}, #{addressAlias,jdbcType=VARCHAR}, #{receiverMobile,jdbcType=VARCHAR},
+    #{receiverPhone,jdbcType=VARCHAR}, #{receiverEmail,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT},
+    #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.user.model.ShippingInfo">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into shipping_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="endUserId != null">
+        end_user_id,
+      </if>
+      <if test="receiverName != null">
+        receiver_name,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="addressDetail != null">
+        address_detail,
+      </if>
+      <if test="addressAlias != null">
+        address_alias,
+      </if>
+      <if test="receiverMobile != null">
+        receiver_mobile,
+      </if>
+      <if test="receiverPhone != null">
+        receiver_phone,
+      </if>
+      <if test="receiverEmail != null">
+        receiver_email,
+      </if>
+      <if test="isDefault != null">
+        is_default,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="endUserId != null">
+        #{endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="receiverName != null">
+        #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="addressDetail != null">
+        #{addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="addressAlias != null">
+        #{addressAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverMobile != null">
+        #{receiverMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPhone != null">
+        #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverEmail != null">
+        #{receiverEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="isDefault != null">
+        #{isDefault,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
 </mapper>

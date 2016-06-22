@@ -7,7 +7,7 @@
         <result column="can_show" property="canShow" jdbcType="BIT"/>
         <result column="topic_img" property="topicImg" jdbcType="VARCHAR"/>
         <result column="topic_img_link" property="topicImgLink" jdbcType="VARCHAR"/>
-        <result column="topic_title" property="topicTitle" jdbcType="VARCHAR"/>
+        <result column="topic_main_title" property="topicMainTitle" jdbcType="VARCHAR"/>
         <result column="topic_desc" property="topicDesc" jdbcType="VARCHAR"/>
         <result column="follow_num" property="followNum" jdbcType="INTEGER"/>
         <result column="comment_num" property="commentNum" jdbcType="INTEGER"/>
@@ -21,15 +21,24 @@
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+        <result column="topic_type" property="topicType" jdbcType="TINYINT"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.wow.product.model.Topic" extends="BaseResultMap">
+        <result column="topic_content_details" property="topicContentDetails" jdbcType="LONGVARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, topic_name, can_show, topic_img, topic_img_link, topic_title, topic_desc, follow_num,
-        comment_num, share_num, group_id, is_allow_comment, like_num, product_num_show_along_with_topic,
-        create_time, create_by, update_time, update_by, is_deleted
+        id, topic_name, can_show, topic_img, topic_img_link, topic_main_title, topic_desc,
+        follow_num, comment_num, share_num, group_id, is_allow_comment, like_num, product_num_show_along_with_topic,
+        create_time, create_by, update_time, update_by, is_deleted, topic_type
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <sql id="Blob_Column_List">
+        topic_content_details
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
         from topic
         where id = #{id,jdbcType=INTEGER}
     </select>
@@ -38,19 +47,21 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into topic (topic_name, can_show, topic_img,
-        topic_img_link, topic_title, topic_desc,
+        topic_img_link, topic_main_title, topic_desc,
         follow_num, comment_num, share_num,
         group_id, is_allow_comment, like_num,
         product_num_show_along_with_topic, create_time,
         create_by, update_time, update_by,
-        is_deleted)
+        is_deleted, topic_type, topic_content_details
+        )
         values (#{topicName,jdbcType=VARCHAR}, #{canShow,jdbcType=BIT}, #{topicImg,jdbcType=VARCHAR},
-        #{topicImgLink,jdbcType=VARCHAR}, #{topicTitle,jdbcType=VARCHAR}, #{topicDesc,jdbcType=VARCHAR},
+        #{topicImgLink,jdbcType=VARCHAR}, #{topicMainTitle,jdbcType=VARCHAR}, #{topicDesc,jdbcType=VARCHAR},
         #{followNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, #{shareNum,jdbcType=INTEGER},
         #{groupId,jdbcType=INTEGER}, #{isAllowComment,jdbcType=BIT}, #{likeNum,jdbcType=INTEGER},
         #{productNumShowAlongWithTopic,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
         #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
-        #{isDeleted,jdbcType=BIT})
+        #{isDeleted,jdbcType=BIT}, #{topicType,jdbcType=TINYINT}, #{topicContentDetails,jdbcType=LONGVARCHAR}
+        )
     </insert>
     <insert id="insertSelective" parameterType="com.wow.product.model.Topic">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
@@ -70,8 +81,8 @@
             <if test="topicImgLink != null">
                 topic_img_link,
             </if>
-            <if test="topicTitle != null">
-                topic_title,
+            <if test="topicMainTitle != null">
+                topic_main_title,
             </if>
             <if test="topicDesc != null">
                 topic_desc,
@@ -112,6 +123,12 @@
             <if test="isDeleted != null">
                 is_deleted,
             </if>
+            <if test="topicType != null">
+                topic_type,
+            </if>
+            <if test="topicContentDetails != null">
+                topic_content_details,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="topicName != null">
@@ -126,8 +143,8 @@
             <if test="topicImgLink != null">
                 #{topicImgLink,jdbcType=VARCHAR},
             </if>
-            <if test="topicTitle != null">
-                #{topicTitle,jdbcType=VARCHAR},
+            <if test="topicMainTitle != null">
+                #{topicMainTitle,jdbcType=VARCHAR},
             </if>
             <if test="topicDesc != null">
                 #{topicDesc,jdbcType=VARCHAR},
@@ -167,6 +184,12 @@
             </if>
             <if test="isDeleted != null">
                 #{isDeleted,jdbcType=BIT},
+            </if>
+            <if test="topicType != null">
+                #{topicType,jdbcType=TINYINT},
+            </if>
+            <if test="topicContentDetails != null">
+                #{topicContentDetails,jdbcType=LONGVARCHAR},
             </if>
         </trim>
     </insert>

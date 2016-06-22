@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableAutoConfiguration
-@MapperScan("com.wow.user.mapper")
+@MapperScan("com.wow.marketing.mapper")
 public class MarketingDBConfig {
 
     @Bean(name = "marketingDataSource")

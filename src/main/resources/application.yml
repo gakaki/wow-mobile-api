@@ -46,13 +46,12 @@ spring:
 
 #日志配置
 logging:
-  file: /Users/zhengzhiqing/IdeaProjects/mobile-api/log/mobile-api.log
+  file: ${HOME}/ApplicationLog/mobile-api/spring-mobile-api.log
   level:
     root: INFO
     org:
       springframework:
         web: WARN
-      hibernate: WARN
 
 
 ## Tomcat specifics

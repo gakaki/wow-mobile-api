@@ -20,6 +20,14 @@ public class ProductImage implements Serializable {
 
     private Boolean isDeleted;
 
+    private Byte viewPlatform;
+
+    private Boolean isPrimary;
+
+    private Boolean isSecondary;
+
+    private String imageDesc;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -86,6 +94,38 @@ public class ProductImage implements Serializable {
         this.isDeleted = isDeleted;
     }
 
+    public Byte getViewPlatform() {
+        return viewPlatform;
+    }
+
+    public void setViewPlatform(Byte viewPlatform) {
+        this.viewPlatform = viewPlatform;
+    }
+
+    public Boolean getIsPrimary() {
+        return isPrimary;
+    }
+
+    public void setIsPrimary(Boolean isPrimary) {
+        this.isPrimary = isPrimary;
+    }
+
+    public Boolean getIsSecondary() {
+        return isSecondary;
+    }
+
+    public void setIsSecondary(Boolean isSecondary) {
+        this.isSecondary = isSecondary;
+    }
+
+    public String getImageDesc() {
+        return imageDesc;
+    }
+
+    public void setImageDesc(String imageDesc) {
+        this.imageDesc = imageDesc;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -100,6 +140,10 @@ public class ProductImage implements Serializable {
         sb.append(", udpateTime=").append(udpateTime);
         sb.append(", updateBy=").append(updateBy);
         sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", viewPlatform=").append(viewPlatform);
+        sb.append(", isPrimary=").append(isPrimary);
+        sb.append(", isSecondary=").append(isSecondary);
+        sb.append(", imageDesc=").append(imageDesc);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

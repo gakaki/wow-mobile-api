@@ -10,10 +10,14 @@
         <result column="udpate_time" property="udpateTime" jdbcType="TIMESTAMP"/>
         <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
         <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+        <result column="view_platform" property="viewPlatform" jdbcType="TINYINT"/>
+        <result column="is_primary" property="isPrimary" jdbcType="BIT"/>
+        <result column="is_secondary" property="isSecondary" jdbcType="BIT"/>
+        <result column="image_desc" property="imageDesc" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, product_id, product_img_url, create_time, create_by, udpate_time, update_by,
-        is_deleted
+        is_deleted, view_platform, is_primary, is_secondary, image_desc
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -27,10 +31,12 @@
         </selectKey>
         insert into product_image (product_id, product_img_url, create_time,
         create_by, udpate_time, update_by,
-        is_deleted)
+        is_deleted, view_platform, is_primary,
+        is_secondary, image_desc)
         values (#{productId,jdbcType=INTEGER}, #{productImgUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
         #{createBy,jdbcType=VARCHAR}, #{udpateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
-        #{isDeleted,jdbcType=BIT})
+        #{isDeleted,jdbcType=BIT}, #{viewPlatform,jdbcType=TINYINT}, #{isPrimary,jdbcType=BIT},
+        #{isSecondary,jdbcType=BIT}, #{imageDesc,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.wow.product.model.ProductImage">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
@@ -59,6 +65,18 @@
             <if test="isDeleted != null">
                 is_deleted,
             </if>
+            <if test="viewPlatform != null">
+                view_platform,
+            </if>
+            <if test="isPrimary != null">
+                is_primary,
+            </if>
+            <if test="isSecondary != null">
+                is_secondary,
+            </if>
+            <if test="imageDesc != null">
+                image_desc,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="productId != null">
@@ -81,6 +99,18 @@
             </if>
             <if test="isDeleted != null">
                 #{isDeleted,jdbcType=BIT},
+            </if>
+            <if test="viewPlatform != null">
+                #{viewPlatform,jdbcType=TINYINT},
+            </if>
+            <if test="isPrimary != null">
+                #{isPrimary,jdbcType=BIT},
+            </if>
+            <if test="isSecondary != null">
+                #{isSecondary,jdbcType=BIT},
+            </if>
+            <if test="imageDesc != null">
+                #{imageDesc,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

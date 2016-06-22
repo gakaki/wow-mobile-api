@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableAutoConfiguration
-@MapperScan("com.wow.order.mapper")
+@MapperScan("com.wow.price.mapper")
 public class PriceDBConfig {
 
     @Bean(name = "orderDataSource")

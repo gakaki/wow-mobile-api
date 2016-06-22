@@ -1,103 +1,103 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wow.user.mapper.ShoppingCartMapper">
-    <resultMap id="BaseResultMap" type="com.wow.user.model.ShoppingCart">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="end_user_id" property="endUserId" jdbcType="INTEGER"/>
-        <result column="product_id" property="productId" jdbcType="INTEGER"/>
-        <result column="product_num" property="productNum" jdbcType="TINYINT"/>
-        <result column="product_price" property="productPrice" jdbcType="DECIMAL"/>
-        <result column="weight" property="weight" jdbcType="DECIMAL"/>
-        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-        <result column="price_type" property="priceType" jdbcType="TINYINT"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, end_user_id, product_id, product_num, product_price, weight, add_time, update_time,
-        is_deleted, price_type
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from shopping_cart
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.user.model.ShoppingCart">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into shopping_cart (end_user_id, product_id, product_num,
-        product_price, weight, add_time,
-        update_time, is_deleted, price_type
-        )
-        values (#{endUserId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{productNum,jdbcType=TINYINT},
-        #{productPrice,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, #{addTime,jdbcType=TIMESTAMP},
-        #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}, #{priceType,jdbcType=TINYINT}
-        )
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.user.model.ShoppingCart">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into shopping_cart
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="endUserId != null">
-                end_user_id,
-            </if>
-            <if test="productId != null">
-                product_id,
-            </if>
-            <if test="productNum != null">
-                product_num,
-            </if>
-            <if test="productPrice != null">
-                product_price,
-            </if>
-            <if test="weight != null">
-                weight,
-            </if>
-            <if test="addTime != null">
-                add_time,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-            <if test="priceType != null">
-                price_type,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="endUserId != null">
-                #{endUserId,jdbcType=INTEGER},
-            </if>
-            <if test="productId != null">
-                #{productId,jdbcType=INTEGER},
-            </if>
-            <if test="productNum != null">
-                #{productNum,jdbcType=TINYINT},
-            </if>
-            <if test="productPrice != null">
-                #{productPrice,jdbcType=DECIMAL},
-            </if>
-            <if test="weight != null">
-                #{weight,jdbcType=DECIMAL},
-            </if>
-            <if test="addTime != null">
-                #{addTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=BIT},
-            </if>
-            <if test="priceType != null">
-                #{priceType,jdbcType=TINYINT},
-            </if>
-        </trim>
-    </insert>
+  <resultMap id="BaseResultMap" type="com.wow.user.model.ShoppingCart">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="end_user_id" property="endUserId" jdbcType="INTEGER"/>
+    <result column="product_id" property="productId" jdbcType="INTEGER"/>
+    <result column="product_num" property="productNum" jdbcType="TINYINT"/>
+    <result column="product_price" property="productPrice" jdbcType="DECIMAL"/>
+    <result column="weight" property="weight" jdbcType="DECIMAL"/>
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
+    <result column="price_type" property="priceType" jdbcType="TINYINT"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, end_user_id, product_id, product_num, product_price, weight, add_time, update_time,
+    is_deleted, price_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from shopping_cart
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="com.wow.user.model.ShoppingCart">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into shopping_cart (end_user_id, product_id, product_num,
+    product_price, weight, add_time,
+    update_time, is_deleted, price_type
+    )
+    values (#{endUserId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{productNum,jdbcType=TINYINT},
+    #{productPrice,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, #{addTime,jdbcType=TIMESTAMP},
+    #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}, #{priceType,jdbcType=TINYINT}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.user.model.ShoppingCart">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into shopping_cart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="endUserId != null">
+        end_user_id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="productNum != null">
+        product_num,
+      </if>
+      <if test="productPrice != null">
+        product_price,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="priceType != null">
+        price_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="endUserId != null">
+        #{endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="productNum != null">
+        #{productNum,jdbcType=TINYINT},
+      </if>
+      <if test="productPrice != null">
+        #{productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="priceType != null">
+        #{priceType,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
 </mapper>

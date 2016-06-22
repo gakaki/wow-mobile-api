@@ -47,31 +47,31 @@ public class AttributeApplication {
         return attributeService.getAttributeById(attributeId);
     }
 
-    @Bean(name = "attributeDataSource")
-    @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.attribute")
-    public DataSource attributeDataSource() {
-        return DataSourceBuilder.create().build();
-    }
-
-    @Bean(name = "attributeSqlSessionFactory")
-    @Primary
-    public SqlSessionFactory attributeSqlSessionFactory(@Qualifier("attributeDataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-        bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/attribute/*Mapper.xml"));
-        return bean.getObject();
-    }
-
-    @Bean(name = "attributeTransactionManager")
-    @Primary
-    public DataSourceTransactionManager attributeTransactionManager(@Qualifier("attributeDataSource") DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
-
-    @Bean(name = "attributeSqlSessionTemplate")
-    @Primary
-    public SqlSessionTemplate attributeSqlSessionTemplate(@Qualifier("attributeSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
-        return new SqlSessionTemplate(sqlSessionFactory);
-    }
+//    @Bean(name = "attributeDataSource")
+//    @Primary
+//    @ConfigurationProperties(prefix = "spring.datasource.attribute")
+//    public DataSource attributeDataSource() {
+//        return DataSourceBuilder.create().build();
+//    }
+//
+//    @Bean(name = "attributeSqlSessionFactory")
+//    @Primary
+//    public SqlSessionFactory attributeSqlSessionFactory(@Qualifier("attributeDataSource") DataSource dataSource) throws Exception {
+//        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+//        bean.setDataSource(dataSource);
+//        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/attribute/*Mapper.xml"));
+//        return bean.getObject();
+//    }
+//
+//    @Bean(name = "attributeTransactionManager")
+//    @Primary
+//    public DataSourceTransactionManager attributeTransactionManager(@Qualifier("attributeDataSource") DataSource dataSource) {
+//        return new DataSourceTransactionManager(dataSource);
+//    }
+//
+//    @Bean(name = "attributeSqlSessionTemplate")
+//    @Primary
+//    public SqlSessionTemplate attributeSqlSessionTemplate(@Qualifier("attributeSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+//        return new SqlSessionTemplate(sqlSessionFactory);
+//    }
 }

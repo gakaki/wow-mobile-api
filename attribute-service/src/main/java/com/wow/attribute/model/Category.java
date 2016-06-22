@@ -15,6 +15,10 @@ public class Category implements Serializable {
 
     private Integer attributeGroupId;
 
+    private String categoryIconSmall;
+
+    private String categoryIconBig;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -65,6 +69,22 @@ public class Category implements Serializable {
         this.attributeGroupId = attributeGroupId;
     }
 
+    public String getCategoryIconSmall() {
+        return categoryIconSmall;
+    }
+
+    public void setCategoryIconSmall(String categoryIconSmall) {
+        this.categoryIconSmall = categoryIconSmall;
+    }
+
+    public String getCategoryIconBig() {
+        return categoryIconBig;
+    }
+
+    public void setCategoryIconBig(String categoryIconBig) {
+        this.categoryIconBig = categoryIconBig;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -77,6 +97,8 @@ public class Category implements Serializable {
         sb.append(", categoryLevel=").append(categoryLevel);
         sb.append(", categoryDesc=").append(categoryDesc);
         sb.append(", attributeGroupId=").append(attributeGroupId);
+        sb.append(", categoryIconSmall=").append(categoryIconSmall);
+        sb.append(", categoryIconBig=").append(categoryIconBig);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -14,7 +14,7 @@ public class Topic implements Serializable {
 
     private String topicImgLink;
 
-    private String topicTitle;
+    private String topicMainTitle;
 
     private String topicDesc;
 
@@ -41,6 +41,10 @@ public class Topic implements Serializable {
     private String updateBy;
 
     private Boolean isDeleted;
+
+    private Byte topicType;
+
+    private String topicContentDetails;
 
     private static final long serialVersionUID = 1L;
 
@@ -84,12 +88,12 @@ public class Topic implements Serializable {
         this.topicImgLink = topicImgLink;
     }
 
-    public String getTopicTitle() {
-        return topicTitle;
+    public String getTopicMainTitle() {
+        return topicMainTitle;
     }
 
-    public void setTopicTitle(String topicTitle) {
-        this.topicTitle = topicTitle;
+    public void setTopicMainTitle(String topicMainTitle) {
+        this.topicMainTitle = topicMainTitle;
     }
 
     public String getTopicDesc() {
@@ -196,6 +200,22 @@ public class Topic implements Serializable {
         this.isDeleted = isDeleted;
     }
 
+    public Byte getTopicType() {
+        return topicType;
+    }
+
+    public void setTopicType(Byte topicType) {
+        this.topicType = topicType;
+    }
+
+    public String getTopicContentDetails() {
+        return topicContentDetails;
+    }
+
+    public void setTopicContentDetails(String topicContentDetails) {
+        this.topicContentDetails = topicContentDetails;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -207,7 +227,7 @@ public class Topic implements Serializable {
         sb.append(", canShow=").append(canShow);
         sb.append(", topicImg=").append(topicImg);
         sb.append(", topicImgLink=").append(topicImgLink);
-        sb.append(", topicTitle=").append(topicTitle);
+        sb.append(", topicMainTitle=").append(topicMainTitle);
         sb.append(", topicDesc=").append(topicDesc);
         sb.append(", followNum=").append(followNum);
         sb.append(", commentNum=").append(commentNum);
@@ -221,6 +241,8 @@ public class Topic implements Serializable {
         sb.append(", updateTime=").append(updateTime);
         sb.append(", updateBy=").append(updateBy);
         sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", topicType=").append(topicType);
+        sb.append(", topicContentDetails=").append(topicContentDetails);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
