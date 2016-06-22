@@ -57,159 +57,159 @@
         <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
         <table schema="root" tableName="area" domainObjectName="Area" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user" domainObjectName="EndUser" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_follow_brand" domainObjectName="EndUserFollowBrand" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_follow_designer" domainObjectName="EndUserFollowDesigner"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_follow_product" domainObjectName="EndUserFollowProduct"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_follow_scene" domainObjectName="EndUserFollowScene" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_login_log" domainObjectName="EndUserLoginLog" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_session" domainObjectName="EndUserSession" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_share_brand" domainObjectName="EndUserShareBrand" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_share_designer" domainObjectName="EndUserShareDesigner"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_share_product" domainObjectName="EndUserShareProduct"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="end_user_share_scene" domainObjectName="EndUserShareScene" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="shipping_info" domainObjectName="ShippingInfo" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="shopping_cart" domainObjectName="ShoppingCart" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 

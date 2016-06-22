@@ -1,110 +1,306 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.user.mapper.EndUserShareDesignerMapper">
-  <resultMap id="BaseResultMap" type="com.wow.user.model.EndUserShareDesigner">
-    <id column="id" property="id" jdbcType="INTEGER"/>
-    <result column="end_user_id" property="endUserId" jdbcType="INTEGER"/>
-    <result column="designer_id" property="designerId" jdbcType="INTEGER"/>
-    <result column="share_title" property="shareTitle" jdbcType="VARCHAR"/>
-    <result column="share_desc" property="shareDesc" jdbcType="VARCHAR"/>
-    <result column="share_url" property="shareUrl" jdbcType="VARCHAR"/>
-    <result column="share_img" property="shareImg" jdbcType="VARCHAR"/>
-    <result column="share_channel" property="shareChannel" jdbcType="TINYINT"/>
-    <result column="recommend_code" property="recommendCode" jdbcType="VARCHAR"/>
-    <result column="share_time" property="shareTime" jdbcType="TIMESTAMP"/>
-    <result column="is_share_success" property="isShareSuccess" jdbcType="BIT"/>
+<mapper namespace="com.wow.user.mapper.EndUserShareDesignerMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.user.model.EndUserShareDesigner" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
+    <result column="designer_id" property="designerId" jdbcType="INTEGER" />
+    <result column="share_title" property="shareTitle" jdbcType="VARCHAR" />
+    <result column="share_desc" property="shareDesc" jdbcType="VARCHAR" />
+    <result column="share_url" property="shareUrl" jdbcType="VARCHAR" />
+    <result column="share_img" property="shareImg" jdbcType="VARCHAR" />
+    <result column="share_channel" property="shareChannel" jdbcType="TINYINT" />
+    <result column="recommend_code" property="recommendCode" jdbcType="VARCHAR" />
+    <result column="share_time" property="shareTime" jdbcType="TIMESTAMP" />
+    <result column="is_share_success" property="isShareSuccess" jdbcType="BIT" />
   </resultMap>
-  <sql id="Base_Column_List">
-    id, end_user_id, designer_id, share_title, share_desc, share_url, share_img, share_channel,
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, end_user_id, designer_id, share_title, share_desc, share_url, share_img, share_channel, 
     recommend_code, share_time, is_share_success
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.EndUserShareDesignerExample" >
     select
-    <include refid="Base_Column_List"/>
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from end_user_share_designer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
     from end_user_share_designer
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <insert id="insert" parameterType="com.wow.user.model.EndUserShareDesigner">
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from end_user_share_designer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.user.model.EndUserShareDesignerExample" >
+    delete from end_user_share_designer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.user.model.EndUserShareDesigner" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into end_user_share_designer (end_user_id, designer_id, share_title,
-    share_desc, share_url, share_img,
-    share_channel, recommend_code, share_time,
-    is_share_success)
-    values (#{endUserId,jdbcType=INTEGER}, #{designerId,jdbcType=INTEGER}, #{shareTitle,jdbcType=VARCHAR},
-    #{shareDesc,jdbcType=VARCHAR}, #{shareUrl,jdbcType=VARCHAR}, #{shareImg,jdbcType=VARCHAR},
-    #{shareChannel,jdbcType=TINYINT}, #{recommendCode,jdbcType=VARCHAR}, #{shareTime,jdbcType=TIMESTAMP},
-    #{isShareSuccess,jdbcType=BIT})
+    insert into end_user_share_designer (end_user_id, designer_id, share_title, 
+      share_desc, share_url, share_img, 
+      share_channel, recommend_code, share_time, 
+      is_share_success)
+    values (#{endUserId,jdbcType=INTEGER}, #{designerId,jdbcType=INTEGER}, #{shareTitle,jdbcType=VARCHAR}, 
+      #{shareDesc,jdbcType=VARCHAR}, #{shareUrl,jdbcType=VARCHAR}, #{shareImg,jdbcType=VARCHAR}, 
+      #{shareChannel,jdbcType=TINYINT}, #{recommendCode,jdbcType=VARCHAR}, #{shareTime,jdbcType=TIMESTAMP}, 
+      #{isShareSuccess,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.user.model.EndUserShareDesigner">
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+  <insert id="insertSelective" parameterType="com.wow.user.model.EndUserShareDesigner" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into end_user_share_designer
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="endUserId != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="endUserId != null" >
         end_user_id,
       </if>
-      <if test="designerId != null">
+      <if test="designerId != null" >
         designer_id,
       </if>
-      <if test="shareTitle != null">
+      <if test="shareTitle != null" >
         share_title,
       </if>
-      <if test="shareDesc != null">
+      <if test="shareDesc != null" >
         share_desc,
       </if>
-      <if test="shareUrl != null">
+      <if test="shareUrl != null" >
         share_url,
       </if>
-      <if test="shareImg != null">
+      <if test="shareImg != null" >
         share_img,
       </if>
-      <if test="shareChannel != null">
+      <if test="shareChannel != null" >
         share_channel,
       </if>
-      <if test="recommendCode != null">
+      <if test="recommendCode != null" >
         recommend_code,
       </if>
-      <if test="shareTime != null">
+      <if test="shareTime != null" >
         share_time,
       </if>
-      <if test="isShareSuccess != null">
+      <if test="isShareSuccess != null" >
         is_share_success,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="endUserId != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="endUserId != null" >
         #{endUserId,jdbcType=INTEGER},
       </if>
-      <if test="designerId != null">
+      <if test="designerId != null" >
         #{designerId,jdbcType=INTEGER},
       </if>
-      <if test="shareTitle != null">
+      <if test="shareTitle != null" >
         #{shareTitle,jdbcType=VARCHAR},
       </if>
-      <if test="shareDesc != null">
+      <if test="shareDesc != null" >
         #{shareDesc,jdbcType=VARCHAR},
       </if>
-      <if test="shareUrl != null">
+      <if test="shareUrl != null" >
         #{shareUrl,jdbcType=VARCHAR},
       </if>
-      <if test="shareImg != null">
+      <if test="shareImg != null" >
         #{shareImg,jdbcType=VARCHAR},
       </if>
-      <if test="shareChannel != null">
+      <if test="shareChannel != null" >
         #{shareChannel,jdbcType=TINYINT},
       </if>
-      <if test="recommendCode != null">
+      <if test="recommendCode != null" >
         #{recommendCode,jdbcType=VARCHAR},
       </if>
-      <if test="shareTime != null">
+      <if test="shareTime != null" >
         #{shareTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isShareSuccess != null">
+      <if test="isShareSuccess != null" >
         #{isShareSuccess,jdbcType=BIT},
       </if>
     </trim>
   </insert>
+  <select id="countByExample" parameterType="com.wow.user.model.EndUserShareDesignerExample" resultType="java.lang.Integer" >
+    select count(*) from end_user_share_designer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update end_user_share_designer
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.endUserId != null" >
+        end_user_id = #{record.endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.designerId != null" >
+        designer_id = #{record.designerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.shareTitle != null" >
+        share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareDesc != null" >
+        share_desc = #{record.shareDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareUrl != null" >
+        share_url = #{record.shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareImg != null" >
+        share_img = #{record.shareImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareChannel != null" >
+        share_channel = #{record.shareChannel,jdbcType=TINYINT},
+      </if>
+      <if test="record.recommendCode != null" >
+        recommend_code = #{record.recommendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareTime != null" >
+        share_time = #{record.shareTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isShareSuccess != null" >
+        is_share_success = #{record.isShareSuccess,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update end_user_share_designer
+    set id = #{record.id,jdbcType=INTEGER},
+      end_user_id = #{record.endUserId,jdbcType=INTEGER},
+      designer_id = #{record.designerId,jdbcType=INTEGER},
+      share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      share_desc = #{record.shareDesc,jdbcType=VARCHAR},
+      share_url = #{record.shareUrl,jdbcType=VARCHAR},
+      share_img = #{record.shareImg,jdbcType=VARCHAR},
+      share_channel = #{record.shareChannel,jdbcType=TINYINT},
+      recommend_code = #{record.recommendCode,jdbcType=VARCHAR},
+      share_time = #{record.shareTime,jdbcType=TIMESTAMP},
+      is_share_success = #{record.isShareSuccess,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.user.model.EndUserShareDesigner" >
+    update end_user_share_designer
+    <set >
+      <if test="endUserId != null" >
+        end_user_id = #{endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="designerId != null" >
+        designer_id = #{designerId,jdbcType=INTEGER},
+      </if>
+      <if test="shareTitle != null" >
+        share_title = #{shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="shareDesc != null" >
+        share_desc = #{shareDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUrl != null" >
+        share_url = #{shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shareImg != null" >
+        share_img = #{shareImg,jdbcType=VARCHAR},
+      </if>
+      <if test="shareChannel != null" >
+        share_channel = #{shareChannel,jdbcType=TINYINT},
+      </if>
+      <if test="recommendCode != null" >
+        recommend_code = #{recommendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTime != null" >
+        share_time = #{shareTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isShareSuccess != null" >
+        is_share_success = #{isShareSuccess,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.user.model.EndUserShareDesigner" >
+    update end_user_share_designer
+    set end_user_id = #{endUserId,jdbcType=INTEGER},
+      designer_id = #{designerId,jdbcType=INTEGER},
+      share_title = #{shareTitle,jdbcType=VARCHAR},
+      share_desc = #{shareDesc,jdbcType=VARCHAR},
+      share_url = #{shareUrl,jdbcType=VARCHAR},
+      share_img = #{shareImg,jdbcType=VARCHAR},
+      share_channel = #{shareChannel,jdbcType=TINYINT},
+      recommend_code = #{recommendCode,jdbcType=VARCHAR},
+      share_time = #{shareTime,jdbcType=TIMESTAMP},
+      is_share_success = #{isShareSuccess,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

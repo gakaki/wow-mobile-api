@@ -1,110 +1,306 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.product.mapper.DesignerMapper">
-    <resultMap id="BaseResultMap" type="com.wow.product.model.Designer">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="designer_name" property="designerName" jdbcType="VARCHAR"/>
-        <result column="designer_sex" property="designerSex" jdbcType="TINYINT"/>
-        <result column="designer_country" property="designerCountry" jdbcType="VARCHAR"/>
-        <result column="designer_home_url" property="designerHomeUrl" jdbcType="VARCHAR"/>
-        <result column="designer_photo" property="designerPhoto" jdbcType="VARCHAR"/>
-        <result column="designer_video" property="designerVideo" jdbcType="VARCHAR"/>
-        <result column="designer_desc" property="designerDesc" jdbcType="VARCHAR"/>
-        <result column="designer_style" property="designerStyle" jdbcType="VARCHAR"/>
-        <result column="is_active" property="isActive" jdbcType="BIT"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, designer_name, designer_sex, designer_country, designer_home_url, designer_photo,
-        designer_video, designer_desc, designer_style, is_active, is_deleted
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from designer
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.product.model.Designer">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into designer (designer_name, designer_sex, designer_country,
-        designer_home_url, designer_photo, designer_video,
-        designer_desc, designer_style, is_active,
-        is_deleted)
-        values (#{designerName,jdbcType=VARCHAR}, #{designerSex,jdbcType=TINYINT}, #{designerCountry,jdbcType=VARCHAR},
-        #{designerHomeUrl,jdbcType=VARCHAR}, #{designerPhoto,jdbcType=VARCHAR}, #{designerVideo,jdbcType=VARCHAR},
-        #{designerDesc,jdbcType=VARCHAR}, #{designerStyle,jdbcType=VARCHAR}, #{isActive,jdbcType=BIT},
-        #{isDeleted,jdbcType=BIT})
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.product.model.Designer">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into designer
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="designerName != null">
-                designer_name,
-            </if>
-            <if test="designerSex != null">
-                designer_sex,
-            </if>
-            <if test="designerCountry != null">
-                designer_country,
-            </if>
-            <if test="designerHomeUrl != null">
-                designer_home_url,
-            </if>
-            <if test="designerPhoto != null">
-                designer_photo,
-            </if>
-            <if test="designerVideo != null">
-                designer_video,
-            </if>
-            <if test="designerDesc != null">
-                designer_desc,
-            </if>
-            <if test="designerStyle != null">
-                designer_style,
-            </if>
-            <if test="isActive != null">
-                is_active,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="designerName != null">
-                #{designerName,jdbcType=VARCHAR},
-            </if>
-            <if test="designerSex != null">
-                #{designerSex,jdbcType=TINYINT},
-            </if>
-            <if test="designerCountry != null">
-                #{designerCountry,jdbcType=VARCHAR},
-            </if>
-            <if test="designerHomeUrl != null">
-                #{designerHomeUrl,jdbcType=VARCHAR},
-            </if>
-            <if test="designerPhoto != null">
-                #{designerPhoto,jdbcType=VARCHAR},
-            </if>
-            <if test="designerVideo != null">
-                #{designerVideo,jdbcType=VARCHAR},
-            </if>
-            <if test="designerDesc != null">
-                #{designerDesc,jdbcType=VARCHAR},
-            </if>
-            <if test="designerStyle != null">
-                #{designerStyle,jdbcType=VARCHAR},
-            </if>
-            <if test="isActive != null">
-                #{isActive,jdbcType=BIT},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=BIT},
-            </if>
-        </trim>
-    </insert>
+<mapper namespace="com.wow.product.mapper.DesignerMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.Designer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="designer_name" property="designerName" jdbcType="VARCHAR" />
+    <result column="designer_sex" property="designerSex" jdbcType="TINYINT" />
+    <result column="designer_country" property="designerCountry" jdbcType="VARCHAR" />
+    <result column="designer_home_url" property="designerHomeUrl" jdbcType="VARCHAR" />
+    <result column="designer_photo" property="designerPhoto" jdbcType="VARCHAR" />
+    <result column="designer_video" property="designerVideo" jdbcType="VARCHAR" />
+    <result column="designer_desc" property="designerDesc" jdbcType="VARCHAR" />
+    <result column="designer_style" property="designerStyle" jdbcType="VARCHAR" />
+    <result column="is_active" property="isActive" jdbcType="BIT" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, designer_name, designer_sex, designer_country, designer_home_url, designer_photo, 
+    designer_video, designer_desc, designer_style, is_active, is_deleted
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.DesignerExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from designer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from designer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from designer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.product.model.DesignerExample" >
+    delete from designer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.product.model.Designer" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into designer (designer_name, designer_sex, designer_country, 
+      designer_home_url, designer_photo, designer_video, 
+      designer_desc, designer_style, is_active, 
+      is_deleted)
+    values (#{designerName,jdbcType=VARCHAR}, #{designerSex,jdbcType=TINYINT}, #{designerCountry,jdbcType=VARCHAR}, 
+      #{designerHomeUrl,jdbcType=VARCHAR}, #{designerPhoto,jdbcType=VARCHAR}, #{designerVideo,jdbcType=VARCHAR}, 
+      #{designerDesc,jdbcType=VARCHAR}, #{designerStyle,jdbcType=VARCHAR}, #{isActive,jdbcType=BIT}, 
+      #{isDeleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.product.model.Designer" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into designer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="designerName != null" >
+        designer_name,
+      </if>
+      <if test="designerSex != null" >
+        designer_sex,
+      </if>
+      <if test="designerCountry != null" >
+        designer_country,
+      </if>
+      <if test="designerHomeUrl != null" >
+        designer_home_url,
+      </if>
+      <if test="designerPhoto != null" >
+        designer_photo,
+      </if>
+      <if test="designerVideo != null" >
+        designer_video,
+      </if>
+      <if test="designerDesc != null" >
+        designer_desc,
+      </if>
+      <if test="designerStyle != null" >
+        designer_style,
+      </if>
+      <if test="isActive != null" >
+        is_active,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="designerName != null" >
+        #{designerName,jdbcType=VARCHAR},
+      </if>
+      <if test="designerSex != null" >
+        #{designerSex,jdbcType=TINYINT},
+      </if>
+      <if test="designerCountry != null" >
+        #{designerCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="designerHomeUrl != null" >
+        #{designerHomeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="designerPhoto != null" >
+        #{designerPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="designerVideo != null" >
+        #{designerVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="designerDesc != null" >
+        #{designerDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="designerStyle != null" >
+        #{designerStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="isActive != null" >
+        #{isActive,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.product.model.DesignerExample" resultType="java.lang.Integer" >
+    select count(*) from designer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update designer
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.designerName != null" >
+        designer_name = #{record.designerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.designerSex != null" >
+        designer_sex = #{record.designerSex,jdbcType=TINYINT},
+      </if>
+      <if test="record.designerCountry != null" >
+        designer_country = #{record.designerCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.designerHomeUrl != null" >
+        designer_home_url = #{record.designerHomeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.designerPhoto != null" >
+        designer_photo = #{record.designerPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.designerVideo != null" >
+        designer_video = #{record.designerVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.designerDesc != null" >
+        designer_desc = #{record.designerDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.designerStyle != null" >
+        designer_style = #{record.designerStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isActive != null" >
+        is_active = #{record.isActive,jdbcType=BIT},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update designer
+    set id = #{record.id,jdbcType=INTEGER},
+      designer_name = #{record.designerName,jdbcType=VARCHAR},
+      designer_sex = #{record.designerSex,jdbcType=TINYINT},
+      designer_country = #{record.designerCountry,jdbcType=VARCHAR},
+      designer_home_url = #{record.designerHomeUrl,jdbcType=VARCHAR},
+      designer_photo = #{record.designerPhoto,jdbcType=VARCHAR},
+      designer_video = #{record.designerVideo,jdbcType=VARCHAR},
+      designer_desc = #{record.designerDesc,jdbcType=VARCHAR},
+      designer_style = #{record.designerStyle,jdbcType=VARCHAR},
+      is_active = #{record.isActive,jdbcType=BIT},
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.Designer" >
+    update designer
+    <set >
+      <if test="designerName != null" >
+        designer_name = #{designerName,jdbcType=VARCHAR},
+      </if>
+      <if test="designerSex != null" >
+        designer_sex = #{designerSex,jdbcType=TINYINT},
+      </if>
+      <if test="designerCountry != null" >
+        designer_country = #{designerCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="designerHomeUrl != null" >
+        designer_home_url = #{designerHomeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="designerPhoto != null" >
+        designer_photo = #{designerPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="designerVideo != null" >
+        designer_video = #{designerVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="designerDesc != null" >
+        designer_desc = #{designerDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="designerStyle != null" >
+        designer_style = #{designerStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="isActive != null" >
+        is_active = #{isActive,jdbcType=BIT},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Designer" >
+    update designer
+    set designer_name = #{designerName,jdbcType=VARCHAR},
+      designer_sex = #{designerSex,jdbcType=TINYINT},
+      designer_country = #{designerCountry,jdbcType=VARCHAR},
+      designer_home_url = #{designerHomeUrl,jdbcType=VARCHAR},
+      designer_photo = #{designerPhoto,jdbcType=VARCHAR},
+      designer_video = #{designerVideo,jdbcType=VARCHAR},
+      designer_desc = #{designerDesc,jdbcType=VARCHAR},
+      designer_style = #{designerStyle,jdbcType=VARCHAR},
+      is_active = #{isActive,jdbcType=BIT},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

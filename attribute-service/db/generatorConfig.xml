@@ -58,67 +58,67 @@
 
         <table schema="root" tableName="attribute" domainObjectName="Attribute" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table schema="root" tableName="attribute_display_rule" domainObjectName="AttributeDisplayRule"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table schema="root" tableName="attribute_group" domainObjectName="AttributeGroup" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="attribute_group_attribute" domainObjectName="AttributeGroupAttribute"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="attribute_value" domainObjectName="AttributeValue" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="category" domainObjectName="Category" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 

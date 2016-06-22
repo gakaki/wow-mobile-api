@@ -1,180 +1,448 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.product.mapper.WarehouseMapper">
-    <resultMap id="BaseResultMap" type="com.wow.product.model.Warehouse">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR"/>
-        <result column="address" property="address" jdbcType="VARCHAR"/>
-        <result column="province" property="province" jdbcType="VARCHAR"/>
-        <result column="city" property="city" jdbcType="VARCHAR"/>
-        <result column="county" property="county" jdbcType="VARCHAR"/>
-        <result column="town" property="town" jdbcType="VARCHAR"/>
-        <result column="is_real_warehouse" property="isRealWarehouse" jdbcType="BIT"/>
-        <result column="capaicity" property="capaicity" jdbcType="SMALLINT"/>
-        <result column="daily_order_limit" property="dailyOrderLimit" jdbcType="TINYINT"/>
-        <result column="worker_num" property="workerNum" jdbcType="TINYINT"/>
-        <result column="admin_name" property="adminName" jdbcType="VARCHAR"/>
-        <result column="admin_mobile" property="adminMobile" jdbcType="VARCHAR"/>
-        <result column="admin_phone" property="adminPhone" jdbcType="VARCHAR"/>
-        <result column="admin_email" property="adminEmail" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, warehouse_name, address, province, city, county, town, is_real_warehouse, capaicity,
-        daily_order_limit, worker_num, admin_name, admin_mobile, admin_phone, admin_email,
-        create_time, create_by, update_time, update_by, is_deleted
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from warehouse
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.product.model.Warehouse">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into warehouse (warehouse_name, address, province,
-        city, county, town,
-        is_real_warehouse, capaicity, daily_order_limit,
-        worker_num, admin_name, admin_mobile,
-        admin_phone, admin_email, create_time,
-        create_by, update_time, update_by,
-        is_deleted)
-        values (#{warehouseName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR},
-        #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR},
-        #{isRealWarehouse,jdbcType=BIT}, #{capaicity,jdbcType=SMALLINT}, #{dailyOrderLimit,jdbcType=TINYINT},
-        #{workerNum,jdbcType=TINYINT}, #{adminName,jdbcType=VARCHAR}, #{adminMobile,jdbcType=VARCHAR},
-        #{adminPhone,jdbcType=VARCHAR}, #{adminEmail,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-        #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
-        #{isDeleted,jdbcType=BIT})
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.product.model.Warehouse">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into warehouse
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="warehouseName != null">
-                warehouse_name,
-            </if>
-            <if test="address != null">
-                address,
-            </if>
-            <if test="province != null">
-                province,
-            </if>
-            <if test="city != null">
-                city,
-            </if>
-            <if test="county != null">
-                county,
-            </if>
-            <if test="town != null">
-                town,
-            </if>
-            <if test="isRealWarehouse != null">
-                is_real_warehouse,
-            </if>
-            <if test="capaicity != null">
-                capaicity,
-            </if>
-            <if test="dailyOrderLimit != null">
-                daily_order_limit,
-            </if>
-            <if test="workerNum != null">
-                worker_num,
-            </if>
-            <if test="adminName != null">
-                admin_name,
-            </if>
-            <if test="adminMobile != null">
-                admin_mobile,
-            </if>
-            <if test="adminPhone != null">
-                admin_phone,
-            </if>
-            <if test="adminEmail != null">
-                admin_email,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="createBy != null">
-                create_by,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="updateBy != null">
-                update_by,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="warehouseName != null">
-                #{warehouseName,jdbcType=VARCHAR},
-            </if>
-            <if test="address != null">
-                #{address,jdbcType=VARCHAR},
-            </if>
-            <if test="province != null">
-                #{province,jdbcType=VARCHAR},
-            </if>
-            <if test="city != null">
-                #{city,jdbcType=VARCHAR},
-            </if>
-            <if test="county != null">
-                #{county,jdbcType=VARCHAR},
-            </if>
-            <if test="town != null">
-                #{town,jdbcType=VARCHAR},
-            </if>
-            <if test="isRealWarehouse != null">
-                #{isRealWarehouse,jdbcType=BIT},
-            </if>
-            <if test="capaicity != null">
-                #{capaicity,jdbcType=SMALLINT},
-            </if>
-            <if test="dailyOrderLimit != null">
-                #{dailyOrderLimit,jdbcType=TINYINT},
-            </if>
-            <if test="workerNum != null">
-                #{workerNum,jdbcType=TINYINT},
-            </if>
-            <if test="adminName != null">
-                #{adminName,jdbcType=VARCHAR},
-            </if>
-            <if test="adminMobile != null">
-                #{adminMobile,jdbcType=VARCHAR},
-            </if>
-            <if test="adminPhone != null">
-                #{adminPhone,jdbcType=VARCHAR},
-            </if>
-            <if test="adminEmail != null">
-                #{adminEmail,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="createBy != null">
-                #{createBy,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateBy != null">
-                #{updateBy,jdbcType=VARCHAR},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=BIT},
-            </if>
-        </trim>
-    </insert>
+<mapper namespace="com.wow.product.mapper.WarehouseMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.Warehouse" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="town" property="town" jdbcType="VARCHAR" />
+    <result column="is_real_warehouse" property="isRealWarehouse" jdbcType="BIT" />
+    <result column="capaicity" property="capaicity" jdbcType="SMALLINT" />
+    <result column="daily_order_limit" property="dailyOrderLimit" jdbcType="TINYINT" />
+    <result column="worker_num" property="workerNum" jdbcType="TINYINT" />
+    <result column="admin_name" property="adminName" jdbcType="VARCHAR" />
+    <result column="admin_mobile" property="adminMobile" jdbcType="VARCHAR" />
+    <result column="admin_phone" property="adminPhone" jdbcType="VARCHAR" />
+    <result column="admin_email" property="adminEmail" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, warehouse_name, address, province, city, county, town, is_real_warehouse, capaicity, 
+    daily_order_limit, worker_num, admin_name, admin_mobile, admin_phone, admin_email, 
+    create_time, create_by, update_time, update_by, is_deleted
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.WarehouseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from warehouse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from warehouse
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from warehouse
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.product.model.WarehouseExample" >
+    delete from warehouse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.product.model.Warehouse" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into warehouse (warehouse_name, address, province, 
+      city, county, town, 
+      is_real_warehouse, capaicity, daily_order_limit, 
+      worker_num, admin_name, admin_mobile, 
+      admin_phone, admin_email, create_time, 
+      create_by, update_time, update_by, 
+      is_deleted)
+    values (#{warehouseName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR}, 
+      #{isRealWarehouse,jdbcType=BIT}, #{capaicity,jdbcType=SMALLINT}, #{dailyOrderLimit,jdbcType=TINYINT}, 
+      #{workerNum,jdbcType=TINYINT}, #{adminName,jdbcType=VARCHAR}, #{adminMobile,jdbcType=VARCHAR}, 
+      #{adminPhone,jdbcType=VARCHAR}, #{adminEmail,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.product.model.Warehouse" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into warehouse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="warehouseName != null" >
+        warehouse_name,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="county != null" >
+        county,
+      </if>
+      <if test="town != null" >
+        town,
+      </if>
+      <if test="isRealWarehouse != null" >
+        is_real_warehouse,
+      </if>
+      <if test="capaicity != null" >
+        capaicity,
+      </if>
+      <if test="dailyOrderLimit != null" >
+        daily_order_limit,
+      </if>
+      <if test="workerNum != null" >
+        worker_num,
+      </if>
+      <if test="adminName != null" >
+        admin_name,
+      </if>
+      <if test="adminMobile != null" >
+        admin_mobile,
+      </if>
+      <if test="adminPhone != null" >
+        admin_phone,
+      </if>
+      <if test="adminEmail != null" >
+        admin_email,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="warehouseName != null" >
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null" >
+        #{town,jdbcType=VARCHAR},
+      </if>
+      <if test="isRealWarehouse != null" >
+        #{isRealWarehouse,jdbcType=BIT},
+      </if>
+      <if test="capaicity != null" >
+        #{capaicity,jdbcType=SMALLINT},
+      </if>
+      <if test="dailyOrderLimit != null" >
+        #{dailyOrderLimit,jdbcType=TINYINT},
+      </if>
+      <if test="workerNum != null" >
+        #{workerNum,jdbcType=TINYINT},
+      </if>
+      <if test="adminName != null" >
+        #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="adminMobile != null" >
+        #{adminMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPhone != null" >
+        #{adminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="adminEmail != null" >
+        #{adminEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.product.model.WarehouseExample" resultType="java.lang.Integer" >
+    select count(*) from warehouse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update warehouse
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.warehouseName != null" >
+        warehouse_name = #{record.warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null" >
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null" >
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.county != null" >
+        county = #{record.county,jdbcType=VARCHAR},
+      </if>
+      <if test="record.town != null" >
+        town = #{record.town,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isRealWarehouse != null" >
+        is_real_warehouse = #{record.isRealWarehouse,jdbcType=BIT},
+      </if>
+      <if test="record.capaicity != null" >
+        capaicity = #{record.capaicity,jdbcType=SMALLINT},
+      </if>
+      <if test="record.dailyOrderLimit != null" >
+        daily_order_limit = #{record.dailyOrderLimit,jdbcType=TINYINT},
+      </if>
+      <if test="record.workerNum != null" >
+        worker_num = #{record.workerNum,jdbcType=TINYINT},
+      </if>
+      <if test="record.adminName != null" >
+        admin_name = #{record.adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminMobile != null" >
+        admin_mobile = #{record.adminMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminPhone != null" >
+        admin_phone = #{record.adminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminEmail != null" >
+        admin_email = #{record.adminEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update warehouse
+    set id = #{record.id,jdbcType=INTEGER},
+      warehouse_name = #{record.warehouseName,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      county = #{record.county,jdbcType=VARCHAR},
+      town = #{record.town,jdbcType=VARCHAR},
+      is_real_warehouse = #{record.isRealWarehouse,jdbcType=BIT},
+      capaicity = #{record.capaicity,jdbcType=SMALLINT},
+      daily_order_limit = #{record.dailyOrderLimit,jdbcType=TINYINT},
+      worker_num = #{record.workerNum,jdbcType=TINYINT},
+      admin_name = #{record.adminName,jdbcType=VARCHAR},
+      admin_mobile = #{record.adminMobile,jdbcType=VARCHAR},
+      admin_phone = #{record.adminPhone,jdbcType=VARCHAR},
+      admin_email = #{record.adminEmail,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.Warehouse" >
+    update warehouse
+    <set >
+      <if test="warehouseName != null" >
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null" >
+        town = #{town,jdbcType=VARCHAR},
+      </if>
+      <if test="isRealWarehouse != null" >
+        is_real_warehouse = #{isRealWarehouse,jdbcType=BIT},
+      </if>
+      <if test="capaicity != null" >
+        capaicity = #{capaicity,jdbcType=SMALLINT},
+      </if>
+      <if test="dailyOrderLimit != null" >
+        daily_order_limit = #{dailyOrderLimit,jdbcType=TINYINT},
+      </if>
+      <if test="workerNum != null" >
+        worker_num = #{workerNum,jdbcType=TINYINT},
+      </if>
+      <if test="adminName != null" >
+        admin_name = #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="adminMobile != null" >
+        admin_mobile = #{adminMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPhone != null" >
+        admin_phone = #{adminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="adminEmail != null" >
+        admin_email = #{adminEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Warehouse" >
+    update warehouse
+    set warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      town = #{town,jdbcType=VARCHAR},
+      is_real_warehouse = #{isRealWarehouse,jdbcType=BIT},
+      capaicity = #{capaicity,jdbcType=SMALLINT},
+      daily_order_limit = #{dailyOrderLimit,jdbcType=TINYINT},
+      worker_num = #{workerNum,jdbcType=TINYINT},
+      admin_name = #{adminName,jdbcType=VARCHAR},
+      admin_mobile = #{adminMobile,jdbcType=VARCHAR},
+      admin_phone = #{adminPhone,jdbcType=VARCHAR},
+      admin_email = #{adminEmail,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

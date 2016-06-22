@@ -1,80 +1,244 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.product.mapper.ProductSummaryMapper">
-    <resultMap id="BaseResultMap" type="com.wow.product.model.ProductSummary">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="product_id" property="productId" jdbcType="INTEGER"/>
-        <result column="total_sold_num" property="totalSoldNum" jdbcType="INTEGER"/>
-        <result column="seven_days_sold_num" property="sevenDaysSoldNum" jdbcType="INTEGER"/>
-        <result column="total_comments" property="totalComments" jdbcType="INTEGER"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, product_id, total_sold_num, seven_days_sold_num, total_comments, update_time,
-        is_deleted
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from product_summary
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.product.model.ProductSummary">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into product_summary (product_id, total_sold_num, seven_days_sold_num,
-        total_comments, update_time, is_deleted
-        )
-        values (#{productId,jdbcType=INTEGER}, #{totalSoldNum,jdbcType=INTEGER}, #{sevenDaysSoldNum,jdbcType=INTEGER},
-        #{totalComments,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
-        )
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.product.model.ProductSummary">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into product_summary
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="productId != null">
-                product_id,
-            </if>
-            <if test="totalSoldNum != null">
-                total_sold_num,
-            </if>
-            <if test="sevenDaysSoldNum != null">
-                seven_days_sold_num,
-            </if>
-            <if test="totalComments != null">
-                total_comments,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="productId != null">
-                #{productId,jdbcType=INTEGER},
-            </if>
-            <if test="totalSoldNum != null">
-                #{totalSoldNum,jdbcType=INTEGER},
-            </if>
-            <if test="sevenDaysSoldNum != null">
-                #{sevenDaysSoldNum,jdbcType=INTEGER},
-            </if>
-            <if test="totalComments != null">
-                #{totalComments,jdbcType=INTEGER},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=BIT},
-            </if>
-        </trim>
-    </insert>
+<mapper namespace="com.wow.product.mapper.ProductSummaryMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.ProductSummary" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="total_sold_num" property="totalSoldNum" jdbcType="INTEGER" />
+    <result column="seven_days_sold_num" property="sevenDaysSoldNum" jdbcType="INTEGER" />
+    <result column="total_comments" property="totalComments" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, product_id, total_sold_num, seven_days_sold_num, total_comments, update_time, 
+    is_deleted
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ProductSummaryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product_summary
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_summary
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product_summary
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.product.model.ProductSummaryExample" >
+    delete from product_summary
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.product.model.ProductSummary" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_summary (product_id, total_sold_num, seven_days_sold_num, 
+      total_comments, update_time, is_deleted
+      )
+    values (#{productId,jdbcType=INTEGER}, #{totalSoldNum,jdbcType=INTEGER}, #{sevenDaysSoldNum,jdbcType=INTEGER}, 
+      #{totalComments,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.product.model.ProductSummary" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_summary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="totalSoldNum != null" >
+        total_sold_num,
+      </if>
+      <if test="sevenDaysSoldNum != null" >
+        seven_days_sold_num,
+      </if>
+      <if test="totalComments != null" >
+        total_comments,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="totalSoldNum != null" >
+        #{totalSoldNum,jdbcType=INTEGER},
+      </if>
+      <if test="sevenDaysSoldNum != null" >
+        #{sevenDaysSoldNum,jdbcType=INTEGER},
+      </if>
+      <if test="totalComments != null" >
+        #{totalComments,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.product.model.ProductSummaryExample" resultType="java.lang.Integer" >
+    select count(*) from product_summary
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update product_summary
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalSoldNum != null" >
+        total_sold_num = #{record.totalSoldNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.sevenDaysSoldNum != null" >
+        seven_days_sold_num = #{record.sevenDaysSoldNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalComments != null" >
+        total_comments = #{record.totalComments,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product_summary
+    set id = #{record.id,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      total_sold_num = #{record.totalSoldNum,jdbcType=INTEGER},
+      seven_days_sold_num = #{record.sevenDaysSoldNum,jdbcType=INTEGER},
+      total_comments = #{record.totalComments,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.ProductSummary" >
+    update product_summary
+    <set >
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="totalSoldNum != null" >
+        total_sold_num = #{totalSoldNum,jdbcType=INTEGER},
+      </if>
+      <if test="sevenDaysSoldNum != null" >
+        seven_days_sold_num = #{sevenDaysSoldNum,jdbcType=INTEGER},
+      </if>
+      <if test="totalComments != null" >
+        total_comments = #{totalComments,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.ProductSummary" >
+    update product_summary
+    set product_id = #{productId,jdbcType=INTEGER},
+      total_sold_num = #{totalSoldNum,jdbcType=INTEGER},
+      seven_days_sold_num = #{sevenDaysSoldNum,jdbcType=INTEGER},
+      total_comments = #{totalComments,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

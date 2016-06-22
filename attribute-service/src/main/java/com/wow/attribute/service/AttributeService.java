@@ -48,6 +48,13 @@ public interface AttributeService {
      */
     Attribute getAttributeByName(String attributeName);
 
+    /**
+     * 根据ID删除属性
+     * @param attributeId
+     * @return
+     */
+    int deleteAttributeById(int attributeId);
+
     //Table: attribute_group
 
     /**

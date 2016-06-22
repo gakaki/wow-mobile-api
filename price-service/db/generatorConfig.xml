@@ -57,24 +57,24 @@
         <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
         <table schema="root" tableName="product_price" domainObjectName="ProductPrice" enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table schema="root" tableName="product_price_change_log" domainObjectName="ProductPriceChangeLog"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
-               enableSelectByExample="false"
-               enableUpdateByPrimaryKey="false"
-               enableDeleteByPrimaryKey="false"
-               enableDeleteByExample="false"
-               enableCountByExample="false"
-               enableUpdateByExample="false" modelType="flat">
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 

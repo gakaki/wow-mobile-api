@@ -1,110 +1,306 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.product.mapper.SceneMapper">
-    <resultMap id="BaseResultMap" type="com.wow.product.model.Scene">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="scene_name" property="sceneName" jdbcType="VARCHAR"/>
-        <result column="product_id" property="productId" jdbcType="INTEGER"/>
-        <result column="scene_title" property="sceneTitle" jdbcType="VARCHAR"/>
-        <result column="scene_desc" property="sceneDesc" jdbcType="VARCHAR"/>
-        <result column="scene_img" property="sceneImg" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, scene_name, product_id, scene_title, scene_desc, scene_img, create_time, create_by,
-        update_time, update_by, is_deleted
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from scene
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.product.model.Scene">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into scene (scene_name, product_id, scene_title,
-        scene_desc, scene_img, create_time,
-        create_by, update_time, update_by,
-        is_deleted)
-        values (#{sceneName,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, #{sceneTitle,jdbcType=VARCHAR},
-        #{sceneDesc,jdbcType=VARCHAR}, #{sceneImg,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-        #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
-        #{isDeleted,jdbcType=BIT})
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.product.model.Scene">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into scene
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="sceneName != null">
-                scene_name,
-            </if>
-            <if test="productId != null">
-                product_id,
-            </if>
-            <if test="sceneTitle != null">
-                scene_title,
-            </if>
-            <if test="sceneDesc != null">
-                scene_desc,
-            </if>
-            <if test="sceneImg != null">
-                scene_img,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="createBy != null">
-                create_by,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="updateBy != null">
-                update_by,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="sceneName != null">
-                #{sceneName,jdbcType=VARCHAR},
-            </if>
-            <if test="productId != null">
-                #{productId,jdbcType=INTEGER},
-            </if>
-            <if test="sceneTitle != null">
-                #{sceneTitle,jdbcType=VARCHAR},
-            </if>
-            <if test="sceneDesc != null">
-                #{sceneDesc,jdbcType=VARCHAR},
-            </if>
-            <if test="sceneImg != null">
-                #{sceneImg,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="createBy != null">
-                #{createBy,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateBy != null">
-                #{updateBy,jdbcType=VARCHAR},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=BIT},
-            </if>
-        </trim>
-    </insert>
+<mapper namespace="com.wow.product.mapper.SceneMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.Scene" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="scene_name" property="sceneName" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="scene_title" property="sceneTitle" jdbcType="VARCHAR" />
+    <result column="scene_desc" property="sceneDesc" jdbcType="VARCHAR" />
+    <result column="scene_img" property="sceneImg" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, scene_name, product_id, scene_title, scene_desc, scene_img, create_time, create_by, 
+    update_time, update_by, is_deleted
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.SceneExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from scene
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from scene
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from scene
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.product.model.SceneExample" >
+    delete from scene
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.product.model.Scene" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into scene (scene_name, product_id, scene_title, 
+      scene_desc, scene_img, create_time, 
+      create_by, update_time, update_by, 
+      is_deleted)
+    values (#{sceneName,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, #{sceneTitle,jdbcType=VARCHAR}, 
+      #{sceneDesc,jdbcType=VARCHAR}, #{sceneImg,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.product.model.Scene" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into scene
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sceneName != null" >
+        scene_name,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="sceneTitle != null" >
+        scene_title,
+      </if>
+      <if test="sceneDesc != null" >
+        scene_desc,
+      </if>
+      <if test="sceneImg != null" >
+        scene_img,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sceneName != null" >
+        #{sceneName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="sceneTitle != null" >
+        #{sceneTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneDesc != null" >
+        #{sceneDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneImg != null" >
+        #{sceneImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.product.model.SceneExample" resultType="java.lang.Integer" >
+    select count(*) from scene
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update scene
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.sceneName != null" >
+        scene_name = #{record.sceneName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=INTEGER},
+      </if>
+      <if test="record.sceneTitle != null" >
+        scene_title = #{record.sceneTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sceneDesc != null" >
+        scene_desc = #{record.sceneDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sceneImg != null" >
+        scene_img = #{record.sceneImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update scene
+    set id = #{record.id,jdbcType=INTEGER},
+      scene_name = #{record.sceneName,jdbcType=VARCHAR},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      scene_title = #{record.sceneTitle,jdbcType=VARCHAR},
+      scene_desc = #{record.sceneDesc,jdbcType=VARCHAR},
+      scene_img = #{record.sceneImg,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.Scene" >
+    update scene
+    <set >
+      <if test="sceneName != null" >
+        scene_name = #{sceneName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="sceneTitle != null" >
+        scene_title = #{sceneTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneDesc != null" >
+        scene_desc = #{sceneDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneImg != null" >
+        scene_img = #{sceneImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Scene" >
+    update scene
+    set scene_name = #{sceneName,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=INTEGER},
+      scene_title = #{sceneTitle,jdbcType=VARCHAR},
+      scene_desc = #{sceneDesc,jdbcType=VARCHAR},
+      scene_img = #{sceneImg,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -1,70 +1,226 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.user.mapper.AreaMapper">
-  <resultMap id="BaseResultMap" type="com.wow.user.model.Area">
-    <id column="id" property="id" jdbcType="INTEGER"/>
-    <result column="area_level" property="areaLevel" jdbcType="TINYINT"/>
-    <result column="province" property="province" jdbcType="VARCHAR"/>
-    <result column="city" property="city" jdbcType="VARCHAR"/>
-    <result column="county" property="county" jdbcType="VARCHAR"/>
-    <result column="town" property="town" jdbcType="VARCHAR"/>
+<mapper namespace="com.wow.user.mapper.AreaMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.user.model.Area" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="area_level" property="areaLevel" jdbcType="TINYINT" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="town" property="town" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
     id, area_level, province, city, county, town
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.AreaExample" >
     select
-    <include refid="Base_Column_List"/>
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from area
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
     from area
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <insert id="insert" parameterType="com.wow.user.model.Area">
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from area
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.user.model.AreaExample" >
+    delete from area
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.user.model.Area" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into area (area_level, province, city,
-    county, town)
-    values (#{areaLevel,jdbcType=TINYINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
-    #{county,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR})
+    insert into area (area_level, province, city, 
+      county, town)
+    values (#{areaLevel,jdbcType=TINYINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{county,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.user.model.Area">
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+  <insert id="insertSelective" parameterType="com.wow.user.model.Area" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into area
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="areaLevel != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="areaLevel != null" >
         area_level,
       </if>
-      <if test="province != null">
+      <if test="province != null" >
         province,
       </if>
-      <if test="city != null">
+      <if test="city != null" >
         city,
       </if>
-      <if test="county != null">
+      <if test="county != null" >
         county,
       </if>
-      <if test="town != null">
+      <if test="town != null" >
         town,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="areaLevel != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="areaLevel != null" >
         #{areaLevel,jdbcType=TINYINT},
       </if>
-      <if test="province != null">
+      <if test="province != null" >
         #{province,jdbcType=VARCHAR},
       </if>
-      <if test="city != null">
+      <if test="city != null" >
         #{city,jdbcType=VARCHAR},
       </if>
-      <if test="county != null">
+      <if test="county != null" >
         #{county,jdbcType=VARCHAR},
       </if>
-      <if test="town != null">
+      <if test="town != null" >
         #{town,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
+  <select id="countByExample" parameterType="com.wow.user.model.AreaExample" resultType="java.lang.Integer" >
+    select count(*) from area
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update area
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaLevel != null" >
+        area_level = #{record.areaLevel,jdbcType=TINYINT},
+      </if>
+      <if test="record.province != null" >
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null" >
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.county != null" >
+        county = #{record.county,jdbcType=VARCHAR},
+      </if>
+      <if test="record.town != null" >
+        town = #{record.town,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update area
+    set id = #{record.id,jdbcType=INTEGER},
+      area_level = #{record.areaLevel,jdbcType=TINYINT},
+      province = #{record.province,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      county = #{record.county,jdbcType=VARCHAR},
+      town = #{record.town,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.user.model.Area" >
+    update area
+    <set >
+      <if test="areaLevel != null" >
+        area_level = #{areaLevel,jdbcType=TINYINT},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null" >
+        town = #{town,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.user.model.Area" >
+    update area
+    set area_level = #{areaLevel,jdbcType=TINYINT},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      town = #{town,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

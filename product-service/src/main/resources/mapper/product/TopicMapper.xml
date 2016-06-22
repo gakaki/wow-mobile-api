@@ -1,196 +1,537 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.product.mapper.TopicMapper">
-    <resultMap id="BaseResultMap" type="com.wow.product.model.Topic">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="topic_name" property="topicName" jdbcType="VARCHAR"/>
-        <result column="can_show" property="canShow" jdbcType="BIT"/>
-        <result column="topic_img" property="topicImg" jdbcType="VARCHAR"/>
-        <result column="topic_img_link" property="topicImgLink" jdbcType="VARCHAR"/>
-        <result column="topic_main_title" property="topicMainTitle" jdbcType="VARCHAR"/>
-        <result column="topic_desc" property="topicDesc" jdbcType="VARCHAR"/>
-        <result column="follow_num" property="followNum" jdbcType="INTEGER"/>
-        <result column="comment_num" property="commentNum" jdbcType="INTEGER"/>
-        <result column="share_num" property="shareNum" jdbcType="INTEGER"/>
-        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
-        <result column="is_allow_comment" property="isAllowComment" jdbcType="BIT"/>
-        <result column="like_num" property="likeNum" jdbcType="INTEGER"/>
-        <result column="product_num_show_along_with_topic" property="productNumShowAlongWithTopic" jdbcType="TINYINT"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-        <result column="topic_type" property="topicType" jdbcType="TINYINT"/>
-    </resultMap>
-    <resultMap id="ResultMapWithBLOBs" type="com.wow.product.model.Topic" extends="BaseResultMap">
-        <result column="topic_content_details" property="topicContentDetails" jdbcType="LONGVARCHAR"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, topic_name, can_show, topic_img, topic_img_link, topic_main_title, topic_desc,
-        follow_num, comment_num, share_num, group_id, is_allow_comment, like_num, product_num_show_along_with_topic,
-        create_time, create_by, update_time, update_by, is_deleted, topic_type
-    </sql>
-    <sql id="Blob_Column_List">
-        topic_content_details
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
-        from topic
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.product.model.Topic">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into topic (topic_name, can_show, topic_img,
-        topic_img_link, topic_main_title, topic_desc,
-        follow_num, comment_num, share_num,
-        group_id, is_allow_comment, like_num,
-        product_num_show_along_with_topic, create_time,
-        create_by, update_time, update_by,
-        is_deleted, topic_type, topic_content_details
-        )
-        values (#{topicName,jdbcType=VARCHAR}, #{canShow,jdbcType=BIT}, #{topicImg,jdbcType=VARCHAR},
-        #{topicImgLink,jdbcType=VARCHAR}, #{topicMainTitle,jdbcType=VARCHAR}, #{topicDesc,jdbcType=VARCHAR},
-        #{followNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, #{shareNum,jdbcType=INTEGER},
-        #{groupId,jdbcType=INTEGER}, #{isAllowComment,jdbcType=BIT}, #{likeNum,jdbcType=INTEGER},
-        #{productNumShowAlongWithTopic,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
-        #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
-        #{isDeleted,jdbcType=BIT}, #{topicType,jdbcType=TINYINT}, #{topicContentDetails,jdbcType=LONGVARCHAR}
-        )
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.product.model.Topic">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into topic
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="topicName != null">
-                topic_name,
-            </if>
-            <if test="canShow != null">
-                can_show,
-            </if>
-            <if test="topicImg != null">
-                topic_img,
-            </if>
-            <if test="topicImgLink != null">
-                topic_img_link,
-            </if>
-            <if test="topicMainTitle != null">
-                topic_main_title,
-            </if>
-            <if test="topicDesc != null">
-                topic_desc,
-            </if>
-            <if test="followNum != null">
-                follow_num,
-            </if>
-            <if test="commentNum != null">
-                comment_num,
-            </if>
-            <if test="shareNum != null">
-                share_num,
-            </if>
-            <if test="groupId != null">
-                group_id,
-            </if>
-            <if test="isAllowComment != null">
-                is_allow_comment,
-            </if>
-            <if test="likeNum != null">
-                like_num,
-            </if>
-            <if test="productNumShowAlongWithTopic != null">
-                product_num_show_along_with_topic,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="createBy != null">
-                create_by,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="updateBy != null">
-                update_by,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-            <if test="topicType != null">
-                topic_type,
-            </if>
-            <if test="topicContentDetails != null">
-                topic_content_details,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="topicName != null">
-                #{topicName,jdbcType=VARCHAR},
-            </if>
-            <if test="canShow != null">
-                #{canShow,jdbcType=BIT},
-            </if>
-            <if test="topicImg != null">
-                #{topicImg,jdbcType=VARCHAR},
-            </if>
-            <if test="topicImgLink != null">
-                #{topicImgLink,jdbcType=VARCHAR},
-            </if>
-            <if test="topicMainTitle != null">
-                #{topicMainTitle,jdbcType=VARCHAR},
-            </if>
-            <if test="topicDesc != null">
-                #{topicDesc,jdbcType=VARCHAR},
-            </if>
-            <if test="followNum != null">
-                #{followNum,jdbcType=INTEGER},
-            </if>
-            <if test="commentNum != null">
-                #{commentNum,jdbcType=INTEGER},
-            </if>
-            <if test="shareNum != null">
-                #{shareNum,jdbcType=INTEGER},
-            </if>
-            <if test="groupId != null">
-                #{groupId,jdbcType=INTEGER},
-            </if>
-            <if test="isAllowComment != null">
-                #{isAllowComment,jdbcType=BIT},
-            </if>
-            <if test="likeNum != null">
-                #{likeNum,jdbcType=INTEGER},
-            </if>
-            <if test="productNumShowAlongWithTopic != null">
-                #{productNumShowAlongWithTopic,jdbcType=TINYINT},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="createBy != null">
-                #{createBy,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateBy != null">
-                #{updateBy,jdbcType=VARCHAR},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=BIT},
-            </if>
-            <if test="topicType != null">
-                #{topicType,jdbcType=TINYINT},
-            </if>
-            <if test="topicContentDetails != null">
-                #{topicContentDetails,jdbcType=LONGVARCHAR},
-            </if>
-        </trim>
-    </insert>
+<mapper namespace="com.wow.product.mapper.TopicMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.Topic" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="topic_name" property="topicName" jdbcType="VARCHAR" />
+    <result column="can_show" property="canShow" jdbcType="BIT" />
+    <result column="topic_img" property="topicImg" jdbcType="VARCHAR" />
+    <result column="topic_img_link" property="topicImgLink" jdbcType="VARCHAR" />
+    <result column="topic_main_title" property="topicMainTitle" jdbcType="VARCHAR" />
+    <result column="topic_desc" property="topicDesc" jdbcType="VARCHAR" />
+    <result column="follow_num" property="followNum" jdbcType="INTEGER" />
+    <result column="comment_num" property="commentNum" jdbcType="INTEGER" />
+    <result column="share_num" property="shareNum" jdbcType="INTEGER" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="is_allow_comment" property="isAllowComment" jdbcType="BIT" />
+    <result column="like_num" property="likeNum" jdbcType="INTEGER" />
+    <result column="product_num_show_along_with_topic" property="productNumShowAlongWithTopic" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="topic_type" property="topicType" jdbcType="TINYINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wow.product.model.Topic" extends="BaseResultMap" >
+    <result column="topic_content_details" property="topicContentDetails" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, topic_name, can_show, topic_img, topic_img_link, topic_main_title, topic_desc, 
+    follow_num, comment_num, share_num, group_id, is_allow_comment, like_num, product_num_show_along_with_topic, 
+    create_time, create_by, update_time, update_by, is_deleted, topic_type
+  </sql>
+  <sql id="Blob_Column_List" >
+    topic_content_details
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.wow.product.model.TopicExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from topic
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.TopicExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from topic
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from topic
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from topic
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.product.model.TopicExample" >
+    delete from topic
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.product.model.Topic" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into topic (topic_name, can_show, topic_img, 
+      topic_img_link, topic_main_title, topic_desc, 
+      follow_num, comment_num, share_num, 
+      group_id, is_allow_comment, like_num, 
+      product_num_show_along_with_topic, create_time, 
+      create_by, update_time, update_by, 
+      is_deleted, topic_type, topic_content_details
+      )
+    values (#{topicName,jdbcType=VARCHAR}, #{canShow,jdbcType=BIT}, #{topicImg,jdbcType=VARCHAR}, 
+      #{topicImgLink,jdbcType=VARCHAR}, #{topicMainTitle,jdbcType=VARCHAR}, #{topicDesc,jdbcType=VARCHAR}, 
+      #{followNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, #{shareNum,jdbcType=INTEGER}, 
+      #{groupId,jdbcType=INTEGER}, #{isAllowComment,jdbcType=BIT}, #{likeNum,jdbcType=INTEGER}, 
+      #{productNumShowAlongWithTopic,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=BIT}, #{topicType,jdbcType=TINYINT}, #{topicContentDetails,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.product.model.Topic" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into topic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="topicName != null" >
+        topic_name,
+      </if>
+      <if test="canShow != null" >
+        can_show,
+      </if>
+      <if test="topicImg != null" >
+        topic_img,
+      </if>
+      <if test="topicImgLink != null" >
+        topic_img_link,
+      </if>
+      <if test="topicMainTitle != null" >
+        topic_main_title,
+      </if>
+      <if test="topicDesc != null" >
+        topic_desc,
+      </if>
+      <if test="followNum != null" >
+        follow_num,
+      </if>
+      <if test="commentNum != null" >
+        comment_num,
+      </if>
+      <if test="shareNum != null" >
+        share_num,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="isAllowComment != null" >
+        is_allow_comment,
+      </if>
+      <if test="likeNum != null" >
+        like_num,
+      </if>
+      <if test="productNumShowAlongWithTopic != null" >
+        product_num_show_along_with_topic,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="topicType != null" >
+        topic_type,
+      </if>
+      <if test="topicContentDetails != null" >
+        topic_content_details,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="topicName != null" >
+        #{topicName,jdbcType=VARCHAR},
+      </if>
+      <if test="canShow != null" >
+        #{canShow,jdbcType=BIT},
+      </if>
+      <if test="topicImg != null" >
+        #{topicImg,jdbcType=VARCHAR},
+      </if>
+      <if test="topicImgLink != null" >
+        #{topicImgLink,jdbcType=VARCHAR},
+      </if>
+      <if test="topicMainTitle != null" >
+        #{topicMainTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="topicDesc != null" >
+        #{topicDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="followNum != null" >
+        #{followNum,jdbcType=INTEGER},
+      </if>
+      <if test="commentNum != null" >
+        #{commentNum,jdbcType=INTEGER},
+      </if>
+      <if test="shareNum != null" >
+        #{shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="isAllowComment != null" >
+        #{isAllowComment,jdbcType=BIT},
+      </if>
+      <if test="likeNum != null" >
+        #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="productNumShowAlongWithTopic != null" >
+        #{productNumShowAlongWithTopic,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="topicType != null" >
+        #{topicType,jdbcType=TINYINT},
+      </if>
+      <if test="topicContentDetails != null" >
+        #{topicContentDetails,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.product.model.TopicExample" resultType="java.lang.Integer" >
+    select count(*) from topic
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update topic
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.topicName != null" >
+        topic_name = #{record.topicName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.canShow != null" >
+        can_show = #{record.canShow,jdbcType=BIT},
+      </if>
+      <if test="record.topicImg != null" >
+        topic_img = #{record.topicImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topicImgLink != null" >
+        topic_img_link = #{record.topicImgLink,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topicMainTitle != null" >
+        topic_main_title = #{record.topicMainTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topicDesc != null" >
+        topic_desc = #{record.topicDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.followNum != null" >
+        follow_num = #{record.followNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.commentNum != null" >
+        comment_num = #{record.commentNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.shareNum != null" >
+        share_num = #{record.shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.groupId != null" >
+        group_id = #{record.groupId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isAllowComment != null" >
+        is_allow_comment = #{record.isAllowComment,jdbcType=BIT},
+      </if>
+      <if test="record.likeNum != null" >
+        like_num = #{record.likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.productNumShowAlongWithTopic != null" >
+        product_num_show_along_with_topic = #{record.productNumShowAlongWithTopic,jdbcType=TINYINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+      <if test="record.topicType != null" >
+        topic_type = #{record.topicType,jdbcType=TINYINT},
+      </if>
+      <if test="record.topicContentDetails != null" >
+        topic_content_details = #{record.topicContentDetails,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update topic
+    set id = #{record.id,jdbcType=INTEGER},
+      topic_name = #{record.topicName,jdbcType=VARCHAR},
+      can_show = #{record.canShow,jdbcType=BIT},
+      topic_img = #{record.topicImg,jdbcType=VARCHAR},
+      topic_img_link = #{record.topicImgLink,jdbcType=VARCHAR},
+      topic_main_title = #{record.topicMainTitle,jdbcType=VARCHAR},
+      topic_desc = #{record.topicDesc,jdbcType=VARCHAR},
+      follow_num = #{record.followNum,jdbcType=INTEGER},
+      comment_num = #{record.commentNum,jdbcType=INTEGER},
+      share_num = #{record.shareNum,jdbcType=INTEGER},
+      group_id = #{record.groupId,jdbcType=INTEGER},
+      is_allow_comment = #{record.isAllowComment,jdbcType=BIT},
+      like_num = #{record.likeNum,jdbcType=INTEGER},
+      product_num_show_along_with_topic = #{record.productNumShowAlongWithTopic,jdbcType=TINYINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=BIT},
+      topic_type = #{record.topicType,jdbcType=TINYINT},
+      topic_content_details = #{record.topicContentDetails,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update topic
+    set id = #{record.id,jdbcType=INTEGER},
+      topic_name = #{record.topicName,jdbcType=VARCHAR},
+      can_show = #{record.canShow,jdbcType=BIT},
+      topic_img = #{record.topicImg,jdbcType=VARCHAR},
+      topic_img_link = #{record.topicImgLink,jdbcType=VARCHAR},
+      topic_main_title = #{record.topicMainTitle,jdbcType=VARCHAR},
+      topic_desc = #{record.topicDesc,jdbcType=VARCHAR},
+      follow_num = #{record.followNum,jdbcType=INTEGER},
+      comment_num = #{record.commentNum,jdbcType=INTEGER},
+      share_num = #{record.shareNum,jdbcType=INTEGER},
+      group_id = #{record.groupId,jdbcType=INTEGER},
+      is_allow_comment = #{record.isAllowComment,jdbcType=BIT},
+      like_num = #{record.likeNum,jdbcType=INTEGER},
+      product_num_show_along_with_topic = #{record.productNumShowAlongWithTopic,jdbcType=TINYINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=BIT},
+      topic_type = #{record.topicType,jdbcType=TINYINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.Topic" >
+    update topic
+    <set >
+      <if test="topicName != null" >
+        topic_name = #{topicName,jdbcType=VARCHAR},
+      </if>
+      <if test="canShow != null" >
+        can_show = #{canShow,jdbcType=BIT},
+      </if>
+      <if test="topicImg != null" >
+        topic_img = #{topicImg,jdbcType=VARCHAR},
+      </if>
+      <if test="topicImgLink != null" >
+        topic_img_link = #{topicImgLink,jdbcType=VARCHAR},
+      </if>
+      <if test="topicMainTitle != null" >
+        topic_main_title = #{topicMainTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="topicDesc != null" >
+        topic_desc = #{topicDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="followNum != null" >
+        follow_num = #{followNum,jdbcType=INTEGER},
+      </if>
+      <if test="commentNum != null" >
+        comment_num = #{commentNum,jdbcType=INTEGER},
+      </if>
+      <if test="shareNum != null" >
+        share_num = #{shareNum,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="isAllowComment != null" >
+        is_allow_comment = #{isAllowComment,jdbcType=BIT},
+      </if>
+      <if test="likeNum != null" >
+        like_num = #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="productNumShowAlongWithTopic != null" >
+        product_num_show_along_with_topic = #{productNumShowAlongWithTopic,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="topicType != null" >
+        topic_type = #{topicType,jdbcType=TINYINT},
+      </if>
+      <if test="topicContentDetails != null" >
+        topic_content_details = #{topicContentDetails,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wow.product.model.Topic" >
+    update topic
+    set topic_name = #{topicName,jdbcType=VARCHAR},
+      can_show = #{canShow,jdbcType=BIT},
+      topic_img = #{topicImg,jdbcType=VARCHAR},
+      topic_img_link = #{topicImgLink,jdbcType=VARCHAR},
+      topic_main_title = #{topicMainTitle,jdbcType=VARCHAR},
+      topic_desc = #{topicDesc,jdbcType=VARCHAR},
+      follow_num = #{followNum,jdbcType=INTEGER},
+      comment_num = #{commentNum,jdbcType=INTEGER},
+      share_num = #{shareNum,jdbcType=INTEGER},
+      group_id = #{groupId,jdbcType=INTEGER},
+      is_allow_comment = #{isAllowComment,jdbcType=BIT},
+      like_num = #{likeNum,jdbcType=INTEGER},
+      product_num_show_along_with_topic = #{productNumShowAlongWithTopic,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      topic_type = #{topicType,jdbcType=TINYINT},
+      topic_content_details = #{topicContentDetails,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Topic" >
+    update topic
+    set topic_name = #{topicName,jdbcType=VARCHAR},
+      can_show = #{canShow,jdbcType=BIT},
+      topic_img = #{topicImg,jdbcType=VARCHAR},
+      topic_img_link = #{topicImgLink,jdbcType=VARCHAR},
+      topic_main_title = #{topicMainTitle,jdbcType=VARCHAR},
+      topic_desc = #{topicDesc,jdbcType=VARCHAR},
+      follow_num = #{followNum,jdbcType=INTEGER},
+      comment_num = #{commentNum,jdbcType=INTEGER},
+      share_num = #{shareNum,jdbcType=INTEGER},
+      group_id = #{groupId,jdbcType=INTEGER},
+      is_allow_comment = #{isAllowComment,jdbcType=BIT},
+      like_num = #{likeNum,jdbcType=INTEGER},
+      product_num_show_along_with_topic = #{productNumShowAlongWithTopic,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      topic_type = #{topicType,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

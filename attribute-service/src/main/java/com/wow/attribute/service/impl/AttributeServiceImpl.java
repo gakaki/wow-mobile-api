@@ -44,9 +44,17 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int updateAttribute(Attribute attribute) {
-        return 1;
+        return attributeMapper.updateByPrimaryKey(attribute);
     }
 
+    /**
+     * 根据ID删除属性
+     * @param attributeId
+     * @return
+     */
+    public int deleteAttributeById(int attributeId) {
+        return attributeMapper.deleteByPrimaryKey(attributeId);
+    }
     /**
      * 根据Id查询属性
      *
@@ -63,6 +71,7 @@ public class AttributeServiceImpl implements AttributeService {
             attribute.setAttributeName("mockattribute");
         }
         return attribute;
+
     }
 
     /**

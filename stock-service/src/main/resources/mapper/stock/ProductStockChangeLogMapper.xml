@@ -1,103 +1,291 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.stock.mapper.ProductStockChangeLogMapper">
-    <resultMap id="BaseResultMap" type="com.wow.stock.model.ProductStockChangeLog">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="biz_type" property="bizType" jdbcType="TINYINT"/>
-        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
-        <result column="product_id" property="productId" jdbcType="INTEGER"/>
-        <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER"/>
-        <result column="stock_num" property="stockNum" jdbcType="SMALLINT"/>
-        <result column="purchase_order_id" property="purchaseOrderId" jdbcType="INTEGER"/>
-        <result column="return_order_id" property="returnOrderId" jdbcType="INTEGER"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, biz_type, order_id, product_id, warehouse_id, stock_num, purchase_order_id, return_order_id,
-        create_time, is_deleted
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from product_stock_change_log
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.stock.model.ProductStockChangeLog">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into product_stock_change_log (biz_type, order_id, product_id,
-        warehouse_id, stock_num, purchase_order_id,
-        return_order_id, create_time, is_deleted
-        )
-        values (#{bizType,jdbcType=TINYINT}, #{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER},
-        #{warehouseId,jdbcType=INTEGER}, #{stockNum,jdbcType=SMALLINT}, #{purchaseOrderId,jdbcType=INTEGER},
-        #{returnOrderId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
-        )
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.stock.model.ProductStockChangeLog">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into product_stock_change_log
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="bizType != null">
-                biz_type,
-            </if>
-            <if test="orderId != null">
-                order_id,
-            </if>
-            <if test="productId != null">
-                product_id,
-            </if>
-            <if test="warehouseId != null">
-                warehouse_id,
-            </if>
-            <if test="stockNum != null">
-                stock_num,
-            </if>
-            <if test="purchaseOrderId != null">
-                purchase_order_id,
-            </if>
-            <if test="returnOrderId != null">
-                return_order_id,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="bizType != null">
-                #{bizType,jdbcType=TINYINT},
-            </if>
-            <if test="orderId != null">
-                #{orderId,jdbcType=INTEGER},
-            </if>
-            <if test="productId != null">
-                #{productId,jdbcType=INTEGER},
-            </if>
-            <if test="warehouseId != null">
-                #{warehouseId,jdbcType=INTEGER},
-            </if>
-            <if test="stockNum != null">
-                #{stockNum,jdbcType=SMALLINT},
-            </if>
-            <if test="purchaseOrderId != null">
-                #{purchaseOrderId,jdbcType=INTEGER},
-            </if>
-            <if test="returnOrderId != null">
-                #{returnOrderId,jdbcType=INTEGER},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=BIT},
-            </if>
-        </trim>
-    </insert>
+<mapper namespace="com.wow.stock.mapper.ProductStockChangeLogMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.stock.model.ProductStockChangeLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="biz_type" property="bizType" jdbcType="TINYINT" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
+    <result column="stock_num" property="stockNum" jdbcType="SMALLINT" />
+    <result column="purchase_order_id" property="purchaseOrderId" jdbcType="INTEGER" />
+    <result column="return_order_id" property="returnOrderId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, biz_type, order_id, product_id, warehouse_id, stock_num, purchase_order_id, return_order_id, 
+    create_time, is_deleted
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.stock.model.ProductStockChangeLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product_stock_change_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_stock_change_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product_stock_change_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.stock.model.ProductStockChangeLogExample" >
+    delete from product_stock_change_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.stock.model.ProductStockChangeLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_stock_change_log (biz_type, order_id, product_id, 
+      warehouse_id, stock_num, purchase_order_id, 
+      return_order_id, create_time, is_deleted
+      )
+    values (#{bizType,jdbcType=TINYINT}, #{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+      #{warehouseId,jdbcType=INTEGER}, #{stockNum,jdbcType=SMALLINT}, #{purchaseOrderId,jdbcType=INTEGER}, 
+      #{returnOrderId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.stock.model.ProductStockChangeLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_stock_change_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bizType != null" >
+        biz_type,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id,
+      </if>
+      <if test="stockNum != null" >
+        stock_num,
+      </if>
+      <if test="purchaseOrderId != null" >
+        purchase_order_id,
+      </if>
+      <if test="returnOrderId != null" >
+        return_order_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bizType != null" >
+        #{bizType,jdbcType=TINYINT},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="stockNum != null" >
+        #{stockNum,jdbcType=SMALLINT},
+      </if>
+      <if test="purchaseOrderId != null" >
+        #{purchaseOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="returnOrderId != null" >
+        #{returnOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.stock.model.ProductStockChangeLogExample" resultType="java.lang.Integer" >
+    select count(*) from product_stock_change_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update product_stock_change_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.bizType != null" >
+        biz_type = #{record.bizType,jdbcType=TINYINT},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=INTEGER},
+      </if>
+      <if test="record.warehouseId != null" >
+        warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="record.stockNum != null" >
+        stock_num = #{record.stockNum,jdbcType=SMALLINT},
+      </if>
+      <if test="record.purchaseOrderId != null" >
+        purchase_order_id = #{record.purchaseOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.returnOrderId != null" >
+        return_order_id = #{record.returnOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product_stock_change_log
+    set id = #{record.id,jdbcType=INTEGER},
+      biz_type = #{record.bizType,jdbcType=TINYINT},
+      order_id = #{record.orderId,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
+      stock_num = #{record.stockNum,jdbcType=SMALLINT},
+      purchase_order_id = #{record.purchaseOrderId,jdbcType=INTEGER},
+      return_order_id = #{record.returnOrderId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.stock.model.ProductStockChangeLog" >
+    update product_stock_change_log
+    <set >
+      <if test="bizType != null" >
+        biz_type = #{bizType,jdbcType=TINYINT},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="stockNum != null" >
+        stock_num = #{stockNum,jdbcType=SMALLINT},
+      </if>
+      <if test="purchaseOrderId != null" >
+        purchase_order_id = #{purchaseOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="returnOrderId != null" >
+        return_order_id = #{returnOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.stock.model.ProductStockChangeLog" >
+    update product_stock_change_log
+    set biz_type = #{bizType,jdbcType=TINYINT},
+      order_id = #{orderId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
+      warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      stock_num = #{stockNum,jdbcType=SMALLINT},
+      purchase_order_id = #{purchaseOrderId,jdbcType=INTEGER},
+      return_order_id = #{returnOrderId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

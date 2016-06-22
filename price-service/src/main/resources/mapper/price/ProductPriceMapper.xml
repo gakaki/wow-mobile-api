@@ -1,117 +1,321 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.price.mapper.ProductPriceMapper">
-    <resultMap id="BaseResultMap" type="com.wow.price.model.ProductPrice">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="product_id" property="productId" jdbcType="INTEGER"/>
-        <result column="sell_price" property="sellPrice" jdbcType="DECIMAL"/>
-        <result column="cost_price" property="costPrice" jdbcType="DECIMAL"/>
-        <result column="min_sell_price" property="minSellPrice" jdbcType="DECIMAL"/>
-        <result column="benchmark_price" property="benchmarkPrice" jdbcType="DECIMAL"/>
-        <result column="promo_price" property="promoPrice" jdbcType="DECIMAL"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
-        <result column="is_deleted" property="isDeleted" jdbcType="BIT"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, product_id, sell_price, cost_price, min_sell_price, benchmark_price, promo_price,
-        create_time, create_by, update_time, update_by, is_deleted
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from product_price
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.price.model.ProductPrice">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into product_price (product_id, sell_price, cost_price,
-        min_sell_price, benchmark_price, promo_price,
-        create_time, create_by, update_time,
-        update_by, is_deleted)
-        values (#{productId,jdbcType=INTEGER}, #{sellPrice,jdbcType=DECIMAL}, #{costPrice,jdbcType=DECIMAL},
-        #{minSellPrice,jdbcType=DECIMAL}, #{benchmarkPrice,jdbcType=DECIMAL}, #{promoPrice,jdbcType=DECIMAL},
-        #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
-        #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.price.model.ProductPrice">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into product_price
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="productId != null">
-                product_id,
-            </if>
-            <if test="sellPrice != null">
-                sell_price,
-            </if>
-            <if test="costPrice != null">
-                cost_price,
-            </if>
-            <if test="minSellPrice != null">
-                min_sell_price,
-            </if>
-            <if test="benchmarkPrice != null">
-                benchmark_price,
-            </if>
-            <if test="promoPrice != null">
-                promo_price,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="createBy != null">
-                create_by,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
-            <if test="updateBy != null">
-                update_by,
-            </if>
-            <if test="isDeleted != null">
-                is_deleted,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="productId != null">
-                #{productId,jdbcType=INTEGER},
-            </if>
-            <if test="sellPrice != null">
-                #{sellPrice,jdbcType=DECIMAL},
-            </if>
-            <if test="costPrice != null">
-                #{costPrice,jdbcType=DECIMAL},
-            </if>
-            <if test="minSellPrice != null">
-                #{minSellPrice,jdbcType=DECIMAL},
-            </if>
-            <if test="benchmarkPrice != null">
-                #{benchmarkPrice,jdbcType=DECIMAL},
-            </if>
-            <if test="promoPrice != null">
-                #{promoPrice,jdbcType=DECIMAL},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="createBy != null">
-                #{createBy,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateBy != null">
-                #{updateBy,jdbcType=VARCHAR},
-            </if>
-            <if test="isDeleted != null">
-                #{isDeleted,jdbcType=BIT},
-            </if>
-        </trim>
-    </insert>
+<mapper namespace="com.wow.price.mapper.ProductPriceMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.price.model.ProductPrice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
+    <result column="min_sell_price" property="minSellPrice" jdbcType="DECIMAL" />
+    <result column="benchmark_price" property="benchmarkPrice" jdbcType="DECIMAL" />
+    <result column="promo_price" property="promoPrice" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, product_id, sell_price, cost_price, min_sell_price, benchmark_price, promo_price, 
+    create_time, create_by, update_time, update_by, is_deleted
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.price.model.ProductPriceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product_price
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_price
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product_price
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.price.model.ProductPriceExample" >
+    delete from product_price
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.price.model.ProductPrice" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_price (product_id, sell_price, cost_price, 
+      min_sell_price, benchmark_price, promo_price, 
+      create_time, create_by, update_time, 
+      update_by, is_deleted)
+    values (#{productId,jdbcType=INTEGER}, #{sellPrice,jdbcType=DECIMAL}, #{costPrice,jdbcType=DECIMAL}, 
+      #{minSellPrice,jdbcType=DECIMAL}, #{benchmarkPrice,jdbcType=DECIMAL}, #{promoPrice,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.price.model.ProductPrice" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_price
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="sellPrice != null" >
+        sell_price,
+      </if>
+      <if test="costPrice != null" >
+        cost_price,
+      </if>
+      <if test="minSellPrice != null" >
+        min_sell_price,
+      </if>
+      <if test="benchmarkPrice != null" >
+        benchmark_price,
+      </if>
+      <if test="promoPrice != null" >
+        promo_price,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="sellPrice != null" >
+        #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="costPrice != null" >
+        #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="minSellPrice != null" >
+        #{minSellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="benchmarkPrice != null" >
+        #{benchmarkPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="promoPrice != null" >
+        #{promoPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.price.model.ProductPriceExample" resultType="java.lang.Integer" >
+    select count(*) from product_price
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update product_price
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=INTEGER},
+      </if>
+      <if test="record.sellPrice != null" >
+        sell_price = #{record.sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costPrice != null" >
+        cost_price = #{record.costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.minSellPrice != null" >
+        min_sell_price = #{record.minSellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.benchmarkPrice != null" >
+        benchmark_price = #{record.benchmarkPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.promoPrice != null" >
+        promo_price = #{record.promoPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product_price
+    set id = #{record.id,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      sell_price = #{record.sellPrice,jdbcType=DECIMAL},
+      cost_price = #{record.costPrice,jdbcType=DECIMAL},
+      min_sell_price = #{record.minSellPrice,jdbcType=DECIMAL},
+      benchmark_price = #{record.benchmarkPrice,jdbcType=DECIMAL},
+      promo_price = #{record.promoPrice,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.price.model.ProductPrice" >
+    update product_price
+    <set >
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="sellPrice != null" >
+        sell_price = #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="costPrice != null" >
+        cost_price = #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="minSellPrice != null" >
+        min_sell_price = #{minSellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="benchmarkPrice != null" >
+        benchmark_price = #{benchmarkPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="promoPrice != null" >
+        promo_price = #{promoPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.price.model.ProductPrice" >
+    update product_price
+    set product_id = #{productId,jdbcType=INTEGER},
+      sell_price = #{sellPrice,jdbcType=DECIMAL},
+      cost_price = #{costPrice,jdbcType=DECIMAL},
+      min_sell_price = #{minSellPrice,jdbcType=DECIMAL},
+      benchmark_price = #{benchmarkPrice,jdbcType=DECIMAL},
+      promo_price = #{promoPrice,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

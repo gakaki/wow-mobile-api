@@ -1,118 +1,321 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.product.mapper.ProductCommentMapper">
-    <resultMap id="BaseResultMap" type="com.wow.product.model.ProductComment">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
-        <result column="product_id" property="productId" jdbcType="INTEGER"/>
-        <result column="end_user_id" property="endUserId" jdbcType="INTEGER"/>
-        <result column="packaging_score" property="packagingScore" jdbcType="TINYINT"/>
-        <result column="delivery_speed_score" property="deliverySpeedScore" jdbcType="TINYINT"/>
-        <result column="delivery_service_attitute_score" property="deliveryServiceAttituteScore" jdbcType="TINYINT"/>
-        <result column="product_satisfaction_score" property="productSatisfactionScore" jdbcType="TINYINT"/>
-        <result column="comments" property="comments" jdbcType="VARCHAR"/>
-        <result column="comment_time" property="commentTime" jdbcType="TIMESTAMP"/>
-        <result column="is_approved" property="isApproved" jdbcType="BIT"/>
-        <result column="cs_reply" property="csReply" jdbcType="VARCHAR"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, order_id, product_id, end_user_id, packaging_score, delivery_speed_score, delivery_service_attitute_score,
-        product_satisfaction_score, comments, comment_time, is_approved, cs_reply
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from product_comment
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <insert id="insert" parameterType="com.wow.product.model.ProductComment">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into product_comment (order_id, product_id, end_user_id,
-        packaging_score, delivery_speed_score, delivery_service_attitute_score,
-        product_satisfaction_score, comments, comment_time,
-        is_approved, cs_reply)
-        values (#{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{endUserId,jdbcType=INTEGER},
-        #{packagingScore,jdbcType=TINYINT}, #{deliverySpeedScore,jdbcType=TINYINT},
+<mapper namespace="com.wow.product.mapper.ProductCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.ProductComment" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
+    <result column="packaging_score" property="packagingScore" jdbcType="TINYINT" />
+    <result column="delivery_speed_score" property="deliverySpeedScore" jdbcType="TINYINT" />
+    <result column="delivery_service_attitute_score" property="deliveryServiceAttituteScore" jdbcType="TINYINT" />
+    <result column="product_satisfaction_score" property="productSatisfactionScore" jdbcType="TINYINT" />
+    <result column="comments" property="comments" jdbcType="VARCHAR" />
+    <result column="comment_time" property="commentTime" jdbcType="TIMESTAMP" />
+    <result column="is_approved" property="isApproved" jdbcType="BIT" />
+    <result column="cs_reply" property="csReply" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, order_id, product_id, end_user_id, packaging_score, delivery_speed_score, delivery_service_attitute_score, 
+    product_satisfaction_score, comments, comment_time, is_approved, cs_reply
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ProductCommentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_comment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product_comment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.product.model.ProductCommentExample" >
+    delete from product_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.product.model.ProductComment" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_comment (order_id, product_id, end_user_id, 
+      packaging_score, delivery_speed_score, delivery_service_attitute_score, 
+      product_satisfaction_score, comments, comment_time, 
+      is_approved, cs_reply)
+    values (#{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{endUserId,jdbcType=INTEGER}, 
+      #{packagingScore,jdbcType=TINYINT}, #{deliverySpeedScore,jdbcType=TINYINT}, #{deliveryServiceAttituteScore,jdbcType=TINYINT}, 
+      #{productSatisfactionScore,jdbcType=TINYINT}, #{comments,jdbcType=VARCHAR}, #{commentTime,jdbcType=TIMESTAMP}, 
+      #{isApproved,jdbcType=BIT}, #{csReply,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.product.model.ProductComment" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="endUserId != null" >
+        end_user_id,
+      </if>
+      <if test="packagingScore != null" >
+        packaging_score,
+      </if>
+      <if test="deliverySpeedScore != null" >
+        delivery_speed_score,
+      </if>
+      <if test="deliveryServiceAttituteScore != null" >
+        delivery_service_attitute_score,
+      </if>
+      <if test="productSatisfactionScore != null" >
+        product_satisfaction_score,
+      </if>
+      <if test="comments != null" >
+        comments,
+      </if>
+      <if test="commentTime != null" >
+        comment_time,
+      </if>
+      <if test="isApproved != null" >
+        is_approved,
+      </if>
+      <if test="csReply != null" >
+        cs_reply,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="endUserId != null" >
+        #{endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="packagingScore != null" >
+        #{packagingScore,jdbcType=TINYINT},
+      </if>
+      <if test="deliverySpeedScore != null" >
+        #{deliverySpeedScore,jdbcType=TINYINT},
+      </if>
+      <if test="deliveryServiceAttituteScore != null" >
         #{deliveryServiceAttituteScore,jdbcType=TINYINT},
-        #{productSatisfactionScore,jdbcType=TINYINT}, #{comments,jdbcType=VARCHAR}, #{commentTime,jdbcType=TIMESTAMP},
-        #{isApproved,jdbcType=BIT}, #{csReply,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" parameterType="com.wow.product.model.ProductComment">
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into product_comment
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="orderId != null">
-                order_id,
-            </if>
-            <if test="productId != null">
-                product_id,
-            </if>
-            <if test="endUserId != null">
-                end_user_id,
-            </if>
-            <if test="packagingScore != null">
-                packaging_score,
-            </if>
-            <if test="deliverySpeedScore != null">
-                delivery_speed_score,
-            </if>
-            <if test="deliveryServiceAttituteScore != null">
-                delivery_service_attitute_score,
-            </if>
-            <if test="productSatisfactionScore != null">
-                product_satisfaction_score,
-            </if>
-            <if test="comments != null">
-                comments,
-            </if>
-            <if test="commentTime != null">
-                comment_time,
-            </if>
-            <if test="isApproved != null">
-                is_approved,
-            </if>
-            <if test="csReply != null">
-                cs_reply,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="orderId != null">
-                #{orderId,jdbcType=INTEGER},
-            </if>
-            <if test="productId != null">
-                #{productId,jdbcType=INTEGER},
-            </if>
-            <if test="endUserId != null">
-                #{endUserId,jdbcType=INTEGER},
-            </if>
-            <if test="packagingScore != null">
-                #{packagingScore,jdbcType=TINYINT},
-            </if>
-            <if test="deliverySpeedScore != null">
-                #{deliverySpeedScore,jdbcType=TINYINT},
-            </if>
-            <if test="deliveryServiceAttituteScore != null">
-                #{deliveryServiceAttituteScore,jdbcType=TINYINT},
-            </if>
-            <if test="productSatisfactionScore != null">
-                #{productSatisfactionScore,jdbcType=TINYINT},
-            </if>
-            <if test="comments != null">
-                #{comments,jdbcType=VARCHAR},
-            </if>
-            <if test="commentTime != null">
-                #{commentTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="isApproved != null">
-                #{isApproved,jdbcType=BIT},
-            </if>
-            <if test="csReply != null">
-                #{csReply,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
+      </if>
+      <if test="productSatisfactionScore != null" >
+        #{productSatisfactionScore,jdbcType=TINYINT},
+      </if>
+      <if test="comments != null" >
+        #{comments,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTime != null" >
+        #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isApproved != null" >
+        #{isApproved,jdbcType=BIT},
+      </if>
+      <if test="csReply != null" >
+        #{csReply,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.product.model.ProductCommentExample" resultType="java.lang.Integer" >
+    select count(*) from product_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update product_comment
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=INTEGER},
+      </if>
+      <if test="record.endUserId != null" >
+        end_user_id = #{record.endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.packagingScore != null" >
+        packaging_score = #{record.packagingScore,jdbcType=TINYINT},
+      </if>
+      <if test="record.deliverySpeedScore != null" >
+        delivery_speed_score = #{record.deliverySpeedScore,jdbcType=TINYINT},
+      </if>
+      <if test="record.deliveryServiceAttituteScore != null" >
+        delivery_service_attitute_score = #{record.deliveryServiceAttituteScore,jdbcType=TINYINT},
+      </if>
+      <if test="record.productSatisfactionScore != null" >
+        product_satisfaction_score = #{record.productSatisfactionScore,jdbcType=TINYINT},
+      </if>
+      <if test="record.comments != null" >
+        comments = #{record.comments,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commentTime != null" >
+        comment_time = #{record.commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isApproved != null" >
+        is_approved = #{record.isApproved,jdbcType=BIT},
+      </if>
+      <if test="record.csReply != null" >
+        cs_reply = #{record.csReply,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product_comment
+    set id = #{record.id,jdbcType=INTEGER},
+      order_id = #{record.orderId,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      end_user_id = #{record.endUserId,jdbcType=INTEGER},
+      packaging_score = #{record.packagingScore,jdbcType=TINYINT},
+      delivery_speed_score = #{record.deliverySpeedScore,jdbcType=TINYINT},
+      delivery_service_attitute_score = #{record.deliveryServiceAttituteScore,jdbcType=TINYINT},
+      product_satisfaction_score = #{record.productSatisfactionScore,jdbcType=TINYINT},
+      comments = #{record.comments,jdbcType=VARCHAR},
+      comment_time = #{record.commentTime,jdbcType=TIMESTAMP},
+      is_approved = #{record.isApproved,jdbcType=BIT},
+      cs_reply = #{record.csReply,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.ProductComment" >
+    update product_comment
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="endUserId != null" >
+        end_user_id = #{endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="packagingScore != null" >
+        packaging_score = #{packagingScore,jdbcType=TINYINT},
+      </if>
+      <if test="deliverySpeedScore != null" >
+        delivery_speed_score = #{deliverySpeedScore,jdbcType=TINYINT},
+      </if>
+      <if test="deliveryServiceAttituteScore != null" >
+        delivery_service_attitute_score = #{deliveryServiceAttituteScore,jdbcType=TINYINT},
+      </if>
+      <if test="productSatisfactionScore != null" >
+        product_satisfaction_score = #{productSatisfactionScore,jdbcType=TINYINT},
+      </if>
+      <if test="comments != null" >
+        comments = #{comments,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTime != null" >
+        comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isApproved != null" >
+        is_approved = #{isApproved,jdbcType=BIT},
+      </if>
+      <if test="csReply != null" >
+        cs_reply = #{csReply,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.ProductComment" >
+    update product_comment
+    set order_id = #{orderId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
+      end_user_id = #{endUserId,jdbcType=INTEGER},
+      packaging_score = #{packagingScore,jdbcType=TINYINT},
+      delivery_speed_score = #{deliverySpeedScore,jdbcType=TINYINT},
+      delivery_service_attitute_score = #{deliveryServiceAttituteScore,jdbcType=TINYINT},
+      product_satisfaction_score = #{productSatisfactionScore,jdbcType=TINYINT},
+      comments = #{comments,jdbcType=VARCHAR},
+      comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      is_approved = #{isApproved,jdbcType=BIT},
+      cs_reply = #{csReply,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

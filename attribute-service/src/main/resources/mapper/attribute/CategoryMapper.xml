@@ -1,87 +1,259 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.attribute.mapper.CategoryMapper">
-  <resultMap id="BaseResultMap" type="com.wow.attribute.model.Category">
-    <id column="id" property="id" jdbcType="INTEGER"/>
-    <result column="category_name" property="categoryName" jdbcType="VARCHAR"/>
-    <result column="parent_category_id" property="parentCategoryId" jdbcType="INTEGER"/>
-    <result column="category_level" property="categoryLevel" jdbcType="TINYINT"/>
-    <result column="category_desc" property="categoryDesc" jdbcType="VARCHAR"/>
-    <result column="attribute_group_id" property="attributeGroupId" jdbcType="INTEGER"/>
-    <result column="category_icon_small" property="categoryIconSmall" jdbcType="VARCHAR"/>
-    <result column="category_icon_big" property="categoryIconBig" jdbcType="VARCHAR"/>
+<mapper namespace="com.wow.attribute.mapper.CategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.attribute.model.Category" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="parent_category_id" property="parentCategoryId" jdbcType="INTEGER" />
+    <result column="category_level" property="categoryLevel" jdbcType="TINYINT" />
+    <result column="category_desc" property="categoryDesc" jdbcType="VARCHAR" />
+    <result column="attribute_group_id" property="attributeGroupId" jdbcType="INTEGER" />
+    <result column="category_icon_small" property="categoryIconSmall" jdbcType="VARCHAR" />
+    <result column="category_icon_big" property="categoryIconBig" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List">
-    id, category_name, parent_category_id, category_level, category_desc, attribute_group_id,
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, category_name, parent_category_id, category_level, category_desc, attribute_group_id, 
     category_icon_small, category_icon_big
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.attribute.model.CategoryExample" >
     select
-    <include refid="Base_Column_List"/>
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from category
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
     from category
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <insert id="insert" parameterType="com.wow.attribute.model.Category">
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from category
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.attribute.model.CategoryExample" >
+    delete from category
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.attribute.model.Category" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into category (category_name, parent_category_id, category_level,
-    category_desc, attribute_group_id, category_icon_small,
-    category_icon_big)
-    values (#{categoryName,jdbcType=VARCHAR}, #{parentCategoryId,jdbcType=INTEGER}, #{categoryLevel,jdbcType=TINYINT},
-    #{categoryDesc,jdbcType=VARCHAR}, #{attributeGroupId,jdbcType=INTEGER}, #{categoryIconSmall,jdbcType=VARCHAR},
-    #{categoryIconBig,jdbcType=VARCHAR})
+    insert into category (category_name, parent_category_id, category_level, 
+      category_desc, attribute_group_id, category_icon_small, 
+      category_icon_big)
+    values (#{categoryName,jdbcType=VARCHAR}, #{parentCategoryId,jdbcType=INTEGER}, #{categoryLevel,jdbcType=TINYINT}, 
+      #{categoryDesc,jdbcType=VARCHAR}, #{attributeGroupId,jdbcType=INTEGER}, #{categoryIconSmall,jdbcType=VARCHAR}, 
+      #{categoryIconBig,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.attribute.model.Category">
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+  <insert id="insertSelective" parameterType="com.wow.attribute.model.Category" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into category
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="categoryName != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="categoryName != null" >
         category_name,
       </if>
-      <if test="parentCategoryId != null">
+      <if test="parentCategoryId != null" >
         parent_category_id,
       </if>
-      <if test="categoryLevel != null">
+      <if test="categoryLevel != null" >
         category_level,
       </if>
-      <if test="categoryDesc != null">
+      <if test="categoryDesc != null" >
         category_desc,
       </if>
-      <if test="attributeGroupId != null">
+      <if test="attributeGroupId != null" >
         attribute_group_id,
       </if>
-      <if test="categoryIconSmall != null">
+      <if test="categoryIconSmall != null" >
         category_icon_small,
       </if>
-      <if test="categoryIconBig != null">
+      <if test="categoryIconBig != null" >
         category_icon_big,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="categoryName != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="categoryName != null" >
         #{categoryName,jdbcType=VARCHAR},
       </if>
-      <if test="parentCategoryId != null">
+      <if test="parentCategoryId != null" >
         #{parentCategoryId,jdbcType=INTEGER},
       </if>
-      <if test="categoryLevel != null">
+      <if test="categoryLevel != null" >
         #{categoryLevel,jdbcType=TINYINT},
       </if>
-      <if test="categoryDesc != null">
+      <if test="categoryDesc != null" >
         #{categoryDesc,jdbcType=VARCHAR},
       </if>
-      <if test="attributeGroupId != null">
+      <if test="attributeGroupId != null" >
         #{attributeGroupId,jdbcType=INTEGER},
       </if>
-      <if test="categoryIconSmall != null">
+      <if test="categoryIconSmall != null" >
         #{categoryIconSmall,jdbcType=VARCHAR},
       </if>
-      <if test="categoryIconBig != null">
+      <if test="categoryIconBig != null" >
         #{categoryIconBig,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
+  <select id="countByExample" parameterType="com.wow.attribute.model.CategoryExample" resultType="java.lang.Integer" >
+    select count(*) from category
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update category
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryName != null" >
+        category_name = #{record.categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentCategoryId != null" >
+        parent_category_id = #{record.parentCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryLevel != null" >
+        category_level = #{record.categoryLevel,jdbcType=TINYINT},
+      </if>
+      <if test="record.categoryDesc != null" >
+        category_desc = #{record.categoryDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attributeGroupId != null" >
+        attribute_group_id = #{record.attributeGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryIconSmall != null" >
+        category_icon_small = #{record.categoryIconSmall,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryIconBig != null" >
+        category_icon_big = #{record.categoryIconBig,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update category
+    set id = #{record.id,jdbcType=INTEGER},
+      category_name = #{record.categoryName,jdbcType=VARCHAR},
+      parent_category_id = #{record.parentCategoryId,jdbcType=INTEGER},
+      category_level = #{record.categoryLevel,jdbcType=TINYINT},
+      category_desc = #{record.categoryDesc,jdbcType=VARCHAR},
+      attribute_group_id = #{record.attributeGroupId,jdbcType=INTEGER},
+      category_icon_small = #{record.categoryIconSmall,jdbcType=VARCHAR},
+      category_icon_big = #{record.categoryIconBig,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.attribute.model.Category" >
+    update category
+    <set >
+      <if test="categoryName != null" >
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCategoryId != null" >
+        parent_category_id = #{parentCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryLevel != null" >
+        category_level = #{categoryLevel,jdbcType=TINYINT},
+      </if>
+      <if test="categoryDesc != null" >
+        category_desc = #{categoryDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeGroupId != null" >
+        attribute_group_id = #{attributeGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryIconSmall != null" >
+        category_icon_small = #{categoryIconSmall,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryIconBig != null" >
+        category_icon_big = #{categoryIconBig,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.attribute.model.Category" >
+    update category
+    set category_name = #{categoryName,jdbcType=VARCHAR},
+      parent_category_id = #{parentCategoryId,jdbcType=INTEGER},
+      category_level = #{categoryLevel,jdbcType=TINYINT},
+      category_desc = #{categoryDesc,jdbcType=VARCHAR},
+      attribute_group_id = #{attributeGroupId,jdbcType=INTEGER},
+      category_icon_small = #{categoryIconSmall,jdbcType=VARCHAR},
+      category_icon_big = #{categoryIconBig,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>
