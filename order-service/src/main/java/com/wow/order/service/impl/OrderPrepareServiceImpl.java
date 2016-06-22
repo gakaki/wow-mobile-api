@@ -4,6 +4,7 @@ import com.wow.order.service.OrderPrepareService;
 import com.wow.order.vo.PackageVo;
 import com.wow.order.vo.PaymentVo;
 import com.wow.user.model.ShoppingCart;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Created by zhengzhiqing on 16/6/16.
  */
+@Service
 public class OrderPrepareServiceImpl implements OrderPrepareService {
     //从购物车进入结算页,需要经过拆单(购销、代销拆分,分属不同仓库拆分)
     public List<PackageVo> splitOrder(List<ShoppingCart> shoppingCartItem) {

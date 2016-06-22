@@ -5,6 +5,7 @@ import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderVo;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * <p>
  * Created by zhengzhiqing on 16/6/16.
  */
+@Service
 public class OrderServiceImpl implements OrderService {
     /**
      * 下单

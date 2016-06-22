@@ -7,6 +7,7 @@ package com.wow.mobileapi.controller;
 import com.wow.product.model.Brand;
 import com.wow.product.model.Product;
 import com.wow.product.service.BrandService;
+import com.wow.product.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class ProductController {
 
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private ProductService productService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Product findProduct(@PathVariable Integer id) {
@@ -47,6 +50,7 @@ public class ProductController {
         product.setId(1);
         product.setProductName("testproduct");
         List<Product> productList = new ArrayList<Product>();
+
         productList.add(product);
         return productList;
     }
