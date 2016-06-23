@@ -77,18 +77,8 @@
                enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table schema="root" tableName="attribute_group" domainObjectName="AttributeGroup" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
 
-        <table schema="root" tableName="attribute_group_attribute" domainObjectName="AttributeGroupAttribute"
+        <table schema="root" tableName="category_attribute" domainObjectName="CategoryAttribute"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"

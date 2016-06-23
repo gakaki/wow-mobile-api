@@ -1,6 +1,7 @@
 package com.wow.attribute.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Category implements Serializable {
     private Integer id;
@@ -13,11 +14,19 @@ public class Category implements Serializable {
 
     private String categoryDesc;
 
-    private Integer attributeGroupId;
-
     private String categoryIconSmall;
 
     private String categoryIconBig;
+
+    private Date createTime;
+
+    private String createBy;
+
+    private Date updateTime;
+
+    private String updateBy;
+
+    private Boolean isDeleted;
 
     private static final long serialVersionUID = 1L;
 
@@ -61,14 +70,6 @@ public class Category implements Serializable {
         this.categoryDesc = categoryDesc;
     }
 
-    public Integer getAttributeGroupId() {
-        return attributeGroupId;
-    }
-
-    public void setAttributeGroupId(Integer attributeGroupId) {
-        this.attributeGroupId = attributeGroupId;
-    }
-
     public String getCategoryIconSmall() {
         return categoryIconSmall;
     }
@@ -85,6 +86,46 @@ public class Category implements Serializable {
         this.categoryIconBig = categoryIconBig;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -96,9 +137,13 @@ public class Category implements Serializable {
         sb.append(", parentCategoryId=").append(parentCategoryId);
         sb.append(", categoryLevel=").append(categoryLevel);
         sb.append(", categoryDesc=").append(categoryDesc);
-        sb.append(", attributeGroupId=").append(attributeGroupId);
         sb.append(", categoryIconSmall=").append(categoryIconSmall);
         sb.append(", categoryIconBig=").append(categoryIconBig);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", createBy=").append(createBy);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append(", updateBy=").append(updateBy);
+        sb.append(", isDeleted=").append(isDeleted);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

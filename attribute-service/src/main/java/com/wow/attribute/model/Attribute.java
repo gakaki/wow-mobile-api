@@ -20,6 +20,12 @@ public class Attribute implements Serializable {
 
     private Boolean isDeleted;
 
+    private Boolean canMultipleSelected;
+
+    private Byte attributeValueType;
+
+    private Byte decimalPlace;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -86,6 +92,30 @@ public class Attribute implements Serializable {
         this.isDeleted = isDeleted;
     }
 
+    public Boolean getCanMultipleSelected() {
+        return canMultipleSelected;
+    }
+
+    public void setCanMultipleSelected(Boolean canMultipleSelected) {
+        this.canMultipleSelected = canMultipleSelected;
+    }
+
+    public Byte getAttributeValueType() {
+        return attributeValueType;
+    }
+
+    public void setAttributeValueType(Byte attributeValueType) {
+        this.attributeValueType = attributeValueType;
+    }
+
+    public Byte getDecimalPlace() {
+        return decimalPlace;
+    }
+
+    public void setDecimalPlace(Byte decimalPlace) {
+        this.decimalPlace = decimalPlace;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -100,6 +130,9 @@ public class Attribute implements Serializable {
         sb.append(", updateTime=").append(updateTime);
         sb.append(", updateBy=").append(updateBy);
         sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", canMultipleSelected=").append(canMultipleSelected);
+        sb.append(", attributeValueType=").append(attributeValueType);
+        sb.append(", decimalPlace=").append(decimalPlace);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

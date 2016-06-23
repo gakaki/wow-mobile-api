@@ -7,9 +7,13 @@
     <result column="parent_category_id" property="parentCategoryId" jdbcType="INTEGER" />
     <result column="category_level" property="categoryLevel" jdbcType="TINYINT" />
     <result column="category_desc" property="categoryDesc" jdbcType="VARCHAR" />
-    <result column="attribute_group_id" property="attributeGroupId" jdbcType="INTEGER" />
     <result column="category_icon_small" property="categoryIconSmall" jdbcType="VARCHAR" />
     <result column="category_icon_big" property="categoryIconBig" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, category_name, parent_category_id, category_level, category_desc, attribute_group_id, 
-    category_icon_small, category_icon_big
+    id, category_name, parent_category_id, category_level, category_desc, category_icon_small, 
+    category_icon_big, create_time, create_by, update_time, update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.attribute.model.CategoryExample" >
     select
@@ -108,11 +112,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into category (category_name, parent_category_id, category_level, 
-      category_desc, attribute_group_id, category_icon_small, 
-      category_icon_big)
+      category_desc, category_icon_small, category_icon_big, 
+      create_time, create_by, update_time, 
+      update_by, is_deleted)
     values (#{categoryName,jdbcType=VARCHAR}, #{parentCategoryId,jdbcType=INTEGER}, #{categoryLevel,jdbcType=TINYINT}, 
-      #{categoryDesc,jdbcType=VARCHAR}, #{attributeGroupId,jdbcType=INTEGER}, #{categoryIconSmall,jdbcType=VARCHAR}, 
-      #{categoryIconBig,jdbcType=VARCHAR})
+      #{categoryDesc,jdbcType=VARCHAR}, #{categoryIconSmall,jdbcType=VARCHAR}, #{categoryIconBig,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.attribute.model.Category" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -132,14 +138,26 @@
       <if test="categoryDesc != null" >
         category_desc,
       </if>
-      <if test="attributeGroupId != null" >
-        attribute_group_id,
-      </if>
       <if test="categoryIconSmall != null" >
         category_icon_small,
       </if>
       <if test="categoryIconBig != null" >
         category_icon_big,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -155,14 +173,26 @@
       <if test="categoryDesc != null" >
         #{categoryDesc,jdbcType=VARCHAR},
       </if>
-      <if test="attributeGroupId != null" >
-        #{attributeGroupId,jdbcType=INTEGER},
-      </if>
       <if test="categoryIconSmall != null" >
         #{categoryIconSmall,jdbcType=VARCHAR},
       </if>
       <if test="categoryIconBig != null" >
         #{categoryIconBig,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -190,14 +220,26 @@
       <if test="record.categoryDesc != null" >
         category_desc = #{record.categoryDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.attributeGroupId != null" >
-        attribute_group_id = #{record.attributeGroupId,jdbcType=INTEGER},
-      </if>
       <if test="record.categoryIconSmall != null" >
         category_icon_small = #{record.categoryIconSmall,jdbcType=VARCHAR},
       </if>
       <if test="record.categoryIconBig != null" >
         category_icon_big = #{record.categoryIconBig,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDeleted != null" >
+        is_deleted = #{record.isDeleted,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -211,9 +253,13 @@
       parent_category_id = #{record.parentCategoryId,jdbcType=INTEGER},
       category_level = #{record.categoryLevel,jdbcType=TINYINT},
       category_desc = #{record.categoryDesc,jdbcType=VARCHAR},
-      attribute_group_id = #{record.attributeGroupId,jdbcType=INTEGER},
       category_icon_small = #{record.categoryIconSmall,jdbcType=VARCHAR},
-      category_icon_big = #{record.categoryIconBig,jdbcType=VARCHAR}
+      category_icon_big = #{record.categoryIconBig,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -233,14 +279,26 @@
       <if test="categoryDesc != null" >
         category_desc = #{categoryDesc,jdbcType=VARCHAR},
       </if>
-      <if test="attributeGroupId != null" >
-        attribute_group_id = #{attributeGroupId,jdbcType=INTEGER},
-      </if>
       <if test="categoryIconSmall != null" >
         category_icon_small = #{categoryIconSmall,jdbcType=VARCHAR},
       </if>
       <if test="categoryIconBig != null" >
         category_icon_big = #{categoryIconBig,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -251,9 +309,13 @@
       parent_category_id = #{parentCategoryId,jdbcType=INTEGER},
       category_level = #{categoryLevel,jdbcType=TINYINT},
       category_desc = #{categoryDesc,jdbcType=VARCHAR},
-      attribute_group_id = #{attributeGroupId,jdbcType=INTEGER},
       category_icon_small = #{categoryIconSmall,jdbcType=VARCHAR},
-      category_icon_big = #{categoryIconBig,jdbcType=VARCHAR}
+      category_icon_big = #{categoryIconBig,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
