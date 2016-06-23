@@ -3,7 +3,7 @@ server:
   port: 8080
   address: 127.0.0.1
   sessionTimeout: 30
-  contextPath: /marketing-service
+  contextPath: /page-service
 
 spring:
   datasource:
@@ -27,5 +27,5 @@ spring:
 
 # MyBatis specifics
 mybatis:
-  typeAliasesPackage: com.wow.attribute.model
-  mapperLocations: classpath:/mapper/marketing/*Mapper.xml
+  typeAliasesPackage: com.wow.page.model
+  mapperLocations: classpath:/mapper/page/*Mapper.xml

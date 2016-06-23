@@ -17,30 +17,30 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableAutoConfiguration
-@MapperScan("com.wow.price.mapper")
-public class PriceDBConfig {
+@MapperScan("com.wow.page.mapper")
+public class PageDBConfig {
 
-    @Bean(name = "priceDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.price")
-    public DataSource priceDataSource() {
+    @Bean(name = "pageDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.page")
+    public DataSource pageDataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "priceSqlSessionFactory")
-    public SqlSessionFactory priceSqlSessionFactory(@Qualifier("priceDataSource") DataSource dataSource) throws Exception {
+    @Bean(name = "pageSqlSessionFactory")
+    public SqlSessionFactory pageSqlSessionFactory(@Qualifier("pageDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/price/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/page/*Mapper.xml"));
         return bean.getObject();
     }
 
-    @Bean(name = "priceTransactionManager")
-    public DataSourceTransactionManager priceTransactionManager(@Qualifier("priceDataSource") DataSource dataSource) {
+    @Bean(name = "pageTransactionManager")
+    public DataSourceTransactionManager pageTransactionManager(@Qualifier("pageDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
-    @Bean(name = "priceSqlSessionTemplate")
-    public SqlSessionTemplate priceSqlSessionTemplate(@Qualifier("priceSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+    @Bean(name = "pageSqlSessionTemplate")
+    public SqlSessionTemplate pageSqlSessionTemplate(@Qualifier("pageSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

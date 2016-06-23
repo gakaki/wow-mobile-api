@@ -220,7 +220,7 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="scene_display_rule" domainObjectName="SceneDisplayRule" enableInsert="true"
+        <table schema="root" tableName="page_scene_config" domainObjectName="PageSceneConfig" enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -253,18 +253,7 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="topic_display_rule" domainObjectName="TopicDisplayRule" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
-        <table schema="root" tableName="topic_product_display_rule" domainObjectName="TopicProductDisplayRule"
+        <table schema="root" tableName="product_short_list_in_topic" domainObjectName="ProductShortListInTopic"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"

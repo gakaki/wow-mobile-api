@@ -31,6 +31,8 @@
       <module name="mobile-api_test" target="1.8" />
       <module name="order-service_main" target="1.8" />
       <module name="order-service_test" target="1.8" />
+      <module name="page-service_main" target="1.8" />
+      <module name="page-service_test" target="1.8" />
       <module name="price-service_main" target="1.8" />
       <module name="price-service_test" target="1.8" />
       <module name="product-service_main" target="1.8" />

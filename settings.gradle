@@ -6,4 +6,5 @@ include 'price-service'
 include 'attribute-service'
 include 'order-service'
 include 'marketing-service'
+include 'page-service'
 

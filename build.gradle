@@ -87,7 +87,7 @@ dependencies {
     compile 'com.wow:price-service:1.0-SNAPSHOT'
     compile 'com.wow:stock-service:1.0-SNAPSHOT'
     compile 'com.wow:marketing-service:1.0-SNAPSHOT'
-
+    compile 'com.wow:page-service:1.0-SNAPSHOT'
 //    compile 'com.github.pagehelper:pagehelper:4.1.1'
 }
 

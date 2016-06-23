@@ -55,8 +55,7 @@
 
         <!-- sql占位符，表示所有的表 -->
         <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-
-        <table schema="root" tableName="attribute" domainObjectName="Attribute" enableInsert="true"
+        <table schema="root" tableName="attribute_filter_config" domainObjectName="AttributeFilterConfig" enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -67,7 +66,20 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="category_attribute" domainObjectName="CategoryAttribute"
+
+        <table schema="root" tableName="page_banner_config" domainObjectName="PageBannerConfig" enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+
+        <table schema="root" tableName="page_scene_config" domainObjectName="PageSceneConfig"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
@@ -79,18 +91,7 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="attribute_value" domainObjectName="AttributeValue" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
-        <table schema="root" tableName="category" domainObjectName="Category" enableInsert="true"
+        <table schema="root" tableName="page_topic_config" domainObjectName="PageTopicConfig" enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"

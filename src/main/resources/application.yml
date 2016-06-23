@@ -10,39 +10,44 @@ spring:
   datasource:
     attribute:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/wowdsgn
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn
       username: root
-      password: root
+      password: z123456
     user:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/wowdsgn
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn
       username: root
-      password: root
+      password: z123456
     price:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/wowdsgn
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn
       username: root
-      password: root
+      password: z123456
     stock:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/wowdsgn
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn
       username: root
-      password: root
+      password: z123456
+    page:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn
+      username: root
+      password: z123456
     product:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/wowdsgn
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn
       username: root
-      password: root
+      password: z123456
     order:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/wowdsgn
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn
       username: root
-      password: root
+      password: z123456
     marketing:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/wowdsgn
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn
       username: root
-      password: root
+      password: z123456
 
 #日志配置
 logging:

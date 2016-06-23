@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/attribute-service" />
             <option value="$PROJECT_DIR$/marketing-service" />
             <option value="$PROJECT_DIR$/order-service" />
+            <option value="$PROJECT_DIR$/page-service" />
             <option value="$PROJECT_DIR$/price-service" />
             <option value="$PROJECT_DIR$/product-service" />
             <option value="$PROJECT_DIR$/stock-service" />

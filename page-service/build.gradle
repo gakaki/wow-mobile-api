@@ -12,7 +12,8 @@ dependencies {
     mybatisGenerator 'tk.mybatis:mapper:3.3.2'
 
     //业务依赖
-    compile 'com.wow:user-service:1.0-SNAPSHOT'
+    compile 'com.wow:product-service:1.0-SNAPSHOT'
+    compile 'com.wow:attribute-service:1.0-SNAPSHOT'
 }
 
 def getDbProperties = {
