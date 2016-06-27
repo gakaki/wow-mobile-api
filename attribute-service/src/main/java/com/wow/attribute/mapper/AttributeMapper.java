@@ -20,6 +20,8 @@ public interface AttributeMapper {
 
     Attribute selectByPrimaryKey(Integer id);
 
+    List<Attribute> selectAll();
+
     int updateByExampleSelective(@Param("record") Attribute record, @Param("example") AttributeExample example);
 
     int updateByExample(@Param("record") Attribute record, @Param("example") AttributeExample example);
