@@ -10,8 +10,6 @@ dependencies {
     mybatisGenerator 'org.mybatis.generator:mybatis-generator-core:1.3.2'
     mybatisGenerator 'mysql:mysql-connector-java:5.1.35'
     mybatisGenerator 'tk.mybatis:mapper:3.3.2'
-    //业务依赖
-    compile 'com.wow:product-service:1.0-SNAPSHOT'
 }
 
 def getDbProperties = {
@@ -23,7 +21,7 @@ def getDbProperties = {
 }
 
 
-task mybatisGenerate << {
+task dbgen(dependsOn: cleanMapper) << {
 
     def properties = getDbProperties()
 
@@ -56,7 +54,6 @@ task mybatisGenerate << {
             propertyref(name: 'modelPackage')
             propertyref(name: 'mapperPackage')
             propertyref(name: 'sqlMapperPackage')
-
         }
     }
 }

@@ -8,11 +8,11 @@ public class ProductSummary implements Serializable {
 
     private Integer productId;
 
-    private Integer totalSoldNum;
+    private Integer totalSoldQty;
 
-    private Integer sevenDaysSoldNum;
+    private Integer sevenDaysSoldQty;
 
-    private Integer totalComments;
+    private Integer totalCommentQty;
 
     private Date updateTime;
 
@@ -36,28 +36,28 @@ public class ProductSummary implements Serializable {
         this.productId = productId;
     }
 
-    public Integer getTotalSoldNum() {
-        return totalSoldNum;
+    public Integer getTotalSoldQty() {
+        return totalSoldQty;
     }
 
-    public void setTotalSoldNum(Integer totalSoldNum) {
-        this.totalSoldNum = totalSoldNum;
+    public void setTotalSoldQty(Integer totalSoldQty) {
+        this.totalSoldQty = totalSoldQty;
     }
 
-    public Integer getSevenDaysSoldNum() {
-        return sevenDaysSoldNum;
+    public Integer getSevenDaysSoldQty() {
+        return sevenDaysSoldQty;
     }
 
-    public void setSevenDaysSoldNum(Integer sevenDaysSoldNum) {
-        this.sevenDaysSoldNum = sevenDaysSoldNum;
+    public void setSevenDaysSoldQty(Integer sevenDaysSoldQty) {
+        this.sevenDaysSoldQty = sevenDaysSoldQty;
     }
 
-    public Integer getTotalComments() {
-        return totalComments;
+    public Integer getTotalCommentQty() {
+        return totalCommentQty;
     }
 
-    public void setTotalComments(Integer totalComments) {
-        this.totalComments = totalComments;
+    public void setTotalCommentQty(Integer totalCommentQty) {
+        this.totalCommentQty = totalCommentQty;
     }
 
     public Date getUpdateTime() {
@@ -84,9 +84,9 @@ public class ProductSummary implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", productId=").append(productId);
-        sb.append(", totalSoldNum=").append(totalSoldNum);
-        sb.append(", sevenDaysSoldNum=").append(sevenDaysSoldNum);
-        sb.append(", totalComments=").append(totalComments);
+        sb.append(", totalSoldQty=").append(totalSoldQty);
+        sb.append(", sevenDaysSoldQty=").append(sevenDaysSoldQty);
+        sb.append(", totalCommentQty=").append(totalCommentQty);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", isDeleted=").append(isDeleted);
         sb.append(", serialVersionUID=").append(serialVersionUID);

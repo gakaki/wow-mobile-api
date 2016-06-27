@@ -21,7 +21,7 @@ def getDbProperties = {
 }
 
 
-task mybatisGenerate << {
+task dbgen(dependsOn: cleanMapper) << {
 
     def properties = getDbProperties()
 

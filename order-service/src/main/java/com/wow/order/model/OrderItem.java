@@ -15,7 +15,7 @@ public class OrderItem implements Serializable {
 
     private BigDecimal orderItemPrice;
 
-    private Byte orderItemNum;
+    private Byte orderItemQty;
 
     private String productName;
 
@@ -29,9 +29,9 @@ public class OrderItem implements Serializable {
 
     private Integer productSupplierId;
 
-    private Short frozenRealStockNum;
+    private Short frozenRealStockQty;
 
-    private Short frozenVirtualStockNum;
+    private Short frozenVirtualStockQty;
 
     private Boolean isVirtualStockReady;
 
@@ -83,12 +83,12 @@ public class OrderItem implements Serializable {
         this.orderItemPrice = orderItemPrice;
     }
 
-    public Byte getOrderItemNum() {
-        return orderItemNum;
+    public Byte getOrderItemQty() {
+        return orderItemQty;
     }
 
-    public void setOrderItemNum(Byte orderItemNum) {
-        this.orderItemNum = orderItemNum;
+    public void setOrderItemQty(Byte orderItemQty) {
+        this.orderItemQty = orderItemQty;
     }
 
     public String getProductName() {
@@ -139,20 +139,20 @@ public class OrderItem implements Serializable {
         this.productSupplierId = productSupplierId;
     }
 
-    public Short getFrozenRealStockNum() {
-        return frozenRealStockNum;
+    public Short getFrozenRealStockQty() {
+        return frozenRealStockQty;
     }
 
-    public void setFrozenRealStockNum(Short frozenRealStockNum) {
-        this.frozenRealStockNum = frozenRealStockNum;
+    public void setFrozenRealStockQty(Short frozenRealStockQty) {
+        this.frozenRealStockQty = frozenRealStockQty;
     }
 
-    public Short getFrozenVirtualStockNum() {
-        return frozenVirtualStockNum;
+    public Short getFrozenVirtualStockQty() {
+        return frozenVirtualStockQty;
     }
 
-    public void setFrozenVirtualStockNum(Short frozenVirtualStockNum) {
-        this.frozenVirtualStockNum = frozenVirtualStockNum;
+    public void setFrozenVirtualStockQty(Short frozenVirtualStockQty) {
+        this.frozenVirtualStockQty = frozenVirtualStockQty;
     }
 
     public Boolean getIsVirtualStockReady() {
@@ -198,15 +198,15 @@ public class OrderItem implements Serializable {
         sb.append(", productId=").append(productId);
         sb.append(", orderItemAmount=").append(orderItemAmount);
         sb.append(", orderItemPrice=").append(orderItemPrice);
-        sb.append(", orderItemNum=").append(orderItemNum);
+        sb.append(", orderItemQty=").append(orderItemQty);
         sb.append(", productName=").append(productName);
         sb.append(", needAssemble=").append(needAssemble);
         sb.append(", productSaleType=").append(productSaleType);
         sb.append(", parentOrderItemId=").append(parentOrderItemId);
         sb.append(", isItemLeaf=").append(isItemLeaf);
         sb.append(", productSupplierId=").append(productSupplierId);
-        sb.append(", frozenRealStockNum=").append(frozenRealStockNum);
-        sb.append(", frozenVirtualStockNum=").append(frozenVirtualStockNum);
+        sb.append(", frozenRealStockQty=").append(frozenRealStockQty);
+        sb.append(", frozenVirtualStockQty=").append(frozenVirtualStockQty);
         sb.append(", isVirtualStockReady=").append(isVirtualStockReady);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);

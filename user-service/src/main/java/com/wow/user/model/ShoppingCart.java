@@ -11,19 +11,17 @@ public class ShoppingCart implements Serializable {
 
     private Integer productId;
 
-    private Byte productNum;
+    private Byte productQty;
 
     private BigDecimal productPrice;
 
     private BigDecimal weight;
 
-    private Date addTime;
+    private Date createTime;
 
     private Date updateTime;
 
     private Boolean isDeleted;
-
-    private Byte priceType;
 
     private static final long serialVersionUID = 1L;
 
@@ -51,12 +49,12 @@ public class ShoppingCart implements Serializable {
         this.productId = productId;
     }
 
-    public Byte getProductNum() {
-        return productNum;
+    public Byte getProductQty() {
+        return productQty;
     }
 
-    public void setProductNum(Byte productNum) {
-        this.productNum = productNum;
+    public void setProductQty(Byte productQty) {
+        this.productQty = productQty;
     }
 
     public BigDecimal getProductPrice() {
@@ -75,12 +73,12 @@ public class ShoppingCart implements Serializable {
         this.weight = weight;
     }
 
-    public Date getAddTime() {
-        return addTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Date getUpdateTime() {
@@ -99,14 +97,6 @@ public class ShoppingCart implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public Byte getPriceType() {
-        return priceType;
-    }
-
-    public void setPriceType(Byte priceType) {
-        this.priceType = priceType;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -116,13 +106,12 @@ public class ShoppingCart implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", endUserId=").append(endUserId);
         sb.append(", productId=").append(productId);
-        sb.append(", productNum=").append(productNum);
+        sb.append(", productQty=").append(productQty);
         sb.append(", productPrice=").append(productPrice);
         sb.append(", weight=").append(weight);
-        sb.append(", addTime=").append(addTime);
+        sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", priceType=").append(priceType);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

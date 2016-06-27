@@ -3,36 +3,32 @@
 <mapper namespace="com.wow.order.mapper.OrderMapper" >
   <resultMap id="BaseResultMap" type="com.wow.order.model.Order" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
     <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+    <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
     <result column="order_amount" property="orderAmount" jdbcType="DECIMAL" />
     <result column="product_amount" property="productAmount" jdbcType="DECIMAL" />
-    <result column="order_source" property="orderSource" jdbcType="TINYINT" />
-    <result column="order_ip" property="orderIp" jdbcType="INTEGER" />
-    <result column="place_order_time" property="placeOrderTime" jdbcType="TIMESTAMP" />
-    <result column="end_user_remarks" property="endUserRemarks" jdbcType="VARCHAR" />
-    <result column="seller_remarks" property="sellerRemarks" jdbcType="VARCHAR" />
-    <result column="parent_order_id" property="parentOrderId" jdbcType="INTEGER" />
-    <result column="is_leaf" property="isLeaf" jdbcType="BIT" />
-    <result column="order_status" property="orderStatus" jdbcType="TINYINT" />
-    <result column="failure_reason" property="failureReason" jdbcType="TINYINT" />
-    <result column="goods_status" property="goodsStatus" jdbcType="TINYINT" />
-    <result column="payment_status" property="paymentStatus" jdbcType="TINYINT" />
-    <result column="payment_method" property="paymentMethod" jdbcType="TINYINT" />
-    <result column="paid_time" property="paidTime" jdbcType="TIMESTAMP" />
+    <result column="delivery_fee" property="deliveryFee" jdbcType="DECIMAL" />
     <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
-    <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR" />
     <result column="receiver_province" property="receiverProvince" jdbcType="VARCHAR" />
     <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
     <result column="receiver_county" property="receiverCounty" jdbcType="VARCHAR" />
     <result column="receiver_town" property="receiverTown" jdbcType="VARCHAR" />
     <result column="receiver_postcode" property="receiverPostcode" jdbcType="CHAR" />
+    <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR" />
     <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR" />
-    <result column="freight_fee" property="freightFee" jdbcType="DECIMAL" />
+    <result column="end_user_remarks" property="endUserRemarks" jdbcType="VARCHAR" />
+    <result column="order_status" property="orderStatus" jdbcType="TINYINT" />
+    <result column="payment_status" property="paymentStatus" jdbcType="TINYINT" />
+    <result column="payment_method" property="paymentMethod" jdbcType="TINYINT" />
+    <result column="paid_time" property="paidTime" jdbcType="TIMESTAMP" />
+    <result column="is_use_coupon" property="isUseCoupon" jdbcType="BIT" />
+    <result column="end_user_coupon_id" property="endUserCouponId" jdbcType="INTEGER" />
     <result column="delivery_mothod" property="deliveryMothod" jdbcType="TINYINT" />
     <result column="delivery_company_name" property="deliveryCompanyName" jdbcType="VARCHAR" />
     <result column="delivery_order_no" property="deliveryOrderNo" jdbcType="VARCHAR" />
     <result column="delivery_date" property="deliveryDate" jdbcType="TIMESTAMP" />
+    <result column="goods_status" property="goodsStatus" jdbcType="TINYINT" />
+    <result column="delivery_failure_reason" property="deliveryFailureReason" jdbcType="TINYINT" />
     <result column="receive_date" property="receiveDate" jdbcType="TIMESTAMP" />
     <result column="return_on_delivery" property="returnOnDelivery" jdbcType="BIT" />
     <result column="cancel_request_time" property="cancelRequestTime" jdbcType="TIMESTAMP" />
@@ -41,8 +37,13 @@
     <result column="refund_approval_status" property="refundApprovalStatus" jdbcType="TINYINT" />
     <result column="refund_approval_time" property="refundApprovalTime" jdbcType="TIMESTAMP" />
     <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
-    <result column="is_use_coupon" property="isUseCoupon" jdbcType="BIT" />
-    <result column="end_user_coupon_id" property="endUserCouponId" jdbcType="INTEGER" />
+    <result column="is_leaf" property="isLeaf" jdbcType="BIT" />
+    <result column="parent_order_id" property="parentOrderId" jdbcType="INTEGER" />
+    <result column="order_create_time" property="orderCreateTime" jdbcType="TIMESTAMP" />
+    <result column="order_source" property="orderSource" jdbcType="TINYINT" />
+    <result column="order_ip" property="orderIp" jdbcType="INTEGER" />
+    <result column="seller_remarks" property="sellerRemarks" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -103,14 +104,14 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, end_user_id, order_code, order_amount, product_amount, order_source, order_ip, 
-    place_order_time, end_user_remarks, seller_remarks, parent_order_id, is_leaf, order_status, 
-    failure_reason, goods_status, payment_status, payment_method, paid_time, receiver_name, 
-    receiver_address, receiver_province, receiver_city, receiver_county, receiver_town, 
-    receiver_postcode, receiver_mobile, freight_fee, delivery_mothod, delivery_company_name, 
-    delivery_order_no, delivery_date, receive_date, return_on_delivery, cancel_request_time, 
-    cancel_reason, cancel_approved_time, refund_approval_status, refund_approval_time, 
-    operator_name, is_use_coupon, end_user_coupon_id
+    id, order_code, end_user_id, order_amount, product_amount, delivery_fee, receiver_name, 
+    receiver_province, receiver_city, receiver_county, receiver_town, receiver_postcode, 
+    receiver_address, receiver_mobile, end_user_remarks, order_status, payment_status, 
+    payment_method, paid_time, is_use_coupon, end_user_coupon_id, delivery_mothod, delivery_company_name, 
+    delivery_order_no, delivery_date, goods_status, delivery_failure_reason, receive_date, 
+    return_on_delivery, cancel_request_time, cancel_reason, cancel_approved_time, refund_approval_status, 
+    refund_approval_time, operator_name, is_leaf, parent_order_id, order_create_time, 
+    order_source, order_ip, seller_remarks, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.order.model.OrderExample" >
     select
@@ -146,34 +147,36 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into order (end_user_id, order_code, order_amount, 
-      product_amount, order_source, order_ip, 
-      place_order_time, end_user_remarks, seller_remarks, 
-      parent_order_id, is_leaf, order_status, 
-      failure_reason, goods_status, payment_status, 
-      payment_method, paid_time, receiver_name, 
-      receiver_address, receiver_province, receiver_city, 
-      receiver_county, receiver_town, receiver_postcode, 
-      receiver_mobile, freight_fee, delivery_mothod, 
+    insert into order (order_code, end_user_id, order_amount, 
+      product_amount, delivery_fee, receiver_name, 
+      receiver_province, receiver_city, receiver_county, 
+      receiver_town, receiver_postcode, receiver_address, 
+      receiver_mobile, end_user_remarks, order_status, 
+      payment_status, payment_method, paid_time, 
+      is_use_coupon, end_user_coupon_id, delivery_mothod, 
       delivery_company_name, delivery_order_no, delivery_date, 
-      receive_date, return_on_delivery, cancel_request_time, 
-      cancel_reason, cancel_approved_time, refund_approval_status, 
-      refund_approval_time, operator_name, is_use_coupon, 
-      end_user_coupon_id)
-    values (#{endUserId,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{orderAmount,jdbcType=DECIMAL}, 
-      #{productAmount,jdbcType=DECIMAL}, #{orderSource,jdbcType=TINYINT}, #{orderIp,jdbcType=INTEGER}, 
-      #{placeOrderTime,jdbcType=TIMESTAMP}, #{endUserRemarks,jdbcType=VARCHAR}, #{sellerRemarks,jdbcType=VARCHAR}, 
-      #{parentOrderId,jdbcType=INTEGER}, #{isLeaf,jdbcType=BIT}, #{orderStatus,jdbcType=TINYINT}, 
-      #{failureReason,jdbcType=TINYINT}, #{goodsStatus,jdbcType=TINYINT}, #{paymentStatus,jdbcType=TINYINT}, 
-      #{paymentMethod,jdbcType=TINYINT}, #{paidTime,jdbcType=TIMESTAMP}, #{receiverName,jdbcType=VARCHAR}, 
-      #{receiverAddress,jdbcType=VARCHAR}, #{receiverProvince,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, 
-      #{receiverCounty,jdbcType=VARCHAR}, #{receiverTown,jdbcType=VARCHAR}, #{receiverPostcode,jdbcType=CHAR}, 
-      #{receiverMobile,jdbcType=VARCHAR}, #{freightFee,jdbcType=DECIMAL}, #{deliveryMothod,jdbcType=TINYINT}, 
+      goods_status, delivery_failure_reason, receive_date, 
+      return_on_delivery, cancel_request_time, cancel_reason, 
+      cancel_approved_time, refund_approval_status, 
+      refund_approval_time, operator_name, is_leaf, 
+      parent_order_id, order_create_time, order_source, 
+      order_ip, seller_remarks, update_time
+      )
+    values (#{orderCode,jdbcType=VARCHAR}, #{endUserId,jdbcType=INTEGER}, #{orderAmount,jdbcType=DECIMAL}, 
+      #{productAmount,jdbcType=DECIMAL}, #{deliveryFee,jdbcType=DECIMAL}, #{receiverName,jdbcType=VARCHAR}, 
+      #{receiverProvince,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, #{receiverCounty,jdbcType=VARCHAR}, 
+      #{receiverTown,jdbcType=VARCHAR}, #{receiverPostcode,jdbcType=CHAR}, #{receiverAddress,jdbcType=VARCHAR}, 
+      #{receiverMobile,jdbcType=VARCHAR}, #{endUserRemarks,jdbcType=VARCHAR}, #{orderStatus,jdbcType=TINYINT}, 
+      #{paymentStatus,jdbcType=TINYINT}, #{paymentMethod,jdbcType=TINYINT}, #{paidTime,jdbcType=TIMESTAMP}, 
+      #{isUseCoupon,jdbcType=BIT}, #{endUserCouponId,jdbcType=INTEGER}, #{deliveryMothod,jdbcType=TINYINT}, 
       #{deliveryCompanyName,jdbcType=VARCHAR}, #{deliveryOrderNo,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=TIMESTAMP}, 
-      #{receiveDate,jdbcType=TIMESTAMP}, #{returnOnDelivery,jdbcType=BIT}, #{cancelRequestTime,jdbcType=TIMESTAMP}, 
-      #{cancelReason,jdbcType=VARCHAR}, #{cancelApprovedTime,jdbcType=TIMESTAMP}, #{refundApprovalStatus,jdbcType=TINYINT}, 
-      #{refundApprovalTime,jdbcType=TIMESTAMP}, #{operatorName,jdbcType=VARCHAR}, #{isUseCoupon,jdbcType=BIT}, 
-      #{endUserCouponId,jdbcType=INTEGER})
+      #{goodsStatus,jdbcType=TINYINT}, #{deliveryFailureReason,jdbcType=TINYINT}, #{receiveDate,jdbcType=TIMESTAMP}, 
+      #{returnOnDelivery,jdbcType=BIT}, #{cancelRequestTime,jdbcType=TIMESTAMP}, #{cancelReason,jdbcType=VARCHAR}, 
+      #{cancelApprovedTime,jdbcType=TIMESTAMP}, #{refundApprovalStatus,jdbcType=TINYINT}, 
+      #{refundApprovalTime,jdbcType=TIMESTAMP}, #{operatorName,jdbcType=VARCHAR}, #{isLeaf,jdbcType=BIT}, 
+      #{parentOrderId,jdbcType=INTEGER}, #{orderCreateTime,jdbcType=TIMESTAMP}, #{orderSource,jdbcType=TINYINT}, 
+      #{orderIp,jdbcType=INTEGER}, #{sellerRemarks,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wow.order.model.Order" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -181,11 +184,11 @@
     </selectKey>
     insert into order
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="endUserId != null" >
-        end_user_id,
-      </if>
       <if test="orderCode != null" >
         order_code,
+      </if>
+      <if test="endUserId != null" >
+        end_user_id,
       </if>
       <if test="orderAmount != null" >
         order_amount,
@@ -193,50 +196,11 @@
       <if test="productAmount != null" >
         product_amount,
       </if>
-      <if test="orderSource != null" >
-        order_source,
-      </if>
-      <if test="orderIp != null" >
-        order_ip,
-      </if>
-      <if test="placeOrderTime != null" >
-        place_order_time,
-      </if>
-      <if test="endUserRemarks != null" >
-        end_user_remarks,
-      </if>
-      <if test="sellerRemarks != null" >
-        seller_remarks,
-      </if>
-      <if test="parentOrderId != null" >
-        parent_order_id,
-      </if>
-      <if test="isLeaf != null" >
-        is_leaf,
-      </if>
-      <if test="orderStatus != null" >
-        order_status,
-      </if>
-      <if test="failureReason != null" >
-        failure_reason,
-      </if>
-      <if test="goodsStatus != null" >
-        goods_status,
-      </if>
-      <if test="paymentStatus != null" >
-        payment_status,
-      </if>
-      <if test="paymentMethod != null" >
-        payment_method,
-      </if>
-      <if test="paidTime != null" >
-        paid_time,
+      <if test="deliveryFee != null" >
+        delivery_fee,
       </if>
       <if test="receiverName != null" >
         receiver_name,
-      </if>
-      <if test="receiverAddress != null" >
-        receiver_address,
       </if>
       <if test="receiverProvince != null" >
         receiver_province,
@@ -253,11 +217,32 @@
       <if test="receiverPostcode != null" >
         receiver_postcode,
       </if>
+      <if test="receiverAddress != null" >
+        receiver_address,
+      </if>
       <if test="receiverMobile != null" >
         receiver_mobile,
       </if>
-      <if test="freightFee != null" >
-        freight_fee,
+      <if test="endUserRemarks != null" >
+        end_user_remarks,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="paymentStatus != null" >
+        payment_status,
+      </if>
+      <if test="paymentMethod != null" >
+        payment_method,
+      </if>
+      <if test="paidTime != null" >
+        paid_time,
+      </if>
+      <if test="isUseCoupon != null" >
+        is_use_coupon,
+      </if>
+      <if test="endUserCouponId != null" >
+        end_user_coupon_id,
       </if>
       <if test="deliveryMothod != null" >
         delivery_mothod,
@@ -270,6 +255,12 @@
       </if>
       <if test="deliveryDate != null" >
         delivery_date,
+      </if>
+      <if test="goodsStatus != null" >
+        goods_status,
+      </if>
+      <if test="deliveryFailureReason != null" >
+        delivery_failure_reason,
       </if>
       <if test="receiveDate != null" >
         receive_date,
@@ -295,19 +286,34 @@
       <if test="operatorName != null" >
         operator_name,
       </if>
-      <if test="isUseCoupon != null" >
-        is_use_coupon,
+      <if test="isLeaf != null" >
+        is_leaf,
       </if>
-      <if test="endUserCouponId != null" >
-        end_user_coupon_id,
+      <if test="parentOrderId != null" >
+        parent_order_id,
+      </if>
+      <if test="orderCreateTime != null" >
+        order_create_time,
+      </if>
+      <if test="orderSource != null" >
+        order_source,
+      </if>
+      <if test="orderIp != null" >
+        order_ip,
+      </if>
+      <if test="sellerRemarks != null" >
+        seller_remarks,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="endUserId != null" >
-        #{endUserId,jdbcType=INTEGER},
-      </if>
       <if test="orderCode != null" >
         #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="endUserId != null" >
+        #{endUserId,jdbcType=INTEGER},
       </if>
       <if test="orderAmount != null" >
         #{orderAmount,jdbcType=DECIMAL},
@@ -315,50 +321,11 @@
       <if test="productAmount != null" >
         #{productAmount,jdbcType=DECIMAL},
       </if>
-      <if test="orderSource != null" >
-        #{orderSource,jdbcType=TINYINT},
-      </if>
-      <if test="orderIp != null" >
-        #{orderIp,jdbcType=INTEGER},
-      </if>
-      <if test="placeOrderTime != null" >
-        #{placeOrderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endUserRemarks != null" >
-        #{endUserRemarks,jdbcType=VARCHAR},
-      </if>
-      <if test="sellerRemarks != null" >
-        #{sellerRemarks,jdbcType=VARCHAR},
-      </if>
-      <if test="parentOrderId != null" >
-        #{parentOrderId,jdbcType=INTEGER},
-      </if>
-      <if test="isLeaf != null" >
-        #{isLeaf,jdbcType=BIT},
-      </if>
-      <if test="orderStatus != null" >
-        #{orderStatus,jdbcType=TINYINT},
-      </if>
-      <if test="failureReason != null" >
-        #{failureReason,jdbcType=TINYINT},
-      </if>
-      <if test="goodsStatus != null" >
-        #{goodsStatus,jdbcType=TINYINT},
-      </if>
-      <if test="paymentStatus != null" >
-        #{paymentStatus,jdbcType=TINYINT},
-      </if>
-      <if test="paymentMethod != null" >
-        #{paymentMethod,jdbcType=TINYINT},
-      </if>
-      <if test="paidTime != null" >
-        #{paidTime,jdbcType=TIMESTAMP},
+      <if test="deliveryFee != null" >
+        #{deliveryFee,jdbcType=DECIMAL},
       </if>
       <if test="receiverName != null" >
         #{receiverName,jdbcType=VARCHAR},
-      </if>
-      <if test="receiverAddress != null" >
-        #{receiverAddress,jdbcType=VARCHAR},
       </if>
       <if test="receiverProvince != null" >
         #{receiverProvince,jdbcType=VARCHAR},
@@ -375,11 +342,32 @@
       <if test="receiverPostcode != null" >
         #{receiverPostcode,jdbcType=CHAR},
       </if>
+      <if test="receiverAddress != null" >
+        #{receiverAddress,jdbcType=VARCHAR},
+      </if>
       <if test="receiverMobile != null" >
         #{receiverMobile,jdbcType=VARCHAR},
       </if>
-      <if test="freightFee != null" >
-        #{freightFee,jdbcType=DECIMAL},
+      <if test="endUserRemarks != null" >
+        #{endUserRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="paymentStatus != null" >
+        #{paymentStatus,jdbcType=TINYINT},
+      </if>
+      <if test="paymentMethod != null" >
+        #{paymentMethod,jdbcType=TINYINT},
+      </if>
+      <if test="paidTime != null" >
+        #{paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isUseCoupon != null" >
+        #{isUseCoupon,jdbcType=BIT},
+      </if>
+      <if test="endUserCouponId != null" >
+        #{endUserCouponId,jdbcType=INTEGER},
       </if>
       <if test="deliveryMothod != null" >
         #{deliveryMothod,jdbcType=TINYINT},
@@ -392,6 +380,12 @@
       </if>
       <if test="deliveryDate != null" >
         #{deliveryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsStatus != null" >
+        #{goodsStatus,jdbcType=TINYINT},
+      </if>
+      <if test="deliveryFailureReason != null" >
+        #{deliveryFailureReason,jdbcType=TINYINT},
       </if>
       <if test="receiveDate != null" >
         #{receiveDate,jdbcType=TIMESTAMP},
@@ -417,11 +411,26 @@
       <if test="operatorName != null" >
         #{operatorName,jdbcType=VARCHAR},
       </if>
-      <if test="isUseCoupon != null" >
-        #{isUseCoupon,jdbcType=BIT},
+      <if test="isLeaf != null" >
+        #{isLeaf,jdbcType=BIT},
       </if>
-      <if test="endUserCouponId != null" >
-        #{endUserCouponId,jdbcType=INTEGER},
+      <if test="parentOrderId != null" >
+        #{parentOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderCreateTime != null" >
+        #{orderCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderSource != null" >
+        #{orderSource,jdbcType=TINYINT},
+      </if>
+      <if test="orderIp != null" >
+        #{orderIp,jdbcType=INTEGER},
+      </if>
+      <if test="sellerRemarks != null" >
+        #{sellerRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -437,11 +446,11 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.endUserId != null" >
-        end_user_id = #{record.endUserId,jdbcType=INTEGER},
-      </if>
       <if test="record.orderCode != null" >
         order_code = #{record.orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endUserId != null" >
+        end_user_id = #{record.endUserId,jdbcType=INTEGER},
       </if>
       <if test="record.orderAmount != null" >
         order_amount = #{record.orderAmount,jdbcType=DECIMAL},
@@ -449,50 +458,11 @@
       <if test="record.productAmount != null" >
         product_amount = #{record.productAmount,jdbcType=DECIMAL},
       </if>
-      <if test="record.orderSource != null" >
-        order_source = #{record.orderSource,jdbcType=TINYINT},
-      </if>
-      <if test="record.orderIp != null" >
-        order_ip = #{record.orderIp,jdbcType=INTEGER},
-      </if>
-      <if test="record.placeOrderTime != null" >
-        place_order_time = #{record.placeOrderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.endUserRemarks != null" >
-        end_user_remarks = #{record.endUserRemarks,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sellerRemarks != null" >
-        seller_remarks = #{record.sellerRemarks,jdbcType=VARCHAR},
-      </if>
-      <if test="record.parentOrderId != null" >
-        parent_order_id = #{record.parentOrderId,jdbcType=INTEGER},
-      </if>
-      <if test="record.isLeaf != null" >
-        is_leaf = #{record.isLeaf,jdbcType=BIT},
-      </if>
-      <if test="record.orderStatus != null" >
-        order_status = #{record.orderStatus,jdbcType=TINYINT},
-      </if>
-      <if test="record.failureReason != null" >
-        failure_reason = #{record.failureReason,jdbcType=TINYINT},
-      </if>
-      <if test="record.goodsStatus != null" >
-        goods_status = #{record.goodsStatus,jdbcType=TINYINT},
-      </if>
-      <if test="record.paymentStatus != null" >
-        payment_status = #{record.paymentStatus,jdbcType=TINYINT},
-      </if>
-      <if test="record.paymentMethod != null" >
-        payment_method = #{record.paymentMethod,jdbcType=TINYINT},
-      </if>
-      <if test="record.paidTime != null" >
-        paid_time = #{record.paidTime,jdbcType=TIMESTAMP},
+      <if test="record.deliveryFee != null" >
+        delivery_fee = #{record.deliveryFee,jdbcType=DECIMAL},
       </if>
       <if test="record.receiverName != null" >
         receiver_name = #{record.receiverName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.receiverAddress != null" >
-        receiver_address = #{record.receiverAddress,jdbcType=VARCHAR},
       </if>
       <if test="record.receiverProvince != null" >
         receiver_province = #{record.receiverProvince,jdbcType=VARCHAR},
@@ -509,11 +479,32 @@
       <if test="record.receiverPostcode != null" >
         receiver_postcode = #{record.receiverPostcode,jdbcType=CHAR},
       </if>
+      <if test="record.receiverAddress != null" >
+        receiver_address = #{record.receiverAddress,jdbcType=VARCHAR},
+      </if>
       <if test="record.receiverMobile != null" >
         receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
       </if>
-      <if test="record.freightFee != null" >
-        freight_fee = #{record.freightFee,jdbcType=DECIMAL},
+      <if test="record.endUserRemarks != null" >
+        end_user_remarks = #{record.endUserRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderStatus != null" >
+        order_status = #{record.orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.paymentStatus != null" >
+        payment_status = #{record.paymentStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.paymentMethod != null" >
+        payment_method = #{record.paymentMethod,jdbcType=TINYINT},
+      </if>
+      <if test="record.paidTime != null" >
+        paid_time = #{record.paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isUseCoupon != null" >
+        is_use_coupon = #{record.isUseCoupon,jdbcType=BIT},
+      </if>
+      <if test="record.endUserCouponId != null" >
+        end_user_coupon_id = #{record.endUserCouponId,jdbcType=INTEGER},
       </if>
       <if test="record.deliveryMothod != null" >
         delivery_mothod = #{record.deliveryMothod,jdbcType=TINYINT},
@@ -526,6 +517,12 @@
       </if>
       <if test="record.deliveryDate != null" >
         delivery_date = #{record.deliveryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.goodsStatus != null" >
+        goods_status = #{record.goodsStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.deliveryFailureReason != null" >
+        delivery_failure_reason = #{record.deliveryFailureReason,jdbcType=TINYINT},
       </if>
       <if test="record.receiveDate != null" >
         receive_date = #{record.receiveDate,jdbcType=TIMESTAMP},
@@ -551,11 +548,26 @@
       <if test="record.operatorName != null" >
         operator_name = #{record.operatorName,jdbcType=VARCHAR},
       </if>
-      <if test="record.isUseCoupon != null" >
-        is_use_coupon = #{record.isUseCoupon,jdbcType=BIT},
+      <if test="record.isLeaf != null" >
+        is_leaf = #{record.isLeaf,jdbcType=BIT},
       </if>
-      <if test="record.endUserCouponId != null" >
-        end_user_coupon_id = #{record.endUserCouponId,jdbcType=INTEGER},
+      <if test="record.parentOrderId != null" >
+        parent_order_id = #{record.parentOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderCreateTime != null" >
+        order_create_time = #{record.orderCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderSource != null" >
+        order_source = #{record.orderSource,jdbcType=TINYINT},
+      </if>
+      <if test="record.orderIp != null" >
+        order_ip = #{record.orderIp,jdbcType=INTEGER},
+      </if>
+      <if test="record.sellerRemarks != null" >
+        seller_remarks = #{record.sellerRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -565,36 +577,32 @@
   <update id="updateByExample" parameterType="map" >
     update order
     set id = #{record.id,jdbcType=INTEGER},
-      end_user_id = #{record.endUserId,jdbcType=INTEGER},
       order_code = #{record.orderCode,jdbcType=VARCHAR},
+      end_user_id = #{record.endUserId,jdbcType=INTEGER},
       order_amount = #{record.orderAmount,jdbcType=DECIMAL},
       product_amount = #{record.productAmount,jdbcType=DECIMAL},
-      order_source = #{record.orderSource,jdbcType=TINYINT},
-      order_ip = #{record.orderIp,jdbcType=INTEGER},
-      place_order_time = #{record.placeOrderTime,jdbcType=TIMESTAMP},
-      end_user_remarks = #{record.endUserRemarks,jdbcType=VARCHAR},
-      seller_remarks = #{record.sellerRemarks,jdbcType=VARCHAR},
-      parent_order_id = #{record.parentOrderId,jdbcType=INTEGER},
-      is_leaf = #{record.isLeaf,jdbcType=BIT},
-      order_status = #{record.orderStatus,jdbcType=TINYINT},
-      failure_reason = #{record.failureReason,jdbcType=TINYINT},
-      goods_status = #{record.goodsStatus,jdbcType=TINYINT},
-      payment_status = #{record.paymentStatus,jdbcType=TINYINT},
-      payment_method = #{record.paymentMethod,jdbcType=TINYINT},
-      paid_time = #{record.paidTime,jdbcType=TIMESTAMP},
+      delivery_fee = #{record.deliveryFee,jdbcType=DECIMAL},
       receiver_name = #{record.receiverName,jdbcType=VARCHAR},
-      receiver_address = #{record.receiverAddress,jdbcType=VARCHAR},
       receiver_province = #{record.receiverProvince,jdbcType=VARCHAR},
       receiver_city = #{record.receiverCity,jdbcType=VARCHAR},
       receiver_county = #{record.receiverCounty,jdbcType=VARCHAR},
       receiver_town = #{record.receiverTown,jdbcType=VARCHAR},
       receiver_postcode = #{record.receiverPostcode,jdbcType=CHAR},
+      receiver_address = #{record.receiverAddress,jdbcType=VARCHAR},
       receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
-      freight_fee = #{record.freightFee,jdbcType=DECIMAL},
+      end_user_remarks = #{record.endUserRemarks,jdbcType=VARCHAR},
+      order_status = #{record.orderStatus,jdbcType=TINYINT},
+      payment_status = #{record.paymentStatus,jdbcType=TINYINT},
+      payment_method = #{record.paymentMethod,jdbcType=TINYINT},
+      paid_time = #{record.paidTime,jdbcType=TIMESTAMP},
+      is_use_coupon = #{record.isUseCoupon,jdbcType=BIT},
+      end_user_coupon_id = #{record.endUserCouponId,jdbcType=INTEGER},
       delivery_mothod = #{record.deliveryMothod,jdbcType=TINYINT},
       delivery_company_name = #{record.deliveryCompanyName,jdbcType=VARCHAR},
       delivery_order_no = #{record.deliveryOrderNo,jdbcType=VARCHAR},
       delivery_date = #{record.deliveryDate,jdbcType=TIMESTAMP},
+      goods_status = #{record.goodsStatus,jdbcType=TINYINT},
+      delivery_failure_reason = #{record.deliveryFailureReason,jdbcType=TINYINT},
       receive_date = #{record.receiveDate,jdbcType=TIMESTAMP},
       return_on_delivery = #{record.returnOnDelivery,jdbcType=BIT},
       cancel_request_time = #{record.cancelRequestTime,jdbcType=TIMESTAMP},
@@ -603,8 +611,13 @@
       refund_approval_status = #{record.refundApprovalStatus,jdbcType=TINYINT},
       refund_approval_time = #{record.refundApprovalTime,jdbcType=TIMESTAMP},
       operator_name = #{record.operatorName,jdbcType=VARCHAR},
-      is_use_coupon = #{record.isUseCoupon,jdbcType=BIT},
-      end_user_coupon_id = #{record.endUserCouponId,jdbcType=INTEGER}
+      is_leaf = #{record.isLeaf,jdbcType=BIT},
+      parent_order_id = #{record.parentOrderId,jdbcType=INTEGER},
+      order_create_time = #{record.orderCreateTime,jdbcType=TIMESTAMP},
+      order_source = #{record.orderSource,jdbcType=TINYINT},
+      order_ip = #{record.orderIp,jdbcType=INTEGER},
+      seller_remarks = #{record.sellerRemarks,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -612,11 +625,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wow.order.model.Order" >
     update order
     <set >
-      <if test="endUserId != null" >
-        end_user_id = #{endUserId,jdbcType=INTEGER},
-      </if>
       <if test="orderCode != null" >
         order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="endUserId != null" >
+        end_user_id = #{endUserId,jdbcType=INTEGER},
       </if>
       <if test="orderAmount != null" >
         order_amount = #{orderAmount,jdbcType=DECIMAL},
@@ -624,50 +637,11 @@
       <if test="productAmount != null" >
         product_amount = #{productAmount,jdbcType=DECIMAL},
       </if>
-      <if test="orderSource != null" >
-        order_source = #{orderSource,jdbcType=TINYINT},
-      </if>
-      <if test="orderIp != null" >
-        order_ip = #{orderIp,jdbcType=INTEGER},
-      </if>
-      <if test="placeOrderTime != null" >
-        place_order_time = #{placeOrderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endUserRemarks != null" >
-        end_user_remarks = #{endUserRemarks,jdbcType=VARCHAR},
-      </if>
-      <if test="sellerRemarks != null" >
-        seller_remarks = #{sellerRemarks,jdbcType=VARCHAR},
-      </if>
-      <if test="parentOrderId != null" >
-        parent_order_id = #{parentOrderId,jdbcType=INTEGER},
-      </if>
-      <if test="isLeaf != null" >
-        is_leaf = #{isLeaf,jdbcType=BIT},
-      </if>
-      <if test="orderStatus != null" >
-        order_status = #{orderStatus,jdbcType=TINYINT},
-      </if>
-      <if test="failureReason != null" >
-        failure_reason = #{failureReason,jdbcType=TINYINT},
-      </if>
-      <if test="goodsStatus != null" >
-        goods_status = #{goodsStatus,jdbcType=TINYINT},
-      </if>
-      <if test="paymentStatus != null" >
-        payment_status = #{paymentStatus,jdbcType=TINYINT},
-      </if>
-      <if test="paymentMethod != null" >
-        payment_method = #{paymentMethod,jdbcType=TINYINT},
-      </if>
-      <if test="paidTime != null" >
-        paid_time = #{paidTime,jdbcType=TIMESTAMP},
+      <if test="deliveryFee != null" >
+        delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
       </if>
       <if test="receiverName != null" >
         receiver_name = #{receiverName,jdbcType=VARCHAR},
-      </if>
-      <if test="receiverAddress != null" >
-        receiver_address = #{receiverAddress,jdbcType=VARCHAR},
       </if>
       <if test="receiverProvince != null" >
         receiver_province = #{receiverProvince,jdbcType=VARCHAR},
@@ -684,11 +658,32 @@
       <if test="receiverPostcode != null" >
         receiver_postcode = #{receiverPostcode,jdbcType=CHAR},
       </if>
+      <if test="receiverAddress != null" >
+        receiver_address = #{receiverAddress,jdbcType=VARCHAR},
+      </if>
       <if test="receiverMobile != null" >
         receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
       </if>
-      <if test="freightFee != null" >
-        freight_fee = #{freightFee,jdbcType=DECIMAL},
+      <if test="endUserRemarks != null" >
+        end_user_remarks = #{endUserRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="paymentStatus != null" >
+        payment_status = #{paymentStatus,jdbcType=TINYINT},
+      </if>
+      <if test="paymentMethod != null" >
+        payment_method = #{paymentMethod,jdbcType=TINYINT},
+      </if>
+      <if test="paidTime != null" >
+        paid_time = #{paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isUseCoupon != null" >
+        is_use_coupon = #{isUseCoupon,jdbcType=BIT},
+      </if>
+      <if test="endUserCouponId != null" >
+        end_user_coupon_id = #{endUserCouponId,jdbcType=INTEGER},
       </if>
       <if test="deliveryMothod != null" >
         delivery_mothod = #{deliveryMothod,jdbcType=TINYINT},
@@ -701,6 +696,12 @@
       </if>
       <if test="deliveryDate != null" >
         delivery_date = #{deliveryDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsStatus != null" >
+        goods_status = #{goodsStatus,jdbcType=TINYINT},
+      </if>
+      <if test="deliveryFailureReason != null" >
+        delivery_failure_reason = #{deliveryFailureReason,jdbcType=TINYINT},
       </if>
       <if test="receiveDate != null" >
         receive_date = #{receiveDate,jdbcType=TIMESTAMP},
@@ -726,47 +727,58 @@
       <if test="operatorName != null" >
         operator_name = #{operatorName,jdbcType=VARCHAR},
       </if>
-      <if test="isUseCoupon != null" >
-        is_use_coupon = #{isUseCoupon,jdbcType=BIT},
+      <if test="isLeaf != null" >
+        is_leaf = #{isLeaf,jdbcType=BIT},
       </if>
-      <if test="endUserCouponId != null" >
-        end_user_coupon_id = #{endUserCouponId,jdbcType=INTEGER},
+      <if test="parentOrderId != null" >
+        parent_order_id = #{parentOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderCreateTime != null" >
+        order_create_time = #{orderCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderSource != null" >
+        order_source = #{orderSource,jdbcType=TINYINT},
+      </if>
+      <if test="orderIp != null" >
+        order_ip = #{orderIp,jdbcType=INTEGER},
+      </if>
+      <if test="sellerRemarks != null" >
+        seller_remarks = #{sellerRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wow.order.model.Order" >
     update order
-    set end_user_id = #{endUserId,jdbcType=INTEGER},
-      order_code = #{orderCode,jdbcType=VARCHAR},
+    set order_code = #{orderCode,jdbcType=VARCHAR},
+      end_user_id = #{endUserId,jdbcType=INTEGER},
       order_amount = #{orderAmount,jdbcType=DECIMAL},
       product_amount = #{productAmount,jdbcType=DECIMAL},
-      order_source = #{orderSource,jdbcType=TINYINT},
-      order_ip = #{orderIp,jdbcType=INTEGER},
-      place_order_time = #{placeOrderTime,jdbcType=TIMESTAMP},
-      end_user_remarks = #{endUserRemarks,jdbcType=VARCHAR},
-      seller_remarks = #{sellerRemarks,jdbcType=VARCHAR},
-      parent_order_id = #{parentOrderId,jdbcType=INTEGER},
-      is_leaf = #{isLeaf,jdbcType=BIT},
-      order_status = #{orderStatus,jdbcType=TINYINT},
-      failure_reason = #{failureReason,jdbcType=TINYINT},
-      goods_status = #{goodsStatus,jdbcType=TINYINT},
-      payment_status = #{paymentStatus,jdbcType=TINYINT},
-      payment_method = #{paymentMethod,jdbcType=TINYINT},
-      paid_time = #{paidTime,jdbcType=TIMESTAMP},
+      delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
       receiver_name = #{receiverName,jdbcType=VARCHAR},
-      receiver_address = #{receiverAddress,jdbcType=VARCHAR},
       receiver_province = #{receiverProvince,jdbcType=VARCHAR},
       receiver_city = #{receiverCity,jdbcType=VARCHAR},
       receiver_county = #{receiverCounty,jdbcType=VARCHAR},
       receiver_town = #{receiverTown,jdbcType=VARCHAR},
       receiver_postcode = #{receiverPostcode,jdbcType=CHAR},
+      receiver_address = #{receiverAddress,jdbcType=VARCHAR},
       receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
-      freight_fee = #{freightFee,jdbcType=DECIMAL},
+      end_user_remarks = #{endUserRemarks,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=TINYINT},
+      payment_status = #{paymentStatus,jdbcType=TINYINT},
+      payment_method = #{paymentMethod,jdbcType=TINYINT},
+      paid_time = #{paidTime,jdbcType=TIMESTAMP},
+      is_use_coupon = #{isUseCoupon,jdbcType=BIT},
+      end_user_coupon_id = #{endUserCouponId,jdbcType=INTEGER},
       delivery_mothod = #{deliveryMothod,jdbcType=TINYINT},
       delivery_company_name = #{deliveryCompanyName,jdbcType=VARCHAR},
       delivery_order_no = #{deliveryOrderNo,jdbcType=VARCHAR},
       delivery_date = #{deliveryDate,jdbcType=TIMESTAMP},
+      goods_status = #{goodsStatus,jdbcType=TINYINT},
+      delivery_failure_reason = #{deliveryFailureReason,jdbcType=TINYINT},
       receive_date = #{receiveDate,jdbcType=TIMESTAMP},
       return_on_delivery = #{returnOnDelivery,jdbcType=BIT},
       cancel_request_time = #{cancelRequestTime,jdbcType=TIMESTAMP},
@@ -775,8 +787,13 @@
       refund_approval_status = #{refundApprovalStatus,jdbcType=TINYINT},
       refund_approval_time = #{refundApprovalTime,jdbcType=TIMESTAMP},
       operator_name = #{operatorName,jdbcType=VARCHAR},
-      is_use_coupon = #{isUseCoupon,jdbcType=BIT},
-      end_user_coupon_id = #{endUserCouponId,jdbcType=INTEGER}
+      is_leaf = #{isLeaf,jdbcType=BIT},
+      parent_order_id = #{parentOrderId,jdbcType=INTEGER},
+      order_create_time = #{orderCreateTime,jdbcType=TIMESTAMP},
+      order_source = #{orderSource,jdbcType=TINYINT},
+      order_ip = #{orderIp,jdbcType=INTEGER},
+      seller_remarks = #{sellerRemarks,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

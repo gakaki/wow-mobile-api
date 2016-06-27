@@ -8,9 +8,9 @@ public class ProductVirtualStock implements Serializable {
 
     private Integer productId;
 
-    private Integer virtualStockNum;
+    private Integer virtualStockQty;
 
-    private Integer frozenVirtualStockNum;
+    private Integer frozenVirtualStockQty;
 
     private Boolean isActive;
 
@@ -38,20 +38,20 @@ public class ProductVirtualStock implements Serializable {
         this.productId = productId;
     }
 
-    public Integer getVirtualStockNum() {
-        return virtualStockNum;
+    public Integer getVirtualStockQty() {
+        return virtualStockQty;
     }
 
-    public void setVirtualStockNum(Integer virtualStockNum) {
-        this.virtualStockNum = virtualStockNum;
+    public void setVirtualStockQty(Integer virtualStockQty) {
+        this.virtualStockQty = virtualStockQty;
     }
 
-    public Integer getFrozenVirtualStockNum() {
-        return frozenVirtualStockNum;
+    public Integer getFrozenVirtualStockQty() {
+        return frozenVirtualStockQty;
     }
 
-    public void setFrozenVirtualStockNum(Integer frozenVirtualStockNum) {
-        this.frozenVirtualStockNum = frozenVirtualStockNum;
+    public void setFrozenVirtualStockQty(Integer frozenVirtualStockQty) {
+        this.frozenVirtualStockQty = frozenVirtualStockQty;
     }
 
     public Boolean getIsActive() {
@@ -94,8 +94,8 @@ public class ProductVirtualStock implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", productId=").append(productId);
-        sb.append(", virtualStockNum=").append(virtualStockNum);
-        sb.append(", frozenVirtualStockNum=").append(frozenVirtualStockNum);
+        sb.append(", virtualStockQty=").append(virtualStockQty);
+        sb.append(", frozenVirtualStockQty=").append(frozenVirtualStockQty);
         sb.append(", isActive=").append(isActive);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);

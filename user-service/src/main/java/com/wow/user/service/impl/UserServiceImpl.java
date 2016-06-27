@@ -1,7 +1,17 @@
 package com.wow.user.service.impl;
 
 import com.wow.user.mapper.EndUserMapper;
-import com.wow.user.model.*;
+import com.wow.user.model.EndUser;
+import com.wow.user.model.EndUserFollowBrand;
+import com.wow.user.model.EndUserFollowDesigner;
+import com.wow.user.model.EndUserFollowProduct;
+import com.wow.user.model.EndUserFollowScene;
+import com.wow.user.model.EndUserShareBrand;
+import com.wow.user.model.EndUserShareDesigner;
+import com.wow.user.model.EndUserShareProduct;
+import com.wow.user.model.EndUserShareScene;
+import com.wow.user.model.ShippingInfo;
+import com.wow.user.model.ShoppingCart;
 import com.wow.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +97,16 @@ public class UserServiceImpl implements UserService {
      */
     public boolean authenticate(String userName, String password) {
         return false;
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param endUserId
+     * @return
+     */
+    public int deleteUser(int endUserId) {
+        return endUserMapper.deleteByPrimaryKey(endUserId);
     }
 
     //table: end_user_follow_brand

@@ -3,17 +3,13 @@ package com.wow.attribute.service.impl;
 
 import com.wow.attribute.mapper.AttributeMapper;
 import com.wow.attribute.model.Attribute;
-import com.wow.attribute.model.AttributeGroup;
-import com.wow.attribute.model.AttributeGroupAttribute;
 import com.wow.attribute.model.AttributeValue;
+import com.wow.attribute.model.CategoryAttribute;
 import com.wow.attribute.service.AttributeService;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -23,10 +19,10 @@ import java.util.List;
 @Transactional(value = "attributeTransactionManager")
 public class AttributeServiceImpl implements AttributeService {
 
-    // Table: attribute
     @Autowired
     private AttributeMapper attributeMapper;
 
+    // Table: attribute
     /**
      * 创建属性
      *
@@ -34,7 +30,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int createAttribute(Attribute attribute) {
-        return attributeMapper.insert(attribute);
+        return 0;
     }
 
     /**
@@ -44,17 +40,9 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int updateAttribute(Attribute attribute) {
-        return attributeMapper.updateByPrimaryKeySelective(attribute);
+        return 0;
     }
 
-    /**
-     * 根据ID删除属性
-     * @param attributeId
-     * @return
-     */
-    public int deleteAttributeById(int attributeId) {
-        return attributeMapper.deleteByPrimaryKey(attributeId);
-    }
     /**
      * 根据Id查询属性
      *
@@ -62,16 +50,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public Attribute getAttributeById(int attributeId) {
-        System.out.println("start to get attribute, id=" + attributeId);
-        Attribute attribute = attributeMapper.selectByPrimaryKey(attributeId);
-        System.out.println("Attribute=" + attribute);
-        if (attribute == null) {
-            attribute = new Attribute();
-            attribute.setId(attributeId);
-            attribute.setAttributeName("mockattribute");
-        }
-        return attribute;
-
+        return attributeMapper.selectByPrimaryKey(attributeId);
     }
 
     /**
@@ -84,90 +63,66 @@ public class AttributeServiceImpl implements AttributeService {
         return null;
     }
 
-
-    //Table: attribute_group
-
     /**
-     * 创建属性组
+     * 查询所有属性
      *
-     * @param attributeGroup
      * @return
      */
-    public int createAttributeGroup(AttributeGroup attributeGroup) {
-        return 1;
+    public List<Attribute> getAllAttributes() {
+        return attributeMapper.selectAll();
     }
 
     /**
-     * 根据属性组Id查询属性组
+     * 根据ID删除属性
      *
-     * @param attributeGroupId
+     * @param attributeId
      * @return
      */
-    public AttributeGroup getAttributeGroupById(int attributeGroupId) {
-        return null;
+    public int deleteAttributeById(int attributeId) {
+        return 0;
+    }
+
+    //Table: category_attribute
+
+    /**
+     * 添加单个属性到三级类目
+     *
+     * @param categoryAttribute
+     * @return
+     */
+    public int addAttributeInCategory(CategoryAttribute categoryAttribute) {
+        return 0;
     }
 
     /**
-     * 根据属性组名查询属性组
+     * 添加多个属性到三级类目
      *
-     * @param attributeGroupName
+     * @param categoryId
+     * @param attributes
      * @return
      */
-    public AttributeGroup getAttributeGroupByName(String attributeGroupName) {
-        return null;
+    public int addAttributesInCategory(int categoryId, List<Attribute> attributes) {
+        return 0;
     }
 
     /**
-     * 更新属性组
+     * 从三级类目中删除属性
      *
-     * @param attributeGroup
-     * @return
-     */
-    public int updateAttributeGroup(AttributeGroup attributeGroup) {
-        return 1;
-    }
-
-    //Table: attribute_group_attribute
-
-    /**
-     * 添加单个属性到属性组
-     *
-     * @param attributeGroupAttribute
-     * @return
-     */
-    public int createAttributeGroupAttribute(AttributeGroupAttribute attributeGroupAttribute) {
-        return 1;
-    }
-
-    /**
-     * 添加多个属性到属性组
-     *
-     * @param attributeGroupId
+     * @param categoryId
      * @param attributeIds
      * @return
      */
-    public int addAttributesIntoAttributeGroup(int attributeGroupId, int[] attributeIds) {
-        return 1;
+    public int deleteAttributesInCategory(int categoryId, int[] attributeIds) {
+        return 0;
     }
 
     /**
-     * 从属性组删除属性
+     * 查询三级类目的所有属性
      *
-     * @param attributeGroupId
-     * @param attributeIds
+     * @param categoryId
      * @return
      */
-    public int removeAttributeFromAttributeGroup(int attributeGroupId, int[] attributeIds) {
-        return 1;
-    }
-
-    /**
-     * 查询属性组里所有属性
-     *
-     * @param attributeGroupId
-     * @return
-     */
-    public List<Attribute> getAttributesByAttributeGroupId(int attributeGroupId) {
+    public List<Attribute> getAttributesInCategory(int categoryId) {
         return null;
     }
 
@@ -180,7 +135,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int createAttributeValue(AttributeValue attributeValue) {
-        return 1;
+        return 0;
     }
 
     /**
@@ -189,8 +144,8 @@ public class AttributeServiceImpl implements AttributeService {
      * @param attributeValue
      * @return
      */
-    public int removeAttributeValue(AttributeValue attributeValue) {
-        return 1;
+    public int deleteAttributeValue(AttributeValue attributeValue) {
+        return 0;
     }
 
     /**
@@ -203,26 +158,36 @@ public class AttributeServiceImpl implements AttributeService {
         return null;
     }
 
-//table: product_attribute
-
-    /**
-     * 查询产品的属性组
-     *
-     * @param product
-     * @return
-     */
-    public AttributeGroup queryAttributeGroupByProduct(Product product) {
-        return null;
-    }
-
-    /**
-     * 设置产品的属性值
-     *
-     * @param productAttributes
-     * @return
-     */
-    public int createProductAttribute(List<ProductAttribute> productAttributes) {
-        return 1;
-    }
+//    //table: product_attribute
+//
+//    /**
+//     * 查询产品的属性:根据product找category,根据category找category_attributes
+//     *
+//     * @param product
+//     * @return
+//     */
+//    public List<Attribute> getAttributesInProduct(Product product) {
+//        return null;
+//    }
+//
+//    /**
+//     * 批量设置产品的属性值
+//     *
+//     * @param productAttributes
+//     * @return
+//     */
+//    public int createProductAttribute(List<ProductAttribute> productAttributes) {
+//        return 0;
+//    }
+//
+//    /**
+//     * 批量更新产品的属性值
+//     *
+//     * @param productAttributes
+//     * @return
+//     */
+//    public int updateProductAttribute(List<ProductAttribute> productAttributes) {
+//        return 0;
+//    }
 
 }

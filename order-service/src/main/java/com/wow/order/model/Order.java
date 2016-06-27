@@ -7,43 +7,17 @@ import java.util.Date;
 public class Order implements Serializable {
     private Integer id;
 
-    private Integer endUserId;
-
     private String orderCode;
+
+    private Integer endUserId;
 
     private BigDecimal orderAmount;
 
     private BigDecimal productAmount;
 
-    private Byte orderSource;
-
-    private Integer orderIp;
-
-    private Date placeOrderTime;
-
-    private String endUserRemarks;
-
-    private String sellerRemarks;
-
-    private Integer parentOrderId;
-
-    private Boolean isLeaf;
-
-    private Byte orderStatus;
-
-    private Byte failureReason;
-
-    private Byte goodsStatus;
-
-    private Byte paymentStatus;
-
-    private Byte paymentMethod;
-
-    private Date paidTime;
+    private BigDecimal deliveryFee;
 
     private String receiverName;
-
-    private String receiverAddress;
 
     private String receiverProvince;
 
@@ -55,9 +29,23 @@ public class Order implements Serializable {
 
     private String receiverPostcode;
 
+    private String receiverAddress;
+
     private String receiverMobile;
 
-    private BigDecimal freightFee;
+    private String endUserRemarks;
+
+    private Byte orderStatus;
+
+    private Byte paymentStatus;
+
+    private Byte paymentMethod;
+
+    private Date paidTime;
+
+    private Boolean isUseCoupon;
+
+    private Integer endUserCouponId;
 
     private Byte deliveryMothod;
 
@@ -66,6 +54,10 @@ public class Order implements Serializable {
     private String deliveryOrderNo;
 
     private Date deliveryDate;
+
+    private Byte goodsStatus;
+
+    private Byte deliveryFailureReason;
 
     private Date receiveDate;
 
@@ -83,9 +75,19 @@ public class Order implements Serializable {
 
     private String operatorName;
 
-    private Boolean isUseCoupon;
+    private Boolean isLeaf;
 
-    private Integer endUserCouponId;
+    private Integer parentOrderId;
+
+    private Date orderCreateTime;
+
+    private Byte orderSource;
+
+    private Integer orderIp;
+
+    private String sellerRemarks;
+
+    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -97,20 +99,20 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public Integer getEndUserId() {
-        return endUserId;
-    }
-
-    public void setEndUserId(Integer endUserId) {
-        this.endUserId = endUserId;
-    }
-
     public String getOrderCode() {
         return orderCode;
     }
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public Integer getEndUserId() {
+        return endUserId;
+    }
+
+    public void setEndUserId(Integer endUserId) {
+        this.endUserId = endUserId;
     }
 
     public BigDecimal getOrderAmount() {
@@ -129,108 +131,12 @@ public class Order implements Serializable {
         this.productAmount = productAmount;
     }
 
-    public Byte getOrderSource() {
-        return orderSource;
+    public BigDecimal getDeliveryFee() {
+        return deliveryFee;
     }
 
-    public void setOrderSource(Byte orderSource) {
-        this.orderSource = orderSource;
-    }
-
-    public Integer getOrderIp() {
-        return orderIp;
-    }
-
-    public void setOrderIp(Integer orderIp) {
-        this.orderIp = orderIp;
-    }
-
-    public Date getPlaceOrderTime() {
-        return placeOrderTime;
-    }
-
-    public void setPlaceOrderTime(Date placeOrderTime) {
-        this.placeOrderTime = placeOrderTime;
-    }
-
-    public String getEndUserRemarks() {
-        return endUserRemarks;
-    }
-
-    public void setEndUserRemarks(String endUserRemarks) {
-        this.endUserRemarks = endUserRemarks;
-    }
-
-    public String getSellerRemarks() {
-        return sellerRemarks;
-    }
-
-    public void setSellerRemarks(String sellerRemarks) {
-        this.sellerRemarks = sellerRemarks;
-    }
-
-    public Integer getParentOrderId() {
-        return parentOrderId;
-    }
-
-    public void setParentOrderId(Integer parentOrderId) {
-        this.parentOrderId = parentOrderId;
-    }
-
-    public Boolean getIsLeaf() {
-        return isLeaf;
-    }
-
-    public void setIsLeaf(Boolean isLeaf) {
-        this.isLeaf = isLeaf;
-    }
-
-    public Byte getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(Byte orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public Byte getFailureReason() {
-        return failureReason;
-    }
-
-    public void setFailureReason(Byte failureReason) {
-        this.failureReason = failureReason;
-    }
-
-    public Byte getGoodsStatus() {
-        return goodsStatus;
-    }
-
-    public void setGoodsStatus(Byte goodsStatus) {
-        this.goodsStatus = goodsStatus;
-    }
-
-    public Byte getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(Byte paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-
-    public Byte getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(Byte paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public Date getPaidTime() {
-        return paidTime;
-    }
-
-    public void setPaidTime(Date paidTime) {
-        this.paidTime = paidTime;
+    public void setDeliveryFee(BigDecimal deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
     public String getReceiverName() {
@@ -239,14 +145,6 @@ public class Order implements Serializable {
 
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
-    }
-
-    public String getReceiverAddress() {
-        return receiverAddress;
-    }
-
-    public void setReceiverAddress(String receiverAddress) {
-        this.receiverAddress = receiverAddress;
     }
 
     public String getReceiverProvince() {
@@ -289,6 +187,14 @@ public class Order implements Serializable {
         this.receiverPostcode = receiverPostcode;
     }
 
+    public String getReceiverAddress() {
+        return receiverAddress;
+    }
+
+    public void setReceiverAddress(String receiverAddress) {
+        this.receiverAddress = receiverAddress;
+    }
+
     public String getReceiverMobile() {
         return receiverMobile;
     }
@@ -297,12 +203,60 @@ public class Order implements Serializable {
         this.receiverMobile = receiverMobile;
     }
 
-    public BigDecimal getFreightFee() {
-        return freightFee;
+    public String getEndUserRemarks() {
+        return endUserRemarks;
     }
 
-    public void setFreightFee(BigDecimal freightFee) {
-        this.freightFee = freightFee;
+    public void setEndUserRemarks(String endUserRemarks) {
+        this.endUserRemarks = endUserRemarks;
+    }
+
+    public Byte getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Byte orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public Byte getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(Byte paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public Byte getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(Byte paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public Date getPaidTime() {
+        return paidTime;
+    }
+
+    public void setPaidTime(Date paidTime) {
+        this.paidTime = paidTime;
+    }
+
+    public Boolean getIsUseCoupon() {
+        return isUseCoupon;
+    }
+
+    public void setIsUseCoupon(Boolean isUseCoupon) {
+        this.isUseCoupon = isUseCoupon;
+    }
+
+    public Integer getEndUserCouponId() {
+        return endUserCouponId;
+    }
+
+    public void setEndUserCouponId(Integer endUserCouponId) {
+        this.endUserCouponId = endUserCouponId;
     }
 
     public Byte getDeliveryMothod() {
@@ -335,6 +289,22 @@ public class Order implements Serializable {
 
     public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
+    }
+
+    public Byte getGoodsStatus() {
+        return goodsStatus;
+    }
+
+    public void setGoodsStatus(Byte goodsStatus) {
+        this.goodsStatus = goodsStatus;
+    }
+
+    public Byte getDeliveryFailureReason() {
+        return deliveryFailureReason;
+    }
+
+    public void setDeliveryFailureReason(Byte deliveryFailureReason) {
+        this.deliveryFailureReason = deliveryFailureReason;
     }
 
     public Date getReceiveDate() {
@@ -401,20 +371,60 @@ public class Order implements Serializable {
         this.operatorName = operatorName;
     }
 
-    public Boolean getIsUseCoupon() {
-        return isUseCoupon;
+    public Boolean getIsLeaf() {
+        return isLeaf;
     }
 
-    public void setIsUseCoupon(Boolean isUseCoupon) {
-        this.isUseCoupon = isUseCoupon;
+    public void setIsLeaf(Boolean isLeaf) {
+        this.isLeaf = isLeaf;
     }
 
-    public Integer getEndUserCouponId() {
-        return endUserCouponId;
+    public Integer getParentOrderId() {
+        return parentOrderId;
     }
 
-    public void setEndUserCouponId(Integer endUserCouponId) {
-        this.endUserCouponId = endUserCouponId;
+    public void setParentOrderId(Integer parentOrderId) {
+        this.parentOrderId = parentOrderId;
+    }
+
+    public Date getOrderCreateTime() {
+        return orderCreateTime;
+    }
+
+    public void setOrderCreateTime(Date orderCreateTime) {
+        this.orderCreateTime = orderCreateTime;
+    }
+
+    public Byte getOrderSource() {
+        return orderSource;
+    }
+
+    public void setOrderSource(Byte orderSource) {
+        this.orderSource = orderSource;
+    }
+
+    public Integer getOrderIp() {
+        return orderIp;
+    }
+
+    public void setOrderIp(Integer orderIp) {
+        this.orderIp = orderIp;
+    }
+
+    public String getSellerRemarks() {
+        return sellerRemarks;
+    }
+
+    public void setSellerRemarks(String sellerRemarks) {
+        this.sellerRemarks = sellerRemarks;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
@@ -424,36 +434,32 @@ public class Order implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", endUserId=").append(endUserId);
         sb.append(", orderCode=").append(orderCode);
+        sb.append(", endUserId=").append(endUserId);
         sb.append(", orderAmount=").append(orderAmount);
         sb.append(", productAmount=").append(productAmount);
-        sb.append(", orderSource=").append(orderSource);
-        sb.append(", orderIp=").append(orderIp);
-        sb.append(", placeOrderTime=").append(placeOrderTime);
-        sb.append(", endUserRemarks=").append(endUserRemarks);
-        sb.append(", sellerRemarks=").append(sellerRemarks);
-        sb.append(", parentOrderId=").append(parentOrderId);
-        sb.append(", isLeaf=").append(isLeaf);
-        sb.append(", orderStatus=").append(orderStatus);
-        sb.append(", failureReason=").append(failureReason);
-        sb.append(", goodsStatus=").append(goodsStatus);
-        sb.append(", paymentStatus=").append(paymentStatus);
-        sb.append(", paymentMethod=").append(paymentMethod);
-        sb.append(", paidTime=").append(paidTime);
+        sb.append(", deliveryFee=").append(deliveryFee);
         sb.append(", receiverName=").append(receiverName);
-        sb.append(", receiverAddress=").append(receiverAddress);
         sb.append(", receiverProvince=").append(receiverProvince);
         sb.append(", receiverCity=").append(receiverCity);
         sb.append(", receiverCounty=").append(receiverCounty);
         sb.append(", receiverTown=").append(receiverTown);
         sb.append(", receiverPostcode=").append(receiverPostcode);
+        sb.append(", receiverAddress=").append(receiverAddress);
         sb.append(", receiverMobile=").append(receiverMobile);
-        sb.append(", freightFee=").append(freightFee);
+        sb.append(", endUserRemarks=").append(endUserRemarks);
+        sb.append(", orderStatus=").append(orderStatus);
+        sb.append(", paymentStatus=").append(paymentStatus);
+        sb.append(", paymentMethod=").append(paymentMethod);
+        sb.append(", paidTime=").append(paidTime);
+        sb.append(", isUseCoupon=").append(isUseCoupon);
+        sb.append(", endUserCouponId=").append(endUserCouponId);
         sb.append(", deliveryMothod=").append(deliveryMothod);
         sb.append(", deliveryCompanyName=").append(deliveryCompanyName);
         sb.append(", deliveryOrderNo=").append(deliveryOrderNo);
         sb.append(", deliveryDate=").append(deliveryDate);
+        sb.append(", goodsStatus=").append(goodsStatus);
+        sb.append(", deliveryFailureReason=").append(deliveryFailureReason);
         sb.append(", receiveDate=").append(receiveDate);
         sb.append(", returnOnDelivery=").append(returnOnDelivery);
         sb.append(", cancelRequestTime=").append(cancelRequestTime);
@@ -462,8 +468,13 @@ public class Order implements Serializable {
         sb.append(", refundApprovalStatus=").append(refundApprovalStatus);
         sb.append(", refundApprovalTime=").append(refundApprovalTime);
         sb.append(", operatorName=").append(operatorName);
-        sb.append(", isUseCoupon=").append(isUseCoupon);
-        sb.append(", endUserCouponId=").append(endUserCouponId);
+        sb.append(", isLeaf=").append(isLeaf);
+        sb.append(", parentOrderId=").append(parentOrderId);
+        sb.append(", orderCreateTime=").append(orderCreateTime);
+        sb.append(", orderSource=").append(orderSource);
+        sb.append(", orderIp=").append(orderIp);
+        sb.append(", sellerRemarks=").append(sellerRemarks);
+        sb.append(", updateTime=").append(updateTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

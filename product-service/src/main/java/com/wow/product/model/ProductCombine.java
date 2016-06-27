@@ -10,7 +10,7 @@ public class ProductCombine implements Serializable {
 
     private Integer subProductId;
 
-    private Byte subProductNum;
+    private Byte subProductQty;
 
     private Date createTime;
 
@@ -48,12 +48,12 @@ public class ProductCombine implements Serializable {
         this.subProductId = subProductId;
     }
 
-    public Byte getSubProductNum() {
-        return subProductNum;
+    public Byte getSubProductQty() {
+        return subProductQty;
     }
 
-    public void setSubProductNum(Byte subProductNum) {
-        this.subProductNum = subProductNum;
+    public void setSubProductQty(Byte subProductQty) {
+        this.subProductQty = subProductQty;
     }
 
     public Date getCreateTime() {
@@ -105,7 +105,7 @@ public class ProductCombine implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", productId=").append(productId);
         sb.append(", subProductId=").append(subProductId);
-        sb.append(", subProductNum=").append(subProductNum);
+        sb.append(", subProductQty=").append(subProductQty);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", updateTime=").append(updateTime);

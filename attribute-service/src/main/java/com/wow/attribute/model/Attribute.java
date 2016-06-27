@@ -1,14 +1,23 @@
 package com.wow.attribute.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class Attribute implements Serializable {
     private Integer id;
 
+    @NotEmpty(message = "属性名不能为空")
     private String attributeName;
 
     private String showName;
+
+    private Boolean canMultipleSelected;
+
+    private Byte attributeValueType;
+
+    private Byte decimalPlace;
 
     private Date createTime;
 
@@ -19,12 +28,6 @@ public class Attribute implements Serializable {
     private String updateBy;
 
     private Boolean isDeleted;
-
-    private Boolean canMultipleSelected;
-
-    private Byte attributeValueType;
-
-    private Byte decimalPlace;
 
     private static final long serialVersionUID = 1L;
 
@@ -50,6 +53,30 @@ public class Attribute implements Serializable {
 
     public void setShowName(String showName) {
         this.showName = showName;
+    }
+
+    public Boolean getCanMultipleSelected() {
+        return canMultipleSelected;
+    }
+
+    public void setCanMultipleSelected(Boolean canMultipleSelected) {
+        this.canMultipleSelected = canMultipleSelected;
+    }
+
+    public Byte getAttributeValueType() {
+        return attributeValueType;
+    }
+
+    public void setAttributeValueType(Byte attributeValueType) {
+        this.attributeValueType = attributeValueType;
+    }
+
+    public Byte getDecimalPlace() {
+        return decimalPlace;
+    }
+
+    public void setDecimalPlace(Byte decimalPlace) {
+        this.decimalPlace = decimalPlace;
     }
 
     public Date getCreateTime() {
@@ -92,30 +119,6 @@ public class Attribute implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public Boolean getCanMultipleSelected() {
-        return canMultipleSelected;
-    }
-
-    public void setCanMultipleSelected(Boolean canMultipleSelected) {
-        this.canMultipleSelected = canMultipleSelected;
-    }
-
-    public Byte getAttributeValueType() {
-        return attributeValueType;
-    }
-
-    public void setAttributeValueType(Byte attributeValueType) {
-        this.attributeValueType = attributeValueType;
-    }
-
-    public Byte getDecimalPlace() {
-        return decimalPlace;
-    }
-
-    public void setDecimalPlace(Byte decimalPlace) {
-        this.decimalPlace = decimalPlace;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -125,14 +128,14 @@ public class Attribute implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", attributeName=").append(attributeName);
         sb.append(", showName=").append(showName);
+        sb.append(", canMultipleSelected=").append(canMultipleSelected);
+        sb.append(", attributeValueType=").append(attributeValueType);
+        sb.append(", decimalPlace=").append(decimalPlace);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", updateBy=").append(updateBy);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", canMultipleSelected=").append(canMultipleSelected);
-        sb.append(", attributeValueType=").append(attributeValueType);
-        sb.append(", decimalPlace=").append(decimalPlace);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

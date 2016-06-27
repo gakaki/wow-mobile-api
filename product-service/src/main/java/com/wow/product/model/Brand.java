@@ -5,7 +5,9 @@ import java.io.Serializable;
 public class Brand implements Serializable {
     private Integer id;
 
-    private String brandName;
+    private String brandCname;
+
+    private String brandEname;
 
     private String brandNameFirstLetter;
 
@@ -31,12 +33,20 @@ public class Brand implements Serializable {
         this.id = id;
     }
 
-    public String getBrandName() {
-        return brandName;
+    public String getBrandCname() {
+        return brandCname;
     }
 
-    public void setBrandName(String brandName) {
-        this.brandName = brandName;
+    public void setBrandCname(String brandCname) {
+        this.brandCname = brandCname;
+    }
+
+    public String getBrandEname() {
+        return brandEname;
+    }
+
+    public void setBrandEname(String brandEname) {
+        this.brandEname = brandEname;
     }
 
     public String getBrandNameFirstLetter() {
@@ -102,7 +112,8 @@ public class Brand implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", brandName=").append(brandName);
+        sb.append(", brandCname=").append(brandCname);
+        sb.append(", brandEname=").append(brandEname);
         sb.append(", brandNameFirstLetter=").append(brandNameFirstLetter);
         sb.append(", brandCountry=").append(brandCountry);
         sb.append(", brandHomeUrl=").append(brandHomeUrl);

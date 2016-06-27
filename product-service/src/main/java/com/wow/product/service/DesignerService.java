@@ -12,7 +12,6 @@ import java.util.List;
  */
 public interface DesignerService {
     //Table: designer
-
     /**
      * 创建设计师
      *
@@ -70,7 +69,6 @@ public interface DesignerService {
     List<Product> getProductsByDesigner(String designerName);
 
     //table: product_designer
-
     /**
      * 设置产品设计师
      *
@@ -93,5 +91,12 @@ public interface DesignerService {
      * @param product
      * @return
      */
-    List<Designer> queryDesignersByProduct(Product product);
+    List<Designer> getDesignersByProduct(Product product);
+
+    /**
+     * 查询产品的主设计师
+     * @param product
+     * @return
+     */
+    Designer getPrimaryDesignerByProduct(Product product);
 }

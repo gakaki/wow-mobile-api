@@ -1,10 +1,13 @@
 package com.wow.product.service.impl;
 
+import com.wow.product.mapper.BrandMapper;
 import com.wow.product.model.Brand;
 import com.wow.product.model.Designer;
 import com.wow.product.model.Product;
 import com.wow.product.service.BrandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +16,11 @@ import java.util.List;
  * Created by zhengzhiqing on 16/6/18.
  */
 @Service
+@Transactional(value = "productTransactionManager")
 public class BrandServiceImpl implements BrandService {
 
-//    @Autowired
-//    BrandMapper brandMapper;
+    @Autowired
+    BrandMapper brandMapper;
 
     //Table: brand
 
@@ -51,10 +55,10 @@ public class BrandServiceImpl implements BrandService {
         List<Brand> brands = new ArrayList<Brand>();
         Brand brand1 = new Brand();
         brand1.setId(1);
-        brand1.setBrandName(firstLetter + 1);
+        brand1.setBrandCname(firstLetter + 1);
         Brand brand2 = new Brand();
         brand2.setId(2);
-        brand2.setBrandName(firstLetter + 2);
+        brand2.setBrandCname(firstLetter + 2);
         brands.add(brand1);
         brands.add(brand2);
         System.out.println("BrandServiceImpl:getBrandsByFirstLetter:" + brands);

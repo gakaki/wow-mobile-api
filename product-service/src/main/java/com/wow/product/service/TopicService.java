@@ -1,9 +1,10 @@
 package com.wow.product.service;
 
 
+import com.wow.product.model.ProductShortListInTopic;
 import com.wow.product.model.Topic;
-import com.wow.product.model.TopicDisplayRule;
-import com.wow.product.model.TopicProductDisplayRule;
+
+import java.util.List;
 
 /**
  * 专题服务
@@ -27,6 +28,14 @@ public interface TopicService {
     int updateTopic(Topic topic);
 
     /**
+     * 删除专题信息
+     *
+     * @param topicId
+     * @return
+     */
+    int deleteTopic(int topicId);
+
+    /**
      * 将产品分组绑定到专题
      *
      * @param topic
@@ -35,30 +44,52 @@ public interface TopicService {
     int bindGroupToTopic(Topic topic);
 
     /**
-     * 在特定页面上显示专题的规则,包括显示哪些专题,排序是什么
-     *
-     * @param topicDisplayRule
+     * 根据ID查询专题
+     * @param topicId
      * @return
      */
-    int createTopicDisplayRule(TopicDisplayRule topicDisplayRule);
+    Topic getTopicById(int topicId);
 
     /**
-     * 更新特定页面上显示专题的规则,包括显示哪些专题,排序是什么
-     *
-     * @param topicDisplayRule
+     * 根据名称查询专题
+     * @param topicName
      * @return
      */
-    int updateTopicDisplayRule(TopicDisplayRule topicDisplayRule);
+    Topic getTopicByName(String topicName);
 
     /**
-     * @param topicProductDisplayRule
+     * 查询所有专题
      * @return
      */
-    int createTopicProductDisplayRule(TopicProductDisplayRule topicProductDisplayRule);
+    List<Topic> getAllTopics();
+
+    //table: product_short_list_in_topic
 
     /**
-     * @param topicProductDisplayRule
+     * 增加在专题里随带展示的产品
+     * @param productShortListInTopics
      * @return
      */
-    int updateTopicProductDisplayRule(TopicProductDisplayRule topicProductDisplayRule);
+    int createProductShortListInTopic(List<ProductShortListInTopic> productShortListInTopics);
+
+    /**
+     * 修改在专题里随带展示的产品
+     * @param productShortListInTopics
+     * @return
+     */
+    int updateProductShortListInTopic(List<ProductShortListInTopic> productShortListInTopics);
+
+    /**
+     * 删除在专题里随带展示的产品
+     * @param productShortListInTopics
+     * @return
+     */
+    int deleteProductShortListInTopic(List<ProductShortListInTopic> productShortListInTopics);
+
+    /**
+     * 查询在专题里随带展示的产品
+     * @param topicId
+     * @return
+     */
+    List<ProductShortListInTopic> getProductShortListInTopic(int topicId);
 }

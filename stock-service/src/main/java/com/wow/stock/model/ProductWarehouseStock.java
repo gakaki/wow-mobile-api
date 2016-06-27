@@ -10,9 +10,11 @@ public class ProductWarehouseStock implements Serializable {
 
     private Integer warehouseId;
 
-    private Short realStock;
+    private Short realStockQty;
 
-    private Short frozenStock;
+    private Short frozenStockQty;
+
+    private Short lockStockQty;
 
     private Boolean isActive;
 
@@ -21,8 +23,6 @@ public class ProductWarehouseStock implements Serializable {
     private Date updateDate;
 
     private Boolean isDeleted;
-
-    private Short lockStock;
 
     private static final long serialVersionUID = 1L;
 
@@ -50,20 +50,28 @@ public class ProductWarehouseStock implements Serializable {
         this.warehouseId = warehouseId;
     }
 
-    public Short getRealStock() {
-        return realStock;
+    public Short getRealStockQty() {
+        return realStockQty;
     }
 
-    public void setRealStock(Short realStock) {
-        this.realStock = realStock;
+    public void setRealStockQty(Short realStockQty) {
+        this.realStockQty = realStockQty;
     }
 
-    public Short getFrozenStock() {
-        return frozenStock;
+    public Short getFrozenStockQty() {
+        return frozenStockQty;
     }
 
-    public void setFrozenStock(Short frozenStock) {
-        this.frozenStock = frozenStock;
+    public void setFrozenStockQty(Short frozenStockQty) {
+        this.frozenStockQty = frozenStockQty;
+    }
+
+    public Short getLockStockQty() {
+        return lockStockQty;
+    }
+
+    public void setLockStockQty(Short lockStockQty) {
+        this.lockStockQty = lockStockQty;
     }
 
     public Boolean getIsActive() {
@@ -98,14 +106,6 @@ public class ProductWarehouseStock implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public Short getLockStock() {
-        return lockStock;
-    }
-
-    public void setLockStock(Short lockStock) {
-        this.lockStock = lockStock;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -115,13 +115,13 @@ public class ProductWarehouseStock implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", productId=").append(productId);
         sb.append(", warehouseId=").append(warehouseId);
-        sb.append(", realStock=").append(realStock);
-        sb.append(", frozenStock=").append(frozenStock);
+        sb.append(", realStockQty=").append(realStockQty);
+        sb.append(", frozenStockQty=").append(frozenStockQty);
+        sb.append(", lockStockQty=").append(lockStockQty);
         sb.append(", isActive=").append(isActive);
         sb.append(", createDate=").append(createDate);
         sb.append(", updateDate=").append(updateDate);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", lockStock=").append(lockStock);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

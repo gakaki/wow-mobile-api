@@ -225,6 +225,146 @@ public class PageBannerConfigExample {
             return (Criteria) this;
         }
 
+        public Criteria andBannerTitleIsNull() {
+            addCriterion("banner_title is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleIsNotNull() {
+            addCriterion("banner_title is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleEqualTo(String value) {
+            addCriterion("banner_title =", value, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleNotEqualTo(String value) {
+            addCriterion("banner_title <>", value, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleGreaterThan(String value) {
+            addCriterion("banner_title >", value, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleGreaterThanOrEqualTo(String value) {
+            addCriterion("banner_title >=", value, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleLessThan(String value) {
+            addCriterion("banner_title <", value, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleLessThanOrEqualTo(String value) {
+            addCriterion("banner_title <=", value, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleLike(String value) {
+            addCriterion("banner_title like", value, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleNotLike(String value) {
+            addCriterion("banner_title not like", value, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleIn(List<String> values) {
+            addCriterion("banner_title in", values, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleNotIn(List<String> values) {
+            addCriterion("banner_title not in", values, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleBetween(String value1, String value2) {
+            addCriterion("banner_title between", value1, value2, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerTitleNotBetween(String value1, String value2) {
+            addCriterion("banner_title not between", value1, value2, "bannerTitle");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescIsNull() {
+            addCriterion("banner_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescIsNotNull() {
+            addCriterion("banner_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescEqualTo(String value) {
+            addCriterion("banner_desc =", value, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescNotEqualTo(String value) {
+            addCriterion("banner_desc <>", value, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescGreaterThan(String value) {
+            addCriterion("banner_desc >", value, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescGreaterThanOrEqualTo(String value) {
+            addCriterion("banner_desc >=", value, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescLessThan(String value) {
+            addCriterion("banner_desc <", value, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescLessThanOrEqualTo(String value) {
+            addCriterion("banner_desc <=", value, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescLike(String value) {
+            addCriterion("banner_desc like", value, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescNotLike(String value) {
+            addCriterion("banner_desc not like", value, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescIn(List<String> values) {
+            addCriterion("banner_desc in", values, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescNotIn(List<String> values) {
+            addCriterion("banner_desc not in", values, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescBetween(String value1, String value2) {
+            addCriterion("banner_desc between", value1, value2, "bannerDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerDescNotBetween(String value1, String value2) {
+            addCriterion("banner_desc not between", value1, value2, "bannerDesc");
+            return (Criteria) this;
+        }
+
         public Criteria andBannerImgSrcIsNull() {
             addCriterion("banner_img_src is null");
             return (Criteria) this;
@@ -425,6 +565,66 @@ public class PageBannerConfigExample {
             return (Criteria) this;
         }
 
+        public Criteria andBannerLinkTargetIdIsNull() {
+            addCriterion("banner_link_target_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdIsNotNull() {
+            addCriterion("banner_link_target_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdEqualTo(Integer value) {
+            addCriterion("banner_link_target_id =", value, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdNotEqualTo(Integer value) {
+            addCriterion("banner_link_target_id <>", value, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdGreaterThan(Integer value) {
+            addCriterion("banner_link_target_id >", value, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("banner_link_target_id >=", value, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdLessThan(Integer value) {
+            addCriterion("banner_link_target_id <", value, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdLessThanOrEqualTo(Integer value) {
+            addCriterion("banner_link_target_id <=", value, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdIn(List<Integer> values) {
+            addCriterion("banner_link_target_id in", values, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdNotIn(List<Integer> values) {
+            addCriterion("banner_link_target_id not in", values, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdBetween(Integer value1, Integer value2) {
+            addCriterion("banner_link_target_id between", value1, value2, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBannerLinkTargetIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("banner_link_target_id not between", value1, value2, "bannerLinkTargetId");
+            return (Criteria) this;
+        }
+
         public Criteria andActiveFromIsNull() {
             addCriterion("active_from is null");
             return (Criteria) this;
@@ -545,203 +745,13 @@ public class PageBannerConfigExample {
             return (Criteria) this;
         }
 
-        public Criteria andBannerTitleIsNull() {
-            addCriterion("banner_title is null");
+        public Criteria andBannerTitleLikeInsensitive(String value) {
+            addCriterion("upper(banner_title) like", value.toUpperCase(), "bannerTitle");
             return (Criteria) this;
         }
 
-        public Criteria andBannerTitleIsNotNull() {
-            addCriterion("banner_title is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleEqualTo(String value) {
-            addCriterion("banner_title =", value, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleNotEqualTo(String value) {
-            addCriterion("banner_title <>", value, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleGreaterThan(String value) {
-            addCriterion("banner_title >", value, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleGreaterThanOrEqualTo(String value) {
-            addCriterion("banner_title >=", value, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleLessThan(String value) {
-            addCriterion("banner_title <", value, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleLessThanOrEqualTo(String value) {
-            addCriterion("banner_title <=", value, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleLike(String value) {
-            addCriterion("banner_title like", value, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleNotLike(String value) {
-            addCriterion("banner_title not like", value, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleIn(List<String> values) {
-            addCriterion("banner_title in", values, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleNotIn(List<String> values) {
-            addCriterion("banner_title not in", values, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleBetween(String value1, String value2) {
-            addCriterion("banner_title between", value1, value2, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleNotBetween(String value1, String value2) {
-            addCriterion("banner_title not between", value1, value2, "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescIsNull() {
-            addCriterion("banner_desc is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescIsNotNull() {
-            addCriterion("banner_desc is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescEqualTo(String value) {
-            addCriterion("banner_desc =", value, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescNotEqualTo(String value) {
-            addCriterion("banner_desc <>", value, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescGreaterThan(String value) {
-            addCriterion("banner_desc >", value, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescGreaterThanOrEqualTo(String value) {
-            addCriterion("banner_desc >=", value, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescLessThan(String value) {
-            addCriterion("banner_desc <", value, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescLessThanOrEqualTo(String value) {
-            addCriterion("banner_desc <=", value, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescLike(String value) {
-            addCriterion("banner_desc like", value, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescNotLike(String value) {
-            addCriterion("banner_desc not like", value, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescIn(List<String> values) {
-            addCriterion("banner_desc in", values, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescNotIn(List<String> values) {
-            addCriterion("banner_desc not in", values, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescBetween(String value1, String value2) {
-            addCriterion("banner_desc between", value1, value2, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescNotBetween(String value1, String value2) {
-            addCriterion("banner_desc not between", value1, value2, "bannerDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdIsNull() {
-            addCriterion("banner_link_target_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdIsNotNull() {
-            addCriterion("banner_link_target_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdEqualTo(Integer value) {
-            addCriterion("banner_link_target_id =", value, "bannerLinkTargetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdNotEqualTo(Integer value) {
-            addCriterion("banner_link_target_id <>", value, "bannerLinkTargetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdGreaterThan(Integer value) {
-            addCriterion("banner_link_target_id >", value, "bannerLinkTargetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("banner_link_target_id >=", value, "bannerLinkTargetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdLessThan(Integer value) {
-            addCriterion("banner_link_target_id <", value, "bannerLinkTargetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdLessThanOrEqualTo(Integer value) {
-            addCriterion("banner_link_target_id <=", value, "bannerLinkTargetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdIn(List<Integer> values) {
-            addCriterion("banner_link_target_id in", values, "bannerLinkTargetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdNotIn(List<Integer> values) {
-            addCriterion("banner_link_target_id not in", values, "bannerLinkTargetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdBetween(Integer value1, Integer value2) {
-            addCriterion("banner_link_target_id between", value1, value2, "bannerLinkTargetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerLinkTargetIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("banner_link_target_id not between", value1, value2, "bannerLinkTargetId");
+        public Criteria andBannerDescLikeInsensitive(String value) {
+            addCriterion("upper(banner_desc) like", value.toUpperCase(), "bannerDesc");
             return (Criteria) this;
         }
 
@@ -752,16 +762,6 @@ public class PageBannerConfigExample {
 
         public Criteria andBannerLinkUrlLikeInsensitive(String value) {
             addCriterion("upper(banner_link_url) like", value.toUpperCase(), "bannerLinkUrl");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerTitleLikeInsensitive(String value) {
-            addCriterion("upper(banner_title) like", value.toUpperCase(), "bannerTitle");
-            return (Criteria) this;
-        }
-
-        public Criteria andBannerDescLikeInsensitive(String value) {
-            addCriterion("upper(banner_desc) like", value.toUpperCase(), "bannerDesc");
             return (Criteria) this;
         }
     }

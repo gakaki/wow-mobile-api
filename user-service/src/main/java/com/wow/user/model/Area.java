@@ -7,9 +7,9 @@ public class Area implements Serializable {
 
     private Byte areaLevel;
 
-    private String province;
-
     private String city;
+
+    private String province;
 
     private String county;
 
@@ -33,20 +33,20 @@ public class Area implements Serializable {
         this.areaLevel = areaLevel;
     }
 
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
     public String getCity() {
         return city;
     }
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getCounty() {
@@ -73,8 +73,8 @@ public class Area implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", areaLevel=").append(areaLevel);
-        sb.append(", province=").append(province);
         sb.append(", city=").append(city);
+        sb.append(", province=").append(province);
         sb.append(", county=").append(county);
         sb.append(", town=").append(town);
         sb.append(", serialVersionUID=").append(serialVersionUID);

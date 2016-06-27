@@ -11,7 +11,7 @@
     <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
     <result column="real_name" property="realName" jdbcType="VARCHAR" />
     <result column="sex" property="sex" jdbcType="TINYINT" />
-    <result column="avator" property="avator" jdbcType="VARCHAR" />
+    <result column="avatar" property="avatar" jdbcType="VARCHAR" />
     <result column="country" property="country" jdbcType="VARCHAR" />
     <result column="date_of_birth" property="dateOfBirth" jdbcType="DATE" />
     <result column="age_range" property="ageRange" jdbcType="TINYINT" />
@@ -23,10 +23,10 @@
     <result column="has_child" property="hasChild" jdbcType="BIT" />
     <result column="annual_income" property="annualIncome" jdbcType="INTEGER" />
     <result column="education_level" property="educationLevel" jdbcType="TINYINT" />
-    <result column="indudstry" property="indudstry" jdbcType="VARCHAR" />
+    <result column="industry" property="industry" jdbcType="VARCHAR" />
     <result column="remarks" property="remarks" jdbcType="VARCHAR" />
     <result column="self_introduction" property="selfIntroduction" jdbcType="VARCHAR" />
-    <result column="sign_aggrement" property="signAggrement" jdbcType="BIT" />
+    <result column="sign_agreement" property="signAgreement" jdbcType="BIT" />
     <result column="is_forbidden" property="isForbidden" jdbcType="BIT" />
     <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -95,9 +95,9 @@
   </sql>
   <sql id="Base_Column_List" >
     id, user_name, password, member_level, total_amount, total_score, nick_name, real_name, 
-    sex, avator, country, date_of_birth, age_range, constellation, mobile, email, hobby, 
-    marriage_status, has_child, annual_income, education_level, indudstry, remarks, self_introduction, 
-    sign_aggrement, is_forbidden, register_time, update_time, is_deleted, city, county, 
+    sex, avatar, country, date_of_birth, age_range, constellation, mobile, email, hobby, 
+    marriage_status, has_child, annual_income, education_level, industry, remarks, self_introduction, 
+    sign_agreement, is_forbidden, register_time, update_time, is_deleted, city, county, 
     forbid_reason
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.EndUserExample" >
@@ -136,23 +136,23 @@
     </selectKey>
     insert into end_user (user_name, password, member_level, 
       total_amount, total_score, nick_name, 
-      real_name, sex, avator, 
+      real_name, sex, avatar, 
       country, date_of_birth, age_range, 
       constellation, mobile, email, 
       hobby, marriage_status, has_child, 
-      annual_income, education_level, indudstry, 
-      remarks, self_introduction, sign_aggrement, 
+      annual_income, education_level, industry, 
+      remarks, self_introduction, sign_agreement, 
       is_forbidden, register_time, update_time, 
       is_deleted, city, county, 
       forbid_reason)
     values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{memberLevel,jdbcType=TINYINT}, 
       #{totalAmount,jdbcType=DECIMAL}, #{totalScore,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, 
-      #{realName,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, #{avator,jdbcType=VARCHAR}, 
+      #{realName,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, #{avatar,jdbcType=VARCHAR}, 
       #{country,jdbcType=VARCHAR}, #{dateOfBirth,jdbcType=DATE}, #{ageRange,jdbcType=TINYINT}, 
       #{constellation,jdbcType=TINYINT}, #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{hobby,jdbcType=VARCHAR}, #{marriageStatus,jdbcType=TINYINT}, #{hasChild,jdbcType=BIT}, 
-      #{annualIncome,jdbcType=INTEGER}, #{educationLevel,jdbcType=TINYINT}, #{indudstry,jdbcType=VARCHAR}, 
-      #{remarks,jdbcType=VARCHAR}, #{selfIntroduction,jdbcType=VARCHAR}, #{signAggrement,jdbcType=BIT}, 
+      #{annualIncome,jdbcType=INTEGER}, #{educationLevel,jdbcType=TINYINT}, #{industry,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{selfIntroduction,jdbcType=VARCHAR}, #{signAgreement,jdbcType=BIT}, 
       #{isForbidden,jdbcType=BIT}, #{registerTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{isDeleted,jdbcType=BIT}, #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, 
       #{forbidReason,jdbcType=VARCHAR})
@@ -187,8 +187,8 @@
       <if test="sex != null" >
         sex,
       </if>
-      <if test="avator != null" >
-        avator,
+      <if test="avatar != null" >
+        avatar,
       </if>
       <if test="country != null" >
         country,
@@ -223,8 +223,8 @@
       <if test="educationLevel != null" >
         education_level,
       </if>
-      <if test="indudstry != null" >
-        indudstry,
+      <if test="industry != null" >
+        industry,
       </if>
       <if test="remarks != null" >
         remarks,
@@ -232,8 +232,8 @@
       <if test="selfIntroduction != null" >
         self_introduction,
       </if>
-      <if test="signAggrement != null" >
-        sign_aggrement,
+      <if test="signAgreement != null" >
+        sign_agreement,
       </if>
       <if test="isForbidden != null" >
         is_forbidden,
@@ -282,8 +282,8 @@
       <if test="sex != null" >
         #{sex,jdbcType=TINYINT},
       </if>
-      <if test="avator != null" >
-        #{avator,jdbcType=VARCHAR},
+      <if test="avatar != null" >
+        #{avatar,jdbcType=VARCHAR},
       </if>
       <if test="country != null" >
         #{country,jdbcType=VARCHAR},
@@ -318,8 +318,8 @@
       <if test="educationLevel != null" >
         #{educationLevel,jdbcType=TINYINT},
       </if>
-      <if test="indudstry != null" >
-        #{indudstry,jdbcType=VARCHAR},
+      <if test="industry != null" >
+        #{industry,jdbcType=VARCHAR},
       </if>
       <if test="remarks != null" >
         #{remarks,jdbcType=VARCHAR},
@@ -327,8 +327,8 @@
       <if test="selfIntroduction != null" >
         #{selfIntroduction,jdbcType=VARCHAR},
       </if>
-      <if test="signAggrement != null" >
-        #{signAggrement,jdbcType=BIT},
+      <if test="signAgreement != null" >
+        #{signAgreement,jdbcType=BIT},
       </if>
       <if test="isForbidden != null" >
         #{isForbidden,jdbcType=BIT},
@@ -389,8 +389,8 @@
       <if test="record.sex != null" >
         sex = #{record.sex,jdbcType=TINYINT},
       </if>
-      <if test="record.avator != null" >
-        avator = #{record.avator,jdbcType=VARCHAR},
+      <if test="record.avatar != null" >
+        avatar = #{record.avatar,jdbcType=VARCHAR},
       </if>
       <if test="record.country != null" >
         country = #{record.country,jdbcType=VARCHAR},
@@ -425,8 +425,8 @@
       <if test="record.educationLevel != null" >
         education_level = #{record.educationLevel,jdbcType=TINYINT},
       </if>
-      <if test="record.indudstry != null" >
-        indudstry = #{record.indudstry,jdbcType=VARCHAR},
+      <if test="record.industry != null" >
+        industry = #{record.industry,jdbcType=VARCHAR},
       </if>
       <if test="record.remarks != null" >
         remarks = #{record.remarks,jdbcType=VARCHAR},
@@ -434,8 +434,8 @@
       <if test="record.selfIntroduction != null" >
         self_introduction = #{record.selfIntroduction,jdbcType=VARCHAR},
       </if>
-      <if test="record.signAggrement != null" >
-        sign_aggrement = #{record.signAggrement,jdbcType=BIT},
+      <if test="record.signAgreement != null" >
+        sign_agreement = #{record.signAgreement,jdbcType=BIT},
       </if>
       <if test="record.isForbidden != null" >
         is_forbidden = #{record.isForbidden,jdbcType=BIT},
@@ -474,7 +474,7 @@
       nick_name = #{record.nickName,jdbcType=VARCHAR},
       real_name = #{record.realName,jdbcType=VARCHAR},
       sex = #{record.sex,jdbcType=TINYINT},
-      avator = #{record.avator,jdbcType=VARCHAR},
+      avatar = #{record.avatar,jdbcType=VARCHAR},
       country = #{record.country,jdbcType=VARCHAR},
       date_of_birth = #{record.dateOfBirth,jdbcType=DATE},
       age_range = #{record.ageRange,jdbcType=TINYINT},
@@ -486,10 +486,10 @@
       has_child = #{record.hasChild,jdbcType=BIT},
       annual_income = #{record.annualIncome,jdbcType=INTEGER},
       education_level = #{record.educationLevel,jdbcType=TINYINT},
-      indudstry = #{record.indudstry,jdbcType=VARCHAR},
+      industry = #{record.industry,jdbcType=VARCHAR},
       remarks = #{record.remarks,jdbcType=VARCHAR},
       self_introduction = #{record.selfIntroduction,jdbcType=VARCHAR},
-      sign_aggrement = #{record.signAggrement,jdbcType=BIT},
+      sign_agreement = #{record.signAgreement,jdbcType=BIT},
       is_forbidden = #{record.isForbidden,jdbcType=BIT},
       register_time = #{record.registerTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -528,8 +528,8 @@
       <if test="sex != null" >
         sex = #{sex,jdbcType=TINYINT},
       </if>
-      <if test="avator != null" >
-        avator = #{avator,jdbcType=VARCHAR},
+      <if test="avatar != null" >
+        avatar = #{avatar,jdbcType=VARCHAR},
       </if>
       <if test="country != null" >
         country = #{country,jdbcType=VARCHAR},
@@ -564,8 +564,8 @@
       <if test="educationLevel != null" >
         education_level = #{educationLevel,jdbcType=TINYINT},
       </if>
-      <if test="indudstry != null" >
-        indudstry = #{indudstry,jdbcType=VARCHAR},
+      <if test="industry != null" >
+        industry = #{industry,jdbcType=VARCHAR},
       </if>
       <if test="remarks != null" >
         remarks = #{remarks,jdbcType=VARCHAR},
@@ -573,8 +573,8 @@
       <if test="selfIntroduction != null" >
         self_introduction = #{selfIntroduction,jdbcType=VARCHAR},
       </if>
-      <if test="signAggrement != null" >
-        sign_aggrement = #{signAggrement,jdbcType=BIT},
+      <if test="signAgreement != null" >
+        sign_agreement = #{signAgreement,jdbcType=BIT},
       </if>
       <if test="isForbidden != null" >
         is_forbidden = #{isForbidden,jdbcType=BIT},
@@ -610,7 +610,7 @@
       nick_name = #{nickName,jdbcType=VARCHAR},
       real_name = #{realName,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=TINYINT},
-      avator = #{avator,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
       country = #{country,jdbcType=VARCHAR},
       date_of_birth = #{dateOfBirth,jdbcType=DATE},
       age_range = #{ageRange,jdbcType=TINYINT},
@@ -622,10 +622,10 @@
       has_child = #{hasChild,jdbcType=BIT},
       annual_income = #{annualIncome,jdbcType=INTEGER},
       education_level = #{educationLevel,jdbcType=TINYINT},
-      indudstry = #{indudstry,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=VARCHAR},
       remarks = #{remarks,jdbcType=VARCHAR},
       self_introduction = #{selfIntroduction,jdbcType=VARCHAR},
-      sign_aggrement = #{signAggrement,jdbcType=BIT},
+      sign_agreement = #{signAgreement,jdbcType=BIT},
       is_forbidden = #{isForbidden,jdbcType=BIT},
       register_time = #{registerTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

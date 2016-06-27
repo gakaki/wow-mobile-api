@@ -61,6 +61,13 @@ public interface UserService {
      */
     boolean authenticate(String userName, String password);
 
+    /**
+     * 删除用户
+     * @param endUserId
+     * @return
+     */
+    int deleteUser(int endUserId);
+
     //table: end_user_follow_brand
 
     /**

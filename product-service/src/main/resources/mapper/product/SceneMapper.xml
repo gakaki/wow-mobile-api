@@ -4,10 +4,10 @@
   <resultMap id="BaseResultMap" type="com.wow.product.model.Scene" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="scene_name" property="sceneName" jdbcType="VARCHAR" />
-    <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="scene_title" property="sceneTitle" jdbcType="VARCHAR" />
     <result column="scene_desc" property="sceneDesc" jdbcType="VARCHAR" />
     <result column="scene_img" property="sceneImg" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -73,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, scene_name, product_id, scene_title, scene_desc, scene_img, create_time, create_by, 
+    id, scene_name, scene_title, scene_desc, scene_img, product_id, create_time, create_by, 
     update_time, update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.SceneExample" >
@@ -110,12 +110,12 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into scene (scene_name, product_id, scene_title, 
-      scene_desc, scene_img, create_time, 
+    insert into scene (scene_name, scene_title, scene_desc, 
+      scene_img, product_id, create_time, 
       create_by, update_time, update_by, 
       is_deleted)
-    values (#{sceneName,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, #{sceneTitle,jdbcType=VARCHAR}, 
-      #{sceneDesc,jdbcType=VARCHAR}, #{sceneImg,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{sceneName,jdbcType=VARCHAR}, #{sceneTitle,jdbcType=VARCHAR}, #{sceneDesc,jdbcType=VARCHAR}, 
+      #{sceneImg,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
       #{isDeleted,jdbcType=BIT})
   </insert>
@@ -128,9 +128,6 @@
       <if test="sceneName != null" >
         scene_name,
       </if>
-      <if test="productId != null" >
-        product_id,
-      </if>
       <if test="sceneTitle != null" >
         scene_title,
       </if>
@@ -139,6 +136,9 @@
       </if>
       <if test="sceneImg != null" >
         scene_img,
+      </if>
+      <if test="productId != null" >
+        product_id,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -160,9 +160,6 @@
       <if test="sceneName != null" >
         #{sceneName,jdbcType=VARCHAR},
       </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=INTEGER},
-      </if>
       <if test="sceneTitle != null" >
         #{sceneTitle,jdbcType=VARCHAR},
       </if>
@@ -171,6 +168,9 @@
       </if>
       <if test="sceneImg != null" >
         #{sceneImg,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -204,9 +204,6 @@
       <if test="record.sceneName != null" >
         scene_name = #{record.sceneName,jdbcType=VARCHAR},
       </if>
-      <if test="record.productId != null" >
-        product_id = #{record.productId,jdbcType=INTEGER},
-      </if>
       <if test="record.sceneTitle != null" >
         scene_title = #{record.sceneTitle,jdbcType=VARCHAR},
       </if>
@@ -215,6 +212,9 @@
       </if>
       <if test="record.sceneImg != null" >
         scene_img = #{record.sceneImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -240,10 +240,10 @@
     update scene
     set id = #{record.id,jdbcType=INTEGER},
       scene_name = #{record.sceneName,jdbcType=VARCHAR},
-      product_id = #{record.productId,jdbcType=INTEGER},
       scene_title = #{record.sceneTitle,jdbcType=VARCHAR},
       scene_desc = #{record.sceneDesc,jdbcType=VARCHAR},
       scene_img = #{record.sceneImg,jdbcType=VARCHAR},
+      product_id = #{record.productId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -259,9 +259,6 @@
       <if test="sceneName != null" >
         scene_name = #{sceneName,jdbcType=VARCHAR},
       </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=INTEGER},
-      </if>
       <if test="sceneTitle != null" >
         scene_title = #{sceneTitle,jdbcType=VARCHAR},
       </if>
@@ -270,6 +267,9 @@
       </if>
       <if test="sceneImg != null" >
         scene_img = #{sceneImg,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -292,10 +292,10 @@
   <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Scene" >
     update scene
     set scene_name = #{sceneName,jdbcType=VARCHAR},
-      product_id = #{productId,jdbcType=INTEGER},
       scene_title = #{sceneTitle,jdbcType=VARCHAR},
       scene_desc = #{sceneDesc,jdbcType=VARCHAR},
       scene_img = #{sceneImg,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

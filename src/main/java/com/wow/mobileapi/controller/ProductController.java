@@ -28,16 +28,18 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Product findProduct(@PathVariable Integer id) {
+    @RequestMapping(value = "/{productId}", method = RequestMethod.GET)
+    public Product getProduct(@PathVariable Integer productId) {
+
+//        productService.
         Product product = new Product();
-        product.setId(id);
-        product.setProductName("product-" + id);
+        product.setId(productId);
+        product.setProductName("product-" + productId);
         return product;
     }
 
     @RequestMapping(value = "/brand/{firstLetter}", method = RequestMethod.GET)
-    public List<Brand> findBrandById(@PathVariable String firstLetter) {
+    public List<Brand> getBrandById(@PathVariable String firstLetter) {
         logger.info("firstLetter is:" + firstLetter);
         List<Brand> brandList = brandService.getBrandsByFirstLetter(firstLetter);
         logger.info("brandList:" + brandList);
@@ -45,7 +47,7 @@ public class ProductController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Product> findProducts() {
+    public List<Product> getProducts() {
         Product product = new Product();
         product.setId(1);
         product.setProductName("testproduct");

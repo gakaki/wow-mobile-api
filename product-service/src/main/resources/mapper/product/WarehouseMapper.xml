@@ -12,7 +12,7 @@
     <result column="is_real_warehouse" property="isRealWarehouse" jdbcType="BIT" />
     <result column="capaicity" property="capaicity" jdbcType="SMALLINT" />
     <result column="daily_order_limit" property="dailyOrderLimit" jdbcType="TINYINT" />
-    <result column="worker_num" property="workerNum" jdbcType="TINYINT" />
+    <result column="worker_qty" property="workerQty" jdbcType="TINYINT" />
     <result column="admin_name" property="adminName" jdbcType="VARCHAR" />
     <result column="admin_mobile" property="adminMobile" jdbcType="VARCHAR" />
     <result column="admin_phone" property="adminPhone" jdbcType="VARCHAR" />
@@ -83,7 +83,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, warehouse_name, address, province, city, county, town, is_real_warehouse, capaicity, 
-    daily_order_limit, worker_num, admin_name, admin_mobile, admin_phone, admin_email, 
+    daily_order_limit, worker_qty, admin_name, admin_mobile, admin_phone, admin_email, 
     create_time, create_by, update_time, update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.WarehouseExample" >
@@ -123,14 +123,14 @@
     insert into warehouse (warehouse_name, address, province, 
       city, county, town, 
       is_real_warehouse, capaicity, daily_order_limit, 
-      worker_num, admin_name, admin_mobile, 
+      worker_qty, admin_name, admin_mobile, 
       admin_phone, admin_email, create_time, 
       create_by, update_time, update_by, 
       is_deleted)
     values (#{warehouseName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
       #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR}, 
       #{isRealWarehouse,jdbcType=BIT}, #{capaicity,jdbcType=SMALLINT}, #{dailyOrderLimit,jdbcType=TINYINT}, 
-      #{workerNum,jdbcType=TINYINT}, #{adminName,jdbcType=VARCHAR}, #{adminMobile,jdbcType=VARCHAR}, 
+      #{workerQty,jdbcType=TINYINT}, #{adminName,jdbcType=VARCHAR}, #{adminMobile,jdbcType=VARCHAR}, 
       #{adminPhone,jdbcType=VARCHAR}, #{adminEmail,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
       #{isDeleted,jdbcType=BIT})
@@ -168,8 +168,8 @@
       <if test="dailyOrderLimit != null" >
         daily_order_limit,
       </if>
-      <if test="workerNum != null" >
-        worker_num,
+      <if test="workerQty != null" >
+        worker_qty,
       </if>
       <if test="adminName != null" >
         admin_name,
@@ -227,8 +227,8 @@
       <if test="dailyOrderLimit != null" >
         #{dailyOrderLimit,jdbcType=TINYINT},
       </if>
-      <if test="workerNum != null" >
-        #{workerNum,jdbcType=TINYINT},
+      <if test="workerQty != null" >
+        #{workerQty,jdbcType=TINYINT},
       </if>
       <if test="adminName != null" >
         #{adminName,jdbcType=VARCHAR},
@@ -298,8 +298,8 @@
       <if test="record.dailyOrderLimit != null" >
         daily_order_limit = #{record.dailyOrderLimit,jdbcType=TINYINT},
       </if>
-      <if test="record.workerNum != null" >
-        worker_num = #{record.workerNum,jdbcType=TINYINT},
+      <if test="record.workerQty != null" >
+        worker_qty = #{record.workerQty,jdbcType=TINYINT},
       </if>
       <if test="record.adminName != null" >
         admin_name = #{record.adminName,jdbcType=VARCHAR},
@@ -345,7 +345,7 @@
       is_real_warehouse = #{record.isRealWarehouse,jdbcType=BIT},
       capaicity = #{record.capaicity,jdbcType=SMALLINT},
       daily_order_limit = #{record.dailyOrderLimit,jdbcType=TINYINT},
-      worker_num = #{record.workerNum,jdbcType=TINYINT},
+      worker_qty = #{record.workerQty,jdbcType=TINYINT},
       admin_name = #{record.adminName,jdbcType=VARCHAR},
       admin_mobile = #{record.adminMobile,jdbcType=VARCHAR},
       admin_phone = #{record.adminPhone,jdbcType=VARCHAR},
@@ -389,8 +389,8 @@
       <if test="dailyOrderLimit != null" >
         daily_order_limit = #{dailyOrderLimit,jdbcType=TINYINT},
       </if>
-      <if test="workerNum != null" >
-        worker_num = #{workerNum,jdbcType=TINYINT},
+      <if test="workerQty != null" >
+        worker_qty = #{workerQty,jdbcType=TINYINT},
       </if>
       <if test="adminName != null" >
         admin_name = #{adminName,jdbcType=VARCHAR},
@@ -433,7 +433,7 @@
       is_real_warehouse = #{isRealWarehouse,jdbcType=BIT},
       capaicity = #{capaicity,jdbcType=SMALLINT},
       daily_order_limit = #{dailyOrderLimit,jdbcType=TINYINT},
-      worker_num = #{workerNum,jdbcType=TINYINT},
+      worker_qty = #{workerQty,jdbcType=TINYINT},
       admin_name = #{adminName,jdbcType=VARCHAR},
       admin_mobile = #{adminMobile,jdbcType=VARCHAR},
       admin_phone = #{adminPhone,jdbcType=VARCHAR},

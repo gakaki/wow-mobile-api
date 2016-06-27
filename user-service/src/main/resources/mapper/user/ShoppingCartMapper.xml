@@ -5,13 +5,12 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
-    <result column="product_num" property="productNum" jdbcType="TINYINT" />
+    <result column="product_qty" property="productQty" jdbcType="TINYINT" />
     <result column="product_price" property="productPrice" jdbcType="DECIMAL" />
     <result column="weight" property="weight" jdbcType="DECIMAL" />
-    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
-    <result column="price_type" property="priceType" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -72,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, end_user_id, product_id, product_num, product_price, weight, add_time, update_time, 
-    is_deleted, price_type
+    id, end_user_id, product_id, product_qty, product_price, weight, create_time, update_time, 
+    is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.ShoppingCartExample" >
     select
@@ -109,14 +108,12 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shopping_cart (end_user_id, product_id, product_num, 
-      product_price, weight, add_time, 
-      update_time, is_deleted, price_type
-      )
-    values (#{endUserId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{productNum,jdbcType=TINYINT}, 
-      #{productPrice,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}, #{priceType,jdbcType=TINYINT}
-      )
+    insert into shopping_cart (end_user_id, product_id, product_qty, 
+      product_price, weight, create_time, 
+      update_time, is_deleted)
+    values (#{endUserId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{productQty,jdbcType=TINYINT}, 
+      #{productPrice,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.user.model.ShoppingCart" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -130,8 +127,8 @@
       <if test="productId != null" >
         product_id,
       </if>
-      <if test="productNum != null" >
-        product_num,
+      <if test="productQty != null" >
+        product_qty,
       </if>
       <if test="productPrice != null" >
         product_price,
@@ -139,17 +136,14 @@
       <if test="weight != null" >
         weight,
       </if>
-      <if test="addTime != null" >
-        add_time,
+      <if test="createTime != null" >
+        create_time,
       </if>
       <if test="updateTime != null" >
         update_time,
       </if>
       <if test="isDeleted != null" >
         is_deleted,
-      </if>
-      <if test="priceType != null" >
-        price_type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -159,8 +153,8 @@
       <if test="productId != null" >
         #{productId,jdbcType=INTEGER},
       </if>
-      <if test="productNum != null" >
-        #{productNum,jdbcType=TINYINT},
+      <if test="productQty != null" >
+        #{productQty,jdbcType=TINYINT},
       </if>
       <if test="productPrice != null" >
         #{productPrice,jdbcType=DECIMAL},
@@ -168,17 +162,14 @@
       <if test="weight != null" >
         #{weight,jdbcType=DECIMAL},
       </if>
-      <if test="addTime != null" >
-        #{addTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=BIT},
-      </if>
-      <if test="priceType != null" >
-        #{priceType,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -200,8 +191,8 @@
       <if test="record.productId != null" >
         product_id = #{record.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.productNum != null" >
-        product_num = #{record.productNum,jdbcType=TINYINT},
+      <if test="record.productQty != null" >
+        product_qty = #{record.productQty,jdbcType=TINYINT},
       </if>
       <if test="record.productPrice != null" >
         product_price = #{record.productPrice,jdbcType=DECIMAL},
@@ -209,17 +200,14 @@
       <if test="record.weight != null" >
         weight = #{record.weight,jdbcType=DECIMAL},
       </if>
-      <if test="record.addTime != null" >
-        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=BIT},
-      </if>
-      <if test="record.priceType != null" >
-        price_type = #{record.priceType,jdbcType=TINYINT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -231,13 +219,12 @@
     set id = #{record.id,jdbcType=INTEGER},
       end_user_id = #{record.endUserId,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
-      product_num = #{record.productNum,jdbcType=TINYINT},
+      product_qty = #{record.productQty,jdbcType=TINYINT},
       product_price = #{record.productPrice,jdbcType=DECIMAL},
       weight = #{record.weight,jdbcType=DECIMAL},
-      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      is_deleted = #{record.isDeleted,jdbcType=BIT},
-      price_type = #{record.priceType,jdbcType=TINYINT}
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -251,8 +238,8 @@
       <if test="productId != null" >
         product_id = #{productId,jdbcType=INTEGER},
       </if>
-      <if test="productNum != null" >
-        product_num = #{productNum,jdbcType=TINYINT},
+      <if test="productQty != null" >
+        product_qty = #{productQty,jdbcType=TINYINT},
       </if>
       <if test="productPrice != null" >
         product_price = #{productPrice,jdbcType=DECIMAL},
@@ -260,17 +247,14 @@
       <if test="weight != null" >
         weight = #{weight,jdbcType=DECIMAL},
       </if>
-      <if test="addTime != null" >
-        add_time = #{addTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=BIT},
-      </if>
-      <if test="priceType != null" >
-        price_type = #{priceType,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -279,13 +263,12 @@
     update shopping_cart
     set end_user_id = #{endUserId,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
-      product_num = #{productNum,jdbcType=TINYINT},
+      product_qty = #{productQty,jdbcType=TINYINT},
       product_price = #{productPrice,jdbcType=DECIMAL},
       weight = #{weight,jdbcType=DECIMAL},
-      add_time = #{addTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=BIT},
-      price_type = #{priceType,jdbcType=TINYINT}
+      is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

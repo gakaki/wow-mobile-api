@@ -28,6 +28,8 @@ public class Category implements Serializable {
 
     private Boolean isDeleted;
 
+    private String path;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -126,6 +128,14 @@ public class Category implements Serializable {
         this.isDeleted = isDeleted;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -144,6 +154,7 @@ public class Category implements Serializable {
         sb.append(", updateTime=").append(updateTime);
         sb.append(", updateBy=").append(updateBy);
         sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", path=").append(path);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

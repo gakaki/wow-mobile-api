@@ -24,7 +24,7 @@ public class Warehouse implements Serializable {
 
     private Byte dailyOrderLimit;
 
-    private Byte workerNum;
+    private Byte workerQty;
 
     private String adminName;
 
@@ -126,12 +126,12 @@ public class Warehouse implements Serializable {
         this.dailyOrderLimit = dailyOrderLimit;
     }
 
-    public Byte getWorkerNum() {
-        return workerNum;
+    public Byte getWorkerQty() {
+        return workerQty;
     }
 
-    public void setWorkerNum(Byte workerNum) {
-        this.workerNum = workerNum;
+    public void setWorkerQty(Byte workerQty) {
+        this.workerQty = workerQty;
     }
 
     public String getAdminName() {
@@ -222,7 +222,7 @@ public class Warehouse implements Serializable {
         sb.append(", isRealWarehouse=").append(isRealWarehouse);
         sb.append(", capaicity=").append(capaicity);
         sb.append(", dailyOrderLimit=").append(dailyOrderLimit);
-        sb.append(", workerNum=").append(workerNum);
+        sb.append(", workerQty=").append(workerQty);
         sb.append(", adminName=").append(adminName);
         sb.append(", adminMobile=").append(adminMobile);
         sb.append(", adminPhone=").append(adminPhone);

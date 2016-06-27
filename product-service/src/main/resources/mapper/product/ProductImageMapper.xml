@@ -4,16 +4,16 @@
   <resultMap id="BaseResultMap" type="com.wow.product.model.ProductImage" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
-    <result column="product_img_url" property="productImgUrl" jdbcType="VARCHAR" />
+    <result column="img_name" property="imgName" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="img_desc" property="imgDesc" jdbcType="VARCHAR" />
+    <result column="view_platform" property="viewPlatform" jdbcType="TINYINT" />
+    <result column="is_primary" property="isPrimary" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="udpate_time" property="udpateTime" jdbcType="TIMESTAMP" />
     <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
-    <result column="view_platform" property="viewPlatform" jdbcType="TINYINT" />
-    <result column="is_primary" property="isPrimary" jdbcType="BIT" />
-    <result column="is_secondary" property="isSecondary" jdbcType="BIT" />
-    <result column="image_desc" property="imageDesc" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -74,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_id, product_img_url, create_time, create_by, udpate_time, update_by, 
-    is_deleted, view_platform, is_primary, is_secondary, image_desc
+    id, product_id, img_name, img_url, img_desc, view_platform, is_primary, create_time, 
+    create_by, udpate_time, update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ProductImageExample" >
     select
@@ -111,14 +111,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product_image (product_id, product_img_url, create_time, 
-      create_by, udpate_time, update_by, 
-      is_deleted, view_platform, is_primary, 
-      is_secondary, image_desc)
-    values (#{productId,jdbcType=INTEGER}, #{productImgUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createBy,jdbcType=VARCHAR}, #{udpateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=BIT}, #{viewPlatform,jdbcType=TINYINT}, #{isPrimary,jdbcType=BIT}, 
-      #{isSecondary,jdbcType=BIT}, #{imageDesc,jdbcType=VARCHAR})
+    insert into product_image (product_id, img_name, img_url, 
+      img_desc, view_platform, is_primary, 
+      create_time, create_by, udpate_time, 
+      update_by, is_deleted)
+    values (#{productId,jdbcType=INTEGER}, #{imgName,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{imgDesc,jdbcType=VARCHAR}, #{viewPlatform,jdbcType=TINYINT}, #{isPrimary,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{udpateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.ProductImage" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -129,8 +129,20 @@
       <if test="productId != null" >
         product_id,
       </if>
-      <if test="productImgUrl != null" >
-        product_img_url,
+      <if test="imgName != null" >
+        img_name,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+      <if test="imgDesc != null" >
+        img_desc,
+      </if>
+      <if test="viewPlatform != null" >
+        view_platform,
+      </if>
+      <if test="isPrimary != null" >
+        is_primary,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -147,25 +159,25 @@
       <if test="isDeleted != null" >
         is_deleted,
       </if>
-      <if test="viewPlatform != null" >
-        view_platform,
-      </if>
-      <if test="isPrimary != null" >
-        is_primary,
-      </if>
-      <if test="isSecondary != null" >
-        is_secondary,
-      </if>
-      <if test="imageDesc != null" >
-        image_desc,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="productId != null" >
         #{productId,jdbcType=INTEGER},
       </if>
-      <if test="productImgUrl != null" >
-        #{productImgUrl,jdbcType=VARCHAR},
+      <if test="imgName != null" >
+        #{imgName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgDesc != null" >
+        #{imgDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="viewPlatform != null" >
+        #{viewPlatform,jdbcType=TINYINT},
+      </if>
+      <if test="isPrimary != null" >
+        #{isPrimary,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -181,18 +193,6 @@
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=BIT},
-      </if>
-      <if test="viewPlatform != null" >
-        #{viewPlatform,jdbcType=TINYINT},
-      </if>
-      <if test="isPrimary != null" >
-        #{isPrimary,jdbcType=BIT},
-      </if>
-      <if test="isSecondary != null" >
-        #{isSecondary,jdbcType=BIT},
-      </if>
-      <if test="imageDesc != null" >
-        #{imageDesc,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -211,8 +211,20 @@
       <if test="record.productId != null" >
         product_id = #{record.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.productImgUrl != null" >
-        product_img_url = #{record.productImgUrl,jdbcType=VARCHAR},
+      <if test="record.imgName != null" >
+        img_name = #{record.imgName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imgUrl != null" >
+        img_url = #{record.imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imgDesc != null" >
+        img_desc = #{record.imgDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viewPlatform != null" >
+        view_platform = #{record.viewPlatform,jdbcType=TINYINT},
+      </if>
+      <if test="record.isPrimary != null" >
+        is_primary = #{record.isPrimary,jdbcType=BIT},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -229,18 +241,6 @@
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=BIT},
       </if>
-      <if test="record.viewPlatform != null" >
-        view_platform = #{record.viewPlatform,jdbcType=TINYINT},
-      </if>
-      <if test="record.isPrimary != null" >
-        is_primary = #{record.isPrimary,jdbcType=BIT},
-      </if>
-      <if test="record.isSecondary != null" >
-        is_secondary = #{record.isSecondary,jdbcType=BIT},
-      </if>
-      <if test="record.imageDesc != null" >
-        image_desc = #{record.imageDesc,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -250,16 +250,16 @@
     update product_image
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
-      product_img_url = #{record.productImgUrl,jdbcType=VARCHAR},
+      img_name = #{record.imgName,jdbcType=VARCHAR},
+      img_url = #{record.imgUrl,jdbcType=VARCHAR},
+      img_desc = #{record.imgDesc,jdbcType=VARCHAR},
+      view_platform = #{record.viewPlatform,jdbcType=TINYINT},
+      is_primary = #{record.isPrimary,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       udpate_time = #{record.udpateTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=VARCHAR},
-      is_deleted = #{record.isDeleted,jdbcType=BIT},
-      view_platform = #{record.viewPlatform,jdbcType=TINYINT},
-      is_primary = #{record.isPrimary,jdbcType=BIT},
-      is_secondary = #{record.isSecondary,jdbcType=BIT},
-      image_desc = #{record.imageDesc,jdbcType=VARCHAR}
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -270,8 +270,20 @@
       <if test="productId != null" >
         product_id = #{productId,jdbcType=INTEGER},
       </if>
-      <if test="productImgUrl != null" >
-        product_img_url = #{productImgUrl,jdbcType=VARCHAR},
+      <if test="imgName != null" >
+        img_name = #{imgName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgDesc != null" >
+        img_desc = #{imgDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="viewPlatform != null" >
+        view_platform = #{viewPlatform,jdbcType=TINYINT},
+      </if>
+      <if test="isPrimary != null" >
+        is_primary = #{isPrimary,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -288,34 +300,22 @@
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=BIT},
       </if>
-      <if test="viewPlatform != null" >
-        view_platform = #{viewPlatform,jdbcType=TINYINT},
-      </if>
-      <if test="isPrimary != null" >
-        is_primary = #{isPrimary,jdbcType=BIT},
-      </if>
-      <if test="isSecondary != null" >
-        is_secondary = #{isSecondary,jdbcType=BIT},
-      </if>
-      <if test="imageDesc != null" >
-        image_desc = #{imageDesc,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wow.product.model.ProductImage" >
     update product_image
     set product_id = #{productId,jdbcType=INTEGER},
-      product_img_url = #{productImgUrl,jdbcType=VARCHAR},
+      img_name = #{imgName,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      img_desc = #{imgDesc,jdbcType=VARCHAR},
+      view_platform = #{viewPlatform,jdbcType=TINYINT},
+      is_primary = #{isPrimary,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       udpate_time = #{udpateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=BIT},
-      view_platform = #{viewPlatform,jdbcType=TINYINT},
-      is_primary = #{isPrimary,jdbcType=BIT},
-      is_secondary = #{isSecondary,jdbcType=BIT},
-      image_desc = #{imageDesc,jdbcType=VARCHAR}
+      is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -6,7 +6,7 @@ import java.util.Date;
 public class Group implements Serializable {
     private Integer id;
 
-    private String groupType;
+    private Byte groupType;
 
     private String groupName;
 
@@ -32,11 +32,11 @@ public class Group implements Serializable {
         this.id = id;
     }
 
-    public String getGroupType() {
+    public Byte getGroupType() {
         return groupType;
     }
 
-    public void setGroupType(String groupType) {
+    public void setGroupType(Byte groupType) {
         this.groupType = groupType;
     }
 

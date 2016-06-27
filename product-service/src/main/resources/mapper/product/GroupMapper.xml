@@ -3,7 +3,7 @@
 <mapper namespace="com.wow.product.mapper.GroupMapper" >
   <resultMap id="BaseResultMap" type="com.wow.product.model.Group" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="group_type" property="groupType" jdbcType="VARCHAR" />
+    <result column="group_type" property="groupType" jdbcType="TINYINT" />
     <result column="group_name" property="groupName" jdbcType="VARCHAR" />
     <result column="is_active" property="isActive" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -111,7 +111,7 @@
     insert into group (group_type, group_name, is_active, 
       create_time, create_by, update_time, 
       update_by, is_deleted)
-    values (#{groupType,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, #{isActive,jdbcType=BIT}, 
+    values (#{groupType,jdbcType=TINYINT}, #{groupName,jdbcType=VARCHAR}, #{isActive,jdbcType=BIT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
   </insert>
@@ -148,7 +148,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="groupType != null" >
-        #{groupType,jdbcType=VARCHAR},
+        #{groupType,jdbcType=TINYINT},
       </if>
       <if test="groupName != null" >
         #{groupName,jdbcType=VARCHAR},
@@ -186,7 +186,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.groupType != null" >
-        group_type = #{record.groupType,jdbcType=VARCHAR},
+        group_type = #{record.groupType,jdbcType=TINYINT},
       </if>
       <if test="record.groupName != null" >
         group_name = #{record.groupName,jdbcType=VARCHAR},
@@ -217,7 +217,7 @@
   <update id="updateByExample" parameterType="map" >
     update group
     set id = #{record.id,jdbcType=INTEGER},
-      group_type = #{record.groupType,jdbcType=VARCHAR},
+      group_type = #{record.groupType,jdbcType=TINYINT},
       group_name = #{record.groupName,jdbcType=VARCHAR},
       is_active = #{record.isActive,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -233,7 +233,7 @@
     update group
     <set >
       <if test="groupType != null" >
-        group_type = #{groupType,jdbcType=VARCHAR},
+        group_type = #{groupType,jdbcType=TINYINT},
       </if>
       <if test="groupName != null" >
         group_name = #{groupName,jdbcType=VARCHAR},
@@ -261,7 +261,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Group" >
     update group
-    set group_type = #{groupType,jdbcType=VARCHAR},
+    set group_type = #{groupType,jdbcType=TINYINT},
       group_name = #{groupName,jdbcType=VARCHAR},
       is_active = #{isActive,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},

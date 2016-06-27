@@ -1,9 +1,9 @@
 package com.wow.product.service;
 
+import com.wow.attribute.model.Attribute;
 import com.wow.product.model.*;
 
 import java.util.List;
-
 
 /**
  * 产品服务
@@ -12,7 +12,6 @@ import java.util.List;
 public interface ProductService {
 
     //table: product
-
     /**
      * 创建产品
      *
@@ -21,12 +20,11 @@ public interface ProductService {
     int createProduct(Product product);
 
     /**
-     * 创建产品编码
-     *
-     * @param product
+     * 根据ID查询产品
+     * @param productId
      * @return
      */
-    int createProductCode(Product product);
+    Product getProductById(int productId);
 
     /**
      * 更新产品
@@ -36,83 +34,7 @@ public interface ProductService {
      */
     int updateProduct(Product product);
 
-
-    //table: group
-
-    /**
-     * 创建产品分组
-     *
-     * @param group
-     * @return
-     */
-    int createGroup(Group group);
-
-    /**
-     * 根据分组类型查询所有产品分组
-     *
-     * @param groupType
-     * @return
-     */
-    List<Group> getGroupsByGroupType(String groupType);
-
-    //table: product_combine
-
-    /**
-     * 创建组合产品
-     *
-     * @param productCombine
-     * @return
-     */
-    int createProductCombine(ProductCombine productCombine);
-
-    /**
-     * 一次性创建组合产品
-     *
-     * @param productCombines
-     * @return
-     */
-    int createProductCombine(List<ProductCombine> productCombines);
-
-    /**
-     * 根据组合主品,查找组合子品信息
-     *
-     * @param productId
-     * @return
-     */
-    List<ProductCombine> querySubProductInfo(int productId);
-
-    //table: product_comment
-
-    /**
-     * 评论产品
-     *
-     * @param productComment
-     * @return
-     */
-    int createProductComment(ProductComment productComment);
-
-    //table: product_group
-
-    /**
-     * 添加产品到产品组
-     *
-     * @param productId
-     * @param groupId
-     * @return
-     */
-    int addProductIntoGroup(int productId, int groupId);
-
-    /**
-     * 批量添加产品到产品组
-     *
-     * @param productId
-     * @param groupId
-     * @return
-     */
-    int addProductsIntoGroup(int[] productId, int groupId);
-
     //table: product_image
-
     /**
      * 添加产品图片
      *
@@ -129,41 +51,51 @@ public interface ProductService {
      */
     int addProductImages(List<ProductImage> productImages);
 
-    //table: product_serial
-
     /**
-     * 判断产品是否系列产品
-     *
+     * 查找产品图片
      * @param productId
      * @return
      */
-    boolean isProductSerial(int productId);
+    List<ProductImage> getProductImages(int productId);
 
     /**
-     * 查询系列品的主子品
+     * 修改产品图片
      *
-     * @param productId
+     * @param productImage
      * @return
      */
-    Product queryPrimarySubProductOfProductSerial(int productId);
-
-    //table: product_summary
+    int updateProductImage(ProductImage productImage);
 
     /**
-     * 创建产品统计信息,包括总销量,评论数
+     * 删除产品图片
      *
-     * @param productSummary
+     * @param productImages
      * @return
      */
-    int createProductSummary(ProductSummary productSummary);
+    int deleteProductImages(List<ProductImage> productImages);
+
+    //table: product_attribute
+    /**
+     * 查询产品的属性:根据product找category,根据category找category_attributes
+     *
+     * @param product
+     * @return
+     */
+    List<Attribute> getAttributesInProduct(Product product);
 
     /**
-     * 更新产品统计信息,包括总销量,评论数(可以使用定时任务或者队列的方式来更新,注意并发)
+     * 批量设置产品的属性值
      *
-     * @param productSummary
+     * @param productAttributes
      * @return
      */
-    int updateProductSummary(ProductSummary productSummary);
+    int createProductAttribute(List<ProductAttribute> productAttributes);
 
+    /**
+     * 批量更新产品的属性值
+     * @param productAttributes
+     * @return
+     */
+    int updateProductAttribute(List<ProductAttribute> productAttributes);
 
 }

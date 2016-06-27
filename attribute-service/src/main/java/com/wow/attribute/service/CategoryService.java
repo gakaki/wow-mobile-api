@@ -10,8 +10,6 @@ import java.util.List;
  */
 public interface CategoryService {
 
-    //table: category
-
     /**
      * 创建类目
      *

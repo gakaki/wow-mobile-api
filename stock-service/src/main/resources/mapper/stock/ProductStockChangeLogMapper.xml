@@ -7,7 +7,7 @@
     <result column="order_id" property="orderId" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
-    <result column="stock_num" property="stockNum" jdbcType="SMALLINT" />
+    <result column="stock_qty" property="stockQty" jdbcType="SMALLINT" />
     <result column="purchase_order_id" property="purchaseOrderId" jdbcType="INTEGER" />
     <result column="return_order_id" property="returnOrderId" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, biz_type, order_id, product_id, warehouse_id, stock_num, purchase_order_id, return_order_id, 
+    id, biz_type, order_id, product_id, warehouse_id, stock_qty, purchase_order_id, return_order_id, 
     create_time, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.stock.model.ProductStockChangeLogExample" >
@@ -110,11 +110,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into product_stock_change_log (biz_type, order_id, product_id, 
-      warehouse_id, stock_num, purchase_order_id, 
+      warehouse_id, stock_qty, purchase_order_id, 
       return_order_id, create_time, is_deleted
       )
     values (#{bizType,jdbcType=TINYINT}, #{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
-      #{warehouseId,jdbcType=INTEGER}, #{stockNum,jdbcType=SMALLINT}, #{purchaseOrderId,jdbcType=INTEGER}, 
+      #{warehouseId,jdbcType=INTEGER}, #{stockQty,jdbcType=SMALLINT}, #{purchaseOrderId,jdbcType=INTEGER}, 
       #{returnOrderId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
       )
   </insert>
@@ -136,8 +136,8 @@
       <if test="warehouseId != null" >
         warehouse_id,
       </if>
-      <if test="stockNum != null" >
-        stock_num,
+      <if test="stockQty != null" >
+        stock_qty,
       </if>
       <if test="purchaseOrderId != null" >
         purchase_order_id,
@@ -165,8 +165,8 @@
       <if test="warehouseId != null" >
         #{warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="stockNum != null" >
-        #{stockNum,jdbcType=SMALLINT},
+      <if test="stockQty != null" >
+        #{stockQty,jdbcType=SMALLINT},
       </if>
       <if test="purchaseOrderId != null" >
         #{purchaseOrderId,jdbcType=INTEGER},
@@ -206,8 +206,8 @@
       <if test="record.warehouseId != null" >
         warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="record.stockNum != null" >
-        stock_num = #{record.stockNum,jdbcType=SMALLINT},
+      <if test="record.stockQty != null" >
+        stock_qty = #{record.stockQty,jdbcType=SMALLINT},
       </if>
       <if test="record.purchaseOrderId != null" >
         purchase_order_id = #{record.purchaseOrderId,jdbcType=INTEGER},
@@ -233,7 +233,7 @@
       order_id = #{record.orderId,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
-      stock_num = #{record.stockNum,jdbcType=SMALLINT},
+      stock_qty = #{record.stockQty,jdbcType=SMALLINT},
       purchase_order_id = #{record.purchaseOrderId,jdbcType=INTEGER},
       return_order_id = #{record.returnOrderId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -257,8 +257,8 @@
       <if test="warehouseId != null" >
         warehouse_id = #{warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="stockNum != null" >
-        stock_num = #{stockNum,jdbcType=SMALLINT},
+      <if test="stockQty != null" >
+        stock_qty = #{stockQty,jdbcType=SMALLINT},
       </if>
       <if test="purchaseOrderId != null" >
         purchase_order_id = #{purchaseOrderId,jdbcType=INTEGER},
@@ -281,7 +281,7 @@
       order_id = #{orderId,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
       warehouse_id = #{warehouseId,jdbcType=INTEGER},
-      stock_num = #{stockNum,jdbcType=SMALLINT},
+      stock_qty = #{stockQty,jdbcType=SMALLINT},
       purchase_order_id = #{purchaseOrderId,jdbcType=INTEGER},
       return_order_id = #{returnOrderId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

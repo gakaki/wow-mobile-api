@@ -8,8 +8,6 @@ public class Topic implements Serializable {
 
     private String topicName;
 
-    private Boolean canShow;
-
     private String topicImg;
 
     private String topicImgLink;
@@ -18,19 +16,23 @@ public class Topic implements Serializable {
 
     private String topicDesc;
 
-    private Integer followNum;
-
-    private Integer commentNum;
-
-    private Integer shareNum;
+    private Byte topicType;
 
     private Integer groupId;
 
+    private Boolean canShow;
+
+    private Byte productQtyShowAlongWithTopic;
+
     private Boolean isAllowComment;
 
-    private Integer likeNum;
+    private Integer commentQty;
 
-    private Byte productNumShowAlongWithTopic;
+    private Integer followQty;
+
+    private Integer shareQty;
+
+    private Integer likeQty;
 
     private Date createTime;
 
@@ -41,8 +43,6 @@ public class Topic implements Serializable {
     private String updateBy;
 
     private Boolean isDeleted;
-
-    private Byte topicType;
 
     private String topicContentDetails;
 
@@ -62,14 +62,6 @@ public class Topic implements Serializable {
 
     public void setTopicName(String topicName) {
         this.topicName = topicName;
-    }
-
-    public Boolean getCanShow() {
-        return canShow;
-    }
-
-    public void setCanShow(Boolean canShow) {
-        this.canShow = canShow;
     }
 
     public String getTopicImg() {
@@ -104,28 +96,12 @@ public class Topic implements Serializable {
         this.topicDesc = topicDesc;
     }
 
-    public Integer getFollowNum() {
-        return followNum;
+    public Byte getTopicType() {
+        return topicType;
     }
 
-    public void setFollowNum(Integer followNum) {
-        this.followNum = followNum;
-    }
-
-    public Integer getCommentNum() {
-        return commentNum;
-    }
-
-    public void setCommentNum(Integer commentNum) {
-        this.commentNum = commentNum;
-    }
-
-    public Integer getShareNum() {
-        return shareNum;
-    }
-
-    public void setShareNum(Integer shareNum) {
-        this.shareNum = shareNum;
+    public void setTopicType(Byte topicType) {
+        this.topicType = topicType;
     }
 
     public Integer getGroupId() {
@@ -136,6 +112,22 @@ public class Topic implements Serializable {
         this.groupId = groupId;
     }
 
+    public Boolean getCanShow() {
+        return canShow;
+    }
+
+    public void setCanShow(Boolean canShow) {
+        this.canShow = canShow;
+    }
+
+    public Byte getProductQtyShowAlongWithTopic() {
+        return productQtyShowAlongWithTopic;
+    }
+
+    public void setProductQtyShowAlongWithTopic(Byte productQtyShowAlongWithTopic) {
+        this.productQtyShowAlongWithTopic = productQtyShowAlongWithTopic;
+    }
+
     public Boolean getIsAllowComment() {
         return isAllowComment;
     }
@@ -144,20 +136,36 @@ public class Topic implements Serializable {
         this.isAllowComment = isAllowComment;
     }
 
-    public Integer getLikeNum() {
-        return likeNum;
+    public Integer getCommentQty() {
+        return commentQty;
     }
 
-    public void setLikeNum(Integer likeNum) {
-        this.likeNum = likeNum;
+    public void setCommentQty(Integer commentQty) {
+        this.commentQty = commentQty;
     }
 
-    public Byte getProductNumShowAlongWithTopic() {
-        return productNumShowAlongWithTopic;
+    public Integer getFollowQty() {
+        return followQty;
     }
 
-    public void setProductNumShowAlongWithTopic(Byte productNumShowAlongWithTopic) {
-        this.productNumShowAlongWithTopic = productNumShowAlongWithTopic;
+    public void setFollowQty(Integer followQty) {
+        this.followQty = followQty;
+    }
+
+    public Integer getShareQty() {
+        return shareQty;
+    }
+
+    public void setShareQty(Integer shareQty) {
+        this.shareQty = shareQty;
+    }
+
+    public Integer getLikeQty() {
+        return likeQty;
+    }
+
+    public void setLikeQty(Integer likeQty) {
+        this.likeQty = likeQty;
     }
 
     public Date getCreateTime() {
@@ -200,14 +208,6 @@ public class Topic implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public Byte getTopicType() {
-        return topicType;
-    }
-
-    public void setTopicType(Byte topicType) {
-        this.topicType = topicType;
-    }
-
     public String getTopicContentDetails() {
         return topicContentDetails;
     }
@@ -224,24 +224,24 @@ public class Topic implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", topicName=").append(topicName);
-        sb.append(", canShow=").append(canShow);
         sb.append(", topicImg=").append(topicImg);
         sb.append(", topicImgLink=").append(topicImgLink);
         sb.append(", topicMainTitle=").append(topicMainTitle);
         sb.append(", topicDesc=").append(topicDesc);
-        sb.append(", followNum=").append(followNum);
-        sb.append(", commentNum=").append(commentNum);
-        sb.append(", shareNum=").append(shareNum);
+        sb.append(", topicType=").append(topicType);
         sb.append(", groupId=").append(groupId);
+        sb.append(", canShow=").append(canShow);
+        sb.append(", productQtyShowAlongWithTopic=").append(productQtyShowAlongWithTopic);
         sb.append(", isAllowComment=").append(isAllowComment);
-        sb.append(", likeNum=").append(likeNum);
-        sb.append(", productNumShowAlongWithTopic=").append(productNumShowAlongWithTopic);
+        sb.append(", commentQty=").append(commentQty);
+        sb.append(", followQty=").append(followQty);
+        sb.append(", shareQty=").append(shareQty);
+        sb.append(", likeQty=").append(likeQty);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", updateBy=").append(updateBy);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", topicType=").append(topicType);
         sb.append(", topicContentDetails=").append(topicContentDetails);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

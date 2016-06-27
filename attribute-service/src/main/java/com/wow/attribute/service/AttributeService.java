@@ -1,9 +1,9 @@
 package com.wow.attribute.service;
 
 
-import com.wow.attribute.model.*;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductAttribute;
+import com.wow.attribute.model.Attribute;
+import com.wow.attribute.model.AttributeValue;
+import com.wow.attribute.model.CategoryAttribute;
 
 import java.util.List;
 
@@ -15,7 +15,6 @@ import java.util.List;
 public interface AttributeService {
 
     // Table: attribute
-
     /**
      * 创建属性
      *
@@ -48,6 +47,14 @@ public interface AttributeService {
      */
     Attribute getAttributeByName(String attributeName);
 
+
+    /**
+     * 查询所有属性
+     *
+     * @return
+     */
+    List<Attribute> getAllAttributes();
+
     /**
      * 根据ID删除属性
      * @param attributeId
@@ -55,78 +62,42 @@ public interface AttributeService {
      */
     int deleteAttributeById(int attributeId);
 
-    //Table: attribute_group
-
+    //Table: category_attribute
     /**
-     * 创建属性组
+     * 添加单个属性到三级类目
      *
-     * @param attributeGroup
+     * @param categoryAttribute
      * @return
      */
-    int createAttributeGroup(AttributeGroup attributeGroup);
+    int addAttributeInCategory(CategoryAttribute categoryAttribute);
 
     /**
-     * 根据属性组Id查询属性组
+     * 添加多个属性到三级类目
      *
-     * @param attributeGroupId
+     * @param categoryId
+     * @param attributes
      * @return
      */
-    AttributeGroup getAttributeGroupById(int attributeGroupId);
+    int addAttributesInCategory(int categoryId, List<Attribute> attributes);
 
     /**
-     * 根据属性组名查询属性组
+     * 从三级类目中删除属性
      *
-     * @param attributeGroupName
-     * @return
-     */
-    AttributeGroup getAttributeGroupByName(String attributeGroupName);
-
-    /**
-     * 更新属性组
-     *
-     * @param attributeGroup
-     * @return
-     */
-    int updateAttributeGroup(AttributeGroup attributeGroup);
-
-    //Table: attribute_group_attribute
-
-    /**
-     * 添加单个属性到属性组
-     *
-     * @param attributeGroupAttribute
-     * @return
-     */
-    int createAttributeGroupAttribute(AttributeGroupAttribute attributeGroupAttribute);
-
-    /**
-     * 添加多个属性到属性组
-     *
-     * @param attributeGroupId
+     * @param categoryId
      * @param attributeIds
      * @return
      */
-    int addAttributesIntoAttributeGroup(int attributeGroupId, int[] attributeIds);
+    int deleteAttributesInCategory(int categoryId, int[] attributeIds);
 
     /**
-     * 从属性组删除属性
+     * 查询三级类目的所有属性
      *
-     * @param attributeGroupId
-     * @param attributeIds
+     * @param categoryId
      * @return
      */
-    int removeAttributeFromAttributeGroup(int attributeGroupId, int[] attributeIds);
-
-    /**
-     * 查询属性组里所有属性
-     *
-     * @param attributeGroupId
-     * @return
-     */
-    List<Attribute> getAttributesByAttributeGroupId(int attributeGroupId);
+    List<Attribute> getAttributesInCategory(int categoryId);
 
     //Table: attribute_value
-
     /**
      * 添加属性值
      *
@@ -141,7 +112,7 @@ public interface AttributeService {
      * @param attributeValue
      * @return
      */
-    int removeAttributeValue(AttributeValue attributeValue);
+    int deleteAttributeValue(AttributeValue attributeValue);
 
     /**
      * 查询一个属性所有的属性值
@@ -151,21 +122,4 @@ public interface AttributeService {
      */
     List<AttributeValue> getAttributeValues(int attributeId);
 
-//table: product_attribute
-
-    /**
-     * 查询产品的属性组
-     *
-     * @param product
-     * @return
-     */
-    AttributeGroup queryAttributeGroupByProduct(Product product);
-
-    /**
-     * 设置产品的属性值
-     *
-     * @param productAttributes
-     * @return
-     */
-    int createProductAttribute(List<ProductAttribute> productAttributes);
 }

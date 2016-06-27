@@ -14,9 +14,6 @@
     <result column="view_platform" property="viewPlatform" jdbcType="TINYINT" />
     <result column="detail_description" property="detailDescription" jdbcType="VARCHAR" />
     <result column="short_description" property="shortDescription" jdbcType="VARCHAR" />
-    <result column="seo_title" property="seoTitle" jdbcType="VARCHAR" />
-    <result column="seo_desc" property="seoDesc" jdbcType="VARCHAR" />
-    <result column="seo_key" property="seoKey" jdbcType="VARCHAR" />
     <result column="is_import" property="isImport" jdbcType="BIT" />
     <result column="product_model" property="productModel" jdbcType="VARCHAR" />
     <result column="origin_country" property="originCountry" jdbcType="VARCHAR" />
@@ -42,6 +39,12 @@
     <result column="style" property="style" jdbcType="VARCHAR" />
     <result column="applicable_scene" property="applicableScene" jdbcType="VARCHAR" />
     <result column="tips" property="tips" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wow.product.model.Product" extends="BaseResultMap" >
+    <result column="seo_title" property="seoTitle" jdbcType="LONGVARCHAR" />
+    <result column="seo_desc" property="seoDesc" jdbcType="LONGVARCHAR" />
+    <result column="seo_key" property="seoKey" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -103,12 +106,31 @@
   </sql>
   <sql id="Base_Column_List" >
     id, product_name, category_id, brand_id, product_type, is_combine, is_bundling, can_sale, 
-    can_show, view_platform, detail_description, short_description, seo_title, seo_desc, 
-    seo_key, is_import, product_model, origin_country, origin_area_id, length, width, 
-    height, weight, spec_img, verbose_info, need_assemble, is_fragile, post_sale_service_desc, 
-    is_presale, product_status, reject_reason, on_shelf_time, added_at, approval_at, 
-    update_at, is_deleted, material, style, applicable_scene, tips
+    can_show, view_platform, detail_description, short_description, is_import, product_model, 
+    origin_country, origin_area_id, length, width, height, weight, spec_img, verbose_info, 
+    need_assemble, is_fragile, post_sale_service_desc, is_presale, product_status, reject_reason, 
+    on_shelf_time, added_at, approval_at, update_at, is_deleted, material, style, applicable_scene, 
+    tips, size
   </sql>
+  <sql id="Blob_Column_List" >
+    seo_title, seo_desc, seo_key
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.wow.product.model.ProductExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ProductExample" >
     select
     <if test="distinct" >
@@ -123,9 +145,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from product
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -146,8 +170,7 @@
     insert into product (product_name, category_id, brand_id, 
       product_type, is_combine, is_bundling, 
       can_sale, can_show, view_platform, 
-      detail_description, short_description, seo_title, 
-      seo_desc, seo_key, is_import, 
+      detail_description, short_description, is_import, 
       product_model, origin_country, origin_area_id, 
       length, width, height, 
       weight, spec_img, verbose_info, 
@@ -155,13 +178,13 @@
       is_presale, product_status, reject_reason, 
       on_shelf_time, added_at, approval_at, 
       update_at, is_deleted, material, 
-      style, applicable_scene, tips
-      )
+      style, applicable_scene, tips, 
+      size, seo_title, seo_desc, 
+      seo_key)
     values (#{productName,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, #{brandId,jdbcType=INTEGER}, 
       #{productType,jdbcType=TINYINT}, #{isCombine,jdbcType=BIT}, #{isBundling,jdbcType=BIT}, 
       #{canSale,jdbcType=BIT}, #{canShow,jdbcType=BIT}, #{viewPlatform,jdbcType=TINYINT}, 
-      #{detailDescription,jdbcType=VARCHAR}, #{shortDescription,jdbcType=VARCHAR}, #{seoTitle,jdbcType=VARCHAR}, 
-      #{seoDesc,jdbcType=VARCHAR}, #{seoKey,jdbcType=VARCHAR}, #{isImport,jdbcType=BIT}, 
+      #{detailDescription,jdbcType=VARCHAR}, #{shortDescription,jdbcType=VARCHAR}, #{isImport,jdbcType=BIT}, 
       #{productModel,jdbcType=VARCHAR}, #{originCountry,jdbcType=VARCHAR}, #{originAreaId,jdbcType=INTEGER}, 
       #{length,jdbcType=SMALLINT}, #{width,jdbcType=SMALLINT}, #{height,jdbcType=SMALLINT}, 
       #{weight,jdbcType=DECIMAL}, #{specImg,jdbcType=VARCHAR}, #{verboseInfo,jdbcType=VARCHAR}, 
@@ -169,8 +192,9 @@
       #{isPresale,jdbcType=BIT}, #{productStatus,jdbcType=DECIMAL}, #{rejectReason,jdbcType=VARCHAR}, 
       #{onShelfTime,jdbcType=TIMESTAMP}, #{addedAt,jdbcType=TIMESTAMP}, #{approvalAt,jdbcType=TIMESTAMP}, 
       #{updateAt,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}, #{material,jdbcType=VARCHAR}, 
-      #{style,jdbcType=VARCHAR}, #{applicableScene,jdbcType=VARCHAR}, #{tips,jdbcType=VARCHAR}
-      )
+      #{style,jdbcType=VARCHAR}, #{applicableScene,jdbcType=VARCHAR}, #{tips,jdbcType=VARCHAR}, 
+      #{size,jdbcType=VARCHAR}, #{seoTitle,jdbcType=LONGVARCHAR}, #{seoDesc,jdbcType=LONGVARCHAR}, 
+      #{seoKey,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.Product" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -210,15 +234,6 @@
       </if>
       <if test="shortDescription != null" >
         short_description,
-      </if>
-      <if test="seoTitle != null" >
-        seo_title,
-      </if>
-      <if test="seoDesc != null" >
-        seo_desc,
-      </if>
-      <if test="seoKey != null" >
-        seo_key,
       </if>
       <if test="isImport != null" >
         is_import,
@@ -295,6 +310,18 @@
       <if test="tips != null" >
         tips,
       </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="seoTitle != null" >
+        seo_title,
+      </if>
+      <if test="seoDesc != null" >
+        seo_desc,
+      </if>
+      <if test="seoKey != null" >
+        seo_key,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="productName != null" >
@@ -329,15 +356,6 @@
       </if>
       <if test="shortDescription != null" >
         #{shortDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="seoTitle != null" >
-        #{seoTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="seoDesc != null" >
-        #{seoDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="seoKey != null" >
-        #{seoKey,jdbcType=VARCHAR},
       </if>
       <if test="isImport != null" >
         #{isImport,jdbcType=BIT},
@@ -414,6 +432,18 @@
       <if test="tips != null" >
         #{tips,jdbcType=VARCHAR},
       </if>
+      <if test="size != null" >
+        #{size,jdbcType=VARCHAR},
+      </if>
+      <if test="seoTitle != null" >
+        #{seoTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="seoDesc != null" >
+        #{seoDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="seoKey != null" >
+        #{seoKey,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.wow.product.model.ProductExample" resultType="java.lang.Integer" >
@@ -460,15 +490,6 @@
       </if>
       <if test="record.shortDescription != null" >
         short_description = #{record.shortDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="record.seoTitle != null" >
-        seo_title = #{record.seoTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="record.seoDesc != null" >
-        seo_desc = #{record.seoDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="record.seoKey != null" >
-        seo_key = #{record.seoKey,jdbcType=VARCHAR},
       </if>
       <if test="record.isImport != null" >
         is_import = #{record.isImport,jdbcType=BIT},
@@ -545,12 +566,24 @@
       <if test="record.tips != null" >
         tips = #{record.tips,jdbcType=VARCHAR},
       </if>
+      <if test="record.size != null" >
+        size = #{record.size,jdbcType=VARCHAR},
+      </if>
+      <if test="record.seoTitle != null" >
+        seo_title = #{record.seoTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.seoDesc != null" >
+        seo_desc = #{record.seoDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.seoKey != null" >
+        seo_key = #{record.seoKey,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
     update product
     set id = #{record.id,jdbcType=INTEGER},
       product_name = #{record.productName,jdbcType=VARCHAR},
@@ -564,9 +597,6 @@
       view_platform = #{record.viewPlatform,jdbcType=TINYINT},
       detail_description = #{record.detailDescription,jdbcType=VARCHAR},
       short_description = #{record.shortDescription,jdbcType=VARCHAR},
-      seo_title = #{record.seoTitle,jdbcType=VARCHAR},
-      seo_desc = #{record.seoDesc,jdbcType=VARCHAR},
-      seo_key = #{record.seoKey,jdbcType=VARCHAR},
       is_import = #{record.isImport,jdbcType=BIT},
       product_model = #{record.productModel,jdbcType=VARCHAR},
       origin_country = #{record.originCountry,jdbcType=VARCHAR},
@@ -591,7 +621,55 @@
       material = #{record.material,jdbcType=VARCHAR},
       style = #{record.style,jdbcType=VARCHAR},
       applicable_scene = #{record.applicableScene,jdbcType=VARCHAR},
-      tips = #{record.tips,jdbcType=VARCHAR}
+      tips = #{record.tips,jdbcType=VARCHAR},
+      size = #{record.size,jdbcType=VARCHAR},
+      seo_title = #{record.seoTitle,jdbcType=LONGVARCHAR},
+      seo_desc = #{record.seoDesc,jdbcType=LONGVARCHAR},
+      seo_key = #{record.seoKey,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product
+    set id = #{record.id,jdbcType=INTEGER},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      category_id = #{record.categoryId,jdbcType=VARCHAR},
+      brand_id = #{record.brandId,jdbcType=INTEGER},
+      product_type = #{record.productType,jdbcType=TINYINT},
+      is_combine = #{record.isCombine,jdbcType=BIT},
+      is_bundling = #{record.isBundling,jdbcType=BIT},
+      can_sale = #{record.canSale,jdbcType=BIT},
+      can_show = #{record.canShow,jdbcType=BIT},
+      view_platform = #{record.viewPlatform,jdbcType=TINYINT},
+      detail_description = #{record.detailDescription,jdbcType=VARCHAR},
+      short_description = #{record.shortDescription,jdbcType=VARCHAR},
+      is_import = #{record.isImport,jdbcType=BIT},
+      product_model = #{record.productModel,jdbcType=VARCHAR},
+      origin_country = #{record.originCountry,jdbcType=VARCHAR},
+      origin_area_id = #{record.originAreaId,jdbcType=INTEGER},
+      length = #{record.length,jdbcType=SMALLINT},
+      width = #{record.width,jdbcType=SMALLINT},
+      height = #{record.height,jdbcType=SMALLINT},
+      weight = #{record.weight,jdbcType=DECIMAL},
+      spec_img = #{record.specImg,jdbcType=VARCHAR},
+      verbose_info = #{record.verboseInfo,jdbcType=VARCHAR},
+      need_assemble = #{record.needAssemble,jdbcType=BIT},
+      is_fragile = #{record.isFragile,jdbcType=BIT},
+      post_sale_service_desc = #{record.postSaleServiceDesc,jdbcType=VARCHAR},
+      is_presale = #{record.isPresale,jdbcType=BIT},
+      product_status = #{record.productStatus,jdbcType=DECIMAL},
+      reject_reason = #{record.rejectReason,jdbcType=VARCHAR},
+      on_shelf_time = #{record.onShelfTime,jdbcType=TIMESTAMP},
+      added_at = #{record.addedAt,jdbcType=TIMESTAMP},
+      approval_at = #{record.approvalAt,jdbcType=TIMESTAMP},
+      update_at = #{record.updateAt,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=BIT},
+      material = #{record.material,jdbcType=VARCHAR},
+      style = #{record.style,jdbcType=VARCHAR},
+      applicable_scene = #{record.applicableScene,jdbcType=VARCHAR},
+      tips = #{record.tips,jdbcType=VARCHAR},
+      size = #{record.size,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -631,15 +709,6 @@
       </if>
       <if test="shortDescription != null" >
         short_description = #{shortDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="seoTitle != null" >
-        seo_title = #{seoTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="seoDesc != null" >
-        seo_desc = #{seoDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="seoKey != null" >
-        seo_key = #{seoKey,jdbcType=VARCHAR},
       </if>
       <if test="isImport != null" >
         is_import = #{isImport,jdbcType=BIT},
@@ -716,10 +785,22 @@
       <if test="tips != null" >
         tips = #{tips,jdbcType=VARCHAR},
       </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=VARCHAR},
+      </if>
+      <if test="seoTitle != null" >
+        seo_title = #{seoTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="seoDesc != null" >
+        seo_desc = #{seoDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="seoKey != null" >
+        seo_key = #{seoKey,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Product" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wow.product.model.Product" >
     update product
     set product_name = #{productName,jdbcType=VARCHAR},
       category_id = #{categoryId,jdbcType=VARCHAR},
@@ -732,9 +813,6 @@
       view_platform = #{viewPlatform,jdbcType=TINYINT},
       detail_description = #{detailDescription,jdbcType=VARCHAR},
       short_description = #{shortDescription,jdbcType=VARCHAR},
-      seo_title = #{seoTitle,jdbcType=VARCHAR},
-      seo_desc = #{seoDesc,jdbcType=VARCHAR},
-      seo_key = #{seoKey,jdbcType=VARCHAR},
       is_import = #{isImport,jdbcType=BIT},
       product_model = #{productModel,jdbcType=VARCHAR},
       origin_country = #{originCountry,jdbcType=VARCHAR},
@@ -759,7 +837,52 @@
       material = #{material,jdbcType=VARCHAR},
       style = #{style,jdbcType=VARCHAR},
       applicable_scene = #{applicableScene,jdbcType=VARCHAR},
-      tips = #{tips,jdbcType=VARCHAR}
+      tips = #{tips,jdbcType=VARCHAR},
+      size = #{size,jdbcType=VARCHAR},
+      seo_title = #{seoTitle,jdbcType=LONGVARCHAR},
+      seo_desc = #{seoDesc,jdbcType=LONGVARCHAR},
+      seo_key = #{seoKey,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Product" >
+    update product
+    set product_name = #{productName,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=VARCHAR},
+      brand_id = #{brandId,jdbcType=INTEGER},
+      product_type = #{productType,jdbcType=TINYINT},
+      is_combine = #{isCombine,jdbcType=BIT},
+      is_bundling = #{isBundling,jdbcType=BIT},
+      can_sale = #{canSale,jdbcType=BIT},
+      can_show = #{canShow,jdbcType=BIT},
+      view_platform = #{viewPlatform,jdbcType=TINYINT},
+      detail_description = #{detailDescription,jdbcType=VARCHAR},
+      short_description = #{shortDescription,jdbcType=VARCHAR},
+      is_import = #{isImport,jdbcType=BIT},
+      product_model = #{productModel,jdbcType=VARCHAR},
+      origin_country = #{originCountry,jdbcType=VARCHAR},
+      origin_area_id = #{originAreaId,jdbcType=INTEGER},
+      length = #{length,jdbcType=SMALLINT},
+      width = #{width,jdbcType=SMALLINT},
+      height = #{height,jdbcType=SMALLINT},
+      weight = #{weight,jdbcType=DECIMAL},
+      spec_img = #{specImg,jdbcType=VARCHAR},
+      verbose_info = #{verboseInfo,jdbcType=VARCHAR},
+      need_assemble = #{needAssemble,jdbcType=BIT},
+      is_fragile = #{isFragile,jdbcType=BIT},
+      post_sale_service_desc = #{postSaleServiceDesc,jdbcType=VARCHAR},
+      is_presale = #{isPresale,jdbcType=BIT},
+      product_status = #{productStatus,jdbcType=DECIMAL},
+      reject_reason = #{rejectReason,jdbcType=VARCHAR},
+      on_shelf_time = #{onShelfTime,jdbcType=TIMESTAMP},
+      added_at = #{addedAt,jdbcType=TIMESTAMP},
+      approval_at = #{approvalAt,jdbcType=TIMESTAMP},
+      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      material = #{material,jdbcType=VARCHAR},
+      style = #{style,jdbcType=VARCHAR},
+      applicable_scene = #{applicableScene,jdbcType=VARCHAR},
+      tips = #{tips,jdbcType=VARCHAR},
+      size = #{size,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -4,24 +4,24 @@
   <resultMap id="BaseResultMap" type="com.wow.product.model.Topic" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="topic_name" property="topicName" jdbcType="VARCHAR" />
-    <result column="can_show" property="canShow" jdbcType="BIT" />
     <result column="topic_img" property="topicImg" jdbcType="VARCHAR" />
     <result column="topic_img_link" property="topicImgLink" jdbcType="VARCHAR" />
     <result column="topic_main_title" property="topicMainTitle" jdbcType="VARCHAR" />
     <result column="topic_desc" property="topicDesc" jdbcType="VARCHAR" />
-    <result column="follow_num" property="followNum" jdbcType="INTEGER" />
-    <result column="comment_num" property="commentNum" jdbcType="INTEGER" />
-    <result column="share_num" property="shareNum" jdbcType="INTEGER" />
+    <result column="topic_type" property="topicType" jdbcType="TINYINT" />
     <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="can_show" property="canShow" jdbcType="BIT" />
+    <result column="product_qty_show_along_with_topic" property="productQtyShowAlongWithTopic" jdbcType="TINYINT" />
     <result column="is_allow_comment" property="isAllowComment" jdbcType="BIT" />
-    <result column="like_num" property="likeNum" jdbcType="INTEGER" />
-    <result column="product_num_show_along_with_topic" property="productNumShowAlongWithTopic" jdbcType="TINYINT" />
+    <result column="comment_qty" property="commentQty" jdbcType="INTEGER" />
+    <result column="follow_qty" property="followQty" jdbcType="INTEGER" />
+    <result column="share_qty" property="shareQty" jdbcType="INTEGER" />
+    <result column="like_qty" property="likeQty" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
-    <result column="topic_type" property="topicType" jdbcType="TINYINT" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wow.product.model.Topic" extends="BaseResultMap" >
     <result column="topic_content_details" property="topicContentDetails" jdbcType="LONGVARCHAR" />
@@ -85,9 +85,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, topic_name, can_show, topic_img, topic_img_link, topic_main_title, topic_desc, 
-    follow_num, comment_num, share_num, group_id, is_allow_comment, like_num, product_num_show_along_with_topic, 
-    create_time, create_by, update_time, update_by, is_deleted, topic_type
+    id, topic_name, topic_img, topic_img_link, topic_main_title, topic_desc, topic_type, 
+    group_id, can_show, product_qty_show_along_with_topic, is_allow_comment, comment_qty, 
+    follow_qty, share_qty, like_qty, create_time, create_by, update_time, update_by, 
+    is_deleted
   </sql>
   <sql id="Blob_Column_List" >
     topic_content_details
@@ -144,22 +145,20 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into topic (topic_name, can_show, topic_img, 
-      topic_img_link, topic_main_title, topic_desc, 
-      follow_num, comment_num, share_num, 
-      group_id, is_allow_comment, like_num, 
-      product_num_show_along_with_topic, create_time, 
+    insert into topic (topic_name, topic_img, topic_img_link, 
+      topic_main_title, topic_desc, topic_type, 
+      group_id, can_show, product_qty_show_along_with_topic, 
+      is_allow_comment, comment_qty, follow_qty, 
+      share_qty, like_qty, create_time, 
       create_by, update_time, update_by, 
-      is_deleted, topic_type, topic_content_details
-      )
-    values (#{topicName,jdbcType=VARCHAR}, #{canShow,jdbcType=BIT}, #{topicImg,jdbcType=VARCHAR}, 
-      #{topicImgLink,jdbcType=VARCHAR}, #{topicMainTitle,jdbcType=VARCHAR}, #{topicDesc,jdbcType=VARCHAR}, 
-      #{followNum,jdbcType=INTEGER}, #{commentNum,jdbcType=INTEGER}, #{shareNum,jdbcType=INTEGER}, 
-      #{groupId,jdbcType=INTEGER}, #{isAllowComment,jdbcType=BIT}, #{likeNum,jdbcType=INTEGER}, 
-      #{productNumShowAlongWithTopic,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      is_deleted, topic_content_details)
+    values (#{topicName,jdbcType=VARCHAR}, #{topicImg,jdbcType=VARCHAR}, #{topicImgLink,jdbcType=VARCHAR}, 
+      #{topicMainTitle,jdbcType=VARCHAR}, #{topicDesc,jdbcType=VARCHAR}, #{topicType,jdbcType=TINYINT}, 
+      #{groupId,jdbcType=INTEGER}, #{canShow,jdbcType=BIT}, #{productQtyShowAlongWithTopic,jdbcType=TINYINT}, 
+      #{isAllowComment,jdbcType=BIT}, #{commentQty,jdbcType=INTEGER}, #{followQty,jdbcType=INTEGER}, 
+      #{shareQty,jdbcType=INTEGER}, #{likeQty,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=BIT}, #{topicType,jdbcType=TINYINT}, #{topicContentDetails,jdbcType=LONGVARCHAR}
-      )
+      #{isDeleted,jdbcType=BIT}, #{topicContentDetails,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.Topic" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -169,9 +168,6 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="topicName != null" >
         topic_name,
-      </if>
-      <if test="canShow != null" >
-        can_show,
       </if>
       <if test="topicImg != null" >
         topic_img,
@@ -185,26 +181,32 @@
       <if test="topicDesc != null" >
         topic_desc,
       </if>
-      <if test="followNum != null" >
-        follow_num,
-      </if>
-      <if test="commentNum != null" >
-        comment_num,
-      </if>
-      <if test="shareNum != null" >
-        share_num,
+      <if test="topicType != null" >
+        topic_type,
       </if>
       <if test="groupId != null" >
         group_id,
       </if>
+      <if test="canShow != null" >
+        can_show,
+      </if>
+      <if test="productQtyShowAlongWithTopic != null" >
+        product_qty_show_along_with_topic,
+      </if>
       <if test="isAllowComment != null" >
         is_allow_comment,
       </if>
-      <if test="likeNum != null" >
-        like_num,
+      <if test="commentQty != null" >
+        comment_qty,
       </if>
-      <if test="productNumShowAlongWithTopic != null" >
-        product_num_show_along_with_topic,
+      <if test="followQty != null" >
+        follow_qty,
+      </if>
+      <if test="shareQty != null" >
+        share_qty,
+      </if>
+      <if test="likeQty != null" >
+        like_qty,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -221,9 +223,6 @@
       <if test="isDeleted != null" >
         is_deleted,
       </if>
-      <if test="topicType != null" >
-        topic_type,
-      </if>
       <if test="topicContentDetails != null" >
         topic_content_details,
       </if>
@@ -231,9 +230,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="topicName != null" >
         #{topicName,jdbcType=VARCHAR},
-      </if>
-      <if test="canShow != null" >
-        #{canShow,jdbcType=BIT},
       </if>
       <if test="topicImg != null" >
         #{topicImg,jdbcType=VARCHAR},
@@ -247,26 +243,32 @@
       <if test="topicDesc != null" >
         #{topicDesc,jdbcType=VARCHAR},
       </if>
-      <if test="followNum != null" >
-        #{followNum,jdbcType=INTEGER},
-      </if>
-      <if test="commentNum != null" >
-        #{commentNum,jdbcType=INTEGER},
-      </if>
-      <if test="shareNum != null" >
-        #{shareNum,jdbcType=INTEGER},
+      <if test="topicType != null" >
+        #{topicType,jdbcType=TINYINT},
       </if>
       <if test="groupId != null" >
         #{groupId,jdbcType=INTEGER},
       </if>
+      <if test="canShow != null" >
+        #{canShow,jdbcType=BIT},
+      </if>
+      <if test="productQtyShowAlongWithTopic != null" >
+        #{productQtyShowAlongWithTopic,jdbcType=TINYINT},
+      </if>
       <if test="isAllowComment != null" >
         #{isAllowComment,jdbcType=BIT},
       </if>
-      <if test="likeNum != null" >
-        #{likeNum,jdbcType=INTEGER},
+      <if test="commentQty != null" >
+        #{commentQty,jdbcType=INTEGER},
       </if>
-      <if test="productNumShowAlongWithTopic != null" >
-        #{productNumShowAlongWithTopic,jdbcType=TINYINT},
+      <if test="followQty != null" >
+        #{followQty,jdbcType=INTEGER},
+      </if>
+      <if test="shareQty != null" >
+        #{shareQty,jdbcType=INTEGER},
+      </if>
+      <if test="likeQty != null" >
+        #{likeQty,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -282,9 +284,6 @@
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=BIT},
-      </if>
-      <if test="topicType != null" >
-        #{topicType,jdbcType=TINYINT},
       </if>
       <if test="topicContentDetails != null" >
         #{topicContentDetails,jdbcType=LONGVARCHAR},
@@ -306,9 +305,6 @@
       <if test="record.topicName != null" >
         topic_name = #{record.topicName,jdbcType=VARCHAR},
       </if>
-      <if test="record.canShow != null" >
-        can_show = #{record.canShow,jdbcType=BIT},
-      </if>
       <if test="record.topicImg != null" >
         topic_img = #{record.topicImg,jdbcType=VARCHAR},
       </if>
@@ -321,26 +317,32 @@
       <if test="record.topicDesc != null" >
         topic_desc = #{record.topicDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.followNum != null" >
-        follow_num = #{record.followNum,jdbcType=INTEGER},
-      </if>
-      <if test="record.commentNum != null" >
-        comment_num = #{record.commentNum,jdbcType=INTEGER},
-      </if>
-      <if test="record.shareNum != null" >
-        share_num = #{record.shareNum,jdbcType=INTEGER},
+      <if test="record.topicType != null" >
+        topic_type = #{record.topicType,jdbcType=TINYINT},
       </if>
       <if test="record.groupId != null" >
         group_id = #{record.groupId,jdbcType=INTEGER},
       </if>
+      <if test="record.canShow != null" >
+        can_show = #{record.canShow,jdbcType=BIT},
+      </if>
+      <if test="record.productQtyShowAlongWithTopic != null" >
+        product_qty_show_along_with_topic = #{record.productQtyShowAlongWithTopic,jdbcType=TINYINT},
+      </if>
       <if test="record.isAllowComment != null" >
         is_allow_comment = #{record.isAllowComment,jdbcType=BIT},
       </if>
-      <if test="record.likeNum != null" >
-        like_num = #{record.likeNum,jdbcType=INTEGER},
+      <if test="record.commentQty != null" >
+        comment_qty = #{record.commentQty,jdbcType=INTEGER},
       </if>
-      <if test="record.productNumShowAlongWithTopic != null" >
-        product_num_show_along_with_topic = #{record.productNumShowAlongWithTopic,jdbcType=TINYINT},
+      <if test="record.followQty != null" >
+        follow_qty = #{record.followQty,jdbcType=INTEGER},
+      </if>
+      <if test="record.shareQty != null" >
+        share_qty = #{record.shareQty,jdbcType=INTEGER},
+      </if>
+      <if test="record.likeQty != null" >
+        like_qty = #{record.likeQty,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -357,9 +359,6 @@
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=BIT},
       </if>
-      <if test="record.topicType != null" >
-        topic_type = #{record.topicType,jdbcType=TINYINT},
-      </if>
       <if test="record.topicContentDetails != null" >
         topic_content_details = #{record.topicContentDetails,jdbcType=LONGVARCHAR},
       </if>
@@ -372,24 +371,24 @@
     update topic
     set id = #{record.id,jdbcType=INTEGER},
       topic_name = #{record.topicName,jdbcType=VARCHAR},
-      can_show = #{record.canShow,jdbcType=BIT},
       topic_img = #{record.topicImg,jdbcType=VARCHAR},
       topic_img_link = #{record.topicImgLink,jdbcType=VARCHAR},
       topic_main_title = #{record.topicMainTitle,jdbcType=VARCHAR},
       topic_desc = #{record.topicDesc,jdbcType=VARCHAR},
-      follow_num = #{record.followNum,jdbcType=INTEGER},
-      comment_num = #{record.commentNum,jdbcType=INTEGER},
-      share_num = #{record.shareNum,jdbcType=INTEGER},
+      topic_type = #{record.topicType,jdbcType=TINYINT},
       group_id = #{record.groupId,jdbcType=INTEGER},
+      can_show = #{record.canShow,jdbcType=BIT},
+      product_qty_show_along_with_topic = #{record.productQtyShowAlongWithTopic,jdbcType=TINYINT},
       is_allow_comment = #{record.isAllowComment,jdbcType=BIT},
-      like_num = #{record.likeNum,jdbcType=INTEGER},
-      product_num_show_along_with_topic = #{record.productNumShowAlongWithTopic,jdbcType=TINYINT},
+      comment_qty = #{record.commentQty,jdbcType=INTEGER},
+      follow_qty = #{record.followQty,jdbcType=INTEGER},
+      share_qty = #{record.shareQty,jdbcType=INTEGER},
+      like_qty = #{record.likeQty,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=BIT},
-      topic_type = #{record.topicType,jdbcType=TINYINT},
       topic_content_details = #{record.topicContentDetails,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -399,24 +398,24 @@
     update topic
     set id = #{record.id,jdbcType=INTEGER},
       topic_name = #{record.topicName,jdbcType=VARCHAR},
-      can_show = #{record.canShow,jdbcType=BIT},
       topic_img = #{record.topicImg,jdbcType=VARCHAR},
       topic_img_link = #{record.topicImgLink,jdbcType=VARCHAR},
       topic_main_title = #{record.topicMainTitle,jdbcType=VARCHAR},
       topic_desc = #{record.topicDesc,jdbcType=VARCHAR},
-      follow_num = #{record.followNum,jdbcType=INTEGER},
-      comment_num = #{record.commentNum,jdbcType=INTEGER},
-      share_num = #{record.shareNum,jdbcType=INTEGER},
+      topic_type = #{record.topicType,jdbcType=TINYINT},
       group_id = #{record.groupId,jdbcType=INTEGER},
+      can_show = #{record.canShow,jdbcType=BIT},
+      product_qty_show_along_with_topic = #{record.productQtyShowAlongWithTopic,jdbcType=TINYINT},
       is_allow_comment = #{record.isAllowComment,jdbcType=BIT},
-      like_num = #{record.likeNum,jdbcType=INTEGER},
-      product_num_show_along_with_topic = #{record.productNumShowAlongWithTopic,jdbcType=TINYINT},
+      comment_qty = #{record.commentQty,jdbcType=INTEGER},
+      follow_qty = #{record.followQty,jdbcType=INTEGER},
+      share_qty = #{record.shareQty,jdbcType=INTEGER},
+      like_qty = #{record.likeQty,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=VARCHAR},
-      is_deleted = #{record.isDeleted,jdbcType=BIT},
-      topic_type = #{record.topicType,jdbcType=TINYINT}
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -426,9 +425,6 @@
     <set >
       <if test="topicName != null" >
         topic_name = #{topicName,jdbcType=VARCHAR},
-      </if>
-      <if test="canShow != null" >
-        can_show = #{canShow,jdbcType=BIT},
       </if>
       <if test="topicImg != null" >
         topic_img = #{topicImg,jdbcType=VARCHAR},
@@ -442,26 +438,32 @@
       <if test="topicDesc != null" >
         topic_desc = #{topicDesc,jdbcType=VARCHAR},
       </if>
-      <if test="followNum != null" >
-        follow_num = #{followNum,jdbcType=INTEGER},
-      </if>
-      <if test="commentNum != null" >
-        comment_num = #{commentNum,jdbcType=INTEGER},
-      </if>
-      <if test="shareNum != null" >
-        share_num = #{shareNum,jdbcType=INTEGER},
+      <if test="topicType != null" >
+        topic_type = #{topicType,jdbcType=TINYINT},
       </if>
       <if test="groupId != null" >
         group_id = #{groupId,jdbcType=INTEGER},
       </if>
+      <if test="canShow != null" >
+        can_show = #{canShow,jdbcType=BIT},
+      </if>
+      <if test="productQtyShowAlongWithTopic != null" >
+        product_qty_show_along_with_topic = #{productQtyShowAlongWithTopic,jdbcType=TINYINT},
+      </if>
       <if test="isAllowComment != null" >
         is_allow_comment = #{isAllowComment,jdbcType=BIT},
       </if>
-      <if test="likeNum != null" >
-        like_num = #{likeNum,jdbcType=INTEGER},
+      <if test="commentQty != null" >
+        comment_qty = #{commentQty,jdbcType=INTEGER},
       </if>
-      <if test="productNumShowAlongWithTopic != null" >
-        product_num_show_along_with_topic = #{productNumShowAlongWithTopic,jdbcType=TINYINT},
+      <if test="followQty != null" >
+        follow_qty = #{followQty,jdbcType=INTEGER},
+      </if>
+      <if test="shareQty != null" >
+        share_qty = #{shareQty,jdbcType=INTEGER},
+      </if>
+      <if test="likeQty != null" >
+        like_qty = #{likeQty,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -478,9 +480,6 @@
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=BIT},
       </if>
-      <if test="topicType != null" >
-        topic_type = #{topicType,jdbcType=TINYINT},
-      </if>
       <if test="topicContentDetails != null" >
         topic_content_details = #{topicContentDetails,jdbcType=LONGVARCHAR},
       </if>
@@ -490,48 +489,48 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wow.product.model.Topic" >
     update topic
     set topic_name = #{topicName,jdbcType=VARCHAR},
-      can_show = #{canShow,jdbcType=BIT},
       topic_img = #{topicImg,jdbcType=VARCHAR},
       topic_img_link = #{topicImgLink,jdbcType=VARCHAR},
       topic_main_title = #{topicMainTitle,jdbcType=VARCHAR},
       topic_desc = #{topicDesc,jdbcType=VARCHAR},
-      follow_num = #{followNum,jdbcType=INTEGER},
-      comment_num = #{commentNum,jdbcType=INTEGER},
-      share_num = #{shareNum,jdbcType=INTEGER},
+      topic_type = #{topicType,jdbcType=TINYINT},
       group_id = #{groupId,jdbcType=INTEGER},
+      can_show = #{canShow,jdbcType=BIT},
+      product_qty_show_along_with_topic = #{productQtyShowAlongWithTopic,jdbcType=TINYINT},
       is_allow_comment = #{isAllowComment,jdbcType=BIT},
-      like_num = #{likeNum,jdbcType=INTEGER},
-      product_num_show_along_with_topic = #{productNumShowAlongWithTopic,jdbcType=TINYINT},
+      comment_qty = #{commentQty,jdbcType=INTEGER},
+      follow_qty = #{followQty,jdbcType=INTEGER},
+      share_qty = #{shareQty,jdbcType=INTEGER},
+      like_qty = #{likeQty,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=BIT},
-      topic_type = #{topicType,jdbcType=TINYINT},
       topic_content_details = #{topicContentDetails,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Topic" >
     update topic
     set topic_name = #{topicName,jdbcType=VARCHAR},
-      can_show = #{canShow,jdbcType=BIT},
       topic_img = #{topicImg,jdbcType=VARCHAR},
       topic_img_link = #{topicImgLink,jdbcType=VARCHAR},
       topic_main_title = #{topicMainTitle,jdbcType=VARCHAR},
       topic_desc = #{topicDesc,jdbcType=VARCHAR},
-      follow_num = #{followNum,jdbcType=INTEGER},
-      comment_num = #{commentNum,jdbcType=INTEGER},
-      share_num = #{shareNum,jdbcType=INTEGER},
+      topic_type = #{topicType,jdbcType=TINYINT},
       group_id = #{groupId,jdbcType=INTEGER},
+      can_show = #{canShow,jdbcType=BIT},
+      product_qty_show_along_with_topic = #{productQtyShowAlongWithTopic,jdbcType=TINYINT},
       is_allow_comment = #{isAllowComment,jdbcType=BIT},
-      like_num = #{likeNum,jdbcType=INTEGER},
-      product_num_show_along_with_topic = #{productNumShowAlongWithTopic,jdbcType=TINYINT},
+      comment_qty = #{commentQty,jdbcType=INTEGER},
+      follow_qty = #{followQty,jdbcType=INTEGER},
+      share_qty = #{shareQty,jdbcType=INTEGER},
+      like_qty = #{likeQty,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=BIT},
-      topic_type = #{topicType,jdbcType=TINYINT}
+      is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

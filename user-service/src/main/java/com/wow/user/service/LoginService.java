@@ -23,10 +23,10 @@ public interface LoginService {
     /**
      * 延续会话
      *
-     * @param endUserId
+     * @param token
      * @return
      */
-    EndUserSession refreshSession(int endUserId);
+    EndUserSession refreshSession(String token);
 
     /**
      * 添加用户登录日志

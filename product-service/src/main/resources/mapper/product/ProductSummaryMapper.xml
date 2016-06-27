@@ -4,9 +4,9 @@
   <resultMap id="BaseResultMap" type="com.wow.product.model.ProductSummary" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
-    <result column="total_sold_num" property="totalSoldNum" jdbcType="INTEGER" />
-    <result column="seven_days_sold_num" property="sevenDaysSoldNum" jdbcType="INTEGER" />
-    <result column="total_comments" property="totalComments" jdbcType="INTEGER" />
+    <result column="total_sold_qty" property="totalSoldQty" jdbcType="INTEGER" />
+    <result column="seven_days_sold_qty" property="sevenDaysSoldQty" jdbcType="INTEGER" />
+    <result column="total_comment_qty" property="totalCommentQty" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
   </resultMap>
@@ -69,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_id, total_sold_num, seven_days_sold_num, total_comments, update_time, 
+    id, product_id, total_sold_qty, seven_days_sold_qty, total_comment_qty, update_time, 
     is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ProductSummaryExample" >
@@ -106,11 +106,11 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product_summary (product_id, total_sold_num, seven_days_sold_num, 
-      total_comments, update_time, is_deleted
+    insert into product_summary (product_id, total_sold_qty, seven_days_sold_qty, 
+      total_comment_qty, update_time, is_deleted
       )
-    values (#{productId,jdbcType=INTEGER}, #{totalSoldNum,jdbcType=INTEGER}, #{sevenDaysSoldNum,jdbcType=INTEGER}, 
-      #{totalComments,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+    values (#{productId,jdbcType=INTEGER}, #{totalSoldQty,jdbcType=INTEGER}, #{sevenDaysSoldQty,jdbcType=INTEGER}, 
+      #{totalCommentQty,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.ProductSummary" >
@@ -122,14 +122,14 @@
       <if test="productId != null" >
         product_id,
       </if>
-      <if test="totalSoldNum != null" >
-        total_sold_num,
+      <if test="totalSoldQty != null" >
+        total_sold_qty,
       </if>
-      <if test="sevenDaysSoldNum != null" >
-        seven_days_sold_num,
+      <if test="sevenDaysSoldQty != null" >
+        seven_days_sold_qty,
       </if>
-      <if test="totalComments != null" >
-        total_comments,
+      <if test="totalCommentQty != null" >
+        total_comment_qty,
       </if>
       <if test="updateTime != null" >
         update_time,
@@ -142,14 +142,14 @@
       <if test="productId != null" >
         #{productId,jdbcType=INTEGER},
       </if>
-      <if test="totalSoldNum != null" >
-        #{totalSoldNum,jdbcType=INTEGER},
+      <if test="totalSoldQty != null" >
+        #{totalSoldQty,jdbcType=INTEGER},
       </if>
-      <if test="sevenDaysSoldNum != null" >
-        #{sevenDaysSoldNum,jdbcType=INTEGER},
+      <if test="sevenDaysSoldQty != null" >
+        #{sevenDaysSoldQty,jdbcType=INTEGER},
       </if>
-      <if test="totalComments != null" >
-        #{totalComments,jdbcType=INTEGER},
+      <if test="totalCommentQty != null" >
+        #{totalCommentQty,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
@@ -174,14 +174,14 @@
       <if test="record.productId != null" >
         product_id = #{record.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.totalSoldNum != null" >
-        total_sold_num = #{record.totalSoldNum,jdbcType=INTEGER},
+      <if test="record.totalSoldQty != null" >
+        total_sold_qty = #{record.totalSoldQty,jdbcType=INTEGER},
       </if>
-      <if test="record.sevenDaysSoldNum != null" >
-        seven_days_sold_num = #{record.sevenDaysSoldNum,jdbcType=INTEGER},
+      <if test="record.sevenDaysSoldQty != null" >
+        seven_days_sold_qty = #{record.sevenDaysSoldQty,jdbcType=INTEGER},
       </if>
-      <if test="record.totalComments != null" >
-        total_comments = #{record.totalComments,jdbcType=INTEGER},
+      <if test="record.totalCommentQty != null" >
+        total_comment_qty = #{record.totalCommentQty,jdbcType=INTEGER},
       </if>
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -198,9 +198,9 @@
     update product_summary
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
-      total_sold_num = #{record.totalSoldNum,jdbcType=INTEGER},
-      seven_days_sold_num = #{record.sevenDaysSoldNum,jdbcType=INTEGER},
-      total_comments = #{record.totalComments,jdbcType=INTEGER},
+      total_sold_qty = #{record.totalSoldQty,jdbcType=INTEGER},
+      seven_days_sold_qty = #{record.sevenDaysSoldQty,jdbcType=INTEGER},
+      total_comment_qty = #{record.totalCommentQty,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
@@ -213,14 +213,14 @@
       <if test="productId != null" >
         product_id = #{productId,jdbcType=INTEGER},
       </if>
-      <if test="totalSoldNum != null" >
-        total_sold_num = #{totalSoldNum,jdbcType=INTEGER},
+      <if test="totalSoldQty != null" >
+        total_sold_qty = #{totalSoldQty,jdbcType=INTEGER},
       </if>
-      <if test="sevenDaysSoldNum != null" >
-        seven_days_sold_num = #{sevenDaysSoldNum,jdbcType=INTEGER},
+      <if test="sevenDaysSoldQty != null" >
+        seven_days_sold_qty = #{sevenDaysSoldQty,jdbcType=INTEGER},
       </if>
-      <if test="totalComments != null" >
-        total_comments = #{totalComments,jdbcType=INTEGER},
+      <if test="totalCommentQty != null" >
+        total_comment_qty = #{totalCommentQty,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -234,9 +234,9 @@
   <update id="updateByPrimaryKey" parameterType="com.wow.product.model.ProductSummary" >
     update product_summary
     set product_id = #{productId,jdbcType=INTEGER},
-      total_sold_num = #{totalSoldNum,jdbcType=INTEGER},
-      seven_days_sold_num = #{sevenDaysSoldNum,jdbcType=INTEGER},
-      total_comments = #{totalComments,jdbcType=INTEGER},
+      total_sold_qty = #{totalSoldQty,jdbcType=INTEGER},
+      seven_days_sold_qty = #{sevenDaysSoldQty,jdbcType=INTEGER},
+      total_comment_qty = #{totalCommentQty,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}

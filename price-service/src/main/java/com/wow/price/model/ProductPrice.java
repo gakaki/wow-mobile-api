@@ -17,7 +17,7 @@ public class ProductPrice implements Serializable {
 
     private BigDecimal benchmarkPrice;
 
-    private BigDecimal promoPrice;
+    private Boolean isPromotePrice;
 
     private Date createTime;
 
@@ -79,12 +79,12 @@ public class ProductPrice implements Serializable {
         this.benchmarkPrice = benchmarkPrice;
     }
 
-    public BigDecimal getPromoPrice() {
-        return promoPrice;
+    public Boolean getIsPromotePrice() {
+        return isPromotePrice;
     }
 
-    public void setPromoPrice(BigDecimal promoPrice) {
-        this.promoPrice = promoPrice;
+    public void setIsPromotePrice(Boolean isPromotePrice) {
+        this.isPromotePrice = isPromotePrice;
     }
 
     public Date getCreateTime() {
@@ -139,7 +139,7 @@ public class ProductPrice implements Serializable {
         sb.append(", costPrice=").append(costPrice);
         sb.append(", minSellPrice=").append(minSellPrice);
         sb.append(", benchmarkPrice=").append(benchmarkPrice);
-        sb.append(", promoPrice=").append(promoPrice);
+        sb.append(", isPromotePrice=").append(isPromotePrice);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", updateTime=").append(updateTime);

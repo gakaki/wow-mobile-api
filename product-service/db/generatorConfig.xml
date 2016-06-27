@@ -220,17 +220,6 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="page_scene_config" domainObjectName="PageSceneConfig" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
         <table schema="root" tableName="supplier" domainObjectName="Supplier" enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"

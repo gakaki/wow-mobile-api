@@ -1,8 +1,5 @@
 buildscript {
     repositories {
-//        jcenter()
-//        maven { url "http://repo.spring.io/snapshot" }
-//        maven { url "http://repo.spring.io/milestone" }
         maven {
             url "${nexusUrl}/repository/maven-public/"
         }
@@ -55,31 +52,35 @@ allprojects {
     }
 
     dependencies {
-        compile("org.springframework.boot:spring-boot-starter-web")
-        testCompile("org.springframework.boot:spring-boot-starter-test")
-
-        compile("org.springframework.boot:spring-boot-starter-actuator")
+        compile 'org.springframework.boot:spring-boot-starter-web'
+        testCompile 'org.springframework.boot:spring-boot-starter-test'
+        compile 'org.springframework.boot:spring-boot-starter-actuator'
         compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1'
-        compile("org.springframework.boot:spring-boot-devtools")
-        testCompile("junit:junit:4.11")
+        compile 'org.springframework.boot:spring-boot-devtools'
+        compile 'org.hibernate:hibernate-validator:5.2.4.Final'
+        testCompile 'junit:junit:4.11'
     }
 
     task wrapper(type: Wrapper) {
         gradleVersion = '2.14'
     }
+
     bootRun {
         addResources = true
+    }
+
+    task cleanMapper(type: Delete) {
+        delete 'src/main/resources/mapper'
     }
 }
 subprojects {
     dependencies {
         compile 'org.mybatis.generator:mybatis-generator:1.3.2'
-        compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.2'
+        compile 'mysql:mysql-connector-java:6.0.2'
     }
 }
 
 dependencies {
-//    compile 'com.wow:common-model:1.0-SNAPSHOT'
     compile 'com.wow:product-service:1.0-SNAPSHOT'
     compile 'com.wow:attribute-service:1.0-SNAPSHOT'
     compile 'com.wow:user-service:1.0-SNAPSHOT'

@@ -23,7 +23,7 @@ public class EndUser implements Serializable {
 
     private Byte sex;
 
-    private String avator;
+    private String avatar;
 
     private String country;
 
@@ -47,13 +47,13 @@ public class EndUser implements Serializable {
 
     private Byte educationLevel;
 
-    private String indudstry;
+    private String industry;
 
     private String remarks;
 
     private String selfIntroduction;
 
-    private Boolean signAggrement;
+    private Boolean signAgreement;
 
     private Boolean isForbidden;
 
@@ -143,12 +143,12 @@ public class EndUser implements Serializable {
         this.sex = sex;
     }
 
-    public String getAvator() {
-        return avator;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setAvator(String avator) {
-        this.avator = avator;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getCountry() {
@@ -239,12 +239,12 @@ public class EndUser implements Serializable {
         this.educationLevel = educationLevel;
     }
 
-    public String getIndudstry() {
-        return indudstry;
+    public String getIndustry() {
+        return industry;
     }
 
-    public void setIndudstry(String indudstry) {
-        this.indudstry = indudstry;
+    public void setIndustry(String industry) {
+        this.industry = industry;
     }
 
     public String getRemarks() {
@@ -263,12 +263,12 @@ public class EndUser implements Serializable {
         this.selfIntroduction = selfIntroduction;
     }
 
-    public Boolean getSignAggrement() {
-        return signAggrement;
+    public Boolean getSignAgreement() {
+        return signAgreement;
     }
 
-    public void setSignAggrement(Boolean signAggrement) {
-        this.signAggrement = signAggrement;
+    public void setSignAgreement(Boolean signAgreement) {
+        this.signAgreement = signAgreement;
     }
 
     public Boolean getIsForbidden() {
@@ -342,7 +342,7 @@ public class EndUser implements Serializable {
         sb.append(", nickName=").append(nickName);
         sb.append(", realName=").append(realName);
         sb.append(", sex=").append(sex);
-        sb.append(", avator=").append(avator);
+        sb.append(", avatar=").append(avatar);
         sb.append(", country=").append(country);
         sb.append(", dateOfBirth=").append(dateOfBirth);
         sb.append(", ageRange=").append(ageRange);
@@ -354,10 +354,10 @@ public class EndUser implements Serializable {
         sb.append(", hasChild=").append(hasChild);
         sb.append(", annualIncome=").append(annualIncome);
         sb.append(", educationLevel=").append(educationLevel);
-        sb.append(", indudstry=").append(indudstry);
+        sb.append(", industry=").append(industry);
         sb.append(", remarks=").append(remarks);
         sb.append(", selfIntroduction=").append(selfIntroduction);
-        sb.append(", signAggrement=").append(signAggrement);
+        sb.append(", signAgreement=").append(signAgreement);
         sb.append(", isForbidden=").append(isForbidden);
         sb.append(", registerTime=").append(registerTime);
         sb.append(", updateTime=").append(updateTime);

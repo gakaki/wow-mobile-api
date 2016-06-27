@@ -55,7 +55,7 @@
 
         <!-- sql占位符，表示所有的表 -->
         <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-        <table schema="root" tableName="freight_template" domainObjectName="FreightTemplate" enableInsert="true"
+        <table schema="root" tableName="delivery_fee_template" domainObjectName="DeliveryFeeTemplate" enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"

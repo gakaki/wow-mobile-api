@@ -14,7 +14,7 @@ public class ProductStockChangeLog implements Serializable {
 
     private Integer warehouseId;
 
-    private Short stockNum;
+    private Short stockQty;
 
     private Integer purchaseOrderId;
 
@@ -66,12 +66,12 @@ public class ProductStockChangeLog implements Serializable {
         this.warehouseId = warehouseId;
     }
 
-    public Short getStockNum() {
-        return stockNum;
+    public Short getStockQty() {
+        return stockQty;
     }
 
-    public void setStockNum(Short stockNum) {
-        this.stockNum = stockNum;
+    public void setStockQty(Short stockQty) {
+        this.stockQty = stockQty;
     }
 
     public Integer getPurchaseOrderId() {
@@ -117,7 +117,7 @@ public class ProductStockChangeLog implements Serializable {
         sb.append(", orderId=").append(orderId);
         sb.append(", productId=").append(productId);
         sb.append(", warehouseId=").append(warehouseId);
-        sb.append(", stockNum=").append(stockNum);
+        sb.append(", stockQty=").append(stockQty);
         sb.append(", purchaseOrderId=").append(purchaseOrderId);
         sb.append(", returnOrderId=").append(returnOrderId);
         sb.append(", createTime=").append(createTime);

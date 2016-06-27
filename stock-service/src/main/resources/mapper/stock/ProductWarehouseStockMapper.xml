@@ -5,13 +5,13 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
-    <result column="real_stock" property="realStock" jdbcType="SMALLINT" />
-    <result column="frozen_stock" property="frozenStock" jdbcType="SMALLINT" />
+    <result column="real_stock_qty" property="realStockQty" jdbcType="SMALLINT" />
+    <result column="frozen_stock_qty" property="frozenStockQty" jdbcType="SMALLINT" />
+    <result column="lock_stock_qty" property="lockStockQty" jdbcType="SMALLINT" />
     <result column="is_active" property="isActive" jdbcType="BIT" />
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
-    <result column="lock_stock" property="lockStock" jdbcType="SMALLINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -72,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_id, warehouse_id, real_stock, frozen_stock, is_active, create_date, update_date, 
-    is_deleted, lock_stock
+    id, product_id, warehouse_id, real_stock_qty, frozen_stock_qty, lock_stock_qty, is_active, 
+    create_date, update_date, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.stock.model.ProductWarehouseStockExample" >
     select
@@ -109,13 +109,13 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product_warehouse_stock (product_id, warehouse_id, real_stock, 
-      frozen_stock, is_active, create_date, 
-      update_date, is_deleted, lock_stock
+    insert into product_warehouse_stock (product_id, warehouse_id, real_stock_qty, 
+      frozen_stock_qty, lock_stock_qty, is_active, 
+      create_date, update_date, is_deleted
       )
-    values (#{productId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, #{realStock,jdbcType=SMALLINT}, 
-      #{frozenStock,jdbcType=SMALLINT}, #{isActive,jdbcType=BIT}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}, #{lockStock,jdbcType=SMALLINT}
+    values (#{productId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, #{realStockQty,jdbcType=SMALLINT}, 
+      #{frozenStockQty,jdbcType=SMALLINT}, #{lockStockQty,jdbcType=SMALLINT}, #{isActive,jdbcType=BIT}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wow.stock.model.ProductWarehouseStock" >
@@ -130,11 +130,14 @@
       <if test="warehouseId != null" >
         warehouse_id,
       </if>
-      <if test="realStock != null" >
-        real_stock,
+      <if test="realStockQty != null" >
+        real_stock_qty,
       </if>
-      <if test="frozenStock != null" >
-        frozen_stock,
+      <if test="frozenStockQty != null" >
+        frozen_stock_qty,
+      </if>
+      <if test="lockStockQty != null" >
+        lock_stock_qty,
       </if>
       <if test="isActive != null" >
         is_active,
@@ -148,9 +151,6 @@
       <if test="isDeleted != null" >
         is_deleted,
       </if>
-      <if test="lockStock != null" >
-        lock_stock,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="productId != null" >
@@ -159,11 +159,14 @@
       <if test="warehouseId != null" >
         #{warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="realStock != null" >
-        #{realStock,jdbcType=SMALLINT},
+      <if test="realStockQty != null" >
+        #{realStockQty,jdbcType=SMALLINT},
       </if>
-      <if test="frozenStock != null" >
-        #{frozenStock,jdbcType=SMALLINT},
+      <if test="frozenStockQty != null" >
+        #{frozenStockQty,jdbcType=SMALLINT},
+      </if>
+      <if test="lockStockQty != null" >
+        #{lockStockQty,jdbcType=SMALLINT},
       </if>
       <if test="isActive != null" >
         #{isActive,jdbcType=BIT},
@@ -176,9 +179,6 @@
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=BIT},
-      </if>
-      <if test="lockStock != null" >
-        #{lockStock,jdbcType=SMALLINT},
       </if>
     </trim>
   </insert>
@@ -200,11 +200,14 @@
       <if test="record.warehouseId != null" >
         warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="record.realStock != null" >
-        real_stock = #{record.realStock,jdbcType=SMALLINT},
+      <if test="record.realStockQty != null" >
+        real_stock_qty = #{record.realStockQty,jdbcType=SMALLINT},
       </if>
-      <if test="record.frozenStock != null" >
-        frozen_stock = #{record.frozenStock,jdbcType=SMALLINT},
+      <if test="record.frozenStockQty != null" >
+        frozen_stock_qty = #{record.frozenStockQty,jdbcType=SMALLINT},
+      </if>
+      <if test="record.lockStockQty != null" >
+        lock_stock_qty = #{record.lockStockQty,jdbcType=SMALLINT},
       </if>
       <if test="record.isActive != null" >
         is_active = #{record.isActive,jdbcType=BIT},
@@ -218,9 +221,6 @@
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=BIT},
       </if>
-      <if test="record.lockStock != null" >
-        lock_stock = #{record.lockStock,jdbcType=SMALLINT},
-      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -231,13 +231,13 @@
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
-      real_stock = #{record.realStock,jdbcType=SMALLINT},
-      frozen_stock = #{record.frozenStock,jdbcType=SMALLINT},
+      real_stock_qty = #{record.realStockQty,jdbcType=SMALLINT},
+      frozen_stock_qty = #{record.frozenStockQty,jdbcType=SMALLINT},
+      lock_stock_qty = #{record.lockStockQty,jdbcType=SMALLINT},
       is_active = #{record.isActive,jdbcType=BIT},
       create_date = #{record.createDate,jdbcType=TIMESTAMP},
       update_date = #{record.updateDate,jdbcType=TIMESTAMP},
-      is_deleted = #{record.isDeleted,jdbcType=BIT},
-      lock_stock = #{record.lockStock,jdbcType=SMALLINT}
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -251,11 +251,14 @@
       <if test="warehouseId != null" >
         warehouse_id = #{warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="realStock != null" >
-        real_stock = #{realStock,jdbcType=SMALLINT},
+      <if test="realStockQty != null" >
+        real_stock_qty = #{realStockQty,jdbcType=SMALLINT},
       </if>
-      <if test="frozenStock != null" >
-        frozen_stock = #{frozenStock,jdbcType=SMALLINT},
+      <if test="frozenStockQty != null" >
+        frozen_stock_qty = #{frozenStockQty,jdbcType=SMALLINT},
+      </if>
+      <if test="lockStockQty != null" >
+        lock_stock_qty = #{lockStockQty,jdbcType=SMALLINT},
       </if>
       <if test="isActive != null" >
         is_active = #{isActive,jdbcType=BIT},
@@ -269,9 +272,6 @@
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=BIT},
       </if>
-      <if test="lockStock != null" >
-        lock_stock = #{lockStock,jdbcType=SMALLINT},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -279,13 +279,13 @@
     update product_warehouse_stock
     set product_id = #{productId,jdbcType=INTEGER},
       warehouse_id = #{warehouseId,jdbcType=INTEGER},
-      real_stock = #{realStock,jdbcType=SMALLINT},
-      frozen_stock = #{frozenStock,jdbcType=SMALLINT},
+      real_stock_qty = #{realStockQty,jdbcType=SMALLINT},
+      frozen_stock_qty = #{frozenStockQty,jdbcType=SMALLINT},
+      lock_stock_qty = #{lockStockQty,jdbcType=SMALLINT},
       is_active = #{isActive,jdbcType=BIT},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=BIT},
-      lock_stock = #{lockStock,jdbcType=SMALLINT}
+      is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

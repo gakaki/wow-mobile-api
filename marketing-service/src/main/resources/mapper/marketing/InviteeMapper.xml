@@ -5,10 +5,11 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="recommend_code" property="recommendCode" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="coupon_id" property="couponId" jdbcType="INTEGER" />
-    <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
     <result column="is_registered" property="isRegistered" jdbcType="BIT" />
+    <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, mobile, recommend_code, create_time, coupon_id, register_time, is_registered
+    id, mobile, recommend_code, coupon_id, is_registered, register_time, create_time, 
+    update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.marketing.model.InviteeExample" >
     select
@@ -105,12 +107,12 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into invitee (mobile, recommend_code, create_time, 
-      coupon_id, register_time, is_registered
-      )
-    values (#{mobile,jdbcType=VARCHAR}, #{recommendCode,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{couponId,jdbcType=INTEGER}, #{registerTime,jdbcType=TIMESTAMP}, #{isRegistered,jdbcType=BIT}
-      )
+    insert into invitee (mobile, recommend_code, coupon_id, 
+      is_registered, register_time, create_time, 
+      update_time)
+    values (#{mobile,jdbcType=VARCHAR}, #{recommendCode,jdbcType=VARCHAR}, #{couponId,jdbcType=INTEGER}, 
+      #{isRegistered,jdbcType=BIT}, #{registerTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.marketing.model.Invitee" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -124,17 +126,20 @@
       <if test="recommendCode != null" >
         recommend_code,
       </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
       <if test="couponId != null" >
         coupon_id,
+      </if>
+      <if test="isRegistered != null" >
+        is_registered,
       </if>
       <if test="registerTime != null" >
         register_time,
       </if>
-      <if test="isRegistered != null" >
-        is_registered,
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -144,17 +149,20 @@
       <if test="recommendCode != null" >
         #{recommendCode,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="couponId != null" >
         #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="isRegistered != null" >
+        #{isRegistered,jdbcType=BIT},
       </if>
       <if test="registerTime != null" >
         #{registerTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isRegistered != null" >
-        #{isRegistered,jdbcType=BIT},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -176,17 +184,20 @@
       <if test="record.recommendCode != null" >
         recommend_code = #{record.recommendCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.couponId != null" >
         coupon_id = #{record.couponId,jdbcType=INTEGER},
+      </if>
+      <if test="record.isRegistered != null" >
+        is_registered = #{record.isRegistered,jdbcType=BIT},
       </if>
       <if test="record.registerTime != null" >
         register_time = #{record.registerTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.isRegistered != null" >
-        is_registered = #{record.isRegistered,jdbcType=BIT},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -198,10 +209,11 @@
     set id = #{record.id,jdbcType=INTEGER},
       mobile = #{record.mobile,jdbcType=VARCHAR},
       recommend_code = #{record.recommendCode,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       coupon_id = #{record.couponId,jdbcType=INTEGER},
+      is_registered = #{record.isRegistered,jdbcType=BIT},
       register_time = #{record.registerTime,jdbcType=TIMESTAMP},
-      is_registered = #{record.isRegistered,jdbcType=BIT}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -215,17 +227,20 @@
       <if test="recommendCode != null" >
         recommend_code = #{recommendCode,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="couponId != null" >
         coupon_id = #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="isRegistered != null" >
+        is_registered = #{isRegistered,jdbcType=BIT},
       </if>
       <if test="registerTime != null" >
         register_time = #{registerTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isRegistered != null" >
-        is_registered = #{isRegistered,jdbcType=BIT},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -234,10 +249,11 @@
     update invitee
     set mobile = #{mobile,jdbcType=VARCHAR},
       recommend_code = #{recommendCode,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
       coupon_id = #{couponId,jdbcType=INTEGER},
+      is_registered = #{isRegistered,jdbcType=BIT},
       register_time = #{registerTime,jdbcType=TIMESTAMP},
-      is_registered = #{isRegistered,jdbcType=BIT}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

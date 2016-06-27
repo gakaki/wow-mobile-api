@@ -3,7 +3,8 @@
 <mapper namespace="com.wow.product.mapper.BrandMapper" >
   <resultMap id="BaseResultMap" type="com.wow.product.model.Brand" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="brand_cname" property="brandCname" jdbcType="VARCHAR" />
+    <result column="brand_ename" property="brandEname" jdbcType="VARCHAR" />
     <result column="brand_name_first_letter" property="brandNameFirstLetter" jdbcType="CHAR" />
     <result column="brand_country" property="brandCountry" jdbcType="VARCHAR" />
     <result column="brand_home_url" property="brandHomeUrl" jdbcType="VARCHAR" />
@@ -71,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, brand_name, brand_name_first_letter, brand_country, brand_home_url, brand_logo_img, 
-    brand_video, brand_img, brand_desc
+    id, brand_cname, brand_ename, brand_name_first_letter, brand_country, brand_home_url, 
+    brand_logo_img, brand_video, brand_img, brand_desc
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.BrandExample" >
     select
@@ -108,12 +109,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into brand (brand_name, brand_name_first_letter, brand_country, 
-      brand_home_url, brand_logo_img, brand_video, 
-      brand_img, brand_desc)
-    values (#{brandName,jdbcType=VARCHAR}, #{brandNameFirstLetter,jdbcType=CHAR}, #{brandCountry,jdbcType=VARCHAR}, 
-      #{brandHomeUrl,jdbcType=VARCHAR}, #{brandLogoImg,jdbcType=VARCHAR}, #{brandVideo,jdbcType=VARCHAR}, 
-      #{brandImg,jdbcType=VARCHAR}, #{brandDesc,jdbcType=VARCHAR})
+    insert into brand (brand_cname, brand_ename, brand_name_first_letter, 
+      brand_country, brand_home_url, brand_logo_img, 
+      brand_video, brand_img, brand_desc
+      )
+    values (#{brandCname,jdbcType=VARCHAR}, #{brandEname,jdbcType=VARCHAR}, #{brandNameFirstLetter,jdbcType=CHAR}, 
+      #{brandCountry,jdbcType=VARCHAR}, #{brandHomeUrl,jdbcType=VARCHAR}, #{brandLogoImg,jdbcType=VARCHAR}, 
+      #{brandVideo,jdbcType=VARCHAR}, #{brandImg,jdbcType=VARCHAR}, #{brandDesc,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.Brand" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -121,8 +124,11 @@
     </selectKey>
     insert into brand
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="brandName != null" >
-        brand_name,
+      <if test="brandCname != null" >
+        brand_cname,
+      </if>
+      <if test="brandEname != null" >
+        brand_ename,
       </if>
       <if test="brandNameFirstLetter != null" >
         brand_name_first_letter,
@@ -147,8 +153,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="brandName != null" >
-        #{brandName,jdbcType=VARCHAR},
+      <if test="brandCname != null" >
+        #{brandCname,jdbcType=VARCHAR},
+      </if>
+      <if test="brandEname != null" >
+        #{brandEname,jdbcType=VARCHAR},
       </if>
       <if test="brandNameFirstLetter != null" >
         #{brandNameFirstLetter,jdbcType=CHAR},
@@ -185,8 +194,11 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.brandName != null" >
-        brand_name = #{record.brandName,jdbcType=VARCHAR},
+      <if test="record.brandCname != null" >
+        brand_cname = #{record.brandCname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brandEname != null" >
+        brand_ename = #{record.brandEname,jdbcType=VARCHAR},
       </if>
       <if test="record.brandNameFirstLetter != null" >
         brand_name_first_letter = #{record.brandNameFirstLetter,jdbcType=CHAR},
@@ -217,7 +229,8 @@
   <update id="updateByExample" parameterType="map" >
     update brand
     set id = #{record.id,jdbcType=INTEGER},
-      brand_name = #{record.brandName,jdbcType=VARCHAR},
+      brand_cname = #{record.brandCname,jdbcType=VARCHAR},
+      brand_ename = #{record.brandEname,jdbcType=VARCHAR},
       brand_name_first_letter = #{record.brandNameFirstLetter,jdbcType=CHAR},
       brand_country = #{record.brandCountry,jdbcType=VARCHAR},
       brand_home_url = #{record.brandHomeUrl,jdbcType=VARCHAR},
@@ -232,8 +245,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.Brand" >
     update brand
     <set >
-      <if test="brandName != null" >
-        brand_name = #{brandName,jdbcType=VARCHAR},
+      <if test="brandCname != null" >
+        brand_cname = #{brandCname,jdbcType=VARCHAR},
+      </if>
+      <if test="brandEname != null" >
+        brand_ename = #{brandEname,jdbcType=VARCHAR},
       </if>
       <if test="brandNameFirstLetter != null" >
         brand_name_first_letter = #{brandNameFirstLetter,jdbcType=CHAR},
@@ -261,7 +277,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Brand" >
     update brand
-    set brand_name = #{brandName,jdbcType=VARCHAR},
+    set brand_cname = #{brandCname,jdbcType=VARCHAR},
+      brand_ename = #{brandEname,jdbcType=VARCHAR},
       brand_name_first_letter = #{brandNameFirstLetter,jdbcType=CHAR},
       brand_country = #{brandCountry,jdbcType=VARCHAR},
       brand_home_url = #{brandHomeUrl,jdbcType=VARCHAR},

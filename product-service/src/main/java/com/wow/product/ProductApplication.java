@@ -30,9 +30,9 @@ public class ProductApplication {
     private ProductService productService;
 
     @RequestMapping(value = "/test-product/{productId}", method = RequestMethod.GET)
-    public Product getPrimarySubProduct(@PathVariable Integer productId) {
-        System.out.println("accept request:" + productId);
-        return productService.queryPrimarySubProductOfProductSerial(productId);
+    public Product getProductById(@PathVariable Integer productId) {
+        logger.info("accept request:" + productId);
+        return productService.getProductById(productId);
     }
 
 //    @Bean(name = "productDataSource")

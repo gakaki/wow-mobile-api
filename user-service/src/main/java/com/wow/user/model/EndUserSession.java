@@ -10,21 +10,21 @@ public class EndUserSession implements Serializable {
 
     private String sessionToken;
 
+    private Byte loginChannel;
+
+    private String userAgentInfo;
+
     private Date lastLoginTime;
+
+    private Integer lastLoginIp;
 
     private Date lastRefreshTime;
 
     private Boolean isExpired;
 
-    private Integer lastLoginIp;
-
-    private String userAgentInfo;
-
     private Boolean isActive;
 
     private Date logoutTime;
-
-    private Byte loginChannel;
 
     private static final long serialVersionUID = 1L;
 
@@ -52,12 +52,36 @@ public class EndUserSession implements Serializable {
         this.sessionToken = sessionToken;
     }
 
+    public Byte getLoginChannel() {
+        return loginChannel;
+    }
+
+    public void setLoginChannel(Byte loginChannel) {
+        this.loginChannel = loginChannel;
+    }
+
+    public String getUserAgentInfo() {
+        return userAgentInfo;
+    }
+
+    public void setUserAgentInfo(String userAgentInfo) {
+        this.userAgentInfo = userAgentInfo;
+    }
+
     public Date getLastLoginTime() {
         return lastLoginTime;
     }
 
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+    }
+
+    public Integer getLastLoginIp() {
+        return lastLoginIp;
+    }
+
+    public void setLastLoginIp(Integer lastLoginIp) {
+        this.lastLoginIp = lastLoginIp;
     }
 
     public Date getLastRefreshTime() {
@@ -76,22 +100,6 @@ public class EndUserSession implements Serializable {
         this.isExpired = isExpired;
     }
 
-    public Integer getLastLoginIp() {
-        return lastLoginIp;
-    }
-
-    public void setLastLoginIp(Integer lastLoginIp) {
-        this.lastLoginIp = lastLoginIp;
-    }
-
-    public String getUserAgentInfo() {
-        return userAgentInfo;
-    }
-
-    public void setUserAgentInfo(String userAgentInfo) {
-        this.userAgentInfo = userAgentInfo;
-    }
-
     public Boolean getIsActive() {
         return isActive;
     }
@@ -108,14 +116,6 @@ public class EndUserSession implements Serializable {
         this.logoutTime = logoutTime;
     }
 
-    public Byte getLoginChannel() {
-        return loginChannel;
-    }
-
-    public void setLoginChannel(Byte loginChannel) {
-        this.loginChannel = loginChannel;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -125,14 +125,14 @@ public class EndUserSession implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", endUserId=").append(endUserId);
         sb.append(", sessionToken=").append(sessionToken);
+        sb.append(", loginChannel=").append(loginChannel);
+        sb.append(", userAgentInfo=").append(userAgentInfo);
         sb.append(", lastLoginTime=").append(lastLoginTime);
+        sb.append(", lastLoginIp=").append(lastLoginIp);
         sb.append(", lastRefreshTime=").append(lastRefreshTime);
         sb.append(", isExpired=").append(isExpired);
-        sb.append(", lastLoginIp=").append(lastLoginIp);
-        sb.append(", userAgentInfo=").append(userAgentInfo);
         sb.append(", isActive=").append(isActive);
         sb.append(", logoutTime=").append(logoutTime);
-        sb.append(", loginChannel=").append(loginChannel);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

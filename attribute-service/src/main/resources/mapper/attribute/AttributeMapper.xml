@@ -5,14 +5,14 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="attribute_name" property="attributeName" jdbcType="VARCHAR" />
     <result column="show_name" property="showName" jdbcType="VARCHAR" />
+    <result column="can_multiple_selected" property="canMultipleSelected" jdbcType="BIT" />
+    <result column="attribute_value_type" property="attributeValueType" jdbcType="TINYINT" />
+    <result column="decimal_place" property="decimalPlace" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
-    <result column="can_multiple_selected" property="canMultipleSelected" jdbcType="BIT" />
-    <result column="attribute_value_type" property="attributeValueType" jdbcType="TINYINT" />
-    <result column="decimal_place" property="decimalPlace" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -73,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, attribute_name, show_name, create_time, create_by, update_time, update_by, is_deleted, 
-    can_multiple_selected, attribute_value_type, decimal_place
+    id, attribute_name, show_name, can_multiple_selected, attribute_value_type, decimal_place, 
+    create_time, create_by, update_time, update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.attribute.model.AttributeExample" >
     select
@@ -110,14 +110,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into attribute (attribute_name, show_name, create_time, 
+    insert into attribute (attribute_name, show_name, can_multiple_selected, 
+      attribute_value_type, decimal_place, create_time, 
       create_by, update_time, update_by, 
-      is_deleted, can_multiple_selected, attribute_value_type, 
-      decimal_place)
-    values (#{attributeName,jdbcType=VARCHAR}, #{showName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      is_deleted)
+    values (#{attributeName,jdbcType=VARCHAR}, #{showName,jdbcType=VARCHAR}, #{canMultipleSelected,jdbcType=BIT}, 
+      #{attributeValueType,jdbcType=TINYINT}, #{decimalPlace,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=BIT}, #{canMultipleSelected,jdbcType=BIT}, #{attributeValueType,jdbcType=TINYINT}, 
-      #{decimalPlace,jdbcType=TINYINT})
+      #{isDeleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.attribute.model.Attribute" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -130,6 +130,15 @@
       </if>
       <if test="showName != null" >
         show_name,
+      </if>
+      <if test="canMultipleSelected != null" >
+        can_multiple_selected,
+      </if>
+      <if test="attributeValueType != null" >
+        attribute_value_type,
+      </if>
+      <if test="decimalPlace != null" >
+        decimal_place,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -146,15 +155,6 @@
       <if test="isDeleted != null" >
         is_deleted,
       </if>
-      <if test="canMultipleSelected != null" >
-        can_multiple_selected,
-      </if>
-      <if test="attributeValueType != null" >
-        attribute_value_type,
-      </if>
-      <if test="decimalPlace != null" >
-        decimal_place,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="attributeName != null" >
@@ -162,6 +162,15 @@
       </if>
       <if test="showName != null" >
         #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="canMultipleSelected != null" >
+        #{canMultipleSelected,jdbcType=BIT},
+      </if>
+      <if test="attributeValueType != null" >
+        #{attributeValueType,jdbcType=TINYINT},
+      </if>
+      <if test="decimalPlace != null" >
+        #{decimalPlace,jdbcType=TINYINT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -177,15 +186,6 @@
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=BIT},
-      </if>
-      <if test="canMultipleSelected != null" >
-        #{canMultipleSelected,jdbcType=BIT},
-      </if>
-      <if test="attributeValueType != null" >
-        #{attributeValueType,jdbcType=TINYINT},
-      </if>
-      <if test="decimalPlace != null" >
-        #{decimalPlace,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -207,6 +207,15 @@
       <if test="record.showName != null" >
         show_name = #{record.showName,jdbcType=VARCHAR},
       </if>
+      <if test="record.canMultipleSelected != null" >
+        can_multiple_selected = #{record.canMultipleSelected,jdbcType=BIT},
+      </if>
+      <if test="record.attributeValueType != null" >
+        attribute_value_type = #{record.attributeValueType,jdbcType=TINYINT},
+      </if>
+      <if test="record.decimalPlace != null" >
+        decimal_place = #{record.decimalPlace,jdbcType=TINYINT},
+      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -222,15 +231,6 @@
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=BIT},
       </if>
-      <if test="record.canMultipleSelected != null" >
-        can_multiple_selected = #{record.canMultipleSelected,jdbcType=BIT},
-      </if>
-      <if test="record.attributeValueType != null" >
-        attribute_value_type = #{record.attributeValueType,jdbcType=TINYINT},
-      </if>
-      <if test="record.decimalPlace != null" >
-        decimal_place = #{record.decimalPlace,jdbcType=TINYINT},
-      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -241,14 +241,14 @@
     set id = #{record.id,jdbcType=INTEGER},
       attribute_name = #{record.attributeName,jdbcType=VARCHAR},
       show_name = #{record.showName,jdbcType=VARCHAR},
+      can_multiple_selected = #{record.canMultipleSelected,jdbcType=BIT},
+      attribute_value_type = #{record.attributeValueType,jdbcType=TINYINT},
+      decimal_place = #{record.decimalPlace,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=VARCHAR},
-      is_deleted = #{record.isDeleted,jdbcType=BIT},
-      can_multiple_selected = #{record.canMultipleSelected,jdbcType=BIT},
-      attribute_value_type = #{record.attributeValueType,jdbcType=TINYINT},
-      decimal_place = #{record.decimalPlace,jdbcType=TINYINT}
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -261,6 +261,15 @@
       </if>
       <if test="showName != null" >
         show_name = #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="canMultipleSelected != null" >
+        can_multiple_selected = #{canMultipleSelected,jdbcType=BIT},
+      </if>
+      <if test="attributeValueType != null" >
+        attribute_value_type = #{attributeValueType,jdbcType=TINYINT},
+      </if>
+      <if test="decimalPlace != null" >
+        decimal_place = #{decimalPlace,jdbcType=TINYINT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -277,15 +286,6 @@
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=BIT},
       </if>
-      <if test="canMultipleSelected != null" >
-        can_multiple_selected = #{canMultipleSelected,jdbcType=BIT},
-      </if>
-      <if test="attributeValueType != null" >
-        attribute_value_type = #{attributeValueType,jdbcType=TINYINT},
-      </if>
-      <if test="decimalPlace != null" >
-        decimal_place = #{decimalPlace,jdbcType=TINYINT},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -293,14 +293,14 @@
     update attribute
     set attribute_name = #{attributeName,jdbcType=VARCHAR},
       show_name = #{showName,jdbcType=VARCHAR},
+      can_multiple_selected = #{canMultipleSelected,jdbcType=BIT},
+      attribute_value_type = #{attributeValueType,jdbcType=TINYINT},
+      decimal_place = #{decimalPlace,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=BIT},
-      can_multiple_selected = #{canMultipleSelected,jdbcType=BIT},
-      attribute_value_type = #{attributeValueType,jdbcType=TINYINT},
-      decimal_place = #{decimalPlace,jdbcType=TINYINT}
+      is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

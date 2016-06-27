@@ -5,15 +5,15 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
-    <result column="in_warehouse_num" property="inWarehouseNum" jdbcType="SMALLINT" />
+    <result column="ship_in_warehouse_qty" property="shipInWarehouseQty" jdbcType="SMALLINT" />
     <result column="unit_price" property="unitPrice" jdbcType="DECIMAL" />
     <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="udpate_time" property="udpateTime" jdbcType="TIMESTAMP" />
     <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -74,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_id, supplier_id, in_warehouse_num, unit_price, warehouse_id, create_time, 
-    create_by, udpate_time, update_by, is_deleted, remark
+    id, product_id, supplier_id, ship_in_warehouse_qty, unit_price, warehouse_id, remark, 
+    create_time, create_by, udpate_time, update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ProductSupplyLogExample" >
     select
@@ -111,14 +111,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product_supply_log (product_id, supplier_id, in_warehouse_num, 
-      unit_price, warehouse_id, create_time, 
-      create_by, udpate_time, update_by, 
-      is_deleted, remark)
-    values (#{productId,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, #{inWarehouseNum,jdbcType=SMALLINT}, 
-      #{unitPrice,jdbcType=DECIMAL}, #{warehouseId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createBy,jdbcType=VARCHAR}, #{udpateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=BIT}, #{remark,jdbcType=VARCHAR})
+    insert into product_supply_log (product_id, supplier_id, ship_in_warehouse_qty, 
+      unit_price, warehouse_id, remark, 
+      create_time, create_by, udpate_time, 
+      update_by, is_deleted)
+    values (#{productId,jdbcType=INTEGER}, #{supplierId,jdbcType=INTEGER}, #{shipInWarehouseQty,jdbcType=SMALLINT}, 
+      #{unitPrice,jdbcType=DECIMAL}, #{warehouseId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{udpateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.ProductSupplyLog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -132,14 +132,17 @@
       <if test="supplierId != null" >
         supplier_id,
       </if>
-      <if test="inWarehouseNum != null" >
-        in_warehouse_num,
+      <if test="shipInWarehouseQty != null" >
+        ship_in_warehouse_qty,
       </if>
       <if test="unitPrice != null" >
         unit_price,
       </if>
       <if test="warehouseId != null" >
         warehouse_id,
+      </if>
+      <if test="remark != null" >
+        remark,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -156,9 +159,6 @@
       <if test="isDeleted != null" >
         is_deleted,
       </if>
-      <if test="remark != null" >
-        remark,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="productId != null" >
@@ -167,14 +167,17 @@
       <if test="supplierId != null" >
         #{supplierId,jdbcType=INTEGER},
       </if>
-      <if test="inWarehouseNum != null" >
-        #{inWarehouseNum,jdbcType=SMALLINT},
+      <if test="shipInWarehouseQty != null" >
+        #{shipInWarehouseQty,jdbcType=SMALLINT},
       </if>
       <if test="unitPrice != null" >
         #{unitPrice,jdbcType=DECIMAL},
       </if>
       <if test="warehouseId != null" >
         #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -190,9 +193,6 @@
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=BIT},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -214,14 +214,17 @@
       <if test="record.supplierId != null" >
         supplier_id = #{record.supplierId,jdbcType=INTEGER},
       </if>
-      <if test="record.inWarehouseNum != null" >
-        in_warehouse_num = #{record.inWarehouseNum,jdbcType=SMALLINT},
+      <if test="record.shipInWarehouseQty != null" >
+        ship_in_warehouse_qty = #{record.shipInWarehouseQty,jdbcType=SMALLINT},
       </if>
       <if test="record.unitPrice != null" >
         unit_price = #{record.unitPrice,jdbcType=DECIMAL},
       </if>
       <if test="record.warehouseId != null" >
         warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -238,9 +241,6 @@
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=BIT},
       </if>
-      <if test="record.remark != null" >
-        remark = #{record.remark,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -251,15 +251,15 @@
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       supplier_id = #{record.supplierId,jdbcType=INTEGER},
-      in_warehouse_num = #{record.inWarehouseNum,jdbcType=SMALLINT},
+      ship_in_warehouse_qty = #{record.shipInWarehouseQty,jdbcType=SMALLINT},
       unit_price = #{record.unitPrice,jdbcType=DECIMAL},
       warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       udpate_time = #{record.udpateTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=VARCHAR},
-      is_deleted = #{record.isDeleted,jdbcType=BIT},
-      remark = #{record.remark,jdbcType=VARCHAR}
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -273,14 +273,17 @@
       <if test="supplierId != null" >
         supplier_id = #{supplierId,jdbcType=INTEGER},
       </if>
-      <if test="inWarehouseNum != null" >
-        in_warehouse_num = #{inWarehouseNum,jdbcType=SMALLINT},
+      <if test="shipInWarehouseQty != null" >
+        ship_in_warehouse_qty = #{shipInWarehouseQty,jdbcType=SMALLINT},
       </if>
       <if test="unitPrice != null" >
         unit_price = #{unitPrice,jdbcType=DECIMAL},
       </if>
       <if test="warehouseId != null" >
         warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -297,9 +300,6 @@
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=BIT},
       </if>
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -307,15 +307,15 @@
     update product_supply_log
     set product_id = #{productId,jdbcType=INTEGER},
       supplier_id = #{supplierId,jdbcType=INTEGER},
-      in_warehouse_num = #{inWarehouseNum,jdbcType=SMALLINT},
+      ship_in_warehouse_qty = #{shipInWarehouseQty,jdbcType=SMALLINT},
       unit_price = #{unitPrice,jdbcType=DECIMAL},
       warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       udpate_time = #{udpateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=BIT},
-      remark = #{remark,jdbcType=VARCHAR}
+      is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

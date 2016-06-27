@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="sub_product_id" property="subProductId" jdbcType="INTEGER" />
-    <result column="sub_product_num" property="subProductNum" jdbcType="TINYINT" />
+    <result column="sub_product_qty" property="subProductQty" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_id, sub_product_id, sub_product_num, create_time, create_by, update_time, 
+    id, product_id, sub_product_id, sub_product_qty, create_time, create_by, update_time, 
     update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ProductCombineExample" >
@@ -108,10 +108,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product_combine (product_id, sub_product_id, sub_product_num, 
+    insert into product_combine (product_id, sub_product_id, sub_product_qty, 
       create_time, create_by, update_time, 
       update_by, is_deleted)
-    values (#{productId,jdbcType=INTEGER}, #{subProductId,jdbcType=INTEGER}, #{subProductNum,jdbcType=TINYINT}, 
+    values (#{productId,jdbcType=INTEGER}, #{subProductId,jdbcType=INTEGER}, #{subProductQty,jdbcType=TINYINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
   </insert>
@@ -127,8 +127,8 @@
       <if test="subProductId != null" >
         sub_product_id,
       </if>
-      <if test="subProductNum != null" >
-        sub_product_num,
+      <if test="subProductQty != null" >
+        sub_product_qty,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -153,8 +153,8 @@
       <if test="subProductId != null" >
         #{subProductId,jdbcType=INTEGER},
       </if>
-      <if test="subProductNum != null" >
-        #{subProductNum,jdbcType=TINYINT},
+      <if test="subProductQty != null" >
+        #{subProductQty,jdbcType=TINYINT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -191,8 +191,8 @@
       <if test="record.subProductId != null" >
         sub_product_id = #{record.subProductId,jdbcType=INTEGER},
       </if>
-      <if test="record.subProductNum != null" >
-        sub_product_num = #{record.subProductNum,jdbcType=TINYINT},
+      <if test="record.subProductQty != null" >
+        sub_product_qty = #{record.subProductQty,jdbcType=TINYINT},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -219,7 +219,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       sub_product_id = #{record.subProductId,jdbcType=INTEGER},
-      sub_product_num = #{record.subProductNum,jdbcType=TINYINT},
+      sub_product_qty = #{record.subProductQty,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -238,8 +238,8 @@
       <if test="subProductId != null" >
         sub_product_id = #{subProductId,jdbcType=INTEGER},
       </if>
-      <if test="subProductNum != null" >
-        sub_product_num = #{subProductNum,jdbcType=TINYINT},
+      <if test="subProductQty != null" >
+        sub_product_qty = #{subProductQty,jdbcType=TINYINT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -263,7 +263,7 @@
     update product_combine
     set product_id = #{productId,jdbcType=INTEGER},
       sub_product_id = #{subProductId,jdbcType=INTEGER},
-      sub_product_num = #{subProductNum,jdbcType=TINYINT},
+      sub_product_qty = #{subProductQty,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

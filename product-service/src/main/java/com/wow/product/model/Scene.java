@@ -8,13 +8,13 @@ public class Scene implements Serializable {
 
     private String sceneName;
 
-    private Integer productId;
-
     private String sceneTitle;
 
     private String sceneDesc;
 
     private String sceneImg;
+
+    private Integer productId;
 
     private Date createTime;
 
@@ -44,14 +44,6 @@ public class Scene implements Serializable {
         this.sceneName = sceneName;
     }
 
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
-
     public String getSceneTitle() {
         return sceneTitle;
     }
@@ -74,6 +66,14 @@ public class Scene implements Serializable {
 
     public void setSceneImg(String sceneImg) {
         this.sceneImg = sceneImg;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public Date getCreateTime() {
@@ -124,10 +124,10 @@ public class Scene implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", sceneName=").append(sceneName);
-        sb.append(", productId=").append(productId);
         sb.append(", sceneTitle=").append(sceneTitle);
         sb.append(", sceneDesc=").append(sceneDesc);
         sb.append(", sceneImg=").append(sceneImg);
+        sb.append(", productId=").append(productId);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", updateTime=").append(updateTime);

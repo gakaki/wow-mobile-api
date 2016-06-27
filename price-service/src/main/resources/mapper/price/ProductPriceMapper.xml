@@ -8,7 +8,7 @@
     <result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
     <result column="min_sell_price" property="minSellPrice" jdbcType="DECIMAL" />
     <result column="benchmark_price" property="benchmarkPrice" jdbcType="DECIMAL" />
-    <result column="promo_price" property="promoPrice" jdbcType="DECIMAL" />
+    <result column="is_promote_price" property="isPromotePrice" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -74,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_id, sell_price, cost_price, min_sell_price, benchmark_price, promo_price, 
+    id, product_id, sell_price, cost_price, min_sell_price, benchmark_price, is_promote_price, 
     create_time, create_by, update_time, update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.price.model.ProductPriceExample" >
@@ -112,11 +112,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into product_price (product_id, sell_price, cost_price, 
-      min_sell_price, benchmark_price, promo_price, 
+      min_sell_price, benchmark_price, is_promote_price, 
       create_time, create_by, update_time, 
       update_by, is_deleted)
     values (#{productId,jdbcType=INTEGER}, #{sellPrice,jdbcType=DECIMAL}, #{costPrice,jdbcType=DECIMAL}, 
-      #{minSellPrice,jdbcType=DECIMAL}, #{benchmarkPrice,jdbcType=DECIMAL}, #{promoPrice,jdbcType=DECIMAL}, 
+      #{minSellPrice,jdbcType=DECIMAL}, #{benchmarkPrice,jdbcType=DECIMAL}, #{isPromotePrice,jdbcType=BIT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
   </insert>
@@ -141,8 +141,8 @@
       <if test="benchmarkPrice != null" >
         benchmark_price,
       </if>
-      <if test="promoPrice != null" >
-        promo_price,
+      <if test="isPromotePrice != null" >
+        is_promote_price,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -176,8 +176,8 @@
       <if test="benchmarkPrice != null" >
         #{benchmarkPrice,jdbcType=DECIMAL},
       </if>
-      <if test="promoPrice != null" >
-        #{promoPrice,jdbcType=DECIMAL},
+      <if test="isPromotePrice != null" >
+        #{isPromotePrice,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -223,8 +223,8 @@
       <if test="record.benchmarkPrice != null" >
         benchmark_price = #{record.benchmarkPrice,jdbcType=DECIMAL},
       </if>
-      <if test="record.promoPrice != null" >
-        promo_price = #{record.promoPrice,jdbcType=DECIMAL},
+      <if test="record.isPromotePrice != null" >
+        is_promote_price = #{record.isPromotePrice,jdbcType=BIT},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -254,7 +254,7 @@
       cost_price = #{record.costPrice,jdbcType=DECIMAL},
       min_sell_price = #{record.minSellPrice,jdbcType=DECIMAL},
       benchmark_price = #{record.benchmarkPrice,jdbcType=DECIMAL},
-      promo_price = #{record.promoPrice,jdbcType=DECIMAL},
+      is_promote_price = #{record.isPromotePrice,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -282,8 +282,8 @@
       <if test="benchmarkPrice != null" >
         benchmark_price = #{benchmarkPrice,jdbcType=DECIMAL},
       </if>
-      <if test="promoPrice != null" >
-        promo_price = #{promoPrice,jdbcType=DECIMAL},
+      <if test="isPromotePrice != null" >
+        is_promote_price = #{isPromotePrice,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -310,7 +310,7 @@
       cost_price = #{costPrice,jdbcType=DECIMAL},
       min_sell_price = #{minSellPrice,jdbcType=DECIMAL},
       benchmark_price = #{benchmarkPrice,jdbcType=DECIMAL},
-      promo_price = #{promoPrice,jdbcType=DECIMAL},
+      is_promote_price = #{isPromotePrice,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

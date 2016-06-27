@@ -10,7 +10,7 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://10.0.60.121:3388/wowdsgn
     username: root
-    password: root
+    password: z123456
     maxActive: 10
     maxIdle: 5
     minIdle: 0

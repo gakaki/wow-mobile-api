@@ -10,26 +10,48 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/v1.0/users")
 public class UserController {
 
-    // 在Java类中创建 logger 实例
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public EndUser findUser(@PathVariable Integer id) {
-        logger.info("get user, id=" + id);
-        EndUser endUser = userService.getEndUserById(id);
-        if (endUser == null) {
-            endUser = new EndUser();
-            endUser.setId(id);
-            endUser.setNickName("nickname");
-            endUser.setRealName("realname");
-            endUser.setUserName("username");
+    @RequestMapping(value = "/{endUserId}", method = RequestMethod.GET)
+    public EndUser getUser(@PathVariable Integer endUserId) {
+        logger.info("get user, id=" + endUserId);
+        return userService.getEndUserById(endUserId);
+    }
+
+    /**
+     * 用户注册(创建新用户)
+     * @param newEndUser
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    public int register(@RequestBody EndUser newEndUser) {
+        logger.info("user registering...");
+        return userService.register(newEndUser);
+    }
+
+    /**
+     * 修改用户信息
+     * @param endUserId
+     * @return
+     */
+    @RequestMapping(value = "/{endUserId}", method = RequestMethod.PUT)
+    public int updateUser(@RequestBody EndUser updatedEndUser, @PathVariable Integer endUserId) {
+        logger.info("update user, userId=" + endUserId);
+        if (updatedEndUser.getId() == null) {
+            updatedEndUser.setId(endUserId);
         }
-        return endUser;
+        return userService.updateEndUser(updatedEndUser);
+    }
+
+    @RequestMapping(value = "/{endUserId}", method = RequestMethod.DELETE)
+    public int deleteUser(@PathVariable Integer endUserId) {
+        logger.info("delete user ...");
+        return userService.deleteUser(endUserId);
     }
 }

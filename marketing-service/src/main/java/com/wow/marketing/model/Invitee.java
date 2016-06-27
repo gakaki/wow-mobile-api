@@ -10,13 +10,15 @@ public class Invitee implements Serializable {
 
     private String recommendCode;
 
-    private Date createTime;
-
     private Integer couponId;
+
+    private Boolean isRegistered;
 
     private Date registerTime;
 
-    private Boolean isRegistered;
+    private Date createTime;
+
+    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -44,20 +46,20 @@ public class Invitee implements Serializable {
         this.recommendCode = recommendCode;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public Integer getCouponId() {
         return couponId;
     }
 
     public void setCouponId(Integer couponId) {
         this.couponId = couponId;
+    }
+
+    public Boolean getIsRegistered() {
+        return isRegistered;
+    }
+
+    public void setIsRegistered(Boolean isRegistered) {
+        this.isRegistered = isRegistered;
     }
 
     public Date getRegisterTime() {
@@ -68,12 +70,20 @@ public class Invitee implements Serializable {
         this.registerTime = registerTime;
     }
 
-    public Boolean getIsRegistered() {
-        return isRegistered;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setIsRegistered(Boolean isRegistered) {
-        this.isRegistered = isRegistered;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
@@ -85,10 +95,11 @@ public class Invitee implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", mobile=").append(mobile);
         sb.append(", recommendCode=").append(recommendCode);
-        sb.append(", createTime=").append(createTime);
         sb.append(", couponId=").append(couponId);
-        sb.append(", registerTime=").append(registerTime);
         sb.append(", isRegistered=").append(isRegistered);
+        sb.append(", registerTime=").append(registerTime);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", updateTime=").append(updateTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

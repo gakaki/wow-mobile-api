@@ -29,12 +29,6 @@ public class Product implements Serializable {
 
     private String shortDescription;
 
-    private String seoTitle;
-
-    private String seoDesc;
-
-    private String seoKey;
-
     private Boolean isImport;
 
     private String productModel;
@@ -84,6 +78,14 @@ public class Product implements Serializable {
     private String applicableScene;
 
     private String tips;
+
+    private String size;
+
+    private String seoTitle;
+
+    private String seoDesc;
+
+    private String seoKey;
 
     private static final long serialVersionUID = 1L;
 
@@ -181,30 +183,6 @@ public class Product implements Serializable {
 
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
-    }
-
-    public String getSeoTitle() {
-        return seoTitle;
-    }
-
-    public void setSeoTitle(String seoTitle) {
-        this.seoTitle = seoTitle;
-    }
-
-    public String getSeoDesc() {
-        return seoDesc;
-    }
-
-    public void setSeoDesc(String seoDesc) {
-        this.seoDesc = seoDesc;
-    }
-
-    public String getSeoKey() {
-        return seoKey;
-    }
-
-    public void setSeoKey(String seoKey) {
-        this.seoKey = seoKey;
     }
 
     public Boolean getIsImport() {
@@ -407,6 +385,38 @@ public class Product implements Serializable {
         this.tips = tips;
     }
 
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getSeoTitle() {
+        return seoTitle;
+    }
+
+    public void setSeoTitle(String seoTitle) {
+        this.seoTitle = seoTitle;
+    }
+
+    public String getSeoDesc() {
+        return seoDesc;
+    }
+
+    public void setSeoDesc(String seoDesc) {
+        this.seoDesc = seoDesc;
+    }
+
+    public String getSeoKey() {
+        return seoKey;
+    }
+
+    public void setSeoKey(String seoKey) {
+        this.seoKey = seoKey;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -425,9 +435,6 @@ public class Product implements Serializable {
         sb.append(", viewPlatform=").append(viewPlatform);
         sb.append(", detailDescription=").append(detailDescription);
         sb.append(", shortDescription=").append(shortDescription);
-        sb.append(", seoTitle=").append(seoTitle);
-        sb.append(", seoDesc=").append(seoDesc);
-        sb.append(", seoKey=").append(seoKey);
         sb.append(", isImport=").append(isImport);
         sb.append(", productModel=").append(productModel);
         sb.append(", originCountry=").append(originCountry);
@@ -453,6 +460,10 @@ public class Product implements Serializable {
         sb.append(", style=").append(style);
         sb.append(", applicableScene=").append(applicableScene);
         sb.append(", tips=").append(tips);
+        sb.append(", size=").append(size);
+        sb.append(", seoTitle=").append(seoTitle);
+        sb.append(", seoDesc=").append(seoDesc);
+        sb.append(", seoKey=").append(seoKey);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

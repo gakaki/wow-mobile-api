@@ -11,11 +11,13 @@ public class ProductSupplyLog implements Serializable {
 
     private Integer supplierId;
 
-    private Short inWarehouseNum;
+    private Short shipInWarehouseQty;
 
     private BigDecimal unitPrice;
 
     private Integer warehouseId;
+
+    private String remark;
 
     private Date createTime;
 
@@ -26,8 +28,6 @@ public class ProductSupplyLog implements Serializable {
     private String updateBy;
 
     private Boolean isDeleted;
-
-    private String remark;
 
     private static final long serialVersionUID = 1L;
 
@@ -55,12 +55,12 @@ public class ProductSupplyLog implements Serializable {
         this.supplierId = supplierId;
     }
 
-    public Short getInWarehouseNum() {
-        return inWarehouseNum;
+    public Short getShipInWarehouseQty() {
+        return shipInWarehouseQty;
     }
 
-    public void setInWarehouseNum(Short inWarehouseNum) {
-        this.inWarehouseNum = inWarehouseNum;
+    public void setShipInWarehouseQty(Short shipInWarehouseQty) {
+        this.shipInWarehouseQty = shipInWarehouseQty;
     }
 
     public BigDecimal getUnitPrice() {
@@ -77,6 +77,14 @@ public class ProductSupplyLog implements Serializable {
 
     public void setWarehouseId(Integer warehouseId) {
         this.warehouseId = warehouseId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Date getCreateTime() {
@@ -119,14 +127,6 @@ public class ProductSupplyLog implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -136,15 +136,15 @@ public class ProductSupplyLog implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", productId=").append(productId);
         sb.append(", supplierId=").append(supplierId);
-        sb.append(", inWarehouseNum=").append(inWarehouseNum);
+        sb.append(", shipInWarehouseQty=").append(shipInWarehouseQty);
         sb.append(", unitPrice=").append(unitPrice);
         sb.append(", warehouseId=").append(warehouseId);
+        sb.append(", remark=").append(remark);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", udpateTime=").append(udpateTime);
         sb.append(", updateBy=").append(updateBy);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", remark=").append(remark);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

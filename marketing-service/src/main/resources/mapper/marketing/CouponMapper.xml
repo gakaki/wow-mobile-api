@@ -4,13 +4,13 @@
   <resultMap id="BaseResultMap" type="com.wow.marketing.model.Coupon" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="coupon_type" property="couponType" jdbcType="TINYINT" />
-    <result column="effective_from" property="effectiveFrom" jdbcType="TIMESTAMP" />
-    <result column="effective_to" property="effectiveTo" jdbcType="TIMESTAMP" />
     <result column="coupon_title" property="couponTitle" jdbcType="VARCHAR" />
     <result column="coupon_desc" property="couponDesc" jdbcType="VARCHAR" />
     <result column="coupon_limit_type" property="couponLimitType" jdbcType="TINYINT" />
     <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
     <result column="min_amount_limit" property="minAmountLimit" jdbcType="SMALLINT" />
+    <result column="effective_from" property="effectiveFrom" jdbcType="TIMESTAMP" />
+    <result column="effective_to" property="effectiveTo" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, coupon_type, effective_from, effective_to, coupon_title, coupon_desc, coupon_limit_type, 
-    discount_rate, min_amount_limit
+    id, coupon_type, coupon_title, coupon_desc, coupon_limit_type, discount_rate, min_amount_limit, 
+    effective_from, effective_to
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.marketing.model.CouponExample" >
     select
@@ -108,12 +108,12 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into coupon (coupon_type, effective_from, effective_to, 
-      coupon_title, coupon_desc, coupon_limit_type, 
-      discount_rate, min_amount_limit)
-    values (#{couponType,jdbcType=TINYINT}, #{effectiveFrom,jdbcType=TIMESTAMP}, #{effectiveTo,jdbcType=TIMESTAMP}, 
-      #{couponTitle,jdbcType=VARCHAR}, #{couponDesc,jdbcType=VARCHAR}, #{couponLimitType,jdbcType=TINYINT}, 
-      #{discountRate,jdbcType=DECIMAL}, #{minAmountLimit,jdbcType=SMALLINT})
+    insert into coupon (coupon_type, coupon_title, coupon_desc, 
+      coupon_limit_type, discount_rate, min_amount_limit, 
+      effective_from, effective_to)
+    values (#{couponType,jdbcType=TINYINT}, #{couponTitle,jdbcType=VARCHAR}, #{couponDesc,jdbcType=VARCHAR}, 
+      #{couponLimitType,jdbcType=TINYINT}, #{discountRate,jdbcType=DECIMAL}, #{minAmountLimit,jdbcType=SMALLINT}, 
+      #{effectiveFrom,jdbcType=TIMESTAMP}, #{effectiveTo,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.marketing.model.Coupon" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -123,12 +123,6 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="couponType != null" >
         coupon_type,
-      </if>
-      <if test="effectiveFrom != null" >
-        effective_from,
-      </if>
-      <if test="effectiveTo != null" >
-        effective_to,
       </if>
       <if test="couponTitle != null" >
         coupon_title,
@@ -145,16 +139,16 @@
       <if test="minAmountLimit != null" >
         min_amount_limit,
       </if>
+      <if test="effectiveFrom != null" >
+        effective_from,
+      </if>
+      <if test="effectiveTo != null" >
+        effective_to,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="couponType != null" >
         #{couponType,jdbcType=TINYINT},
-      </if>
-      <if test="effectiveFrom != null" >
-        #{effectiveFrom,jdbcType=TIMESTAMP},
-      </if>
-      <if test="effectiveTo != null" >
-        #{effectiveTo,jdbcType=TIMESTAMP},
       </if>
       <if test="couponTitle != null" >
         #{couponTitle,jdbcType=VARCHAR},
@@ -170,6 +164,12 @@
       </if>
       <if test="minAmountLimit != null" >
         #{minAmountLimit,jdbcType=SMALLINT},
+      </if>
+      <if test="effectiveFrom != null" >
+        #{effectiveFrom,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveTo != null" >
+        #{effectiveTo,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -188,12 +188,6 @@
       <if test="record.couponType != null" >
         coupon_type = #{record.couponType,jdbcType=TINYINT},
       </if>
-      <if test="record.effectiveFrom != null" >
-        effective_from = #{record.effectiveFrom,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.effectiveTo != null" >
-        effective_to = #{record.effectiveTo,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.couponTitle != null" >
         coupon_title = #{record.couponTitle,jdbcType=VARCHAR},
       </if>
@@ -209,6 +203,12 @@
       <if test="record.minAmountLimit != null" >
         min_amount_limit = #{record.minAmountLimit,jdbcType=SMALLINT},
       </if>
+      <if test="record.effectiveFrom != null" >
+        effective_from = #{record.effectiveFrom,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.effectiveTo != null" >
+        effective_to = #{record.effectiveTo,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -218,13 +218,13 @@
     update coupon
     set id = #{record.id,jdbcType=INTEGER},
       coupon_type = #{record.couponType,jdbcType=TINYINT},
-      effective_from = #{record.effectiveFrom,jdbcType=TIMESTAMP},
-      effective_to = #{record.effectiveTo,jdbcType=TIMESTAMP},
       coupon_title = #{record.couponTitle,jdbcType=VARCHAR},
       coupon_desc = #{record.couponDesc,jdbcType=VARCHAR},
       coupon_limit_type = #{record.couponLimitType,jdbcType=TINYINT},
       discount_rate = #{record.discountRate,jdbcType=DECIMAL},
-      min_amount_limit = #{record.minAmountLimit,jdbcType=SMALLINT}
+      min_amount_limit = #{record.minAmountLimit,jdbcType=SMALLINT},
+      effective_from = #{record.effectiveFrom,jdbcType=TIMESTAMP},
+      effective_to = #{record.effectiveTo,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -234,12 +234,6 @@
     <set >
       <if test="couponType != null" >
         coupon_type = #{couponType,jdbcType=TINYINT},
-      </if>
-      <if test="effectiveFrom != null" >
-        effective_from = #{effectiveFrom,jdbcType=TIMESTAMP},
-      </if>
-      <if test="effectiveTo != null" >
-        effective_to = #{effectiveTo,jdbcType=TIMESTAMP},
       </if>
       <if test="couponTitle != null" >
         coupon_title = #{couponTitle,jdbcType=VARCHAR},
@@ -256,19 +250,25 @@
       <if test="minAmountLimit != null" >
         min_amount_limit = #{minAmountLimit,jdbcType=SMALLINT},
       </if>
+      <if test="effectiveFrom != null" >
+        effective_from = #{effectiveFrom,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveTo != null" >
+        effective_to = #{effectiveTo,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wow.marketing.model.Coupon" >
     update coupon
     set coupon_type = #{couponType,jdbcType=TINYINT},
-      effective_from = #{effectiveFrom,jdbcType=TIMESTAMP},
-      effective_to = #{effectiveTo,jdbcType=TIMESTAMP},
       coupon_title = #{couponTitle,jdbcType=VARCHAR},
       coupon_desc = #{couponDesc,jdbcType=VARCHAR},
       coupon_limit_type = #{couponLimitType,jdbcType=TINYINT},
       discount_rate = #{discountRate,jdbcType=DECIMAL},
-      min_amount_limit = #{minAmountLimit,jdbcType=SMALLINT}
+      min_amount_limit = #{minAmountLimit,jdbcType=SMALLINT},
+      effective_from = #{effectiveFrom,jdbcType=TIMESTAMP},
+      effective_to = #{effectiveTo,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -9,10 +9,6 @@ public class Coupon implements Serializable {
 
     private Byte couponType;
 
-    private Date effectiveFrom;
-
-    private Date effectiveTo;
-
     private String couponTitle;
 
     private String couponDesc;
@@ -22,6 +18,10 @@ public class Coupon implements Serializable {
     private BigDecimal discountRate;
 
     private Short minAmountLimit;
+
+    private Date effectiveFrom;
+
+    private Date effectiveTo;
 
     private static final long serialVersionUID = 1L;
 
@@ -39,22 +39,6 @@ public class Coupon implements Serializable {
 
     public void setCouponType(Byte couponType) {
         this.couponType = couponType;
-    }
-
-    public Date getEffectiveFrom() {
-        return effectiveFrom;
-    }
-
-    public void setEffectiveFrom(Date effectiveFrom) {
-        this.effectiveFrom = effectiveFrom;
-    }
-
-    public Date getEffectiveTo() {
-        return effectiveTo;
-    }
-
-    public void setEffectiveTo(Date effectiveTo) {
-        this.effectiveTo = effectiveTo;
     }
 
     public String getCouponTitle() {
@@ -97,6 +81,22 @@ public class Coupon implements Serializable {
         this.minAmountLimit = minAmountLimit;
     }
 
+    public Date getEffectiveFrom() {
+        return effectiveFrom;
+    }
+
+    public void setEffectiveFrom(Date effectiveFrom) {
+        this.effectiveFrom = effectiveFrom;
+    }
+
+    public Date getEffectiveTo() {
+        return effectiveTo;
+    }
+
+    public void setEffectiveTo(Date effectiveTo) {
+        this.effectiveTo = effectiveTo;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -105,13 +105,13 @@ public class Coupon implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", couponType=").append(couponType);
-        sb.append(", effectiveFrom=").append(effectiveFrom);
-        sb.append(", effectiveTo=").append(effectiveTo);
         sb.append(", couponTitle=").append(couponTitle);
         sb.append(", couponDesc=").append(couponDesc);
         sb.append(", couponLimitType=").append(couponLimitType);
         sb.append(", discountRate=").append(discountRate);
         sb.append(", minAmountLimit=").append(minAmountLimit);
+        sb.append(", effectiveFrom=").append(effectiveFrom);
+        sb.append(", effectiveTo=").append(effectiveTo);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -8,7 +8,15 @@ public class ProductImage implements Serializable {
 
     private Integer productId;
 
-    private String productImgUrl;
+    private String imgName;
+
+    private String imgUrl;
+
+    private String imgDesc;
+
+    private Byte viewPlatform;
+
+    private Boolean isPrimary;
 
     private Date createTime;
 
@@ -19,14 +27,6 @@ public class ProductImage implements Serializable {
     private String updateBy;
 
     private Boolean isDeleted;
-
-    private Byte viewPlatform;
-
-    private Boolean isPrimary;
-
-    private Boolean isSecondary;
-
-    private String imageDesc;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,12 +46,44 @@ public class ProductImage implements Serializable {
         this.productId = productId;
     }
 
-    public String getProductImgUrl() {
-        return productImgUrl;
+    public String getImgName() {
+        return imgName;
     }
 
-    public void setProductImgUrl(String productImgUrl) {
-        this.productImgUrl = productImgUrl;
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getImgDesc() {
+        return imgDesc;
+    }
+
+    public void setImgDesc(String imgDesc) {
+        this.imgDesc = imgDesc;
+    }
+
+    public Byte getViewPlatform() {
+        return viewPlatform;
+    }
+
+    public void setViewPlatform(Byte viewPlatform) {
+        this.viewPlatform = viewPlatform;
+    }
+
+    public Boolean getIsPrimary() {
+        return isPrimary;
+    }
+
+    public void setIsPrimary(Boolean isPrimary) {
+        this.isPrimary = isPrimary;
     }
 
     public Date getCreateTime() {
@@ -94,38 +126,6 @@ public class ProductImage implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public Byte getViewPlatform() {
-        return viewPlatform;
-    }
-
-    public void setViewPlatform(Byte viewPlatform) {
-        this.viewPlatform = viewPlatform;
-    }
-
-    public Boolean getIsPrimary() {
-        return isPrimary;
-    }
-
-    public void setIsPrimary(Boolean isPrimary) {
-        this.isPrimary = isPrimary;
-    }
-
-    public Boolean getIsSecondary() {
-        return isSecondary;
-    }
-
-    public void setIsSecondary(Boolean isSecondary) {
-        this.isSecondary = isSecondary;
-    }
-
-    public String getImageDesc() {
-        return imageDesc;
-    }
-
-    public void setImageDesc(String imageDesc) {
-        this.imageDesc = imageDesc;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -134,16 +134,16 @@ public class ProductImage implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", productId=").append(productId);
-        sb.append(", productImgUrl=").append(productImgUrl);
+        sb.append(", imgName=").append(imgName);
+        sb.append(", imgUrl=").append(imgUrl);
+        sb.append(", imgDesc=").append(imgDesc);
+        sb.append(", viewPlatform=").append(viewPlatform);
+        sb.append(", isPrimary=").append(isPrimary);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", udpateTime=").append(udpateTime);
         sb.append(", updateBy=").append(updateBy);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", viewPlatform=").append(viewPlatform);
-        sb.append(", isPrimary=").append(isPrimary);
-        sb.append(", isSecondary=").append(isSecondary);
-        sb.append(", imageDesc=").append(imageDesc);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
