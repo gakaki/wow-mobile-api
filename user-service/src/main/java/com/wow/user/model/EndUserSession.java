@@ -16,7 +16,7 @@ public class EndUserSession implements Serializable {
 
     private Date lastLoginTime;
 
-    private Integer lastLoginIp;
+    private Long lastLoginIp;
 
     private Date lastRefreshTime;
 
@@ -76,11 +76,11 @@ public class EndUserSession implements Serializable {
         this.lastLoginTime = lastLoginTime;
     }
 
-    public Integer getLastLoginIp() {
+    public Long getLastLoginIp() {
         return lastLoginIp;
     }
 
-    public void setLastLoginIp(Integer lastLoginIp) {
+    public void setLastLoginIp(Long lastLoginIp) {
         this.lastLoginIp = lastLoginIp;
     }
 

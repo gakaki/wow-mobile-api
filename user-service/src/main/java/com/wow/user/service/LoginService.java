@@ -2,6 +2,8 @@ package com.wow.user.service;
 
 import com.wow.user.model.EndUserLoginLog;
 import com.wow.user.model.EndUserSession;
+import com.wow.user.vo.LoginRequest;
+import com.wow.user.vo.LoginResult;
 
 import java.util.List;
 
@@ -14,11 +16,10 @@ public interface LoginService {
     /**
      * 用户登录
      *
-     * @param userName
-     * @param password
+     * @param loginRequest
      * @return
      */
-    EndUserSession login(String userName, String password);
+    LoginResult login(LoginRequest loginRequest);
 
     /**
      * 延续会话

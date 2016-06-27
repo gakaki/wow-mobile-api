@@ -59,7 +59,7 @@ public interface UserService {
      * @param password
      * @return
      */
-    boolean authenticate(String userName, String password);
+    EndUser authenticate(String userName, String password);
 
     /**
      * 删除用户

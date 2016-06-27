@@ -1,10 +1,16 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.attribute.model.Attribute;
+import com.wow.mobileapi.dto.ApiResponse;
+import com.wow.mobileapi.util.ErrorRespUtil;
 import com.wow.user.model.EndUserSession;
 import com.wow.user.service.LoginService;
+import com.wow.user.vo.LoginRequest;
+import com.wow.user.vo.LoginResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,14 +28,24 @@ public class SessionController {
 
     /**
      * 创建新的会话(登入)
-     * @param userName
-     * @param password
+     * @param loginRequest
      * @return
      */
     @RequestMapping(method = RequestMethod.POST)
-    public EndUserSession login(@RequestParam String userName, @RequestParam String password) {
+    public ApiResponse login(@Validated @RequestBody LoginRequest loginRequest) {
+        ApiResponse apiResponse = new ApiResponse();
         logger.info("user login...");
-        return loginService.login(userName, password);
+        LoginResult loginResult = loginService.login(loginRequest);
+        if (loginResult.isValidUser()) {
+            apiResponse.setResCode("0");
+            apiResponse.setResMsg("success");
+            apiResponse.setData(loginResult.getEndUserSession());
+        } else {
+            ErrorRespUtil.setError(apiResponse,"40201");
+            apiResponse.setData(loginResult.getEndUserSession());
+        }
+
+        return apiResponse;
     }
 
     /**
@@ -38,8 +54,13 @@ public class SessionController {
      * @return
      */
     @RequestMapping(method = RequestMethod.DELETE)
-    public EndUserSession logout(@PathVariable Integer endUserId) {
+    public ApiResponse logout(@PathVariable Integer endUserId) {
+        ApiResponse apiResponse = new ApiResponse();
         logger.info("user logout...");
-        return loginService.logout(endUserId);
+        EndUserSession endUserSession = loginService.logout(endUserId);
+        apiResponse.setResCode("0");
+        apiResponse.setResMsg("success");
+        apiResponse.setData(endUserSession);
+        return apiResponse;
     }
 }

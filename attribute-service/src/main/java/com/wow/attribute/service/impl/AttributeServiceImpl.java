@@ -34,13 +34,13 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     /**
-     * 更新属性
+     * 更新属性(只更新不为空的字段)
      *
      * @param attribute
      * @return
      */
     public int updateAttribute(Attribute attribute) {
-        return 0;
+        return attributeMapper.updateByPrimaryKey(attribute);
     }
 
     /**
@@ -79,7 +79,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int deleteAttributeById(int attributeId) {
-        return 0;
+        return attributeMapper.deleteByPrimaryKey(attributeId);
     }
 
     //Table: category_attribute

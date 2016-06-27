@@ -95,8 +95,8 @@ public class UserServiceImpl implements UserService {
      * @param password
      * @return
      */
-    public boolean authenticate(String userName, String password) {
-        return false;
+    public EndUser authenticate(String userName, String password) {
+        return new EndUser();
     }
 
     /**
