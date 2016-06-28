@@ -11,6 +11,8 @@ public class ProductPrice implements Serializable {
 
     private BigDecimal sellPrice;
 
+    private BigDecimal originalPrice;
+
     private BigDecimal costPrice;
 
     private BigDecimal minSellPrice;
@@ -53,6 +55,14 @@ public class ProductPrice implements Serializable {
 
     public void setSellPrice(BigDecimal sellPrice) {
         this.sellPrice = sellPrice;
+    }
+
+    public BigDecimal getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(BigDecimal originalPrice) {
+        this.originalPrice = originalPrice;
     }
 
     public BigDecimal getCostPrice() {
@@ -136,6 +146,7 @@ public class ProductPrice implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", productId=").append(productId);
         sb.append(", sellPrice=").append(sellPrice);
+        sb.append(", originalPrice=").append(originalPrice);
         sb.append(", costPrice=").append(costPrice);
         sb.append(", minSellPrice=").append(minSellPrice);
         sb.append(", benchmarkPrice=").append(benchmarkPrice);

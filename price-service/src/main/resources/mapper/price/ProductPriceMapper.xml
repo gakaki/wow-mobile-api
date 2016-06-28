@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="original_price" property="originalPrice" jdbcType="DECIMAL" />
     <result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
     <result column="min_sell_price" property="minSellPrice" jdbcType="DECIMAL" />
     <result column="benchmark_price" property="benchmarkPrice" jdbcType="DECIMAL" />
@@ -74,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_id, sell_price, cost_price, min_sell_price, benchmark_price, is_promote_price, 
-    create_time, create_by, update_time, update_by, is_deleted
+    id, product_id, sell_price, original_price, cost_price, min_sell_price, benchmark_price, 
+    is_promote_price, create_time, create_by, update_time, update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.price.model.ProductPriceExample" >
     select
@@ -111,14 +112,16 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product_price (product_id, sell_price, cost_price, 
-      min_sell_price, benchmark_price, is_promote_price, 
-      create_time, create_by, update_time, 
-      update_by, is_deleted)
-    values (#{productId,jdbcType=INTEGER}, #{sellPrice,jdbcType=DECIMAL}, #{costPrice,jdbcType=DECIMAL}, 
-      #{minSellPrice,jdbcType=DECIMAL}, #{benchmarkPrice,jdbcType=DECIMAL}, #{isPromotePrice,jdbcType=BIT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
+    insert into product_price (product_id, sell_price, original_price, 
+      cost_price, min_sell_price, benchmark_price, 
+      is_promote_price, create_time, create_by, 
+      update_time, update_by, is_deleted
+      )
+    values (#{productId,jdbcType=INTEGER}, #{sellPrice,jdbcType=DECIMAL}, #{originalPrice,jdbcType=DECIMAL}, 
+      #{costPrice,jdbcType=DECIMAL}, #{minSellPrice,jdbcType=DECIMAL}, #{benchmarkPrice,jdbcType=DECIMAL}, 
+      #{isPromotePrice,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wow.price.model.ProductPrice" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -131,6 +134,9 @@
       </if>
       <if test="sellPrice != null" >
         sell_price,
+      </if>
+      <if test="originalPrice != null" >
+        original_price,
       </if>
       <if test="costPrice != null" >
         cost_price,
@@ -166,6 +172,9 @@
       </if>
       <if test="sellPrice != null" >
         #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="originalPrice != null" >
+        #{originalPrice,jdbcType=DECIMAL},
       </if>
       <if test="costPrice != null" >
         #{costPrice,jdbcType=DECIMAL},
@@ -214,6 +223,9 @@
       <if test="record.sellPrice != null" >
         sell_price = #{record.sellPrice,jdbcType=DECIMAL},
       </if>
+      <if test="record.originalPrice != null" >
+        original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      </if>
       <if test="record.costPrice != null" >
         cost_price = #{record.costPrice,jdbcType=DECIMAL},
       </if>
@@ -251,6 +263,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       sell_price = #{record.sellPrice,jdbcType=DECIMAL},
+      original_price = #{record.originalPrice,jdbcType=DECIMAL},
       cost_price = #{record.costPrice,jdbcType=DECIMAL},
       min_sell_price = #{record.minSellPrice,jdbcType=DECIMAL},
       benchmark_price = #{record.benchmarkPrice,jdbcType=DECIMAL},
@@ -272,6 +285,9 @@
       </if>
       <if test="sellPrice != null" >
         sell_price = #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="originalPrice != null" >
+        original_price = #{originalPrice,jdbcType=DECIMAL},
       </if>
       <if test="costPrice != null" >
         cost_price = #{costPrice,jdbcType=DECIMAL},
@@ -307,6 +323,7 @@
     update product_price
     set product_id = #{productId,jdbcType=INTEGER},
       sell_price = #{sellPrice,jdbcType=DECIMAL},
+      original_price = #{originalPrice,jdbcType=DECIMAL},
       cost_price = #{costPrice,jdbcType=DECIMAL},
       min_sell_price = #{minSellPrice,jdbcType=DECIMAL},
       benchmark_price = #{benchmarkPrice,jdbcType=DECIMAL},
