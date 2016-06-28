@@ -1,7 +1,10 @@
 package com.wow.attribute.service.impl;
 
+import com.wow.attribute.mapper.CategoryMapper;
 import com.wow.attribute.model.Category;
+import com.wow.attribute.model.CategoryExample;
 import com.wow.attribute.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,8 @@ import java.util.List;
 @Transactional(value = "attributeTransactionManager")
 public class CategoryServiceImpl implements CategoryService {
 
+    @Autowired
+    private CategoryMapper categoryMapper;
     /**
      * 创建类目
      *
@@ -22,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     public int createCategory(Category category) {
-        return 0;
+        return categoryMapper.insert(category);
     }
 
     /**
@@ -32,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     public int updateCategory(Category category) {
-        return 0;
+        return categoryMapper.updateByPrimaryKey(category);
     }
 
     /**
@@ -42,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     public Category getCategoryById(int categoryId) {
-        return null;
+        return categoryMapper.selectByPrimaryKey(categoryId);
     }
 
     /**
@@ -52,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     public List<Category> getSubCategory(int categoryId) {
-        return null;
+        return categoryMapper.getSubCategory(categoryId);
     }
 
     /**
