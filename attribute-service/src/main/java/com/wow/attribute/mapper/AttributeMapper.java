@@ -16,11 +16,11 @@ public interface AttributeMapper {
 
     int insertSelective(Attribute record);
 
+    List<Attribute> selectAll();
+
     List<Attribute> selectByExample(AttributeExample example);
 
     Attribute selectByPrimaryKey(Integer id);
-
-    List<Attribute> selectAll();
 
     int updateByExampleSelective(@Param("record") Attribute record, @Param("example") AttributeExample example);
 
