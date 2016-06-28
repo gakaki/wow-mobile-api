@@ -6,7 +6,7 @@
     <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
     <result column="login_channel" property="loginChannel" jdbcType="TINYINT" />
     <result column="user_agent_info" property="userAgentInfo" jdbcType="VARCHAR" />
-    <result column="login_ip" property="loginIp" jdbcType="INTEGER" />
+    <result column="login_ip" property="loginIp" jdbcType="BIGINT" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -107,7 +107,7 @@
     insert into end_user_login_log (end_user_id, login_channel, user_agent_info, 
       login_ip, login_time)
     values (#{endUserId,jdbcType=INTEGER}, #{loginChannel,jdbcType=TINYINT}, #{userAgentInfo,jdbcType=VARCHAR}, 
-      #{loginIp,jdbcType=INTEGER}, #{loginTime,jdbcType=TIMESTAMP})
+      #{loginIp,jdbcType=BIGINT}, #{loginTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.user.model.EndUserLoginLog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -142,7 +142,7 @@
         #{userAgentInfo,jdbcType=VARCHAR},
       </if>
       <if test="loginIp != null" >
-        #{loginIp,jdbcType=INTEGER},
+        #{loginIp,jdbcType=BIGINT},
       </if>
       <if test="loginTime != null" >
         #{loginTime,jdbcType=TIMESTAMP},
@@ -171,7 +171,7 @@
         user_agent_info = #{record.userAgentInfo,jdbcType=VARCHAR},
       </if>
       <if test="record.loginIp != null" >
-        login_ip = #{record.loginIp,jdbcType=INTEGER},
+        login_ip = #{record.loginIp,jdbcType=BIGINT},
       </if>
       <if test="record.loginTime != null" >
         login_time = #{record.loginTime,jdbcType=TIMESTAMP},
@@ -187,7 +187,7 @@
       end_user_id = #{record.endUserId,jdbcType=INTEGER},
       login_channel = #{record.loginChannel,jdbcType=TINYINT},
       user_agent_info = #{record.userAgentInfo,jdbcType=VARCHAR},
-      login_ip = #{record.loginIp,jdbcType=INTEGER},
+      login_ip = #{record.loginIp,jdbcType=BIGINT},
       login_time = #{record.loginTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -206,7 +206,7 @@
         user_agent_info = #{userAgentInfo,jdbcType=VARCHAR},
       </if>
       <if test="loginIp != null" >
-        login_ip = #{loginIp,jdbcType=INTEGER},
+        login_ip = #{loginIp,jdbcType=BIGINT},
       </if>
       <if test="loginTime != null" >
         login_time = #{loginTime,jdbcType=TIMESTAMP},
@@ -219,7 +219,7 @@
     set end_user_id = #{endUserId,jdbcType=INTEGER},
       login_channel = #{loginChannel,jdbcType=TINYINT},
       user_agent_info = #{userAgentInfo,jdbcType=VARCHAR},
-      login_ip = #{loginIp,jdbcType=INTEGER},
+      login_ip = #{loginIp,jdbcType=BIGINT},
       login_time = #{loginTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>

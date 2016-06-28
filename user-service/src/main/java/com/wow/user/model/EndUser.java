@@ -11,12 +11,6 @@ public class EndUser implements Serializable {
 
     private String password;
 
-    private Byte memberLevel;
-
-    private BigDecimal totalAmount;
-
-    private Integer totalScore;
-
     private String nickName;
 
     private String realName;
@@ -26,6 +20,14 @@ public class EndUser implements Serializable {
     private String avatar;
 
     private String country;
+
+    private String province;
+
+    private String city;
+
+    private String county;
+
+    private String address;
 
     private Date dateOfBirth;
 
@@ -57,17 +59,19 @@ public class EndUser implements Serializable {
 
     private Boolean isForbidden;
 
+    private String forbidReason;
+
+    private BigDecimal totalAmount;
+
+    private Integer totalScore;
+
+    private Byte memberLevel;
+
     private Date registerTime;
 
     private Date updateTime;
 
     private Boolean isDeleted;
-
-    private String city;
-
-    private String county;
-
-    private String forbidReason;
 
     private static final long serialVersionUID = 1L;
 
@@ -93,30 +97,6 @@ public class EndUser implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Byte getMemberLevel() {
-        return memberLevel;
-    }
-
-    public void setMemberLevel(Byte memberLevel) {
-        this.memberLevel = memberLevel;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public Integer getTotalScore() {
-        return totalScore;
-    }
-
-    public void setTotalScore(Integer totalScore) {
-        this.totalScore = totalScore;
     }
 
     public String getNickName() {
@@ -157,6 +137,38 @@ public class EndUser implements Serializable {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Date getDateOfBirth() {
@@ -279,6 +291,38 @@ public class EndUser implements Serializable {
         this.isForbidden = isForbidden;
     }
 
+    public String getForbidReason() {
+        return forbidReason;
+    }
+
+    public void setForbidReason(String forbidReason) {
+        this.forbidReason = forbidReason;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public Integer getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public Byte getMemberLevel() {
+        return memberLevel;
+    }
+
+    public void setMemberLevel(Byte memberLevel) {
+        this.memberLevel = memberLevel;
+    }
+
     public Date getRegisterTime() {
         return registerTime;
     }
@@ -303,30 +347,6 @@ public class EndUser implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public String getForbidReason() {
-        return forbidReason;
-    }
-
-    public void setForbidReason(String forbidReason) {
-        this.forbidReason = forbidReason;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -336,14 +356,15 @@ public class EndUser implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", userName=").append(userName);
         sb.append(", password=").append(password);
-        sb.append(", memberLevel=").append(memberLevel);
-        sb.append(", totalAmount=").append(totalAmount);
-        sb.append(", totalScore=").append(totalScore);
         sb.append(", nickName=").append(nickName);
         sb.append(", realName=").append(realName);
         sb.append(", sex=").append(sex);
         sb.append(", avatar=").append(avatar);
         sb.append(", country=").append(country);
+        sb.append(", province=").append(province);
+        sb.append(", city=").append(city);
+        sb.append(", county=").append(county);
+        sb.append(", address=").append(address);
         sb.append(", dateOfBirth=").append(dateOfBirth);
         sb.append(", ageRange=").append(ageRange);
         sb.append(", constellation=").append(constellation);
@@ -359,12 +380,13 @@ public class EndUser implements Serializable {
         sb.append(", selfIntroduction=").append(selfIntroduction);
         sb.append(", signAgreement=").append(signAgreement);
         sb.append(", isForbidden=").append(isForbidden);
+        sb.append(", forbidReason=").append(forbidReason);
+        sb.append(", totalAmount=").append(totalAmount);
+        sb.append(", totalScore=").append(totalScore);
+        sb.append(", memberLevel=").append(memberLevel);
         sb.append(", registerTime=").append(registerTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", city=").append(city);
-        sb.append(", county=").append(county);
-        sb.append(", forbidReason=").append(forbidReason);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
