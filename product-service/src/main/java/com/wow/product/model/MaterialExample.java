@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ApplicableSceneExample {
+public class MaterialExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ApplicableSceneExample() {
+    public MaterialExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -165,143 +165,143 @@ public class ApplicableSceneExample {
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameIsNull() {
-            addCriterion("applicable_scene_name is null");
+        public Criteria andMaterialNameIsNull() {
+            addCriterion("material_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameIsNotNull() {
-            addCriterion("applicable_scene_name is not null");
+        public Criteria andMaterialNameIsNotNull() {
+            addCriterion("material_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameEqualTo(String value) {
-            addCriterion("applicable_scene_name =", value, "applicableSceneName");
+        public Criteria andMaterialNameEqualTo(String value) {
+            addCriterion("material_name =", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameNotEqualTo(String value) {
-            addCriterion("applicable_scene_name <>", value, "applicableSceneName");
+        public Criteria andMaterialNameNotEqualTo(String value) {
+            addCriterion("material_name <>", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameGreaterThan(String value) {
-            addCriterion("applicable_scene_name >", value, "applicableSceneName");
+        public Criteria andMaterialNameGreaterThan(String value) {
+            addCriterion("material_name >", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameGreaterThanOrEqualTo(String value) {
-            addCriterion("applicable_scene_name >=", value, "applicableSceneName");
+        public Criteria andMaterialNameGreaterThanOrEqualTo(String value) {
+            addCriterion("material_name >=", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameLessThan(String value) {
-            addCriterion("applicable_scene_name <", value, "applicableSceneName");
+        public Criteria andMaterialNameLessThan(String value) {
+            addCriterion("material_name <", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameLessThanOrEqualTo(String value) {
-            addCriterion("applicable_scene_name <=", value, "applicableSceneName");
+        public Criteria andMaterialNameLessThanOrEqualTo(String value) {
+            addCriterion("material_name <=", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameLike(String value) {
-            addCriterion("applicable_scene_name like", value, "applicableSceneName");
+        public Criteria andMaterialNameLike(String value) {
+            addCriterion("material_name like", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameNotLike(String value) {
-            addCriterion("applicable_scene_name not like", value, "applicableSceneName");
+        public Criteria andMaterialNameNotLike(String value) {
+            addCriterion("material_name not like", value, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameIn(List<String> values) {
-            addCriterion("applicable_scene_name in", values, "applicableSceneName");
+        public Criteria andMaterialNameIn(List<String> values) {
+            addCriterion("material_name in", values, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameNotIn(List<String> values) {
-            addCriterion("applicable_scene_name not in", values, "applicableSceneName");
+        public Criteria andMaterialNameNotIn(List<String> values) {
+            addCriterion("material_name not in", values, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameBetween(String value1, String value2) {
-            addCriterion("applicable_scene_name between", value1, value2, "applicableSceneName");
+        public Criteria andMaterialNameBetween(String value1, String value2) {
+            addCriterion("material_name between", value1, value2, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameNotBetween(String value1, String value2) {
-            addCriterion("applicable_scene_name not between", value1, value2, "applicableSceneName");
+        public Criteria andMaterialNameNotBetween(String value1, String value2) {
+            addCriterion("material_name not between", value1, value2, "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescIsNull() {
-            addCriterion("applicable_scene_desc is null");
+        public Criteria andMaterialDescIsNull() {
+            addCriterion("material_desc is null");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescIsNotNull() {
-            addCriterion("applicable_scene_desc is not null");
+        public Criteria andMaterialDescIsNotNull() {
+            addCriterion("material_desc is not null");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescEqualTo(String value) {
-            addCriterion("applicable_scene_desc =", value, "applicableSceneDesc");
+        public Criteria andMaterialDescEqualTo(String value) {
+            addCriterion("material_desc =", value, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescNotEqualTo(String value) {
-            addCriterion("applicable_scene_desc <>", value, "applicableSceneDesc");
+        public Criteria andMaterialDescNotEqualTo(String value) {
+            addCriterion("material_desc <>", value, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescGreaterThan(String value) {
-            addCriterion("applicable_scene_desc >", value, "applicableSceneDesc");
+        public Criteria andMaterialDescGreaterThan(String value) {
+            addCriterion("material_desc >", value, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescGreaterThanOrEqualTo(String value) {
-            addCriterion("applicable_scene_desc >=", value, "applicableSceneDesc");
+        public Criteria andMaterialDescGreaterThanOrEqualTo(String value) {
+            addCriterion("material_desc >=", value, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescLessThan(String value) {
-            addCriterion("applicable_scene_desc <", value, "applicableSceneDesc");
+        public Criteria andMaterialDescLessThan(String value) {
+            addCriterion("material_desc <", value, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescLessThanOrEqualTo(String value) {
-            addCriterion("applicable_scene_desc <=", value, "applicableSceneDesc");
+        public Criteria andMaterialDescLessThanOrEqualTo(String value) {
+            addCriterion("material_desc <=", value, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescLike(String value) {
-            addCriterion("applicable_scene_desc like", value, "applicableSceneDesc");
+        public Criteria andMaterialDescLike(String value) {
+            addCriterion("material_desc like", value, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescNotLike(String value) {
-            addCriterion("applicable_scene_desc not like", value, "applicableSceneDesc");
+        public Criteria andMaterialDescNotLike(String value) {
+            addCriterion("material_desc not like", value, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescIn(List<String> values) {
-            addCriterion("applicable_scene_desc in", values, "applicableSceneDesc");
+        public Criteria andMaterialDescIn(List<String> values) {
+            addCriterion("material_desc in", values, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescNotIn(List<String> values) {
-            addCriterion("applicable_scene_desc not in", values, "applicableSceneDesc");
+        public Criteria andMaterialDescNotIn(List<String> values) {
+            addCriterion("material_desc not in", values, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescBetween(String value1, String value2) {
-            addCriterion("applicable_scene_desc between", value1, value2, "applicableSceneDesc");
+        public Criteria andMaterialDescBetween(String value1, String value2) {
+            addCriterion("material_desc between", value1, value2, "materialDesc");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescNotBetween(String value1, String value2) {
-            addCriterion("applicable_scene_desc not between", value1, value2, "applicableSceneDesc");
+        public Criteria andMaterialDescNotBetween(String value1, String value2) {
+            addCriterion("material_desc not between", value1, value2, "materialDesc");
             return (Criteria) this;
         }
 
@@ -625,13 +625,13 @@ public class ApplicableSceneExample {
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameLikeInsensitive(String value) {
-            addCriterion("upper(applicable_scene_name) like", value.toUpperCase(), "applicableSceneName");
+        public Criteria andMaterialNameLikeInsensitive(String value) {
+            addCriterion("upper(material_name) like", value.toUpperCase(), "materialName");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescLikeInsensitive(String value) {
-            addCriterion("upper(applicable_scene_desc) like", value.toUpperCase(), "applicableSceneDesc");
+        public Criteria andMaterialDescLikeInsensitive(String value) {
+            addCriterion("upper(material_desc) like", value.toUpperCase(), "materialDesc");
             return (Criteria) this;
         }
 

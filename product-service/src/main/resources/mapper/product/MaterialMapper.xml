@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.product.mapper.ApplicableSceneMapper" >
-  <resultMap id="BaseResultMap" type="com.wow.product.model.ApplicableScene" >
+<mapper namespace="com.wow.product.mapper.MaterialMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.Material" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="applicable_scene_name" property="applicableSceneName" jdbcType="VARCHAR" />
-    <result column="applicable_scene_desc" property="applicableSceneDesc" jdbcType="VARCHAR" />
+    <result column="material_name" property="materialName" jdbcType="VARCHAR" />
+    <result column="material_desc" property="materialDesc" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -70,16 +70,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, applicable_scene_name, applicable_scene_desc, create_time, create_by, update_time, 
-    update_by, is_deleted
+    id, material_name, material_desc, create_time, create_by, update_time, update_by, 
+    is_deleted
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ApplicableSceneExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.MaterialExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from applicable_scene
+    from material
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,41 +90,41 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from applicable_scene
+    from material
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from applicable_scene
+    delete from material
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wow.product.model.ApplicableSceneExample" >
-    delete from applicable_scene
+  <delete id="deleteByExample" parameterType="com.wow.product.model.MaterialExample" >
+    delete from material
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wow.product.model.ApplicableScene" >
+  <insert id="insert" parameterType="com.wow.product.model.Material" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into applicable_scene (applicable_scene_name, applicable_scene_desc, 
-      create_time, create_by, update_time, 
-      update_by, is_deleted)
-    values (#{applicableSceneName,jdbcType=VARCHAR}, #{applicableSceneDesc,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
+    insert into material (material_name, material_desc, create_time, 
+      create_by, update_time, update_by, 
+      is_deleted)
+    values (#{materialName,jdbcType=VARCHAR}, #{materialDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.product.model.ApplicableScene" >
+  <insert id="insertSelective" parameterType="com.wow.product.model.Material" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into applicable_scene
+    insert into material
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="applicableSceneName != null" >
-        applicable_scene_name,
+      <if test="materialName != null" >
+        material_name,
       </if>
-      <if test="applicableSceneDesc != null" >
-        applicable_scene_desc,
+      <if test="materialDesc != null" >
+        material_desc,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -143,11 +143,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="applicableSceneName != null" >
-        #{applicableSceneName,jdbcType=VARCHAR},
+      <if test="materialName != null" >
+        #{materialName,jdbcType=VARCHAR},
       </if>
-      <if test="applicableSceneDesc != null" >
-        #{applicableSceneDesc,jdbcType=VARCHAR},
+      <if test="materialDesc != null" >
+        #{materialDesc,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -166,23 +166,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wow.product.model.ApplicableSceneExample" resultType="java.lang.Integer" >
-    select count(*) from applicable_scene
+  <select id="countByExample" parameterType="com.wow.product.model.MaterialExample" resultType="java.lang.Integer" >
+    select count(*) from material
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update applicable_scene
+    update material
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.applicableSceneName != null" >
-        applicable_scene_name = #{record.applicableSceneName,jdbcType=VARCHAR},
+      <if test="record.materialName != null" >
+        material_name = #{record.materialName,jdbcType=VARCHAR},
       </if>
-      <if test="record.applicableSceneDesc != null" >
-        applicable_scene_desc = #{record.applicableSceneDesc,jdbcType=VARCHAR},
+      <if test="record.materialDesc != null" >
+        material_desc = #{record.materialDesc,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -205,10 +205,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update applicable_scene
+    update material
     set id = #{record.id,jdbcType=INTEGER},
-      applicable_scene_name = #{record.applicableSceneName,jdbcType=VARCHAR},
-      applicable_scene_desc = #{record.applicableSceneDesc,jdbcType=VARCHAR},
+      material_name = #{record.materialName,jdbcType=VARCHAR},
+      material_desc = #{record.materialDesc,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -218,14 +218,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.ApplicableScene" >
-    update applicable_scene
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.Material" >
+    update material
     <set >
-      <if test="applicableSceneName != null" >
-        applicable_scene_name = #{applicableSceneName,jdbcType=VARCHAR},
+      <if test="materialName != null" >
+        material_name = #{materialName,jdbcType=VARCHAR},
       </if>
-      <if test="applicableSceneDesc != null" >
-        applicable_scene_desc = #{applicableSceneDesc,jdbcType=VARCHAR},
+      <if test="materialDesc != null" >
+        material_desc = #{materialDesc,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -245,10 +245,10 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.ApplicableScene" >
-    update applicable_scene
-    set applicable_scene_name = #{applicableSceneName,jdbcType=VARCHAR},
-      applicable_scene_desc = #{applicableSceneDesc,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Material" >
+    update material
+    set material_name = #{materialName,jdbcType=VARCHAR},
+      material_desc = #{materialDesc,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

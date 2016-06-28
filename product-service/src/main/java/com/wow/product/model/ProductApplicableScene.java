@@ -3,12 +3,12 @@ package com.wow.product.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ApplicableScene implements Serializable {
+public class ProductApplicableScene implements Serializable {
     private Integer id;
 
-    private String applicableSceneName;
+    private Integer productId;
 
-    private String applicableSceneDesc;
+    private Integer applicableSceneId;
 
     private Date createTime;
 
@@ -30,20 +30,20 @@ public class ApplicableScene implements Serializable {
         this.id = id;
     }
 
-    public String getApplicableSceneName() {
-        return applicableSceneName;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setApplicableSceneName(String applicableSceneName) {
-        this.applicableSceneName = applicableSceneName;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
-    public String getApplicableSceneDesc() {
-        return applicableSceneDesc;
+    public Integer getApplicableSceneId() {
+        return applicableSceneId;
     }
 
-    public void setApplicableSceneDesc(String applicableSceneDesc) {
-        this.applicableSceneDesc = applicableSceneDesc;
+    public void setApplicableSceneId(Integer applicableSceneId) {
+        this.applicableSceneId = applicableSceneId;
     }
 
     public Date getCreateTime() {
@@ -93,8 +93,8 @@ public class ApplicableScene implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", applicableSceneName=").append(applicableSceneName);
-        sb.append(", applicableSceneDesc=").append(applicableSceneDesc);
+        sb.append(", productId=").append(productId);
+        sb.append(", applicableSceneId=").append(applicableSceneId);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", updateTime=").append(updateTime);

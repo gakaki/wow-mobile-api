@@ -9,15 +9,21 @@ public class Product implements Serializable {
 
     private String productName;
 
+    private String productCode;
+
+    private Byte productType;
+
     private String categoryId;
 
     private Integer brandId;
 
-    private Byte productType;
+    private String productModel;
 
-    private Boolean isCombine;
+    private String material;
 
-    private Boolean isBundling;
+    private String sellingPoint;
+
+    private String detailDescription;
 
     private Boolean canSale;
 
@@ -25,17 +31,13 @@ public class Product implements Serializable {
 
     private Byte viewPlatform;
 
-    private String detailDescription;
-
-    private String shortDescription;
-
-    private Boolean isImport;
-
-    private String productModel;
-
     private String originCountry;
 
     private Integer originAreaId;
+
+    private String originText;
+
+    private Boolean isImport;
 
     private Short length;
 
@@ -43,19 +45,39 @@ public class Product implements Serializable {
 
     private Short height;
 
+    private String sizeText;
+
     private BigDecimal weight;
+
+    private String weightText;
+
+    private String spec;
 
     private String specImg;
 
+    private String color;
+
+    private String style;
+
     private String verboseInfo;
 
-    private Boolean needAssemble;
+    private String tips;
 
-    private Boolean isFragile;
+    private String applicableScene;
 
     private String postSaleServiceDesc;
 
+    private Byte deliveryFeeType;
+
+    private Boolean needAssemble;
+
+    private String assembleTips;
+
+    private Boolean isFragile;
+
     private Boolean isPresale;
+
+    private Boolean isBundling;
 
     private Short productStatus;
 
@@ -63,23 +85,13 @@ public class Product implements Serializable {
 
     private Date onShelfTime;
 
-    private Date addedAt;
+    private Date createTime;
 
-    private Date approvalAt;
+    private Date approvalTime;
 
-    private Date updateAt;
+    private Date updateTime;
 
     private Boolean isDeleted;
-
-    private String material;
-
-    private String style;
-
-    private String applicableScene;
-
-    private String tips;
-
-    private String size;
 
     private String seoTitle;
 
@@ -105,6 +117,22 @@ public class Product implements Serializable {
         this.productName = productName;
     }
 
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public Byte getProductType() {
+        return productType;
+    }
+
+    public void setProductType(Byte productType) {
+        this.productType = productType;
+    }
+
     public String getCategoryId() {
         return categoryId;
     }
@@ -121,28 +149,36 @@ public class Product implements Serializable {
         this.brandId = brandId;
     }
 
-    public Byte getProductType() {
-        return productType;
+    public String getProductModel() {
+        return productModel;
     }
 
-    public void setProductType(Byte productType) {
-        this.productType = productType;
+    public void setProductModel(String productModel) {
+        this.productModel = productModel;
     }
 
-    public Boolean getIsCombine() {
-        return isCombine;
+    public String getMaterial() {
+        return material;
     }
 
-    public void setIsCombine(Boolean isCombine) {
-        this.isCombine = isCombine;
+    public void setMaterial(String material) {
+        this.material = material;
     }
 
-    public Boolean getIsBundling() {
-        return isBundling;
+    public String getSellingPoint() {
+        return sellingPoint;
     }
 
-    public void setIsBundling(Boolean isBundling) {
-        this.isBundling = isBundling;
+    public void setSellingPoint(String sellingPoint) {
+        this.sellingPoint = sellingPoint;
+    }
+
+    public String getDetailDescription() {
+        return detailDescription;
+    }
+
+    public void setDetailDescription(String detailDescription) {
+        this.detailDescription = detailDescription;
     }
 
     public Boolean getCanSale() {
@@ -169,38 +205,6 @@ public class Product implements Serializable {
         this.viewPlatform = viewPlatform;
     }
 
-    public String getDetailDescription() {
-        return detailDescription;
-    }
-
-    public void setDetailDescription(String detailDescription) {
-        this.detailDescription = detailDescription;
-    }
-
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
-    }
-
-    public Boolean getIsImport() {
-        return isImport;
-    }
-
-    public void setIsImport(Boolean isImport) {
-        this.isImport = isImport;
-    }
-
-    public String getProductModel() {
-        return productModel;
-    }
-
-    public void setProductModel(String productModel) {
-        this.productModel = productModel;
-    }
-
     public String getOriginCountry() {
         return originCountry;
     }
@@ -215,6 +219,22 @@ public class Product implements Serializable {
 
     public void setOriginAreaId(Integer originAreaId) {
         this.originAreaId = originAreaId;
+    }
+
+    public String getOriginText() {
+        return originText;
+    }
+
+    public void setOriginText(String originText) {
+        this.originText = originText;
+    }
+
+    public Boolean getIsImport() {
+        return isImport;
+    }
+
+    public void setIsImport(Boolean isImport) {
+        this.isImport = isImport;
     }
 
     public Short getLength() {
@@ -241,12 +261,36 @@ public class Product implements Serializable {
         this.height = height;
     }
 
+    public String getSizeText() {
+        return sizeText;
+    }
+
+    public void setSizeText(String sizeText) {
+        this.sizeText = sizeText;
+    }
+
     public BigDecimal getWeight() {
         return weight;
     }
 
     public void setWeight(BigDecimal weight) {
         this.weight = weight;
+    }
+
+    public String getWeightText() {
+        return weightText;
+    }
+
+    public void setWeightText(String weightText) {
+        this.weightText = weightText;
+    }
+
+    public String getSpec() {
+        return spec;
+    }
+
+    public void setSpec(String spec) {
+        this.spec = spec;
     }
 
     public String getSpecImg() {
@@ -257,6 +301,22 @@ public class Product implements Serializable {
         this.specImg = specImg;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
     public String getVerboseInfo() {
         return verboseInfo;
     }
@@ -265,20 +325,20 @@ public class Product implements Serializable {
         this.verboseInfo = verboseInfo;
     }
 
-    public Boolean getNeedAssemble() {
-        return needAssemble;
+    public String getTips() {
+        return tips;
     }
 
-    public void setNeedAssemble(Boolean needAssemble) {
-        this.needAssemble = needAssemble;
+    public void setTips(String tips) {
+        this.tips = tips;
     }
 
-    public Boolean getIsFragile() {
-        return isFragile;
+    public String getApplicableScene() {
+        return applicableScene;
     }
 
-    public void setIsFragile(Boolean isFragile) {
-        this.isFragile = isFragile;
+    public void setApplicableScene(String applicableScene) {
+        this.applicableScene = applicableScene;
     }
 
     public String getPostSaleServiceDesc() {
@@ -289,12 +349,52 @@ public class Product implements Serializable {
         this.postSaleServiceDesc = postSaleServiceDesc;
     }
 
+    public Byte getDeliveryFeeType() {
+        return deliveryFeeType;
+    }
+
+    public void setDeliveryFeeType(Byte deliveryFeeType) {
+        this.deliveryFeeType = deliveryFeeType;
+    }
+
+    public Boolean getNeedAssemble() {
+        return needAssemble;
+    }
+
+    public void setNeedAssemble(Boolean needAssemble) {
+        this.needAssemble = needAssemble;
+    }
+
+    public String getAssembleTips() {
+        return assembleTips;
+    }
+
+    public void setAssembleTips(String assembleTips) {
+        this.assembleTips = assembleTips;
+    }
+
+    public Boolean getIsFragile() {
+        return isFragile;
+    }
+
+    public void setIsFragile(Boolean isFragile) {
+        this.isFragile = isFragile;
+    }
+
     public Boolean getIsPresale() {
         return isPresale;
     }
 
     public void setIsPresale(Boolean isPresale) {
         this.isPresale = isPresale;
+    }
+
+    public Boolean getIsBundling() {
+        return isBundling;
+    }
+
+    public void setIsBundling(Boolean isBundling) {
+        this.isBundling = isBundling;
     }
 
     public Short getProductStatus() {
@@ -321,28 +421,28 @@ public class Product implements Serializable {
         this.onShelfTime = onShelfTime;
     }
 
-    public Date getAddedAt() {
-        return addedAt;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setAddedAt(Date addedAt) {
-        this.addedAt = addedAt;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getApprovalAt() {
-        return approvalAt;
+    public Date getApprovalTime() {
+        return approvalTime;
     }
 
-    public void setApprovalAt(Date approvalAt) {
-        this.approvalAt = approvalAt;
+    public void setApprovalTime(Date approvalTime) {
+        this.approvalTime = approvalTime;
     }
 
-    public Date getUpdateAt() {
-        return updateAt;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public Boolean getIsDeleted() {
@@ -351,46 +451,6 @@ public class Product implements Serializable {
 
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
-    }
-
-    public String getStyle() {
-        return style;
-    }
-
-    public void setStyle(String style) {
-        this.style = style;
-    }
-
-    public String getApplicableScene() {
-        return applicableScene;
-    }
-
-    public void setApplicableScene(String applicableScene) {
-        this.applicableScene = applicableScene;
-    }
-
-    public String getTips() {
-        return tips;
-    }
-
-    public void setTips(String tips) {
-        this.tips = tips;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
     }
 
     public String getSeoTitle() {
@@ -425,42 +485,48 @@ public class Product implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", productName=").append(productName);
+        sb.append(", productCode=").append(productCode);
+        sb.append(", productType=").append(productType);
         sb.append(", categoryId=").append(categoryId);
         sb.append(", brandId=").append(brandId);
-        sb.append(", productType=").append(productType);
-        sb.append(", isCombine=").append(isCombine);
-        sb.append(", isBundling=").append(isBundling);
+        sb.append(", productModel=").append(productModel);
+        sb.append(", material=").append(material);
+        sb.append(", sellingPoint=").append(sellingPoint);
+        sb.append(", detailDescription=").append(detailDescription);
         sb.append(", canSale=").append(canSale);
         sb.append(", canShow=").append(canShow);
         sb.append(", viewPlatform=").append(viewPlatform);
-        sb.append(", detailDescription=").append(detailDescription);
-        sb.append(", shortDescription=").append(shortDescription);
-        sb.append(", isImport=").append(isImport);
-        sb.append(", productModel=").append(productModel);
         sb.append(", originCountry=").append(originCountry);
         sb.append(", originAreaId=").append(originAreaId);
+        sb.append(", originText=").append(originText);
+        sb.append(", isImport=").append(isImport);
         sb.append(", length=").append(length);
         sb.append(", width=").append(width);
         sb.append(", height=").append(height);
+        sb.append(", sizeText=").append(sizeText);
         sb.append(", weight=").append(weight);
+        sb.append(", weightText=").append(weightText);
+        sb.append(", spec=").append(spec);
         sb.append(", specImg=").append(specImg);
+        sb.append(", color=").append(color);
+        sb.append(", style=").append(style);
         sb.append(", verboseInfo=").append(verboseInfo);
-        sb.append(", needAssemble=").append(needAssemble);
-        sb.append(", isFragile=").append(isFragile);
+        sb.append(", tips=").append(tips);
+        sb.append(", applicableScene=").append(applicableScene);
         sb.append(", postSaleServiceDesc=").append(postSaleServiceDesc);
+        sb.append(", deliveryFeeType=").append(deliveryFeeType);
+        sb.append(", needAssemble=").append(needAssemble);
+        sb.append(", assembleTips=").append(assembleTips);
+        sb.append(", isFragile=").append(isFragile);
         sb.append(", isPresale=").append(isPresale);
+        sb.append(", isBundling=").append(isBundling);
         sb.append(", productStatus=").append(productStatus);
         sb.append(", rejectReason=").append(rejectReason);
         sb.append(", onShelfTime=").append(onShelfTime);
-        sb.append(", addedAt=").append(addedAt);
-        sb.append(", approvalAt=").append(approvalAt);
-        sb.append(", updateAt=").append(updateAt);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", approvalTime=").append(approvalTime);
+        sb.append(", updateTime=").append(updateTime);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", material=").append(material);
-        sb.append(", style=").append(style);
-        sb.append(", applicableScene=").append(applicableScene);
-        sb.append(", tips=").append(tips);
-        sb.append(", size=").append(size);
         sb.append(", seoTitle=").append(seoTitle);
         sb.append(", seoDesc=").append(seoDesc);
         sb.append(", seoKey=").append(seoKey);

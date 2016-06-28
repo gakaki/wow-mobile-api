@@ -3,12 +3,12 @@ package com.wow.product.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ApplicableScene implements Serializable {
+public class Material implements Serializable {
     private Integer id;
 
-    private String applicableSceneName;
+    private String materialName;
 
-    private String applicableSceneDesc;
+    private String materialDesc;
 
     private Date createTime;
 
@@ -30,20 +30,20 @@ public class ApplicableScene implements Serializable {
         this.id = id;
     }
 
-    public String getApplicableSceneName() {
-        return applicableSceneName;
+    public String getMaterialName() {
+        return materialName;
     }
 
-    public void setApplicableSceneName(String applicableSceneName) {
-        this.applicableSceneName = applicableSceneName;
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
     }
 
-    public String getApplicableSceneDesc() {
-        return applicableSceneDesc;
+    public String getMaterialDesc() {
+        return materialDesc;
     }
 
-    public void setApplicableSceneDesc(String applicableSceneDesc) {
-        this.applicableSceneDesc = applicableSceneDesc;
+    public void setMaterialDesc(String materialDesc) {
+        this.materialDesc = materialDesc;
     }
 
     public Date getCreateTime() {
@@ -93,8 +93,8 @@ public class ApplicableScene implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", applicableSceneName=").append(applicableSceneName);
-        sb.append(", applicableSceneDesc=").append(applicableSceneDesc);
+        sb.append(", materialName=").append(materialName);
+        sb.append(", materialDesc=").append(materialDesc);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", updateTime=").append(updateTime);
