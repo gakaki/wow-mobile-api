@@ -15,6 +15,8 @@ public class ProductPriceChangeLog implements Serializable {
 
     private BigDecimal priceTo;
 
+    private String priceChangeReason;
+
     private String updateBy;
 
     private Date updateTime;
@@ -61,6 +63,14 @@ public class ProductPriceChangeLog implements Serializable {
         this.priceTo = priceTo;
     }
 
+    public String getPriceChangeReason() {
+        return priceChangeReason;
+    }
+
+    public void setPriceChangeReason(String priceChangeReason) {
+        this.priceChangeReason = priceChangeReason;
+    }
+
     public String getUpdateBy() {
         return updateBy;
     }
@@ -88,6 +98,7 @@ public class ProductPriceChangeLog implements Serializable {
         sb.append(", priceType=").append(priceType);
         sb.append(", priceFrom=").append(priceFrom);
         sb.append(", priceTo=").append(priceTo);
+        sb.append(", priceChangeReason=").append(priceChangeReason);
         sb.append(", updateBy=").append(updateBy);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

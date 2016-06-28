@@ -12,7 +12,7 @@ public class EndUserLoginLog implements Serializable {
 
     private String userAgentInfo;
 
-    private Integer loginIp;
+    private Long loginIp;
 
     private Date loginTime;
 
@@ -50,11 +50,11 @@ public class EndUserLoginLog implements Serializable {
         this.userAgentInfo = userAgentInfo;
     }
 
-    public Integer getLoginIp() {
+    public Long getLoginIp() {
         return loginIp;
     }
 
-    public void setLoginIp(Integer loginIp) {
+    public void setLoginIp(Long loginIp) {
         this.loginIp = loginIp;
     }
 

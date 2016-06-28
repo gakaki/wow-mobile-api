@@ -1,14 +1,15 @@
-package com.wow.product.model;
+package com.wow.order.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
-public class ApplicableScene implements Serializable {
+public class DeliveryFeeConfig implements Serializable {
     private Integer id;
 
-    private String applicableSceneName;
+    private Byte deliveryFeeType;
 
-    private String applicableSceneDesc;
+    private BigDecimal deliveryFee;
 
     private Date createTime;
 
@@ -18,7 +19,7 @@ public class ApplicableScene implements Serializable {
 
     private String updateBy;
 
-    private Boolean isDeleted;
+    private Byte isDeleted;
 
     private static final long serialVersionUID = 1L;
 
@@ -30,20 +31,20 @@ public class ApplicableScene implements Serializable {
         this.id = id;
     }
 
-    public String getApplicableSceneName() {
-        return applicableSceneName;
+    public Byte getDeliveryFeeType() {
+        return deliveryFeeType;
     }
 
-    public void setApplicableSceneName(String applicableSceneName) {
-        this.applicableSceneName = applicableSceneName;
+    public void setDeliveryFeeType(Byte deliveryFeeType) {
+        this.deliveryFeeType = deliveryFeeType;
     }
 
-    public String getApplicableSceneDesc() {
-        return applicableSceneDesc;
+    public BigDecimal getDeliveryFee() {
+        return deliveryFee;
     }
 
-    public void setApplicableSceneDesc(String applicableSceneDesc) {
-        this.applicableSceneDesc = applicableSceneDesc;
+    public void setDeliveryFee(BigDecimal deliveryFee) {
+        this.deliveryFee = deliveryFee;
     }
 
     public Date getCreateTime() {
@@ -78,11 +79,11 @@ public class ApplicableScene implements Serializable {
         this.updateBy = updateBy;
     }
 
-    public Boolean getIsDeleted() {
+    public Byte getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(Boolean isDeleted) {
+    public void setIsDeleted(Byte isDeleted) {
         this.isDeleted = isDeleted;
     }
 
@@ -93,8 +94,8 @@ public class ApplicableScene implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", applicableSceneName=").append(applicableSceneName);
-        sb.append(", applicableSceneDesc=").append(applicableSceneDesc);
+        sb.append(", deliveryFeeType=").append(deliveryFeeType);
+        sb.append(", deliveryFee=").append(deliveryFee);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", updateTime=").append(updateTime);

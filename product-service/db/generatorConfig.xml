@@ -66,28 +66,6 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="designer" domainObjectName="Designer" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
-        <table schema="root" tableName="group" domainObjectName="Group" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
         <table schema="root" tableName="product" domainObjectName="Product" enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
@@ -98,63 +76,17 @@
                enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-
-        <table schema="root" tableName="product_attribute" domainObjectName="ProductAttribute" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
-        <table schema="root" tableName="product_combine" domainObjectName="ProductCombine" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
-        <table schema="root" tableName="product_comment" domainObjectName="ProductComment" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
-        <table schema="root" tableName="product_designer" domainObjectName="ProductDesigner" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
-        <table schema="root" tableName="product_group" domainObjectName="ProductGroup" enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-
         <table schema="root" tableName="product_image" domainObjectName="ProductImage" enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table schema="root" tableName="product_attribute" domainObjectName="ProductAttribute" enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -175,8 +107,7 @@
                enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-
-        <table schema="root" tableName="product_summary" domainObjectName="ProductSummary" enableInsert="true"
+        <table schema="root" tableName="product_combine" domainObjectName="ProductCombine" enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -187,7 +118,8 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="product_supplier" domainObjectName="ProductSupplier" enableInsert="true"
+        <table schema="root" tableName="product_comment" domainObjectName="ProductComment"
+               enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -198,7 +130,19 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="product_supply_log" domainObjectName="ProductSupplyLog" enableInsert="true"
+        <table schema="root" tableName="designer" domainObjectName="Designer"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table schema="root" tableName="product_designer" domainObjectName="ProductDesigner"
+               enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -209,7 +153,19 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="scene" domainObjectName="Scene" enableInsert="true"
+        <table schema="root" tableName="group" domainObjectName="Group"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table schema="root" tableName="product_group" domainObjectName="ProductGroup"
+               enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -220,7 +176,54 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="supplier" domainObjectName="Supplier" enableInsert="true"
+        <table schema="root" tableName="product_summary" domainObjectName="ProductSummary"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table schema="root" tableName="scene" domainObjectName="Scene"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table schema="root" tableName="supplier" domainObjectName="Supplier"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table schema="root" tableName="product_supplier" domainObjectName="ProductSupplier"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table schema="root" tableName="product_supply_log" domainObjectName="ProductSupplyLog"
+               enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -241,7 +244,6 @@
                enableUpdateByExample="true" modelType="flat">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-
         <table schema="root" tableName="product_short_list_in_topic" domainObjectName="ProductShortListInTopic"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
@@ -254,7 +256,8 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="warehouse" domainObjectName="Warehouse" enableInsert="true"
+        <table schema="root" tableName="warehouse" domainObjectName="Warehouse"
+               enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -265,7 +268,8 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="style" domainObjectName="Style" enableInsert="true"
+        <table schema="root" tableName="style" domainObjectName="Style"
+               enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -276,7 +280,42 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="applicable_scene" domainObjectName="ApplicableScene" enableInsert="true"
+        <table schema="root" tableName="applicable_scene" domainObjectName="ApplicableScene"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table schema="root" tableName="product_applicable_scene" domainObjectName="ProductApplicableScene"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table schema="root" tableName="material" domainObjectName="Material"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table schema="root" tableName="product_material" domainObjectName="ProductMaterial"
+               enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"

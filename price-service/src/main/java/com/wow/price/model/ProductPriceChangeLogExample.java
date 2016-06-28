@@ -406,6 +406,76 @@ public class ProductPriceChangeLogExample {
             return (Criteria) this;
         }
 
+        public Criteria andPriceChangeReasonIsNull() {
+            addCriterion("price_change_reason is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonIsNotNull() {
+            addCriterion("price_change_reason is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonEqualTo(String value) {
+            addCriterion("price_change_reason =", value, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonNotEqualTo(String value) {
+            addCriterion("price_change_reason <>", value, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonGreaterThan(String value) {
+            addCriterion("price_change_reason >", value, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonGreaterThanOrEqualTo(String value) {
+            addCriterion("price_change_reason >=", value, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonLessThan(String value) {
+            addCriterion("price_change_reason <", value, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonLessThanOrEqualTo(String value) {
+            addCriterion("price_change_reason <=", value, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonLike(String value) {
+            addCriterion("price_change_reason like", value, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonNotLike(String value) {
+            addCriterion("price_change_reason not like", value, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonIn(List<String> values) {
+            addCriterion("price_change_reason in", values, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonNotIn(List<String> values) {
+            addCriterion("price_change_reason not in", values, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonBetween(String value1, String value2) {
+            addCriterion("price_change_reason between", value1, value2, "priceChangeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonNotBetween(String value1, String value2) {
+            addCriterion("price_change_reason not between", value1, value2, "priceChangeReason");
+            return (Criteria) this;
+        }
+
         public Criteria andUpdateByIsNull() {
             addCriterion("update_by is null");
             return (Criteria) this;
@@ -533,6 +603,11 @@ public class ProductPriceChangeLogExample {
 
         public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
             addCriterion("update_time not between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceChangeReasonLikeInsensitive(String value) {
+            addCriterion("upper(price_change_reason) like", value.toUpperCase(), "priceChangeReason");
             return (Criteria) this;
         }
 

@@ -495,52 +495,52 @@ public class EndUserSessionExample {
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpEqualTo(Integer value) {
+        public Criteria andLastLoginIpEqualTo(Long value) {
             addCriterion("last_login_ip =", value, "lastLoginIp");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpNotEqualTo(Integer value) {
+        public Criteria andLastLoginIpNotEqualTo(Long value) {
             addCriterion("last_login_ip <>", value, "lastLoginIp");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpGreaterThan(Integer value) {
+        public Criteria andLastLoginIpGreaterThan(Long value) {
             addCriterion("last_login_ip >", value, "lastLoginIp");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpGreaterThanOrEqualTo(Integer value) {
+        public Criteria andLastLoginIpGreaterThanOrEqualTo(Long value) {
             addCriterion("last_login_ip >=", value, "lastLoginIp");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpLessThan(Integer value) {
+        public Criteria andLastLoginIpLessThan(Long value) {
             addCriterion("last_login_ip <", value, "lastLoginIp");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpLessThanOrEqualTo(Integer value) {
+        public Criteria andLastLoginIpLessThanOrEqualTo(Long value) {
             addCriterion("last_login_ip <=", value, "lastLoginIp");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpIn(List<Integer> values) {
+        public Criteria andLastLoginIpIn(List<Long> values) {
             addCriterion("last_login_ip in", values, "lastLoginIp");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpNotIn(List<Integer> values) {
+        public Criteria andLastLoginIpNotIn(List<Long> values) {
             addCriterion("last_login_ip not in", values, "lastLoginIp");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpBetween(Integer value1, Integer value2) {
+        public Criteria andLastLoginIpBetween(Long value1, Long value2) {
             addCriterion("last_login_ip between", value1, value2, "lastLoginIp");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginIpNotBetween(Integer value1, Integer value2) {
+        public Criteria andLastLoginIpNotBetween(Long value1, Long value2) {
             addCriterion("last_login_ip not between", value1, value2, "lastLoginIp");
             return (Criteria) this;
         }

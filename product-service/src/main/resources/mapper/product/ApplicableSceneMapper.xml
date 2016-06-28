@@ -5,7 +5,6 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="applicable_scene_name" property="applicableSceneName" jdbcType="VARCHAR" />
     <result column="applicable_scene_desc" property="applicableSceneDesc" jdbcType="VARCHAR" />
-    <result column="is_active" property="isActive" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -71,8 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, applicable_scene_name, applicable_scene_desc, is_active, create_time, create_by, 
-    update_time, update_by, is_deleted
+    id, applicable_scene_name, applicable_scene_desc, create_time, create_by, update_time, 
+    update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ApplicableSceneExample" >
     select
@@ -109,13 +108,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into applicable_scene (applicable_scene_name, applicable_scene_desc, 
-      is_active, create_time, create_by, 
-      update_time, update_by, is_deleted
-      )
+      create_time, create_by, update_time, 
+      update_by, is_deleted)
     values (#{applicableSceneName,jdbcType=VARCHAR}, #{applicableSceneDesc,jdbcType=VARCHAR}, 
-      #{isActive,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT}
-      )
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.ApplicableScene" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -128,9 +125,6 @@
       </if>
       <if test="applicableSceneDesc != null" >
         applicable_scene_desc,
-      </if>
-      <if test="isActive != null" >
-        is_active,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -154,9 +148,6 @@
       </if>
       <if test="applicableSceneDesc != null" >
         #{applicableSceneDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="isActive != null" >
-        #{isActive,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -193,9 +184,6 @@
       <if test="record.applicableSceneDesc != null" >
         applicable_scene_desc = #{record.applicableSceneDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.isActive != null" >
-        is_active = #{record.isActive,jdbcType=BIT},
-      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -221,7 +209,6 @@
     set id = #{record.id,jdbcType=INTEGER},
       applicable_scene_name = #{record.applicableSceneName,jdbcType=VARCHAR},
       applicable_scene_desc = #{record.applicableSceneDesc,jdbcType=VARCHAR},
-      is_active = #{record.isActive,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -239,9 +226,6 @@
       </if>
       <if test="applicableSceneDesc != null" >
         applicable_scene_desc = #{applicableSceneDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="isActive != null" >
-        is_active = #{isActive,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -265,7 +249,6 @@
     update applicable_scene
     set applicable_scene_name = #{applicableSceneName,jdbcType=VARCHAR},
       applicable_scene_desc = #{applicableSceneDesc,jdbcType=VARCHAR},
-      is_active = #{isActive,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

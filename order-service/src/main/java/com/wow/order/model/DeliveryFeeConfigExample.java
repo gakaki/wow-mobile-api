@@ -1,17 +1,18 @@
-package com.wow.product.model;
+package com.wow.order.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ApplicableSceneExample {
+public class DeliveryFeeConfigExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ApplicableSceneExample() {
+    public DeliveryFeeConfigExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -165,143 +166,123 @@ public class ApplicableSceneExample {
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameIsNull() {
-            addCriterion("applicable_scene_name is null");
+        public Criteria andDeliveryFeeTypeIsNull() {
+            addCriterion("delivery_fee_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameIsNotNull() {
-            addCriterion("applicable_scene_name is not null");
+        public Criteria andDeliveryFeeTypeIsNotNull() {
+            addCriterion("delivery_fee_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameEqualTo(String value) {
-            addCriterion("applicable_scene_name =", value, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeEqualTo(Byte value) {
+            addCriterion("delivery_fee_type =", value, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameNotEqualTo(String value) {
-            addCriterion("applicable_scene_name <>", value, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeNotEqualTo(Byte value) {
+            addCriterion("delivery_fee_type <>", value, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameGreaterThan(String value) {
-            addCriterion("applicable_scene_name >", value, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeGreaterThan(Byte value) {
+            addCriterion("delivery_fee_type >", value, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameGreaterThanOrEqualTo(String value) {
-            addCriterion("applicable_scene_name >=", value, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("delivery_fee_type >=", value, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameLessThan(String value) {
-            addCriterion("applicable_scene_name <", value, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeLessThan(Byte value) {
+            addCriterion("delivery_fee_type <", value, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameLessThanOrEqualTo(String value) {
-            addCriterion("applicable_scene_name <=", value, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("delivery_fee_type <=", value, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameLike(String value) {
-            addCriterion("applicable_scene_name like", value, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeIn(List<Byte> values) {
+            addCriterion("delivery_fee_type in", values, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameNotLike(String value) {
-            addCriterion("applicable_scene_name not like", value, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeNotIn(List<Byte> values) {
+            addCriterion("delivery_fee_type not in", values, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameIn(List<String> values) {
-            addCriterion("applicable_scene_name in", values, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeBetween(Byte value1, Byte value2) {
+            addCriterion("delivery_fee_type between", value1, value2, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameNotIn(List<String> values) {
-            addCriterion("applicable_scene_name not in", values, "applicableSceneName");
+        public Criteria andDeliveryFeeTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("delivery_fee_type not between", value1, value2, "deliveryFeeType");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameBetween(String value1, String value2) {
-            addCriterion("applicable_scene_name between", value1, value2, "applicableSceneName");
+        public Criteria andDeliveryFeeIsNull() {
+            addCriterion("delivery_fee is null");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneNameNotBetween(String value1, String value2) {
-            addCriterion("applicable_scene_name not between", value1, value2, "applicableSceneName");
+        public Criteria andDeliveryFeeIsNotNull() {
+            addCriterion("delivery_fee is not null");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescIsNull() {
-            addCriterion("applicable_scene_desc is null");
+        public Criteria andDeliveryFeeEqualTo(BigDecimal value) {
+            addCriterion("delivery_fee =", value, "deliveryFee");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescIsNotNull() {
-            addCriterion("applicable_scene_desc is not null");
+        public Criteria andDeliveryFeeNotEqualTo(BigDecimal value) {
+            addCriterion("delivery_fee <>", value, "deliveryFee");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescEqualTo(String value) {
-            addCriterion("applicable_scene_desc =", value, "applicableSceneDesc");
+        public Criteria andDeliveryFeeGreaterThan(BigDecimal value) {
+            addCriterion("delivery_fee >", value, "deliveryFee");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescNotEqualTo(String value) {
-            addCriterion("applicable_scene_desc <>", value, "applicableSceneDesc");
+        public Criteria andDeliveryFeeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("delivery_fee >=", value, "deliveryFee");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescGreaterThan(String value) {
-            addCriterion("applicable_scene_desc >", value, "applicableSceneDesc");
+        public Criteria andDeliveryFeeLessThan(BigDecimal value) {
+            addCriterion("delivery_fee <", value, "deliveryFee");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescGreaterThanOrEqualTo(String value) {
-            addCriterion("applicable_scene_desc >=", value, "applicableSceneDesc");
+        public Criteria andDeliveryFeeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("delivery_fee <=", value, "deliveryFee");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescLessThan(String value) {
-            addCriterion("applicable_scene_desc <", value, "applicableSceneDesc");
+        public Criteria andDeliveryFeeIn(List<BigDecimal> values) {
+            addCriterion("delivery_fee in", values, "deliveryFee");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescLessThanOrEqualTo(String value) {
-            addCriterion("applicable_scene_desc <=", value, "applicableSceneDesc");
+        public Criteria andDeliveryFeeNotIn(List<BigDecimal> values) {
+            addCriterion("delivery_fee not in", values, "deliveryFee");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescLike(String value) {
-            addCriterion("applicable_scene_desc like", value, "applicableSceneDesc");
+        public Criteria andDeliveryFeeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("delivery_fee between", value1, value2, "deliveryFee");
             return (Criteria) this;
         }
 
-        public Criteria andApplicableSceneDescNotLike(String value) {
-            addCriterion("applicable_scene_desc not like", value, "applicableSceneDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andApplicableSceneDescIn(List<String> values) {
-            addCriterion("applicable_scene_desc in", values, "applicableSceneDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andApplicableSceneDescNotIn(List<String> values) {
-            addCriterion("applicable_scene_desc not in", values, "applicableSceneDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andApplicableSceneDescBetween(String value1, String value2) {
-            addCriterion("applicable_scene_desc between", value1, value2, "applicableSceneDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andApplicableSceneDescNotBetween(String value1, String value2) {
-            addCriterion("applicable_scene_desc not between", value1, value2, "applicableSceneDesc");
+        public Criteria andDeliveryFeeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("delivery_fee not between", value1, value2, "deliveryFee");
             return (Criteria) this;
         }
 
@@ -575,63 +556,53 @@ public class ApplicableSceneExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedEqualTo(Boolean value) {
+        public Criteria andIsDeletedEqualTo(Byte value) {
             addCriterion("is_deleted =", value, "isDeleted");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedNotEqualTo(Boolean value) {
+        public Criteria andIsDeletedNotEqualTo(Byte value) {
             addCriterion("is_deleted <>", value, "isDeleted");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedGreaterThan(Boolean value) {
+        public Criteria andIsDeletedGreaterThan(Byte value) {
             addCriterion("is_deleted >", value, "isDeleted");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andIsDeletedGreaterThanOrEqualTo(Byte value) {
             addCriterion("is_deleted >=", value, "isDeleted");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedLessThan(Boolean value) {
+        public Criteria andIsDeletedLessThan(Byte value) {
             addCriterion("is_deleted <", value, "isDeleted");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedLessThanOrEqualTo(Boolean value) {
+        public Criteria andIsDeletedLessThanOrEqualTo(Byte value) {
             addCriterion("is_deleted <=", value, "isDeleted");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedIn(List<Boolean> values) {
+        public Criteria andIsDeletedIn(List<Byte> values) {
             addCriterion("is_deleted in", values, "isDeleted");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedNotIn(List<Boolean> values) {
+        public Criteria andIsDeletedNotIn(List<Byte> values) {
             addCriterion("is_deleted not in", values, "isDeleted");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedBetween(Boolean value1, Boolean value2) {
+        public Criteria andIsDeletedBetween(Byte value1, Byte value2) {
             addCriterion("is_deleted between", value1, value2, "isDeleted");
             return (Criteria) this;
         }
 
-        public Criteria andIsDeletedNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andIsDeletedNotBetween(Byte value1, Byte value2) {
             addCriterion("is_deleted not between", value1, value2, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andApplicableSceneNameLikeInsensitive(String value) {
-            addCriterion("upper(applicable_scene_name) like", value.toUpperCase(), "applicableSceneName");
-            return (Criteria) this;
-        }
-
-        public Criteria andApplicableSceneDescLikeInsensitive(String value) {
-            addCriterion("upper(applicable_scene_desc) like", value.toUpperCase(), "applicableSceneDesc");
             return (Criteria) this;
         }
 

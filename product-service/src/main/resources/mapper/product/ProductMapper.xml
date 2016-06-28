@@ -4,42 +4,48 @@
   <resultMap id="BaseResultMap" type="com.wow.product.model.Product" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="product_type" property="productType" jdbcType="TINYINT" />
     <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
     <result column="brand_id" property="brandId" jdbcType="INTEGER" />
-    <result column="product_type" property="productType" jdbcType="TINYINT" />
-    <result column="is_combine" property="isCombine" jdbcType="BIT" />
-    <result column="is_bundling" property="isBundling" jdbcType="BIT" />
+    <result column="product_model" property="productModel" jdbcType="VARCHAR" />
+    <result column="material" property="material" jdbcType="VARCHAR" />
+    <result column="selling_point" property="sellingPoint" jdbcType="VARCHAR" />
+    <result column="detail_description" property="detailDescription" jdbcType="VARCHAR" />
     <result column="can_sale" property="canSale" jdbcType="BIT" />
     <result column="can_show" property="canShow" jdbcType="BIT" />
     <result column="view_platform" property="viewPlatform" jdbcType="TINYINT" />
-    <result column="detail_description" property="detailDescription" jdbcType="VARCHAR" />
-    <result column="short_description" property="shortDescription" jdbcType="VARCHAR" />
-    <result column="is_import" property="isImport" jdbcType="BIT" />
-    <result column="product_model" property="productModel" jdbcType="VARCHAR" />
     <result column="origin_country" property="originCountry" jdbcType="VARCHAR" />
     <result column="origin_area_id" property="originAreaId" jdbcType="INTEGER" />
+    <result column="origin_text" property="originText" jdbcType="VARCHAR" />
+    <result column="is_import" property="isImport" jdbcType="BIT" />
     <result column="length" property="length" jdbcType="SMALLINT" />
     <result column="width" property="width" jdbcType="SMALLINT" />
     <result column="height" property="height" jdbcType="SMALLINT" />
+    <result column="size_text" property="sizeText" jdbcType="VARCHAR" />
     <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="weight_text" property="weightText" jdbcType="VARCHAR" />
+    <result column="spec" property="spec" jdbcType="VARCHAR" />
     <result column="spec_img" property="specImg" jdbcType="VARCHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="style" property="style" jdbcType="VARCHAR" />
     <result column="verbose_info" property="verboseInfo" jdbcType="VARCHAR" />
-    <result column="need_assemble" property="needAssemble" jdbcType="BIT" />
-    <result column="is_fragile" property="isFragile" jdbcType="BIT" />
+    <result column="tips" property="tips" jdbcType="VARCHAR" />
+    <result column="applicable_scene" property="applicableScene" jdbcType="VARCHAR" />
     <result column="post_sale_service_desc" property="postSaleServiceDesc" jdbcType="VARCHAR" />
+    <result column="delivery_fee_type" property="deliveryFeeType" jdbcType="TINYINT" />
+    <result column="need_assemble" property="needAssemble" jdbcType="BIT" />
+    <result column="assemble_tips" property="assembleTips" jdbcType="VARCHAR" />
+    <result column="is_fragile" property="isFragile" jdbcType="BIT" />
     <result column="is_presale" property="isPresale" jdbcType="BIT" />
+    <result column="is_bundling" property="isBundling" jdbcType="BIT" />
     <result column="product_status" property="productStatus" jdbcType="DECIMAL" />
     <result column="reject_reason" property="rejectReason" jdbcType="VARCHAR" />
     <result column="on_shelf_time" property="onShelfTime" jdbcType="TIMESTAMP" />
-    <result column="added_at" property="addedAt" jdbcType="TIMESTAMP" />
-    <result column="approval_at" property="approvalAt" jdbcType="TIMESTAMP" />
-    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="approval_time" property="approvalTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
-    <result column="material" property="material" jdbcType="VARCHAR" />
-    <result column="style" property="style" jdbcType="VARCHAR" />
-    <result column="applicable_scene" property="applicableScene" jdbcType="VARCHAR" />
-    <result column="tips" property="tips" jdbcType="VARCHAR" />
-    <result column="size" property="size" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.wow.product.model.Product" extends="BaseResultMap" >
     <result column="seo_title" property="seoTitle" jdbcType="LONGVARCHAR" />
@@ -105,12 +111,13 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, product_name, category_id, brand_id, product_type, is_combine, is_bundling, can_sale, 
-    can_show, view_platform, detail_description, short_description, is_import, product_model, 
-    origin_country, origin_area_id, length, width, height, weight, spec_img, verbose_info, 
-    need_assemble, is_fragile, post_sale_service_desc, is_presale, product_status, reject_reason, 
-    on_shelf_time, added_at, approval_at, update_at, is_deleted, material, style, applicable_scene, 
-    tips, size
+    id, product_name, product_code, product_type, category_id, brand_id, product_model, 
+    material, selling_point, detail_description, can_sale, can_show, view_platform, origin_country, 
+    origin_area_id, origin_text, is_import, length, width, height, size_text, weight, 
+    weight_text, spec, spec_img, color, style, verbose_info, tips, applicable_scene, 
+    post_sale_service_desc, delivery_fee_type, need_assemble, assemble_tips, is_fragile, 
+    is_presale, is_bundling, product_status, reject_reason, on_shelf_time, create_time, 
+    approval_time, update_time, is_deleted
   </sql>
   <sql id="Blob_Column_List" >
     seo_title, seo_desc, seo_key
@@ -167,33 +174,37 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product (product_name, category_id, brand_id, 
-      product_type, is_combine, is_bundling, 
+    insert into product (product_name, product_code, product_type, 
+      category_id, brand_id, product_model, 
+      material, selling_point, detail_description, 
       can_sale, can_show, view_platform, 
-      detail_description, short_description, is_import, 
-      product_model, origin_country, origin_area_id, 
-      length, width, height, 
-      weight, spec_img, verbose_info, 
-      need_assemble, is_fragile, post_sale_service_desc, 
-      is_presale, product_status, reject_reason, 
-      on_shelf_time, added_at, approval_at, 
-      update_at, is_deleted, material, 
-      style, applicable_scene, tips, 
-      size, seo_title, seo_desc, 
+      origin_country, origin_area_id, origin_text, 
+      is_import, length, width, 
+      height, size_text, weight, 
+      weight_text, spec, spec_img, 
+      color, style, verbose_info, 
+      tips, applicable_scene, post_sale_service_desc, 
+      delivery_fee_type, need_assemble, assemble_tips, 
+      is_fragile, is_presale, is_bundling, 
+      product_status, reject_reason, on_shelf_time, 
+      create_time, approval_time, update_time, 
+      is_deleted, seo_title, seo_desc, 
       seo_key)
-    values (#{productName,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, #{brandId,jdbcType=INTEGER}, 
-      #{productType,jdbcType=TINYINT}, #{isCombine,jdbcType=BIT}, #{isBundling,jdbcType=BIT}, 
+    values (#{productName,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, #{productType,jdbcType=TINYINT}, 
+      #{categoryId,jdbcType=VARCHAR}, #{brandId,jdbcType=INTEGER}, #{productModel,jdbcType=VARCHAR}, 
+      #{material,jdbcType=VARCHAR}, #{sellingPoint,jdbcType=VARCHAR}, #{detailDescription,jdbcType=VARCHAR}, 
       #{canSale,jdbcType=BIT}, #{canShow,jdbcType=BIT}, #{viewPlatform,jdbcType=TINYINT}, 
-      #{detailDescription,jdbcType=VARCHAR}, #{shortDescription,jdbcType=VARCHAR}, #{isImport,jdbcType=BIT}, 
-      #{productModel,jdbcType=VARCHAR}, #{originCountry,jdbcType=VARCHAR}, #{originAreaId,jdbcType=INTEGER}, 
-      #{length,jdbcType=SMALLINT}, #{width,jdbcType=SMALLINT}, #{height,jdbcType=SMALLINT}, 
-      #{weight,jdbcType=DECIMAL}, #{specImg,jdbcType=VARCHAR}, #{verboseInfo,jdbcType=VARCHAR}, 
-      #{needAssemble,jdbcType=BIT}, #{isFragile,jdbcType=BIT}, #{postSaleServiceDesc,jdbcType=VARCHAR}, 
-      #{isPresale,jdbcType=BIT}, #{productStatus,jdbcType=DECIMAL}, #{rejectReason,jdbcType=VARCHAR}, 
-      #{onShelfTime,jdbcType=TIMESTAMP}, #{addedAt,jdbcType=TIMESTAMP}, #{approvalAt,jdbcType=TIMESTAMP}, 
-      #{updateAt,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}, #{material,jdbcType=VARCHAR}, 
-      #{style,jdbcType=VARCHAR}, #{applicableScene,jdbcType=VARCHAR}, #{tips,jdbcType=VARCHAR}, 
-      #{size,jdbcType=VARCHAR}, #{seoTitle,jdbcType=LONGVARCHAR}, #{seoDesc,jdbcType=LONGVARCHAR}, 
+      #{originCountry,jdbcType=VARCHAR}, #{originAreaId,jdbcType=INTEGER}, #{originText,jdbcType=VARCHAR}, 
+      #{isImport,jdbcType=BIT}, #{length,jdbcType=SMALLINT}, #{width,jdbcType=SMALLINT}, 
+      #{height,jdbcType=SMALLINT}, #{sizeText,jdbcType=VARCHAR}, #{weight,jdbcType=DECIMAL}, 
+      #{weightText,jdbcType=VARCHAR}, #{spec,jdbcType=VARCHAR}, #{specImg,jdbcType=VARCHAR}, 
+      #{color,jdbcType=VARCHAR}, #{style,jdbcType=VARCHAR}, #{verboseInfo,jdbcType=VARCHAR}, 
+      #{tips,jdbcType=VARCHAR}, #{applicableScene,jdbcType=VARCHAR}, #{postSaleServiceDesc,jdbcType=VARCHAR}, 
+      #{deliveryFeeType,jdbcType=TINYINT}, #{needAssemble,jdbcType=BIT}, #{assembleTips,jdbcType=VARCHAR}, 
+      #{isFragile,jdbcType=BIT}, #{isPresale,jdbcType=BIT}, #{isBundling,jdbcType=BIT}, 
+      #{productStatus,jdbcType=DECIMAL}, #{rejectReason,jdbcType=VARCHAR}, #{onShelfTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{approvalTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=BIT}, #{seoTitle,jdbcType=LONGVARCHAR}, #{seoDesc,jdbcType=LONGVARCHAR}, 
       #{seoKey,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.Product" >
@@ -205,20 +216,29 @@
       <if test="productName != null" >
         product_name,
       </if>
+      <if test="productCode != null" >
+        product_code,
+      </if>
+      <if test="productType != null" >
+        product_type,
+      </if>
       <if test="categoryId != null" >
         category_id,
       </if>
       <if test="brandId != null" >
         brand_id,
       </if>
-      <if test="productType != null" >
-        product_type,
+      <if test="productModel != null" >
+        product_model,
       </if>
-      <if test="isCombine != null" >
-        is_combine,
+      <if test="material != null" >
+        material,
       </if>
-      <if test="isBundling != null" >
-        is_bundling,
+      <if test="sellingPoint != null" >
+        selling_point,
+      </if>
+      <if test="detailDescription != null" >
+        detail_description,
       </if>
       <if test="canSale != null" >
         can_sale,
@@ -229,23 +249,17 @@
       <if test="viewPlatform != null" >
         view_platform,
       </if>
-      <if test="detailDescription != null" >
-        detail_description,
-      </if>
-      <if test="shortDescription != null" >
-        short_description,
-      </if>
-      <if test="isImport != null" >
-        is_import,
-      </if>
-      <if test="productModel != null" >
-        product_model,
-      </if>
       <if test="originCountry != null" >
         origin_country,
       </if>
       <if test="originAreaId != null" >
         origin_area_id,
+      </if>
+      <if test="originText != null" >
+        origin_text,
+      </if>
+      <if test="isImport != null" >
+        is_import,
       </if>
       <if test="length != null" >
         length,
@@ -256,26 +270,56 @@
       <if test="height != null" >
         height,
       </if>
+      <if test="sizeText != null" >
+        size_text,
+      </if>
       <if test="weight != null" >
         weight,
+      </if>
+      <if test="weightText != null" >
+        weight_text,
+      </if>
+      <if test="spec != null" >
+        spec,
       </if>
       <if test="specImg != null" >
         spec_img,
       </if>
+      <if test="color != null" >
+        color,
+      </if>
+      <if test="style != null" >
+        style,
+      </if>
       <if test="verboseInfo != null" >
         verbose_info,
       </if>
-      <if test="needAssemble != null" >
-        need_assemble,
+      <if test="tips != null" >
+        tips,
       </if>
-      <if test="isFragile != null" >
-        is_fragile,
+      <if test="applicableScene != null" >
+        applicable_scene,
       </if>
       <if test="postSaleServiceDesc != null" >
         post_sale_service_desc,
       </if>
+      <if test="deliveryFeeType != null" >
+        delivery_fee_type,
+      </if>
+      <if test="needAssemble != null" >
+        need_assemble,
+      </if>
+      <if test="assembleTips != null" >
+        assemble_tips,
+      </if>
+      <if test="isFragile != null" >
+        is_fragile,
+      </if>
       <if test="isPresale != null" >
         is_presale,
+      </if>
+      <if test="isBundling != null" >
+        is_bundling,
       </if>
       <if test="productStatus != null" >
         product_status,
@@ -286,32 +330,17 @@
       <if test="onShelfTime != null" >
         on_shelf_time,
       </if>
-      <if test="addedAt != null" >
-        added_at,
+      <if test="createTime != null" >
+        create_time,
       </if>
-      <if test="approvalAt != null" >
-        approval_at,
+      <if test="approvalTime != null" >
+        approval_time,
       </if>
-      <if test="updateAt != null" >
-        update_at,
+      <if test="updateTime != null" >
+        update_time,
       </if>
       <if test="isDeleted != null" >
         is_deleted,
-      </if>
-      <if test="material != null" >
-        material,
-      </if>
-      <if test="style != null" >
-        style,
-      </if>
-      <if test="applicableScene != null" >
-        applicable_scene,
-      </if>
-      <if test="tips != null" >
-        tips,
-      </if>
-      <if test="size != null" >
-        size,
       </if>
       <if test="seoTitle != null" >
         seo_title,
@@ -327,20 +356,29 @@
       <if test="productName != null" >
         #{productName,jdbcType=VARCHAR},
       </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        #{productType,jdbcType=TINYINT},
+      </if>
       <if test="categoryId != null" >
         #{categoryId,jdbcType=VARCHAR},
       </if>
       <if test="brandId != null" >
         #{brandId,jdbcType=INTEGER},
       </if>
-      <if test="productType != null" >
-        #{productType,jdbcType=TINYINT},
+      <if test="productModel != null" >
+        #{productModel,jdbcType=VARCHAR},
       </if>
-      <if test="isCombine != null" >
-        #{isCombine,jdbcType=BIT},
+      <if test="material != null" >
+        #{material,jdbcType=VARCHAR},
       </if>
-      <if test="isBundling != null" >
-        #{isBundling,jdbcType=BIT},
+      <if test="sellingPoint != null" >
+        #{sellingPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="detailDescription != null" >
+        #{detailDescription,jdbcType=VARCHAR},
       </if>
       <if test="canSale != null" >
         #{canSale,jdbcType=BIT},
@@ -351,23 +389,17 @@
       <if test="viewPlatform != null" >
         #{viewPlatform,jdbcType=TINYINT},
       </if>
-      <if test="detailDescription != null" >
-        #{detailDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="shortDescription != null" >
-        #{shortDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="isImport != null" >
-        #{isImport,jdbcType=BIT},
-      </if>
-      <if test="productModel != null" >
-        #{productModel,jdbcType=VARCHAR},
-      </if>
       <if test="originCountry != null" >
         #{originCountry,jdbcType=VARCHAR},
       </if>
       <if test="originAreaId != null" >
         #{originAreaId,jdbcType=INTEGER},
+      </if>
+      <if test="originText != null" >
+        #{originText,jdbcType=VARCHAR},
+      </if>
+      <if test="isImport != null" >
+        #{isImport,jdbcType=BIT},
       </if>
       <if test="length != null" >
         #{length,jdbcType=SMALLINT},
@@ -378,26 +410,56 @@
       <if test="height != null" >
         #{height,jdbcType=SMALLINT},
       </if>
+      <if test="sizeText != null" >
+        #{sizeText,jdbcType=VARCHAR},
+      </if>
       <if test="weight != null" >
         #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="weightText != null" >
+        #{weightText,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null" >
+        #{spec,jdbcType=VARCHAR},
       </if>
       <if test="specImg != null" >
         #{specImg,jdbcType=VARCHAR},
       </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null" >
+        #{style,jdbcType=VARCHAR},
+      </if>
       <if test="verboseInfo != null" >
         #{verboseInfo,jdbcType=VARCHAR},
       </if>
-      <if test="needAssemble != null" >
-        #{needAssemble,jdbcType=BIT},
+      <if test="tips != null" >
+        #{tips,jdbcType=VARCHAR},
       </if>
-      <if test="isFragile != null" >
-        #{isFragile,jdbcType=BIT},
+      <if test="applicableScene != null" >
+        #{applicableScene,jdbcType=VARCHAR},
       </if>
       <if test="postSaleServiceDesc != null" >
         #{postSaleServiceDesc,jdbcType=VARCHAR},
       </if>
+      <if test="deliveryFeeType != null" >
+        #{deliveryFeeType,jdbcType=TINYINT},
+      </if>
+      <if test="needAssemble != null" >
+        #{needAssemble,jdbcType=BIT},
+      </if>
+      <if test="assembleTips != null" >
+        #{assembleTips,jdbcType=VARCHAR},
+      </if>
+      <if test="isFragile != null" >
+        #{isFragile,jdbcType=BIT},
+      </if>
       <if test="isPresale != null" >
         #{isPresale,jdbcType=BIT},
+      </if>
+      <if test="isBundling != null" >
+        #{isBundling,jdbcType=BIT},
       </if>
       <if test="productStatus != null" >
         #{productStatus,jdbcType=DECIMAL},
@@ -408,32 +470,17 @@
       <if test="onShelfTime != null" >
         #{onShelfTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="addedAt != null" >
-        #{addedAt,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="approvalAt != null" >
-        #{approvalAt,jdbcType=TIMESTAMP},
+      <if test="approvalTime != null" >
+        #{approvalTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateAt != null" >
-        #{updateAt,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=BIT},
-      </if>
-      <if test="material != null" >
-        #{material,jdbcType=VARCHAR},
-      </if>
-      <if test="style != null" >
-        #{style,jdbcType=VARCHAR},
-      </if>
-      <if test="applicableScene != null" >
-        #{applicableScene,jdbcType=VARCHAR},
-      </if>
-      <if test="tips != null" >
-        #{tips,jdbcType=VARCHAR},
-      </if>
-      <if test="size != null" >
-        #{size,jdbcType=VARCHAR},
       </if>
       <if test="seoTitle != null" >
         #{seoTitle,jdbcType=LONGVARCHAR},
@@ -461,20 +508,29 @@
       <if test="record.productName != null" >
         product_name = #{record.productName,jdbcType=VARCHAR},
       </if>
+      <if test="record.productCode != null" >
+        product_code = #{record.productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productType != null" >
+        product_type = #{record.productType,jdbcType=TINYINT},
+      </if>
       <if test="record.categoryId != null" >
         category_id = #{record.categoryId,jdbcType=VARCHAR},
       </if>
       <if test="record.brandId != null" >
         brand_id = #{record.brandId,jdbcType=INTEGER},
       </if>
-      <if test="record.productType != null" >
-        product_type = #{record.productType,jdbcType=TINYINT},
+      <if test="record.productModel != null" >
+        product_model = #{record.productModel,jdbcType=VARCHAR},
       </if>
-      <if test="record.isCombine != null" >
-        is_combine = #{record.isCombine,jdbcType=BIT},
+      <if test="record.material != null" >
+        material = #{record.material,jdbcType=VARCHAR},
       </if>
-      <if test="record.isBundling != null" >
-        is_bundling = #{record.isBundling,jdbcType=BIT},
+      <if test="record.sellingPoint != null" >
+        selling_point = #{record.sellingPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailDescription != null" >
+        detail_description = #{record.detailDescription,jdbcType=VARCHAR},
       </if>
       <if test="record.canSale != null" >
         can_sale = #{record.canSale,jdbcType=BIT},
@@ -485,23 +541,17 @@
       <if test="record.viewPlatform != null" >
         view_platform = #{record.viewPlatform,jdbcType=TINYINT},
       </if>
-      <if test="record.detailDescription != null" >
-        detail_description = #{record.detailDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="record.shortDescription != null" >
-        short_description = #{record.shortDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="record.isImport != null" >
-        is_import = #{record.isImport,jdbcType=BIT},
-      </if>
-      <if test="record.productModel != null" >
-        product_model = #{record.productModel,jdbcType=VARCHAR},
-      </if>
       <if test="record.originCountry != null" >
         origin_country = #{record.originCountry,jdbcType=VARCHAR},
       </if>
       <if test="record.originAreaId != null" >
         origin_area_id = #{record.originAreaId,jdbcType=INTEGER},
+      </if>
+      <if test="record.originText != null" >
+        origin_text = #{record.originText,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isImport != null" >
+        is_import = #{record.isImport,jdbcType=BIT},
       </if>
       <if test="record.length != null" >
         length = #{record.length,jdbcType=SMALLINT},
@@ -512,26 +562,56 @@
       <if test="record.height != null" >
         height = #{record.height,jdbcType=SMALLINT},
       </if>
+      <if test="record.sizeText != null" >
+        size_text = #{record.sizeText,jdbcType=VARCHAR},
+      </if>
       <if test="record.weight != null" >
         weight = #{record.weight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.weightText != null" >
+        weight_text = #{record.weightText,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spec != null" >
+        spec = #{record.spec,jdbcType=VARCHAR},
       </if>
       <if test="record.specImg != null" >
         spec_img = #{record.specImg,jdbcType=VARCHAR},
       </if>
+      <if test="record.color != null" >
+        color = #{record.color,jdbcType=VARCHAR},
+      </if>
+      <if test="record.style != null" >
+        style = #{record.style,jdbcType=VARCHAR},
+      </if>
       <if test="record.verboseInfo != null" >
         verbose_info = #{record.verboseInfo,jdbcType=VARCHAR},
       </if>
-      <if test="record.needAssemble != null" >
-        need_assemble = #{record.needAssemble,jdbcType=BIT},
+      <if test="record.tips != null" >
+        tips = #{record.tips,jdbcType=VARCHAR},
       </if>
-      <if test="record.isFragile != null" >
-        is_fragile = #{record.isFragile,jdbcType=BIT},
+      <if test="record.applicableScene != null" >
+        applicable_scene = #{record.applicableScene,jdbcType=VARCHAR},
       </if>
       <if test="record.postSaleServiceDesc != null" >
         post_sale_service_desc = #{record.postSaleServiceDesc,jdbcType=VARCHAR},
       </if>
+      <if test="record.deliveryFeeType != null" >
+        delivery_fee_type = #{record.deliveryFeeType,jdbcType=TINYINT},
+      </if>
+      <if test="record.needAssemble != null" >
+        need_assemble = #{record.needAssemble,jdbcType=BIT},
+      </if>
+      <if test="record.assembleTips != null" >
+        assemble_tips = #{record.assembleTips,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isFragile != null" >
+        is_fragile = #{record.isFragile,jdbcType=BIT},
+      </if>
       <if test="record.isPresale != null" >
         is_presale = #{record.isPresale,jdbcType=BIT},
+      </if>
+      <if test="record.isBundling != null" >
+        is_bundling = #{record.isBundling,jdbcType=BIT},
       </if>
       <if test="record.productStatus != null" >
         product_status = #{record.productStatus,jdbcType=DECIMAL},
@@ -542,32 +622,17 @@
       <if test="record.onShelfTime != null" >
         on_shelf_time = #{record.onShelfTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.addedAt != null" >
-        added_at = #{record.addedAt,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.approvalAt != null" >
-        approval_at = #{record.approvalAt,jdbcType=TIMESTAMP},
+      <if test="record.approvalTime != null" >
+        approval_time = #{record.approvalTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateAt != null" >
-        update_at = #{record.updateAt,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=BIT},
-      </if>
-      <if test="record.material != null" >
-        material = #{record.material,jdbcType=VARCHAR},
-      </if>
-      <if test="record.style != null" >
-        style = #{record.style,jdbcType=VARCHAR},
-      </if>
-      <if test="record.applicableScene != null" >
-        applicable_scene = #{record.applicableScene,jdbcType=VARCHAR},
-      </if>
-      <if test="record.tips != null" >
-        tips = #{record.tips,jdbcType=VARCHAR},
-      </if>
-      <if test="record.size != null" >
-        size = #{record.size,jdbcType=VARCHAR},
       </if>
       <if test="record.seoTitle != null" >
         seo_title = #{record.seoTitle,jdbcType=LONGVARCHAR},
@@ -587,42 +652,48 @@
     update product
     set id = #{record.id,jdbcType=INTEGER},
       product_name = #{record.productName,jdbcType=VARCHAR},
+      product_code = #{record.productCode,jdbcType=VARCHAR},
+      product_type = #{record.productType,jdbcType=TINYINT},
       category_id = #{record.categoryId,jdbcType=VARCHAR},
       brand_id = #{record.brandId,jdbcType=INTEGER},
-      product_type = #{record.productType,jdbcType=TINYINT},
-      is_combine = #{record.isCombine,jdbcType=BIT},
-      is_bundling = #{record.isBundling,jdbcType=BIT},
+      product_model = #{record.productModel,jdbcType=VARCHAR},
+      material = #{record.material,jdbcType=VARCHAR},
+      selling_point = #{record.sellingPoint,jdbcType=VARCHAR},
+      detail_description = #{record.detailDescription,jdbcType=VARCHAR},
       can_sale = #{record.canSale,jdbcType=BIT},
       can_show = #{record.canShow,jdbcType=BIT},
       view_platform = #{record.viewPlatform,jdbcType=TINYINT},
-      detail_description = #{record.detailDescription,jdbcType=VARCHAR},
-      short_description = #{record.shortDescription,jdbcType=VARCHAR},
-      is_import = #{record.isImport,jdbcType=BIT},
-      product_model = #{record.productModel,jdbcType=VARCHAR},
       origin_country = #{record.originCountry,jdbcType=VARCHAR},
       origin_area_id = #{record.originAreaId,jdbcType=INTEGER},
+      origin_text = #{record.originText,jdbcType=VARCHAR},
+      is_import = #{record.isImport,jdbcType=BIT},
       length = #{record.length,jdbcType=SMALLINT},
       width = #{record.width,jdbcType=SMALLINT},
       height = #{record.height,jdbcType=SMALLINT},
+      size_text = #{record.sizeText,jdbcType=VARCHAR},
       weight = #{record.weight,jdbcType=DECIMAL},
+      weight_text = #{record.weightText,jdbcType=VARCHAR},
+      spec = #{record.spec,jdbcType=VARCHAR},
       spec_img = #{record.specImg,jdbcType=VARCHAR},
+      color = #{record.color,jdbcType=VARCHAR},
+      style = #{record.style,jdbcType=VARCHAR},
       verbose_info = #{record.verboseInfo,jdbcType=VARCHAR},
-      need_assemble = #{record.needAssemble,jdbcType=BIT},
-      is_fragile = #{record.isFragile,jdbcType=BIT},
+      tips = #{record.tips,jdbcType=VARCHAR},
+      applicable_scene = #{record.applicableScene,jdbcType=VARCHAR},
       post_sale_service_desc = #{record.postSaleServiceDesc,jdbcType=VARCHAR},
+      delivery_fee_type = #{record.deliveryFeeType,jdbcType=TINYINT},
+      need_assemble = #{record.needAssemble,jdbcType=BIT},
+      assemble_tips = #{record.assembleTips,jdbcType=VARCHAR},
+      is_fragile = #{record.isFragile,jdbcType=BIT},
       is_presale = #{record.isPresale,jdbcType=BIT},
+      is_bundling = #{record.isBundling,jdbcType=BIT},
       product_status = #{record.productStatus,jdbcType=DECIMAL},
       reject_reason = #{record.rejectReason,jdbcType=VARCHAR},
       on_shelf_time = #{record.onShelfTime,jdbcType=TIMESTAMP},
-      added_at = #{record.addedAt,jdbcType=TIMESTAMP},
-      approval_at = #{record.approvalAt,jdbcType=TIMESTAMP},
-      update_at = #{record.updateAt,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      approval_time = #{record.approvalTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{record.isDeleted,jdbcType=BIT},
-      material = #{record.material,jdbcType=VARCHAR},
-      style = #{record.style,jdbcType=VARCHAR},
-      applicable_scene = #{record.applicableScene,jdbcType=VARCHAR},
-      tips = #{record.tips,jdbcType=VARCHAR},
-      size = #{record.size,jdbcType=VARCHAR},
       seo_title = #{record.seoTitle,jdbcType=LONGVARCHAR},
       seo_desc = #{record.seoDesc,jdbcType=LONGVARCHAR},
       seo_key = #{record.seoKey,jdbcType=LONGVARCHAR}
@@ -634,42 +705,48 @@
     update product
     set id = #{record.id,jdbcType=INTEGER},
       product_name = #{record.productName,jdbcType=VARCHAR},
+      product_code = #{record.productCode,jdbcType=VARCHAR},
+      product_type = #{record.productType,jdbcType=TINYINT},
       category_id = #{record.categoryId,jdbcType=VARCHAR},
       brand_id = #{record.brandId,jdbcType=INTEGER},
-      product_type = #{record.productType,jdbcType=TINYINT},
-      is_combine = #{record.isCombine,jdbcType=BIT},
-      is_bundling = #{record.isBundling,jdbcType=BIT},
+      product_model = #{record.productModel,jdbcType=VARCHAR},
+      material = #{record.material,jdbcType=VARCHAR},
+      selling_point = #{record.sellingPoint,jdbcType=VARCHAR},
+      detail_description = #{record.detailDescription,jdbcType=VARCHAR},
       can_sale = #{record.canSale,jdbcType=BIT},
       can_show = #{record.canShow,jdbcType=BIT},
       view_platform = #{record.viewPlatform,jdbcType=TINYINT},
-      detail_description = #{record.detailDescription,jdbcType=VARCHAR},
-      short_description = #{record.shortDescription,jdbcType=VARCHAR},
-      is_import = #{record.isImport,jdbcType=BIT},
-      product_model = #{record.productModel,jdbcType=VARCHAR},
       origin_country = #{record.originCountry,jdbcType=VARCHAR},
       origin_area_id = #{record.originAreaId,jdbcType=INTEGER},
+      origin_text = #{record.originText,jdbcType=VARCHAR},
+      is_import = #{record.isImport,jdbcType=BIT},
       length = #{record.length,jdbcType=SMALLINT},
       width = #{record.width,jdbcType=SMALLINT},
       height = #{record.height,jdbcType=SMALLINT},
+      size_text = #{record.sizeText,jdbcType=VARCHAR},
       weight = #{record.weight,jdbcType=DECIMAL},
+      weight_text = #{record.weightText,jdbcType=VARCHAR},
+      spec = #{record.spec,jdbcType=VARCHAR},
       spec_img = #{record.specImg,jdbcType=VARCHAR},
+      color = #{record.color,jdbcType=VARCHAR},
+      style = #{record.style,jdbcType=VARCHAR},
       verbose_info = #{record.verboseInfo,jdbcType=VARCHAR},
-      need_assemble = #{record.needAssemble,jdbcType=BIT},
-      is_fragile = #{record.isFragile,jdbcType=BIT},
+      tips = #{record.tips,jdbcType=VARCHAR},
+      applicable_scene = #{record.applicableScene,jdbcType=VARCHAR},
       post_sale_service_desc = #{record.postSaleServiceDesc,jdbcType=VARCHAR},
+      delivery_fee_type = #{record.deliveryFeeType,jdbcType=TINYINT},
+      need_assemble = #{record.needAssemble,jdbcType=BIT},
+      assemble_tips = #{record.assembleTips,jdbcType=VARCHAR},
+      is_fragile = #{record.isFragile,jdbcType=BIT},
       is_presale = #{record.isPresale,jdbcType=BIT},
+      is_bundling = #{record.isBundling,jdbcType=BIT},
       product_status = #{record.productStatus,jdbcType=DECIMAL},
       reject_reason = #{record.rejectReason,jdbcType=VARCHAR},
       on_shelf_time = #{record.onShelfTime,jdbcType=TIMESTAMP},
-      added_at = #{record.addedAt,jdbcType=TIMESTAMP},
-      approval_at = #{record.approvalAt,jdbcType=TIMESTAMP},
-      update_at = #{record.updateAt,jdbcType=TIMESTAMP},
-      is_deleted = #{record.isDeleted,jdbcType=BIT},
-      material = #{record.material,jdbcType=VARCHAR},
-      style = #{record.style,jdbcType=VARCHAR},
-      applicable_scene = #{record.applicableScene,jdbcType=VARCHAR},
-      tips = #{record.tips,jdbcType=VARCHAR},
-      size = #{record.size,jdbcType=VARCHAR}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      approval_time = #{record.approvalTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -680,20 +757,29 @@
       <if test="productName != null" >
         product_name = #{productName,jdbcType=VARCHAR},
       </if>
+      <if test="productCode != null" >
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null" >
+        product_type = #{productType,jdbcType=TINYINT},
+      </if>
       <if test="categoryId != null" >
         category_id = #{categoryId,jdbcType=VARCHAR},
       </if>
       <if test="brandId != null" >
         brand_id = #{brandId,jdbcType=INTEGER},
       </if>
-      <if test="productType != null" >
-        product_type = #{productType,jdbcType=TINYINT},
+      <if test="productModel != null" >
+        product_model = #{productModel,jdbcType=VARCHAR},
       </if>
-      <if test="isCombine != null" >
-        is_combine = #{isCombine,jdbcType=BIT},
+      <if test="material != null" >
+        material = #{material,jdbcType=VARCHAR},
       </if>
-      <if test="isBundling != null" >
-        is_bundling = #{isBundling,jdbcType=BIT},
+      <if test="sellingPoint != null" >
+        selling_point = #{sellingPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="detailDescription != null" >
+        detail_description = #{detailDescription,jdbcType=VARCHAR},
       </if>
       <if test="canSale != null" >
         can_sale = #{canSale,jdbcType=BIT},
@@ -704,23 +790,17 @@
       <if test="viewPlatform != null" >
         view_platform = #{viewPlatform,jdbcType=TINYINT},
       </if>
-      <if test="detailDescription != null" >
-        detail_description = #{detailDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="shortDescription != null" >
-        short_description = #{shortDescription,jdbcType=VARCHAR},
-      </if>
-      <if test="isImport != null" >
-        is_import = #{isImport,jdbcType=BIT},
-      </if>
-      <if test="productModel != null" >
-        product_model = #{productModel,jdbcType=VARCHAR},
-      </if>
       <if test="originCountry != null" >
         origin_country = #{originCountry,jdbcType=VARCHAR},
       </if>
       <if test="originAreaId != null" >
         origin_area_id = #{originAreaId,jdbcType=INTEGER},
+      </if>
+      <if test="originText != null" >
+        origin_text = #{originText,jdbcType=VARCHAR},
+      </if>
+      <if test="isImport != null" >
+        is_import = #{isImport,jdbcType=BIT},
       </if>
       <if test="length != null" >
         length = #{length,jdbcType=SMALLINT},
@@ -731,26 +811,56 @@
       <if test="height != null" >
         height = #{height,jdbcType=SMALLINT},
       </if>
+      <if test="sizeText != null" >
+        size_text = #{sizeText,jdbcType=VARCHAR},
+      </if>
       <if test="weight != null" >
         weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="weightText != null" >
+        weight_text = #{weightText,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null" >
+        spec = #{spec,jdbcType=VARCHAR},
       </if>
       <if test="specImg != null" >
         spec_img = #{specImg,jdbcType=VARCHAR},
       </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="style != null" >
+        style = #{style,jdbcType=VARCHAR},
+      </if>
       <if test="verboseInfo != null" >
         verbose_info = #{verboseInfo,jdbcType=VARCHAR},
       </if>
-      <if test="needAssemble != null" >
-        need_assemble = #{needAssemble,jdbcType=BIT},
+      <if test="tips != null" >
+        tips = #{tips,jdbcType=VARCHAR},
       </if>
-      <if test="isFragile != null" >
-        is_fragile = #{isFragile,jdbcType=BIT},
+      <if test="applicableScene != null" >
+        applicable_scene = #{applicableScene,jdbcType=VARCHAR},
       </if>
       <if test="postSaleServiceDesc != null" >
         post_sale_service_desc = #{postSaleServiceDesc,jdbcType=VARCHAR},
       </if>
+      <if test="deliveryFeeType != null" >
+        delivery_fee_type = #{deliveryFeeType,jdbcType=TINYINT},
+      </if>
+      <if test="needAssemble != null" >
+        need_assemble = #{needAssemble,jdbcType=BIT},
+      </if>
+      <if test="assembleTips != null" >
+        assemble_tips = #{assembleTips,jdbcType=VARCHAR},
+      </if>
+      <if test="isFragile != null" >
+        is_fragile = #{isFragile,jdbcType=BIT},
+      </if>
       <if test="isPresale != null" >
         is_presale = #{isPresale,jdbcType=BIT},
+      </if>
+      <if test="isBundling != null" >
+        is_bundling = #{isBundling,jdbcType=BIT},
       </if>
       <if test="productStatus != null" >
         product_status = #{productStatus,jdbcType=DECIMAL},
@@ -761,32 +871,17 @@
       <if test="onShelfTime != null" >
         on_shelf_time = #{onShelfTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="addedAt != null" >
-        added_at = #{addedAt,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="approvalAt != null" >
-        approval_at = #{approvalAt,jdbcType=TIMESTAMP},
+      <if test="approvalTime != null" >
+        approval_time = #{approvalTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateAt != null" >
-        update_at = #{updateAt,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=BIT},
-      </if>
-      <if test="material != null" >
-        material = #{material,jdbcType=VARCHAR},
-      </if>
-      <if test="style != null" >
-        style = #{style,jdbcType=VARCHAR},
-      </if>
-      <if test="applicableScene != null" >
-        applicable_scene = #{applicableScene,jdbcType=VARCHAR},
-      </if>
-      <if test="tips != null" >
-        tips = #{tips,jdbcType=VARCHAR},
-      </if>
-      <if test="size != null" >
-        size = #{size,jdbcType=VARCHAR},
       </if>
       <if test="seoTitle != null" >
         seo_title = #{seoTitle,jdbcType=LONGVARCHAR},
@@ -803,42 +898,48 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wow.product.model.Product" >
     update product
     set product_name = #{productName,jdbcType=VARCHAR},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      product_type = #{productType,jdbcType=TINYINT},
       category_id = #{categoryId,jdbcType=VARCHAR},
       brand_id = #{brandId,jdbcType=INTEGER},
-      product_type = #{productType,jdbcType=TINYINT},
-      is_combine = #{isCombine,jdbcType=BIT},
-      is_bundling = #{isBundling,jdbcType=BIT},
+      product_model = #{productModel,jdbcType=VARCHAR},
+      material = #{material,jdbcType=VARCHAR},
+      selling_point = #{sellingPoint,jdbcType=VARCHAR},
+      detail_description = #{detailDescription,jdbcType=VARCHAR},
       can_sale = #{canSale,jdbcType=BIT},
       can_show = #{canShow,jdbcType=BIT},
       view_platform = #{viewPlatform,jdbcType=TINYINT},
-      detail_description = #{detailDescription,jdbcType=VARCHAR},
-      short_description = #{shortDescription,jdbcType=VARCHAR},
-      is_import = #{isImport,jdbcType=BIT},
-      product_model = #{productModel,jdbcType=VARCHAR},
       origin_country = #{originCountry,jdbcType=VARCHAR},
       origin_area_id = #{originAreaId,jdbcType=INTEGER},
+      origin_text = #{originText,jdbcType=VARCHAR},
+      is_import = #{isImport,jdbcType=BIT},
       length = #{length,jdbcType=SMALLINT},
       width = #{width,jdbcType=SMALLINT},
       height = #{height,jdbcType=SMALLINT},
+      size_text = #{sizeText,jdbcType=VARCHAR},
       weight = #{weight,jdbcType=DECIMAL},
+      weight_text = #{weightText,jdbcType=VARCHAR},
+      spec = #{spec,jdbcType=VARCHAR},
       spec_img = #{specImg,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      style = #{style,jdbcType=VARCHAR},
       verbose_info = #{verboseInfo,jdbcType=VARCHAR},
-      need_assemble = #{needAssemble,jdbcType=BIT},
-      is_fragile = #{isFragile,jdbcType=BIT},
+      tips = #{tips,jdbcType=VARCHAR},
+      applicable_scene = #{applicableScene,jdbcType=VARCHAR},
       post_sale_service_desc = #{postSaleServiceDesc,jdbcType=VARCHAR},
+      delivery_fee_type = #{deliveryFeeType,jdbcType=TINYINT},
+      need_assemble = #{needAssemble,jdbcType=BIT},
+      assemble_tips = #{assembleTips,jdbcType=VARCHAR},
+      is_fragile = #{isFragile,jdbcType=BIT},
       is_presale = #{isPresale,jdbcType=BIT},
+      is_bundling = #{isBundling,jdbcType=BIT},
       product_status = #{productStatus,jdbcType=DECIMAL},
       reject_reason = #{rejectReason,jdbcType=VARCHAR},
       on_shelf_time = #{onShelfTime,jdbcType=TIMESTAMP},
-      added_at = #{addedAt,jdbcType=TIMESTAMP},
-      approval_at = #{approvalAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=BIT},
-      material = #{material,jdbcType=VARCHAR},
-      style = #{style,jdbcType=VARCHAR},
-      applicable_scene = #{applicableScene,jdbcType=VARCHAR},
-      tips = #{tips,jdbcType=VARCHAR},
-      size = #{size,jdbcType=VARCHAR},
       seo_title = #{seoTitle,jdbcType=LONGVARCHAR},
       seo_desc = #{seoDesc,jdbcType=LONGVARCHAR},
       seo_key = #{seoKey,jdbcType=LONGVARCHAR}
@@ -847,42 +948,48 @@
   <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Product" >
     update product
     set product_name = #{productName,jdbcType=VARCHAR},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      product_type = #{productType,jdbcType=TINYINT},
       category_id = #{categoryId,jdbcType=VARCHAR},
       brand_id = #{brandId,jdbcType=INTEGER},
-      product_type = #{productType,jdbcType=TINYINT},
-      is_combine = #{isCombine,jdbcType=BIT},
-      is_bundling = #{isBundling,jdbcType=BIT},
+      product_model = #{productModel,jdbcType=VARCHAR},
+      material = #{material,jdbcType=VARCHAR},
+      selling_point = #{sellingPoint,jdbcType=VARCHAR},
+      detail_description = #{detailDescription,jdbcType=VARCHAR},
       can_sale = #{canSale,jdbcType=BIT},
       can_show = #{canShow,jdbcType=BIT},
       view_platform = #{viewPlatform,jdbcType=TINYINT},
-      detail_description = #{detailDescription,jdbcType=VARCHAR},
-      short_description = #{shortDescription,jdbcType=VARCHAR},
-      is_import = #{isImport,jdbcType=BIT},
-      product_model = #{productModel,jdbcType=VARCHAR},
       origin_country = #{originCountry,jdbcType=VARCHAR},
       origin_area_id = #{originAreaId,jdbcType=INTEGER},
+      origin_text = #{originText,jdbcType=VARCHAR},
+      is_import = #{isImport,jdbcType=BIT},
       length = #{length,jdbcType=SMALLINT},
       width = #{width,jdbcType=SMALLINT},
       height = #{height,jdbcType=SMALLINT},
+      size_text = #{sizeText,jdbcType=VARCHAR},
       weight = #{weight,jdbcType=DECIMAL},
+      weight_text = #{weightText,jdbcType=VARCHAR},
+      spec = #{spec,jdbcType=VARCHAR},
       spec_img = #{specImg,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      style = #{style,jdbcType=VARCHAR},
       verbose_info = #{verboseInfo,jdbcType=VARCHAR},
-      need_assemble = #{needAssemble,jdbcType=BIT},
-      is_fragile = #{isFragile,jdbcType=BIT},
+      tips = #{tips,jdbcType=VARCHAR},
+      applicable_scene = #{applicableScene,jdbcType=VARCHAR},
       post_sale_service_desc = #{postSaleServiceDesc,jdbcType=VARCHAR},
+      delivery_fee_type = #{deliveryFeeType,jdbcType=TINYINT},
+      need_assemble = #{needAssemble,jdbcType=BIT},
+      assemble_tips = #{assembleTips,jdbcType=VARCHAR},
+      is_fragile = #{isFragile,jdbcType=BIT},
       is_presale = #{isPresale,jdbcType=BIT},
+      is_bundling = #{isBundling,jdbcType=BIT},
       product_status = #{productStatus,jdbcType=DECIMAL},
       reject_reason = #{rejectReason,jdbcType=VARCHAR},
       on_shelf_time = #{onShelfTime,jdbcType=TIMESTAMP},
-      added_at = #{addedAt,jdbcType=TIMESTAMP},
-      approval_at = #{approvalAt,jdbcType=TIMESTAMP},
-      update_at = #{updateAt,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=BIT},
-      material = #{material,jdbcType=VARCHAR},
-      style = #{style,jdbcType=VARCHAR},
-      applicable_scene = #{applicableScene,jdbcType=VARCHAR},
-      tips = #{tips,jdbcType=VARCHAR},
-      size = #{size,jdbcType=VARCHAR}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

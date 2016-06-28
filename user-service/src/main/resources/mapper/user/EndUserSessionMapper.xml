@@ -8,7 +8,7 @@
     <result column="login_channel" property="loginChannel" jdbcType="TINYINT" />
     <result column="user_agent_info" property="userAgentInfo" jdbcType="VARCHAR" />
     <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
-    <result column="last_login_ip" property="lastLoginIp" jdbcType="INTEGER" />
+    <result column="last_login_ip" property="lastLoginIp" jdbcType="BIGINT" />
     <result column="last_refresh_time" property="lastRefreshTime" jdbcType="TIMESTAMP" />
     <result column="is_expired" property="isExpired" jdbcType="BIT" />
     <result column="is_active" property="isActive" jdbcType="BIT" />
@@ -115,7 +115,7 @@
       last_refresh_time, is_expired, is_active, 
       logout_time)
     values (#{endUserId,jdbcType=INTEGER}, #{sessionToken,jdbcType=VARCHAR}, #{loginChannel,jdbcType=TINYINT}, 
-      #{userAgentInfo,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{lastLoginIp,jdbcType=INTEGER}, 
+      #{userAgentInfo,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{lastLoginIp,jdbcType=BIGINT}, 
       #{lastRefreshTime,jdbcType=TIMESTAMP}, #{isExpired,jdbcType=BIT}, #{isActive,jdbcType=BIT}, 
       #{logoutTime,jdbcType=TIMESTAMP})
   </insert>
@@ -173,7 +173,7 @@
         #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="lastLoginIp != null" >
-        #{lastLoginIp,jdbcType=INTEGER},
+        #{lastLoginIp,jdbcType=BIGINT},
       </if>
       <if test="lastRefreshTime != null" >
         #{lastRefreshTime,jdbcType=TIMESTAMP},
@@ -217,7 +217,7 @@
         last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.lastLoginIp != null" >
-        last_login_ip = #{record.lastLoginIp,jdbcType=INTEGER},
+        last_login_ip = #{record.lastLoginIp,jdbcType=BIGINT},
       </if>
       <if test="record.lastRefreshTime != null" >
         last_refresh_time = #{record.lastRefreshTime,jdbcType=TIMESTAMP},
@@ -244,7 +244,7 @@
       login_channel = #{record.loginChannel,jdbcType=TINYINT},
       user_agent_info = #{record.userAgentInfo,jdbcType=VARCHAR},
       last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
-      last_login_ip = #{record.lastLoginIp,jdbcType=INTEGER},
+      last_login_ip = #{record.lastLoginIp,jdbcType=BIGINT},
       last_refresh_time = #{record.lastRefreshTime,jdbcType=TIMESTAMP},
       is_expired = #{record.isExpired,jdbcType=BIT},
       is_active = #{record.isActive,jdbcType=BIT},
@@ -272,7 +272,7 @@
         last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       </if>
       <if test="lastLoginIp != null" >
-        last_login_ip = #{lastLoginIp,jdbcType=INTEGER},
+        last_login_ip = #{lastLoginIp,jdbcType=BIGINT},
       </if>
       <if test="lastRefreshTime != null" >
         last_refresh_time = #{lastRefreshTime,jdbcType=TIMESTAMP},
@@ -296,7 +296,7 @@
       login_channel = #{loginChannel,jdbcType=TINYINT},
       user_agent_info = #{userAgentInfo,jdbcType=VARCHAR},
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
-      last_login_ip = #{lastLoginIp,jdbcType=INTEGER},
+      last_login_ip = #{lastLoginIp,jdbcType=BIGINT},
       last_refresh_time = #{lastRefreshTime,jdbcType=TIMESTAMP},
       is_expired = #{isExpired,jdbcType=BIT},
       is_active = #{isActive,jdbcType=BIT},

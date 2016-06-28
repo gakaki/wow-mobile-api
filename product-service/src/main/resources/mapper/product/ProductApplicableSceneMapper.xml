@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.attribute.mapper.AttributeMapper" >
-  <resultMap id="BaseResultMap" type="com.wow.attribute.model.Attribute" >
+<mapper namespace="com.wow.product.mapper.ProductApplicableSceneMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.ProductApplicableScene" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="attribute_name" property="attributeName" jdbcType="VARCHAR" />
-    <result column="show_name" property="showName" jdbcType="VARCHAR" />
-    <result column="can_multiple_selected" property="canMultipleSelected" jdbcType="BIT" />
-    <result column="attribute_value_type" property="attributeValueType" jdbcType="TINYINT" />
-    <result column="decimal_place" property="decimalPlace" jdbcType="TINYINT" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="applicable_scene_id" property="applicableSceneId" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -73,16 +70,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, attribute_name, show_name, can_multiple_selected, attribute_value_type, decimal_place, 
-    create_time, create_by, update_time, update_by, is_deleted
+    id, product_id, applicable_scene_id, create_time, create_by, update_time, update_by, 
+    is_deleted
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.attribute.model.AttributeExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ProductApplicableSceneExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from attribute
+    from product_applicable_scene
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -93,57 +90,41 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from attribute
+    from product_applicable_scene
     where id = #{id,jdbcType=INTEGER}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select
-    <include refid="Base_Column_List" />
-    from attribute
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from attribute
+    delete from product_applicable_scene
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wow.attribute.model.AttributeExample" >
-    delete from attribute
+  <delete id="deleteByExample" parameterType="com.wow.product.model.ProductApplicableSceneExample" >
+    delete from product_applicable_scene
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wow.attribute.model.Attribute" >
+  <insert id="insert" parameterType="com.wow.product.model.ProductApplicableScene" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into attribute (attribute_name, show_name, can_multiple_selected, 
-      attribute_value_type, decimal_place, create_time, 
+    insert into product_applicable_scene (product_id, applicable_scene_id, create_time, 
       create_by, update_time, update_by, 
       is_deleted)
-    values (#{attributeName,jdbcType=VARCHAR}, #{showName,jdbcType=VARCHAR}, #{canMultipleSelected,jdbcType=BIT}, 
-      #{attributeValueType,jdbcType=TINYINT}, #{decimalPlace,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{productId,jdbcType=INTEGER}, #{applicableSceneId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
       #{isDeleted,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.attribute.model.Attribute" >
+  <insert id="insertSelective" parameterType="com.wow.product.model.ProductApplicableScene" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into attribute
+    insert into product_applicable_scene
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="attributeName != null" >
-        attribute_name,
+      <if test="productId != null" >
+        product_id,
       </if>
-      <if test="showName != null" >
-        show_name,
-      </if>
-      <if test="canMultipleSelected != null" >
-        can_multiple_selected,
-      </if>
-      <if test="attributeValueType != null" >
-        attribute_value_type,
-      </if>
-      <if test="decimalPlace != null" >
-        decimal_place,
+      <if test="applicableSceneId != null" >
+        applicable_scene_id,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -162,20 +143,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="attributeName != null" >
-        #{attributeName,jdbcType=VARCHAR},
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
       </if>
-      <if test="showName != null" >
-        #{showName,jdbcType=VARCHAR},
-      </if>
-      <if test="canMultipleSelected != null" >
-        #{canMultipleSelected,jdbcType=BIT},
-      </if>
-      <if test="attributeValueType != null" >
-        #{attributeValueType,jdbcType=TINYINT},
-      </if>
-      <if test="decimalPlace != null" >
-        #{decimalPlace,jdbcType=TINYINT},
+      <if test="applicableSceneId != null" >
+        #{applicableSceneId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -194,32 +166,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wow.attribute.model.AttributeExample" resultType="java.lang.Integer" >
-    select count(*) from attribute
+  <select id="countByExample" parameterType="com.wow.product.model.ProductApplicableSceneExample" resultType="java.lang.Integer" >
+    select count(*) from product_applicable_scene
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update attribute
+    update product_applicable_scene
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.attributeName != null" >
-        attribute_name = #{record.attributeName,jdbcType=VARCHAR},
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=INTEGER},
       </if>
-      <if test="record.showName != null" >
-        show_name = #{record.showName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.canMultipleSelected != null" >
-        can_multiple_selected = #{record.canMultipleSelected,jdbcType=BIT},
-      </if>
-      <if test="record.attributeValueType != null" >
-        attribute_value_type = #{record.attributeValueType,jdbcType=TINYINT},
-      </if>
-      <if test="record.decimalPlace != null" >
-        decimal_place = #{record.decimalPlace,jdbcType=TINYINT},
+      <if test="record.applicableSceneId != null" >
+        applicable_scene_id = #{record.applicableSceneId,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -242,13 +205,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update attribute
+    update product_applicable_scene
     set id = #{record.id,jdbcType=INTEGER},
-      attribute_name = #{record.attributeName,jdbcType=VARCHAR},
-      show_name = #{record.showName,jdbcType=VARCHAR},
-      can_multiple_selected = #{record.canMultipleSelected,jdbcType=BIT},
-      attribute_value_type = #{record.attributeValueType,jdbcType=TINYINT},
-      decimal_place = #{record.decimalPlace,jdbcType=TINYINT},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      applicable_scene_id = #{record.applicableSceneId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -258,23 +218,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wow.attribute.model.Attribute" >
-    update attribute
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.ProductApplicableScene" >
+    update product_applicable_scene
     <set >
-      <if test="attributeName != null" >
-        attribute_name = #{attributeName,jdbcType=VARCHAR},
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
       </if>
-      <if test="showName != null" >
-        show_name = #{showName,jdbcType=VARCHAR},
-      </if>
-      <if test="canMultipleSelected != null" >
-        can_multiple_selected = #{canMultipleSelected,jdbcType=BIT},
-      </if>
-      <if test="attributeValueType != null" >
-        attribute_value_type = #{attributeValueType,jdbcType=TINYINT},
-      </if>
-      <if test="decimalPlace != null" >
-        decimal_place = #{decimalPlace,jdbcType=TINYINT},
+      <if test="applicableSceneId != null" >
+        applicable_scene_id = #{applicableSceneId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -294,13 +245,10 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.attribute.model.Attribute" >
-    update attribute
-    set attribute_name = #{attributeName,jdbcType=VARCHAR},
-      show_name = #{showName,jdbcType=VARCHAR},
-      can_multiple_selected = #{canMultipleSelected,jdbcType=BIT},
-      attribute_value_type = #{attributeValueType,jdbcType=TINYINT},
-      decimal_place = #{decimalPlace,jdbcType=TINYINT},
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.ProductApplicableScene" >
+    update product_applicable_scene
+    set product_id = #{productId,jdbcType=INTEGER},
+      applicable_scene_id = #{applicableSceneId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

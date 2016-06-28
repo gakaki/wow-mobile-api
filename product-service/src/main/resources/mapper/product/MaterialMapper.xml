@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.page.mapper.AttributeFilterConfigMapper" >
-  <resultMap id="BaseResultMap" type="com.wow.page.model.AttributeFilterConfig" >
+<mapper namespace="com.wow.product.mapper.MaterialMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.Material" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
-    <result column="attribute_id" property="attributeId" jdbcType="INTEGER" />
-    <result column="is_filter_attribute" property="isFilterAttribute" jdbcType="BIT" />
-    <result column="sort_order" property="sortOrder" jdbcType="TINYINT" />
-    <result column="is_among_more" property="isAmongMore" jdbcType="BIT" />
+    <result column="material_name" property="materialName" jdbcType="VARCHAR" />
+    <result column="material_desc" property="materialDesc" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -69,15 +70,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, category_id, attribute_id, is_filter_attribute, sort_order, is_among_more, is_deleted
+    id, material_name, material_desc, create_time, create_by, update_time, update_by, 
+    is_deleted
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.page.model.AttributeFilterConfigExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.MaterialExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from attribute_filter_config
+    from material
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,102 +90,111 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from attribute_filter_config
+    from material
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from attribute_filter_config
+    delete from material
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wow.page.model.AttributeFilterConfigExample" >
-    delete from attribute_filter_config
+  <delete id="deleteByExample" parameterType="com.wow.product.model.MaterialExample" >
+    delete from material
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wow.page.model.AttributeFilterConfig" >
+  <insert id="insert" parameterType="com.wow.product.model.Material" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into attribute_filter_config (category_id, attribute_id, is_filter_attribute, 
-      sort_order, is_among_more, is_deleted
-      )
-    values (#{categoryId,jdbcType=INTEGER}, #{attributeId,jdbcType=INTEGER}, #{isFilterAttribute,jdbcType=BIT}, 
-      #{sortOrder,jdbcType=TINYINT}, #{isAmongMore,jdbcType=BIT}, #{isDeleted,jdbcType=BIT}
-      )
+    insert into material (material_name, material_desc, create_time, 
+      create_by, update_time, update_by, 
+      is_deleted)
+    values (#{materialName,jdbcType=VARCHAR}, #{materialDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{isDeleted,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.page.model.AttributeFilterConfig" >
+  <insert id="insertSelective" parameterType="com.wow.product.model.Material" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into attribute_filter_config
+    insert into material
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="categoryId != null" >
-        category_id,
+      <if test="materialName != null" >
+        material_name,
       </if>
-      <if test="attributeId != null" >
-        attribute_id,
+      <if test="materialDesc != null" >
+        material_desc,
       </if>
-      <if test="isFilterAttribute != null" >
-        is_filter_attribute,
+      <if test="createTime != null" >
+        create_time,
       </if>
-      <if test="sortOrder != null" >
-        sort_order,
+      <if test="createBy != null" >
+        create_by,
       </if>
-      <if test="isAmongMore != null" >
-        is_among_more,
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
       </if>
       <if test="isDeleted != null" >
         is_deleted,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="categoryId != null" >
-        #{categoryId,jdbcType=INTEGER},
+      <if test="materialName != null" >
+        #{materialName,jdbcType=VARCHAR},
       </if>
-      <if test="attributeId != null" >
-        #{attributeId,jdbcType=INTEGER},
+      <if test="materialDesc != null" >
+        #{materialDesc,jdbcType=VARCHAR},
       </if>
-      <if test="isFilterAttribute != null" >
-        #{isFilterAttribute,jdbcType=BIT},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="sortOrder != null" >
-        #{sortOrder,jdbcType=TINYINT},
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
       </if>
-      <if test="isAmongMore != null" >
-        #{isAmongMore,jdbcType=BIT},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wow.page.model.AttributeFilterConfigExample" resultType="java.lang.Integer" >
-    select count(*) from attribute_filter_config
+  <select id="countByExample" parameterType="com.wow.product.model.MaterialExample" resultType="java.lang.Integer" >
+    select count(*) from material
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update attribute_filter_config
+    update material
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.categoryId != null" >
-        category_id = #{record.categoryId,jdbcType=INTEGER},
+      <if test="record.materialName != null" >
+        material_name = #{record.materialName,jdbcType=VARCHAR},
       </if>
-      <if test="record.attributeId != null" >
-        attribute_id = #{record.attributeId,jdbcType=INTEGER},
+      <if test="record.materialDesc != null" >
+        material_desc = #{record.materialDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.isFilterAttribute != null" >
-        is_filter_attribute = #{record.isFilterAttribute,jdbcType=BIT},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.sortOrder != null" >
-        sort_order = #{record.sortOrder,jdbcType=TINYINT},
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=VARCHAR},
       </if>
-      <if test="record.isAmongMore != null" >
-        is_among_more = #{record.isAmongMore,jdbcType=BIT},
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
       </if>
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=BIT},
@@ -194,35 +205,39 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update attribute_filter_config
+    update material
     set id = #{record.id,jdbcType=INTEGER},
-      category_id = #{record.categoryId,jdbcType=INTEGER},
-      attribute_id = #{record.attributeId,jdbcType=INTEGER},
-      is_filter_attribute = #{record.isFilterAttribute,jdbcType=BIT},
-      sort_order = #{record.sortOrder,jdbcType=TINYINT},
-      is_among_more = #{record.isAmongMore,jdbcType=BIT},
+      material_name = #{record.materialName,jdbcType=VARCHAR},
+      material_desc = #{record.materialDesc,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
       is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wow.page.model.AttributeFilterConfig" >
-    update attribute_filter_config
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.Material" >
+    update material
     <set >
-      <if test="categoryId != null" >
-        category_id = #{categoryId,jdbcType=INTEGER},
+      <if test="materialName != null" >
+        material_name = #{materialName,jdbcType=VARCHAR},
       </if>
-      <if test="attributeId != null" >
-        attribute_id = #{attributeId,jdbcType=INTEGER},
+      <if test="materialDesc != null" >
+        material_desc = #{materialDesc,jdbcType=VARCHAR},
       </if>
-      <if test="isFilterAttribute != null" >
-        is_filter_attribute = #{isFilterAttribute,jdbcType=BIT},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="sortOrder != null" >
-        sort_order = #{sortOrder,jdbcType=TINYINT},
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
       </if>
-      <if test="isAmongMore != null" >
-        is_among_more = #{isAmongMore,jdbcType=BIT},
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
       </if>
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=BIT},
@@ -230,13 +245,14 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.page.model.AttributeFilterConfig" >
-    update attribute_filter_config
-    set category_id = #{categoryId,jdbcType=INTEGER},
-      attribute_id = #{attributeId,jdbcType=INTEGER},
-      is_filter_attribute = #{isFilterAttribute,jdbcType=BIT},
-      sort_order = #{sortOrder,jdbcType=TINYINT},
-      is_among_more = #{isAmongMore,jdbcType=BIT},
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.Material" >
+    update material
+    set material_name = #{materialName,jdbcType=VARCHAR},
+      material_desc = #{materialDesc,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
