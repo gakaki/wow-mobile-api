@@ -68,10 +68,6 @@ allprojects {
     bootRun {
         addResources = true
     }
-
-    task cleanMapper(type: Delete) {
-        delete 'src/main/resources/mapper'
-    }
 }
 subprojects {
     dependencies {

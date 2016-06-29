@@ -1,10 +1,9 @@
 package com.wow.mobileapi.controller;
 
-import com.wow.attribute.model.Attribute;
 import com.wow.mobileapi.dto.ApiResponse;
 import com.wow.mobileapi.util.ErrorRespUtil;
 import com.wow.user.model.EndUserSession;
-import com.wow.user.service.LoginService;
+import com.wow.user.service.SessionService;
 import com.wow.user.vo.LoginRequest;
 import com.wow.user.vo.LoginResult;
 import org.slf4j.Logger;
@@ -24,7 +23,7 @@ public class SessionController {
     private static final Logger logger = LoggerFactory.getLogger(SessionController.class);
 
     @Autowired
-    private LoginService loginService;
+    private SessionService sessionService;
 
     /**
      * 创建新的会话(登入)
@@ -35,7 +34,7 @@ public class SessionController {
     public ApiResponse login(@Validated @RequestBody LoginRequest loginRequest) {
         ApiResponse apiResponse = new ApiResponse();
         logger.info("user login...");
-        LoginResult loginResult = loginService.login(loginRequest);
+        LoginResult loginResult = sessionService.login(loginRequest);
         if (loginResult.isValidUser()) {
             apiResponse.setResCode("0");
             apiResponse.setResMsg("success");
@@ -54,13 +53,19 @@ public class SessionController {
      * @return
      */
     @RequestMapping(method = RequestMethod.DELETE)
-    public ApiResponse logout(@PathVariable Integer endUserId) {
+    public ApiResponse logout(@PathVariable Integer endUserId, @PathVariable byte loginChannel) {
         ApiResponse apiResponse = new ApiResponse();
         logger.info("user logout...");
-        EndUserSession endUserSession = loginService.logout(endUserId);
-        apiResponse.setResCode("0");
-        apiResponse.setResMsg("success");
-        apiResponse.setData(endUserSession);
+        int i = sessionService.logout(endUserId,loginChannel);
+        if (i > 0) {
+            apiResponse.setResCode("0");
+            apiResponse.setResMsg("success");
+            apiResponse.setData("log out successfully");
+        } else {
+            apiResponse.setResCode("0");
+            apiResponse.setResMsg("failed");
+            apiResponse.setData("log out failed");
+        }
         return apiResponse;
     }
 }

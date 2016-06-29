@@ -4,6 +4,9 @@ server:
   address: 127.0.0.1
   sessionTimeout: 30
   contextPath: /mobile-api-dev
+# Session Token有效时间配置(毫秒)
+session:
+  expirationTime: 60000
 
 #内网数据库
 spring:

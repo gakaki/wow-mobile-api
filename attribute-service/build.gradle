@@ -21,7 +21,7 @@ def getDbProperties = {
 }
 
 
-task dbgen(dependsOn: cleanMapper) << {
+task dbgen << {
 
     def properties = getDbProperties()
 

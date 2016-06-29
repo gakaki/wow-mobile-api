@@ -31,7 +31,6 @@ public class MobileApiApplication extends WebMvcConfigurerAdapter implements Com
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new MustLoginInterceptor()).addPathPatterns("/v1.0/users/**");
         registry.addInterceptor(new MustLoginInterceptor()).addPathPatterns("/v1.0/orders/**");
-        registry.addInterceptor(new MustLoginInterceptor()).addPathPatterns("/v1.0/attributes/**");
     }
 
     /**

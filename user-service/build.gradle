@@ -21,7 +21,7 @@ def getDbProperties = {
 }
 
 
-task dbgen() << {
+task dbgen << {
 
     def properties = getDbProperties()
 
