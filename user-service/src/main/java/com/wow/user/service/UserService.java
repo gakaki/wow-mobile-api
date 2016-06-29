@@ -19,6 +19,13 @@ public interface UserService {
     int register(EndUser endUser);
 
     /**
+     * 是否已注册用户
+     * @param userName
+     * @return
+     */
+    boolean isExistedUser(String userName);
+
+    /**
      * 用户信息更新
      *
      * @param endUser

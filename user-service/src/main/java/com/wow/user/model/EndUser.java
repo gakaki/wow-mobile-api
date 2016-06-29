@@ -1,14 +1,16 @@
 package com.wow.user.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class EndUser implements Serializable {
     private Integer id;
-
+    @NotEmpty(message = "用户名不能为空")
     private String userName;
-
+    @NotEmpty(message = "密码不能为空")
     private String password;
 
     private String nickName;

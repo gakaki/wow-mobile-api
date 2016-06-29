@@ -22,6 +22,8 @@ public interface EndUserMapper {
 
     EndUser selectByUserNamePassword(@Param("userName") String userName,@Param("password") String password);
 
+    EndUser selectByUserName(@Param("userName") String userName);
+
     int updateByExampleSelective(@Param("record") EndUser record, @Param("example") EndUserExample example);
 
     int updateByExample(@Param("record") EndUser record, @Param("example") EndUserExample example);

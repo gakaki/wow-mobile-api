@@ -42,7 +42,20 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public int register(EndUser endUser) {
-        return 0;
+        return endUserMapper.insert(endUser);
+    }
+
+    /**
+     * 是否已注册用户
+     *
+     * @param userName
+     * @return
+     */
+    @Override
+    public boolean isExistedUser(String userName) {
+        EndUser user = endUserMapper.selectByUserName(userName);
+        logger.info("user=" + user);
+        return (user != null);
     }
 
     /**
