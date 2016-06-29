@@ -92,8 +92,14 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="getSubCategory" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+   select
+    <include refid="Base_Column_List" />
+    from category
+    where parent_category_id = #{id,jdbcType=INTEGER}
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from category
     where id = #{id,jdbcType=INTEGER}
