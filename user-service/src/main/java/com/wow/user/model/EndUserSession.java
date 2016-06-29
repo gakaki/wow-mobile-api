@@ -20,9 +20,7 @@ public class EndUserSession implements Serializable {
 
     private Date lastRefreshTime;
 
-    private Boolean isExpired;
-
-    private Boolean isActive;
+    private Boolean isLogout;
 
     private Date logoutTime;
 
@@ -92,20 +90,12 @@ public class EndUserSession implements Serializable {
         this.lastRefreshTime = lastRefreshTime;
     }
 
-    public Boolean getIsExpired() {
-        return isExpired;
+    public Boolean getIsLogout() {
+        return isLogout;
     }
 
-    public void setIsExpired(Boolean isExpired) {
-        this.isExpired = isExpired;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setIsLogout(Boolean isLogout) {
+        this.isLogout = isLogout;
     }
 
     public Date getLogoutTime() {
@@ -130,8 +120,7 @@ public class EndUserSession implements Serializable {
         sb.append(", lastLoginTime=").append(lastLoginTime);
         sb.append(", lastLoginIp=").append(lastLoginIp);
         sb.append(", lastRefreshTime=").append(lastRefreshTime);
-        sb.append(", isExpired=").append(isExpired);
-        sb.append(", isActive=").append(isActive);
+        sb.append(", isLogout=").append(isLogout);
         sb.append(", logoutTime=").append(logoutTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

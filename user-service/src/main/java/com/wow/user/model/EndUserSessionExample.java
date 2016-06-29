@@ -605,123 +605,63 @@ public class EndUserSessionExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredIsNull() {
-            addCriterion("is_expired is null");
+        public Criteria andIsLogoutIsNull() {
+            addCriterion("is_logout is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredIsNotNull() {
-            addCriterion("is_expired is not null");
+        public Criteria andIsLogoutIsNotNull() {
+            addCriterion("is_logout is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredEqualTo(Boolean value) {
-            addCriterion("is_expired =", value, "isExpired");
+        public Criteria andIsLogoutEqualTo(Boolean value) {
+            addCriterion("is_logout =", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredNotEqualTo(Boolean value) {
-            addCriterion("is_expired <>", value, "isExpired");
+        public Criteria andIsLogoutNotEqualTo(Boolean value) {
+            addCriterion("is_logout <>", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredGreaterThan(Boolean value) {
-            addCriterion("is_expired >", value, "isExpired");
+        public Criteria andIsLogoutGreaterThan(Boolean value) {
+            addCriterion("is_logout >", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_expired >=", value, "isExpired");
+        public Criteria andIsLogoutGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_logout >=", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredLessThan(Boolean value) {
-            addCriterion("is_expired <", value, "isExpired");
+        public Criteria andIsLogoutLessThan(Boolean value) {
+            addCriterion("is_logout <", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_expired <=", value, "isExpired");
+        public Criteria andIsLogoutLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_logout <=", value, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredIn(List<Boolean> values) {
-            addCriterion("is_expired in", values, "isExpired");
+        public Criteria andIsLogoutIn(List<Boolean> values) {
+            addCriterion("is_logout in", values, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredNotIn(List<Boolean> values) {
-            addCriterion("is_expired not in", values, "isExpired");
+        public Criteria andIsLogoutNotIn(List<Boolean> values) {
+            addCriterion("is_logout not in", values, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_expired between", value1, value2, "isExpired");
+        public Criteria andIsLogoutBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_logout between", value1, value2, "isActive");
             return (Criteria) this;
         }
 
-        public Criteria andIsExpiredNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_expired not between", value1, value2, "isExpired");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveIsNull() {
-            addCriterion("is_active is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveIsNotNull() {
-            addCriterion("is_active is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveEqualTo(Boolean value) {
-            addCriterion("is_active =", value, "isActive");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveNotEqualTo(Boolean value) {
-            addCriterion("is_active <>", value, "isActive");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveGreaterThan(Boolean value) {
-            addCriterion("is_active >", value, "isActive");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_active >=", value, "isActive");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveLessThan(Boolean value) {
-            addCriterion("is_active <", value, "isActive");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_active <=", value, "isActive");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveIn(List<Boolean> values) {
-            addCriterion("is_active in", values, "isActive");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveNotIn(List<Boolean> values) {
-            addCriterion("is_active not in", values, "isActive");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_active between", value1, value2, "isActive");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsActiveNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_active not between", value1, value2, "isActive");
+        public Criteria andIsLogoutNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_logout not between", value1, value2, "isActive");
             return (Criteria) this;
         }
 

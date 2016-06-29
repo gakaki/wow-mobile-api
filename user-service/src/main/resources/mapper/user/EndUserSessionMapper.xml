@@ -10,8 +10,7 @@
     <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     <result column="last_login_ip" property="lastLoginIp" jdbcType="BIGINT" />
     <result column="last_refresh_time" property="lastRefreshTime" jdbcType="TIMESTAMP" />
-    <result column="is_expired" property="isExpired" jdbcType="BIT" />
-    <result column="is_active" property="isActive" jdbcType="BIT" />
+    <result column="is_logout" property="isLogout" jdbcType="BIT" />
     <result column="logout_time" property="logoutTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -74,7 +73,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, end_user_id, session_token, login_channel, user_agent_info, last_login_time, 
-    last_login_ip, last_refresh_time, is_expired, is_active, logout_time
+    last_login_ip, last_refresh_time, is_logout, logout_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.EndUserSessionExample" >
     select
@@ -100,18 +99,33 @@
     select
     <include refid="Base_Column_List" />
     from end_user_session
-    where end_user_id = #{userId,jdbcType=INTEGER}
+    where end_user_id = #{endUserId,jdbcType=INTEGER}
   </select>
 
   <select id="selectByUserIdChannel" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List" />
     from end_user_session
-    where end_user_id = #{userId,jdbcType=INTEGER}
+    where end_user_id = #{endUserId,jdbcType=INTEGER}
     and login_channel = #{loginChannel, jdbcType=TINYINT}
   </select>
 
+  <select id="selectValidSession" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from end_user_session
+    where session_token = #{sessionToken,jdbcType=VARCHAR}
+    and login_channel = #{loginChannel, jdbcType=TINYINT}
+    and last_refresh_time > #{mustRefreshAfter, jdbcType=TIMESTAMP}
+    and is_logout != 1
+  </select>
 
+  <select id="updateRefreshTime" resultMap="BaseResultMap" >
+    update end_user_session
+    set last_refresh_time = now()
+    where end_user_id = #{endUserId,jdbcType=VARCHAR}
+    and login_channel = #{loginChannel, jdbcType=TINYINT}
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from end_user_session
@@ -129,11 +143,11 @@
     </selectKey>
     insert into end_user_session (end_user_id, session_token, login_channel, 
       user_agent_info, last_login_time, last_login_ip, 
-      last_refresh_time, is_expired, is_active, 
+      last_refresh_time, is_logout,
       logout_time)
     values (#{endUserId,jdbcType=INTEGER}, #{sessionToken,jdbcType=VARCHAR}, #{loginChannel,jdbcType=TINYINT}, 
       #{userAgentInfo,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{lastLoginIp,jdbcType=BIGINT}, 
-      #{lastRefreshTime,jdbcType=TIMESTAMP}, #{isExpired,jdbcType=BIT}, #{isActive,jdbcType=BIT}, 
+      #{lastRefreshTime,jdbcType=TIMESTAMP}, #{isLogout,jdbcType=BIT},
       #{logoutTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.user.model.EndUserSession" >
@@ -163,11 +177,8 @@
       <if test="lastRefreshTime != null" >
         last_refresh_time,
       </if>
-      <if test="isExpired != null" >
-        is_expired,
-      </if>
-      <if test="isActive != null" >
-        is_active,
+      <if test="isLogout != null" >
+        is_logout,
       </if>
       <if test="logoutTime != null" >
         logout_time,
@@ -195,11 +206,8 @@
       <if test="lastRefreshTime != null" >
         #{lastRefreshTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isExpired != null" >
-        #{isExpired,jdbcType=BIT},
-      </if>
-      <if test="isActive != null" >
-        #{isActive,jdbcType=BIT},
+      <if test="isLogout != null" >
+        #{isLogout,jdbcType=BIT},
       </if>
       <if test="logoutTime != null" >
         #{logoutTime,jdbcType=TIMESTAMP},
@@ -239,11 +247,8 @@
       <if test="record.lastRefreshTime != null" >
         last_refresh_time = #{record.lastRefreshTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.isExpired != null" >
-        is_expired = #{record.isExpired,jdbcType=BIT},
-      </if>
-      <if test="record.isActive != null" >
-        is_active = #{record.isActive,jdbcType=BIT},
+      <if test="record.isLogout != null" >
+        is_logout = #{record.isLogout,jdbcType=BIT},
       </if>
       <if test="record.logoutTime != null" >
         logout_time = #{record.logoutTime,jdbcType=TIMESTAMP},
@@ -263,8 +268,7 @@
       last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
       last_login_ip = #{record.lastLoginIp,jdbcType=BIGINT},
       last_refresh_time = #{record.lastRefreshTime,jdbcType=TIMESTAMP},
-      is_expired = #{record.isExpired,jdbcType=BIT},
-      is_active = #{record.isActive,jdbcType=BIT},
+      is_logout = #{record.isLogout,jdbcType=BIT},
       logout_time = #{record.logoutTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -294,11 +298,8 @@
       <if test="lastRefreshTime != null" >
         last_refresh_time = #{lastRefreshTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isExpired != null" >
-        is_expired = #{isExpired,jdbcType=BIT},
-      </if>
-      <if test="isActive != null" >
-        is_active = #{isActive,jdbcType=BIT},
+      <if test="isLogout != null" >
+        is_logout = #{isLogout,jdbcType=BIT},
       </if>
       <if test="logoutTime != null" >
         logout_time = #{logoutTime,jdbcType=TIMESTAMP},
@@ -315,9 +316,18 @@
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       last_login_ip = #{lastLoginIp,jdbcType=BIGINT},
       last_refresh_time = #{lastRefreshTime,jdbcType=TIMESTAMP},
-      is_expired = #{isExpired,jdbcType=BIT},
-      is_active = #{isActive,jdbcType=BIT},
+      is_logout = #{isLogout,jdbcType=BIT},
       logout_time = #{logoutTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="updateLogout">
+    update end_user_session
+    set is_logout = true,
+    logout_time = now()
+    where end_user_id = #{endUserId,jdbcType=INTEGER}
+    and login_channel = #{loginChannel,jdbcType=TINYINT}
+  </update>
+
+
 </mapper>

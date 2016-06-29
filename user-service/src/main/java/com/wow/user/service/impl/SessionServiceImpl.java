@@ -6,7 +6,7 @@ import com.wow.user.mapper.EndUserSessionMapper;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserLoginLog;
 import com.wow.user.model.EndUserSession;
-import com.wow.user.service.LoginService;
+import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.util.IpConvertUtil;
 import com.wow.user.vo.LoginRequest;
@@ -14,6 +14,8 @@ import com.wow.user.vo.LoginResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +28,9 @@ import java.util.UUID;
  */
 @Service
 @Transactional(value = "userTransactionManager")
-public class LoginServiceImpl implements LoginService {
+public class SessionServiceImpl implements SessionService {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SessionServiceImpl.class);
 
     @Autowired
     private EndUserMapper endUserMapper;
@@ -41,6 +43,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private UserService userService;
+
+    @Value("${session.expirationTime}")
+    private long sessionExpirationTime;
 
     /**
      * 用户登录
@@ -58,12 +63,13 @@ public class LoginServiceImpl implements LoginService {
             endUserSession = endUserSessionMapper.selectByUserIdChannel(endUser.getId(), loginRequest.getLoginChannel());
             long loginIp = IpConvertUtil.ipToLong(loginRequest.getLoginIp());
             Date now = new Date();
+            logger.info("start to login at:" + now);
+            //token生成算法,暂用UUID,可以替换
             String sessionToken = UUID.randomUUID().toString();
             if (endUserSession == null) {
                 endUserSession = new EndUserSession();
                 endUserSession.setEndUserId(endUser.getId());
-                endUserSession.setIsActive(true);
-                endUserSession.setIsExpired(false);
+                endUserSession.setIsLogout(false);
                 endUserSession.setLastLoginIp(loginIp);
                 endUserSession.setLastRefreshTime(now);
                 endUserSession.setLastLoginTime(now);
@@ -71,10 +77,9 @@ public class LoginServiceImpl implements LoginService {
                 endUserSession.setLogoutTime(null);
                 endUserSession.setSessionToken(sessionToken);
                 endUserSession.setUserAgentInfo(loginRequest.getUserAgent());
-                createSession(endUserSession);
+                endUserSessionMapper.insert(endUserSession);
             } else {
-                endUserSession.setIsActive(true);
-                endUserSession.setIsExpired(false);
+                endUserSession.setIsLogout(false);
                 endUserSession.setLastLoginIp(loginIp);
                 endUserSession.setLastRefreshTime(now);
                 endUserSession.setLastLoginTime(now);
@@ -82,7 +87,7 @@ public class LoginServiceImpl implements LoginService {
                 endUserSession.setLogoutTime(null);
                 endUserSession.setSessionToken(sessionToken);
                 endUserSession.setUserAgentInfo(loginRequest.getUserAgent());
-                updateSession(endUserSession);
+                endUserSessionMapper.updateByPrimaryKey(endUserSession);
             }
 
             //记录登录日志
@@ -108,42 +113,27 @@ public class LoginServiceImpl implements LoginService {
         return loginResult;
     }
 
-    public int createSession(EndUserSession endUserSession) {
-        return endUserSessionMapper.insert(endUserSession);
-    }
-
-    public int updateSession(EndUserSession endUserSession) {
-        return endUserSessionMapper.updateByPrimaryKey(endUserSession);
-    }
 
     /**
-     * 创建会话
+     * 根据userId和登录渠道查询会话
      *
      * @param userId
+     * @param loginChannel
      * @return
      */
-    public EndUserSession getSessionByUserId(int userId) {
-        return endUserSessionMapper.selectByUserId(userId);
+    public EndUserSession getSessionByUserIdAndChannel (int userId, byte loginChannel) {
+        return endUserSessionMapper.selectByUserId(userId, loginChannel);
     }
 
     /**
      * 延续会话
      *
-     * @param token
+     * @param userId
+     * @param loginChannel
      * @return
      */
-    public EndUserSession refreshSession(String token) {
-        return null;
-    }
-
-    /**
-     * 添加用户登录日志
-     *
-     * @param endUserLoginLog
-     * @return
-     */
-    public int createLoginLog(EndUserLoginLog endUserLoginLog) {
-        return 0;
+    private int refreshSession(int userId, byte loginChannel) {
+        return endUserSessionMapper.updateRefreshTime(userId,loginChannel);
     }
 
     /**
@@ -162,8 +152,36 @@ public class LoginServiceImpl implements LoginService {
      * @param endUserId
      * @return
      */
-    public EndUserSession logout(int endUserId) {
-        return null;
+    public int logout(int endUserId,byte loginChannel) {
+        EndUserSession endUserSession = new EndUserSession();
+        endUserSession.setEndUserId(endUserId);
+        endUserSession.setIsLogout(true);
+        endUserSession.setLogoutTime(new Date());
+        return endUserSessionMapper.updateLogout(endUserId, loginChannel);
+    }
+
+    /**
+     * 判断是否有效session
+     *
+     * @param sessionToken
+     * @param loginChannel
+     * @return
+     */
+    @Override
+    public boolean isValidSessionToken(String sessionToken, byte loginChannel) {
+        boolean isValid = false;
+        long currentTime = System.currentTimeMillis();
+        Date mustRefreshAfter = new Date(currentTime - sessionExpirationTime);
+        EndUserSession endUserSession = endUserSessionMapper.selectValidSession(sessionToken, loginChannel, mustRefreshAfter);
+        logger.info("endUserSession:" + endUserSession);
+        if (endUserSession != null && endUserSession.getId() != null) {
+            isValid = true;
+            //刷新过期时间,不是每次都刷新,仅仅在当前时间与上次刷新时间之间间隔 < 过期时间的25%处刷新
+            if (currentTime - endUserSession.getLastRefreshTime().getTime() < sessionExpirationTime*0.25) {
+                refreshSession(endUserSession.getEndUserId(),endUserSession.getLoginChannel());
+            }
+        }
+        return isValid;
     }
 
 }

@@ -10,8 +10,7 @@ import java.util.List;
 /**
  * Created by zhengzhiqing on 16/6/16.
  */
-public interface LoginService {
-    //table: end_user_login_log
+public interface SessionService {
 
     /**
      * 用户登录
@@ -22,36 +21,13 @@ public interface LoginService {
     LoginResult login(LoginRequest loginRequest);
 
     /**
-     * 创建会话
-     *
-     * @param endUserSession
-     * @return
-     */
-    int createSession(EndUserSession endUserSession);
-
-    /**
-     * 创建会话
+     * 根据userId和登录渠道查询会话
      *
      * @param userId
+     * @param loginChannel
      * @return
      */
-    EndUserSession getSessionByUserId(int userId);
-
-    /**
-     * 延续会话
-     *
-     * @param token
-     * @return
-     */
-    EndUserSession refreshSession(String token);
-
-    /**
-     * 添加用户登录日志
-     *
-     * @param endUserLoginLog
-     * @return
-     */
-    int createLoginLog(EndUserLoginLog endUserLoginLog);
+    EndUserSession getSessionByUserIdAndChannel(int userId, byte loginChannel);
 
     /**
      * 查询用户登录日志
@@ -67,6 +43,14 @@ public interface LoginService {
      * @param endUserId
      * @return
      */
-    EndUserSession logout(int endUserId);
+    int logout(int endUserId, byte loginChannel);
+
+    /**
+     * 判断是否有效session
+     * @param sessionToken
+     * @param loginChannel
+     * @return
+     */
+    boolean isValidSessionToken(String sessionToken, byte loginChannel);
 
 }

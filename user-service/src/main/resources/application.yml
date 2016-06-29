@@ -5,11 +5,14 @@ server:
   sessionTimeout: 30
   contextPath: /user-service
 
+session:
+  expirationTime: 60000
+
 spring:
   datasource:
     user:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://10.0.60.121:3388/wowdsgn
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn?useSSL=false
       username: root
       password: z123456
       maxActive: 10
@@ -30,3 +33,17 @@ spring:
 mybatis:
   typeAliasesPackage: com.wow.user.model
   mapperLocations: classpath:/mapper/user/*Mapper.xml
+
+#日志配置
+logging:
+  file: ${HOME}/ApplicationLog/mobile-api/user-service/spring-user-service.log
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: WARN
+    java:
+      sql:
+        Connection: INFO
+        Statement: DEBUG
+        PreparedStatement: DEBUG

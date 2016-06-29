@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public int updateEndUser(EndUser endUser) {
-        return 1;
+        return endUserMapper.updateByPrimaryKeySelective(endUser);
     }
 
     /**
