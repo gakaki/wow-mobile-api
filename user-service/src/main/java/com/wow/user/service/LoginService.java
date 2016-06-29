@@ -22,6 +22,22 @@ public interface LoginService {
     LoginResult login(LoginRequest loginRequest);
 
     /**
+     * 创建会话
+     *
+     * @param endUserSession
+     * @return
+     */
+    int createSession(EndUserSession endUserSession);
+
+    /**
+     * 创建会话
+     *
+     * @param userId
+     * @return
+     */
+    EndUserSession getSessionByUserId(int userId);
+
+    /**
      * 延续会话
      *
      * @param token

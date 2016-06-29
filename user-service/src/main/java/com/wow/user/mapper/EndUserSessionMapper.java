@@ -20,6 +20,9 @@ public interface EndUserSessionMapper {
 
     EndUserSession selectByPrimaryKey(Integer id);
 
+    EndUserSession selectByUserId(@Param("userId") int userId);
+    EndUserSession selectByUserIdChannel(@Param("userId") int userId, @Param("loginChannel") byte loginChannel);
+
     int updateByExampleSelective(@Param("record") EndUserSession record, @Param("example") EndUserSessionExample example);
 
     int updateByExample(@Param("record") EndUserSession record, @Param("example") EndUserSessionExample example);

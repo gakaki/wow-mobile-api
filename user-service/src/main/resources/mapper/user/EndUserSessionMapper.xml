@@ -96,6 +96,23 @@
     from end_user_session
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from end_user_session
+    where end_user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUserIdChannel" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from end_user_session
+    where end_user_id = #{userId,jdbcType=INTEGER}
+    and login_channel = #{loginChannel, jdbcType=TINYINT}
+  </select>
+
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from end_user_session
     where id = #{id,jdbcType=INTEGER}

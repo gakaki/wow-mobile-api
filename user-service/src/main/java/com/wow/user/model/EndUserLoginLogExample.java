@@ -475,8 +475,83 @@ public class EndUserLoginLogExample {
             return (Criteria) this;
         }
 
+        public Criteria andSessionTokenIsNull() {
+            addCriterion("session_token is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenIsNotNull() {
+            addCriterion("session_token is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenEqualTo(String value) {
+            addCriterion("session_token =", value, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenNotEqualTo(String value) {
+            addCriterion("session_token <>", value, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenGreaterThan(String value) {
+            addCriterion("session_token >", value, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenGreaterThanOrEqualTo(String value) {
+            addCriterion("session_token >=", value, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenLessThan(String value) {
+            addCriterion("session_token <", value, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenLessThanOrEqualTo(String value) {
+            addCriterion("session_token <=", value, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenLike(String value) {
+            addCriterion("session_token like", value, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenNotLike(String value) {
+            addCriterion("session_token not like", value, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenIn(List<String> values) {
+            addCriterion("session_token in", values, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenNotIn(List<String> values) {
+            addCriterion("session_token not in", values, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenBetween(String value1, String value2) {
+            addCriterion("session_token between", value1, value2, "sessionToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenNotBetween(String value1, String value2) {
+            addCriterion("session_token not between", value1, value2, "sessionToken");
+            return (Criteria) this;
+        }
+
         public Criteria andUserAgentInfoLikeInsensitive(String value) {
             addCriterion("upper(user_agent_info) like", value.toUpperCase(), "userAgentInfo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSessionTokenLikeInsensitive(String value) {
+            addCriterion("upper(session_token) like", value.toUpperCase(), "sessionToken");
             return (Criteria) this;
         }
     }

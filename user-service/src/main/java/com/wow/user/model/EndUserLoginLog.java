@@ -16,6 +16,8 @@ public class EndUserLoginLog implements Serializable {
 
     private Date loginTime;
 
+    private String sessionToken;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -66,6 +68,14 @@ public class EndUserLoginLog implements Serializable {
         this.loginTime = loginTime;
     }
 
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -78,6 +88,7 @@ public class EndUserLoginLog implements Serializable {
         sb.append(", userAgentInfo=").append(userAgentInfo);
         sb.append(", loginIp=").append(loginIp);
         sb.append(", loginTime=").append(loginTime);
+        sb.append(", sessionToken=").append(sessionToken);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

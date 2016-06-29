@@ -20,6 +20,8 @@ public interface EndUserMapper {
 
     EndUser selectByPrimaryKey(Integer id);
 
+    EndUser selectByUserNamePassword(@Param("userName") String userName,@Param("password") String password);
+
     int updateByExampleSelective(@Param("record") EndUser record, @Param("example") EndUserExample example);
 
     int updateByExample(@Param("record") EndUser record, @Param("example") EndUserExample example);

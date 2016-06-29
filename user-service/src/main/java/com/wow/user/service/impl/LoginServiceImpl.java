@@ -1,6 +1,8 @@
 package com.wow.user.service.impl;
 
+import com.wow.user.mapper.EndUserLoginLogMapper;
 import com.wow.user.mapper.EndUserMapper;
+import com.wow.user.mapper.EndUserSessionMapper;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserLoginLog;
 import com.wow.user.model.EndUserSession;
@@ -32,10 +34,13 @@ public class LoginServiceImpl implements LoginService {
     private EndUserMapper endUserMapper;
 
     @Autowired
+    EndUserSessionMapper endUserSessionMapper;
+
+    @Autowired
+    EndUserLoginLogMapper endUserLoginLogMapper;
+
+    @Autowired
     private UserService userService;
-
-
-    //table: end_user_login_log
 
     /**
      * 用户登录
@@ -47,24 +52,49 @@ public class LoginServiceImpl implements LoginService {
         LoginResult loginResult = new LoginResult();
         EndUserSession endUserSession = null;
         //先检查数据库,看用户名和密码是否匹配
-//        EndUser endUser = userService.authenticate(loginRequest.getUserName(), loginRequest.getPassword());
-        EndUser endUser = new EndUser();
-        endUser.setId(1);
+        EndUser endUser = userService.authenticate(loginRequest.getUserName(), loginRequest.getPassword());
         if (endUser != null) { //验证成功
-            //开始写入EndUserSession
-            endUserSession = new EndUserSession();
-            endUserSession.setEndUserId(endUser.getId());
-            endUserSession.setIsActive(true);
-            endUserSession.setIsExpired(false);
-            endUserSession.setLastLoginIp(IpConvertUtil.ipToLong(loginRequest.getLoginIp()));
+            //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
+            endUserSession = endUserSessionMapper.selectByUserIdChannel(endUser.getId(), loginRequest.getLoginChannel());
+            long loginIp = IpConvertUtil.ipToLong(loginRequest.getLoginIp());
             Date now = new Date();
-            endUserSession.setLastRefreshTime(now);
-            endUserSession.setLastLoginTime(now);
-            endUserSession.setLoginChannel(loginRequest.getLoginChannel());
-            endUserSession.setLogoutTime(null);
-            endUserSession.setSessionToken(UUID.randomUUID().toString());
-            endUserSession.setUserAgentInfo(loginRequest.getUserAgent());
-            //TODO: insert into end_user_session
+            String sessionToken = UUID.randomUUID().toString();
+            if (endUserSession == null) {
+                endUserSession = new EndUserSession();
+                endUserSession.setEndUserId(endUser.getId());
+                endUserSession.setIsActive(true);
+                endUserSession.setIsExpired(false);
+                endUserSession.setLastLoginIp(loginIp);
+                endUserSession.setLastRefreshTime(now);
+                endUserSession.setLastLoginTime(now);
+                endUserSession.setLoginChannel(loginRequest.getLoginChannel());
+                endUserSession.setLogoutTime(null);
+                endUserSession.setSessionToken(sessionToken);
+                endUserSession.setUserAgentInfo(loginRequest.getUserAgent());
+                createSession(endUserSession);
+            } else {
+                endUserSession.setIsActive(true);
+                endUserSession.setIsExpired(false);
+                endUserSession.setLastLoginIp(loginIp);
+                endUserSession.setLastRefreshTime(now);
+                endUserSession.setLastLoginTime(now);
+                endUserSession.setLoginChannel(loginRequest.getLoginChannel());
+                endUserSession.setLogoutTime(null);
+                endUserSession.setSessionToken(sessionToken);
+                endUserSession.setUserAgentInfo(loginRequest.getUserAgent());
+                updateSession(endUserSession);
+            }
+
+            //记录登录日志
+            EndUserLoginLog endUserLoginLog = new EndUserLoginLog();
+            endUserLoginLog.setUserAgentInfo(loginRequest.getUserAgent());
+            endUserLoginLog.setLoginChannel(loginRequest.getLoginChannel());
+            endUserLoginLog.setEndUserId(endUser.getId());
+            endUserLoginLog.setLoginIp(loginIp);
+            endUserLoginLog.setLoginTime(now);
+            endUserLoginLog.setSessionToken(sessionToken);
+            endUserLoginLogMapper.insert(endUserLoginLog);
+
             loginResult.setUserName(loginRequest.getUserName());
             loginResult.setValidUser(true);
             loginResult.setErrorMsg(null);
@@ -76,6 +106,24 @@ public class LoginServiceImpl implements LoginService {
             loginResult.setEndUserSession(null);
         }
         return loginResult;
+    }
+
+    public int createSession(EndUserSession endUserSession) {
+        return endUserSessionMapper.insert(endUserSession);
+    }
+
+    public int updateSession(EndUserSession endUserSession) {
+        return endUserSessionMapper.updateByPrimaryKey(endUserSession);
+    }
+
+    /**
+     * 创建会话
+     *
+     * @param userId
+     * @return
+     */
+    public EndUserSession getSessionByUserId(int userId) {
+        return endUserSessionMapper.selectByUserId(userId);
     }
 
     /**
