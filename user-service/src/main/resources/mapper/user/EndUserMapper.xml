@@ -123,7 +123,7 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="selectByUserNamePassword" resultMap="BaseResultMap">
+  <select id="selectByUserNameAndPassword" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from end_user

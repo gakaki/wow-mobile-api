@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public EndUser authenticate(String userName, String password) {
-        return endUserMapper.selectByUserNamePassword(userName,password);
+        return endUserMapper.selectByUserNameAndPassword(userName,password);
     }
 
     /**

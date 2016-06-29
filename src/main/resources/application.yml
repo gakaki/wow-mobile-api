@@ -13,7 +13,7 @@ spring:
   datasource:
     attribute:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://10.0.60.121:3388/wowdsgn #?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
       username: root
       password: z123456
       initialSize: 1

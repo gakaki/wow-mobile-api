@@ -29,21 +29,6 @@ spring:
 #  backgroundProcessorDelay: 30 # secs
 
 # MyBatis specifics
-# MyBatis specifics
 mybatis:
   typeAliasesPackage: com.wow.user.model
   mapperLocations: classpath:/mapper/user/*Mapper.xml
-
-#日志配置
-logging:
-  file: ${HOME}/ApplicationLog/mobile-api/user-service/spring-user-service.log
-  level:
-    root: INFO
-    org:
-      springframework:
-        web: WARN
-    java:
-      sql:
-        Connection: INFO
-        Statement: DEBUG
-        PreparedStatement: DEBUG

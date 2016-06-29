@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface EndUserMapper {
+
     int countByExample(EndUserExample example);
 
     int deleteByExample(EndUserExample example);
@@ -20,13 +21,16 @@ public interface EndUserMapper {
 
     EndUser selectByPrimaryKey(Integer id);
 
-    EndUser selectByUserNamePassword(@Param("userName") String userName,@Param("password") String password);
+    EndUser selectByUserNameAndPassword(@Param("userName") String userName,
+                                        @Param("password") String password);
 
     EndUser selectByUserName(@Param("userName") String userName);
 
-    int updateByExampleSelective(@Param("record") EndUser record, @Param("example") EndUserExample example);
+    int updateByExampleSelective(@Param("record") EndUser record,
+                                 @Param("example") EndUserExample example);
 
-    int updateByExample(@Param("record") EndUser record, @Param("example") EndUserExample example);
+    int updateByExample(@Param("record") EndUser record,
+                        @Param("example") EndUserExample example);
 
     int updateByPrimaryKeySelective(EndUser record);
 

@@ -32,5 +32,5 @@ spring:
 
 # MyBatis specifics
 mybatis:
-  typeAliasesPackage: com.wow.attribute.model
-  mapperLocations: classpath:/mapper/*Mapper.xml
+  typeAliasesPackage: com.wow.stock.model
+  mapperLocations: classpath:/mapper/stock/*Mapper.xml
