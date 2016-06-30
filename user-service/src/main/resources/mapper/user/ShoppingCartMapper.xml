@@ -271,4 +271,13 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByEndUser" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from shopping_cart
+    where end_user_id = #{endUserId,jdbcType=INTEGER}
+    and is_deleted = false
+  </select>
+
 </mapper>

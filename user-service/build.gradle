@@ -54,7 +54,6 @@ task dbgen << {
             propertyref(name: 'modelPackage')
             propertyref(name: 'mapperPackage')
             propertyref(name: 'sqlMapperPackage')
-
         }
     }
 }
