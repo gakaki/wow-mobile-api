@@ -27,4 +27,18 @@ public interface ShippingInfoMapper {
     int updateByPrimaryKeySelective(ShippingInfo record);
 
     int updateByPrimaryKey(ShippingInfo record);
+
+    /**
+     * 查找用户的收货信息
+     * @param endUserId
+     * @return
+     */
+    List<ShippingInfo> selectByUserId(@Param("endUserId") int endUserId);
+
+    /**
+     * 查询用户默认收货信息
+     * @param endUserId
+     * @return
+     */
+    ShippingInfo selectDefault(@Param("endUserId") int endUserId);
 }
