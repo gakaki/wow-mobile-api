@@ -335,4 +335,24 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByProductId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from product_price
+    where product_id = #{productId,jdbcType=INTEGER}
+    and is_deleted = false
+  </select>
+
+  <select id="selectByProductIds" resultMap="BaseResultMap" parameterType="array" >
+    select
+    <include refid="Base_Column_List" />
+    from product_price
+    where product_id in
+    <foreach collection="array" index="index" item="productId" open="(" separator="," close=")">
+      #{productId,jdbcType=INTEGER}
+    </foreach>
+    and is_deleted = false
+  </select>
+
 </mapper>

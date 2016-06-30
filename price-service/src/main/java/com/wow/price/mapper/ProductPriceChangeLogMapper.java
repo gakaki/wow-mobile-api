@@ -19,4 +19,6 @@ public interface ProductPriceChangeLogMapper {
     int updateByExampleSelective(@Param("record") ProductPriceChangeLog record, @Param("example") ProductPriceChangeLogExample example);
 
     int updateByExample(@Param("record") ProductPriceChangeLog record, @Param("example") ProductPriceChangeLogExample example);
+
+    List<ProductPriceChangeLog> selectPriceChangeLogsByProductId(@Param("productId") int productId);
 }

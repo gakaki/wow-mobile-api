@@ -27,4 +27,8 @@ public interface ProductPriceMapper {
     int updateByPrimaryKeySelective(ProductPrice record);
 
     int updateByPrimaryKey(ProductPrice record);
+
+    ProductPrice selectByProductId(@Param("productId") int productId);
+
+    List<ProductPrice> selectByProductIds(@Param("productIds") int[] productIds);
 }

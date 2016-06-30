@@ -1,8 +1,11 @@
 package com.wow.price.service.impl;
 
+import com.wow.price.mapper.ProductPriceChangeLogMapper;
+import com.wow.price.mapper.ProductPriceMapper;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.model.ProductPriceChangeLog;
 import com.wow.price.service.PriceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,11 +15,12 @@ import java.util.List;
  */
 @Service
 public class PriceServiceImpl implements PriceService {
-    /**
-     * @param productPrice
-     * @return
-     */
-    //table: product_price, product_price_change_log
+
+    @Autowired
+    ProductPriceMapper productPriceMapper;
+
+    @Autowired
+    ProductPriceChangeLogMapper productPriceChangeLogMapper;
 
     /**
      * 创建产品价格(一般在首次产品上架的时候)
@@ -25,7 +29,7 @@ public class PriceServiceImpl implements PriceService {
      * @return
      */
     public int createProductPrice(ProductPrice productPrice) {
-        return 1;
+        return productPriceMapper.insert(productPrice);
     }
 
     /**
@@ -35,7 +39,7 @@ public class PriceServiceImpl implements PriceService {
      * @return
      */
     public int updateProductPrice(ProductPrice productPrice) {
-        return 1;
+        return productPriceMapper.updateByPrimaryKeySelective(productPrice);
     }
 
     /**
@@ -45,7 +49,7 @@ public class PriceServiceImpl implements PriceService {
      * @return
      */
     public ProductPrice queryProductPrice(int productId) {
-        return null;
+        return productPriceMapper.selectByProductId(productId);
     }
 
     /**
@@ -55,7 +59,7 @@ public class PriceServiceImpl implements PriceService {
      * @return
      */
     public List<ProductPrice> queryProductPriceList(int[] productIds) {
-        return null;
+        return productPriceMapper.selectByProductIds(productIds);
     }
 
     /**
@@ -65,7 +69,7 @@ public class PriceServiceImpl implements PriceService {
      * @return
      */
     public int createPriceChangeLog(ProductPriceChangeLog productPriceChangeLog) {
-        return 1;
+        return productPriceChangeLogMapper.insert(productPriceChangeLog);
     }
 
     /**
@@ -75,7 +79,7 @@ public class PriceServiceImpl implements PriceService {
      * @return
      */
     public List<ProductPriceChangeLog> queryPriceChangeLog(int productId) {
-        return null;
+        return productPriceChangeLogMapper.selectPriceChangeLogsByProductId(productId);
     }
 
 }
