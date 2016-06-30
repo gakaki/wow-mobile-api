@@ -5,6 +5,8 @@ import com.wow.product.model.Brand;
 import com.wow.product.model.Designer;
 import com.wow.product.model.Product;
 import com.wow.product.service.BrandService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import java.util.List;
 @Service
 @Transactional(value = "productTransactionManager")
 public class BrandServiceImpl implements BrandService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BrandServiceImpl.class);
 
     @Autowired
     BrandMapper brandMapper;
@@ -51,7 +55,7 @@ public class BrandServiceImpl implements BrandService {
      * @return
      */
     public List<Brand> getBrandsByFirstLetter(String firstLetter) {
-        System.out.println("BrandServiceImpl:getBrandsByFirstLetter:" + firstLetter);
+        logger.info("BrandServiceImpl:getBrandsByFirstLetter:" + firstLetter);
         List<Brand> brands = new ArrayList<Brand>();
         Brand brand1 = new Brand();
         brand1.setId(1);
@@ -61,7 +65,7 @@ public class BrandServiceImpl implements BrandService {
         brand2.setBrandCname(firstLetter + 2);
         brands.add(brand1);
         brands.add(brand2);
-        System.out.println("BrandServiceImpl:getBrandsByFirstLetter:" + brands);
+        logger.info("BrandServiceImpl:getBrandsByFirstLetter:" + brands);
         return brands;
     }
 
