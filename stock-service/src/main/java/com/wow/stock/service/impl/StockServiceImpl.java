@@ -1,16 +1,34 @@
 package com.wow.stock.service.impl;
 
+import com.wow.product.mapper.WarehouseMapper;
 import com.wow.product.model.Warehouse;
+import com.wow.stock.mapper.ProductVirtualStockMapper;
+import com.wow.stock.mapper.ProductWarehouseStockMapper;
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.model.ProductWarehouseStock;
 import com.wow.stock.service.StockService;
+import com.wow.stock.vo.AvailableStock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhengzhiqing on 16/6/17.
  */
 @Service
 public class StockServiceImpl implements StockService{
+
+    @Autowired
+    ProductWarehouseStockMapper productWarehouseStockMapper;
+
+    @Autowired
+    ProductVirtualStockMapper productVirtualStockMapper;
+
+    @Autowired
+    WarehouseMapper warehouseMapper;
+
     /**
      * 第一次商品进入仓库时创建库存记录
      *
@@ -18,7 +36,7 @@ public class StockServiceImpl implements StockService{
      * @return
      */
     public int createProductWarehouseStock(ProductWarehouseStock productWarehouseStock) {
-        return 1;
+        return productWarehouseStockMapper.insert(productWarehouseStock);
     }
 
     /**
@@ -28,7 +46,7 @@ public class StockServiceImpl implements StockService{
      * @return
      */
     public int createProductVirtualStock(ProductVirtualStock productVirtualStock) {
-        return 1;
+        return productVirtualStockMapper.insert(productVirtualStock);
     }
 
     /**
@@ -36,31 +54,50 @@ public class StockServiceImpl implements StockService{
      *
      * @param productId
      * @param warehouseId
-     * @param adjustNum
+     * @param adjustNum 可以为正数或负数
      */
-    public void adjustWarehouseRealStock(int productId, int warehouseId, int adjustNum) {
-
+    public int adjustWarehouseRealStock(int productId, int warehouseId, int adjustNum) {
+        //先更新真实库存
+        productWarehouseStockMapper.adjustWarehouseRealStock(productId, warehouseId, adjustNum);
+        //如果是调增库存(比如进货),需要先满足之前冻结的虚拟库存
+        if(adjustNum > 0) {
+            //当前冻结的虚拟库存数量
+            int frozenVirtualStockQty = productVirtualStockMapper.getFrozenVirtualStock(productId);
+            //需要解冻的虚拟库存数量
+            int unfreezeVirtualStockQty = 0;
+            if (adjustNum >= frozenVirtualStockQty) {
+                unfreezeVirtualStockQty = frozenVirtualStockQty;
+            } else {
+                unfreezeVirtualStockQty = adjustNum;
+            }
+            //虚拟冻结转真实冻结
+            productVirtualStockMapper.shipOutVirtualStock(productId, unfreezeVirtualStockQty);
+            productWarehouseStockMapper.freezeWarehouseStock(productId, warehouseId, unfreezeVirtualStockQty);
+            //更新订单状态
+            //TODO:查看order_item中有虚拟冻结的产品,修改冻结状态和冻结数量。提醒发货员发货等
+        }
+        return 1;
     }
 
     /**
      * 调整虚拟库存(调增,调减都可以)
      *
      * @param productId
-     * @param adjustNum
+     * @param adjustNum 可以为正数或负数
      */
-    public void adjustVirtualStock(int productId, int adjustNum) {
-
+    public int adjustVirtualStock(int productId, int adjustNum) {
+        return productVirtualStockMapper.adjustVirtualStock(productId, adjustNum);
     }
 
     /**
-     * 冻结库存(一般是下单时)
+     * 冻结仓库库存(一般是下单时)
      *
      * @param productId
      * @param warehouseId
-     * @param productNum
+     * @param productQty 产品数量-正整数
      */
-    public void freezeStock(int productId, int warehouseId, int productNum) {
-
+    public int freezeWarehouseStock(int productId, int warehouseId, int productQty) {
+        return productWarehouseStockMapper.freezeWarehouseStock(productId,warehouseId,productQty);
     }
 
     /**
@@ -68,10 +105,21 @@ public class StockServiceImpl implements StockService{
      *
      * @param productId
      * @param warehouseId
-     * @param productNum
+     * @param productQty 产品数量-正整数
      */
-    public void unFreezeStock(int productId, int warehouseId, int productNum) {
+    public int unfreezeWarehouseStock(int productId, int warehouseId, int productQty) {
+        return productWarehouseStockMapper.unfreezeWarehouseStock(productId,warehouseId,productQty);
+    }
 
+    /**
+     * 解冻虚拟库存(一般是取消订单)
+     *
+     * @param productId
+     * @param productQty 产品数量-正整数
+     */
+    @Override
+    public int unfreezeVirtualStock(int productId, int productQty) {
+        return productVirtualStockMapper.unfreezeVirtualStock(productId, productQty);
     }
 
     /**
@@ -80,8 +128,25 @@ public class StockServiceImpl implements StockService{
      * @param productId
      * @return
      */
-    public int getAvailableStock(int productId) {
-        return 1;
+    public AvailableStock getAvailableStock(int productId) {
+        AvailableStock availableStock = new AvailableStock();
+        //首先遍历所有仓库,查找仓库库存,然后计算虚拟可用库存
+        Map<Integer,Integer> map = productWarehouseStockMapper.getWarehouseAvailableStock(productId);
+        availableStock.setAvailableRealStockQtyMap(map);
+
+        int totalAvailableRealStock = 0;
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            totalAvailableRealStock += entry.getValue();
+        }
+
+        availableStock.setTotalAvailableRealStockQty(totalAvailableRealStock);
+
+        int availableVirtualStockQty = productVirtualStockMapper.getAvailableVirtualStock(productId);
+        availableStock.setAvailableVirtualStockQty(availableVirtualStockQty);
+
+        availableStock.setTotalAvailableStockQty(totalAvailableRealStock + availableVirtualStockQty);
+
+        return availableStock;
     }
 
     /**
@@ -89,17 +154,10 @@ public class StockServiceImpl implements StockService{
      *
      * @param productId
      * @param warehouseId
-     * @param productNum
+     * @param productQty 产品数量-正整数
      */
-    public void deliverGoods(int productId, int warehouseId, int productNum) {
-    }
-
-    /**
-     * 虚拟库存到货之后马上发货,不用进入仓库,否则可能被卖掉 - 减少虚拟冻结
-     *
-     * @param productId
-     */
-    public void deliverDelayedGoods(int productId) {
+    public int shipOutGoods(int productId, int warehouseId, int productQty) {
+        return productWarehouseStockMapper.shipOutWarehouseGoods(productId,warehouseId,productQty);
     }
 
     /**
@@ -109,7 +167,7 @@ public class StockServiceImpl implements StockService{
      * @return
      */
     public int createWarehouse(Warehouse warehouse) {
-        return 1;
+        return warehouseMapper.insert(warehouse);
     }
 
     /**
@@ -119,7 +177,7 @@ public class StockServiceImpl implements StockService{
      * @return
      */
     public int updateWarehouse(Warehouse warehouse) {
-        return 1;
+        return warehouseMapper.updateByPrimaryKeySelective(warehouse);
     }
 
     /**
@@ -128,8 +186,7 @@ public class StockServiceImpl implements StockService{
      * @param productId
      * @return
      */
-    public int[] queryWarehousesByProductId(int productId) {
-        int[] a = {1,2};
-        return a;
+    public List<Integer> selectWarehouseByProductId(int productId) {
+        return productWarehouseStockMapper.selectWarehouseByProductId(productId);
     }
 }

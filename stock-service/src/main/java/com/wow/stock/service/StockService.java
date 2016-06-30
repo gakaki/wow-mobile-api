@@ -3,6 +3,9 @@ package com.wow.stock.service;
 import com.wow.product.model.Warehouse;
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.model.ProductWarehouseStock;
+import com.wow.stock.vo.AvailableStock;
+
+import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/17.
@@ -31,7 +34,7 @@ public interface StockService {
      * @param warehouseId
      * @param adjustNum
      */
-    void adjustWarehouseRealStock(int productId, int warehouseId, int adjustNum);
+    int adjustWarehouseRealStock(int productId, int warehouseId, int adjustNum);
 
     /**
      * 调整虚拟库存(调增,调减都可以)
@@ -39,25 +42,33 @@ public interface StockService {
      * @param productId
      * @param adjustNum
      */
-    void adjustVirtualStock(int productId, int adjustNum);
+    int adjustVirtualStock(int productId, int adjustNum);
 
     /**
      * 冻结库存(一般是下单时)
      *
      * @param productId
      * @param warehouseId
-     * @param productNum
+     * @param productQty 产品数量-正整数
      */
-    void freezeStock(int productId, int warehouseId, int productNum);
+    int freezeWarehouseStock(int productId, int warehouseId, int productQty);
 
     /**
-     * 解冻库存(一般是取消订单)
+     * 解冻仓库库存(一般是取消订单)
      *
      * @param productId
      * @param warehouseId
-     * @param productNum
+     * @param productQty 产品数量-正整数
      */
-    void unFreezeStock(int productId, int warehouseId, int productNum);
+    int unfreezeWarehouseStock(int productId, int warehouseId, int productQty);
+
+    /**
+     * 解冻虚拟库存(一般是取消订单)
+     *
+     * @param productId
+     * @param productQty 产品数量-正整数
+     */
+    int unfreezeVirtualStock(int productId, int productQty);
 
     /**
      * 计算可用库存=仓库可用库存+虚拟可用库存
@@ -65,23 +76,17 @@ public interface StockService {
      * @param productId
      * @return
      */
-    int getAvailableStock(int productId);
+    AvailableStock getAvailableStock(int productId);
 
     /**
      * 发货出库-同时减少实际库存和冻结库存
      *
      * @param productId
      * @param warehouseId
-     * @param productNum
+     * @param productQty 产品数量-正整数
      */
-    void deliverGoods(int productId, int warehouseId, int productNum);
+    int shipOutGoods(int productId, int warehouseId, int productQty);
 
-    /**
-     * 虚拟库存到货之后马上发货,不用进入仓库,否则可能被卖掉 - 减少虚拟冻结
-     *
-     * @param productId
-     */
-    void deliverDelayedGoods(int productId);
 
     /**
      * 创建仓库(自营的创建自营仓库,供应商的创建供应商虚拟仓库)
@@ -105,5 +110,5 @@ public interface StockService {
      * @param productId
      * @return
      */
-    int[] queryWarehousesByProductId(int productId);
+    List<Integer> selectWarehouseByProductId(int productId);
 }

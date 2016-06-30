@@ -256,4 +256,50 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="adjustVirtualStock">
+    update product_virtual_stock
+    set virtual_stock_qty = virtual_stock_qty + #{adjustNum,jdbcType=SMALLINT},
+    update_time = now()
+    where product_id = #{productId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </update>
+
+  <update id="unfreezeVirtualStock">
+    update product_virtual_stock
+    set frozen_virtual_stock_qty = frozen_virtual_stock_qty - #{productQty,jdbcType=SMALLINT},
+    update_time = now()
+    where product_id = #{productId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </update>
+
+  <update id="shipOutVirtualStock">
+    update product_virtual_stock
+    set frozen_virtual_stock_qty = frozen_virtual_stock_qty - #{productQty,jdbcType=SMALLINT},
+    virtual_stock_qty = virtual_stock_qty - #{productQty,jdbcType=SMALLINT},
+    update_time = now()
+    where product_id = #{productId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </update>
+
+
+  <select id="getAvailableVirtualStock" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+    select virtual_stock_qty-frozen_virtual_stock_qty
+    from product_virtual_stock
+    where product_id = #{productId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </select>
+
+  <select id="getFrozenVirtualStock" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+    select frozen_virtual_stock_qty
+    from product_virtual_stock
+    where product_id = #{productId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </select>
+
 </mapper>

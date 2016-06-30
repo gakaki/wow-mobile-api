@@ -288,4 +288,62 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="adjustWarehouseRealStock">
+    update product_warehouse_stock
+    set real_stock_qty = real_stock_qty + #{adjustNum,jdbcType=SMALLINT},
+    update_date = now()
+    where product_id = #{productId,jdbcType=INTEGER}
+    and warehouse_id= #{warehouseId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </update>
+
+  <update id="freezeWarehouseStock">
+    update product_warehouse_stock
+    set frozen_stock_qty = frozen_stock_qty + #{productQty,jdbcType=SMALLINT},
+    update_date = now()
+    where product_id = #{productId,jdbcType=INTEGER}
+    and warehouse_id= #{warehouseId,jdbcType=INTEGER}
+    and (real_stock_qty - lock_stock_qty) - (frozen_stock_qty + #{productQty,jdbcType=SMALLINT}) >= 0 <!--防止超卖-->
+    and is_active = true
+    and is_deleted = false
+  </update>
+
+  <update id="unfreezeWarehouseStock">
+    update product_warehouse_stock
+    set frozen_stock_qty = frozen_stock_qty - #{productQty,jdbcType=SMALLINT},
+    update_date = now()
+    where product_id = #{productId,jdbcType=INTEGER}
+    and warehouse_id= #{warehouseId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </update>
+
+  <select id="getWarehouseAvailableStock" parameterType="java.util.Map" resultType="java.lang.Integer" >
+    select warehouse_id, (real_stock_qty - lock_stock_qty - productQty) as available_stock from product_warehouse_stock
+    where product_id = #{productId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </select>
+
+  <update id="shipOutWarehouseGoods">
+    update product_warehouse_stock
+    set frozen_stock_qty = frozen_stock_qty - #{productQty,jdbcType=SMALLINT},
+    real_stock_qty = real_stock_qty - #{productQty,jdbcType=SMALLINT},
+    update_date = now()
+    where product_id = #{productId,jdbcType=INTEGER}
+    and warehouse_id= #{warehouseId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </update>
+
+  <select id="selectWarehouseByProductId" parameterType="java.util.List" resultType="java.lang.Integer" >
+    select warehouse_id,
+    from product_warehouse_stock
+    where product_id = #{productId,jdbcType=INTEGER}
+    and is_active = true
+    and is_deleted = false
+  </select>
+
 </mapper>

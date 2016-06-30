@@ -27,4 +27,16 @@ public interface ProductVirtualStockMapper {
     int updateByPrimaryKeySelective(ProductVirtualStock record);
 
     int updateByPrimaryKey(ProductVirtualStock record);
+
+    int adjustVirtualStock(@Param("productId")int productId, @Param("adjustNum")int adjustNum);
+
+    int getAvailableVirtualStock(@Param("productId")int productId);
+
+    int getFrozenVirtualStock(@Param("productId")int productId);
+
+    int unfreezeVirtualStock(@Param("productId")int productId, @Param("productQty")int productQty);
+
+    //虚拟发货,同时扣减虚拟库存和虚拟冻结库存
+    int shipOutVirtualStock(@Param("productId")int productId, @Param("productQty")int productQty);
+
 }
