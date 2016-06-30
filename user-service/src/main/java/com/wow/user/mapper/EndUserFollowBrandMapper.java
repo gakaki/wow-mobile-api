@@ -27,4 +27,12 @@ public interface EndUserFollowBrandMapper {
     int updateByPrimaryKeySelective(EndUserFollowBrand record);
 
     int updateByPrimaryKey(EndUserFollowBrand record);
+
+    /**
+     * 用户取消关注品牌
+     * @param endUserId
+     * @param brandId
+     * @return
+     */
+    int cancelFollowBrand(@Param("endUserId") int endUserId, @Param("brandId") int brandId);
 }
