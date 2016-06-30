@@ -27,4 +27,11 @@ public interface ShoppingCartMapper {
     int updateByPrimaryKeySelective(ShoppingCart record);
 
     int updateByPrimaryKey(ShoppingCart record);
+
+    /**
+     * 查找用户购物车信息
+     * @param endUserId
+     * @return
+     */
+    List<ShoppingCart> selectByEndUser(@Param("endUserId") int endUserId);
 }

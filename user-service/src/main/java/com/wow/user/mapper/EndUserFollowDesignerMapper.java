@@ -27,4 +27,12 @@ public interface EndUserFollowDesignerMapper {
     int updateByPrimaryKeySelective(EndUserFollowDesigner record);
 
     int updateByPrimaryKey(EndUserFollowDesigner record);
+
+    /**
+     * 用户取消关注设计师
+     * @param endUserId
+     * @param designerId
+     * @return
+     */
+    int cancelFollowDesigner(@Param("endUserId") int endUserId, @Param("designerId") int designerId);
 }

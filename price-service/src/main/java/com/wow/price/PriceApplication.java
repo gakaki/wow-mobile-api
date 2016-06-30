@@ -31,7 +31,7 @@ public class PriceApplication {
 
     @RequestMapping(value = "/test-price/{productId}", method = RequestMethod.GET)
     public ProductPrice getOrderById(@PathVariable Integer productId) {
-        System.out.println("accept request:" + productId);
+        logger.info("accept request:" + productId);
         return priceService.queryProductPrice(productId);
     }
 

@@ -24,7 +24,7 @@ public class PageApplication {
 //
 //    @RequestMapping(value = "/test-page/{couponId}", method = RequestMethod.GET)
 //    public Coupon getCouponById(@PathVariable Integer couponId) {
-//        System.out.println("accept request:" + couponId);
+//        logger.info("accept request:" + couponId);
 //        return couponService.getCouponById(couponId);
 //    }
 

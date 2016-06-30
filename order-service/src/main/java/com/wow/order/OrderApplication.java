@@ -31,7 +31,7 @@ public class OrderApplication {
 
     @RequestMapping(value = "/test-order/{orderId}", method = RequestMethod.GET)
     public Order getOrderById(@PathVariable Integer orderId) {
-        System.out.println("accept request:" + orderId);
+        logger.info("accept request:" + orderId);
         return orderService.queryOrderById(orderId);
     }
 

@@ -27,4 +27,12 @@ public interface EndUserFollowSceneMapper {
     int updateByPrimaryKeySelective(EndUserFollowScene record);
 
     int updateByPrimaryKey(EndUserFollowScene record);
+
+    /**
+     * 用户取消关注场景
+     * @param endUserId
+     * @param sceneId
+     * @return
+     */
+    int cancelFollowScene(@Param("endUserId") int endUserId, @Param("sceneId") int sceneId);
 }

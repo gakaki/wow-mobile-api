@@ -1,6 +1,7 @@
 package com.wow.stock;
 
 import com.wow.stock.service.StockService;
+import com.wow.stock.vo.AvailableStock;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +30,7 @@ public class StockApplication {
     private StockService stockService;
 
     @RequestMapping(value = "/test-stock/{productId}", method = RequestMethod.GET)
-    public int getPrimarySubProduct(@PathVariable Integer productId) {
-        System.out.println("accept request:" + productId);
+    public AvailableStock getAvailableStock(@PathVariable Integer productId) {
         return stockService.getAvailableStock(productId);
     }
 

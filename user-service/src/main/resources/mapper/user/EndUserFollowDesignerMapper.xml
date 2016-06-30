@@ -240,4 +240,13 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="cancelFollowDesigner" >
+    update end_user_follow_designer
+    set is_cancelled = true,
+    cancel_follow_time = now()
+    where end_user_id = #{endUserId,jdbcType=INTEGER}
+    and designer_id = #{designerId,jdbcType=INTEGER}
+    and is_deleted = false
+  </update>
 </mapper>

@@ -3,6 +3,8 @@ package com.wow.marketing;
 import com.wow.marketing.model.Coupon;
 import com.wow.marketing.service.CouponService;
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableTransactionManagement
 @MapperScan("com.wow.marketing.mapper")
 public class MarketingApplication {
+
+    private static final Logger logger = LoggerFactory.getLogger(MarketingApplication.class);
+
     public static void main(String[] args) {
         SpringApplication.run(MarketingApplication.class, args);
     }
@@ -26,7 +31,7 @@ public class MarketingApplication {
 
     @RequestMapping(value = "/test-marketing/{couponId}", method = RequestMethod.GET)
     public Coupon getCouponById(@PathVariable Integer couponId) {
-        System.out.println("accept request:" + couponId);
+        logger.info("accept request:" + couponId);
         return couponService.getCouponById(couponId);
     }
 

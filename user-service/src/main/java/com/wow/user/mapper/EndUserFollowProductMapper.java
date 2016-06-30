@@ -27,4 +27,12 @@ public interface EndUserFollowProductMapper {
     int updateByPrimaryKeySelective(EndUserFollowProduct record);
 
     int updateByPrimaryKey(EndUserFollowProduct record);
+
+    /**
+     * 用户取消关注产品
+     * @param endUserId
+     * @param productId
+     * @return
+     */
+    int cancelFollowProduct(@Param("endUserId") int endUserId, @Param("productId") int productId);
 }
