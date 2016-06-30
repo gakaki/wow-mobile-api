@@ -15,6 +15,8 @@ public class Area implements Serializable {
 
     private String town;
 
+    private Integer parentAreaId;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -65,6 +67,14 @@ public class Area implements Serializable {
         this.town = town;
     }
 
+    public Integer getParentAreaId() {
+        return parentAreaId;
+    }
+
+    public void setParentAreaId(Integer parentAreaId) {
+        this.parentAreaId = parentAreaId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -77,6 +87,7 @@ public class Area implements Serializable {
         sb.append(", city=").append(city);
         sb.append(", county=").append(county);
         sb.append(", town=").append(town);
+        sb.append(", parentAreaId=").append(parentAreaId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

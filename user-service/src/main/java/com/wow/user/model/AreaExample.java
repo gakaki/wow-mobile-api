@@ -504,6 +504,66 @@ public class AreaExample {
             return (Criteria) this;
         }
 
+        public Criteria andParentAreaIdIsNull() {
+            addCriterion("parent_area_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdIsNotNull() {
+            addCriterion("parent_area_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdEqualTo(Integer value) {
+            addCriterion("parent_area_id =", value, "parentAreaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdNotEqualTo(Integer value) {
+            addCriterion("parent_area_id <>", value, "parentAreaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdGreaterThan(Integer value) {
+            addCriterion("parent_area_id >", value, "parentAreaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("parent_area_id >=", value, "parentAreaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdLessThan(Integer value) {
+            addCriterion("parent_area_id <", value, "parentAreaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdLessThanOrEqualTo(Integer value) {
+            addCriterion("parent_area_id <=", value, "parentAreaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdIn(List<Integer> values) {
+            addCriterion("parent_area_id in", values, "parentAreaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdNotIn(List<Integer> values) {
+            addCriterion("parent_area_id not in", values, "parentAreaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdBetween(Integer value1, Integer value2) {
+            addCriterion("parent_area_id between", value1, value2, "parentAreaId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAreaIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("parent_area_id not between", value1, value2, "parentAreaId");
+            return (Criteria) this;
+        }
+
         public Criteria andProvinceLikeInsensitive(String value) {
             addCriterion("upper(province) like", value.toUpperCase(), "province");
             return (Criteria) this;
