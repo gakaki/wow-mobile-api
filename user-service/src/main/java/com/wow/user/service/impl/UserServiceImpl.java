@@ -13,6 +13,7 @@ import com.wow.user.model.EndUserShareScene;
 import com.wow.user.model.ShippingInfo;
 import com.wow.user.model.ShoppingCart;
 import com.wow.user.service.UserService;
+import com.wow.user.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public int register(EndUser endUser) {
+        endUser.setPassword(PasswordUtil.passwordHashGenerate(endUser.getPassword()));
         return endUserMapper.insert(endUser);
     }
 
@@ -109,7 +111,13 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public EndUser authenticate(String userName, String password) {
-        return endUserMapper.selectByUserNameAndPassword(userName,password);
+
+        EndUser endUser = endUserMapper.selectByUserName(userName);
+        if (PasswordUtil.passwordHashValidate(password, endUser.getPassword())) {
+            return endUser;
+        } else {
+            return null;
+        }
     }
 
     /**

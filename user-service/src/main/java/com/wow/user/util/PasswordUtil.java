@@ -8,34 +8,26 @@ import java.util.Random;
  */
 public class PasswordUtil {
 
-    public static String passwordHashGenerate(String pwd) throws NoSuchAlgorithmException {
-
-        String salt             = randomString();
-        String res              = PasswordUtil.MD5( salt + pwd ) + ':' + salt;
-
+    public static String passwordHashGenerate(String pwd) {
+        String salt = randomString();
+        String res = PasswordUtil.MD5(salt + pwd) + ':' + salt;
         return res;
-
     }
-    public static boolean passwordHashValidate(String pwd,String pwdHash) throws NoSuchAlgorithmException {
-
-        String[] hash              = pwdHash.split(":");
-        String hash_part_1         = hash[0];
-        String hash_part_2         = hash[1];
-
+    public static boolean passwordHashValidate(String pwd,String pwdHash) {
+        String[] hash = pwdHash.split(":");
+        String hashPart1 = hash[0];
+        String hashPart2 = hash[1];
         //已检查没有长度为hash length1的密码了 放心用下面的算法吧
-        String entrypat_str        = MD5(hash_part_2 + pwd);
+        String pwdDigest = MD5(hashPart2 + pwd);
 
-        if( entrypat_str.equals(hash_part_1) ){
-            return true;
-        }
+        return pwdDigest.equals(hashPart1);
 
-        return false;
     }
     //todo
     private static String randomString(){
-        int length_default  = 32;
+        int defaultLen  = 32;
 
-        String chars        = "";
+        String chars = "";
 
         String CHARS_LOWERS   = "abcdefghijklmnopqrstuvwxyz";
         String CHARS_UPPERS   = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -48,19 +40,17 @@ public class PasswordUtil {
 
         String str = "";
 
-        // console.log("lenght chars is ",length_chars); // red green blue
-
-        for ( int i = 0,  lc = chars.length() - 1 ; i < length_default; i++) {
-            long mt_rand_res = mt_rand(0, lc);
-            int  mt_rand_res_int = Math.toIntExact(mt_rand_res);
-            System.out.print( mt_rand_res_int) ;
-            str  += chars.charAt(mt_rand_res_int);
+        for ( int i = 0,  lc = chars.length() - 1 ; i < defaultLen; i++) {
+            long mtRandRes = mtRand(0, lc);
+            int  mtRandResInt = Math.toIntExact(mtRandRes);
+            System.out.print( mtRandResInt) ;
+            str  += chars.charAt(mtRandResInt);
         }
 
         return str;
     }
 
-    public static long mt_rand( long min, long max){
+    public static long mtRand(long min, long max){
 
         Random rnd = new Random();
 
@@ -78,7 +68,7 @@ public class PasswordUtil {
         return min + value % range;
     }
 
-    public static String MD5(String md5) throws NoSuchAlgorithmException {
+    public static String MD5(String md5) {
         String res = "";
         try {
             java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
