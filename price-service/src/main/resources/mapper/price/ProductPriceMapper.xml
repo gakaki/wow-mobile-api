@@ -344,7 +344,7 @@
     and is_deleted = false
   </select>
 
-  <select id="selectByProductIds" resultMap="BaseResultMap" parameterType="array" >
+  <select id="selectByProductIds" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from product_price
