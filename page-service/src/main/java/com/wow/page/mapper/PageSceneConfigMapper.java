@@ -27,4 +27,6 @@ public interface PageSceneConfigMapper {
     int updateByPrimaryKeySelective(PageSceneConfig record);
 
     int updateByPrimaryKey(PageSceneConfig record);
+
+    List<PageSceneConfig> selectByPageType(@Param("pageType") int pageType);
 }

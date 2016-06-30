@@ -208,4 +208,12 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByPageType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from page_scene_config
+    where page_type = #{pageType,jdbcType=TINYINT}
+  </select>
+
 </mapper>

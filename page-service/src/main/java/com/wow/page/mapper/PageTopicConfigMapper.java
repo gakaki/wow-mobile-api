@@ -27,4 +27,6 @@ public interface PageTopicConfigMapper {
     int updateByPrimaryKeySelective(PageTopicConfig record);
 
     int updateByPrimaryKey(PageTopicConfig record);
+
+    List<PageTopicConfig> selectByPageType(@Param("pageType") int pageType);
 }
