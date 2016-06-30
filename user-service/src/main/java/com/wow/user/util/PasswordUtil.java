@@ -8,17 +8,33 @@ import java.util.Random;
  */
 public class PasswordUtil {
 
-    public String magento_pwd(String pwd) throws NoSuchAlgorithmException {
+    public static String passwordHashGenerate(String pwd) throws NoSuchAlgorithmException {
 
-        String salt             = this.randomString();
+        String salt             = randomString();
         String res              = PasswordUtil.MD5( salt + pwd ) + ':' + salt;
+
         return res;
 
     }
+    public static boolean passwordHashValidate(String pwd,String pwdHash) throws NoSuchAlgorithmException {
 
+        String[] hash              = pwdHash.split(":");
+        String hash_part_1         = hash[0];
+        String hash_part_2         = hash[1];
+
+        //已检查没有长度为hash length1的密码了 放心用下面的算法吧
+        String entrypat_str        = MD5(hash_part_2 + pwd);
+
+        if( entrypat_str.equals(hash_part_1) ){
+            return true;
+        }
+
+        return false;
+    }
     //todo
-    private String randomString(){
+    private static String randomString(){
         int length_default  = 32;
+
         String chars        = "";
 
         String CHARS_LOWERS   = "abcdefghijklmnopqrstuvwxyz";
@@ -35,9 +51,10 @@ public class PasswordUtil {
         // console.log("lenght chars is ",length_chars); // red green blue
 
         for ( int i = 0,  lc = chars.length() - 1 ; i < length_default; i++) {
-            long mt_rand_res = this.mt_rand(0, lc);
-            // console.log(mt_rand_res); // red green blue
-//            str  += chars[mt_rand_res];
+            long mt_rand_res = mt_rand(0, lc);
+            int  mt_rand_res_int = Math.toIntExact(mt_rand_res);
+            System.out.print( mt_rand_res_int) ;
+            str  += chars.charAt(mt_rand_res_int);
         }
 
         return str;
