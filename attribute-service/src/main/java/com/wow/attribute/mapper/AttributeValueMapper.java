@@ -17,7 +17,7 @@ public interface AttributeValueMapper {
     int insertSelective(AttributeValue record);
 
     List<AttributeValue> selectByExample(AttributeValueExample example);
-
+    List<AttributeValue> selectAll();
     AttributeValue selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") AttributeValue record, @Param("example") AttributeValueExample example);

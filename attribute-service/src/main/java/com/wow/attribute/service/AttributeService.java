@@ -1,6 +1,7 @@
 package com.wow.attribute.service;
 
 
+import com.wow.attribute.mapper.BaseMapper;
 import com.wow.attribute.model.Attribute;
 import com.wow.attribute.model.AttributeValue;
 import com.wow.attribute.model.CategoryAttribute;
@@ -12,7 +13,7 @@ import java.util.List;
  * <p>
  * Created by zhengzhiqing on 16/6/16.
  */
-public interface AttributeService {
+public interface AttributeService extends BaseMapper<Attribute> {
 
     // Table: attribute
     /**
@@ -21,7 +22,7 @@ public interface AttributeService {
      * @param attribute
      * @return
      */
-    int createAttribute(Attribute attribute);
+   // int createAttribute(Attribute attribute);
 
     /**
      * 更新属性
@@ -29,7 +30,7 @@ public interface AttributeService {
      * @param attribute
      * @return
      */
-    int updateAttribute(Attribute attribute);
+  //  int updateAttribute(Attribute attribute);
 
     /**
      * 根据Id查询属性
@@ -37,7 +38,7 @@ public interface AttributeService {
      * @param attributeId
      * @return
      */
-    Attribute getAttributeById(int attributeId);
+   // Attribute getAttributeById(int attributeId);
 
     /**
      * 根据名字查询属性
@@ -60,7 +61,7 @@ public interface AttributeService {
      * @param attributeId
      * @return
      */
-    int deleteAttributeById(int attributeId);
+ //   int deleteAttributeById(int attributeId);
 
     //Table: category_attribute
     /**
@@ -87,7 +88,7 @@ public interface AttributeService {
      * @param attributeIds
      * @return
      */
-    int deleteAttributesInCategory(int categoryId, int[] attributeIds);
+    int deleteAttributesInCategory(int categoryId, Integer[] attributeIds);
 
     /**
      * 查询三级类目的所有属性

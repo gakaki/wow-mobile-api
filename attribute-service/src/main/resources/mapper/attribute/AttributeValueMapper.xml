@@ -93,6 +93,11 @@
     from attribute_value
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from attribute_value
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from attribute_value
     where id = #{id,jdbcType=INTEGER}
