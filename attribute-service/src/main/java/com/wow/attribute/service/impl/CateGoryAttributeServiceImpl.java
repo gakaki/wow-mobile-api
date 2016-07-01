@@ -14,15 +14,30 @@ import java.util.List;
  */
 @Service
 @Transactional(value = "attributeTransactionManager")
-public class CategoryAttributeServiceImpl extends  BaseService<CategoryAttribute> implements CategoryAttributeService{
+public class CategoryAttributeServiceImpl implements CategoryAttributeService{
 
     @Autowired
     CategoryAttributeMapper categoryAttributeMapper;
 
-    @Autowired
+
     @Override
-    public void setMapper() {
-        super.baseMapper=categoryAttributeMapper;
+    public int createCategoryAttribute(CategoryAttribute categoryAttribute) {
+        return categoryAttributeMapper.insert(categoryAttribute);
+    }
+
+    @Override
+    public int updateCategoryAttribute(CategoryAttribute categoryAttribute) {
+        return categoryAttributeMapper.updateByPrimaryKey(categoryAttribute);
+    }
+
+    @Override
+    public int deleteCategoryAttributeById(int categoryAttributeId) {
+        return categoryAttributeMapper.deleteByPrimaryKey(categoryAttributeId);
+    }
+
+    @Override
+    public CategoryAttribute getCategoryAttributeById(int categoryAttributeId) {
+        return categoryAttributeMapper.selectByPrimaryKey(categoryAttributeId);
     }
 
     @Override

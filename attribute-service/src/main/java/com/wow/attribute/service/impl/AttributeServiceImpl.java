@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Service
 @Transactional(value = "attributeTransactionManager")
-public class AttributeServiceImpl  extends BaseService<Attribute> implements AttributeService {
+public class AttributeServiceImpl implements AttributeService {
 
     @Autowired
     private AttributeMapper attributeMapper;
@@ -37,11 +37,7 @@ public class AttributeServiceImpl  extends BaseService<Attribute> implements Att
     private CategoryAttributeService categoryAttributeService;
 
     private  final  int error=-1;
-    @Autowired
-    @Override
-    public void setMapper() {
-        super.baseMapper=attributeMapper;
-    }
+
     // Table: attribute
     /**
      * 创建属性
@@ -49,9 +45,9 @@ public class AttributeServiceImpl  extends BaseService<Attribute> implements Att
      * @param attribute
      * @return
      */
-//    public int createAttribute(Attribute attribute) {
-//        return 0;
-//    }
+    public int createAttribute(Attribute attribute) {
+        return attributeMapper.insert(attribute);
+    }
 
     /**
      * 更新属性(只更新不为空的字段)
@@ -59,9 +55,9 @@ public class AttributeServiceImpl  extends BaseService<Attribute> implements Att
      * @param attribute
      * @return
      */
-//    public int updateAttribute(Attribute attribute) {
-//        return attributeMapper.updateByPrimaryKey(attribute);
-//    }
+    public int updateAttribute(Attribute attribute) {
+        return attributeMapper.updateByPrimaryKey(attribute);
+    }
 
     /**
      * 根据Id查询属性
@@ -69,9 +65,9 @@ public class AttributeServiceImpl  extends BaseService<Attribute> implements Att
      * @param attributeId
      * @return
      */
-//    public Attribute getAttributeById(int attributeId) {
-//        return attributeMapper.selectByPrimaryKey(attributeId);
-//    }
+    public Attribute getAttributeById(int attributeId) {
+        return attributeMapper.selectByPrimaryKey(attributeId);
+    }
 
     /**
      * 根据名字查询属性
@@ -98,9 +94,9 @@ public class AttributeServiceImpl  extends BaseService<Attribute> implements Att
      * @param attributeId
      * @return
      */
-//    public int deleteAttributeById(int attributeId) {
-//        return attributeMapper.deleteByPrimaryKey(attributeId);
-//    }
+    public int deleteAttributeById(int attributeId) {
+        return attributeMapper.deleteByPrimaryKey(attributeId);
+    }
 
     //Table: category_attribute
 
@@ -111,7 +107,7 @@ public class AttributeServiceImpl  extends BaseService<Attribute> implements Att
      * @return
      */
     public int addAttributeInCategory(CategoryAttribute categoryAttribute) {
-        return categoryAttributeService.insert(categoryAttribute);
+        return categoryAttributeService.createCategoryAttribute(categoryAttribute);
     }
 
     /**
@@ -122,20 +118,6 @@ public class AttributeServiceImpl  extends BaseService<Attribute> implements Att
      * @return
      */
     public int addAttributesInCategory(int categoryId, List<Attribute> attributes)  {
-//       attributeMapper.insertBatch(attributes);
-//        List<CategoryAttribute> list=new ArrayList<>();
-//
-//            for (Attribute attribute:attributes) {
-//                CategoryAttribute categoryAttribute =new CategoryAttribute();
-//                categoryAttribute.setCategoryId(categoryId);
-//                categoryAttribute.setAttributeId(attribute.getId());
-//                categoryAttribute.setCreateBy("fangy");
-//                categoryAttribute.setCreateTime(new java.util.Date());
-//                categoryAttribute.setIsDeleted(false);
-//                categoryAttribute.setUdpateBy("");
-//                categoryAttribute.setUpdateTime(new java.util.Date());
-//                list.add(categoryAttribute);
-//            }
         List<CategoryAttribute> list=new ArrayList<>();
         for (Attribute attribute:attributes)
         {
@@ -162,7 +144,7 @@ public class AttributeServiceImpl  extends BaseService<Attribute> implements Att
      * @return
      */
     public int deleteAttributesInCategory(int categoryId, Integer[] attributeIds) {
-        categoryService.deleteByPrimaryKey(categoryId);
+        categoryService.deleteCategoryById(categoryId);
         List list=Arrays.asList(attributeIds);
         attributeMapper.deleteBatchByPrimaryKey(list);
         categoryAttributeService.deleteByCategoryId(categoryId);
@@ -176,7 +158,7 @@ public class AttributeServiceImpl  extends BaseService<Attribute> implements Att
      * @return
      */
     public List<Attribute> getAttributesInCategory(int categoryId) {
-        Category category=categoryService.selectByPrimaryKey(categoryId);
+        Category category=categoryService.getCategoryById(categoryId);
         if(category==null)
         return null;
         List<CategoryAttribute> categoryAttributes= categoryAttributeService.selectByCategoryId(category.getId());
