@@ -1,6 +1,5 @@
 package com.wow.attribute.service;
 
-import com.wow.attribute.mapper.BaseMapper;
 import com.wow.attribute.model.Category;
 
 import java.util.List;
@@ -9,8 +8,38 @@ import java.util.List;
  * 类目服务
  * Created by zhengzhiqing on 16/6/17.
  */
-public interface CategoryService extends BaseMapper<Category> {
+public interface CategoryService {
 
+    // Table: attribute
+    /**
+     * 创建类目
+     *
+     * @param category
+     * @return
+     */
+    int createCategory(Category category);
+    /**
+     * 更新类目
+     *
+     * @param category
+     * @return
+     */
+    int updateCategory(Category category);
+
+    /**
+     * 根据ID删除属性
+     * @param categoryId
+     * @return
+     */
+    int deleteCategoryById(int categoryId);
+
+    /**
+     * 根据Id查询属性
+     *
+     * @param categoryId
+     * @return
+     */
+    Category getCategoryById(int categoryId);
     /**
      * 查询指定类目的子类目
      *

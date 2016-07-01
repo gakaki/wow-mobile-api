@@ -6,7 +6,7 @@ import com.wow.attribute.model.CategoryAttributeExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface CategoryAttributeMapper extends BaseMapper<CategoryAttribute> {
+public interface CategoryAttributeMapper {
     int countByExample(CategoryAttributeExample example);
 
     int deleteByExample(CategoryAttributeExample example);

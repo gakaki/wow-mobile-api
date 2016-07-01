@@ -1,9 +1,7 @@
 package com.wow.attribute.service.impl;
 
-import com.wow.attribute.mapper.BaseMapper;
 import com.wow.attribute.mapper.CategoryMapper;
 import com.wow.attribute.model.Category;
-import com.wow.attribute.model.CategoryExample;
 import com.wow.attribute.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,26 +15,22 @@ import java.util.List;
  */
 @Service
 @Transactional(value = "attributeTransactionManager")
-public class CategoryServiceImpl extends BaseService<Category> implements CategoryService {
+public class CategoryServiceImpl  implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
 
     private final int parentFirstLevelCategory=0;
-    @Autowired
-    @Override
-    public void setMapper() {
-        super.baseMapper=categoryMapper;
-    }
+
     /**
      * 创建类目
      *
      * @param category
      * @return
      */
-//    public int createCategory(Category category) {
-//        return categoryMapper.insert(category);
-//    }
+    public int createCategory(Category category) {
+        return categoryMapper.insert(category);
+    }
 
     /**
      * 更新类目
@@ -44,19 +38,30 @@ public class CategoryServiceImpl extends BaseService<Category> implements Catego
      * @param category
      * @return
      */
-//    public int updateCategory(Category category) {
-//        return categoryMapper.updateByPrimaryKey(category);
-//    }
+    public int updateCategory(Category category) {
+        return categoryMapper.updateByPrimaryKey(category);
+    }
 
-//    /**
-//     * 根据id查询类目
-//     *
-//     * @param categoryId
-//     * @return
-//     */
-//    public Category getCategoryById(int categoryId) {
-//        return selectByPrimaryKey(categoryId);
-//    }
+    /**
+     * 删除类目
+     * @param categoryId
+     * @return
+     */
+    public int deleteCategoryById(int categoryId) {
+        return categoryMapper.deleteByPrimaryKey(categoryId);
+    }
+
+    /**
+     * 根据id查询类目
+     *
+     * @param categoryId
+     * @return
+     */
+    public Category getCategoryById(int categoryId) {
+        return categoryMapper.selectByPrimaryKey(categoryId);
+    }
+
+
 
     /**
      * 查询指定类目的子类目
@@ -75,10 +80,10 @@ public class CategoryServiceImpl extends BaseService<Category> implements Catego
      * @return
      */
     public Category getParentCategory(int categoryId) {
-        Category category= selectByPrimaryKey(categoryId);
+        Category category= categoryMapper.selectByPrimaryKey(categoryId);
         if(category==null)
         return null;
-       return selectByPrimaryKey(category.getParentCategoryId());
+       return categoryMapper.selectByPrimaryKey(category.getParentCategoryId());
     }
 
     /**

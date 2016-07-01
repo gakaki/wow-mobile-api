@@ -5,7 +5,7 @@ import com.wow.attribute.model.AttributeExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface AttributeMapper extends BaseMapper<Attribute> {
+public interface AttributeMapper  {
     int countByExample(AttributeExample example);
 
     int deleteByExample(AttributeExample example);
