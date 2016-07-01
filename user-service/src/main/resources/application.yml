@@ -1,9 +1,8 @@
-# Server settings (ServerProperties)
 server:
   port: 8080
   address: 127.0.0.1
   sessionTimeout: 30
-  contextPath: /user-service
+  contextPath: /user-service-test
 
 session:
   expirationTime: 60000
@@ -19,16 +18,3 @@ spring:
       maxIdle: 5
       minIdle: 0
       defaultAutoCommit: false
-
-## Tomcat specifics
-#tomcat:
-#  accessLogEnabled: false
-#  protocolHeader: x-forwarded-proto
-#  remoteIpHeader: x-forwarded-for
-#  basedir:
-#  backgroundProcessorDelay: 30 # secs
-
-# MyBatis specifics
-mybatis:
-  typeAliasesPackage: com.wow.user.model
-  mapperLocations: classpath:/mapper/user/*Mapper.xml

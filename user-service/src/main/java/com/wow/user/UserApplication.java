@@ -36,8 +36,6 @@ import java.util.Date;
  */
 @SpringBootApplication
 @RestController
-@EnableTransactionManagement
-@MapperScan("com.wow.user.mapper")
 public class UserApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(UserApplication.class);
@@ -51,34 +49,12 @@ public class UserApplication {
     @Autowired
     private SessionService sessionService;
 
-    @RequestMapping(value = "/test-user/{endUserId}", method = RequestMethod.GET)
-    public EndUser selectUserById(@PathVariable Integer endUserId) {
-        logger.info("getUser:" + endUserId);
-        EndUser endUser = userService.getEndUserById(endUserId);
-        logger.info("endUser=" + endUser);
-        return endUser;
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public LoginResult login(@Validated @RequestBody LoginRequest loginRequest) {
-        logger.info("user login...");
-        return sessionService.login(loginRequest);
-    }
-
-    @RequestMapping(value = "/logout/{endUserId}/{loginChannel}", method = RequestMethod.PUT)
-    public int logout(@PathVariable int endUserId, @PathVariable byte loginChannel) {
-        logger.info("user logout...");
-        return sessionService.logout(endUserId, loginChannel);
-    }
-
-    @RequestMapping(value = "/isvalidsession/{sessionToken}/{loginChannel}", method = RequestMethod.GET)
-    public boolean isValidSession(@PathVariable String sessionToken,
-                                      @PathVariable byte loginChannel) {
-        logger.info("is valid session?");
-        return sessionService.isValidSessionToken(sessionToken, loginChannel);
-    }
-
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    /**
+     * 用户注册
+     * @param endUser
+     * @return
+     */
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
     public String register(@Validated @RequestBody EndUser endUser) {
         String registerResult = "";
         //先根据用户名查找是否已经注册过
@@ -99,28 +75,53 @@ public class UserApplication {
         return registerResult;
     }
 
-//    @Bean(name = "userDataSource")
-//    @ConfigurationProperties(prefix = "spring.datasource.user")
-//    public DataSource userDataSource() {
-//        return DataSourceBuilder.create().build();
-//    }
-//
-//    @Bean(name = "userSqlSessionFactory")
-//    public SqlSessionFactory userSqlSessionFactory(@Qualifier("userDataSource") DataSource dataSource) throws Exception {
-//        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-//        bean.setDataSource(dataSource);
-//        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/user/*Mapper.xml"));
-//        return bean.getObject();
-//    }
-//
-//    @Bean(name = "userTransactionManager")
-//    public DataSourceTransactionManager userTransactionManager(@Qualifier("userDataSource") DataSource dataSource) {
-//        return new DataSourceTransactionManager(dataSource);
-//    }
-//
-//    @Bean(name = "userSqlSessionTemplate")
-//    public SqlSessionTemplate userSqlSessionTemplate(@Qualifier("userSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
-//        return new SqlSessionTemplate(sqlSessionFactory);
-//    }
+    /**
+     * 查询用户
+     * @param endUserId
+     * @return
+     */
+    @RequestMapping(value = "/users/{endUserId}", method = RequestMethod.GET)
+    public EndUser selectUserById(@PathVariable Integer endUserId) {
+        logger.info("getUser:" + endUserId);
+        EndUser endUser = userService.getEndUserById(endUserId);
+        logger.info("endUser=" + endUser);
+        return endUser;
+    }
+
+    /**
+     * 用户登录
+     * @param loginRequest
+     * @return
+     */
+    @RequestMapping(value = "/sessions", method = RequestMethod.POST)
+    public LoginResult login(@Validated @RequestBody LoginRequest loginRequest) {
+        logger.info("user login...");
+        return sessionService.login(loginRequest);
+    }
+
+    /**
+     * 用户登出
+     * @param endUserId
+     * @param loginChannel
+     * @return
+     */
+    @RequestMapping(value = "/sessions/{endUserId}/{loginChannel}", method = RequestMethod.DELETE)
+    public int logout(@PathVariable int endUserId, @PathVariable byte loginChannel) {
+        logger.info("user logout...");
+        return sessionService.logout(endUserId, loginChannel);
+    }
+
+    /**
+     * 验证会话token
+     * @param sessionToken
+     * @param loginChannel
+     * @return
+     */
+    @RequestMapping(value = "/sessions/validation/{sessionToken}/{loginChannel}", method = RequestMethod.GET)
+    public boolean isValidSession(@PathVariable String sessionToken,
+                                      @PathVariable byte loginChannel) {
+        logger.info("is valid session?");
+        return sessionService.isValidSessionToken(sessionToken, loginChannel);
+    }
 
 }

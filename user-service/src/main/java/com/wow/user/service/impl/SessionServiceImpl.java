@@ -37,10 +37,10 @@ public class SessionServiceImpl implements SessionService {
     private EndUserMapper endUserMapper;
 
     @Autowired
-    EndUserSessionMapper endUserSessionMapper;
+    private EndUserSessionMapper endUserSessionMapper;
 
     @Autowired
-    EndUserLoginLogMapper endUserLoginLogMapper;
+    private EndUserLoginLogMapper endUserLoginLogMapper;
 
     @Autowired
     private UserService userService;
@@ -170,6 +170,7 @@ public class SessionServiceImpl implements SessionService {
      */
     @Override
     public boolean isValidSessionToken(String sessionToken, byte loginChannel) {
+        logger.info("check whether is valid session token:" + sessionToken + ", loginChannel:" + loginChannel);
         boolean isValid = false;
         long currentTime = System.currentTimeMillis();
         Date mustRefreshAfter = new Date(currentTime - sessionExpirationTime);
