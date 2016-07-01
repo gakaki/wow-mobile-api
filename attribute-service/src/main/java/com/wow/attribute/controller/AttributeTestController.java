@@ -1,4 +1,4 @@
-package com.wow.attribute;
+package com.wow.attribute.controller;
 
 import com.wow.attribute.model.Attribute;
 import com.wow.attribute.model.Category;
@@ -31,9 +31,18 @@ import java.util.List;
 /**
  * Created by zhengzhiqing on 16/6/18.
  */
-@SpringBootApplication
-public class AttributeApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(AttributeApplication.class, args);
+@RestController
+public class AttributeTestController {
+
+    @Autowired
+    private AttributeService attributeService;
+
+    @RequestMapping(value = "/attributes/{attributeId}", method = RequestMethod.GET)
+    public Attribute selectAttributeById(@PathVariable Integer attributeId) {
+        return attributeService.getAttributeById(attributeId);
+    }
+    @RequestMapping(value = "/attributes/{attributeId}", method = RequestMethod.DELETE)
+    public int deleteAttribute(@PathVariable Integer attributeId) {
+        return attributeService.deleteAttributeById(attributeId);
     }
 }

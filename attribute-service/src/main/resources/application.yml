@@ -3,7 +3,7 @@ server:
   port: 8080
   address: 127.0.0.1
   sessionTimeout: 30
-  contextPath: /attribute-service
+  contextPath: /attribute-service-test
 
 spring:
   datasource:
@@ -16,16 +16,3 @@ spring:
       maxIdle: 5
       minIdle: 0
       defaultAutoCommit: false
-
-## Tomcat specifics
-#tomcat:
-#  accessLogEnabled: false
-#  protocolHeader: x-forwarded-proto
-#  remoteIpHeader: x-forwarded-for
-#  basedir:
-#  backgroundProcessorDelay: 30 # secs
-
-# MyBatis specifics
-mybatis:
-  typeAliasesPackage: com.wow.attribute.model
-  mapperLocations: classpath:/mapper/attribute/*Mapper.xml
