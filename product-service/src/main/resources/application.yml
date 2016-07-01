@@ -3,18 +3,20 @@ server:
   port: 8080
   address: 127.0.0.1
   sessionTimeout: 30
-  contextPath: /product-service
+  contextPath: /product-service-test
 
 spring:
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://10.0.60.121:3388/wowdsgn
-    username: root
-    password: z123456
-    maxActive: 10
-    maxIdle: 5
-    minIdle: 0
-    defaultAutoCommit: false
+    product:
+      driverClassName: com.mysql.cj.jdbc.Driver
+       #com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.0.60.121:3388/wowdsgn?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+      username: root
+      password: z123456
+      maxActive: 10
+      maxIdle: 5
+      minIdle: 0
+      defaultAutoCommit: false
 
 ## Tomcat specifics
 #tomcat:

@@ -13,7 +13,7 @@ public class Product implements Serializable {
 
     private Byte productType;
 
-    private String categoryId;
+    private Integer categoryId;
 
     private Integer brandId;
 
@@ -121,7 +121,7 @@ public class Product implements Serializable {
         return productCode;
     }
 
-    public void setProductCode(String productCode) {
+  public void setProductCode(String productCode) {
         this.productCode = productCode;
     }
 
@@ -133,11 +133,11 @@ public class Product implements Serializable {
         this.productType = productType;
     }
 
-    public String getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 

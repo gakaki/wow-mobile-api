@@ -16,6 +16,8 @@ public interface ProductAttributeMapper {
 
     int insertSelective(ProductAttribute record);
 
+    int insertBatch(List<ProductAttribute> productAttributes);
+
     List<ProductAttribute> selectByExample(ProductAttributeExample example);
 
     ProductAttribute selectByPrimaryKey(Integer id);

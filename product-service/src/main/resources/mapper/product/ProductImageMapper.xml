@@ -97,6 +97,12 @@
     from product_image
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByProductId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from product_image
+    where product_id = #{id,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from product_image
     where id = #{id,jdbcType=INTEGER}
@@ -106,6 +112,13 @@
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+  </delete>
+  <delete id="deleteBatch" parameterType="java.util.List" >
+    delete from product_image
+    where id IN
+    <foreach collection="list" item="item" index="index"  separator="," >
+     (#{item.productId,jdbcType=INTEGER})
+    </foreach>
   </delete>
   <insert id="insert" parameterType="com.wow.product.model.ProductImage" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -119,6 +132,23 @@
       #{imgDesc,jdbcType=VARCHAR}, #{viewPlatform,jdbcType=TINYINT}, #{isPrimary,jdbcType=BIT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{udpateTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_image (product_id, img_name, img_url,
+    img_desc, view_platform, is_primary,
+    create_time, create_by, udpate_time,
+    update_by, is_deleted)
+    values
+    <foreach collection="list" item="item" index="index"  separator="," >
+      (#{item.productId,jdbcType=INTEGER}, #{item.imgName,jdbcType=VARCHAR}, #{item.imgUrl,jdbcType=VARCHAR},
+      #{item.imgDesc,jdbcType=VARCHAR}, #{item.viewPlatform,jdbcType=TINYINT}, #{item.isPrimary,jdbcType=BIT},
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.createBy,jdbcType=VARCHAR}, #{item.udpateTime,jdbcType=TIMESTAMP},
+      #{item.updateBy,jdbcType=VARCHAR}, #{item.isDeleted,jdbcType=BIT})
+    </foreach>
+
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.ProductImage" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
