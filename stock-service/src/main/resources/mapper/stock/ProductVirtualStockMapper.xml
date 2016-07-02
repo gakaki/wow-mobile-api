@@ -302,4 +302,13 @@
     and is_deleted = false
   </select>
 
+  <select id="selectAllProductsWithFrozenVirtualStock" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from product_virtual_stock
+    where frozen_virtual_stock_qty > 0
+    and is_active = true
+    and is_deleted = false
+  </select>
+
 </mapper>

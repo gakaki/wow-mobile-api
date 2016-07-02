@@ -39,4 +39,10 @@ public interface ProductVirtualStockMapper {
     //虚拟发货,同时扣减虚拟库存和虚拟冻结库存
     int shipOutVirtualStock(@Param("productId")int productId, @Param("productQty")int productQty);
 
+    /**
+     * 查找所有有虚拟冻结的产品库存信息
+     * @return
+     */
+    List<ProductVirtualStock> selectAllProductsWithFrozenVirtualStock();
+
 }

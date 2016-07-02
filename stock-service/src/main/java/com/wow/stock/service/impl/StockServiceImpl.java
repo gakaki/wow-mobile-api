@@ -70,11 +70,13 @@ public class StockServiceImpl implements StockService{
             } else {
                 unfreezeVirtualStockQty = adjustNum;
             }
-            //虚拟冻结转真实冻结
-            productVirtualStockMapper.shipOutVirtualStock(productId, unfreezeVirtualStockQty);
-            productWarehouseStockMapper.freezeWarehouseStock(productId, warehouseId, unfreezeVirtualStockQty);
-            //更新订单状态
-            //TODO:查看order_item中有虚拟冻结的产品,修改冻结状态和冻结数量。提醒发货员发货等
+            if (unfreezeVirtualStockQty > 0) {
+                //虚拟冻结转真实冻结
+                productVirtualStockMapper.shipOutVirtualStock(productId, unfreezeVirtualStockQty);
+                productWarehouseStockMapper.freezeWarehouseStock(productId, warehouseId, unfreezeVirtualStockQty);
+                //更新订单状态
+                //TODO:查看order_item中有虚拟冻结的产品,修改冻结状态和冻结数量。提醒发货员发货等
+            }
         }
         return 1;
     }
@@ -188,5 +190,15 @@ public class StockServiceImpl implements StockService{
      */
     public List<Integer> selectWarehouseByProductId(int productId) {
         return productWarehouseStockMapper.selectWarehouseByProductId(productId);
+    }
+
+    /**
+     * 查找所有有虚拟冻结的产品库存信息
+     *
+     * @return
+     */
+    @Override
+    public List<ProductVirtualStock> selectAllProductsWithFrozenVirtualStock() {
+        return productVirtualStockMapper.selectAllProductsWithFrozenVirtualStock();
     }
 }

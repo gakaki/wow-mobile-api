@@ -111,4 +111,10 @@ public interface StockService {
      * @return
      */
     List<Integer> selectWarehouseByProductId(int productId);
+
+    /**
+     * 查找所有有虚拟冻结的产品库存信息
+     * @return
+     */
+    List<ProductVirtualStock> selectAllProductsWithFrozenVirtualStock();
 }
