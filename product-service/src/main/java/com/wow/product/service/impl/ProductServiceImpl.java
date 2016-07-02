@@ -1,15 +1,21 @@
 package com.wow.product.service.impl;
 
 
-import com.wow.attribute.model.Attribute;
+import com.wow.attribute.model.*;
+import com.wow.attribute.service.AttributeService;
+
+import com.wow.attribute.service.CategoryService;
+import com.wow.product.mapper.ProductAttributeMapper;
+import com.wow.product.mapper.ProductImageMapper;
 import com.wow.product.mapper.ProductMapper;
-import com.wow.product.model.*;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductAttribute;
+import com.wow.product.model.ProductImage;
 import com.wow.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -24,23 +30,39 @@ public class ProductServiceImpl implements ProductService {
     //table: product
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private ProductImageMapper productImageMapper;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    AttributeService attributeService;
+
+    @Autowired
+    private ProductAttributeMapper productAttributeMapper;
     /**
      * 创建产品(注意要调用生码接口)
      *
      * @param product
      */
     public int createProduct(Product product) {
-        String productCode = generateProductCode(product);
-        return 1;
+        if(product==null)
+            return -1;
+        String productCode = generateProductCode();
+
+            product.setProductCode(productCode.substring(0,7));
+        return productMapper.insert(product);
     }
 
     /**
      * 生成产品编码
-     * @param product
      * @return
      */
-    private String generateProductCode(Product product) {
-        return "";
+    private String generateProductCode() {
+
+        return java.util.UUID.randomUUID().toString();
     }
 
 
@@ -51,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public Product getProductById(int productId) {
-        return null;
+        return productMapper.selectByPrimaryKey(productId);
     }
 
     /**
@@ -61,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int updateProduct(Product product) {
-        return 0;
+        return productMapper.updateByPrimaryKey(product);
     }
 
     //table: product_image
@@ -73,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int addProductImage(ProductImage productImage) {
-        return 0;
+        return productImageMapper.insert(productImage);
     }
 
     /**
@@ -83,6 +105,9 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int addProductImages(List<ProductImage> productImages) {
+        if(productImages==null ||productImages.size()==0)
+            return -1;
+        productImageMapper.insertBatch(productImages);
         return 0;
     }
 
@@ -93,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public List<ProductImage> getProductImages(int productId) {
-        return null;
+        return  productImageMapper.selectByProductId(productId);
     }
 
     /**
@@ -103,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int updateProductImage(ProductImage productImage) {
-        return 0;
+        return productImageMapper.updateByPrimaryKey(productImage);
     }
 
     /**
@@ -113,7 +138,9 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int deleteProductImages(List<ProductImage> productImages) {
-        return 0;
+        if(productImages==null ||productImages.size()==0)
+            return -1;
+        return productImageMapper.deleteBatch(productImages);
     }
 
     //table: product_attribute
@@ -124,7 +151,13 @@ public class ProductServiceImpl implements ProductService {
      * @param product
      * @return
      */
-    public List<Attribute> getAttributesInProduct(Product product) {
+    public List<Attribute> getAttributesInProduct(Product product){
+        if(product==null)
+            return null;
+      Category category= categoryService.getCategoryById(product.getCategoryId());
+        if(category!=null)
+           return attributeService.getAttributesInCategory(category.getId());
+
         return null;
     }
 
@@ -135,7 +168,9 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int createProductAttribute(List<ProductAttribute> productAttributes) {
-        return 0;
+        if(productAttributes==null ||productAttributes.size()==0)
+            return -1;
+        return productAttributeMapper.insertBatch(productAttributes);
     }
 
     /**
@@ -145,7 +180,15 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int updateProductAttribute(List<ProductAttribute> productAttributes) {
-        return 0;
+        if(productAttributes==null ||productAttributes.size()==0)
+            return -1;
+        Iterator  var=productAttributes.iterator();
+        int updateFlag=0;
+        while (var.hasNext())
+        {
+            updateFlag=  productAttributeMapper.updateByPrimaryKey((ProductAttribute)var.next());
+        }
+        return updateFlag;
     }
 
 }

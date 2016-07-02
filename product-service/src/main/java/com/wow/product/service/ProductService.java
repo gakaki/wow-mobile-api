@@ -1,7 +1,9 @@
 package com.wow.product.service;
 
 import com.wow.attribute.model.Attribute;
-import com.wow.product.model.*;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductAttribute;
+import com.wow.product.model.ProductImage;
 
 import java.util.List;
 

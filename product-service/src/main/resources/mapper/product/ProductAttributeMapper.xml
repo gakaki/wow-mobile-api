@@ -166,6 +166,21 @@
       </if>
     </trim>
   </insert>
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_attribute (product_id, attribute_name, attribute_value,
+    show_name, create_time, update_time,
+    is_deleted)
+    values
+    <foreach collection="list" item="item" index="index"  separator="," >
+      (#{item.productId,jdbcType=INTEGER}, #{item.attributeName,jdbcType=VARCHAR}, #{item.attributeValue,jdbcType=VARCHAR},
+      #{item.showName,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP},
+      #{item.isDeleted,jdbcType=BIT})
+    </foreach>
+
+  </insert>
   <select id="countByExample" parameterType="com.wow.product.model.ProductAttributeExample" resultType="java.lang.Integer" >
     select count(*) from product_attribute
     <if test="_parameter != null" >

@@ -6,7 +6,7 @@
     <result column="product_name" property="productName" jdbcType="VARCHAR" />
     <result column="product_code" property="productCode" jdbcType="VARCHAR" />
     <result column="product_type" property="productType" jdbcType="TINYINT" />
-    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
     <result column="brand_id" property="brandId" jdbcType="INTEGER" />
     <result column="product_model" property="productModel" jdbcType="VARCHAR" />
     <result column="material" property="material" jdbcType="VARCHAR" />
@@ -191,7 +191,7 @@
       is_deleted, seo_title, seo_desc, 
       seo_key)
     values (#{productName,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, #{productType,jdbcType=TINYINT}, 
-      #{categoryId,jdbcType=VARCHAR}, #{brandId,jdbcType=INTEGER}, #{productModel,jdbcType=VARCHAR}, 
+      #{categoryId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, #{productModel,jdbcType=VARCHAR},
       #{material,jdbcType=VARCHAR}, #{sellingPoint,jdbcType=VARCHAR}, #{detailDescription,jdbcType=VARCHAR}, 
       #{canSale,jdbcType=BIT}, #{canShow,jdbcType=BIT}, #{viewPlatform,jdbcType=TINYINT}, 
       #{originCountry,jdbcType=VARCHAR}, #{originAreaId,jdbcType=INTEGER}, #{originText,jdbcType=VARCHAR}, 
@@ -363,7 +363,7 @@
         #{productType,jdbcType=TINYINT},
       </if>
       <if test="categoryId != null" >
-        #{categoryId,jdbcType=VARCHAR},
+        #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="brandId != null" >
         #{brandId,jdbcType=INTEGER},
@@ -515,7 +515,7 @@
         product_type = #{record.productType,jdbcType=TINYINT},
       </if>
       <if test="record.categoryId != null" >
-        category_id = #{record.categoryId,jdbcType=VARCHAR},
+        category_id = #{record.categoryId,jdbcType=INTEGER},
       </if>
       <if test="record.brandId != null" >
         brand_id = #{record.brandId,jdbcType=INTEGER},
@@ -654,7 +654,7 @@
       product_name = #{record.productName,jdbcType=VARCHAR},
       product_code = #{record.productCode,jdbcType=VARCHAR},
       product_type = #{record.productType,jdbcType=TINYINT},
-      category_id = #{record.categoryId,jdbcType=VARCHAR},
+      category_id = #{record.categoryId,jdbcType=INTEGER},
       brand_id = #{record.brandId,jdbcType=INTEGER},
       product_model = #{record.productModel,jdbcType=VARCHAR},
       material = #{record.material,jdbcType=VARCHAR},
@@ -707,7 +707,7 @@
       product_name = #{record.productName,jdbcType=VARCHAR},
       product_code = #{record.productCode,jdbcType=VARCHAR},
       product_type = #{record.productType,jdbcType=TINYINT},
-      category_id = #{record.categoryId,jdbcType=VARCHAR},
+      category_id = #{record.categoryId,jdbcType=INTEGER},
       brand_id = #{record.brandId,jdbcType=INTEGER},
       product_model = #{record.productModel,jdbcType=VARCHAR},
       material = #{record.material,jdbcType=VARCHAR},
@@ -764,7 +764,7 @@
         product_type = #{productType,jdbcType=TINYINT},
       </if>
       <if test="categoryId != null" >
-        category_id = #{categoryId,jdbcType=VARCHAR},
+        category_id = #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="brandId != null" >
         brand_id = #{brandId,jdbcType=INTEGER},
@@ -900,7 +900,7 @@
     set product_name = #{productName,jdbcType=VARCHAR},
       product_code = #{productCode,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=TINYINT},
-      category_id = #{categoryId,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
       brand_id = #{brandId,jdbcType=INTEGER},
       product_model = #{productModel,jdbcType=VARCHAR},
       material = #{material,jdbcType=VARCHAR},
@@ -950,7 +950,7 @@
     set product_name = #{productName,jdbcType=VARCHAR},
       product_code = #{productCode,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=TINYINT},
-      category_id = #{categoryId,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
       brand_id = #{brandId,jdbcType=INTEGER},
       product_model = #{productModel,jdbcType=VARCHAR},
       material = #{material,jdbcType=VARCHAR},
