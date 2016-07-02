@@ -7,10 +7,12 @@ package com.wow;
 import com.wow.mobileapi.interceptor.MustLoginInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 @SpringBootApplication
@@ -22,13 +24,15 @@ public class MobileApiApplication extends WebMvcConfigurerAdapter implements Com
         SpringApplication.run(MobileApiApplication.class, args);
     }
 
-    /**
-     * 配置拦截器
-     * @param registry
-     */
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MustLoginInterceptor()).addPathPatterns("/v1.0/orders/**");
-    }
+//    @Autowired
+//    MustLoginInterceptor mustLoginInterceptor;
+//    /**
+//     * 配置拦截器
+//     * @param registry
+//     */
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(mustLoginInterceptor).addPathPatterns("/v1.0/orders/**");
+//    }
 
     /**
      * spring boot 定时任务
