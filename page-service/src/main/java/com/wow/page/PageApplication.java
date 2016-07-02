@@ -30,7 +30,7 @@ public class PageApplication {
 
 //    @Bean(name = "pageDataSource")
 //    @Primary
-//    @ConfigurationProperties(prefix = "spring.datasource.page")
+//    @ConfigurationProperties(prefix = "wow.datasource.page")
 //    public DataSource pageDataSource() {
 //        return DataSourceBuilder.create().build();
 //    }

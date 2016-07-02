@@ -37,7 +37,7 @@ public class MarketingApplication {
 
 //    @Bean(name = "marketingDataSource")
 //    @Primary
-//    @ConfigurationProperties(prefix = "spring.datasource.marketing")
+//    @ConfigurationProperties(prefix = "wow.datasource.marketing")
 //    public DataSource marketingDataSource() {
 //        return DataSourceBuilder.create().build();
 //    }

@@ -1,51 +1,58 @@
-package com.wow.config;
+package com.wow.user.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
 @Configuration
-@EnableAutoConfiguration
-@MapperScan("com.wow.attribute.mapper")
-public class AttributeDBConfig {
+@PropertySource("classpath:ds_user.properties")
+@MapperScan(basePackages ="com.wow.user.mapper",sqlSessionFactoryRef="userSqlSessionFactory")
+public class UserDSConfig {
 
-    @Bean(name = "attributeDataSource")
+    @Bean(name = "userDataSource")
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.attribute")
-    public DataSource attributeDataSource() {
+    @ConfigurationProperties(prefix = "wow.datasource.user")
+    public DataSource userDataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "attributeSqlSessionFactory")
+    @Bean(name = "userSqlSessionFactory")
     @Primary
-    public SqlSessionFactory attributeSqlSessionFactory(@Qualifier("attributeDataSource") DataSource dataSource) throws Exception {
+    @Autowired
+    @Qualifier("userDataSource")
+    public SqlSessionFactory userSqlSessionFactory(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/attribute/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/user/*Mapper.xml"));
         return bean.getObject();
     }
 
-    @Bean(name = "attributeTransactionManager")
+    @Bean(name = "userTransactionManager")
     @Primary
-    public DataSourceTransactionManager attributeTransactionManager(@Qualifier("attributeDataSource") DataSource dataSource) {
+    @Autowired
+    @Qualifier("userDataSource")
+    public DataSourceTransactionManager userTransactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
-    @Bean(name = "attributeSqlSessionTemplate")
+    @Bean(name = "userSqlSessionTemplate")
     @Primary
-    public SqlSessionTemplate attributeSqlSessionTemplate(@Qualifier("attributeSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+    @Autowired
+    @Qualifier("userSqlSessionFactory")
+    public SqlSessionTemplate userSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

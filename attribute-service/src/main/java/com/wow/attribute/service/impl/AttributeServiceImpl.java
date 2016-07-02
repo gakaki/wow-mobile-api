@@ -22,15 +22,13 @@ import java.util.List;
  * Created by zhengzhiqing on 16/6/19.
  */
 @Service
-@Transactional(value = "attributeTransactionManager")
+@Transactional("attributeTransactionManager")
 public class AttributeServiceImpl implements AttributeService {
 
     @Autowired
     private AttributeMapper attributeMapper;
-
     @Autowired
     private CategoryService categoryService;
-
     @Autowired
     private AttributeValueMapper attributeValueMapper;
     @Autowired

@@ -11,10 +11,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 @SpringBootApplication
 public class MobileApiApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
 
@@ -29,7 +27,6 @@ public class MobileApiApplication extends WebMvcConfigurerAdapter implements Com
      * @param registry
      */
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MustLoginInterceptor()).addPathPatterns("/v1.0/users/**");
         registry.addInterceptor(new MustLoginInterceptor()).addPathPatterns("/v1.0/orders/**");
     }
 
@@ -38,7 +35,6 @@ public class MobileApiApplication extends WebMvcConfigurerAdapter implements Com
      */
     @Scheduled(cron = "0 0 22 * * ?")
     public void reportCurrentTime() {
-        // put your scheduler code here
     }
 
     /**
@@ -47,7 +43,19 @@ public class MobileApiApplication extends WebMvcConfigurerAdapter implements Com
      * @param args
      */
     public void run(String... args) {
-        // Do something...
         logger.info("Mobile api is started and be ready to accept requests from app(iOS/Android).");
+//        logger.info("Datasource for user: " + userDS.toString());
+//        logger.info("Datasource for attribute: " + attributeDS.toString());
     }
+
+
+//    @Autowired
+//    @Qualifier("userDataSource")
+//    private DataSource userDS;
+//
+//    @Autowired
+//    @Qualifier("attributeDataSource")
+//    private DataSource attributeDS;
+
+
 }

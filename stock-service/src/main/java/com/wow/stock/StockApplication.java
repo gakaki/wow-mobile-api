@@ -36,7 +36,7 @@ public class StockApplication {
 
 //    @Bean(name = "stockDataSource")
 //    @Primary
-//    @ConfigurationProperties(prefix = "spring.datasource.stock")
+//    @ConfigurationProperties(prefix = "wow.datasource.stock")
 //    public DataSource stockDataSource() {
 //        return DataSourceBuilder.create().build();
 //    }

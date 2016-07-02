@@ -37,7 +37,7 @@ public class PriceApplication {
 
 //    @Bean(name = "priceDataSource")
 //    @Primary
-//    @ConfigurationProperties(prefix = "spring.datasource.price")
+//    @ConfigurationProperties(prefix = "wow.datasource.price")
 //    public DataSource priceDataSource() {
 //        return DataSourceBuilder.create().build();
 //    }

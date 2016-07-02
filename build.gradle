@@ -59,6 +59,8 @@ allprojects {
         compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1'
         compile 'org.springframework.boot:spring-boot-devtools'
         compile 'org.hibernate:hibernate-validator:5.2.4.Final'
+        compile 'org.springframework.boot:spring-boot-starter-redis'
+
         testCompile 'junit:junit:4.11'
     }
 
@@ -86,6 +88,5 @@ dependencies {
     compile 'com.wow:stock-service:1.0-SNAPSHOT'
     compile 'com.wow:marketing-service:1.0-SNAPSHOT'
     compile 'com.wow:page-service:1.0-SNAPSHOT'
-//    compile 'com.github.pagehelper:pagehelper:4.1.1'
 }
 

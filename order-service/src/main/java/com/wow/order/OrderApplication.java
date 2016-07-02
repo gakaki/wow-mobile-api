@@ -37,7 +37,7 @@ public class OrderApplication {
 
 //    @Bean(name = "orderDataSource")
 //    @Primary
-//    @ConfigurationProperties(prefix = "spring.datasource.order")
+//    @ConfigurationProperties(prefix = "wow.datasource.order")
 //    public DataSource orderDataSource() {
 //        return DataSourceBuilder.create().build();
 //    }

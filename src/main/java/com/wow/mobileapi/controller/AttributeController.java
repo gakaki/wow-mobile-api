@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping
 public class AttributeController {
 
     private static final Logger logger = LoggerFactory.getLogger(AttributeController.class);

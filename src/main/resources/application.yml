@@ -4,57 +4,36 @@ server:
   address: 127.0.0.1
   sessionTimeout: 30
   contextPath: /mobile-api-dev
+
+# Tomcat specifics
+tomcat:
+  accessLogEnabled: false
+  protocolHeader: x-forwarded-proto
+  remoteIpHeader: x-forwarded-for
+  basedir:
+  backgroundProcessorDelay: 30 # secs
+
 # Session Token有效时间配置(毫秒)
 session:
   expirationTime: 60000
 
-#内网数据库
+## redis configuration
+#wow:
+#  redis:
+#    database: 0
+#    host: 10.0.60.121
+#    password: admin123
+#    port: 6379
+#    timeout: 0
+#    pool:
+#      max-active: 8
+#      max-idle: 8
+#      max-wait: -1
+#      min-idle: 0
+
+# data source configuration
 spring:
   datasource:
-    attribute:
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://10.0.60.121:3388/wowdsgn?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
-      username: root
-      password: z123456
-      initialSize: 1
-      minIdle: 1
-      maxIdle: 5
-      maxActive: 10
-      maxWait: 1000
-      testOnBorrow: true
-      testOnReturn: false
-      testWhileIdle: true
-      validationQuery: SELECT 1
-      validationQueryTimeout: 5
-      validationInterval: 30000
-      timeBetweenEvictionRunsMillis: 30000
-      minEvictableIdleTimeMillis: 120000
-      logAbandoned: false
-      removeAbandoned: true
-      removeAbandonedTimeout: 60
-      jdbcInterceptors: org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer
-    user:
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://10.0.60.121:3388/wowdsgn?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
-      username: root
-      password: z123456
-      initialSize: 1
-      minIdle: 1
-      maxIdle: 5
-      maxActive: 10
-      maxWait: 5000
-      testOnBorrow: true
-      testOnReturn: false
-      testWhileIdle: true
-      validationQuery: SELECT 1
-      validationQueryTimeout: 5
-      validationInterval: 30000
-      timeBetweenEvictionRunsMillis: 30000
-      minEvictableIdleTimeMillis: 120000
-      logAbandoned: false
-      removeAbandoned: true
-      removeAbandonedTimeout: 60
-      jdbcInterceptors: org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer
     price:
       driverClassName: com.mysql.jdbc.Driver
       url: jdbc:mysql://10.0.60.121:3388/wowdsgn?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
@@ -196,15 +175,6 @@ logging:
     org:
       springframework:
         web: WARN
-
-
-## Tomcat specifics
-#tomcat:
-#  accessLogEnabled: false
-#  protocolHeader: x-forwarded-proto
-#  remoteIpHeader: x-forwarded-for
-#  basedir:
-#  backgroundProcessorDelay: 30 # secs
 
 # MyBatis specifics
 #mybatis:

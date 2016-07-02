@@ -20,13 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/21.
  */
 @Service
-@Transactional(value = "userTransactionManager")
+@Transactional("userTransactionManager")
 public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);

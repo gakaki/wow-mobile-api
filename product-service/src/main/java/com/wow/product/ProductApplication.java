@@ -37,7 +37,7 @@ public class ProductApplication {
 
 //    @Bean(name = "productDataSource")
 //    @Primary
-//    @ConfigurationProperties(prefix = "spring.datasource.product")
+//    @ConfigurationProperties(prefix = "wow.datasource.product")
 //    public DataSource productDataSource() {
 //        return DataSourceBuilder.create().build();
 //    }

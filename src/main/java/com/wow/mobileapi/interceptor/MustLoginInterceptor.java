@@ -8,28 +8,38 @@ import com.wow.user.service.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 拦截未登录的用户
  */
+@Configuration
+@ComponentScan
+@EnableAutoConfiguration
 public class MustLoginInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(MustLoginInterceptor.class);
-
     @Autowired
     private SessionService sessionService;
+//
+//    public void setSessionService(SessionService sessionService) {
+//        this.sessionService = sessionService;
+//    }
 
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         logger.info("must login interceptor:preHandle:" + request);
         String token = getSessionToken(request, response);
+        token = "39b0b50d-8838-496e-93cd-6e7f87dea1e6";//TODO: hard code here
         byte loginChannel = getLoginChannel(request, response);
 
         //check whether token is valid, by search it from redis or mysql
-        if (! sessionService.isValidSessionToken(token,loginChannel)) {
+        if (!sessionService.isValidSessionToken(token,loginChannel)) {
             logger.info("token is invalid, please login");
             response.getWriter().write("您的会话已过期,请重新登录");
             return false;

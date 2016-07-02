@@ -2,8 +2,9 @@ package com.wow.user.mapper;
 
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface EndUserMapper {
 
