@@ -14,6 +14,7 @@
         <commentGenerator>
             <property name="suppressAllComments" value="true"/>
             <property name="suppressDate" value="true"/>
+            <property name="javaFileEncoding" value="utf-8"/>
         </commentGenerator>
 
         <!-- 数据库连接的信息：驱动类、连接地址、用户名、密码 -->
@@ -35,7 +36,7 @@
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="fasle"/>
             <!-- 从数据库返回的值被清理前后的空格 -->
-            <property name="trimStrings" value="false"/>
+            <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!--sqlMapper XML文件的生成信息，包括生成路径等 -->
@@ -55,7 +56,8 @@
 
         <!-- sql占位符，表示所有的表 -->
         <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-        <table schema="root" tableName="product_price" domainObjectName="ProductPrice" enableInsert="true"
+        <table schema="root" tableName="page_banner_config" domainObjectName="PageBannerConfig"
+               enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"
                enableUpdateByPrimaryKey="true"
@@ -66,7 +68,20 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="product_price_change_log" domainObjectName="ProductPriceChangeLog"
+
+        <table schema="root" tableName="page_scene_config" domainObjectName="PageSceneConfig"
+               enableInsert="true"
+               enableSelectByPrimaryKey="true"
+               enableSelectByExample="true"
+               enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true"
+               enableDeleteByExample="true"
+               enableCountByExample="true"
+               enableUpdateByExample="true" modelType="flat">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table schema="root" tableName="page_topic_config" domainObjectName="PageTopicConfig"
                enableInsert="true"
                enableSelectByPrimaryKey="true"
                enableSelectByExample="true"

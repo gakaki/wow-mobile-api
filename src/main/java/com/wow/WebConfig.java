@@ -1,6 +1,6 @@
 package com.wow;
 
-import com.wow.mobileapi.interceptor.MustLoginInterceptor;
+import com.wow.mobileapi.interceptor.AuthInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -15,11 +15,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
-    MustLoginInterceptor mustLoginInterceptor;
+    AuthInterceptor authInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(mustLoginInterceptor).addPathPatterns("/v1.0/orders/**");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1.0/orders/**");
     }
 
 }
