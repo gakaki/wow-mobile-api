@@ -13,11 +13,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:ds_page.properties")
+@EnableTransactionManagement
 @MapperScan(basePackages ="com.wow.page.mapper",sqlSessionFactoryRef="pageSqlSessionFactory")
 public class PageDSConfig {
 

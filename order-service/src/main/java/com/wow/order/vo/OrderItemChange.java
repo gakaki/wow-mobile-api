@@ -1,6 +1,4 @@
-package com.wow.stock.vo;
-
-import java.math.BigDecimal;
+package com.wow.order.vo;
 
 /**
  * Created by zhengzhiqing on 16/7/2.

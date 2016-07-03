@@ -26,10 +26,6 @@ public class MustLoginInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(MustLoginInterceptor.class);
     @Autowired
     private SessionService sessionService;
-//
-//    public void setSessionService(SessionService sessionService) {
-//        this.sessionService = sessionService;
-//    }
 
     @Override
     public boolean preHandle(HttpServletRequest request,

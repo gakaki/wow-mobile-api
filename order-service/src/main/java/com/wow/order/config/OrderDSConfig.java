@@ -13,11 +13,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:ds_order.properties")
+@EnableTransactionManagement
 @MapperScan(basePackages ="com.wow.order.mapper",sqlSessionFactoryRef="orderSqlSessionFactory")
 public class OrderDSConfig {
 

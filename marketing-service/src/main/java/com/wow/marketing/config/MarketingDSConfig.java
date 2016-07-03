@@ -13,11 +13,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:ds_marketing.properties")
+@EnableTransactionManagement
 @MapperScan(basePackages ="com.wow.marketing.mapper",sqlSessionFactoryRef="marketingSqlSessionFactory")
 public class MarketingDSConfig {
 

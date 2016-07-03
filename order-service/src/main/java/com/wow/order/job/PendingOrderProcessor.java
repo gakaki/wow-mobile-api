@@ -1,12 +1,12 @@
-package com.wow.stock.job;
+package com.wow.order.job;
 
 /**
  * Created by zhengzhiqing on 16/7/2.
  */
 
+import com.wow.order.vo.OrderWithVirtualStockProcessResult;
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.service.StockService;
-import com.wow.stock.vo.OrderWithVirtualStockProcessResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class VirtualStockProcessor {
+public class PendingOrderProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(VirtualStockProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(PendingOrderProcessor.class);
 
     @Autowired
     StockService stockService;
     /**
      * 处理因为虚拟库存而pending的订单
      */
-    @Scheduled(fixedRate = 5000) //only for testing
-//    @Scheduled(cron = "0 0 0 * * ?") //每天0点跑一次
-    public List<OrderWithVirtualStockProcessResult> processOrderPendingOnVirtualStock() {
+//    @Scheduled(fixedRate = 10000) //only for testing
+    @Scheduled(cron = "0 0 0 * * ?") //每天0点跑一次
+    public void processOrderPendingOnVirtualStock() {
         List<OrderWithVirtualStockProcessResult> orderWithVirtualStockProcessResults =
                 new ArrayList<OrderWithVirtualStockProcessResult>();
         //要注意防并发,如果有两个实例,需要一种锁算法
@@ -45,7 +45,6 @@ public class VirtualStockProcessor {
         logger.info("处理结束,本次处理结果明细" + orderWithVirtualStockProcessResults);
         //异步发个邮件给到干系人
         //sendMain();
-        return orderWithVirtualStockProcessResults;
     }
 
     /**

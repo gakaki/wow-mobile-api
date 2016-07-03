@@ -1,6 +1,4 @@
-package com.wow.stock.vo;
-
-import com.wow.order.model.OrderItem;
+package com.wow.order.vo;
 
 import java.util.List;
 import java.util.Map;
