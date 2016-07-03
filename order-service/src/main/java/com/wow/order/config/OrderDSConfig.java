@@ -30,26 +30,24 @@ public class OrderDSConfig {
     }
 
     @Bean(name = "orderSqlSessionFactory")
-    @Autowired
-    @Qualifier("orderDataSource")
-    public SqlSessionFactory orderSqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory orderSqlSessionFactory(
+            @Qualifier("orderDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/order/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath:/mapper/order/*Mapper.xml"));
         return bean.getObject();
     }
 
     @Bean(name = "orderTransactionManager")
-    @Autowired
-    @Qualifier("orderDataSource")
-    public DataSourceTransactionManager orderTransactionManager(DataSource dataSource) {
+    public DataSourceTransactionManager orderTransactionManager(
+            @Qualifier("orderDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "orderSqlSessionTemplate")
-    @Autowired
-    @Qualifier("orderSqlSessionFactory")
-    public SqlSessionTemplate orderSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate orderSqlSessionTemplate(
+            @Qualifier("orderSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

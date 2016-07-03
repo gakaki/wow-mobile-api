@@ -30,26 +30,24 @@ public class PriceDSConfig {
     }
 
     @Bean(name = "priceSqlSessionFactory")
-    @Autowired
-    @Qualifier("priceDataSource")
-    public SqlSessionFactory priceSqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory priceSqlSessionFactory(
+            @Qualifier("priceDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/price/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath:/mapper/price/*Mapper.xml"));
         return bean.getObject();
     }
 
     @Bean(name = "priceTransactionManager")
-    @Autowired
-    @Qualifier("priceDataSource")
-    public DataSourceTransactionManager priceTransactionManager(DataSource dataSource) {
+    public DataSourceTransactionManager priceTransactionManager(
+            @Qualifier("priceDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "priceSqlSessionTemplate")
-    @Autowired
-    @Qualifier("priceSqlSessionFactory")
-    public SqlSessionTemplate priceSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate priceSqlSessionTemplate(
+            @Qualifier("priceSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

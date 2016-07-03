@@ -31,26 +31,24 @@ public class AttributeDSConfig {
     }
 
     @Bean(name = "attributeSqlSessionFactory")
-    @Autowired
-    @Qualifier("attributeDataSource")
-    public SqlSessionFactory attributeSqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory attributeSqlSessionFactory(
+            @Qualifier("attributeDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/attribute/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath:/mapper/attribute/*Mapper.xml"));
         return bean.getObject();
     }
 
     @Bean(name = "attributeTransactionManager")
-    @Autowired
-    @Qualifier("attributeDataSource")
-    public PlatformTransactionManager attributeTransactionManager(DataSource dataSource) {
+    public PlatformTransactionManager attributeTransactionManager(
+            @Qualifier("attributeDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "attributeSqlSessionTemplate")
-    @Autowired
-    @Qualifier("attributeSqlSessionFactory")
-    public SqlSessionTemplate attributeSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate attributeSqlSessionTemplate(
+            @Qualifier("attributeSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

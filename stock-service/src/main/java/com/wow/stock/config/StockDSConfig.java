@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -31,26 +30,24 @@ public class StockDSConfig {
     }
 
     @Bean(name = "stockSqlSessionFactory")
-    @Autowired
-    @Qualifier("stockDataSource")
-    public SqlSessionFactory stockSqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory stockSqlSessionFactory(
+            @Qualifier("stockDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/stock/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath:/mapper/stock/*Mapper.xml"));
         return bean.getObject();
     }
 
     @Bean(name = "stockTransactionManager")
-    @Autowired
-    @Qualifier("stockDataSource")
-    public DataSourceTransactionManager stockTransactionManager(DataSource dataSource) {
+    public DataSourceTransactionManager stockTransactionManager(
+            @Qualifier("stockDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "stockSqlSessionTemplate")
-    @Autowired
-    @Qualifier("stockSqlSessionFactory")
-    public SqlSessionTemplate stockSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate stockSqlSessionTemplate(
+            @Qualifier("stockSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

@@ -32,29 +32,24 @@ public class UserDSConfig {
     }
 
     @Bean(name = "userSqlSessionFactory")
-    @Primary
-    @Autowired
-    @Qualifier("userDataSource")
-    public SqlSessionFactory userSqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory userSqlSessionFactory(
+            @Qualifier("userDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/user/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath:/mapper/user/*Mapper.xml"));
         return bean.getObject();
     }
 
     @Bean(name = "userTransactionManager")
-    @Primary
-    @Autowired
-    @Qualifier("userDataSource")
-    public DataSourceTransactionManager userTransactionManager(DataSource dataSource) {
+    public DataSourceTransactionManager userTransactionManager(
+            @Qualifier("userDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "userSqlSessionTemplate")
-    @Primary
-    @Autowired
-    @Qualifier("userSqlSessionFactory")
-    public SqlSessionTemplate userSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate userSqlSessionTemplate(
+            @Qualifier("userSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

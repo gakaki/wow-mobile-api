@@ -4,7 +4,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,7 +19,7 @@ import javax.sql.DataSource;
 @Configuration
 @PropertySource("classpath:ds_product.properties")
 @EnableTransactionManagement
-@MapperScan(basePackages ="com.wow.product.mapper",sqlSessionFactoryRef="productSqlSessionFactory")
+@MapperScan(basePackages = "com.wow.product.mapper", sqlSessionFactoryRef = "productSqlSessionFactory")
 public class ProductDSConfig {
 
     @Bean(name = "productDataSource")
@@ -30,26 +29,24 @@ public class ProductDSConfig {
     }
 
     @Bean(name = "productSqlSessionFactory")
-    @Autowired
-    @Qualifier("productDataSource")
-    public SqlSessionFactory productSqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory productSqlSessionFactory(
+            @Qualifier("productDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/product/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath:/mapper/product/*Mapper.xml"));
         return bean.getObject();
     }
 
     @Bean(name = "productTransactionManager")
-    @Autowired
-    @Qualifier("productDataSource")
-    public DataSourceTransactionManager productTransactionManager(DataSource dataSource) {
+    public DataSourceTransactionManager productTransactionManager(
+            @Qualifier("productDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "productSqlSessionTemplate")
-    @Autowired
-    @Qualifier("productSqlSessionFactory")
-    public SqlSessionTemplate productSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate productSqlSessionTemplate(
+            @Qualifier("productSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

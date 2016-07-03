@@ -30,26 +30,24 @@ public class PageDSConfig {
     }
 
     @Bean(name = "pageSqlSessionFactory")
-    @Autowired
-    @Qualifier("pageDataSource")
-    public SqlSessionFactory pageSqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory pageSqlSessionFactory(
+            @Qualifier("pageDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/page/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath:/mapper/page/*Mapper.xml"));
         return bean.getObject();
     }
 
     @Bean(name = "pageTransactionManager")
-    @Autowired
-    @Qualifier("pageDataSource")
-    public DataSourceTransactionManager pageTransactionManager(DataSource dataSource) {
+    public DataSourceTransactionManager pageTransactionManager(
+            @Qualifier("pageDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "pageSqlSessionTemplate")
-    @Autowired
-    @Qualifier("pageSqlSessionFactory")
-    public SqlSessionTemplate pageSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate pageSqlSessionTemplate(
+            @Qualifier("pageSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

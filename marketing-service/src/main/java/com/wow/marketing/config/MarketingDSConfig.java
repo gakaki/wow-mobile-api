@@ -30,26 +30,24 @@ public class MarketingDSConfig {
     }
 
     @Bean(name = "marketingSqlSessionFactory")
-    @Autowired
-    @Qualifier("marketingDataSource")
-    public SqlSessionFactory marketingSqlSessionFactory(DataSource dataSource) throws Exception {
+    public SqlSessionFactory marketingSqlSessionFactory(
+            @Qualifier("marketingDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mapper/marketing/*Mapper.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver()
+                .getResources("classpath:/mapper/marketing/*Mapper.xml"));
         return bean.getObject();
     }
 
     @Bean(name = "marketingTransactionManager")
-    @Autowired
-    @Qualifier("marketingDataSource")
-    public DataSourceTransactionManager marketingTransactionManager(DataSource dataSource) {
+    public DataSourceTransactionManager marketingTransactionManager(
+            @Qualifier("marketingDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "marketingSqlSessionTemplate")
-    @Autowired
-    @Qualifier("marketingSqlSessionFactory")
-    public SqlSessionTemplate marketingSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate marketingSqlSessionTemplate(
+            @Qualifier("marketingSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }
