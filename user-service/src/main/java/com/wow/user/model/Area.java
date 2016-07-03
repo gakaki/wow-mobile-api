@@ -5,17 +5,13 @@ import java.io.Serializable;
 public class Area implements Serializable {
     private Integer id;
 
+    private Integer parentAreaId;
+
+    private String areaName;
+
     private Byte areaLevel;
 
-    private String province;
-
-    private String city;
-
-    private String county;
-
-    private String town;
-
-    private Integer parentAreaId;
+    private Boolean isLeaf;
 
     private static final long serialVersionUID = 1L;
 
@@ -27,6 +23,22 @@ public class Area implements Serializable {
         this.id = id;
     }
 
+    public Integer getParentAreaId() {
+        return parentAreaId;
+    }
+
+    public void setParentAreaId(Integer parentAreaId) {
+        this.parentAreaId = parentAreaId;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName == null ? null : areaName.trim();
+    }
+
     public Byte getAreaLevel() {
         return areaLevel;
     }
@@ -35,44 +47,12 @@ public class Area implements Serializable {
         this.areaLevel = areaLevel;
     }
 
-    public String getProvince() {
-        return province;
+    public Boolean getIsLeaf() {
+        return isLeaf;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public String getTown() {
-        return town;
-    }
-
-    public void setTown(String town) {
-        this.town = town;
-    }
-
-    public Integer getParentAreaId() {
-        return parentAreaId;
-    }
-
-    public void setParentAreaId(Integer parentAreaId) {
-        this.parentAreaId = parentAreaId;
+    public void setIsLeaf(Boolean isLeaf) {
+        this.isLeaf = isLeaf;
     }
 
     @Override
@@ -82,12 +62,10 @@ public class Area implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", areaLevel=").append(areaLevel);
-        sb.append(", province=").append(province);
-        sb.append(", city=").append(city);
-        sb.append(", county=").append(county);
-        sb.append(", town=").append(town);
         sb.append(", parentAreaId=").append(parentAreaId);
+        sb.append(", areaName=").append(areaName);
+        sb.append(", areaLevel=").append(areaLevel);
+        sb.append(", isLeaf=").append(isLeaf);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
