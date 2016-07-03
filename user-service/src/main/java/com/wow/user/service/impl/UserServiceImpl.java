@@ -1,26 +1,16 @@
 package com.wow.user.service.impl;
 
 import com.wow.user.mapper.EndUserMapper;
-import com.wow.user.model.EndUser;
-import com.wow.user.model.EndUserFollowBrand;
-import com.wow.user.model.EndUserFollowDesigner;
-import com.wow.user.model.EndUserFollowProduct;
-import com.wow.user.model.EndUserFollowScene;
-import com.wow.user.model.EndUserShareBrand;
-import com.wow.user.model.EndUserShareDesigner;
-import com.wow.user.model.EndUserShareProduct;
-import com.wow.user.model.EndUserShareScene;
-import com.wow.user.model.ShippingInfo;
-import com.wow.user.model.ShoppingCart;
+import com.wow.user.model.*;
 import com.wow.user.service.UserService;
 import com.wow.user.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -35,14 +25,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EndUserMapper endUserMapper;
 
-    //Table: end_user
-
     /**
      * 用户注册
      *
      * @param endUser
      * @return
      */
+    @Override
     public int register(EndUser endUser) {
         endUser.setPassword(PasswordUtil.passwordHashGenerate(endUser.getPassword()));
         return endUserMapper.insert(endUser);
@@ -55,6 +44,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public boolean isExistedUser(String userName) {
         EndUser user = endUserMapper.selectByUserName(userName);
         logger.info("user=" + user);
@@ -89,6 +79,7 @@ public class UserServiceImpl implements UserService {
      * @param endUserId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public EndUser getEndUserById(int endUserId) {
         logger.info("get end user with id:" + endUserId);
         return endUserMapper.selectByPrimaryKey(endUserId);
@@ -100,6 +91,7 @@ public class UserServiceImpl implements UserService {
      * @param endUserIds
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<EndUser> getEndUsersByIds(int[] endUserIds) {
         return null;
     }
@@ -111,6 +103,7 @@ public class UserServiceImpl implements UserService {
      * @param password
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public EndUser authenticate(String userName, String password) {
 
         EndUser endUser = endUserMapper.selectByUserName(userName);
@@ -130,97 +123,6 @@ public class UserServiceImpl implements UserService {
     public int deleteUser(int endUserId) {
         return endUserMapper.deleteByPrimaryKey(endUserId);
     }
-
-    //table: end_user_follow_brand
-
-    /**
-     * 用户关注品牌
-     *
-     * @param endUserFollowBrand
-     * @return
-     */
-    public int followBrand(EndUserFollowBrand endUserFollowBrand) {
-        return 0;
-    }
-
-    /**
-     * 用户取消关注品牌
-     *
-     * @param endUserFollowBrand
-     * @return
-     */
-    public int cancelFollowBrand(EndUserFollowBrand endUserFollowBrand) {
-        return 0;
-    }
-
-    //table: end_user_follow_designer
-
-    /**
-     * 用户关注设计师
-     *
-     * @param endUserFollowDesigner
-     * @return
-     */
-    public int followDesigner(EndUserFollowDesigner endUserFollowDesigner) {
-        return 0;
-    }
-
-    /**
-     * 用户取消关注设计师
-     *
-     * @param endUserFollowDesigner
-     * @return
-     */
-    public int cancelFollowDesigner(EndUserFollowDesigner endUserFollowDesigner) {
-        return 0;
-    }
-
-    //table: end_user_follow_product
-
-    /**
-     * 用户关注产品
-     *
-     * @param endUserFollowProduct
-     * @return
-     */
-    public int followProduct(EndUserFollowProduct endUserFollowProduct) {
-        return 0;
-    }
-
-    /**
-     * 用户取消关注产品
-     *
-     * @param endUserFollowProduct
-     * @return
-     */
-    public int cancelFollowProduct(EndUserFollowProduct endUserFollowProduct) {
-        return 0;
-    }
-
-    //table: end_user_follow_scene
-
-    /**
-     * 用户关注场景
-     *
-     * @param endUserFollowScene
-     * @return
-     */
-    public int followScene(EndUserFollowScene endUserFollowScene) {
-        return 0;
-    }
-
-    /**
-     * 用户取消关注场景
-     *
-     * @param endUserFollowScene
-     * @return
-     */
-    public int cancelFollowScene(EndUserFollowScene endUserFollowScene) {
-        return 0;
-    }
-
-
-    //table: end_user_share_brand
 
     /**
      * 用户分享品牌

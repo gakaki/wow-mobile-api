@@ -5,6 +5,7 @@ import com.wow.user.model.Area;
 import com.wow.user.service.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -47,6 +48,7 @@ public class AreaServiceImpl implements AreaService{
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Area> findFirstLevelArea() {
         return areaMapper.selectFirstLevelArea();
     }
@@ -58,6 +60,7 @@ public class AreaServiceImpl implements AreaService{
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Area> findNextLevelArea(int areaId) {
         return areaMapper.selectNextLevelArea(areaId);
     }

@@ -5,9 +5,9 @@ import com.wow.user.model.ShoppingCart;
 import com.wow.user.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -65,6 +65,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<ShoppingCart> queryShoppingCart(int endUserId) {
         return shoppingCartMapper.selectByEndUser(endUserId);
     }

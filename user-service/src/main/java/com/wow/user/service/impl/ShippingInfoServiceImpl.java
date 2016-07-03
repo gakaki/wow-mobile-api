@@ -5,6 +5,7 @@ import com.wow.user.model.ShippingInfo;
 import com.wow.user.service.ShippingInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -59,6 +60,7 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<ShippingInfo> getShippingInfoByUserId(int endUserId) {
         return shippingInfoMapper.selectByUserId(endUserId);
     }
@@ -68,6 +70,7 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      * @param endUserId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public ShippingInfo getDefaultShippingInfoByUserId(int endUserId) {
         return shippingInfoMapper.selectDefault(endUserId);
     }
