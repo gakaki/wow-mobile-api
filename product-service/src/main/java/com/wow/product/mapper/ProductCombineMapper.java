@@ -14,11 +14,15 @@ public interface ProductCombineMapper {
 
     int insert(ProductCombine record);
 
+    int insertBatch(List<ProductCombine> productCombines);
+
     int insertSelective(ProductCombine record);
 
     List<ProductCombine> selectByExample(ProductCombineExample example);
 
     ProductCombine selectByPrimaryKey(Integer id);
+
+     List<ProductCombine>  selectByProductId(Integer id);
 
     int updateByExampleSelective(@Param("record") ProductCombine record, @Param("example") ProductCombineExample example);
 

@@ -94,6 +94,12 @@
     from product_combine
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByProductId" parameterMap="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from product_combine
+    where product_id = #{id,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from product_combine
     where id = #{id,jdbcType=INTEGER}
@@ -114,6 +120,20 @@
     values (#{productId,jdbcType=INTEGER}, #{subProductId,jdbcType=INTEGER}, #{subProductQty,jdbcType=TINYINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertBatch" parameterMap="java.util.List">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_combine (product_id, sub_product_id, sub_product_qty,
+    create_time, create_by, update_time,
+    update_by, is_deleted)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+    (#{item.productId,jdbcType=INTEGER}, #{item.subProductId,jdbcType=INTEGER}, #{item.subProductQty,jdbcType=TINYINT},
+    #{item.createTime,jdbcType=TIMESTAMP}, #{item.createBy,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP},
+    #{item.updateBy,jdbcType=VARCHAR}, #{item.isDeleted,jdbcType=BIT})
+    </foreach>
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.ProductCombine" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >

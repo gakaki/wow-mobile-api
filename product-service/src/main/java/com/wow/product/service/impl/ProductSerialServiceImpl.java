@@ -7,6 +7,8 @@ import com.wow.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 
 import java.util.*;
@@ -43,8 +45,9 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      */
     @Override
     public int updateProductSerial(List<ProductSerial> productSerials) {
-        for (ProductSerial ps:productSerials) {
-            productSerialMapper.updateByPrimaryKey(ps);
+        if(!CollectionUtils.isEmpty(productSerials))
+        {
+            productSerials.forEach(o->productSerialMapper.updateByPrimaryKey(o));
         }
         return 0;
     }
@@ -87,9 +90,9 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      */
     @Override
     public boolean isProductSerial(int productId) {
-           if(getProductSerials(productId)!=null &&getProductSerials(productId).size()>0)
-               return  true;
-        return false;
+        List<ProductSerial> productSerials=getProductSerials(productId);
+        return !CollectionUtils.isEmpty(productSerials);
+
     }
 
     /**

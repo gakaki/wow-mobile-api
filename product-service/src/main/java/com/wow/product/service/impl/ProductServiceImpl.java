@@ -15,6 +15,8 @@ import com.wow.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -105,9 +107,8 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int addProductImages(List<ProductImage> productImages) {
-        if(productImages==null ||productImages.size()==0)
-            return -1;
-        productImageMapper.insertBatch(productImages);
+        if(!CollectionUtils.isEmpty(productImages))
+            productImageMapper.insertBatch(productImages);
         return 0;
     }
 
@@ -128,6 +129,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int updateProductImage(ProductImage productImage) {
+
         return productImageMapper.updateByPrimaryKey(productImage);
     }
 
@@ -138,9 +140,9 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int deleteProductImages(List<ProductImage> productImages) {
-        if(productImages==null ||productImages.size()==0)
-            return -1;
-        return productImageMapper.deleteBatch(productImages);
+        if(!CollectionUtils.isEmpty(productImages))
+           return productImageMapper.deleteBatch(productImages);
+        return -1;
     }
 
     //table: product_attribute
@@ -168,9 +170,9 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int createProductAttribute(List<ProductAttribute> productAttributes) {
-        if(productAttributes==null ||productAttributes.size()==0)
-            return -1;
-        return productAttributeMapper.insertBatch(productAttributes);
+        if(!CollectionUtils.isEmpty(productAttributes))
+           return productAttributeMapper.insertBatch(productAttributes);
+        return -1;
     }
 
     /**
@@ -180,7 +182,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int updateProductAttribute(List<ProductAttribute> productAttributes) {
-        if(productAttributes==null ||productAttributes.size()==0)
+        if(CollectionUtils.isEmpty(productAttributes))
             return -1;
         Iterator  var=productAttributes.iterator();
         int updateFlag=0;
