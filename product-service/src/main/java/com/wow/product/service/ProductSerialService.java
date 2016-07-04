@@ -40,6 +40,7 @@ public interface ProductSerialService {
      */
     int deleteProductSerial(List<ProductSerial> productSerials);
 
+    int deleteProductSerial(int productId);
     /**
      * 判断产品是否系列主品
      *
@@ -54,5 +55,5 @@ public interface ProductSerialService {
      * @param productId
      * @return
      */
-    Product getPrimarySubProductOfProductSerial(int productId);
+    ProductSerial getPrimarySubProductOfProductSerial(int productId);
 }
