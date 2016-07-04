@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,7 +63,22 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 用户修改密码
+     * 获取验证码
+     *
+     * @param mobile
+     * @return 验证码
+     */
+    public String getCaptcha(String mobile) {
+        String captcha = "";
+        //TODO:调用阿里大鱼的短信接口,往目标手机发送随机生成的6位数字,并将6位数字存储到Redis中
+        //1. generate 6-bit digit randomly
+        //2. call alidayu interface to send sms
+        //3. store digit into redis
+        return captcha;
+    }
+
+    /**
+     * 用户修改密码 - 只要记住老密码就可以了(有一定风险)
      *
      * @param endUserId
      * @param oldPwd
@@ -74,6 +90,37 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 用户忘记密码/重置密码 - 需要手机验证(以后可支持邮件验证?)
+     *
+     * @param mobile
+     * @param captcha
+     * @param newPwd
+     * @return
+     */
+    @Override
+    public boolean resetPassword(String mobile, String captcha, String newPwd) {
+        String captchaForMobile = getCaptchaOnServer(mobile);
+        if (captchaForMobile.equalsIgnoreCase(captcha)) {
+            EndUser endUser = getEndUserByMobile(mobile);
+            endUser.setPassword(PasswordUtil.passwordHashGenerate(newPwd));
+            endUser.setUpdateTime(new Date());
+            return (endUserMapper.updateByPrimaryKeySelective(endUser)>0);
+        } else {
+            logger.info("验证码无效,请重新获取");
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param mobile
+     * @return
+     */
+    private String getCaptchaOnServer(String mobile) {
+        //TODO: get captcha from redis or mysql
+        return "123456";
+    }
+    /**
      * 根据Id获取用户信息
      *
      * @param endUserId
@@ -83,6 +130,18 @@ public class UserServiceImpl implements UserService {
     public EndUser getEndUserById(int endUserId) {
         logger.info("get end user with id:" + endUserId);
         return endUserMapper.selectByPrimaryKey(endUserId);
+    }
+
+    /**
+     * 根据手机号获取用户信息
+     *
+     * @param mobile
+     * @return
+     */
+    @Override
+    public EndUser getEndUserByMobile(String mobile) {
+        //TODO:
+        return null;
     }
 
     /**
@@ -162,54 +221,4 @@ public class UserServiceImpl implements UserService {
         return 0;
     }
 
-    //table: shipping_info
-
-    /**
-     * 创建收货地址
-     *
-     * @param shippingInfo
-     * @return
-     */
-    public int addShippingInfo(ShippingInfo shippingInfo) {
-        return 0;
-    }
-
-    /**
-     * 修改或删除收货地址,包括指定默认收货地址
-     *
-     * @param shippingInfo
-     * @return
-     */
-    public int updateShippingInfo(ShippingInfo shippingInfo) {
-        return 0;
-    }
-
-    //table: shopping_cart
-
-    /**
-     * 添加商品到购物车
-     *
-     * @param shoppingCart
-     * @return
-     */
-    public int addProductIntoCart(ShoppingCart shoppingCart) {
-        return 0;
-    }
-
-    /**
-     * 调整购物车里的产品数量
-     */
-    public int updateProductNumInCart(ShoppingCart shoppingCart) {
-        return 0;
-    }
-
-    /**
-     * 删除购物车里某种产品
-     *
-     * @param shoppingCart
-     * @return
-     */
-    public int deleteProductInCart(ShoppingCart shoppingCart) {
-        return 0;
-    }
 }

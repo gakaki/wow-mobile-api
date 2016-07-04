@@ -34,6 +34,13 @@ public interface UserService {
     int updateEndUser(EndUser endUser);
 
     /**
+     * 获取验证码
+     * @param mobile
+     * @return 验证码
+     */
+    String getCaptcha(String mobile);
+
+    /**
      * 用户修改密码
      *
      * @param endUserId
@@ -44,12 +51,29 @@ public interface UserService {
     int modifyPassword(int endUserId, String oldPwd, String newPwd);
 
     /**
+     * 用户重置密码
+     * @param mobile
+     * @param captcha
+     * @param newPwd
+     * @return
+     */
+    boolean resetPassword(String mobile, String captcha, String newPwd);
+
+    /**
      * 根据Id获取用户信息
      *
      * @param endUserId
      * @return
      */
     EndUser getEndUserById(int endUserId);
+
+    /**
+     * 根据手机号获取用户信息
+     *
+     * @param mobile
+     * @return
+     */
+    EndUser getEndUserByMobile(String mobile);
 
     /**
      * 批量查询多个用户
@@ -106,45 +130,4 @@ public interface UserService {
     //table: end_user_share_scene
     //用户分享场景
     int shareScene(EndUserShareScene endUserShareScene);
-
-    //table: shipping_info
-
-    /**
-     * 创建收货地址
-     *
-     * @param shippingInfo
-     * @return
-     */
-    int addShippingInfo(ShippingInfo shippingInfo);
-
-    /**
-     * 修改或删除收货地址,包括指定默认收货地址
-     *
-     * @param shippingInfo
-     * @return
-     */
-    int updateShippingInfo(ShippingInfo shippingInfo);
-
-    //table: shopping_cart
-
-    /**
-     * 添加商品到购物车
-     *
-     * @param shoppingCart
-     * @return
-     */
-    int addProductIntoCart(ShoppingCart shoppingCart);
-
-    /**
-     * 调整购物车里的产品数量
-     */
-    int updateProductNumInCart(ShoppingCart shoppingCart);
-
-    /**
-     * 删除购物车里某种产品
-     *
-     * @param shoppingCart
-     * @return
-     */
-    int deleteProductInCart(ShoppingCart shoppingCart);
 }
