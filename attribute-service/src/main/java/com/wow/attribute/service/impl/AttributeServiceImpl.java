@@ -13,6 +13,7 @@ import com.wow.attribute.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,6 +117,8 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int addAttributesInCategory(int categoryId, List<Attribute> attributes)  {
+        if(CollectionUtils.isEmpty(attributes))
+            return 0;
         List<CategoryAttribute> list=new ArrayList<>();
         for (Attribute attribute:attributes)
         {
