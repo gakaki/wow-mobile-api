@@ -42,6 +42,7 @@ public class UserDSConfig {
     }
 
     @Bean(name = "userTransactionManager")
+    @Primary
     public DataSourceTransactionManager userTransactionManager(
             @Qualifier("userDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
