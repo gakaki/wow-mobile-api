@@ -1,4 +1,4 @@
-package com.wow;
+package com.wow.mobileapi.config;
 
 import com.wow.mobileapi.interceptor.AuthInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
