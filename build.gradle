@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         maven {
-            url "${nexusUrl}/repository/maven-public/"
+            url "${nexusUrl}/content/groups/public/"
         }
     }
     dependencies {
@@ -25,17 +25,17 @@ allprojects {
     repositories {
         mavenLocal()
         maven {
-            url "${nexusUrl}/repository/maven-public/"
+            url "${nexusUrl}//content/groups/public/"
         }
     }
 
     uploadArchives {
         repositories {
             mavenDeployer {
-                repository(url: "${nexusUrl}/repository/maven-releases/") {
+                repository(url: "${nexusUrl}/content/repositories/releases/") {
                     authentication(userName: nexusUsername, password: nexusPassword)
                 }
-                snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
+                snapshotRepository(url: "${nexusUrl}/content/repositories/snapshots/") {
                     authentication(userName: nexusUsername, password: nexusPassword)
                 }
             }
