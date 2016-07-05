@@ -32,17 +32,14 @@ public class SessionController {
     @RequestMapping(method = RequestMethod.POST)
     public ApiResponse login(@Validated @RequestBody LoginRequest loginRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        logger.info("user login...");
         LoginResult loginResult = sessionService.login(loginRequest);
         if (loginResult.isValidUser()) {
-            apiResponse.setResCode("0");
-            apiResponse.setResMsg("success");
+            ResponseUtil.setResponse(apiResponse,"0");
             apiResponse.setData(loginResult.getEndUserSession());
         } else {
             ResponseUtil.setResponse(apiResponse,"40201");
             apiResponse.setData(loginResult.getEndUserSession());
         }
-
         return apiResponse;
     }
 
@@ -54,17 +51,9 @@ public class SessionController {
     @RequestMapping(method = RequestMethod.DELETE)
     public ApiResponse logout(@PathVariable Integer endUserId, @PathVariable byte loginChannel) {
         ApiResponse apiResponse = new ApiResponse();
-        logger.info("user logout...");
-        int i = sessionService.logout(endUserId,loginChannel);
-        if (i > 0) {
-            apiResponse.setResCode("0");
-            apiResponse.setResMsg("success");
-            apiResponse.setData("log out successfully");
-        } else {
-            apiResponse.setResCode("0");
-            apiResponse.setResMsg("failed");
-            apiResponse.setData("log out failed");
-        }
+        boolean isSuccess = (sessionService.logout(endUserId,loginChannel)==1);
+        ResponseUtil.setResponse(apiResponse,"0");
+        apiResponse.setData(isSuccess);
         return apiResponse;
     }
 }

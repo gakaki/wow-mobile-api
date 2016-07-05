@@ -21,13 +21,56 @@ public class ApiSummaryController {
     @RequestMapping(method = RequestMethod.GET)
     public Map<String,String> findAllApis() {
         Map<String,String> apiMap = new HashMap<String,String>();
-        apiMap.put("attributes_url","http://localhost:8080/mobile-api-dev/attributes/{attribute_id}");
-        apiMap.put("users_url","http://localhost:8080/mobile-api-dev/users/{user_id}");
-        apiMap.put("products_url","http://localhost:8080/mobile-api-dev/products/{product_id}");
-        apiMap.put("orders_url","http://localhost:8080/mobile-api-dev/orders/{order_id}");
-        apiMap.put("prices_url","http://localhost:8080/mobile-api-dev/prices/{product_id}");
-        apiMap.put("stocks_url","http://localhost:8080/mobile-api-dev/stocks/{product_id}");
-        apiMap.put("coupons_url","http://localhost:8080/mobile-api-dev/coupons/{coupon_id}");
+        
+        //attributes related
+        apiMap.put("attributes get","GET http://localhost:8080/mobile-api-dev/v1/attributes/{attribute_id}");
+        apiMap.put("attributes get all","GET http://localhost:8080/mobile-api-dev/v1/attributes");
+        apiMap.put("attributes post","POST http://localhost:8080/mobile-api-dev/v1/attributes");
+        apiMap.put("attributes put","PUT http://localhost:8080/mobile-api-dev/v1/attributes/{attribute_id}");
+        apiMap.put("attributes delete","DELETE http://localhost:8080/mobile-api-dev/v1/attributes/{attribute_id}");
+        
+        //user related
+        apiMap.put("users get","GET http://localhost:8080/mobile-api-dev/v1/users/{user_id}");
+        apiMap.put("users get all","GET http://localhost:8080/mobile-api-dev/v1/users");
+        apiMap.put("users post","POST http://localhost:8080/mobile-api-dev/v1/users");
+        apiMap.put("users put","PUT http://localhost:8080/mobile-api-dev/v1/users/{user_id}");
+        apiMap.put("users delete","DELETE http://localhost:8080/mobile-api-dev/v1/users/{user_id}");
+        
+        //product related
+        apiMap.put("products get","GET http://localhost:8080/mobile-api-dev/v1/products/{product_id}");
+        apiMap.put("products get all","GET http://localhost:8080/mobile-api-dev/v1/products");
+        apiMap.put("products post","POST http://localhost:8080/mobile-api-dev/v1/products");
+        apiMap.put("products put","PUT http://localhost:8080/mobile-api-dev/v1/products/{product_id}");
+        apiMap.put("products delete","DELETE http://localhost:8080/mobile-api-dev/v1/products/{product_id}");
+        
+        //order related
+        apiMap.put("orders get","GET http://localhost:8080/mobile-api-dev/v1/orders/{order_id}");
+        apiMap.put("orders get all","GET http://localhost:8080/mobile-api-dev/v1/orders");
+        apiMap.put("orders post","POST http://localhost:8080/mobile-api-dev/v1/orders");
+        apiMap.put("orders put","PUT http://localhost:8080/mobile-api-dev/v1/orders/{order_id}");
+        apiMap.put("orders delete","DELETE http://localhost:8080/mobile-api-dev/v1/orders/{order_id}");
+        
+        //price related
+        apiMap.put("prices get","GET http://localhost:8080/mobile-api-dev/v1/prices/{price_id}");
+        apiMap.put("prices get all","GET http://localhost:8080/mobile-api-dev/v1/prices");
+        apiMap.put("prices post","POST http://localhost:8080/mobile-api-dev/v1/prices");
+        apiMap.put("prices put","PUT http://localhost:8080/mobile-api-dev/v1/prices/{price_id}");
+        apiMap.put("prices delete","DELETE http://localhost:8080/mobile-api-dev/v1/prices/{price_id}");
+        
+        //stock related
+        apiMap.put("stocks get","GET http://localhost:8080/mobile-api-dev/v1/stocks/{stock_id}");
+        apiMap.put("stocks get all","GET http://localhost:8080/mobile-api-dev/v1/stocks");
+        apiMap.put("stocks post","POST http://localhost:8080/mobile-api-dev/v1/stocks");
+        apiMap.put("stocks put","PUT http://localhost:8080/mobile-api-dev/v1/stocks/{stock_id}");
+        apiMap.put("stocks delete","DELETE http://localhost:8080/mobile-api-dev/v1/stocks/{stock_id}");
+        
+        //coupons related
+        apiMap.put("coupons get","GET http://localhost:8080/mobile-api-dev/v1/coupons/{coupon_id}");
+        apiMap.put("coupons get all","GET http://localhost:8080/mobile-api-dev/v1/coupons");
+        apiMap.put("coupons post","POST http://localhost:8080/mobile-api-dev/v1/coupons");
+        apiMap.put("coupons put","PUT http://localhost:8080/mobile-api-dev/v1/coupons/{coupon_id}");
+        apiMap.put("coupons delete","DELETE http://localhost:8080/mobile-api-dev/v1/coupons/{coupon_id}");
+        
         return apiMap;
     }
 }

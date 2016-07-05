@@ -15,6 +15,7 @@ public class ApiErrorCode {
     private static Map<String,String> ERROR_CODE_MAP = new HashMap<String,String>();
     static {
         ERROR_CODE_MAP.put("0","Success");
+        ERROR_CODE_MAP.put("10000","Invalid session");
         ERROR_CODE_MAP.put("40000","Invalid input parameter");
         ERROR_CODE_MAP.put("40401","AttributeId cannot <= 0");
         ERROR_CODE_MAP.put("40002","Another invalid input parameter");
