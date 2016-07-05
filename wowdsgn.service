@@ -1,0 +1,11 @@
+[Unit]
+Description=wowdsgn
+After=syslog.target
+
+[Service]
+User=root
+ExecStart=/data/server/mobile-api/build/libs/mobile-api-1.0-SNAPSHOT.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

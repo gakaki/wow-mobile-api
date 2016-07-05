@@ -22,10 +22,14 @@ allprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
+//    let spring boot can be as init.d and systemd to background run
+    springBoot {
+        executable = true
+    }
     repositories {
         mavenLocal()
         maven {
-            url "${nexusUrl}//content/groups/public/"
+            url "${nexusUrl}/content/groups/public/"
         }
     }
 
@@ -81,6 +85,8 @@ subprojects {
         compile 'mysql:mysql-connector-java:6.0.2'
     }
 }
+
+
 
 dependencies {
     compile 'com.wow:product-service:1.0-SNAPSHOT'
