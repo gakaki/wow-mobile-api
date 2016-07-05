@@ -92,20 +92,10 @@
     from category_attribute
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectByCategoryId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from category_attribute
-    where category_id = #{id,jdbcType=INTEGER}
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
   delete from category_attribute
   where id = #{id,jdbcType=INTEGER}
 </delete>
-  <delete id="deleteByCategoryId" parameterType="java.lang.Integer" >
-    delete from category_attribute
-    where category_id = #{id,jdbcType=INTEGER}
-  </delete>
   <delete id="deleteByExample" parameterType="com.wow.attribute.model.CategoryAttributeExample" >
     delete from category_attribute
     <if test="_parameter != null" >
@@ -122,21 +112,6 @@
     values (#{categoryId,jdbcType=INTEGER}, #{attributeId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{udpateBy,jdbcType=VARCHAR}, 
       #{isDeleted,jdbcType=BIT})
-  </insert>
-  <insert id="insertBatch" parameterType="java.util.List" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into category_attribute (category_id, attribute_id, create_time,
-    create_by, update_time, udpate_by,
-    is_deleted)
-    values
-    <foreach collection="list" item="item" index="index"  separator="," >
-      (#{item.categoryId,jdbcType=INTEGER}, #{item.attributeId,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP},
-      #{item.createBy,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.udpateBy,jdbcType=VARCHAR},
-      #{item.isDeleted,jdbcType=BIT})
-    </foreach>
-
   </insert>
   <insert id="insertSelective" parameterType="com.wow.attribute.model.CategoryAttribute" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >

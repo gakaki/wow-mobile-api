@@ -13,17 +13,11 @@ public interface CategoryAttributeMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int deleteByCategoryId(Integer id);
-
     int insert(CategoryAttribute record);
-
-    int insertBatch(List<CategoryAttribute> categoryAttributes);
 
     int insertSelective(CategoryAttribute record);
 
     List<CategoryAttribute> selectByExample(CategoryAttributeExample example);
-
-    List<CategoryAttribute> selectByCategoryId(Integer id);
 
     CategoryAttribute selectByPrimaryKey(Integer id);
 

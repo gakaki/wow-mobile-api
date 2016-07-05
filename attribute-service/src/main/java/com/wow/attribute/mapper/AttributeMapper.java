@@ -12,11 +12,7 @@ public interface AttributeMapper  {
 
     int deleteByPrimaryKey(Integer id);
 
-    int deleteBatchByPrimaryKey(List attributeIds);
-
     int insert(Attribute record);
-
-    int insertBatch(List<Attribute> attributes);
 
     int insertSelective(Attribute record);
 

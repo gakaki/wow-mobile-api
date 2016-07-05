@@ -111,13 +111,6 @@
     delete from attribute
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteBatchByPrimaryKey" parameterType="java.util.List" >
-    delete from attribute
-    where id IN
-    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-      #{item,jdbcType=INTEGER}
-    </foreach>
-  </delete>
   <delete id="deleteByExample" parameterType="com.wow.attribute.model.AttributeExample" >
     delete from attribute
     <if test="_parameter != null" >
@@ -136,23 +129,6 @@
       #{attributeValueType,jdbcType=TINYINT}, #{decimalPlace,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
       #{isDeleted,jdbcType=BIT})
-  </insert>
-  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into attribute (attribute_name, show_name, can_multiple_selected,
-    attribute_value_type, decimal_place, create_time,
-    create_by, update_time, update_by,
-    is_deleted)
-    values
-    <foreach collection="list" item="item" index="index"  separator="," >
-      (#{item.attributeName,jdbcType=VARCHAR}, #{item.showName,jdbcType=VARCHAR}, #{item.canMultipleSelected,jdbcType=BIT},
-      #{item.attributeValueType,jdbcType=TINYINT}, #{item.decimalPlace,jdbcType=TINYINT}, #{item.createTime,jdbcType=TIMESTAMP},
-      #{item.createBy,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=VARCHAR},
-      #{item.isDeleted,jdbcType=BIT})
-    </foreach>
-
   </insert>
   <insert id="insertSelective" parameterType="com.wow.attribute.model.Attribute" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >

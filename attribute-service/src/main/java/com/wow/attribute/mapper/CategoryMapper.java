@@ -18,8 +18,6 @@ public interface CategoryMapper{
 
     List<Category> selectByExample(CategoryExample example);
 
-    List<Category> getSubCategory(Integer id);
-
     Category selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Category record, @Param("example") CategoryExample example);
