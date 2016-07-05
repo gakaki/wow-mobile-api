@@ -27,13 +27,13 @@ public interface AreaService {
      * 查找一级区域(省、直辖市)
      * @return
      */
-    List<Area> findFirstLevelArea();
+    List<Area> getFirstLevelArea();
 
     /**
      * 查找下级区域
      * @param areaId
      * @return
      */
-    List<Area> findNextLevelArea(int areaId);
+    List<Area> getNextLevelArea(int areaId);
 
 }

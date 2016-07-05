@@ -1,7 +1,6 @@
 package com.wow.user.controller;
 
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
-import com.wow.user.model.EndUser;
 import com.wow.user.service.UserService;
 import com.wow.user.thirdparty.SmsSender;
 import org.slf4j.Logger;
@@ -62,6 +61,29 @@ public class UserTestController {
         logger.info("getUser:" + endUserId);
         EndUser endUser = userService.getEndUserById(endUserId);
         logger.info("endUser=" + endUser);
+        return endUser;
+    }
+
+    /**
+     * 按手机查询用户
+     * @param mobile
+     * @return
+     */
+    @RequestMapping(value = "/users/mobile/{mobile}", method = RequestMethod.GET)
+    public EndUser selectUserByMobile(@PathVariable String mobile) {
+        EndUser endUser = userService.getEndUserByMobile(mobile);
+        return endUser;
+    }
+
+
+    /**
+     * 按昵称查询用户
+     * @param nickName
+     * @return
+     */
+    @RequestMapping(value = "/users/nickname/{nickName}", method = RequestMethod.GET)
+    public EndUser selectUserByNickName(@PathVariable String nickName) {
+        EndUser endUser = userService.getEndUserByNickName(nickName);
         return endUser;
     }
 

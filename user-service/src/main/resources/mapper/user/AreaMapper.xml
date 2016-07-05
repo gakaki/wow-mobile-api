@@ -8,11 +8,83 @@
     <result column="area_level" property="areaLevel" jdbcType="TINYINT" />
     <result column="is_leaf" property="isLeaf" jdbcType="BIT" />
   </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
   <sql id="Base_Column_List" >
     id, parent_area_id, area_name, area_level, is_leaf
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.AreaExample" >
     select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from area
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
     <include refid="Base_Column_List" />
     from area
     where id = #{id,jdbcType=INTEGER}
@@ -21,14 +93,20 @@
     delete from area
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteByExample" parameterType="com.wow.user.model.AreaExample" >
+    delete from area
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
   <insert id="insert" parameterType="com.wow.user.model.Area" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into area (parent_area_id, area_name, area_level,
-    is_leaf)
-    values (#{parentAreaId,jdbcType=INTEGER}, #{areaName,jdbcType=VARCHAR}, #{areaLevel,jdbcType=TINYINT},
-    #{isLeaf,jdbcType=BIT})
+    insert into area (parent_area_id, area_name, area_level, 
+      is_leaf)
+    values (#{parentAreaId,jdbcType=INTEGER}, #{areaName,jdbcType=VARCHAR}, #{areaLevel,jdbcType=TINYINT}, 
+      #{isLeaf,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.user.model.Area" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -64,6 +142,46 @@
       </if>
     </trim>
   </insert>
+  <select id="countByExample" parameterType="com.wow.user.model.AreaExample" resultType="java.lang.Integer" >
+    select count(*) from area
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update area
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.parentAreaId != null" >
+        parent_area_id = #{record.parentAreaId,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaName != null" >
+        area_name = #{record.areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaLevel != null" >
+        area_level = #{record.areaLevel,jdbcType=TINYINT},
+      </if>
+      <if test="record.isLeaf != null" >
+        is_leaf = #{record.isLeaf,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update area
+    set id = #{record.id,jdbcType=INTEGER},
+      parent_area_id = #{record.parentAreaId,jdbcType=INTEGER},
+      area_name = #{record.areaName,jdbcType=VARCHAR},
+      area_level = #{record.areaLevel,jdbcType=TINYINT},
+      is_leaf = #{record.isLeaf,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.wow.user.model.Area" >
     update area
     <set >
@@ -85,21 +203,9 @@
   <update id="updateByPrimaryKey" parameterType="com.wow.user.model.Area" >
     update area
     set parent_area_id = #{parentAreaId,jdbcType=INTEGER},
-    area_name = #{areaName,jdbcType=VARCHAR},
-    area_level = #{areaLevel,jdbcType=TINYINT},
-    is_leaf = #{isLeaf,jdbcType=BIT}
+      area_name = #{areaName,jdbcType=VARCHAR},
+      area_level = #{areaLevel,jdbcType=TINYINT},
+      is_leaf = #{isLeaf,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectFirstLevelArea" resultMap="BaseResultMap" >
-    select
-    <include refid="Base_Column_List" />
-    from area
-    where area_level = 1
-  </select>
-  <select id="selectNextLevelArea" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from area
-    where parent_area_id = #{areaId,jdbcType=INTEGER}
-  </select>
 </mapper>

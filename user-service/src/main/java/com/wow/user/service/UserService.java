@@ -41,16 +41,6 @@ public interface UserService {
     String getCaptcha(String mobile);
 
     /**
-     * 用户修改密码
-     *
-     * @param endUserId
-     * @param oldPwd
-     * @param newPwd
-     * @return
-     */
-    int modifyPassword(int endUserId, String oldPwd, String newPwd);
-
-    /**
      * 用户重置密码
      * @param mobile
      * @param captcha
@@ -68,12 +58,28 @@ public interface UserService {
     EndUser getEndUserById(int endUserId);
 
     /**
+     * 根据用户名获取用户信息
+     *
+     * @param userName
+     * @return
+     */
+    EndUser getEndUserByUserName(String userName);
+
+    /**
      * 根据手机号获取用户信息
      *
      * @param mobile
      * @return
      */
     EndUser getEndUserByMobile(String mobile);
+
+    /**
+     * 根据昵称获取用户信息
+     *
+     * @param nickName
+     * @return
+     */
+    EndUser getEndUserByNickName(String nickName);
 
     /**
      * 批量查询多个用户

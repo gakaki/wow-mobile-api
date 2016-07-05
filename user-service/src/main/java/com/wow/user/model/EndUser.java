@@ -1,16 +1,14 @@
 package com.wow.user.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class EndUser implements Serializable {
     private Integer id;
-    @NotEmpty(message = "用户名不能为空")
+
     private String userName;
-    @NotEmpty(message = "密码不能为空")
+
     private String password;
 
     private String nickName;
@@ -90,7 +88,7 @@ public class EndUser implements Serializable {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.userName = userName == null ? null : userName.trim();
     }
 
     public String getPassword() {
@@ -98,7 +96,7 @@ public class EndUser implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password == null ? null : password.trim();
     }
 
     public String getNickName() {
@@ -106,7 +104,7 @@ public class EndUser implements Serializable {
     }
 
     public void setNickName(String nickName) {
-        this.nickName = nickName;
+        this.nickName = nickName == null ? null : nickName.trim();
     }
 
     public String getRealName() {
@@ -114,7 +112,7 @@ public class EndUser implements Serializable {
     }
 
     public void setRealName(String realName) {
-        this.realName = realName;
+        this.realName = realName == null ? null : realName.trim();
     }
 
     public Byte getSex() {
@@ -130,7 +128,7 @@ public class EndUser implements Serializable {
     }
 
     public void setAvatar(String avatar) {
-        this.avatar = avatar;
+        this.avatar = avatar == null ? null : avatar.trim();
     }
 
     public String getCountry() {
@@ -138,7 +136,7 @@ public class EndUser implements Serializable {
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        this.country = country == null ? null : country.trim();
     }
 
     public String getProvince() {
@@ -146,7 +144,7 @@ public class EndUser implements Serializable {
     }
 
     public void setProvince(String province) {
-        this.province = province;
+        this.province = province == null ? null : province.trim();
     }
 
     public String getCity() {
@@ -154,7 +152,7 @@ public class EndUser implements Serializable {
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.city = city == null ? null : city.trim();
     }
 
     public String getCounty() {
@@ -162,7 +160,7 @@ public class EndUser implements Serializable {
     }
 
     public void setCounty(String county) {
-        this.county = county;
+        this.county = county == null ? null : county.trim();
     }
 
     public String getAddress() {
@@ -170,7 +168,7 @@ public class EndUser implements Serializable {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.address = address == null ? null : address.trim();
     }
 
     public Date getDateOfBirth() {
@@ -202,7 +200,7 @@ public class EndUser implements Serializable {
     }
 
     public void setMobile(String mobile) {
-        this.mobile = mobile;
+        this.mobile = mobile == null ? null : mobile.trim();
     }
 
     public String getEmail() {
@@ -210,7 +208,7 @@ public class EndUser implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email == null ? null : email.trim();
     }
 
     public String getHobby() {
@@ -218,7 +216,7 @@ public class EndUser implements Serializable {
     }
 
     public void setHobby(String hobby) {
-        this.hobby = hobby;
+        this.hobby = hobby == null ? null : hobby.trim();
     }
 
     public Byte getMarriageStatus() {
@@ -258,7 +256,7 @@ public class EndUser implements Serializable {
     }
 
     public void setIndustry(String industry) {
-        this.industry = industry;
+        this.industry = industry == null ? null : industry.trim();
     }
 
     public String getRemarks() {
@@ -266,7 +264,7 @@ public class EndUser implements Serializable {
     }
 
     public void setRemarks(String remarks) {
-        this.remarks = remarks;
+        this.remarks = remarks == null ? null : remarks.trim();
     }
 
     public String getSelfIntroduction() {
@@ -274,7 +272,7 @@ public class EndUser implements Serializable {
     }
 
     public void setSelfIntroduction(String selfIntroduction) {
-        this.selfIntroduction = selfIntroduction;
+        this.selfIntroduction = selfIntroduction == null ? null : selfIntroduction.trim();
     }
 
     public Boolean getSignAgreement() {
@@ -298,7 +296,7 @@ public class EndUser implements Serializable {
     }
 
     public void setForbidReason(String forbidReason) {
-        this.forbidReason = forbidReason;
+        this.forbidReason = forbidReason == null ? null : forbidReason.trim();
     }
 
     public BigDecimal getTotalAmount() {
