@@ -1,9 +1,14 @@
 package com.wow.user.vo;
 
+import java.io.Serializable;
+
 /**
  * Created by zhengzhiqing on 16/6/28.
  */
-public class LoginRequest {
+public class LoginRequestVo implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+
     private String userName;
     private String password;
     private String loginIp;

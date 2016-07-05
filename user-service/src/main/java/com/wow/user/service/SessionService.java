@@ -2,8 +2,8 @@ package com.wow.user.service;
 
 import com.wow.user.model.EndUserLoginLog;
 import com.wow.user.model.EndUserSession;
-import com.wow.user.vo.LoginRequest;
-import com.wow.user.vo.LoginResult;
+import com.wow.user.vo.LoginRequestVo;
+import com.wow.user.vo.LoginResultVo;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface SessionService {
      * @param loginRequest
      * @return
      */
-    LoginResult login(LoginRequest loginRequest);
+    LoginResultVo login(LoginRequestVo loginRequest);
 
     /**
      * 根据userId和登录渠道查询会话

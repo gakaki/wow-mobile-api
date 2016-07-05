@@ -2,14 +2,18 @@ package com.wow.mobileapi.controller;
 
 import com.wow.mobileapi.dto.ApiResponse;
 import com.wow.mobileapi.util.ResponseUtil;
+import com.wow.mobileapi.util.ValidatorUtil;
 import com.wow.user.service.SessionService;
-import com.wow.user.vo.LoginRequest;
-import com.wow.user.vo.LoginResult;
+import com.wow.user.vo.LoginRequestVo;
+import com.wow.user.vo.LoginResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * 登录、登出
@@ -26,19 +30,26 @@ public class SessionController {
 
     /**
      * 创建新的会话(登入)
-     * @param loginRequest
+     * @param loginRequestVo
      * @return
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ApiResponse login(@Validated @RequestBody LoginRequest loginRequest) {
+    public ApiResponse login(@Validated @RequestBody LoginRequestVo loginRequestVo,
+                             BindingResult result) {
         ApiResponse apiResponse = new ApiResponse();
-        LoginResult loginResult = sessionService.login(loginRequest);
-        if (loginResult.isValidUser()) {
-            ResponseUtil.setResponse(apiResponse,"0");
-            apiResponse.setData(loginResult.getEndUserSession());
+        if (result.hasErrors()) {
+            ResponseUtil.setResponse(apiResponse, "40000");
+            Map<String, String> map = ValidatorUtil.getErrors(result);
+            apiResponse.setData(map);
         } else {
-            ResponseUtil.setResponse(apiResponse,"40201");
-            apiResponse.setData(loginResult.getEndUserSession());
+            LoginResultVo loginResultVo = sessionService.login(loginRequestVo);
+            if (loginResultVo.isValidUser()) {
+                ResponseUtil.setResponse(apiResponse,"0");
+                apiResponse.setData(loginResultVo.getEndUserSession());
+            } else {
+                ResponseUtil.setResponse(apiResponse,"40201");
+                apiResponse.setData(loginResultVo.getEndUserSession());
+            }
         }
         return apiResponse;
     }

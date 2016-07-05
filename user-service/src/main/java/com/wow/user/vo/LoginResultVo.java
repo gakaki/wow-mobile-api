@@ -5,7 +5,7 @@ import com.wow.user.model.EndUserSession;
 /**
  * Created by zhengzhiqing on 16/6/28.
  */
-public class LoginResult {
+public class LoginResultVo {
     private String userName;
     private boolean isValidUser;
     private String errorMsg;

@@ -1,8 +1,8 @@
 package com.wow.user.controller;
 
 import com.wow.user.service.SessionService;
-import com.wow.user.vo.LoginRequest;
-import com.wow.user.vo.LoginResult;
+import com.wow.user.vo.LoginRequestVo;
+import com.wow.user.vo.LoginResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class SessionTestController {
      * @return
      */
     @RequestMapping(value = "/sessions", method = RequestMethod.POST)
-    public LoginResult login(@Validated @RequestBody LoginRequest loginRequest) {
+    public LoginResultVo login(@Validated @RequestBody LoginRequestVo loginRequest) {
         logger.info("user login...");
         return sessionService.login(loginRequest);
     }
