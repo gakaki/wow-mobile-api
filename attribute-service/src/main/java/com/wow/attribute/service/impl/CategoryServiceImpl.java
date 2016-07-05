@@ -2,9 +2,11 @@ package com.wow.attribute.service.impl;
 
 import com.wow.attribute.mapper.CategoryMapper;
 import com.wow.attribute.model.Category;
+import com.wow.attribute.model.CategoryExample;
 import com.wow.attribute.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -23,6 +25,7 @@ public class CategoryServiceImpl  implements CategoryService {
 
     private final int parentFirstLevelCategory=0;
 
+    private CategoryExample categoryExample;
     /**
      * 创建类目
      *
@@ -40,7 +43,7 @@ public class CategoryServiceImpl  implements CategoryService {
      * @return
      */
     public int updateCategory(Category category) {
-        return categoryMapper.updateByPrimaryKey(category);
+        return categoryMapper.updateByPrimaryKeySelective(category);
     }
 
     /**
@@ -49,7 +52,10 @@ public class CategoryServiceImpl  implements CategoryService {
      * @return
      */
     public int deleteCategoryById(int categoryId) {
-        return categoryMapper.deleteByPrimaryKey(categoryId);
+        Category category=new Category();
+        category.setId(categoryId);
+        category.setIsDeleted(true);
+        return updateCategory(category);
     }
 
     /**
@@ -58,6 +64,7 @@ public class CategoryServiceImpl  implements CategoryService {
      * @param categoryId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Category getCategoryById(int categoryId) {
         return categoryMapper.selectByPrimaryKey(categoryId);
     }
@@ -70,8 +77,13 @@ public class CategoryServiceImpl  implements CategoryService {
      * @param categoryId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Category> getSubCategory(int categoryId) {
-        return categoryMapper.getSubCategory(categoryId);
+        categoryExample=new CategoryExample();
+        CategoryExample.Criteria criteria=categoryExample.createCriteria();
+        criteria.andParentCategoryIdEqualTo(categoryId);
+        criteria.andIsDeletedEqualTo(false);
+        return categoryMapper.selectByExample(categoryExample);
     }
 
     /**
@@ -80,10 +92,11 @@ public class CategoryServiceImpl  implements CategoryService {
      * @param categoryId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Category getParentCategory(int categoryId) {
         Category category= categoryMapper.selectByPrimaryKey(categoryId);
         if(category==null)
-        return null;
+              return null;
        return categoryMapper.selectByPrimaryKey(category.getParentCategoryId());
     }
 
@@ -92,6 +105,7 @@ public class CategoryServiceImpl  implements CategoryService {
      *
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Category> getFirstLevelCategory() {
         return getSubCategory(parentFirstLevelCategory);
     }

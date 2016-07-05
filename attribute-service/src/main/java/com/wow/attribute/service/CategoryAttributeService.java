@@ -42,19 +42,19 @@ public interface CategoryAttributeService{
      * @param categoryId
      * @return
      */
-    List<CategoryAttribute> selectByCategoryId(int categoryId);
+    List<CategoryAttribute> getCategoryAttributeByCategoryId(int categoryId);
 
     /**
      * 根据类目Id删除
      * @param categoryId
      * @return
      */
-    int deleteByCategoryId(int categoryId);
+    int deleteCategoryAttributeByCategoryId(int categoryId);
 
     /**
      * 批量插入
      * @param CategoryAttributes
      * @return
      */
-    int insertBatch(List<CategoryAttribute> CategoryAttributes);
+    int createCategoryAttribute(List<CategoryAttribute> CategoryAttributes);
 }

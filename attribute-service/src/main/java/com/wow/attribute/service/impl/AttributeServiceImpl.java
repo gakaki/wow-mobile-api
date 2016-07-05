@@ -3,21 +3,20 @@ package com.wow.attribute.service.impl;
 
 import com.wow.attribute.mapper.AttributeMapper;
 import com.wow.attribute.mapper.AttributeValueMapper;
-import com.wow.attribute.model.Attribute;
-import com.wow.attribute.model.AttributeValue;
-import com.wow.attribute.model.Category;
-import com.wow.attribute.model.CategoryAttribute;
+import com.wow.attribute.model.*;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryAttributeService;
 import com.wow.attribute.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by zhengzhiqing on 16/6/19.
@@ -37,6 +36,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     private  final  int error=-1;
 
+    private AttributeExample attributeExample;
     // Table: attribute
     /**
      * 创建属性
@@ -45,6 +45,8 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int createAttribute(Attribute attribute) {
+        if(attribute==null)
+            return 0;
         return attributeMapper.insert(attribute);
     }
 
@@ -55,7 +57,9 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int updateAttribute(Attribute attribute) {
-        return attributeMapper.updateByPrimaryKey(attribute);
+        if(attribute==null)
+            return 0;
+        return attributeMapper.updateByPrimaryKeySelective(attribute);
     }
 
     /**
@@ -64,6 +68,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @param attributeId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Attribute getAttributeById(int attributeId) {
         return attributeMapper.selectByPrimaryKey(attributeId);
     }
@@ -74,6 +79,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @param attributeName
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Attribute getAttributeByName(String attributeName) {
         return attributeMapper.selectAttributeByName(attributeName);
     }
@@ -83,6 +89,7 @@ public class AttributeServiceImpl implements AttributeService {
      *
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Attribute> getAllAttributes() {
         return attributeMapper.selectAll();
     }
@@ -94,7 +101,10 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int deleteAttributeById(int attributeId) {
-        return attributeMapper.deleteByPrimaryKey(attributeId);
+         Attribute attribute=new Attribute();
+        attribute.setId(attributeId);
+        attribute.setIsDeleted(true);
+        return updateAttribute(attribute);
     }
 
     //Table: category_attribute
@@ -106,6 +116,8 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int addAttributeInCategory(CategoryAttribute categoryAttribute) {
+        if(categoryAttribute==null)
+            return 0;
         return categoryAttributeService.createCategoryAttribute(categoryAttribute);
     }
 
@@ -123,18 +135,22 @@ public class AttributeServiceImpl implements AttributeService {
         for (Attribute attribute:attributes)
         {
             attributeMapper.insert(attribute);
-            CategoryAttribute categoryAttribute =new CategoryAttribute();
-            categoryAttribute.setCategoryId(categoryId);
-            categoryAttribute.setAttributeId(attribute.getId());
-            categoryAttribute.setCreateBy("fangy");
-            categoryAttribute.setCreateTime(new java.util.Date());
-            categoryAttribute.setIsDeleted(false);
-            categoryAttribute.setUdpateBy("");
-            categoryAttribute.setUpdateTime(new java.util.Date());
-            list.add(categoryAttribute);
+            list.add(getCategoryAttribute(categoryId, attribute));
         }
-        categoryAttributeService.insertBatch(list);
+        categoryAttributeService.createCategoryAttribute(list);
         return 0;
+    }
+
+    private CategoryAttribute getCategoryAttribute(int categoryId, Attribute attribute) {
+        CategoryAttribute categoryAttribute =new CategoryAttribute();
+        categoryAttribute.setCategoryId(categoryId);
+        categoryAttribute.setAttributeId(attribute.getId());
+        categoryAttribute.setCreateBy(attribute.getUpdateBy());
+        categoryAttribute.setCreateTime(new java.util.Date());
+        categoryAttribute.setIsDeleted(false);
+        categoryAttribute.setUdpateBy(attribute.getUpdateBy());
+        categoryAttribute.setUpdateTime(new java.util.Date());
+        return categoryAttribute;
     }
 
     /**
@@ -144,11 +160,19 @@ public class AttributeServiceImpl implements AttributeService {
      * @param attributeIds
      * @return
      */
-    public int deleteAttributesInCategory(int categoryId, Integer[] attributeIds) {
-        categoryService.deleteCategoryById(categoryId);
-        List list=Arrays.asList(attributeIds);
-        attributeMapper.deleteBatchByPrimaryKey(list);
-        categoryAttributeService.deleteByCategoryId(categoryId);
+    public int deleteAttributesInCategory(int categoryId, Integer[] attributeIds)  {
+
+        try{
+            List list=Arrays.asList(attributeIds);
+            list.forEach(o->  deleteAttributeById((Integer) o));
+            categoryService.deleteCategoryById(categoryId);
+            categoryAttributeService.deleteCategoryAttributeByCategoryId(categoryId);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         return 0;
     }
 
@@ -158,11 +182,12 @@ public class AttributeServiceImpl implements AttributeService {
      * @param categoryId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Attribute> getAttributesInCategory(int categoryId) {
         Category category=categoryService.getCategoryById(categoryId);
         if(category==null)
         return null;
-        List<CategoryAttribute> categoryAttributes= categoryAttributeService.selectByCategoryId(category.getId());
+        List<CategoryAttribute> categoryAttributes= categoryAttributeService.getCategoryAttributeByCategoryId(category.getId());
         List<Attribute> attributes=new ArrayList<>();
         for (CategoryAttribute categoryAttribute:categoryAttributes) {
          Attribute attribute= attributeMapper.selectByPrimaryKey(categoryAttribute.getAttributeId());
@@ -192,8 +217,9 @@ public class AttributeServiceImpl implements AttributeService {
      */
     public int deleteAttributeValue(AttributeValue attributeValue) {
         if(attributeValue==null)
-            return error;
-        return attributeValueMapper.deleteByPrimaryKey(attributeValue.getId());
+            return 0;
+        attributeValue.setIsDeleted(true);
+        return attributeValueMapper.updateByPrimaryKeySelective(attributeValue);
     }
 
     /**
@@ -202,6 +228,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @param attributeId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<AttributeValue> getAttributeValues(int attributeId) {
         return attributeValueMapper.selectAll();
     }
