@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public int register(EndUser endUser) {
         endUser.setPassword(PasswordUtil.passwordHashGenerate(endUser.getPassword()));
-        return endUserMapper.insert(endUser);
+        return endUserMapper.insertSelective(endUser);
     }
 
     /**

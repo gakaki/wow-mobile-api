@@ -6,10 +6,9 @@ import com.wow.mobileapi.exception.ApiErrorCode;
 /**
  * Created by zhengzhiqing on 16/6/27.
  */
-public class ErrorRespUtil {
-    public static void setError(ApiResponse apiResponse, String resCode) {
+public class ResponseUtil {
+    public static void setResponse(ApiResponse apiResponse, String resCode) {
         apiResponse.setResCode(resCode);
         apiResponse.setResMsg(ApiErrorCode.getErrorMsg(resCode));
     }
 }
-

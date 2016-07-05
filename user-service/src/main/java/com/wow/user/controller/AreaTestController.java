@@ -25,6 +25,6 @@ public class AreaTestController {
 
     @RequestMapping(value = "/areas/{areaId}/subareas", method = RequestMethod.GET)
     public List<Area> findNextLevelArea(@PathVariable int areaId) {
-        return areaService.findNextLevelArea(areaId);
+        return areaService.getNextLevelArea(areaId);
     }
 }

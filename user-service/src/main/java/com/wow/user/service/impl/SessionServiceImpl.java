@@ -3,6 +3,7 @@ package com.wow.user.service.impl;
 import com.wow.user.mapper.EndUserLoginLogMapper;
 import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.EndUserSessionMapper;
+import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserLoginLog;
 import com.wow.user.model.EndUserSession;
 import com.wow.user.service.SessionService;

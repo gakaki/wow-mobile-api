@@ -1,5 +1,7 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.mobileapi.dto.ApiResponse;
+import com.wow.mobileapi.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
@@ -30,14 +32,17 @@ public class WowErrorController implements ErrorController {
     }
 
     @RequestMapping
-    public Map<String, Object> error(HttpServletRequest aRequest) {
+    public ApiResponse error(HttpServletRequest aRequest) {
+        ApiResponse apiResponse = new ApiResponse();
         Map<String, Object> body = getErrorAttributes(aRequest, getTraceParameter(aRequest));
         String trace = (String) body.get("trace");
         if (trace != null) {
             String[] lines = trace.split("\n\t");
             body.put("trace", lines);
         }
-        return body;
+        ResponseUtil.setResponse(apiResponse, "50000");
+        apiResponse.setData(body);
+        return apiResponse;
     }
 
     private boolean getTraceParameter(HttpServletRequest request) {

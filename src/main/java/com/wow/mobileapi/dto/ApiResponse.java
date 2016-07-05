@@ -1,9 +1,12 @@
 package com.wow.mobileapi.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by zhengzhiqing on 16/6/27.
  */
-public class ApiResponse {
+public class ApiResponse implements Serializable {
+
     private String resCode;
     private String resMsg;
     private Object data;

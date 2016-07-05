@@ -1,8 +1,7 @@
 package com.wow.mobileapi.controller;
 
 import com.wow.mobileapi.dto.ApiResponse;
-import com.wow.mobileapi.util.ErrorRespUtil;
-import com.wow.user.model.EndUserSession;
+import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.service.SessionService;
 import com.wow.user.vo.LoginRequest;
 import com.wow.user.vo.LoginResult;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by zhengzhiqing on 16/6/23.
  */
 @RestController
-@RequestMapping("/v1.0/sessions")
+@RequestMapping("/v1/sessions")
 public class SessionController {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionController.class);
@@ -40,7 +39,7 @@ public class SessionController {
             apiResponse.setResMsg("success");
             apiResponse.setData(loginResult.getEndUserSession());
         } else {
-            ErrorRespUtil.setError(apiResponse,"40201");
+            ResponseUtil.setResponse(apiResponse,"40201");
             apiResponse.setData(loginResult.getEndUserSession());
         }
 

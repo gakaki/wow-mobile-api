@@ -20,7 +20,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @RequestMapping(value = "/v1.0/orders/{orderId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/orders/{orderId}", method = RequestMethod.GET)
     public Order getOrder(@PathVariable Integer orderId) {
         return orderService.queryOrderById(orderId);
     }

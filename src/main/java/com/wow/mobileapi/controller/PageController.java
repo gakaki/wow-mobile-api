@@ -18,17 +18,17 @@ import java.util.List;
 public class PageController {
     private static final Logger logger = LoggerFactory.getLogger(PageController.class);
 
-    @RequestMapping(value = "/v1.0/pages/banners?pageType={pageType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/pages/banners?pageType={pageType}", method = RequestMethod.GET)
     public List<PageBannerConfig> getBannersOnPage(@RequestParam Integer pageType) {
         return null;
     }
 
-    @RequestMapping(value = "/v1.0/pages/scenes?pageType={pageType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/pages/scenes?pageType={pageType}", method = RequestMethod.GET)
     public List<PageSceneConfig> getScenesOnPage(@RequestParam Integer pageType) {
         return null;
     }
 
-    @RequestMapping(value = "/v1.0/pages/topics?pageType={pageType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/pages/topics?pageType={pageType}", method = RequestMethod.GET)
     public List<PageTopicConfig> getTopicsOnPage(@RequestParam Integer pageType) {
         return null;
     }
