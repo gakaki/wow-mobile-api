@@ -1,6 +1,5 @@
 package com.wow.user.service;
 
-import com.wow.user.model.EndUser;
 import com.wow.user.model.ShippingInfo;
 
 import java.util.List;

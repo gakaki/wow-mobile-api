@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
     public boolean isExistedUser(String userName) {
-        EndUser user = endUserMapper.selectByUserName(userName);
+        EndUser user = getEndUserByUserName(userName);
         logger.info("user=" + user);
         return (user != null);
     }
@@ -70,23 +70,11 @@ public class UserServiceImpl implements UserService {
      */
     public String getCaptcha(String mobile) {
         String captcha = "";
-        //TODO:调用阿里大鱼的短信接口,往目标手机发送随机生成的6位数字,并将6位数字存储到Redis中
+        //TODO:调用阿里大禹的短信接口,往目标手机发送随机生成的6位数字,并将6位数字存储到Redis中
         //1. generate 6-bit digit randomly
         //2. call alidayu interface to send sms
         //3. store digit into redis
         return captcha;
-    }
-
-    /**
-     * 用户修改密码 - 只要记住老密码就可以了(有一定风险)
-     *
-     * @param endUserId
-     * @param oldPwd
-     * @param newPwd
-     * @return
-     */
-    public int modifyPassword(int endUserId, String oldPwd, String newPwd) {
-        return 1;
     }
 
     /**
@@ -102,6 +90,10 @@ public class UserServiceImpl implements UserService {
         String captchaForMobile = getCaptchaOnServer(mobile);
         if (captchaForMobile.equalsIgnoreCase(captcha)) {
             EndUser endUser = getEndUserByMobile(mobile);
+            if(endUser == null) {
+                logger.error("该用户不存在");
+                return false;
+            }
             endUser.setPassword(PasswordUtil.passwordHashGenerate(newPwd));
             endUser.setUpdateTime(new Date());
             return (endUserMapper.updateByPrimaryKeySelective(endUser)>0);
@@ -116,6 +108,7 @@ public class UserServiceImpl implements UserService {
      * @param mobile
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     private String getCaptchaOnServer(String mobile) {
         //TODO: get captcha from redis or mysql
         return "123456";
@@ -133,15 +126,77 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 根据用户名获取用户信息
+     *
+     * @param userName
+     * @return
+     */
+    @Override
+    public EndUser getEndUserByUserName(String userName) {
+        EndUserExample endUserExample = new EndUserExample();
+        EndUserExample.Criteria criteria = endUserExample.createCriteria();
+        criteria.andUserNameEqualTo(userName);
+        criteria.andIsDeletedEqualTo(false);
+        List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
+        logger.info("userList:" + userList);
+        if (userList.size() > 1) {
+            logger.error("username should be unique");
+            return null;
+        } else if (userList.size() == 1) {
+            return userList.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * 根据手机号获取用户信息
      *
      * @param mobile
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public EndUser getEndUserByMobile(String mobile) {
-        //TODO:
-        return null;
+        EndUserExample endUserExample = new EndUserExample();
+        EndUserExample.Criteria criteria = endUserExample.createCriteria();
+        criteria.andMobileEqualTo(mobile);
+        criteria.andIsDeletedEqualTo(false);
+        List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
+        logger.info("userList:" + userList);
+        if (userList.size() > 1) {
+            logger.error("mobile should be unique");
+            return null;
+        } else if (userList.size() == 1) {
+            return userList.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 根据昵称获取用户信息
+     *
+     * @param nickName
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public EndUser getEndUserByNickName(String nickName) {
+        EndUserExample endUserExample = new EndUserExample();
+        EndUserExample.Criteria criteria = endUserExample.createCriteria();
+        criteria.andNickNameEqualTo(nickName);
+        criteria.andIsDeletedEqualTo(false);
+        List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
+        logger.info("userList:" + userList);
+        if (userList.size() > 1) {
+            logger.error("nickname should be unique");
+            return null;
+        } else if (userList.size() == 1) {
+            return userList.get(0);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -165,7 +220,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation= Propagation.SUPPORTS)
     public EndUser authenticate(String userName, String password) {
 
-        EndUser endUser = endUserMapper.selectByUserName(userName);
+        EndUser endUser = getEndUserByUserName(userName);
         if (PasswordUtil.passwordHashValidate(password, endUser.getPassword())) {
             return endUser;
         } else {

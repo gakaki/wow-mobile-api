@@ -2,12 +2,10 @@ package com.wow.user.mapper;
 
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserExample;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 public interface EndUserMapper {
-
     int countByExample(EndUserExample example);
 
     int deleteByExample(EndUserExample example);
@@ -22,16 +20,9 @@ public interface EndUserMapper {
 
     EndUser selectByPrimaryKey(Integer id);
 
-    EndUser selectByUserNameAndPassword(@Param("userName") String userName,
-                                        @Param("password") String password);
+    int updateByExampleSelective(@Param("record") EndUser record, @Param("example") EndUserExample example);
 
-    EndUser selectByUserName(@Param("userName") String userName);
-
-    int updateByExampleSelective(@Param("record") EndUser record,
-                                 @Param("example") EndUserExample example);
-
-    int updateByExample(@Param("record") EndUser record,
-                        @Param("example") EndUserExample example);
+    int updateByExample(@Param("record") EndUser record, @Param("example") EndUserExample example);
 
     int updateByPrimaryKeySelective(EndUser record);
 
