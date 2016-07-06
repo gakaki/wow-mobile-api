@@ -12,17 +12,12 @@ public interface ProductImageMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int deleteBatch(List<ProductImage> productImages);
-
     int insert(ProductImage record);
 
-    int insertBatch(List<ProductImage> productImages);
 
     int insertSelective(ProductImage record);
 
     List<ProductImage> selectByExample(ProductImageExample example);
-
-    List<ProductImage> selectByProductId(int productId);
 
     ProductImage selectByPrimaryKey(Integer id);
 

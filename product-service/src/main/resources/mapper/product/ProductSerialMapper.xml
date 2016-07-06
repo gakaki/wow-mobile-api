@@ -94,32 +94,15 @@
     from product_serial
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectByProductId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-    select
-    <include refid="Base_Column_List" />
-    from product_serial
-    where product_id = #{id,jdbcType=INTEGER}
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from product_serial
     where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByProductId" parameterType="java.lang.Integer" >
-    delete from product_serial
-    where product_id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.wow.product.model.ProductSerialExample" >
     delete from product_serial
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-  </delete>
-  <delete id="deleteBatch" parameterType="java.util.List">
-     delete from product_serial
-    where id IN
-    <foreach collection="list" item="item" open="(" separator="," close=")">
-      #{item.id,jdbcType=INTEGER}
-    </foreach>
   </delete>
   <insert id="insert" parameterType="com.wow.product.model.ProductSerial" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -189,20 +172,6 @@
         #{isDeleted,jdbcType=BIT},
       </if>
     </trim>
-  </insert>
-  <insert id="insertBatch" parameterType="java.util.List">
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into product_serial (product_id, sub_product_id, is_primary,
-    create_time, create_by, update_time,
-    update_by, is_deleted)
-    values
-    <foreach collection="list" item="item"  separator="," >
-    (#{item.productId,jdbcType=INTEGER}, #{item.subProductId,jdbcType=INTEGER}, #{item.isPrimary,jdbcType=BIT},
-    #{item.createTime,jdbcType=TIMESTAMP}, #{item.createBy,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP},
-    #{item.updateBy,jdbcType=VARCHAR}, #{item.isDeleted,jdbcType=BIT})
-    </foreach>
   </insert>
   <select id="countByExample" parameterType="com.wow.product.model.ProductSerialExample" resultType="java.lang.Integer" >
     select count(*) from product_serial

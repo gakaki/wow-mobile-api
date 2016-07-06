@@ -2,6 +2,7 @@ package com.wow.product.service.impl;
 
 import com.wow.product.mapper.ProductCombineMapper;
 import com.wow.product.model.ProductCombine;
+import com.wow.product.model.ProductCombineExample;
 import com.wow.product.model.ProductComment;
 import com.wow.product.service.ProductCombineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,33 +34,50 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
      */
     @Override
     public int createProductCombines(List<ProductCombine> productCombines) {
-        return  productCombineMapper.insertBatch(productCombines);
+        if(!CollectionUtils.isEmpty(productCombines))
+            productCombines.forEach(o->productCombineMapper.insert(o));
+        return 0;
     }
 
     @Override
     public int addProductIntoCombine(ProductCombine productCombine) {
-        return productCombineMapper.insert(productCombine);
+        if(productCombine!=null)
+          return productCombineMapper.insert(productCombine);
+        return 0;
     }
 
     @Override
     public int updateProductCombines(List<ProductCombine> productCombines) {
-        if(CollectionUtils.isEmpty(productCombines))
-            return  0;
-        productCombines.forEach(o->productCombineMapper.updateByPrimaryKey(o));
+        if(!CollectionUtils.isEmpty(productCombines))
+        productCombines.forEach(o->productCombineMapper.updateByPrimaryKeySelective(o));
         return 0;
     }
 
     @Override
     public int removeProductFromCombine(ProductCombine productCombine) {
         Assert.notNull(productCombine,"入参是null");
-        return productCombineMapper.deleteByPrimaryKey(productCombine.getId());
+        productCombine.setIsDeleted(true);
+        return productCombineMapper.updateByPrimaryKeySelective(productCombine);
     }
 
     @Override
     public boolean isProductCombine(int productId) {
-        List<ProductCombine> lists=productCombineMapper.selectByProductId(productId);
-        return !CollectionUtils.isEmpty(lists);
+
+        return getProductCombineByProductId(productId).isEmpty();
     }
+
+    private List<ProductCombine> getProductCombineByProductId(int productId) {
+        ProductCombineExample productCombineExample=new ProductCombineExample();
+        ProductCombineExample.Criteria criteria=productCombineExample.createCriteria();
+        criteria.andProductIdEqualTo(productId);
+        criteria.andIsDeletedEqualTo(false);
+//        PageHelper.startPage(1,20);
+//        productCombineMapper.selectByExample(productCombineExample);
+//        PageInfo pageInfo= new PageInfo(productCombineMapper.selectByExample(productCombineExample));
+       return  productCombineMapper.selectByExample(productCombineExample);
+
+    }
+
     /**
      * 根据组合主品,查找组合子品信息
      *
@@ -68,17 +86,16 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
      */
     @Override
     public List<ProductCombine> getSubProductInfo(int productId) {
-        List<ProductCombine> lists= productCombineMapper.selectByProductId(productId);
 
+        List<ProductCombine> lists= getProductCombineByProductId(productId);
         if(!CollectionUtils.isEmpty(lists))
         {
             List<ProductCombine> resultLists=new ArrayList<>();
             HashSet set=new HashSet();
-            lists.stream().forEach(o->set.add(o.getSubProductId()));
-            set.stream().forEach(o-> resultLists.addAll(productCombineMapper.selectByProductId((Integer) o)));
+            lists.forEach(o->set.add(o.getSubProductId()));
+            set.forEach(o-> resultLists.addAll(getProductCombineByProductId((Integer) o)));
             return resultLists;
         }
-
         return null;
     }
 

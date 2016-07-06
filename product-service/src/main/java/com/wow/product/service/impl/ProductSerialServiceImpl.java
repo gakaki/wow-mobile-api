@@ -2,6 +2,7 @@ package com.wow.product.service.impl;
 
 import com.wow.product.mapper.ProductSerialMapper;
 import com.wow.product.model.ProductSerial;
+import com.wow.product.model.ProductSerialExample;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,9 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      */
     @Override
     public int createProductSerial(List<ProductSerial> productSerials) {
-        return productSerialMapper.insertBatch(productSerials);
+        if(!CollectionUtils.isEmpty(productSerials))
+            productSerials.forEach(o->productSerialMapper.insert(o));
+        return 0;
     }
 
     /**
@@ -47,10 +51,11 @@ public class ProductSerialServiceImpl implements ProductSerialService {
     public int updateProductSerial(List<ProductSerial> productSerials) {
         if(!CollectionUtils.isEmpty(productSerials))
         {
-            productSerials.forEach(o->productSerialMapper.updateByPrimaryKey(o));
+            productSerials.forEach(o->productSerialMapper.updateByPrimaryKeySelective(o));
         }
         return 0;
     }
+
     /**
      * 根据系列主品查找所有子品
      * @param productId 产品ID
@@ -58,7 +63,11 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      */
     @Override
     public List<ProductSerial> getProductSerials(int productId) {
-        return productSerialMapper.selectByProductId(productId);
+        ProductSerialExample productSerialExample=new ProductSerialExample();
+        ProductSerialExample.Criteria criteria=productSerialExample.createCriteria();
+        criteria.andProductIdEqualTo(productId);
+        criteria.andIsDeletedEqualTo(false);
+        return productSerialMapper.selectByExample(productSerialExample);
 
     }
 
@@ -69,7 +78,17 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      */
     @Override
     public int deleteProductSerial(List<ProductSerial> productSerials) {
-        return productSerialMapper.deleteBatch(productSerials);
+        if(!CollectionUtils.isEmpty(productSerials))
+        {
+            productSerials.forEach(new Consumer<ProductSerial>() {
+                @Override
+                public void accept(ProductSerial productSerial) {
+                    productSerial.setIsDeleted(true);
+                    productSerialMapper.updateByPrimaryKeySelective(productSerial);
+                }
+            });
+        }
+        return 0;
     }
 
     /**
@@ -79,7 +98,12 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      */
     public  int deleteProductSerial(int productId)
     {
-        return  productSerialMapper.deleteByProductId(productId);
+        ProductSerialExample productSerialExample=new ProductSerialExample();
+        ProductSerialExample.Criteria criteria=productSerialExample.createCriteria();
+        criteria.andProductIdEqualTo(productId);
+        ProductSerial productSerial=new ProductSerial();
+        productSerial.setIsDeleted(true);
+        return  productSerialMapper.updateByExampleSelective(productSerial,productSerialExample);
     }
 
     /**

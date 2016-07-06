@@ -11,14 +11,17 @@ import com.wow.product.mapper.ProductMapper;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductAttribute;
 import com.wow.product.model.ProductImage;
+import com.wow.product.model.ProductImageExample;
 import com.wow.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 /**
@@ -44,6 +47,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductAttributeMapper productAttributeMapper;
+
+
     /**
      * 创建产品(注意要调用生码接口)
      *
@@ -53,8 +58,7 @@ public class ProductServiceImpl implements ProductService {
         if(product==null)
             return -1;
         String productCode = generateProductCode();
-
-            product.setProductCode(productCode.substring(0,7));
+        product.setProductCode(productCode.substring(0,7));
         return productMapper.insert(product);
     }
 
@@ -74,6 +78,7 @@ public class ProductServiceImpl implements ProductService {
      * @param productId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Product getProductById(int productId) {
         return productMapper.selectByPrimaryKey(productId);
     }
@@ -85,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int updateProduct(Product product) {
-        return productMapper.updateByPrimaryKey(product);
+        return productMapper.updateByPrimaryKeySelective(product);
     }
 
     //table: product_image
@@ -108,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
      */
     public int addProductImages(List<ProductImage> productImages) {
         if(!CollectionUtils.isEmpty(productImages))
-            productImageMapper.insertBatch(productImages);
+            productImages.forEach(o->addProductImage(o));
         return 0;
     }
 
@@ -118,8 +123,13 @@ public class ProductServiceImpl implements ProductService {
      * @param productId
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<ProductImage> getProductImages(int productId) {
-        return  productImageMapper.selectByProductId(productId);
+        ProductImageExample productImageExample=new ProductImageExample();
+        ProductImageExample.Criteria criteria=productImageExample.createCriteria();
+        criteria.andProductIdEqualTo(productId);
+        criteria.andIsDeletedEqualTo(false);
+        return  productImageMapper.selectByExample(productImageExample);
     }
 
     /**
@@ -129,8 +139,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int updateProductImage(ProductImage productImage) {
-
-        return productImageMapper.updateByPrimaryKey(productImage);
+        return productImageMapper.updateByPrimaryKeySelective(productImage);
     }
 
     /**
@@ -140,8 +149,16 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int deleteProductImages(List<ProductImage> productImages) {
-        if(!CollectionUtils.isEmpty(productImages))
-           return productImageMapper.deleteBatch(productImages);
+        if(!CollectionUtils.isEmpty(productImages)) {
+            productImages.forEach(new Consumer<ProductImage>() {
+                @Override
+                public void accept(ProductImage productImage) {
+                    productImage.setIsDeleted(true);
+                    updateProductImage(productImage);
+                }
+            });
+            return 0;
+        }
         return -1;
     }
 
@@ -153,6 +170,7 @@ public class ProductServiceImpl implements ProductService {
      * @param product
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Attribute> getAttributesInProduct(Product product){
         if(product==null)
             return null;
@@ -170,8 +188,10 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int createProductAttribute(List<ProductAttribute> productAttributes) {
-        if(!CollectionUtils.isEmpty(productAttributes))
-           return productAttributeMapper.insertBatch(productAttributes);
+        if(!CollectionUtils.isEmpty(productAttributes)) {
+            productAttributes.forEach(o -> productAttributeMapper.insert(o));
+            return 0;
+        }
         return -1;
     }
 
@@ -182,15 +202,11 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int updateProductAttribute(List<ProductAttribute> productAttributes) {
-        if(CollectionUtils.isEmpty(productAttributes))
-            return -1;
-        Iterator  var=productAttributes.iterator();
-        int updateFlag=0;
-        while (var.hasNext())
-        {
-            updateFlag=  productAttributeMapper.updateByPrimaryKey((ProductAttribute)var.next());
+        if(!CollectionUtils.isEmpty(productAttributes)) {
+            productAttributes.forEach(o -> productAttributeMapper.updateByPrimaryKeySelective(o));
+            return 0;
         }
-        return updateFlag;
+        return -1;
     }
 
 }

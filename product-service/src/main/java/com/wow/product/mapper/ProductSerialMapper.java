@@ -12,19 +12,11 @@ public interface ProductSerialMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int deleteBatch(List<ProductSerial> productSerials);
-
-    int deleteByProductId(Integer id);
-
     int insert(ProductSerial record);
 
     int insertSelective(ProductSerial record);
 
-    int insertBatch(List<ProductSerial> productSerials);
-
     List<ProductSerial> selectByExample(ProductSerialExample example);
-
-    List<ProductSerial> selectByProductId(Integer id);
 
     ProductSerial selectByPrimaryKey(Integer id);
 
