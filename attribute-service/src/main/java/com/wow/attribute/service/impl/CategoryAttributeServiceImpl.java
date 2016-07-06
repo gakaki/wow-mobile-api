@@ -29,7 +29,7 @@ public class CategoryAttributeServiceImpl implements CategoryAttributeService{
     public int createCategoryAttribute(CategoryAttribute categoryAttribute) {
         if(categoryAttribute==null)
             return 0;
-        return categoryAttributeMapper.insert(categoryAttribute);
+        return categoryAttributeMapper.insertSelective(categoryAttribute);
     }
 
     @Override
