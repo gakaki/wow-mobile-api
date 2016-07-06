@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
             return -1;
         String productCode = generateProductCode();
         product.setProductCode(productCode.substring(0,7));
-        return productMapper.insert(product);
+        return productMapper.insertSelective(product);
     }
 
     /**
@@ -102,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int addProductImage(ProductImage productImage) {
-        return productImageMapper.insert(productImage);
+        return productImageMapper.insertSelective(productImage);
     }
 
     /**
