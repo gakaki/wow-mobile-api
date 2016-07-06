@@ -58,7 +58,7 @@ public class UserTestController {
      * @return
      */
     @RequestMapping(value = "/users/{endUserId}", method = RequestMethod.GET)
-    public EndUser selectUserById(@PathVariable Integer endUserId) {
+    public EndUser selectUserById(@PathVariable int endUserId) {
         logger.info("getUser:" + endUserId);
         EndUser endUser = userService.getEndUserById(endUserId);
         logger.info("endUser=" + endUser);

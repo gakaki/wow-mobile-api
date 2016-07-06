@@ -7,6 +7,8 @@ import com.wow.user.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +60,8 @@ public class UserServiceImpl implements UserService {
      * @param endUser
      * @return
      */
+    @Override
+    @CacheEvict(value = "UserCache",key="'USER_ID_'+#endUserId")
     public int updateEndUser(EndUser endUser) {
         return endUserMapper.updateByPrimaryKeySelective(endUser);
     }
@@ -86,6 +90,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
+    @CacheEvict(value = "UserCache", key="'USER_MOBILE_'+#mobile")
     public boolean resetPassword(String mobile, String captcha, String newPwd) {
         String captchaForMobile = getCaptchaOnServer(mobile);
         if (captchaForMobile.equalsIgnoreCase(captcha)) {
@@ -119,9 +124,11 @@ public class UserServiceImpl implements UserService {
      * @param endUserId
      * @return
      */
+    @Override
     @Transactional(propagation= Propagation.SUPPORTS)
+    @Cacheable(value = "UserCache",key="'USER_ID_'+#endUserId")
     public EndUser getEndUserById(int endUserId) {
-        logger.info("get end user with id:" + endUserId);
+        logger.info("无缓存的时候调用这里");
         return endUserMapper.selectByPrimaryKey(endUserId);
     }
 
@@ -132,6 +139,8 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
+    @Cacheable(value = "UserCache",key="'USER_NAME_'+#userName")
     public EndUser getEndUserByUserName(String userName) {
         EndUserExample endUserExample = new EndUserExample();
         EndUserExample.Criteria criteria = endUserExample.createCriteria();
@@ -157,6 +166,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
+    @Cacheable(value = "UserCache", key="'USER_MOBILE_'+#mobile")
     public EndUser getEndUserByMobile(String mobile) {
         EndUserExample endUserExample = new EndUserExample();
         EndUserExample.Criteria criteria = endUserExample.createCriteria();
@@ -182,6 +192,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
+    @Cacheable(value = "UserCache")
     public EndUser getEndUserByNickName(String nickName) {
         EndUserExample endUserExample = new EndUserExample();
         EndUserExample.Criteria criteria = endUserExample.createCriteria();
@@ -205,7 +216,9 @@ public class UserServiceImpl implements UserService {
      * @param endUserIds
      * @return
      */
+    @Override
     @Transactional(propagation= Propagation.SUPPORTS)
+    @Cacheable(value = "UserCache")
     public List<EndUser> getEndUsersByIds(int[] endUserIds) {
         return null;
     }
