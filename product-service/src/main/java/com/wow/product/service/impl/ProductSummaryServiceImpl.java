@@ -21,7 +21,7 @@ public class ProductSummaryServiceImpl implements ProductSummaryService {
     @Override
     public int createProductSummary(ProductSummary productSummary) {
         if(productSummary!=null)
-          return productSummaryMapper.insert(productSummary);
+          return productSummaryMapper.insertSelective(productSummary);
         return 0;
     }
 
