@@ -4,7 +4,8 @@ After=syslog.target
 
 [Service]
 User=root
-ExecStart=/data/server/mobile-api/build/libs/mobile-api-1.0-SNAPSHOT.jar
+WorkingDirectory=/data/server/mobile-api
+ExecStart=/usr/local/java/bin/java -jar /data/server/mobile-api-1.0-SNAPSHOT.jar
 SuccessExitStatus=143
 
 [Install]
