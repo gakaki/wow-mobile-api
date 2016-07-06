@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -82,15 +83,19 @@ public class DesignerServiceImpl implements DesignerService {
 
     private List<Product> getProducts(List<ProductDesigner> productDesigners) {
         List<Product> products=new ArrayList<>();
-        if(!productDesigners.isEmpty())
-            productDesigners.forEach(new Consumer<ProductDesigner>() {
+
+        if(!productDesigners.isEmpty()) {
+            HashSet<Integer> productIds = new HashSet();
+            productDesigners.forEach(o->productIds.add(o.getProductId()));
+            productIds.forEach(new Consumer<Integer>() {
                 @Override
-                public void accept(ProductDesigner productDesigner) {
-                    Product product= productService.getProductById(productDesigner.getProductId());
-                    if(product!=null)
+                public void accept(Integer integer) {
+                    Product product = productService.getProductById(integer);
+                    if (product != null)
                         products.add(product);
                 }
             });
+        }
         return  products;
     }
 
