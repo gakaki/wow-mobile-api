@@ -1,6 +1,7 @@
 package com.wow.product.service;
 
 import com.wow.product.model.ApplicableScene;
+import com.wow.product.model.ProductApplicableScene;
 
 import java.util.List;
 
@@ -46,11 +47,33 @@ public interface ApplicableSceneService {
      * @param applicableSceneName
      * @return
      */
-    ApplicableScene getApplicableSceneByName(String applicableSceneName);
+    ApplicableScene getApplicableSceneByName(String applicableSceneName) throws Exception;
 
     /**
      * 查找所有适用场景
      * @return
      */
     List<ApplicableScene> getAllApplicableScene();
+
+    /**
+     *
+     * @param productId
+     * @return
+     */
+    List<ApplicableScene> getApplicableSceneInProduct(int productId);
+
+    /**
+     * 产品适用场景
+     *
+     * @param applicableScenes
+     * @return
+     */
+    int createProductApplicableScene(List<ProductApplicableScene> applicableScenes);
+
+    /**
+     * 批量更新产品的属性值
+     * @param applicableScenes
+     * @return
+     */
+    int updateProductApplicableScene(List<ProductApplicableScene> applicableScenes);
 }

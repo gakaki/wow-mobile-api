@@ -28,6 +28,7 @@ public class SceneServiceImpl implements SceneService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Scene getSceneById(int sceneId) {
         return sceneMapper.selectByPrimaryKey(sceneId);
     }

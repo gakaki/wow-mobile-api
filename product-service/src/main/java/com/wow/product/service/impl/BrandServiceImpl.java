@@ -2,16 +2,22 @@ package com.wow.product.service.impl;
 
 import com.wow.product.mapper.BrandMapper;
 import com.wow.product.model.Brand;
+import com.wow.product.model.BrandExample;
 import com.wow.product.model.Designer;
 import com.wow.product.model.Product;
 import com.wow.product.service.BrandService;
+import com.wow.product.service.DesignerService;
+import com.wow.product.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.ArrayList;
+
 import java.util.List;
 
 /**
@@ -24,8 +30,11 @@ public class BrandServiceImpl implements BrandService {
     private static final Logger logger = LoggerFactory.getLogger(BrandServiceImpl.class);
 
     @Autowired
-    BrandMapper brandMapper;
-
+    private BrandMapper brandMapper;
+     @Autowired
+     private ProductService productService;
+    @Autowired
+    private DesignerService designerService;
     //Table: brand
 
     /**
@@ -35,7 +44,7 @@ public class BrandServiceImpl implements BrandService {
      * @return
      */
     public int createBrand(Brand brand) {
-        return 0;
+        return brandMapper.insertSelective(brand);
     }
 
     /**
@@ -45,33 +54,33 @@ public class BrandServiceImpl implements BrandService {
      * @return
      */
     public int updateBrand(Brand brand) {
-        return 0;
+        return brandMapper.updateByPrimaryKeySelective(brand);
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Brand getBrandById(int brandId) {
         return brandMapper.selectByPrimaryKey(brandId);
     }
 
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public List<Brand> getBrandById(List<Integer> brandIds)
+    {
+        BrandExample brandExample=new BrandExample();
+        brandExample.or().andIdIn(brandIds);
+        return brandMapper.selectByExample(brandExample);
+    }
     /**
      * 根据首字母查询品牌
      *
      * @param firstLetter
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Brand> getBrandsByFirstLetter(String firstLetter) {
-        logger.info("BrandServiceImpl:getBrandsByFirstLetter:" + firstLetter);
-        List<Brand> brands = new ArrayList<Brand>();
-        Brand brand1 = new Brand();
-        brand1.setId(1);
-        brand1.setBrandCname(firstLetter + 1);
-        Brand brand2 = new Brand();
-        brand2.setId(2);
-        brand2.setBrandCname(firstLetter + 2);
-        brands.add(brand1);
-        brands.add(brand2);
-        logger.info("BrandServiceImpl:getBrandsByFirstLetter:" + brands);
-        return brands;
+        BrandExample brandExample=new BrandExample();
+        brandExample.or().andBrandNameFirstLetterEqualTo(firstLetter);
+        return brandMapper.selectByExample(brandExample);
     }
 
     /**
@@ -79,8 +88,9 @@ public class BrandServiceImpl implements BrandService {
      *
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Brand> getAllBrands() {
-        return null;
+        return brandMapper.selectAll();
     }
 
     /**
@@ -89,7 +99,10 @@ public class BrandServiceImpl implements BrandService {
      * @param brand
      * @return
      */
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Product> getProductsByBrand(Brand brand) {
+        if(brand!=null)
+        return productService.getProductByBrandId(brand.getId());
         return null;
     }
 
@@ -99,8 +112,13 @@ public class BrandServiceImpl implements BrandService {
      * @param brand
      * @return
      */
-    public List<Designer> getDesignersByBrand(Brand brand) {
-        return null;
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public List<Designer> getDesignersByBrand(Brand brand) throws Exception {
+        List<Product> products=getProductsByBrand(brand);
+        List<Designer> designers=new ArrayList<>();
+        if(!products.isEmpty())
+            products.forEach(o-> designers.addAll(designerService.getDesignersByProduct(o)) );
+        return  designers;
     }
 
 }

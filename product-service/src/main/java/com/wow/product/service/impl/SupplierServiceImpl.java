@@ -2,6 +2,7 @@ package com.wow.product.service.impl;
 
 import com.wow.product.mapper.ProductSupplierMapper;
 import com.wow.product.mapper.ProductSupplyLogMapper;
+import com.wow.product.mapper.SupplierBrandMapper;
 import com.wow.product.mapper.SupplierMapper;
 import com.wow.product.model.*;
 import com.wow.product.service.BrandService;
@@ -9,9 +10,11 @@ import com.wow.product.service.ProductService;
 import com.wow.product.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -31,6 +34,8 @@ public class SupplierServiceImpl implements SupplierService {
     private ProductSupplyLogMapper productSupplyLogMapper;
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private SupplierBrandMapper supplierBrandMapper;
     @Override
     public int createSupplier(Supplier supplier) {
 
@@ -38,11 +43,13 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Supplier getSupplierById(int supplierId) {
         return supplierMapper.selectByPrimaryKey(supplierId);
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Supplier getSupplierByName(String supplierName) {
         SupplierExample supplierExample=new SupplierExample();
         SupplierExample.Criteria criteria=supplierExample.createCriteria();
@@ -52,6 +59,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Supplier> getAllSuppliers() {
         return supplierMapper.selectAll();
     }
@@ -61,10 +69,16 @@ public class SupplierServiceImpl implements SupplierService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Brand> getBrandsBySupplier(int supplierId) {
-        Supplier supplier=  getSupplierById(supplierId);
-        if(supplier!=null)
-            brandService.getBrandById(supplier.getBrandId());
+        SupplierBrandExample supplierBrandExample=new SupplierBrandExample();
+        supplierBrandExample.or().andSupplierIdEqualTo(supplierId).andIsDeleteNotEqualTo(false);
+        List< SupplierBrand> supplierBrands=supplierBrandMapper.selectByExample(supplierBrandExample);
+        if(!supplierBrands.isEmpty()) {
+            HashSet<Integer> set=new HashSet<>();
+            supplierBrands.forEach(o->set.add(o.getBrandId()));
+            return brandService.getBrandById(new ArrayList(set));
+        }
         return null;
     }
 
@@ -90,6 +104,7 @@ public class SupplierServiceImpl implements SupplierService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public int getProductSupplier(int productId) throws Exception {
 
              ProductSupplierExample productSupplierExample=new ProductSupplierExample();
@@ -102,26 +117,20 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public List<Product> getProductsBySupplier(int supplierId)  {
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public List<Product> getProductsBySupplier(int supplierId) {
 
-            ProductSupplierExample productSupplierExample=new ProductSupplierExample();
-            ProductSupplierExample.Criteria criteria=productSupplierExample.createCriteria();
-            criteria.andSupplierIdEqualTo(supplierId);
-            criteria.andIsDeletedEqualTo(false);
-          List<ProductSupplier> list=  productSupplierMapper.selectByExample(productSupplierExample);
-            List<Product> products=new ArrayList<>();
-            if(!list.isEmpty())
-                list.forEach(new Consumer<ProductSupplier>() {
-                    @Override
-                    public void accept(ProductSupplier productSupplier) {
-                        Product   product=  productService.getProductById(productSupplier.getProductId());
-                        if(product!=null)
-                            products.add(product);
-                    }
-                });
-            return products;
-
-
+        ProductSupplierExample productSupplierExample = new ProductSupplierExample();
+        ProductSupplierExample.Criteria criteria = productSupplierExample.createCriteria();
+        criteria.andSupplierIdEqualTo(supplierId);
+        criteria.andIsDeletedEqualTo(false);
+        List<ProductSupplier> list = productSupplierMapper.selectByExample(productSupplierExample);
+        if (!list.isEmpty()) {
+            HashSet<Integer> productIds = new HashSet<>();
+            list.forEach(o -> productIds.add(o.getProductId()));
+            return  productService.getProductById(new ArrayList<Integer>(productIds));
+        }
+        return  null;
     }
 
     @Override
@@ -135,6 +144,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<ProductSupplyLog> getSupplyLogsByProduct(int productId) {
         ProductSupplyLogExample productSupplyLogExample=new ProductSupplyLogExample();
         ProductSupplyLogExample.Criteria criteria=productSupplyLogExample.createCriteria();
@@ -144,6 +154,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<ProductSupplyLog> getSupplyLogsBySupplier(int supplierId) {
         ProductSupplyLogExample productSupplyLogExample=new ProductSupplyLogExample();
         ProductSupplyLogExample.Criteria criteria=productSupplyLogExample.createCriteria();

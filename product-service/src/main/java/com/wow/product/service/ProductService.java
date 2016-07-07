@@ -1,9 +1,7 @@
 package com.wow.product.service;
 
 import com.wow.attribute.model.Attribute;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductAttribute;
-import com.wow.product.model.ProductImage;
+import com.wow.product.model.*;
 
 import java.util.List;
 
@@ -27,6 +25,10 @@ public interface ProductService {
      * @return
      */
     Product getProductById(int productId);
+
+    List<Product> getProductById(List<Integer> productId);
+
+    List<Product> getProductByBrandId(int brandId);
 
     /**
      * 更新产品
@@ -100,4 +102,21 @@ public interface ProductService {
      */
     int updateProductAttribute(List<ProductAttribute> productAttributes);
 
+
+    List<Material> getMaterialInProduct(Integer productId);
+
+    /**
+     * 批量设置产品的材质
+     *
+     * @param productMaterials
+     * @return
+     */
+    int createProductMaterial(List<ProductMaterial> productMaterials);
+
+    /**
+     * 批量更新产品的材质
+     * @param productMaterials
+     * @return
+     */
+    int updateProductMaterial(List<ProductMaterial> productMaterials);
 }

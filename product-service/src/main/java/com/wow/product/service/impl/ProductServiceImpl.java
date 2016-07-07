@@ -5,21 +5,17 @@ import com.wow.attribute.model.*;
 import com.wow.attribute.service.AttributeService;
 
 import com.wow.attribute.service.CategoryService;
-import com.wow.product.mapper.ProductAttributeMapper;
-import com.wow.product.mapper.ProductImageMapper;
-import com.wow.product.mapper.ProductMapper;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductAttribute;
-import com.wow.product.model.ProductImage;
-import com.wow.product.model.ProductImageExample;
+import com.wow.product.mapper.*;
+import com.wow.product.model.*;
 import com.wow.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Iterator;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -48,7 +44,11 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductAttributeMapper productAttributeMapper;
 
+    @Autowired
+    private  ProductMaterialMapper productMaterialMapper;
 
+    @Autowired
+    private MaterialMapper materialMapper;
     /**
      * 创建产品(注意要调用生码接口)
      *
@@ -83,6 +83,19 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.selectByPrimaryKey(productId);
     }
 
+    public List<Product> getProductById(List<Integer> productIds)
+    {
+        ProductExample productExample=new ProductExample();
+        productExample.or().andBrandIdIn(productIds).andIsDeletedEqualTo(false);
+        return productMapper.selectByExample(productExample);
+    }
+    @Override
+    public List<Product> getProductByBrandId(int brandId) {
+        ProductExample productExample=new ProductExample();
+        productExample.or().andBrandIdEqualTo(brandId).andIsDeletedEqualTo(false);
+        return productMapper.selectByExample(productExample);
+    }
+
     /**
      * 更新产品
      *
@@ -112,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int addProductImages(List<ProductImage> productImages) {
-        if(!CollectionUtils.isEmpty(productImages))
+        if(!productImages.isEmpty())
             productImages.forEach(o->addProductImage(o));
         return 0;
     }
@@ -149,7 +162,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int deleteProductImages(List<ProductImage> productImages) {
-        if(!CollectionUtils.isEmpty(productImages)) {
+        if(!productImages.isEmpty()) {
             productImages.forEach(new Consumer<ProductImage>() {
                 @Override
                 public void accept(ProductImage productImage) {
@@ -188,7 +201,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int createProductAttribute(List<ProductAttribute> productAttributes) {
-        if(!CollectionUtils.isEmpty(productAttributes)) {
+        if(!productAttributes.isEmpty()) {
             productAttributes.forEach(o -> productAttributeMapper.insertSelective(o));
             return 0;
         }
@@ -202,11 +215,48 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int updateProductAttribute(List<ProductAttribute> productAttributes) {
-        if(!CollectionUtils.isEmpty(productAttributes)) {
+        if(!productAttributes.isEmpty()) {
             productAttributes.forEach(o -> productAttributeMapper.updateByPrimaryKeySelective(o));
             return 0;
         }
         return -1;
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public List<Material> getMaterialInProduct(Integer productId) {
+
+            ProductMaterialExample productMaterialExample=new ProductMaterialExample();
+            productMaterialExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo(productId);
+           List<ProductMaterial> productMaterials=productMaterialMapper.selectByExample(productMaterialExample);
+         if(!productMaterials.isEmpty())
+         {
+             HashSet<Integer> materialIds=new HashSet<>();
+             productMaterials.forEach(o->materialIds.add(o.getMaterialId()));
+             return getMaterialById(new ArrayList<>(materialIds));
+         }
+
+        return null;
+    }
+
+    private  List<Material> getMaterialById(List<Integer> ids)
+    {
+        MaterialExample example=new MaterialExample();
+        example.or().andIdIn(ids).andIsDeletedEqualTo(false);
+        return materialMapper.selectByExample(example);
+    }
+    @Override
+    public int createProductMaterial(List<ProductMaterial> productMaterials) {
+        if(!productMaterials.isEmpty())
+            productMaterials.forEach(o->productMaterialMapper.insertSelective(o));
+        return 0;
+    }
+
+    @Override
+    public int updateProductMaterial(List<ProductMaterial> productMaterials) {
+        if(!productMaterials.isEmpty())
+            productMaterials.forEach(o->productMaterialMapper.updateByPrimaryKeySelective(o));
+        return 0;
     }
 
 }

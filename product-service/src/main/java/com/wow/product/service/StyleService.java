@@ -35,17 +35,17 @@ public interface StyleService {
 
     /**
      * 根据ID查找风格
-     * @param style
+     * @param styleId
      * @return
      */
-    Style getStyleById(Style style);
+    Style getStyleById(Integer styleId);
 
     /**
      * 根据名称查找风格
-     * @param style
+     * @param styleName
      * @return
      */
-    Style getStyleByName(Style style);
+    Style getStyleByName(String styleName) throws Exception ;
 
     /**
      * 查看所有风格

@@ -6,6 +6,7 @@ import com.wow.product.model.WarehouseExample;
 import com.wow.product.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,25 +39,23 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Warehouse getWarehouseById(Integer warehouseId) {
             return warehouseMapper.selectByPrimaryKey(warehouseId);
     }
 
     @Override
-    public Warehouse getWarehouseByName(String warehouseName) {
-        try{
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public Warehouse getWarehouseByName(String warehouseName) throws Exception {
             WarehouseExample warehouseExample=new WarehouseExample();
             warehouseExample.or().andIsDeletedEqualTo(false).andWarehouseNameEqualTo(warehouseName);
             return warehouseMapper.selectByExample(warehouseExample).get(0);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+
+
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Warehouse> getAllWarehouses() {
         return warehouseMapper.selectAll();
     }

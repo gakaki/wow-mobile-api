@@ -18,6 +18,8 @@ public interface ApplicableSceneMapper {
 
     List<ApplicableScene> selectByExample(ApplicableSceneExample example);
 
+    List<ApplicableScene> selectAll();
+
     ApplicableScene selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") ApplicableScene record, @Param("example") ApplicableSceneExample example);

@@ -28,6 +28,8 @@ public interface DesignerService {
      */
     Designer getDesignerById(int designerId);
 
+    List<Designer> getDesignerById(List<Integer> designerIds);
+
     /**
      * 更新设计师
      *

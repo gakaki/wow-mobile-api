@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.product.mapper.ApplicableSceneMapper" >
-  <resultMap id="BaseResultMap" type="com.wow.product.model.ApplicableScene" >
+<mapper namespace="com.wow.product.mapper.SupplierBrandMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.product.model.SupplierBrand" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="applicable_scene_name" property="applicableSceneName" jdbcType="VARCHAR" />
-    <result column="applicable_scene_desc" property="applicableSceneDesc" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,16 +70,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, applicable_scene_name, applicable_scene_desc, create_time, create_by, update_time, 
-    update_by, is_deleted
+    id, supplier_id, brand_id, create_by, create_time, update_by, update_time, is_delete
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ApplicableSceneExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.SupplierBrandExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from applicable_scene
+    from supplier_brand
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,119 +89,114 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from applicable_scene
+    from supplier_brand
     where id = #{id,jdbcType=INTEGER}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap"  >
-    select
-    <include refid="Base_Column_List" />
-    from applicable_scene
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from applicable_scene
+    delete from supplier_brand
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wow.product.model.ApplicableSceneExample" >
-    delete from applicable_scene
+  <delete id="deleteByExample" parameterType="com.wow.product.model.SupplierBrandExample" >
+    delete from supplier_brand
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wow.product.model.ApplicableScene" >
+  <insert id="insert" parameterType="com.wow.product.model.SupplierBrand" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into applicable_scene (applicable_scene_name, applicable_scene_desc, 
-      create_time, create_by, update_time, 
-      update_by, is_deleted)
-    values (#{applicableSceneName,jdbcType=VARCHAR}, #{applicableSceneDesc,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT})
+    insert into supplier_brand (supplier_id, brand_id, create_by, 
+      create_time, update_by, update_time, 
+      is_delete)
+    values (#{supplierId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.product.model.ApplicableScene" >
+  <insert id="insertSelective" parameterType="com.wow.product.model.SupplierBrand" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into applicable_scene
+    insert into supplier_brand
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="applicableSceneName != null" >
-        applicable_scene_name,
+      <if test="supplierId != null" >
+        supplier_id,
       </if>
-      <if test="applicableSceneDesc != null" >
-        applicable_scene_desc,
-      </if>
-      <if test="createTime != null" >
-        create_time,
+      <if test="brandId != null" >
+        brand_id,
       </if>
       <if test="createBy != null" >
         create_by,
       </if>
-      <if test="updateTime != null" >
-        update_time,
+      <if test="createTime != null" >
+        create_time,
       </if>
       <if test="updateBy != null" >
         update_by,
       </if>
-      <if test="isDeleted != null" >
-        is_deleted,
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="applicableSceneName != null" >
-        #{applicableSceneName,jdbcType=VARCHAR},
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=INTEGER},
       </if>
-      <if test="applicableSceneDesc != null" >
-        #{applicableSceneDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="brandId != null" >
+        #{brandId,jdbcType=INTEGER},
       </if>
       <if test="createBy != null" >
         #{createBy,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateBy != null" >
         #{updateBy,jdbcType=VARCHAR},
       </if>
-      <if test="isDeleted != null" >
-        #{isDeleted,jdbcType=BIT},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wow.product.model.ApplicableSceneExample" resultType="java.lang.Integer" >
-    select count(*) from applicable_scene
+  <select id="countByExample" parameterType="com.wow.product.model.SupplierBrandExample" resultType="java.lang.Integer" >
+    select count(*) from supplier_brand
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update applicable_scene
+    update supplier_brand
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.applicableSceneName != null" >
-        applicable_scene_name = #{record.applicableSceneName,jdbcType=VARCHAR},
+      <if test="record.supplierId != null" >
+        supplier_id = #{record.supplierId,jdbcType=INTEGER},
       </if>
-      <if test="record.applicableSceneDesc != null" >
-        applicable_scene_desc = #{record.applicableSceneDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      <if test="record.brandId != null" >
+        brand_id = #{record.brandId,jdbcType=INTEGER},
       </if>
       <if test="record.createBy != null" >
         create_by = #{record.createBy,jdbcType=VARCHAR},
       </if>
-      <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateBy != null" >
         update_by = #{record.updateBy,jdbcType=VARCHAR},
       </if>
-      <if test="record.isDeleted != null" >
-        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -210,55 +204,55 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update applicable_scene
+    update supplier_brand
     set id = #{record.id,jdbcType=INTEGER},
-      applicable_scene_name = #{record.applicableSceneName,jdbcType=VARCHAR},
-      applicable_scene_desc = #{record.applicableSceneDesc,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      supplier_id = #{record.supplierId,jdbcType=INTEGER},
+      brand_id = #{record.brandId,jdbcType=INTEGER},
       create_by = #{record.createBy,jdbcType=VARCHAR},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=VARCHAR},
-      is_deleted = #{record.isDeleted,jdbcType=BIT}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{record.isDelete,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.ApplicableScene" >
-    update applicable_scene
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.product.model.SupplierBrand" >
+    update supplier_brand
     <set >
-      <if test="applicableSceneName != null" >
-        applicable_scene_name = #{applicableSceneName,jdbcType=VARCHAR},
+      <if test="supplierId != null" >
+        supplier_id = #{supplierId,jdbcType=INTEGER},
       </if>
-      <if test="applicableSceneDesc != null" >
-        applicable_scene_desc = #{applicableSceneDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="brandId != null" >
+        brand_id = #{brandId,jdbcType=INTEGER},
       </if>
       <if test="createBy != null" >
         create_by = #{createBy,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateBy != null" >
         update_by = #{updateBy,jdbcType=VARCHAR},
       </if>
-      <if test="isDeleted != null" >
-        is_deleted = #{isDeleted,jdbcType=BIT},
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.ApplicableScene" >
-    update applicable_scene
-    set applicable_scene_name = #{applicableSceneName,jdbcType=VARCHAR},
-      applicable_scene_desc = #{applicableSceneDesc,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
+  <update id="updateByPrimaryKey" parameterType="com.wow.product.model.SupplierBrand" >
+    update supplier_brand
+    set supplier_id = #{supplierId,jdbcType=INTEGER},
+      brand_id = #{brandId,jdbcType=INTEGER},
       create_by = #{createBy,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=BIT}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

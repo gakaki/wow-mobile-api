@@ -40,7 +40,7 @@ public interface WarehouseService {
      * @param warehouseName
      * @return
      */
-    Warehouse getWarehouseByName(String warehouseName);
+    Warehouse getWarehouseByName(String warehouseName) throws Exception;
 
     /**
      * 查询所有仓库

@@ -7,15 +7,13 @@ import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+
 
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 /**
@@ -37,7 +35,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      */
     @Override
     public int createProductSerial(List<ProductSerial> productSerials) {
-        if(!CollectionUtils.isEmpty(productSerials))
+        if(!productSerials.isEmpty())
             productSerials.forEach(o->productSerialMapper.insertSelective(o));
         return 0;
     }
@@ -49,7 +47,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      */
     @Override
     public int updateProductSerial(List<ProductSerial> productSerials) {
-        if(!CollectionUtils.isEmpty(productSerials))
+        if(!productSerials.isEmpty())
         {
             productSerials.forEach(o->productSerialMapper.updateByPrimaryKeySelective(o));
         }
@@ -62,6 +60,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<ProductSerial> getProductSerials(int productId) {
         ProductSerialExample productSerialExample=new ProductSerialExample();
         ProductSerialExample.Criteria criteria=productSerialExample.createCriteria();
@@ -78,7 +77,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      */
     @Override
     public int deleteProductSerial(List<ProductSerial> productSerials) {
-        if(!CollectionUtils.isEmpty(productSerials))
+        if(!productSerials.isEmpty())
         {
             productSerials.forEach(new Consumer<ProductSerial>() {
                 @Override
@@ -115,7 +114,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
     @Override
     public boolean isProductSerial(int productId) {
         List<ProductSerial> productSerials=getProductSerials(productId);
-        return !CollectionUtils.isEmpty(productSerials);
+        return !productSerials.isEmpty();
 
     }
 
@@ -126,6 +125,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public ProductSerial getPrimarySubProductOfProductSerial(int productId) {
         return  getProductSerials(productId).stream().filter(o->o.getIsPrimary()==true).findAny().get();
     }

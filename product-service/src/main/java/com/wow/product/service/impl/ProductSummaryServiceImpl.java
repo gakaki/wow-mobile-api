@@ -6,6 +6,7 @@ import com.wow.product.model.ProductSummaryExample;
 import com.wow.product.service.ProductSummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class ProductSummaryServiceImpl implements ProductSummaryService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<ProductSummary> getProductSummary(int productId) {
         ProductSummaryExample productSummaryExample=new ProductSummaryExample();
         ProductSummaryExample.Criteria criteria=productSummaryExample.createCriteria();

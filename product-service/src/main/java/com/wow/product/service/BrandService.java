@@ -36,6 +36,8 @@ public interface BrandService {
     int updateBrand(Brand brand);
 
     Brand getBrandById(int brandId);
+
+    List<Brand> getBrandById(List<Integer> brandIds);
     /**
      * 根据首字母查询品牌
      *
@@ -57,7 +59,7 @@ public interface BrandService {
      * @param brand
      * @return
      */
-    List<Product> getProductsByBrand(Brand brand);
+    List<Product> getProductsByBrand(Brand brand) ;
 
     /**
      * 查看品牌设计师列表
@@ -65,6 +67,6 @@ public interface BrandService {
      * @param brand
      * @return
      */
-    List<Designer> getDesignersByBrand(Brand brand);
+    List<Designer> getDesignersByBrand(Brand brand) throws Exception;
 
 }

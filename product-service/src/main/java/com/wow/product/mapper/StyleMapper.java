@@ -18,6 +18,8 @@ public interface StyleMapper {
 
     List<Style> selectByExample(StyleExample example);
 
+    List<Style> selectAll();
+
     Style selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Style record, @Param("example") StyleExample example);

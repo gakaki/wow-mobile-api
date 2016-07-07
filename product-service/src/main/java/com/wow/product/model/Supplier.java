@@ -20,8 +20,6 @@ public class Supplier implements Serializable {
 
     private String fax;
 
-    private Integer brandId;
-
     private String purchaseOwner;
 
     private String remark;
@@ -71,7 +69,7 @@ public class Supplier implements Serializable {
     }
 
     public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+        this.supplierName = supplierName == null ? null : supplierName.trim();
     }
 
     public String getCompanyName() {
@@ -79,7 +77,7 @@ public class Supplier implements Serializable {
     }
 
     public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+        this.companyName = companyName == null ? null : companyName.trim();
     }
 
     public String getSiteUrl() {
@@ -87,7 +85,7 @@ public class Supplier implements Serializable {
     }
 
     public void setSiteUrl(String siteUrl) {
-        this.siteUrl = siteUrl;
+        this.siteUrl = siteUrl == null ? null : siteUrl.trim();
     }
 
     public Integer getSupplierAreaId() {
@@ -103,7 +101,7 @@ public class Supplier implements Serializable {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.address = address == null ? null : address.trim();
     }
 
     public String getShipAddress() {
@@ -111,7 +109,7 @@ public class Supplier implements Serializable {
     }
 
     public void setShipAddress(String shipAddress) {
-        this.shipAddress = shipAddress;
+        this.shipAddress = shipAddress == null ? null : shipAddress.trim();
     }
 
     public String getFax() {
@@ -119,15 +117,7 @@ public class Supplier implements Serializable {
     }
 
     public void setFax(String fax) {
-        this.fax = fax;
-    }
-
-    public Integer getBrandId() {
-        return brandId;
-    }
-
-    public void setBrandId(Integer brandId) {
-        this.brandId = brandId;
+        this.fax = fax == null ? null : fax.trim();
     }
 
     public String getPurchaseOwner() {
@@ -135,7 +125,7 @@ public class Supplier implements Serializable {
     }
 
     public void setPurchaseOwner(String purchaseOwner) {
-        this.purchaseOwner = purchaseOwner;
+        this.purchaseOwner = purchaseOwner == null ? null : purchaseOwner.trim();
     }
 
     public String getRemark() {
@@ -143,7 +133,7 @@ public class Supplier implements Serializable {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark;
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public String getContactName() {
@@ -151,7 +141,7 @@ public class Supplier implements Serializable {
     }
 
     public void setContactName(String contactName) {
-        this.contactName = contactName;
+        this.contactName = contactName == null ? null : contactName.trim();
     }
 
     public String getContactPhone() {
@@ -159,7 +149,7 @@ public class Supplier implements Serializable {
     }
 
     public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
+        this.contactPhone = contactPhone == null ? null : contactPhone.trim();
     }
 
     public String getContactMobile() {
@@ -167,7 +157,7 @@ public class Supplier implements Serializable {
     }
 
     public void setContactMobile(String contactMobile) {
-        this.contactMobile = contactMobile;
+        this.contactMobile = contactMobile == null ? null : contactMobile.trim();
     }
 
     public String getContactEmail() {
@@ -175,7 +165,7 @@ public class Supplier implements Serializable {
     }
 
     public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
+        this.contactEmail = contactEmail == null ? null : contactEmail.trim();
     }
 
     public String getContactQq() {
@@ -183,7 +173,7 @@ public class Supplier implements Serializable {
     }
 
     public void setContactQq(String contactQq) {
-        this.contactQq = contactQq;
+        this.contactQq = contactQq == null ? null : contactQq.trim();
     }
 
     public String getOpenAccountBank() {
@@ -191,7 +181,7 @@ public class Supplier implements Serializable {
     }
 
     public void setOpenAccountBank(String openAccountBank) {
-        this.openAccountBank = openAccountBank;
+        this.openAccountBank = openAccountBank == null ? null : openAccountBank.trim();
     }
 
     public String getBankAccountNo() {
@@ -199,7 +189,7 @@ public class Supplier implements Serializable {
     }
 
     public void setBankAccountNo(String bankAccountNo) {
-        this.bankAccountNo = bankAccountNo;
+        this.bankAccountNo = bankAccountNo == null ? null : bankAccountNo.trim();
     }
 
     public String getTaxNo() {
@@ -207,7 +197,7 @@ public class Supplier implements Serializable {
     }
 
     public void setTaxNo(String taxNo) {
-        this.taxNo = taxNo;
+        this.taxNo = taxNo == null ? null : taxNo.trim();
     }
 
     public String getPayLatency() {
@@ -215,7 +205,7 @@ public class Supplier implements Serializable {
     }
 
     public void setPayLatency(String payLatency) {
-        this.payLatency = payLatency;
+        this.payLatency = payLatency == null ? null : payLatency.trim();
     }
 
     public Boolean getIsActive() {
@@ -239,7 +229,7 @@ public class Supplier implements Serializable {
     }
 
     public void setCreateBy(String createBy) {
-        this.createBy = createBy;
+        this.createBy = createBy == null ? null : createBy.trim();
     }
 
     public Date getUpdateTime() {
@@ -255,7 +245,7 @@ public class Supplier implements Serializable {
     }
 
     public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
+        this.updateBy = updateBy == null ? null : updateBy.trim();
     }
 
     public Boolean getIsDeleted() {
@@ -280,7 +270,6 @@ public class Supplier implements Serializable {
         sb.append(", address=").append(address);
         sb.append(", shipAddress=").append(shipAddress);
         sb.append(", fax=").append(fax);
-        sb.append(", brandId=").append(brandId);
         sb.append(", purchaseOwner=").append(purchaseOwner);
         sb.append(", remark=").append(remark);
         sb.append(", contactName=").append(contactName);

@@ -1,8 +1,9 @@
 package com.wow.product.mapper;
 
+import java.util.List;
+
 import com.wow.product.model.Supplier;
 import com.wow.product.model.SupplierExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface SupplierMapper {

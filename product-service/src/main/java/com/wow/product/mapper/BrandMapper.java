@@ -18,6 +18,8 @@ public interface BrandMapper {
 
     List<Brand> selectByExample(BrandExample example);
 
+    List<Brand> selectAll();
+
     Brand selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Brand record, @Param("example") BrandExample example);

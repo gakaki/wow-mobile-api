@@ -9,6 +9,7 @@ import com.wow.product.model.TopicExample;
 import com.wow.product.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -55,11 +56,13 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Topic getTopicById(int topicId) {
         return topicMapper.selectByPrimaryKey(topicId);
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public Topic getTopicByName(String topicName) throws Exception{
 
             TopicExample topicExample=new TopicExample();
@@ -68,6 +71,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Topic> getAllTopics() {
         return topicMapper.selectAll();
     }
@@ -82,19 +86,21 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public int updateProductShortListInTopic(List<ProductShortListInTopic> productShortListInTopics) {
         if(!productShortListInTopics.isEmpty())
-            productShortListInTopics.forEach(o-> productShortListInTopicMapper.updateByPrimaryKey(o));
+            productShortListInTopics.forEach(o-> productShortListInTopicMapper.updateByPrimaryKeySelective(o));
         return 0;
     }
 
     @Override
     public int deleteProductShortListInTopic(List<ProductShortListInTopic> productShortListInTopics) {
-        if(!productShortListInTopics.isEmpty())
-            productShortListInTopics.forEach(o->o.setIsDeleted(true));
-        updateProductShortListInTopic(productShortListInTopics);
+        if(!productShortListInTopics.isEmpty()) {
+            productShortListInTopics.forEach(o -> o.setIsDeleted(true));
+            updateProductShortListInTopic(productShortListInTopics);
+        }
         return 0;
     }
 
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<ProductShortListInTopic> getProductShortListInTopic(int topicId) {
         ProductShortListInTopicExample productShortListInTopicExample=new ProductShortListInTopicExample();
         productShortListInTopicExample.or().andIsDeletedEqualTo(false).andTopicIdEqualTo(topicId);

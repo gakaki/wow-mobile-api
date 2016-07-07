@@ -7,15 +7,16 @@ import com.wow.product.model.ProductComment;
 import com.wow.product.service.ProductCombineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+
 
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.function.Predicate;
+
 
 /**
  * Created by fangying@wowdsgn on 2016/7/4.
@@ -34,7 +35,7 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
      */
     @Override
     public int createProductCombines(List<ProductCombine> productCombines) {
-        if(!CollectionUtils.isEmpty(productCombines))
+        if(!productCombines.isEmpty())
             productCombines.forEach(o->productCombineMapper.insertSelective(o));
         return 0;
     }
@@ -48,7 +49,7 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
 
     @Override
     public int updateProductCombines(List<ProductCombine> productCombines) {
-        if(!CollectionUtils.isEmpty(productCombines))
+        if(!productCombines.isEmpty())
         productCombines.forEach(o->productCombineMapper.updateByPrimaryKeySelective(o));
         return 0;
     }
@@ -82,10 +83,11 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
      * @return List<ProductCombine> 子品列表
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<ProductCombine> getSubProductInfo(int productId) {
 
         List<ProductCombine> lists= getProductCombineByProductId(productId);
-        if(!CollectionUtils.isEmpty(lists))
+        if(!lists.isEmpty())
         {
             List<ProductCombine> resultLists=new ArrayList<>();
             HashSet<Integer> set=new HashSet();
