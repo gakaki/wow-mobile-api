@@ -40,7 +40,7 @@ public interface SceneService {
      * @param scene
      * @return
      */
-    int bindProductCombineIntoScene(Scene scene);
+    int bindProductCombineIntoScene(Scene scene,int productId);
 
     /**
      * 查询所有场景

@@ -138,14 +138,8 @@ public class DesignerServiceImpl implements DesignerService {
         return  designers;
     }
     @Override
-    public Designer getPrimaryDesignerByProduct(Product product) {
-        try {
+    public Designer getPrimaryDesignerByProduct(Product product) throws Exception {
+
               return getDesignersByProduct(product).stream().findAny().get();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

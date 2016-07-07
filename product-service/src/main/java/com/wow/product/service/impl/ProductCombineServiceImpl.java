@@ -71,9 +71,6 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
         ProductCombineExample.Criteria criteria=productCombineExample.createCriteria();
         criteria.andProductIdEqualTo(productId);
         criteria.andIsDeletedEqualTo(false);
-//        PageHelper.startPage(1,20);
-//        productCombineMapper.selectByExample(productCombineExample);
-//        PageInfo pageInfo= new PageInfo(productCombineMapper.selectByExample(productCombineExample));
        return  productCombineMapper.selectByExample(productCombineExample);
 
     }
@@ -91,9 +88,9 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
         if(!CollectionUtils.isEmpty(lists))
         {
             List<ProductCombine> resultLists=new ArrayList<>();
-            HashSet set=new HashSet();
+            HashSet<Integer> set=new HashSet();
             lists.forEach(o->set.add(o.getSubProductId()));
-            set.forEach(o-> resultLists.addAll(getProductCombineByProductId((Integer) o)));
+            set.forEach(o-> resultLists.addAll(getProductCombineByProductId(o)));
             return resultLists;
         }
         return null;

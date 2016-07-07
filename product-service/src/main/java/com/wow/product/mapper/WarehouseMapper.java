@@ -20,6 +20,8 @@ public interface WarehouseMapper {
 
     Warehouse selectByPrimaryKey(Integer id);
 
+    List<Warehouse> selectAll();
+
     int updateByExampleSelective(@Param("record") Warehouse record, @Param("example") WarehouseExample example);
 
     int updateByExample(@Param("record") Warehouse record, @Param("example") WarehouseExample example);
@@ -27,4 +29,5 @@ public interface WarehouseMapper {
     int updateByPrimaryKeySelective(Warehouse record);
 
     int updateByPrimaryKey(Warehouse record);
+
 }

@@ -4,6 +4,7 @@ import com.wow.product.mapper.ProductSupplierMapper;
 import com.wow.product.mapper.ProductSupplyLogMapper;
 import com.wow.product.mapper.SupplierMapper;
 import com.wow.product.model.*;
+import com.wow.product.service.BrandService;
 import com.wow.product.service.ProductService;
 import com.wow.product.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class SupplierServiceImpl implements SupplierService {
     private ProductService productService;
     @Autowired
     private ProductSupplyLogMapper productSupplyLogMapper;
+    @Autowired
+    private BrandService brandService;
     @Override
     public int createSupplier(Supplier supplier) {
 
@@ -50,12 +53,18 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public List<Supplier> getAllSuppliers() {
-
-        return null;
+        return supplierMapper.selectAll();
     }
 
+    /**
+     * 查询供应商供应品牌
+     * @return
+     */
     @Override
     public List<Brand> getBrandsBySupplier(int supplierId) {
+        Supplier supplier=  getSupplierById(supplierId);
+        if(supplier!=null)
+            brandService.getBrandById(supplier.getBrandId());
         return null;
     }
 
@@ -81,27 +90,20 @@ public class SupplierServiceImpl implements SupplierService {
      * @return
      */
     @Override
-    public int getProductSupplier(int productId) {
+    public int getProductSupplier(int productId) throws Exception {
 
-         try {
              ProductSupplierExample productSupplierExample=new ProductSupplierExample();
              ProductSupplierExample.Criteria criteria=productSupplierExample.createCriteria();
              criteria.andProductIdEqualTo(productId);
              criteria.andIsDeletedEqualTo(false);
              return productSupplierMapper.selectByExample(productSupplierExample)
-                     .stream().findAny().get().getSupplierId();
-         }
-         catch (Exception e)
-         {
-             e.printStackTrace();
-         }
-         return 0;
+                    .get(0).getSupplierId();
 
     }
 
     @Override
-    public List<Product> getProductsBySupplier(int supplierId) {
-        try{
+    public List<Product> getProductsBySupplier(int supplierId)  {
+
             ProductSupplierExample productSupplierExample=new ProductSupplierExample();
             ProductSupplierExample.Criteria criteria=productSupplierExample.createCriteria();
             criteria.andSupplierIdEqualTo(supplierId);
@@ -118,12 +120,8 @@ public class SupplierServiceImpl implements SupplierService {
                     }
                 });
             return products;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
+
+
     }
 
     @Override

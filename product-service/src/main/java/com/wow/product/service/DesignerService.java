@@ -98,5 +98,5 @@ public interface DesignerService {
      * @param product
      * @return
      */
-    Designer getPrimaryDesignerByProduct(Product product);
+    Designer getPrimaryDesignerByProduct(Product product) throws Exception;
 }

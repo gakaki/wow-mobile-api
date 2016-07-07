@@ -48,14 +48,14 @@ public interface TopicService {
      * @param topicId
      * @return
      */
-    Topic getTopicById(int topicId);
+    Topic getTopicById(int topicId) ;
 
     /**
      * 根据名称查询专题
      * @param topicName
      * @return
      */
-    Topic getTopicByName(String topicName);
+    Topic getTopicByName(String topicName) throws Exception;
 
     /**
      * 查询所有专题

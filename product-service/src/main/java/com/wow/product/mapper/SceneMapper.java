@@ -18,6 +18,8 @@ public interface SceneMapper {
 
     List<Scene> selectByExample(SceneExample example);
 
+    List<Scene> selectAll();
+
     Scene selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Scene record, @Param("example") SceneExample example);

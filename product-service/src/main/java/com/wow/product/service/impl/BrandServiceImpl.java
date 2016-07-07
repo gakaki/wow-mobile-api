@@ -48,6 +48,11 @@ public class BrandServiceImpl implements BrandService {
         return 0;
     }
 
+    @Override
+    public Brand getBrandById(int brandId) {
+        return brandMapper.selectByPrimaryKey(brandId);
+    }
+
     /**
      * 根据首字母查询品牌
      *

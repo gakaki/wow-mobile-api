@@ -35,6 +35,7 @@ public interface BrandService {
      */
     int updateBrand(Brand brand);
 
+    Brand getBrandById(int brandId);
     /**
      * 根据首字母查询品牌
      *
