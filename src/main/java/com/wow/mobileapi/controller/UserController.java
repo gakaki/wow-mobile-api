@@ -3,6 +3,7 @@ package com.wow.mobileapi.controller;
 import com.wow.common.error.ErrorRepositoryManager;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.dto.ApiResponse;
+import com.wow.mobileapi.dto.MobileRequestVo;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.model.EndUser;
 import com.wow.user.service.UserService;
@@ -65,11 +66,11 @@ public class UserController {
             RegisterResultVo registerResultVo = userService.register(registerRequestVo);
             if (registerResultVo.isSuccess()) {
                 responseUtil.setResponse(apiResponse,"0");
-                apiResponse.setData("注册成功");
+                apiResponse.setData(registerResultVo);
             } else {
                 apiResponse.setResCode(registerResultVo.getResCode());
                 apiResponse.setResMsg(errorRepositoryManager.getErrorMsg(registerResultVo.getResCode()));
-                apiResponse.setData("注册失败");
+                apiResponse.setData(registerResultVo);
             }
         }
         return apiResponse;
@@ -102,8 +103,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/mobile", method = RequestMethod.GET)
-    public ApiResponse isExistedUserByMobile(
-            @RequestParam(value = "mobile", required = true) String mobile) {
+    public ApiResponse isExistedUserByMobile(@RequestParam String mobile) {
         ApiResponse apiResponse = new ApiResponse();
         boolean isSuccess = (userService.isExistedUserByMobile(mobile));
         responseUtil.setResponse(apiResponse,"0");
@@ -112,8 +112,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/nickname", method = RequestMethod.GET)
-    public ApiResponse isExistedUserByNickName(
-            @RequestParam(value = "nickName", required = true) String nickName) {
+    public ApiResponse isExistedUserByNickName(@RequestParam String nickName) {
         ApiResponse apiResponse = new ApiResponse();
         boolean isSuccess = (userService.isExistedUserByNickName(nickName));
         responseUtil.setResponse(apiResponse,"0");
@@ -122,10 +121,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/captcha", method = RequestMethod.POST)
-    public ApiResponse requestCaptcha(
-            @RequestParam(value = "mobile", required = true) String mobile) {
+    public ApiResponse requestCaptcha(@RequestBody MobileRequestVo mobileRequestVo) {
         ApiResponse apiResponse = new ApiResponse();
-        String captcha = (userService.getCaptcha(mobile));
+        String captcha = (userService.getCaptcha(mobileRequestVo.getMobile()));
         responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData("验证码已发送,请查看手机短信之后输入");
         return apiResponse;

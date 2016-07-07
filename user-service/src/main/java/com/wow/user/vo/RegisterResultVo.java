@@ -1,12 +1,18 @@
 package com.wow.user.vo;
 
+import java.io.Serializable;
+
 /**
  * Created by zhengzhiqing on 16/7/6.
  */
-public class RegisterResultVo {
+public class RegisterResultVo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private boolean success;
     private String resCode;
     private String resMsg;
+    private int endUserId;
 
     public boolean isSuccess() {
         return success;
@@ -30,5 +36,13 @@ public class RegisterResultVo {
 
     public void setResMsg(String resMsg) {
         this.resMsg = resMsg;
+    }
+
+    public int getEndUserId() {
+        return endUserId;
+    }
+
+    public void setEndUserId(int endUserId) {
+        this.endUserId = endUserId;
     }
 }
