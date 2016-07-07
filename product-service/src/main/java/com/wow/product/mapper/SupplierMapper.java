@@ -18,6 +18,8 @@ public interface SupplierMapper {
 
     List<Supplier> selectByExample(SupplierExample example);
 
+    List<Supplier> selectAll();
+
     Supplier selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Supplier record, @Param("example") SupplierExample example);

@@ -78,7 +78,7 @@ public interface SupplierService {
      * @param productId
      * @return
      */
-    int getProductSupplier(int productId);
+    int getProductSupplier(int productId) throws Exception;
 
     /**
      * 根据供应商查询产品
@@ -87,6 +87,7 @@ public interface SupplierService {
      * @return
      */
     List<Product> getProductsBySupplier(int supplierId);
+
 
     /**
      * 更新产品供应商信息,如到货周期,销售类型等

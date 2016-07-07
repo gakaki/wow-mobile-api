@@ -57,7 +57,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public List<Warehouse> getAllWarehouses(Warehouse warehouse) {
-        return null;
+    public List<Warehouse> getAllWarehouses() {
+        return warehouseMapper.selectAll();
     }
 }

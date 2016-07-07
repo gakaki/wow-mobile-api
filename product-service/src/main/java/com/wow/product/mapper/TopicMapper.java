@@ -20,6 +20,8 @@ public interface TopicMapper {
 
     List<Topic> selectByExample(TopicExample example);
 
+    List<Topic> selectAll();
+
     Topic selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Topic record, @Param("example") TopicExample example);

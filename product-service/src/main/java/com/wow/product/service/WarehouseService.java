@@ -44,9 +44,8 @@ public interface WarehouseService {
 
     /**
      * 查询所有仓库
-     * @param warehouse
      * @return
      */
-    List<Warehouse> getAllWarehouses(Warehouse warehouse);
+    List<Warehouse> getAllWarehouses();
 
 }
