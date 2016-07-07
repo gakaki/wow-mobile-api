@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/attribute-service" />
+            <option value="$PROJECT_DIR$/common-util" />
             <option value="$PROJECT_DIR$/marketing-service" />
             <option value="$PROJECT_DIR$/order-service" />
             <option value="$PROJECT_DIR$/page-service" />

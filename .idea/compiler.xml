@@ -23,6 +23,8 @@
       <module name="attribute-service_test" target="1.8" />
       <module name="common-model_main" target="1.8" />
       <module name="common-model_test" target="1.8" />
+      <module name="common-util_main" target="1.8" />
+      <module name="common-util_test" target="1.8" />
       <module name="marketing-service_main" target="1.8" />
       <module name="marketing-service_test" target="1.8" />
       <module name="markting-service_main" target="1.8" />
