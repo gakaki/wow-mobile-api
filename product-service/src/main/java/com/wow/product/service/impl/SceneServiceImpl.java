@@ -7,6 +7,7 @@ import com.wow.product.service.ProductCombineService;
 import com.wow.product.service.SceneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -24,6 +25,11 @@ public class SceneServiceImpl implements SceneService {
     @Override
     public int createScene(Scene scene) {
         return sceneMapper.insertSelective(scene);
+    }
+
+    @Override
+    public Scene getSceneById(int sceneId) {
+        return sceneMapper.selectByPrimaryKey(sceneId);
     }
 
     @Override
@@ -60,6 +66,7 @@ public class SceneServiceImpl implements SceneService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
     public List<Scene> getScenes() {
         return sceneMapper.selectAll();
     }
