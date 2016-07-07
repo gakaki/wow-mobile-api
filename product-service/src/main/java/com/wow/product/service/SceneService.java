@@ -19,6 +19,13 @@ public interface SceneService {
     int createScene(Scene scene);
 
     /**
+     * 根据场景ID查询场景
+     * @param sceneId
+     * @return
+     */
+    Scene getSceneById(int sceneId);
+
+    /**
      * 更新场景
      *
      * @param scene
