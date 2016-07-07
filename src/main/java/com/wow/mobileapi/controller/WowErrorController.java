@@ -21,6 +21,9 @@ public class WowErrorController implements ErrorController {
     private final ErrorAttributes errorAttributes;
 
     @Autowired
+    ResponseUtil responseUtil;
+
+    @Autowired
     public WowErrorController(ErrorAttributes errorAttributes) {
         Assert.notNull(errorAttributes, "ErrorAttributes must not be null");
         this.errorAttributes = errorAttributes;
@@ -40,7 +43,7 @@ public class WowErrorController implements ErrorController {
             String[] lines = trace.split("\n\t");
             body.put("trace", lines);
         }
-        ResponseUtil.setResponse(apiResponse, "50000");
+        responseUtil.setResponse(apiResponse, "50000");
         apiResponse.setData(body);
         return apiResponse;
     }

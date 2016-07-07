@@ -4,6 +4,8 @@ import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.wow.user.model.EndUser;
 import com.wow.user.service.UserService;
 import com.wow.user.thirdparty.SmsSender;
+import com.wow.user.vo.RegisterRequestVo;
+import com.wow.user.vo.RegisterResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +34,18 @@ public class UserTestController {
      * @return
      */
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public String register(@Validated @RequestBody EndUser endUser) {
+    public String register(@Validated @RequestBody RegisterRequestVo registerRequestVo) {
         String registerResult = "";
         //先根据用户名查找是否已经注册过
-        if (userService.isExistedUser(endUser.getUserName())) {
+        if (userService.isExistedUserByUserName(registerRequestVo.getEndUser().getUserName())) {
             logger.info("existed user try to register...");
             registerResult = "您已经注册过,请直接登录";
         } else {
             logger.info("user register...");
-            endUser.setIsDeleted(false);
-            endUser.setRegisterTime(new Date());
-            int i = userService.register(endUser);
-            if (i > 0) {
+            registerRequestVo.getEndUser().setIsDeleted(false);
+            registerRequestVo.getEndUser().setRegisterTime(new Date());
+            RegisterResultVo registerResultVo = userService.register(registerRequestVo);
+            if (registerResultVo.isSuccess()) {
                 registerResult = "注册成功,请登录";
             } else {
                 registerResult = "注册失败,请重试";

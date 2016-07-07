@@ -1,8 +1,9 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.common.util.RedisUtil;
+import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.dto.ApiResponse;
 import com.wow.mobileapi.util.ResponseUtil;
-import com.wow.mobileapi.util.ValidatorUtil;
 import com.wow.user.service.SessionService;
 import com.wow.user.vo.LoginRequestVo;
 import com.wow.user.vo.LoginResultVo;
@@ -27,6 +28,8 @@ public class SessionController {
 
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private ResponseUtil responseUtil;
 
     /**
      * 创建新的会话(登入)
@@ -38,16 +41,17 @@ public class SessionController {
                              BindingResult result) {
         ApiResponse apiResponse = new ApiResponse();
         if (result.hasErrors()) {
-            ResponseUtil.setResponse(apiResponse, "40000");
+            responseUtil.setResponse(apiResponse, "40000");
             Map<String, String> map = ValidatorUtil.getErrors(result);
             apiResponse.setData(map);
         } else {
+            //TODO: 可能会需要从header中获取部分信息,放到LoginRequestVo,比如login channel
             LoginResultVo loginResultVo = sessionService.login(loginRequestVo);
             if (loginResultVo.isValidUser()) {
-                ResponseUtil.setResponse(apiResponse,"0");
+                responseUtil.setResponse(apiResponse,"0");
                 apiResponse.setData(loginResultVo.getEndUserSession());
             } else {
-                ResponseUtil.setResponse(apiResponse,"40201");
+                responseUtil.setResponse(apiResponse,"40203");
                 apiResponse.setData(loginResultVo.getEndUserSession());
             }
         }
@@ -63,7 +67,7 @@ public class SessionController {
     public ApiResponse logout(@PathVariable Integer endUserId, @PathVariable byte loginChannel) {
         ApiResponse apiResponse = new ApiResponse();
         boolean isSuccess = (sessionService.logout(endUserId,loginChannel)==1);
-        ResponseUtil.setResponse(apiResponse,"0");
+        responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData(isSuccess);
         return apiResponse;
     }

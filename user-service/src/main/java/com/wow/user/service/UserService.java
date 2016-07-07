@@ -1,6 +1,8 @@
 package com.wow.user.service;
 
 import com.wow.user.model.*;
+import com.wow.user.vo.RegisterRequestVo;
+import com.wow.user.vo.RegisterResultVo;
 
 import java.util.List;
 
@@ -12,18 +14,31 @@ public interface UserService {
 
     /**
      * 用户注册
-     *
-     * @param endUser
+     * @param registerRequestVo
      * @return
      */
-    int register(EndUser endUser);
+    RegisterResultVo register(RegisterRequestVo registerRequestVo);
 
     /**
-     * 是否已注册用户
+     * 根据用户名判断是否已注册用户
      * @param userName
      * @return
      */
-    boolean isExistedUser(String userName);
+    boolean isExistedUserByUserName(String userName);
+
+    /**
+     * 根据手机号判断是否已注册用户
+     * @param mobile
+     * @return
+     */
+    boolean isExistedUserByMobile(String mobile);
+
+    /**
+     * 根据昵称判断是否已注册用户
+     * @param nickName
+     * @return
+     */
+    boolean isExistedUserByNickName(String nickName);
 
     /**
      * 用户信息更新

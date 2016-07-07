@@ -34,4 +34,8 @@ public class ApiResponse implements Serializable {
     public void setData(Object data) {
         this.data = data;
     }
+
+    public String toString() {
+        return "resCode:" + resCode + ",resMsg:" + resMsg + ",data:" + data;
+    }
 }

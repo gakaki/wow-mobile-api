@@ -1,9 +1,15 @@
 package com.wow.user.service.impl;
 
+import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+import com.wow.common.error.ErrorRepositoryManager;
+import com.wow.common.util.RedisUtil;
 import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.model.*;
 import com.wow.user.service.UserService;
+import com.wow.user.thirdparty.SmsSender;
 import com.wow.user.util.PasswordUtil;
+import com.wow.user.vo.RegisterRequestVo;
+import com.wow.user.vo.RegisterResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +18,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -28,28 +35,90 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EndUserMapper endUserMapper;
 
+    @Autowired
+    private SmsSender smsSender;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Autowired
+    private ErrorRepositoryManager errorRepositoryManager;
+
     /**
      * 用户注册
      *
-     * @param endUser
+     * @param registerRequestVo
      * @return
      */
     @Override
-    public int register(EndUser endUser) {
-        endUser.setPassword(PasswordUtil.passwordHashGenerate(endUser.getPassword()));
-        return endUserMapper.insertSelective(endUser);
+    public RegisterResultVo register(RegisterRequestVo registerRequestVo) {
+        RegisterResultVo registerResultVo = new RegisterResultVo();
+        String mobile = registerRequestVo.getEndUser().getMobile();
+        if (StringUtils.isEmpty(mobile)) {
+            registerResultVo.setSuccess(false);
+            registerResultVo.setResCode("40000");
+            registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("40000"));
+        } else {
+            //判断验证码是否与服务端一致,且服务端验证码未过期
+            String captchaOnServer = getCaptchaOnServer(mobile);
+            if (StringUtils.isEmpty(captchaOnServer)) {
+                registerResultVo.setSuccess(false);
+                registerResultVo.setResCode("40201");
+                registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("40201"));
+            } else if (!registerRequestVo.getCaptcha().equalsIgnoreCase(captchaOnServer)) {
+                registerResultVo.setSuccess(false);
+                registerResultVo.setResCode("40202");
+                registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("40202"));
+            } else {
+                registerRequestVo.getEndUser().setPassword(
+                        PasswordUtil.passwordHashGenerate(registerRequestVo.getEndUser().getPassword()));
+                endUserMapper.insertSelective(registerRequestVo.getEndUser());
+                registerResultVo.setSuccess(true);
+                registerResultVo.setResCode("0");
+                registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("0"));
+            }
+        }
+        return registerResultVo;
     }
 
     /**
-     * 是否已注册用户
+     * 根据用户名判断是否已注册用户
      *
      * @param userName
      * @return
      */
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
-    public boolean isExistedUser(String userName) {
+    public boolean isExistedUserByUserName(String userName) {
         EndUser user = getEndUserByUserName(userName);
+        logger.info("user=" + user);
+        return (user != null);
+    }
+
+    /**
+     * 根据手机号判断是否已注册用户
+     *
+     * @param mobile
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public boolean isExistedUserByMobile(String mobile) {
+        EndUser user = getEndUserByMobile(mobile);
+        logger.info("user=" + user);
+        return (user != null);
+    }
+
+    /**
+     * 根据昵称判断是否已注册用户
+     *
+     * @param nickName
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public boolean isExistedUserByNickName(String nickName) {
+        EndUser user = getEndUserByNickName(nickName);
         logger.info("user=" + user);
         return (user != null);
     }
@@ -67,18 +136,31 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 获取验证码
+     * 请求验证码
      *
      * @param mobile
      * @return 验证码
      */
     public String getCaptcha(String mobile) {
-        String captcha = "";
+
         //TODO:调用阿里大禹的短信接口,往目标手机发送随机生成的6位数字,并将6位数字存储到Redis中
         //1. generate 6-bit digit randomly
+        String randomNum = "349873";
+
         //2. call alidayu interface to send sms
+        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+        req.setExtend( "13764641531 uid " );//公共回传参数，在“消息返回”中会透传回该参数；举例：用户可以传入自己下级的会员ID，在消息返回时，该会员ID会包含在内，用户可以根据该会员ID识别是哪位会员使用了你的应用
+        req.setSmsType("normal");//短信类型，传入值请填写normal
+        req.setSmsFreeSignName("尖叫设计");//   短信签名，传入的短信签名必须是在阿里大鱼“管理中心-短信签名管理”中的可用签名。如“阿里大鱼”已在短信签名管理中通过审核，则可传入”阿里大鱼“（传参时去掉引号）作为短信签名。短信效果示例：【阿里大鱼】欢迎使用阿里大鱼服务。
+        req.setSmsParamString("{'code':'743621','product':'尖叫设计'}");//短信模板变量，传参规则{"key":"value"}，key的名字须和申请模板中的变量名一致，多个变量之间以逗号隔开。示例：针对模板“验证码${code}，您正在进行${product}身份验证，打死不要告诉别人哦！”，传参时需传入{"code":"1234","product":"alidayu"}
+        req.setRecNum("13764641531");//短信接收号码。支持单个或多个手机号码，传入号码为11位手机号码，不能加0或+86。群发短信需传入多个号码，以英文逗号分隔，一次调用最多传入200个号码。示例：18600000000,13911111111,13322222222
+        req.setSmsTemplateCode("SMS_5165048");//短信模板ID，传入的模板必须是在阿里大鱼“管理中心-短信模板管理”中的可用模板。示例：SMS_585014
+        smsSender.sendValidateCode(req);
+
         //3. store digit into redis
-        return captcha;
+        redisUtil.set(mobile,randomNum,300L);//缓存5分钟
+
+        return randomNum;
     }
 
     /**
@@ -90,7 +172,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    @CacheEvict(value = "UserCache", key="'USER_MOBILE_'+#mobile")
+//    @CacheEvict(value = "UserCache", key="'USER_MOBILE_'+#mobile")
     public boolean resetPassword(String mobile, String captcha, String newPwd) {
         String captchaForMobile = getCaptchaOnServer(mobile);
         if (captchaForMobile.equalsIgnoreCase(captcha)) {
@@ -115,8 +197,12 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional(propagation= Propagation.SUPPORTS)
     private String getCaptchaOnServer(String mobile) {
-        //TODO: get captcha from redis or mysql
-        return "123456";
+        String captchaOnServer = "";
+        Object captcha = redisUtil.get(mobile);
+        if (captcha != null) {
+            captchaOnServer = (String) captcha;
+        }
+        return captchaOnServer;
     }
     /**
      * 根据Id获取用户信息
@@ -232,10 +318,11 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional(propagation= Propagation.SUPPORTS)
     public EndUser authenticate(String userName, String password) {
-
         EndUser endUser = getEndUserByUserName(userName);
-        if (PasswordUtil.passwordHashValidate(password, endUser.getPassword())) {
-            return endUser;
+        if (endUser!=null
+                && endUser.getPassword()!=null
+                && PasswordUtil.passwordHashValidate(password, endUser.getPassword())) {
+                return endUser;
         } else {
             return null;
         }

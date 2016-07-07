@@ -3,19 +3,15 @@ package com.wow.mobileapi.controller;
 
 import com.wow.attribute.model.Attribute;
 import com.wow.attribute.service.AttributeService;
+import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.dto.ApiResponse;
 import com.wow.mobileapi.util.ResponseUtil;
-import com.wow.mobileapi.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -27,11 +23,14 @@ public class AttributeController {
     @Autowired
     private AttributeService attributeService;
 
+    @Autowired
+    private ResponseUtil responseUtil;
+
     @RequestMapping(value = "/v1/attributes", method = RequestMethod.POST)
     public ApiResponse createAttribute(@Validated @RequestBody Attribute newAttribute, BindingResult result) {
         ApiResponse apiResponse = new ApiResponse();
         if (result.hasErrors()) {
-            ResponseUtil.setResponse(apiResponse, "40000");
+            responseUtil.setResponse(apiResponse, "40000");
             Map<String, String> map = ValidatorUtil.getErrors(result);
             apiResponse.setData(map);
         } else {
@@ -49,7 +48,7 @@ public class AttributeController {
         ApiResponse apiResponse = new ApiResponse();
         logger.info("get attribute, id=" + id);
         if(id==null || id <=0 ) {
-            ResponseUtil.setResponse(apiResponse, "40401");
+            responseUtil.setResponse(apiResponse, "40401");
         } else {
             try {
                 Attribute attribute = attributeService.getAttributeById(id);
@@ -87,7 +86,7 @@ public class AttributeController {
         ApiResponse apiResponse = new ApiResponse();
         logger.info("get attribute, id=" + id);
         if(id==null || id <=0 ) {
-            ResponseUtil.setResponse(apiResponse, "40401");
+            responseUtil.setResponse(apiResponse, "40401");
         } else {
             try {
                 Attribute attribute = attributeService.getAttributeById(id);

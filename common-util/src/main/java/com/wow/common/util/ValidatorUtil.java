@@ -1,4 +1,4 @@
-package com.wow.mobileapi.util;
+package com.wow.common.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -63,7 +63,6 @@ public class SessionServiceImpl implements SessionService {
             endUserSession = endUserSessionMapper.selectByUserIdChannel(endUser.getId(), loginRequestVo.getLoginChannel());
             long loginIp = IpConvertUtil.ipToLong(loginRequestVo.getLoginIp());
             Date now = new Date();
-            logger.info("start to login at:" + now);
             //token生成算法,暂用UUID,可以替换
             String sessionToken = UUID.randomUUID().toString();
             if (endUserSession == null) {
@@ -77,7 +76,7 @@ public class SessionServiceImpl implements SessionService {
                 endUserSession.setLogoutTime(null);
                 endUserSession.setSessionToken(sessionToken);
                 endUserSession.setUserAgentInfo(loginRequestVo.getUserAgent());
-                endUserSessionMapper.insert(endUserSession);
+                endUserSessionMapper.insertSelective(endUserSession);
             } else {
                 endUserSession.setIsLogout(false);
                 endUserSession.setLastLoginIp(loginIp);

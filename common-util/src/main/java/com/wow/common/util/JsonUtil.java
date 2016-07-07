@@ -1,4 +1,4 @@
-package com.wow.mobileapi.util;
+package com.wow.common.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

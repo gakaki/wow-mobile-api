@@ -23,13 +23,15 @@ public class StockController {
 
     @Autowired
     private StockService stockService;
+    @Autowired
+    private ResponseUtil responseUtil;
 
     @RequestMapping(value = "/{productId}", method = RequestMethod.GET)
     public ApiResponse getProductWarehouses(@PathVariable Integer productId) {
         logger.info("start to get warehouses in which product stored");
         ApiResponse apiResponse = new ApiResponse();
         List<Integer> warehouseList = stockService.selectWarehouseByProductId(productId);
-        ResponseUtil.setResponse(apiResponse,"0");
+        responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData(warehouseList);
         return apiResponse;
     }

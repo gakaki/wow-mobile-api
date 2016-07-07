@@ -1,21 +1,19 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.common.error.ErrorRepositoryManager;
+import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.dto.ApiResponse;
 import com.wow.mobileapi.util.ResponseUtil;
-import com.wow.mobileapi.util.ValidatorUtil;
 import com.wow.user.model.EndUser;
 import com.wow.user.service.UserService;
+import com.wow.user.vo.RegisterRequestVo;
+import com.wow.user.vo.RegisterResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -27,6 +25,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ErrorRepositoryManager errorRepositoryManager;
+
+    @Autowired
+    private ResponseUtil responseUtil;
 
     @RequestMapping(value = "/{endUserId}", method = RequestMethod.GET)
     public ApiResponse getEndUserById(@PathVariable Integer endUserId) {
@@ -45,25 +49,28 @@ public class UserController {
 
     /**
      * 用户注册(创建新用户)
-     * @param newEndUser
+     * @param registerRequestVo
      * @return
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ApiResponse register(@Validated @RequestBody EndUser newEndUser, BindingResult result) {
+    public ApiResponse register(@Validated @RequestBody RegisterRequestVo registerRequestVo,
+                                BindingResult result) {
         ApiResponse apiResponse = new ApiResponse();
 
         if (result.hasErrors()) {
-            ResponseUtil.setResponse(apiResponse,"40000");
+            responseUtil.setResponse(apiResponse,"40000");
             Map<String, String> map = ValidatorUtil.getErrors(result);
             apiResponse.setData(map);
         } else {
-            boolean isRegisterSuccess = false;
-            int i= userService.register(newEndUser);
-            if (i==1) {
-                isRegisterSuccess = true;
+            RegisterResultVo registerResultVo = userService.register(registerRequestVo);
+            if (registerResultVo.isSuccess()) {
+                responseUtil.setResponse(apiResponse,"0");
+                apiResponse.setData("注册成功");
+            } else {
+                apiResponse.setResCode(registerResultVo.getResCode());
+                apiResponse.setResMsg(errorRepositoryManager.getErrorMsg(registerResultVo.getResCode()));
+                apiResponse.setData("注册失败");
             }
-            ResponseUtil.setResponse(apiResponse,"0");
-            apiResponse.setData(isRegisterSuccess);
         }
         return apiResponse;
     }
@@ -80,7 +87,7 @@ public class UserController {
             updatedEndUser.setId(endUserId);
         }
         boolean isSuccess =  (userService.updateEndUser(updatedEndUser) == 1);
-        ResponseUtil.setResponse(apiResponse,"0");
+        responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData(isSuccess);
         return apiResponse;
     }
@@ -89,18 +96,38 @@ public class UserController {
     public ApiResponse deleteUser(@PathVariable Integer endUserId) {
         ApiResponse apiResponse = new ApiResponse();
         boolean isSuccess = (userService.deleteUser(endUserId)==1);
-        ResponseUtil.setResponse(apiResponse,"0");
+        responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData(isSuccess);
         return apiResponse;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/mobile", method = RequestMethod.GET)
     public ApiResponse isExistedUserByMobile(
             @RequestParam(value = "mobile", required = true) String mobile) {
         ApiResponse apiResponse = new ApiResponse();
-        boolean isSuccess = (userService.isExistedUser(mobile));
-        ResponseUtil.setResponse(apiResponse,"0");
+        boolean isSuccess = (userService.isExistedUserByMobile(mobile));
+        responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData(isSuccess);
+        return apiResponse;
+    }
+
+    @RequestMapping(value = "/nickname", method = RequestMethod.GET)
+    public ApiResponse isExistedUserByNickName(
+            @RequestParam(value = "nickName", required = true) String nickName) {
+        ApiResponse apiResponse = new ApiResponse();
+        boolean isSuccess = (userService.isExistedUserByNickName(nickName));
+        responseUtil.setResponse(apiResponse,"0");
+        apiResponse.setData(isSuccess);
+        return apiResponse;
+    }
+
+    @RequestMapping(value = "/captcha", method = RequestMethod.POST)
+    public ApiResponse requestCaptcha(
+            @RequestParam(value = "mobile", required = true) String mobile) {
+        ApiResponse apiResponse = new ApiResponse();
+        String captcha = (userService.getCaptcha(mobile));
+        responseUtil.setResponse(apiResponse,"0");
+        apiResponse.setData("验证码已发送,请查看手机短信之后输入");
         return apiResponse;
     }
 

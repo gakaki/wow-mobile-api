@@ -1,17 +1,14 @@
 package com.wow.mobileapi.interceptor;
 
+import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.constant.ApiConstant;
 import com.wow.mobileapi.dto.ApiResponse;
-import com.wow.mobileapi.util.JsonUtil;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.service.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,6 +24,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private ResponseUtil responseUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -40,7 +39,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         //check whether token is valid, by search it from redis or mysql
         if (!sessionService.isValidSessionToken(token,loginChannel)) {
             logger.warn("session token is invalid");
-            ResponseUtil.setResponse(apiResponse,"10000");
+            responseUtil.setResponse(apiResponse,"10000");
             apiResponse.setData("您的会话已过期,请重新登录");
             response.setContentType("application/json");
             response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
