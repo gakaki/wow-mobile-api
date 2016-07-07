@@ -33,7 +33,7 @@ public class CategoryServiceImpl  implements CategoryService {
      * @return
      */
     public int createCategory(Category category) {
-        return categoryMapper.insert(category);
+        return categoryMapper.insertSelective(category);
     }
 
     /**

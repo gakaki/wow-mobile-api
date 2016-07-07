@@ -30,17 +30,17 @@ public interface WarehouseService {
 
     /**
      * 根据ID查询仓库
-     * @param warehouse
+     * @param warehouseId
      * @return
      */
-    Warehouse getWarehouseById(Warehouse warehouse);
+    Warehouse getWarehouseById(Integer warehouseId);
 
     /**
      * 根据名称查询仓库
-     * @param warehouse
+     * @param warehouseName
      * @return
      */
-    Warehouse getWarehouseByName(Warehouse warehouse);
+    Warehouse getWarehouseByName(String warehouseName);
 
     /**
      * 查询所有仓库

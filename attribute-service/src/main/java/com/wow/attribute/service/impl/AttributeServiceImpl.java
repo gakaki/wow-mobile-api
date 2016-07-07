@@ -47,7 +47,7 @@ public class AttributeServiceImpl implements AttributeService {
     public int createAttribute(Attribute attribute) {
         if(attribute==null)
             return 0;
-        return attributeMapper.insert(attribute);
+        return attributeMapper.insertSelective(attribute);
     }
 
     /**
@@ -134,7 +134,7 @@ public class AttributeServiceImpl implements AttributeService {
         List<CategoryAttribute> list=new ArrayList<>();
         for (Attribute attribute:attributes)
         {
-            attributeMapper.insert(attribute);
+            attributeMapper.insertSelective(attribute);
             list.add(getCategoryAttribute(categoryId, attribute));
         }
         categoryAttributeService.createCategoryAttribute(list);
@@ -206,7 +206,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @return
      */
     public int createAttributeValue(AttributeValue attributeValue) {
-        return attributeValueMapper.insert(attributeValue);
+        return attributeValueMapper.insertSelective(attributeValue);
     }
 
     /**

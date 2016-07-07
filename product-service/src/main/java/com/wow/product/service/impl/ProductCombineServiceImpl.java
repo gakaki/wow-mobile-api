@@ -35,14 +35,14 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
     @Override
     public int createProductCombines(List<ProductCombine> productCombines) {
         if(!CollectionUtils.isEmpty(productCombines))
-            productCombines.forEach(o->productCombineMapper.insert(o));
+            productCombines.forEach(o->productCombineMapper.insertSelective(o));
         return 0;
     }
 
     @Override
     public int addProductIntoCombine(ProductCombine productCombine) {
         if(productCombine!=null)
-          return productCombineMapper.insert(productCombine);
+          return productCombineMapper.insertSelective(productCombine);
         return 0;
     }
 

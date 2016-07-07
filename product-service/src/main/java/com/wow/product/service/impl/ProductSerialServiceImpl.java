@@ -38,7 +38,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
     @Override
     public int createProductSerial(List<ProductSerial> productSerials) {
         if(!CollectionUtils.isEmpty(productSerials))
-            productSerials.forEach(o->productSerialMapper.insert(o));
+            productSerials.forEach(o->productSerialMapper.insertSelective(o));
         return 0;
     }
 

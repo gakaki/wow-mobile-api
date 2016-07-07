@@ -189,7 +189,7 @@ public class ProductServiceImpl implements ProductService {
      */
     public int createProductAttribute(List<ProductAttribute> productAttributes) {
         if(!CollectionUtils.isEmpty(productAttributes)) {
-            productAttributes.forEach(o -> productAttributeMapper.insert(o));
+            productAttributes.forEach(o -> productAttributeMapper.insertSelective(o));
             return 0;
         }
         return -1;

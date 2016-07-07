@@ -30,6 +30,7 @@ public class SupplierServiceImpl implements SupplierService {
     private ProductSupplyLogMapper productSupplyLogMapper;
     @Override
     public int createSupplier(Supplier supplier) {
+
         return supplierMapper.insertSelective(supplier);
     }
 

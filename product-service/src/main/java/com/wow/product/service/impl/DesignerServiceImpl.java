@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -25,6 +26,8 @@ public class DesignerServiceImpl implements DesignerService {
     private ProductDesignerMapper productDesignerMapper;
     @Autowired
     private ProductService productService;
+
+    private  ProductDesignerExample productDesignerExample;
     @Override
     public int createDesigner(Designer designer) {
         return designerMapper.insertSelective(designer);
@@ -43,62 +46,106 @@ public class DesignerServiceImpl implements DesignerService {
     @Override
     public List<Designer> getDesignersByCountry(String country) {
         DesignerExample designerExample=new DesignerExample();
-        DesignerExample.Criteria criteria=designerExample.createCriteria();
-        criteria.andDesignerCountryEqualTo(country);
+        designerExample.or().andIsDeletedEqualTo(false).andDesignerCountryEqualTo(country);
         return designerMapper.selectByExample(designerExample);
     }
-
+    private List<Designer> getDesignersByName(String designerName) {
+        DesignerExample designerExample=new DesignerExample();
+        designerExample.or().andIsDeletedEqualTo(false).andDesignerNameEqualTo(designerName);
+        return designerMapper.selectByExample(designerExample);
+    }
     @Override
     public List<Designer> getDesignersByStyle(String style) {
         DesignerExample designerExample=new DesignerExample();
-        DesignerExample.Criteria criteria=designerExample.createCriteria();
-        criteria.andDesignerStyleEqualTo(style);
-        criteria.andIsDeletedEqualTo(false);
+        designerExample.or().andIsDeletedEqualTo(false).andDesignerStyleEqualTo(style);
         return designerMapper.selectByExample(designerExample);
     }
 
     @Override
     public List<Product> getProductsByDesigner(int designerId) {
-        ProductDesignerExample productDesignerExample=new ProductDesignerExample();
-        ProductDesignerExample.Criteria criteria=productDesignerExample.createCriteria();
-        criteria.andDesignerIdEqualTo(designerId);
-        criteria.andIsDeletedEqualTo(false);
+        productDesignerExample=new ProductDesignerExample();
+        productDesignerExample.or().andDesignerIdEqualTo(designerId).andIsDeletedEqualTo(false);
         List<ProductDesigner> productDesigners=productDesignerMapper.selectByExample(productDesignerExample);
-        List<Product> products=new ArrayList<>();
-        if(!productDesigners.isEmpty())
-            productDesigners.forEach(new Consumer<ProductDesigner>() {
-                @Override
-                public void accept(ProductDesigner productDesigner) {
-                 Product product= productService.getProductById(productDesigner.getProductId());
-                    if(product!=null)
-                        products.add(product);
-                }
-            });
-        return products;
+        return getProducts(productDesigners);
     }
 
     @Override
     public List<Product> getProductsByDesigner(String designerName) {
-        return null;
+        Designer designer= getDesignersByName(designerName).stream().findAny().get();
+        if(designer==null)
+            return  null;
+        productDesignerExample=new ProductDesignerExample();
+        productDesignerExample.or().andIsDeletedEqualTo(false).andDesignerIdEqualTo(designer.getId());
+        List<ProductDesigner> productDesigners=productDesignerMapper.selectByExample(productDesignerExample);
+        return getProducts(productDesigners);
+       // return null;
+    }
+
+    private List<Product> getProducts(List<ProductDesigner> productDesigners) {
+        List<Product> products=new ArrayList<>();
+
+        if(!productDesigners.isEmpty()) {
+            HashSet<Integer> productIds = new HashSet();
+            productDesigners.forEach(o->productIds.add(o.getProductId()));
+            productIds.forEach(new Consumer<Integer>() {
+                @Override
+                public void accept(Integer integer) {
+                    Product product = productService.getProductById(integer);
+                    if (product != null)
+                        products.add(product);
+                }
+            });
+        }
+        return  products;
     }
 
     @Override
     public int createProductDesigner(ProductDesigner productDesigner) {
-        return 0;
+        return productDesignerMapper.insertSelective(productDesigner);
     }
 
     @Override
     public int createProductDesigners(List<ProductDesigner> productDesigners) {
+        if(!productDesigners.isEmpty())
+            productDesigners.forEach(o->productDesignerMapper.insertSelective(o));
         return 0;
     }
 
     @Override
     public List<Designer> getDesignersByProduct(Product product) {
+        if(product!=null) {
+            productDesignerExample=new ProductDesignerExample();
+            productDesignerExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo( product.getId());
+          List<ProductDesigner> productDesigners= productDesignerMapper.selectByExample(productDesignerExample);
+            if(!productDesigners.isEmpty())
+              return  getDesigners(productDesigners);
+        }
         return null;
     }
 
+    private  List<Designer> getDesigners(List<ProductDesigner> productDesigners)
+    {
+        List<Designer> designers=new ArrayList<>();
+        if(!productDesigners.isEmpty())
+            productDesigners.forEach(new Consumer<ProductDesigner>() {
+                @Override
+                public void accept(ProductDesigner productDesigner) {
+                    Designer designer= designerMapper.selectByPrimaryKey(productDesigner.getDesignerId());
+                    if(designer!=null)
+                        designers.add(designer);
+                }
+            });
+        return  designers;
+    }
     @Override
     public Designer getPrimaryDesignerByProduct(Product product) {
+        try {
+              return getDesignersByProduct(product).stream().findAny().get();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return null;
     }
 }
