@@ -63,6 +63,7 @@ public class PageController {
                     @Override
                     public void accept(PageSceneConfig pageSceneConfig) {
                         Scene scene= sceneService.getSceneById(pageSceneConfig.getSceneId());
+                        scene.setSceneImg("http://www.wowdsgn.com" + scene.getSceneImg());
                         if(scene!=null)
                             scenes.add(scene);
                     }

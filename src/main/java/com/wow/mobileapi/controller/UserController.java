@@ -1,6 +1,7 @@
 package com.wow.mobileapi.controller;
 
 import com.wow.common.error.ErrorRepositoryManager;
+import com.wow.common.util.JsonUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.dto.ApiResponse;
 import com.wow.mobileapi.dto.MobileRequestVo;
@@ -57,7 +58,7 @@ public class UserController {
     public ApiResponse register(@Validated @RequestBody RegisterRequestVo registerRequestVo,
                                 BindingResult result) {
         ApiResponse apiResponse = new ApiResponse();
-
+        logger.info("registering, request=" + registerRequestVo);
         if (result.hasErrors()) {
             responseUtil.setResponse(apiResponse,"40000");
             Map<String, String> map = ValidatorUtil.getErrors(result);
@@ -73,20 +74,18 @@ public class UserController {
                 apiResponse.setData(registerResultVo);
             }
         }
+        logger.info("register result json = " + JsonUtil.pojo2Json(registerRequestVo));
         return apiResponse;
     }
 
     /**
      * 修改用户信息
-     * @param endUserId
+     * @param updatedEndUser
      * @return
      */
-    @RequestMapping(value = "/{endUserId}", method = RequestMethod.PUT)
-    public ApiResponse updateUser(@RequestBody EndUser updatedEndUser, @PathVariable Integer endUserId) {
+    @RequestMapping(method = RequestMethod.PUT)
+    public ApiResponse updateUser(@Validated @RequestBody EndUser updatedEndUser) {
         ApiResponse apiResponse = new ApiResponse();
-        if (updatedEndUser.getId() == null) {
-            updatedEndUser.setId(endUserId);
-        }
         boolean isSuccess =  (userService.updateEndUser(updatedEndUser) == 1);
         responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData(isSuccess);
@@ -104,28 +103,34 @@ public class UserController {
 
     @RequestMapping(value = "/mobile", method = RequestMethod.GET)
     public ApiResponse isExistedUserByMobile(@RequestParam String mobile) {
+        logger.info("is existed mobile:" + mobile);
         ApiResponse apiResponse = new ApiResponse();
         boolean isSuccess = (userService.isExistedUserByMobile(mobile));
         responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData(isSuccess);
+        logger.info("JSON to return:" + JsonUtil.pojo2Json(apiResponse));
         return apiResponse;
     }
 
     @RequestMapping(value = "/nickname", method = RequestMethod.GET)
     public ApiResponse isExistedUserByNickName(@RequestParam String nickName) {
+        logger.info("is existed nickName:" + nickName);
         ApiResponse apiResponse = new ApiResponse();
         boolean isSuccess = (userService.isExistedUserByNickName(nickName));
         responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData(isSuccess);
+        logger.info("JSON to return:" + JsonUtil.pojo2Json(apiResponse));
         return apiResponse;
     }
 
     @RequestMapping(value = "/captcha", method = RequestMethod.POST)
     public ApiResponse requestCaptcha(@RequestBody MobileRequestVo mobileRequestVo) {
+        logger.info("submit mobile to request captcha:" + mobileRequestVo.getMobile());
         ApiResponse apiResponse = new ApiResponse();
         String captcha = (userService.getCaptcha(mobileRequestVo.getMobile()));
         responseUtil.setResponse(apiResponse,"0");
-        apiResponse.setData("验证码已发送,请查看手机短信之后输入");
+        apiResponse.setData("1");
+        logger.info("JSON to return:" + JsonUtil.pojo2Json(apiResponse));
         return apiResponse;
     }
 

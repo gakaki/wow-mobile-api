@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
         smsSender.sendValidateCode(req);
 
         //3. store digit into redis
-        redisUtil.set(mobile,randomNum,300L);//缓存5分钟
+        redisUtil.set(mobile,randomNum,3000000000000000L);//缓存5分钟
 
         return randomNum;
     }
@@ -236,7 +236,6 @@ public class UserServiceImpl implements UserService {
         criteria.andUserNameEqualTo(userName);
         criteria.andIsDeletedEqualTo(false);
         List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
-        logger.info("userList:" + userList);
         if (userList.size() > 1) {
             logger.error("username should be unique");
             return null;
@@ -262,7 +261,6 @@ public class UserServiceImpl implements UserService {
         criteria.andMobileEqualTo(mobile);
         criteria.andIsDeletedEqualTo(false);
         List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
-        logger.info("userList:" + userList);
         if (userList.size() > 1) {
             logger.error("mobile should be unique");
             return null;
@@ -288,7 +286,6 @@ public class UserServiceImpl implements UserService {
         criteria.andNickNameEqualTo(nickName);
         criteria.andIsDeletedEqualTo(false);
         List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
-        logger.info("userList:" + userList);
         if (userList.size() > 1) {
             logger.error("nickname should be unique");
             return null;

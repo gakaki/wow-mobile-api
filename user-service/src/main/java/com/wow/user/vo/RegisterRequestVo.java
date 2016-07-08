@@ -29,4 +29,8 @@ public class RegisterRequestVo implements Serializable {
     public void setCaptcha(String captcha) {
         this.captcha = captcha;
     }
+
+    public String toString() {
+        return "captchar:" + captcha + "endUser:" + endUser.toString();
+    }
 }

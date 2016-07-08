@@ -114,7 +114,7 @@ public class PageConfigServiceImpl implements PageConfigService {
                                                     ProductImageVo productImageVo = new ProductImageVo();
                                                     productImageVo.setGroupId(productShortListInTopic.getGroupId());
                                                     productImageVo.setSortOrder(productShortListInTopic.getSortOrder());
-                                                    productImageVo.setProductId(productImageVo.getProductId());
+                                                    productImageVo.setProductId(productShortListInTopic.getProductId());
                                                     productImageVo.setImgDesc(productImage.getImgDesc());
                                                     productImageVo.setImgName(productImage.getImgName());
                                                     productImageVo.setImgUrl(productImage.getImgUrl());
