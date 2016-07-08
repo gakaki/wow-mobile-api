@@ -6,6 +6,8 @@ import com.wow.page.model.PageBannerConfig;
 import com.wow.page.model.PageSceneConfig;
 import com.wow.page.model.PageTopicConfig;
 import com.wow.page.service.PageConfigService;
+import com.wow.page.vo.PageTopicVo;
+import com.wow.product.model.ProductShortListInTopic;
 import com.wow.product.model.Scene;
 import com.wow.product.model.Topic;
 import com.wow.product.service.SceneService;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -35,8 +38,7 @@ public class PageController {
 
     @Autowired
     private SceneService sceneService;
-    @Autowired
-    private TopicService topicService;
+
 
     @Autowired
     private ResponseUtil responseUtil;
@@ -75,20 +77,9 @@ public class PageController {
     public ApiResponse getTopicsOnPage(@PathVariable Integer pageType) {
         logger.info("start to get topics on page");
         ApiResponse apiResponse = new ApiResponse();
-        List<PageTopicConfig> topicList = pageConfigService.getTopicsByPageType(pageType);
-        List<Topic> topics=new ArrayList<>();
-        topicList.forEach(
-                new Consumer<PageTopicConfig>() {
-                    @Override
-                    public void accept(PageTopicConfig pageTopicConfig) {
-                       Topic topic= topicService.getTopicById(pageTopicConfig.getTopicId());
-                        if(topic!=null)
-                            topics.add(topic);
-                    }
-                });
-
+        List<PageTopicVo> topicList = pageConfigService.getTopicsByPageType(pageType);
         responseUtil.setResponse(apiResponse,"0");
-        apiResponse.setData(topics);
+        apiResponse.setData(topicList);
         return apiResponse;
     }
 }
