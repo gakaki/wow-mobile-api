@@ -99,29 +99,30 @@ public class PageConfigServiceImpl implements PageConfigService {
                         pageTopicVo.setTopicName(topic.getTopicName());
                         pageTopicVo.setTopicType(topic.getTopicType());
                         List<ProductImageVo> productImageVos=new ArrayList<ProductImageVo>();
-                        Stream productShortListInTopicStreams=topicService.getProductShortListInTopic(topic.getId()).stream().filter(o->o.getShortListInTopic()==true);
+                        List<ProductShortListInTopic> productShortListInTopics=topicService.getProductShortListInTopic(topic.getId());
                         topicService.getProductShortListInTopic(topic.getId()).stream().filter(o->o.getShortListInTopic()==true).toArray();
-                        if(productShortListInTopicStreams.count()>0) {
-                            productShortListInTopicStreams.forEach(new Consumer<ProductShortListInTopic>() {
+                        if(!productShortListInTopics.isEmpty()) {
+                            productShortListInTopics.forEach(new Consumer<ProductShortListInTopic>() {
                                 @Override
                                 public void accept(ProductShortListInTopic productShortListInTopic) {
-
-                                    List<ProductImage> productImages= productService.getProductImages(productShortListInTopic.getProductId());
-                                    if(!productImages.isEmpty()){
-                                        productImages.forEach(new Consumer<ProductImage>() {
-                                            @Override
-                                            public void accept(ProductImage productImage) {
-                                                ProductImageVo productImageVo=new ProductImageVo();
-                                                productImageVo.setGroupId(productShortListInTopic.getGroupId());
-                                                productImageVo.setSortOrder(productShortListInTopic.getSortOrder());
-                                                productImageVo.setProductId(productImageVo.getProductId());
-                                                productImageVo.setImgDesc(productImage.getImgDesc());
-                                                productImageVo.setImgName(productImage.getImgName());
-                                                productImageVo.setImgUrl(productImage.getImgUrl());
-                                                productImageVo.setViewPlatform(productImage.getViewPlatform());
-                                                productImageVos.add(productImageVo);
-                                            }
-                                        });
+                                    if (productShortListInTopic.getShortListInTopic()) {
+                                        List<ProductImage> productImages = productService.getProductImages(productShortListInTopic.getProductId());
+                                        if (!productImages.isEmpty()) {
+                                            productImages.forEach(new Consumer<ProductImage>() {
+                                                @Override
+                                                public void accept(ProductImage productImage) {
+                                                    ProductImageVo productImageVo = new ProductImageVo();
+                                                    productImageVo.setGroupId(productShortListInTopic.getGroupId());
+                                                    productImageVo.setSortOrder(productShortListInTopic.getSortOrder());
+                                                    productImageVo.setProductId(productImageVo.getProductId());
+                                                    productImageVo.setImgDesc(productImage.getImgDesc());
+                                                    productImageVo.setImgName(productImage.getImgName());
+                                                    productImageVo.setImgUrl(productImage.getImgUrl());
+                                                    productImageVo.setViewPlatform(productImage.getViewPlatform());
+                                                    productImageVos.add(productImageVo);
+                                                }
+                                            });
+                                        }
                                     }
                                 }
                             });
