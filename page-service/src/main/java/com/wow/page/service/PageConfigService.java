@@ -3,6 +3,7 @@ package com.wow.page.service;
 import com.wow.page.model.PageBannerConfig;
 import com.wow.page.model.PageSceneConfig;
 import com.wow.page.model.PageTopicConfig;
+import com.wow.page.vo.PageTopicVo;
 import com.wow.product.model.SceneDisplayRule;
 
 import java.util.List;
@@ -30,6 +31,6 @@ public interface PageConfigService {
      * @param pageType
      * @return
      */
-    List<PageTopicConfig> getTopicsByPageType(int pageType);
+    List<PageTopicVo> getTopicsByPageType(int pageType);
 
 }
