@@ -10,7 +10,7 @@ public class Attribute implements Serializable {
 
     @NotEmpty(message = "属性名不能为空")
     private String attributeName;
-
+    @NotEmpty(message = "属性显示名不能为空")
     private String showName;
 
     private Boolean canMultipleSelected;
