@@ -8,9 +8,9 @@ public class EndUserSession implements Serializable {
 
     private Integer endUserId;
 
-    private String sessionToken;
-
     private Byte loginChannel;
+
+    private String sessionToken;
 
     private String userAgentInfo;
 
@@ -23,6 +23,8 @@ public class EndUserSession implements Serializable {
     private Boolean isLogout;
 
     private Date logoutTime;
+
+    private Boolean isActive;
 
     private static final long serialVersionUID = 1L;
 
@@ -42,14 +44,6 @@ public class EndUserSession implements Serializable {
         this.endUserId = endUserId;
     }
 
-    public String getSessionToken() {
-        return sessionToken;
-    }
-
-    public void setSessionToken(String sessionToken) {
-        this.sessionToken = sessionToken;
-    }
-
     public Byte getLoginChannel() {
         return loginChannel;
     }
@@ -58,12 +52,20 @@ public class EndUserSession implements Serializable {
         this.loginChannel = loginChannel;
     }
 
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken == null ? null : sessionToken.trim();
+    }
+
     public String getUserAgentInfo() {
         return userAgentInfo;
     }
 
     public void setUserAgentInfo(String userAgentInfo) {
-        this.userAgentInfo = userAgentInfo;
+        this.userAgentInfo = userAgentInfo == null ? null : userAgentInfo.trim();
     }
 
     public Date getLastLoginTime() {
@@ -106,6 +108,14 @@ public class EndUserSession implements Serializable {
         this.logoutTime = logoutTime;
     }
 
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -114,14 +124,15 @@ public class EndUserSession implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", endUserId=").append(endUserId);
-        sb.append(", sessionToken=").append(sessionToken);
         sb.append(", loginChannel=").append(loginChannel);
+        sb.append(", sessionToken=").append(sessionToken);
         sb.append(", userAgentInfo=").append(userAgentInfo);
         sb.append(", lastLoginTime=").append(lastLoginTime);
         sb.append(", lastLoginIp=").append(lastLoginIp);
         sb.append(", lastRefreshTime=").append(lastRefreshTime);
         sb.append(", isLogout=").append(isLogout);
         sb.append(", logoutTime=").append(logoutTime);
+        sb.append(", isActive=").append(isActive);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

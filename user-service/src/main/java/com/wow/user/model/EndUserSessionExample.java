@@ -225,6 +225,66 @@ public class EndUserSessionExample {
             return (Criteria) this;
         }
 
+        public Criteria andLoginChannelIsNull() {
+            addCriterion("login_channel is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelIsNotNull() {
+            addCriterion("login_channel is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelEqualTo(Byte value) {
+            addCriterion("login_channel =", value, "loginChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelNotEqualTo(Byte value) {
+            addCriterion("login_channel <>", value, "loginChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelGreaterThan(Byte value) {
+            addCriterion("login_channel >", value, "loginChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelGreaterThanOrEqualTo(Byte value) {
+            addCriterion("login_channel >=", value, "loginChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelLessThan(Byte value) {
+            addCriterion("login_channel <", value, "loginChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelLessThanOrEqualTo(Byte value) {
+            addCriterion("login_channel <=", value, "loginChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelIn(List<Byte> values) {
+            addCriterion("login_channel in", values, "loginChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelNotIn(List<Byte> values) {
+            addCriterion("login_channel not in", values, "loginChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelBetween(Byte value1, Byte value2) {
+            addCriterion("login_channel between", value1, value2, "loginChannel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLoginChannelNotBetween(Byte value1, Byte value2) {
+            addCriterion("login_channel not between", value1, value2, "loginChannel");
+            return (Criteria) this;
+        }
+
         public Criteria andSessionTokenIsNull() {
             addCriterion("session_token is null");
             return (Criteria) this;
@@ -292,66 +352,6 @@ public class EndUserSessionExample {
 
         public Criteria andSessionTokenNotBetween(String value1, String value2) {
             addCriterion("session_token not between", value1, value2, "sessionToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelIsNull() {
-            addCriterion("login_channel is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelIsNotNull() {
-            addCriterion("login_channel is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelEqualTo(Byte value) {
-            addCriterion("login_channel =", value, "loginChannel");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelNotEqualTo(Byte value) {
-            addCriterion("login_channel <>", value, "loginChannel");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelGreaterThan(Byte value) {
-            addCriterion("login_channel >", value, "loginChannel");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelGreaterThanOrEqualTo(Byte value) {
-            addCriterion("login_channel >=", value, "loginChannel");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelLessThan(Byte value) {
-            addCriterion("login_channel <", value, "loginChannel");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelLessThanOrEqualTo(Byte value) {
-            addCriterion("login_channel <=", value, "loginChannel");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelIn(List<Byte> values) {
-            addCriterion("login_channel in", values, "loginChannel");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelNotIn(List<Byte> values) {
-            addCriterion("login_channel not in", values, "loginChannel");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelBetween(Byte value1, Byte value2) {
-            addCriterion("login_channel between", value1, value2, "loginChannel");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginChannelNotBetween(Byte value1, Byte value2) {
-            addCriterion("login_channel not between", value1, value2, "loginChannel");
             return (Criteria) this;
         }
 
@@ -616,52 +616,52 @@ public class EndUserSessionExample {
         }
 
         public Criteria andIsLogoutEqualTo(Boolean value) {
-            addCriterion("is_logout =", value, "isActive");
+            addCriterion("is_logout =", value, "isLogout");
             return (Criteria) this;
         }
 
         public Criteria andIsLogoutNotEqualTo(Boolean value) {
-            addCriterion("is_logout <>", value, "isActive");
+            addCriterion("is_logout <>", value, "isLogout");
             return (Criteria) this;
         }
 
         public Criteria andIsLogoutGreaterThan(Boolean value) {
-            addCriterion("is_logout >", value, "isActive");
+            addCriterion("is_logout >", value, "isLogout");
             return (Criteria) this;
         }
 
         public Criteria andIsLogoutGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_logout >=", value, "isActive");
+            addCriterion("is_logout >=", value, "isLogout");
             return (Criteria) this;
         }
 
         public Criteria andIsLogoutLessThan(Boolean value) {
-            addCriterion("is_logout <", value, "isActive");
+            addCriterion("is_logout <", value, "isLogout");
             return (Criteria) this;
         }
 
         public Criteria andIsLogoutLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_logout <=", value, "isActive");
+            addCriterion("is_logout <=", value, "isLogout");
             return (Criteria) this;
         }
 
         public Criteria andIsLogoutIn(List<Boolean> values) {
-            addCriterion("is_logout in", values, "isActive");
+            addCriterion("is_logout in", values, "isLogout");
             return (Criteria) this;
         }
 
         public Criteria andIsLogoutNotIn(List<Boolean> values) {
-            addCriterion("is_logout not in", values, "isActive");
+            addCriterion("is_logout not in", values, "isLogout");
             return (Criteria) this;
         }
 
         public Criteria andIsLogoutBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_logout between", value1, value2, "isActive");
+            addCriterion("is_logout between", value1, value2, "isLogout");
             return (Criteria) this;
         }
 
         public Criteria andIsLogoutNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_logout not between", value1, value2, "isActive");
+            addCriterion("is_logout not between", value1, value2, "isLogout");
             return (Criteria) this;
         }
 
@@ -722,6 +722,66 @@ public class EndUserSessionExample {
 
         public Criteria andLogoutTimeNotBetween(Date value1, Date value2) {
             addCriterion("logout_time not between", value1, value2, "logoutTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveIsNull() {
+            addCriterion("is_active is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveIsNotNull() {
+            addCriterion("is_active is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveEqualTo(Boolean value) {
+            addCriterion("is_active =", value, "isActive");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveNotEqualTo(Boolean value) {
+            addCriterion("is_active <>", value, "isActive");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveGreaterThan(Boolean value) {
+            addCriterion("is_active >", value, "isActive");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_active >=", value, "isActive");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveLessThan(Boolean value) {
+            addCriterion("is_active <", value, "isActive");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_active <=", value, "isActive");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveIn(List<Boolean> values) {
+            addCriterion("is_active in", values, "isActive");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveNotIn(List<Boolean> values) {
+            addCriterion("is_active not in", values, "isActive");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_active between", value1, value2, "isActive");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsActiveNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_active not between", value1, value2, "isActive");
             return (Criteria) this;
         }
 

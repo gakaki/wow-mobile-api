@@ -53,4 +53,11 @@ public interface SessionService {
      */
     boolean isValidSessionToken(String sessionToken, byte loginChannel);
 
+    /**
+     * 使会话失效 - 常用在修改密码之后
+     * @param endUserId
+     * @return
+     */
+    int invalidateSessionToken(int endUserId);
+
 }

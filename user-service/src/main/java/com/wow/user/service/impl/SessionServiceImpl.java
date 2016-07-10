@@ -5,7 +5,9 @@ import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.EndUserSessionMapper;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserLoginLog;
+import com.wow.user.model.EndUserLoginLogExample;
 import com.wow.user.model.EndUserSession;
+import com.wow.user.model.EndUserSessionExample;
 import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.util.IpConvertUtil;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Created by zhengzhiqing on 16/6/16.
@@ -60,7 +63,7 @@ public class SessionServiceImpl implements SessionService {
         EndUser endUser = userService.authenticate(loginRequestVo.getUserName(), loginRequestVo.getPassword());
         if (endUser != null) { //验证成功
             //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
-            endUserSession = endUserSessionMapper.selectByUserIdChannel(endUser.getId(), loginRequestVo.getLoginChannel());
+            endUserSession = getSessionByUserIdAndChannel(endUser.getId(), loginRequestVo.getLoginChannel());
             long loginIp = IpConvertUtil.ipToLong(loginRequestVo.getLoginIp());
             Date now = new Date();
             //token生成算法,暂用UUID,可以替换
@@ -86,6 +89,7 @@ public class SessionServiceImpl implements SessionService {
                 endUserSession.setLogoutTime(null);
                 endUserSession.setSessionToken(sessionToken);
                 endUserSession.setUserAgentInfo(loginRequestVo.getUserAgent());
+                //此处不用updateByPrimaryKeySelective,因为setLogoutTime(null)
                 endUserSessionMapper.updateByPrimaryKey(endUserSession);
             }
 
@@ -122,18 +126,35 @@ public class SessionServiceImpl implements SessionService {
      */
     @Transactional(propagation= Propagation.SUPPORTS)
     public EndUserSession getSessionByUserIdAndChannel (int userId, byte loginChannel) {
-        return endUserSessionMapper.selectByUserId(userId, loginChannel);
+        EndUserSession endUserSession = null;
+        EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
+        EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
+        criteria.andEndUserIdEqualTo(userId);
+        criteria.andLoginChannelEqualTo(loginChannel);
+        List<EndUserSession> endUserSessions = endUserSessionMapper.selectByExample(endUserSessionExample);
+        if (endUserSessions != null && endUserSessions.size()==1) {
+            endUserSession = endUserSessions.get(0);
+        } else if (endUserSessions.size() > 1) {
+            //异常,不应该有多条记录
+        }
+        return endUserSession;
     }
 
     /**
-     * 延续会话
+     * 延续会话过期时间
      *
-     * @param userId
-     * @param loginChannel
+     * @param endUserSession
      * @return
      */
-    private int refreshSession(int userId, byte loginChannel) {
-        return endUserSessionMapper.updateRefreshTime(userId,loginChannel);
+    private int refreshSession(EndUserSession endUserSession) {
+        EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
+        EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
+        criteria.andEndUserIdEqualTo(endUserSession.getEndUserId());
+        criteria.andLoginChannelEqualTo(endUserSession.getLoginChannel());
+        criteria.andIsLogoutEqualTo(false);
+        criteria.andIsActiveEqualTo(true);
+        endUserSession.setLastRefreshTime(new Date());
+        return endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
     }
 
     /**
@@ -144,7 +165,10 @@ public class SessionServiceImpl implements SessionService {
      */
     @Transactional(propagation= Propagation.SUPPORTS)
     public List<EndUserLoginLog> getLoginLogsByUserId(int endUserId) {
-        return null;
+        EndUserLoginLogExample endUserLoginLogExample = new EndUserLoginLogExample();
+        EndUserLoginLogExample.Criteria criteria = endUserLoginLogExample.createCriteria();
+        criteria.andEndUserIdEqualTo(endUserId);
+        return endUserLoginLogMapper.selectByExample(endUserLoginLogExample);
     }
 
     /**
@@ -155,10 +179,13 @@ public class SessionServiceImpl implements SessionService {
      */
     public int logout(int endUserId,byte loginChannel) {
         EndUserSession endUserSession = new EndUserSession();
-        endUserSession.setEndUserId(endUserId);
         endUserSession.setIsLogout(true);
         endUserSession.setLogoutTime(new Date());
-        return endUserSessionMapper.updateLogout(endUserId, loginChannel);
+        EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
+        EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
+        criteria.andEndUserIdEqualTo(endUserId);
+        criteria.andLoginChannelEqualTo(loginChannel);
+        return endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
     }
 
     /**
@@ -174,16 +201,78 @@ public class SessionServiceImpl implements SessionService {
         boolean isValid = false;
         long currentTime = System.currentTimeMillis();
         Date mustRefreshAfter = new Date(currentTime - sessionExpirationTime);
-        EndUserSession endUserSession = endUserSessionMapper.selectValidSession(sessionToken, loginChannel, mustRefreshAfter);
+        EndUserSession endUserSession = getValidUserSessionBySessionToken(
+                sessionToken, loginChannel, mustRefreshAfter);
         logger.info("endUserSession:" + endUserSession);
         if (endUserSession != null && endUserSession.getId() != null) {
             isValid = true;
             //刷新过期时间,不是每次都刷新,仅仅在当前时间与上次刷新时间之间间隔 < 过期时间的25%处刷新
             if (currentTime - endUserSession.getLastRefreshTime().getTime() < sessionExpirationTime*0.25) {
-                refreshSession(endUserSession.getEndUserId(),endUserSession.getLoginChannel());
+                refreshSession(endUserSession);
             }
         }
         return isValid;
     }
 
+    /**
+     * 根据会话token查找当前有效的会话信息
+     * @param sessionToken
+     * @param loginChannel
+     * @param mustRefreshAfter
+     * @return
+     */
+    private EndUserSession getValidUserSessionBySessionToken(
+            String sessionToken, byte loginChannel, Date mustRefreshAfter) {
+        EndUserSession endUserSession = null;
+        EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
+        EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
+        criteria.andSessionTokenEqualTo(sessionToken);
+        criteria.andLoginChannelEqualTo(loginChannel);
+        criteria.andIsLogoutEqualTo(false);
+        criteria.andIsActiveEqualTo(true);
+        criteria.andLastRefreshTimeGreaterThan(mustRefreshAfter);
+
+        List<EndUserSession> endUserSessions = endUserSessionMapper.selectByExample(endUserSessionExample);
+
+        if (endUserSessions != null && endUserSessions.size()==1) {
+            endUserSession = endUserSessions.get(0);
+        } else if (endUserSessions.size() > 1) {
+            //异常,不应该有多条记录
+        }
+        return endUserSession;
+
+    }
+
+    /**
+     * 使会话失效 - 常用在修改密码之后
+     *
+     * @param endUserId
+     * @return
+     */
+    @Override
+    public int invalidateSessionToken(int endUserId) {
+        EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
+        EndUserSessionExample.Criteria criteria=endUserSessionExample.createCriteria();
+        criteria.andIdEqualTo(endUserId);
+        List<EndUserSession> endUserSessions=getAllActiveUserSession(endUserId);
+        for (EndUserSession endUserSession : endUserSessions) {
+            endUserSession.setIsActive(false);
+            endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
+        }
+        return endUserSessions.size();
+    }
+
+    /**
+     * 获取所有有效的会话
+     * @param endUserId
+     * @return
+     */
+    private List<EndUserSession> getAllActiveUserSession(int endUserId) {
+        EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
+        EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
+        criteria.andIdEqualTo(endUserId);
+        criteria.andIsLogoutEqualTo(false);
+        criteria.andIsActiveEqualTo(true);
+        return endUserSessionMapper.selectByExample(endUserSessionExample);
+    }
 }

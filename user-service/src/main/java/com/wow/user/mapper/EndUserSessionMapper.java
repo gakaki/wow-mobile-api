@@ -2,8 +2,6 @@ package com.wow.user.mapper;
 
 import com.wow.user.model.EndUserSession;
 import com.wow.user.model.EndUserSessionExample;
-
-import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,7 +10,7 @@ public interface EndUserSessionMapper {
 
     int deleteByExample(EndUserSessionExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(@Param("id") Integer id, @Param("endUserId") Integer endUserId, @Param("loginChannel") Byte loginChannel);
 
     int insert(EndUserSession record);
 
@@ -20,13 +18,7 @@ public interface EndUserSessionMapper {
 
     List<EndUserSession> selectByExample(EndUserSessionExample example);
 
-    EndUserSession selectByPrimaryKey(Integer id);
-
-    EndUserSession selectByUserId(@Param("endUserId") int endUserId,
-                                  @Param("loginChannel") byte loginChannel);
-
-    EndUserSession selectByUserIdChannel(@Param("endUserId") int endUserId,
-                                         @Param("loginChannel") byte loginChannel);
+    EndUserSession selectByPrimaryKey(@Param("id") Integer id, @Param("endUserId") Integer endUserId, @Param("loginChannel") Byte loginChannel);
 
     int updateByExampleSelective(@Param("record") EndUserSession record, @Param("example") EndUserSessionExample example);
 
@@ -35,12 +27,4 @@ public interface EndUserSessionMapper {
     int updateByPrimaryKeySelective(EndUserSession record);
 
     int updateByPrimaryKey(EndUserSession record);
-
-    EndUserSession selectValidSession(@Param("sessionToken") String sessionToken,
-                                      @Param("loginChannel") byte loginChannel,
-                                      @Param("mustRefreshAfter") Date mustRefreshAfter);
-
-    int updateRefreshTime(@Param("endUserId") int endUserId, @Param("loginChannel") byte loginChannel);
-
-    int updateLogout(@Param("endUserId") int endUserId, @Param("loginChannel") byte loginChannel);
 }

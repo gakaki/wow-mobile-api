@@ -1,25 +1,38 @@
 package com.wow.user.service.impl;
 
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+
 import com.wow.common.error.ErrorRepositoryManager;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.RedisUtil;
 import com.wow.user.mapper.EndUserMapper;
-import com.wow.user.model.*;
+import com.wow.user.mapper.EndUserWechatMapper;
+import com.wow.user.model.EndUser;
+import com.wow.user.model.EndUserExample;
+import com.wow.user.model.EndUserShareBrand;
+import com.wow.user.model.EndUserShareDesigner;
+import com.wow.user.model.EndUserShareProduct;
+import com.wow.user.model.EndUserShareScene;
+import com.wow.user.model.EndUserWechat;
+import com.wow.user.model.EndUserWechatExample;
+import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.thirdparty.SmsSender;
 import com.wow.user.util.PasswordUtil;
 import com.wow.user.vo.RegisterRequestVo;
 import com.wow.user.vo.RegisterResultVo;
+import com.wow.user.vo.WechatBindingStatusVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Date;
 import java.util.List;
@@ -37,6 +50,12 @@ public class UserServiceImpl implements UserService {
     private EndUserMapper endUserMapper;
 
     @Autowired
+    private EndUserWechatMapper endUserWechatMapper;
+
+    @Autowired
+    private SessionService sessionService;
+
+    @Autowired
     private SmsSender smsSender;
 
     @Autowired
@@ -45,6 +64,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ErrorRepositoryManager errorRepositoryManager;
 
+    @Value("${redis.captcha.timeout}")
+    private long captchaTimeout;
+
     /**
      * 用户注册
      *
@@ -52,8 +74,9 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public RegisterResultVo register(RegisterRequestVo registerRequestVo) {
+    public RegisterResultVo register(@Validated RegisterRequestVo registerRequestVo) {
         RegisterResultVo registerResultVo = new RegisterResultVo();
+        //TODO: validation required, use hibernate validator?
         String mobile = registerRequestVo.getEndUser().getMobile();
         if (StringUtils.isEmpty(mobile)) {
             registerResultVo.setSuccess(false);
@@ -66,7 +89,7 @@ public class UserServiceImpl implements UserService {
                 registerResultVo.setSuccess(false);
                 registerResultVo.setResCode("40201");
                 registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("40201"));
-            } else if (!registerRequestVo.getCaptcha().equalsIgnoreCase(captchaOnServer)) {
+            } else if (!registerRequestVo.getCaptcha().equals(captchaOnServer)) {
                 registerResultVo.setSuccess(false);
                 registerResultVo.setResCode("40202");
                 registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("40202"));
@@ -74,7 +97,9 @@ public class UserServiceImpl implements UserService {
                 registerRequestVo.getEndUser().setPassword(
                         PasswordUtil.passwordHashGenerate(registerRequestVo.getEndUser().getPassword()));
                 endUserMapper.insertSelective(registerRequestVo.getEndUser());
+                //TODO: 如果该用户是通过好友推荐进来注册的,需要更新推荐相关信息,通过消息通知营销系统,否则要双向依赖
                 registerResultVo.setSuccess(true);
+                //注册成功,需要将用户ID返回
                 registerResultVo.setEndUserId(registerRequestVo.getEndUser().getId());
                 registerResultVo.setResCode("0");
                 registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("0"));
@@ -112,6 +137,47 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 检查手机号的注册和绑定微信状态
+     *
+     * @param mobile
+     * @return
+     */
+    @Override
+    public WechatBindingStatusVo checkWechatBindStatus(String mobile) {
+        WechatBindingStatusVo wechatBindingStatusVo = new WechatBindingStatusVo();
+        wechatBindingStatusVo.setMobile(mobile);
+        wechatBindingStatusVo.setRegistered(isExistedUserByMobile(mobile));
+        EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
+        EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
+        criteria.andMobileEqualTo(mobile);
+        criteria.andWechatIdIsNotNull();
+        criteria.andIsBindEqualTo(true);
+        List<EndUserWechat> list = endUserWechatMapper.selectByExample(endUserWechatExample);
+        if (list != null && list.size()==1) {
+            EndUserWechat endUserWechat = list.get(0);
+            wechatBindingStatusVo.setBindWechat(true);
+            wechatBindingStatusVo.setWechatId(endUserWechat.getWechatId());
+        } else if (list == null || list.size()==0){
+            wechatBindingStatusVo.setBindWechat(false);
+        } else if (list.size() > 1) {
+            //异常
+            wechatBindingStatusVo.setBindWechat(false);
+        }
+        return wechatBindingStatusVo;
+    }
+
+    /**
+     * 绑定微信
+     *
+     * @param endUserWechat
+     * @return
+     */
+    @Override
+    public int bindWechatToUser(EndUserWechat endUserWechat) {
+        return endUserWechatMapper.insertSelective(endUserWechat);
+    }
+
+    /**
      * 根据昵称判断是否已注册用户
      *
      * @param nickName
@@ -138,12 +204,13 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 请求验证码
+     * 请求并发送验证码
+     * 注册,修改密码或者多次输入错误的情况下使用
      *
      * @param mobile
      * @return 验证码
      */
-    public String getCaptcha(String mobile) {
+    public String sendCaptcha(String mobile) {
 
         //调用阿里大鱼的短信接口,往目标手机发送随机生成的6位数字,并将6位数字存储到Redis中
         //1. generate 6-bit digit randomly
@@ -161,7 +228,8 @@ public class UserServiceImpl implements UserService {
         smsSender.sendValidateCode(req);
 
         //3. store digit into redis
-        redisUtil.set(mobile,randomNum,3000000000000000L);//缓存5分钟
+        //TODO: 是否所有验证码的过期时间一样,还是需要配置?
+        redisUtil.set(mobile,randomNum,captchaTimeout);//缓存无限长,需要做成配置
 
         return randomNum;
     }
@@ -175,10 +243,10 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-//    @CacheEvict(value = "UserCache", key="'USER_MOBILE_'+#mobile")
+    @CacheEvict(value = "UserCache", key="'USER_MOBILE_'+#mobile")
     public boolean resetPassword(String mobile, String captcha, String newPwd) {
         String captchaForMobile = getCaptchaOnServer(mobile);
-        if (captchaForMobile.equalsIgnoreCase(captcha)) {
+        if (captchaForMobile.equals(captcha)) {
             EndUser endUser = getEndUserByMobile(mobile);
             if(endUser == null) {
                 logger.error("该用户不存在");
@@ -186,21 +254,28 @@ public class UserServiceImpl implements UserService {
             }
             endUser.setPassword(PasswordUtil.passwordHashGenerate(newPwd));
             endUser.setUpdateTime(new Date());
-            return (endUserMapper.updateByPrimaryKeySelective(endUser)>0);
+            if (endUserMapper.updateByPrimaryKeySelective(endUser)>0) {
+                //需要设置当前有效的session token失效(所有登录渠道)
+                sessionService.invalidateSessionToken(endUser.getId());
+            } else {
+                //修改密码失败
+            }
         } else {
             logger.info("验证码无效,请重新获取");
             return false;
         }
+        return true;
     }
 
     /**
-     *
+     * 获取服务器上生成的验证码
      * @param mobile
      * @return
      */
     @Transactional(propagation= Propagation.SUPPORTS)
     private String getCaptchaOnServer(String mobile) {
         String captchaOnServer = "";
+        //get from redis
         Object captcha = redisUtil.get(mobile);
         if (captcha != null) {
             captchaOnServer = (String) captcha;
@@ -298,6 +373,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 批量查询多个用户
+     * 一般是运营后台调用
      *
      * @param endUserIds
      * @return
@@ -306,6 +382,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation= Propagation.SUPPORTS)
     @Cacheable(value = "UserCache")
     public List<EndUser> getEndUsersByIds(int[] endUserIds) {
+        //TODO:
         return null;
     }
 
@@ -326,16 +403,6 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
-    }
-
-    /**
-     * 删除用户
-     *
-     * @param endUserId
-     * @return
-     */
-    public int deleteUser(int endUserId) {
-        return endUserMapper.deleteByPrimaryKey(endUserId);
     }
 
     /**

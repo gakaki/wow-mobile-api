@@ -3,6 +3,7 @@ package com.wow.user.service;
 import com.wow.user.model.*;
 import com.wow.user.vo.RegisterRequestVo;
 import com.wow.user.vo.RegisterResultVo;
+import com.wow.user.vo.WechatBindingStatusVo;
 
 import java.util.List;
 
@@ -34,6 +35,20 @@ public interface UserService {
     boolean isExistedUserByMobile(String mobile);
 
     /**
+     * 检查手机号的注册和绑定微信状态
+     * @param mobile
+     * @return
+     */
+    WechatBindingStatusVo checkWechatBindStatus(String mobile);
+
+    /**
+     * 绑定微信
+     * @param endUserWechat
+     * @return
+     */
+    int bindWechatToUser(EndUserWechat endUserWechat);
+
+    /**
      * 根据昵称判断是否已注册用户
      * @param nickName
      * @return
@@ -53,7 +68,7 @@ public interface UserService {
      * @param mobile
      * @return 验证码
      */
-    String getCaptcha(String mobile);
+    String sendCaptcha(String mobile);
 
     /**
      * 用户重置密码
@@ -112,13 +127,6 @@ public interface UserService {
      * @return
      */
     EndUser authenticate(String userName, String password);
-
-    /**
-     * 删除用户
-     * @param endUserId
-     * @return
-     */
-    int deleteUser(int endUserId);
 
     //table: end_user_share_brand
 
