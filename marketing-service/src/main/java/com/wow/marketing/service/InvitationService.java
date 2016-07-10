@@ -10,8 +10,6 @@ import java.util.List;
  */
 public interface InvitationService {
 
-//table: end_user_invite_friends
-
     /**
      * 用户邀请好友
      *
@@ -21,7 +19,7 @@ public interface InvitationService {
     int createInvitation(EndUserInviteFriends endUserInviteFriends);
 
     /**
-     * 查询某用户邀请好友的列表
+     * 查询用户所有邀请记录
      *
      * @param endUserId
      * @return
