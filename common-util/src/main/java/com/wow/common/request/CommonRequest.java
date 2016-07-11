@@ -1,4 +1,4 @@
-package com.wow.mobileapi.dto.request;
+package com.wow.common.request;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.wow.mobileapi.dto.response;
+package com.wow.common.response;
 
 /**
  * Created by zhengzhiqing on 16/6/27.
