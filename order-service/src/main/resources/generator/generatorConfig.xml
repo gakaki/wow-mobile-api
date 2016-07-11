@@ -56,41 +56,41 @@
 
         <!-- sql占位符，表示所有的表 -->
         <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
-        <table schema="root" tableName="delivery_fee_config" domainObjectName="DeliveryFeeConfig"
-               enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table schema="root" tableName="delivery_fee_config" domainObjectName="DeliveryFeeConfig"-->
+               <!--enableInsert="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" modelType="flat">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
-        <table schema="root" tableName="order" domainObjectName="Order"
-               enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table schema="root" tableName="order" domainObjectName="Order"-->
+               <!--enableInsert="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" modelType="flat">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
-        <table schema="root" tableName="order_invoice" domainObjectName="OrderInvoice"
-               enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table schema="root" tableName="order_invoice" domainObjectName="OrderInvoice"-->
+               <!--enableInsert="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" modelType="flat">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
         <table schema="root" tableName="order_item" domainObjectName="OrderItem"
                enableInsert="true"
@@ -104,29 +104,29 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table schema="root" tableName="order_log" domainObjectName="OrderLog"
-               enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table schema="root" tableName="order_log" domainObjectName="OrderLog"-->
+               <!--enableInsert="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" modelType="flat">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
-        <table schema="root" tableName="return_order" domainObjectName="ReturnOrder"
-               enableInsert="true"
-               enableSelectByPrimaryKey="true"
-               enableSelectByExample="true"
-               enableUpdateByPrimaryKey="true"
-               enableDeleteByPrimaryKey="true"
-               enableDeleteByExample="true"
-               enableCountByExample="true"
-               enableUpdateByExample="true" modelType="flat">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table schema="root" tableName="return_order" domainObjectName="ReturnOrder"-->
+               <!--enableInsert="true"-->
+               <!--enableSelectByPrimaryKey="true"-->
+               <!--enableSelectByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true"-->
+               <!--enableDeleteByExample="true"-->
+               <!--enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" modelType="flat">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
     </context>
 </generatorConfiguration>

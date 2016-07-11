@@ -1,6 +1,6 @@
 package com.wow.mobileapi.controller;
 
-import com.wow.mobileapi.dto.ApiResponse;
+import com.wow.mobileapi.dto.response.ApiResponse;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.stock.service.StockService;
 import org.slf4j.Logger;

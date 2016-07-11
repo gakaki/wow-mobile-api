@@ -836,6 +836,66 @@ public class OrderItemExample {
             return (Criteria) this;
         }
 
+        public Criteria andWarehouseIdIsNull() {
+            addCriterion("warehouse_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdIsNotNull() {
+            addCriterion("warehouse_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdEqualTo(Integer value) {
+            addCriterion("warehouse_id =", value, "warehouseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdNotEqualTo(Integer value) {
+            addCriterion("warehouse_id <>", value, "warehouseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdGreaterThan(Integer value) {
+            addCriterion("warehouse_id >", value, "warehouseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("warehouse_id >=", value, "warehouseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdLessThan(Integer value) {
+            addCriterion("warehouse_id <", value, "warehouseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdLessThanOrEqualTo(Integer value) {
+            addCriterion("warehouse_id <=", value, "warehouseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdIn(List<Integer> values) {
+            addCriterion("warehouse_id in", values, "warehouseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdNotIn(List<Integer> values) {
+            addCriterion("warehouse_id not in", values, "warehouseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdBetween(Integer value1, Integer value2) {
+            addCriterion("warehouse_id between", value1, value2, "warehouseId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("warehouse_id not between", value1, value2, "warehouseId");
+            return (Criteria) this;
+        }
+
         public Criteria andFrozenRealStockQtyIsNull() {
             addCriterion("frozen_real_stock_qty is null");
             return (Criteria) this;

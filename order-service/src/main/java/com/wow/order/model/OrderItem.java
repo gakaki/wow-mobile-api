@@ -29,6 +29,8 @@ public class OrderItem implements Serializable {
 
     private Integer productSupplierId;
 
+    private Integer warehouseId;
+
     private Short frozenRealStockQty;
 
     private Short frozenVirtualStockQty;
@@ -96,7 +98,7 @@ public class OrderItem implements Serializable {
     }
 
     public void setProductName(String productName) {
-        this.productName = productName;
+        this.productName = productName == null ? null : productName.trim();
     }
 
     public Boolean getNeedAssemble() {
@@ -137,6 +139,14 @@ public class OrderItem implements Serializable {
 
     public void setProductSupplierId(Integer productSupplierId) {
         this.productSupplierId = productSupplierId;
+    }
+
+    public Integer getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Integer warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     public Short getFrozenRealStockQty() {
@@ -205,6 +215,7 @@ public class OrderItem implements Serializable {
         sb.append(", parentOrderItemId=").append(parentOrderItemId);
         sb.append(", isItemLeaf=").append(isItemLeaf);
         sb.append(", productSupplierId=").append(productSupplierId);
+        sb.append(", warehouseId=").append(warehouseId);
         sb.append(", frozenRealStockQty=").append(frozenRealStockQty);
         sb.append(", frozenVirtualStockQty=").append(frozenVirtualStockQty);
         sb.append(", isVirtualStockReady=").append(isVirtualStockReady);
