@@ -14,27 +14,27 @@ import java.util.Objects;
  * Created by zhengzhiqing on 16/6/23.
  */
 public interface PageConfigService {
-//    /**
-//     * 根据页面类型查询应该显示的Banner
-//     * @param pageType
-//     * @return
-//     */
-//    List<PageBannerConfig> getBannersByPageType(int pageType);
-//
-//    /**
-//     * 根据页面类型查询应该显示的场景
-//     * @param pageType
-//     * @return
-//     */
-//    List<PageSceneConfig> getScenesByPageType(int pageType);
-//
-//    /**
-//     * 根据页面类型查询应该显示的Topic
-//     * @param pageType
-//     * @return
-//     */
-//    List<PageTopicVo> getTopicsByPageType(int pageType);
+    /**
+     * 根据页面类型查询应该显示的Banner
+     * @param pageType
+     * @return
+     */
+    List<PageBannerConfig> getBannersByPageType(int pageType);
 
-    Object getByPageType (int pageType) throws Exception;
+    /**
+     * 根据页面类型查询应该显示的场景
+     * @param pageType
+     * @return
+     */
+    List<PageSceneConfig> getScenesByPageType(int pageType);
+
+    /**
+     * 根据页面类型查询应该显示的Topic
+     * @param pageType
+     * @return
+     */
+    List<PageTopicVo> getTopicsByPageType(int pageType);
+
+
 
 }
