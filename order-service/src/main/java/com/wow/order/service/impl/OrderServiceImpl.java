@@ -1,13 +1,16 @@
 package com.wow.order.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.order.model.Order;
 import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderVo;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.wow.order.vo.response.OrderResponse;
 
 /**
  * 订单服务
@@ -15,6 +18,7 @@ import java.util.List;
  * Created by zhengzhiqing on 16/6/16.
  */
 @Service
+@Transactional("orderTransactionManager")
 public class OrderServiceImpl implements OrderService {
     /**
      * 下单
@@ -45,8 +49,11 @@ public class OrderServiceImpl implements OrderService {
      * @param orderId
      * @return
      */
-    public Order queryOrderById(int orderId) {
-        return null;
+    @Override
+    public OrderResponse queryOrderById(int orderId) {
+        OrderResponse orderResponse=new OrderResponse();
+        
+        return orderResponse;
     }
 
     /**
