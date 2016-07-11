@@ -4,7 +4,7 @@ package com.wow.mobileapi.controller;
 import com.wow.attribute.model.Attribute;
 import com.wow.attribute.service.AttributeService;
 import com.wow.common.util.ValidatorUtil;
-import com.wow.mobileapi.dto.ApiResponse;
+import com.wow.mobileapi.dto.response.ApiResponse;
 import com.wow.mobileapi.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

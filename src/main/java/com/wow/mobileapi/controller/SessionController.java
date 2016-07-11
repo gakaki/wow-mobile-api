@@ -2,7 +2,7 @@ package com.wow.mobileapi.controller;
 
 import com.wow.common.util.RedisUtil;
 import com.wow.common.util.ValidatorUtil;
-import com.wow.mobileapi.dto.ApiResponse;
+import com.wow.mobileapi.dto.response.ApiResponse;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.service.SessionService;
 import com.wow.user.vo.LoginRequestVo;

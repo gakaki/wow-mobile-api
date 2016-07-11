@@ -1,13 +1,9 @@
 package com.wow.mobileapi.controller;
 
-import com.wow.mobileapi.dto.ApiResponse;
-import com.wow.mobileapi.util.ResponseUtil;
-import com.wow.page.model.PageBannerConfig;
-import com.wow.page.model.PageSceneConfig;
-import com.wow.page.service.PageConfigService;
-import com.wow.page.vo.PageTopicVo;
-import com.wow.product.model.Scene;
-import com.wow.product.service.SceneService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import com.wow.mobileapi.dto.response.ApiResponse;
+import com.wow.mobileapi.util.ResponseUtil;
+import com.wow.page.model.PageBannerConfig;
+import com.wow.page.model.PageSceneConfig;
+import com.wow.page.model.PageTopicConfig;
+import com.wow.page.service.PageConfigService;
+import com.wow.page.vo.PageTopicVo;
+import com.wow.product.model.Scene;
+import com.wow.product.service.SceneService;
 
 /**
  * Created by zhengzhiqing on 16/6/23.

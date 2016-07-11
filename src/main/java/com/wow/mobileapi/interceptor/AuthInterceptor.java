@@ -2,7 +2,7 @@ package com.wow.mobileapi.interceptor;
 
 import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.constant.ApiConstant;
-import com.wow.mobileapi.dto.ApiResponse;
+import com.wow.mobileapi.dto.response.ApiResponse;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.service.SessionService;
 import org.slf4j.Logger;

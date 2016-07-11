@@ -1,25 +1,29 @@
 package com.wow.mobileapi.controller;
 
-import com.wow.common.error.ErrorRepositoryManager;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.ValidatorUtil;
-import com.wow.mobileapi.dto.ApiResponse;
-import com.wow.mobileapi.dto.MobileRequestVo;
-import com.wow.mobileapi.util.ResponseUtil;
-import com.wow.user.model.EndUser;
-import com.wow.user.model.EndUserWechat;
-import com.wow.user.service.UserService;
-import com.wow.user.vo.RegisterRequestVo;
-import com.wow.user.vo.RegisterResultVo;
-import com.wow.user.vo.WechatBindingStatusVo;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import com.wow.common.error.ErrorRepositoryManager;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.dto.MobileRequestVo;
+import com.wow.mobileapi.dto.response.ApiResponse;
+import com.wow.mobileapi.util.ResponseUtil;
+import com.wow.user.model.EndUser;
+import com.wow.user.service.UserService;
+import com.wow.user.vo.RegisterRequestVo;
+import com.wow.user.vo.RegisterResultVo;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -125,7 +129,7 @@ public class UserController {
     public ApiResponse requestCaptcha(@RequestBody MobileRequestVo mobileRequestVo) {
         logger.info("请求发送手机验证码:" + mobileRequestVo.getMobile());
         ApiResponse apiResponse = new ApiResponse();
-        String captcha = (userService.sendCaptcha(mobileRequestVo.getMobile()));
+       // String captcha = (userService.sendCaptcha(mobileRequestVo.getMobile()));
         responseUtil.setResponse(apiResponse,"0");
         apiResponse.setData("1");
         logger.info("请求发送手机验证码,返回结果:" + JsonUtil.pojo2Json(apiResponse));
@@ -141,9 +145,9 @@ public class UserController {
     public ApiResponse checkWechatBindStatus(@RequestParam String mobile) {
         logger.info("检查手机是否已注册并绑定微信:" + mobile);
         ApiResponse apiResponse = new ApiResponse();
-        WechatBindingStatusVo wechatBindingStatusVo = userService.checkWechatBindStatus(mobile);
+        //WechatBindingStatusVo wechatBindingStatusVo = userService.checkWechatBindStatus(mobile);
         responseUtil.setResponse(apiResponse,"0");
-        apiResponse.setData(wechatBindingStatusVo);
+       // apiResponse.setData(wechatBindingStatusVo);
         logger.info("检查手机是否已注册并绑定微信,返回结果:" + JsonUtil.pojo2Json(apiResponse));
         return apiResponse;
     }
@@ -153,19 +157,19 @@ public class UserController {
      * @param endUserWechat
      * @return
      */
-    @RequestMapping(value = "/wechat-bind", method = RequestMethod.POST)
-    public ApiResponse bindWechat(@RequestBody EndUserWechat endUserWechat) {
-        logger.info("绑定微信:" + endUserWechat);
-        ApiResponse apiResponse = new ApiResponse();
-        int i = userService.bindWechatToUser(endUserWechat);
-        if(i==1) {
-            responseUtil.setResponse(apiResponse, "0");
-            apiResponse.setData(endUserWechat);
-        } else {
-            responseUtil.setResponse(apiResponse, "50000");
-        }
-        logger.info("绑定微信,返回结果:" + JsonUtil.pojo2Json(apiResponse));
-        return apiResponse;
-    }
+//    @RequestMapping(value = "/wechat-bind", method = RequestMethod.POST)
+//    public ApiResponse bindWechat(@RequestBody EndUserWechat endUserWechat) {
+//        logger.info("绑定微信:" + endUserWechat);
+//        ApiResponse apiResponse = new ApiResponse();
+//        int i = userService.bindWechatToUser(endUserWechat);
+//        if(i==1) {
+//            responseUtil.setResponse(apiResponse, "0");
+//            apiResponse.setData(endUserWechat);
+//        } else {
+//            responseUtil.setResponse(apiResponse, "50000");
+//        }
+//        logger.info("绑定微信,返回结果:" + JsonUtil.pojo2Json(apiResponse));
+//        return apiResponse;
+//    }
 
 }

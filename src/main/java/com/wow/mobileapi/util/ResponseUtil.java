@@ -1,7 +1,8 @@
 package com.wow.mobileapi.util;
 
 import com.wow.common.error.ErrorRepositoryManager;
-import com.wow.mobileapi.dto.ApiResponse;
+import com.wow.mobileapi.dto.response.ApiResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
