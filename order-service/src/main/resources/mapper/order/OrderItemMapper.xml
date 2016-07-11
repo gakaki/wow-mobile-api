@@ -14,6 +14,7 @@
     <result column="parent_order_item_id" property="parentOrderItemId" jdbcType="INTEGER" />
     <result column="is_item_leaf" property="isItemLeaf" jdbcType="BIT" />
     <result column="product_supplier_id" property="productSupplierId" jdbcType="INTEGER" />
+    <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
     <result column="frozen_real_stock_qty" property="frozenRealStockQty" jdbcType="SMALLINT" />
     <result column="frozen_virtual_stock_qty" property="frozenVirtualStockQty" jdbcType="SMALLINT" />
     <result column="is_virtual_stock_ready" property="isVirtualStockReady" jdbcType="BIT" />
@@ -82,8 +83,8 @@
   <sql id="Base_Column_List" >
     id, order_id, product_id, order_item_amount, order_item_price, order_item_qty, product_name, 
     need_assemble, product_sale_type, parent_order_item_id, is_item_leaf, product_supplier_id, 
-    frozen_real_stock_qty, frozen_virtual_stock_qty, is_virtual_stock_ready, create_time, 
-    update_time, is_deleted
+    warehouse_id, frozen_real_stock_qty, frozen_virtual_stock_qty, is_virtual_stock_ready, 
+    create_time, update_time, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.order.model.OrderItemExample" >
     select
@@ -122,17 +123,17 @@
     insert into order_item (order_id, product_id, order_item_amount, 
       order_item_price, order_item_qty, product_name, 
       need_assemble, product_sale_type, parent_order_item_id, 
-      is_item_leaf, product_supplier_id, frozen_real_stock_qty, 
-      frozen_virtual_stock_qty, is_virtual_stock_ready, 
-      create_time, update_time, is_deleted
-      )
+      is_item_leaf, product_supplier_id, warehouse_id, 
+      frozen_real_stock_qty, frozen_virtual_stock_qty, 
+      is_virtual_stock_ready, create_time, update_time, 
+      is_deleted)
     values (#{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{orderItemAmount,jdbcType=DECIMAL}, 
       #{orderItemPrice,jdbcType=DECIMAL}, #{orderItemQty,jdbcType=TINYINT}, #{productName,jdbcType=VARCHAR}, 
       #{needAssemble,jdbcType=BIT}, #{productSaleType,jdbcType=TINYINT}, #{parentOrderItemId,jdbcType=INTEGER}, 
-      #{isItemLeaf,jdbcType=BIT}, #{productSupplierId,jdbcType=INTEGER}, #{frozenRealStockQty,jdbcType=SMALLINT}, 
-      #{frozenVirtualStockQty,jdbcType=SMALLINT}, #{isVirtualStockReady,jdbcType=BIT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
-      )
+      #{isItemLeaf,jdbcType=BIT}, #{productSupplierId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, 
+      #{frozenRealStockQty,jdbcType=SMALLINT}, #{frozenVirtualStockQty,jdbcType=SMALLINT}, 
+      #{isVirtualStockReady,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.order.model.OrderItem" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -172,6 +173,9 @@
       </if>
       <if test="productSupplierId != null" >
         product_supplier_id,
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id,
       </if>
       <if test="frozenRealStockQty != null" >
         frozen_real_stock_qty,
@@ -225,6 +229,9 @@
       </if>
       <if test="productSupplierId != null" >
         #{productSupplierId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=INTEGER},
       </if>
       <if test="frozenRealStockQty != null" >
         #{frozenRealStockQty,jdbcType=SMALLINT},
@@ -291,6 +298,9 @@
       <if test="record.productSupplierId != null" >
         product_supplier_id = #{record.productSupplierId,jdbcType=INTEGER},
       </if>
+      <if test="record.warehouseId != null" >
+        warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
+      </if>
       <if test="record.frozenRealStockQty != null" >
         frozen_real_stock_qty = #{record.frozenRealStockQty,jdbcType=SMALLINT},
       </if>
@@ -328,6 +338,7 @@
       parent_order_item_id = #{record.parentOrderItemId,jdbcType=INTEGER},
       is_item_leaf = #{record.isItemLeaf,jdbcType=BIT},
       product_supplier_id = #{record.productSupplierId,jdbcType=INTEGER},
+      warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
       frozen_real_stock_qty = #{record.frozenRealStockQty,jdbcType=SMALLINT},
       frozen_virtual_stock_qty = #{record.frozenVirtualStockQty,jdbcType=SMALLINT},
       is_virtual_stock_ready = #{record.isVirtualStockReady,jdbcType=BIT},
@@ -374,6 +385,9 @@
       <if test="productSupplierId != null" >
         product_supplier_id = #{productSupplierId,jdbcType=INTEGER},
       </if>
+      <if test="warehouseId != null" >
+        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
       <if test="frozenRealStockQty != null" >
         frozen_real_stock_qty = #{frozenRealStockQty,jdbcType=SMALLINT},
       </if>
@@ -408,6 +422,7 @@
       parent_order_item_id = #{parentOrderItemId,jdbcType=INTEGER},
       is_item_leaf = #{isItemLeaf,jdbcType=BIT},
       product_supplier_id = #{productSupplierId,jdbcType=INTEGER},
+      warehouse_id = #{warehouseId,jdbcType=INTEGER},
       frozen_real_stock_qty = #{frozenRealStockQty,jdbcType=SMALLINT},
       frozen_virtual_stock_qty = #{frozenVirtualStockQty,jdbcType=SMALLINT},
       is_virtual_stock_ready = #{isVirtualStockReady,jdbcType=BIT},
