@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.user.mapper.EndUserWechatMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.user.model.EndUserWechat" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="wechat_id" property="wechatId" jdbcType="VARCHAR" />
+    <result column="wechat_nick_name" property="wechatNickName" jdbcType="VARCHAR" />
+    <result column="wechat_avatar" property="wechatAvatar" jdbcType="VARCHAR" />
+    <result column="is_bind" property="isBind" jdbcType="BIT" />
+    <result column="bind_time" property="bindTime" jdbcType="TIMESTAMP" />
+    <result column="unbind_time" property="unbindTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, end_user_id, mobile, wechat_id, wechat_nick_name, wechat_avatar, is_bind, bind_time, 
+    unbind_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.EndUserWechatExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from end_user_wechat
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from end_user_wechat
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from end_user_wechat
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.user.model.EndUserWechatExample" >
+    delete from end_user_wechat
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.user.model.EndUserWechat" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into end_user_wechat (end_user_id, mobile, wechat_id, 
+      wechat_nick_name, wechat_avatar, is_bind, 
+      bind_time, unbind_time)
+    values (#{endUserId,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{wechatId,jdbcType=VARCHAR}, 
+      #{wechatNickName,jdbcType=VARCHAR}, #{wechatAvatar,jdbcType=VARCHAR}, #{isBind,jdbcType=BIT}, 
+      #{bindTime,jdbcType=TIMESTAMP}, #{unbindTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.user.model.EndUserWechat" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into end_user_wechat
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="endUserId != null" >
+        end_user_id,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="wechatId != null" >
+        wechat_id,
+      </if>
+      <if test="wechatNickName != null" >
+        wechat_nick_name,
+      </if>
+      <if test="wechatAvatar != null" >
+        wechat_avatar,
+      </if>
+      <if test="isBind != null" >
+        is_bind,
+      </if>
+      <if test="bindTime != null" >
+        bind_time,
+      </if>
+      <if test="unbindTime != null" >
+        unbind_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="endUserId != null" >
+        #{endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatId != null" >
+        #{wechatId,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatNickName != null" >
+        #{wechatNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatAvatar != null" >
+        #{wechatAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="isBind != null" >
+        #{isBind,jdbcType=BIT},
+      </if>
+      <if test="bindTime != null" >
+        #{bindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unbindTime != null" >
+        #{unbindTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.user.model.EndUserWechatExample" resultType="java.lang.Integer" >
+    select count(*) from end_user_wechat
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update end_user_wechat
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.endUserId != null" >
+        end_user_id = #{record.endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.mobile != null" >
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wechatId != null" >
+        wechat_id = #{record.wechatId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wechatNickName != null" >
+        wechat_nick_name = #{record.wechatNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wechatAvatar != null" >
+        wechat_avatar = #{record.wechatAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isBind != null" >
+        is_bind = #{record.isBind,jdbcType=BIT},
+      </if>
+      <if test="record.bindTime != null" >
+        bind_time = #{record.bindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.unbindTime != null" >
+        unbind_time = #{record.unbindTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update end_user_wechat
+    set id = #{record.id,jdbcType=INTEGER},
+      end_user_id = #{record.endUserId,jdbcType=INTEGER},
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      wechat_id = #{record.wechatId,jdbcType=VARCHAR},
+      wechat_nick_name = #{record.wechatNickName,jdbcType=VARCHAR},
+      wechat_avatar = #{record.wechatAvatar,jdbcType=VARCHAR},
+      is_bind = #{record.isBind,jdbcType=BIT},
+      bind_time = #{record.bindTime,jdbcType=TIMESTAMP},
+      unbind_time = #{record.unbindTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.user.model.EndUserWechat" >
+    update end_user_wechat
+    <set >
+      <if test="endUserId != null" >
+        end_user_id = #{endUserId,jdbcType=INTEGER},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatId != null" >
+        wechat_id = #{wechatId,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatNickName != null" >
+        wechat_nick_name = #{wechatNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatAvatar != null" >
+        wechat_avatar = #{wechatAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="isBind != null" >
+        is_bind = #{isBind,jdbcType=BIT},
+      </if>
+      <if test="bindTime != null" >
+        bind_time = #{bindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unbindTime != null" >
+        unbind_time = #{unbindTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.user.model.EndUserWechat" >
+    update end_user_wechat
+    set end_user_id = #{endUserId,jdbcType=INTEGER},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      wechat_id = #{wechatId,jdbcType=VARCHAR},
+      wechat_nick_name = #{wechatNickName,jdbcType=VARCHAR},
+      wechat_avatar = #{wechatAvatar,jdbcType=VARCHAR},
+      is_bind = #{isBind,jdbcType=BIT},
+      bind_time = #{bindTime,jdbcType=TIMESTAMP},
+      unbind_time = #{unbindTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
