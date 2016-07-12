@@ -27,7 +27,7 @@ public class BaseController {
      * @param apiResponse
      * @param commonResponse
      */
-    public void warpBussinessErrorInfo(ApiResponse apiResponse, CommonResponse commonResponse) {
+    public void copyResponse(ApiResponse apiResponse, CommonResponse commonResponse) {
         apiResponse.setResCode(commonResponse.getResCode());
         apiResponse.setResMsg(commonResponse.getResMsg());
     }
@@ -38,8 +38,8 @@ public class BaseController {
      * 
      * @param apiResponse
      */
-    public void warpJsonParseErrorInfo(ApiResponse apiResponse) {
-        apiResponse.setResCode("22323");
+    public void setParseError(ApiResponse apiResponse) {
+        apiResponse.setResCode("40001");
         apiResponse.setResMsg("paramJson参数格式有误");
     }
 
