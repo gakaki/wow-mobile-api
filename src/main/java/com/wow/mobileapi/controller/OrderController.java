@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.request.OrderRequest;
 import com.wow.order.vo.response.OrderResponse;
@@ -40,6 +42,16 @@ public class OrderController extends BaseController {
         //判断json格式参数是否有误
         if (orderRequest == null) {
             setParseError(apiResponse);
+
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(orderRequest);
+
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            copyValidatorResponse(apiResponse, errorMsg);
+
             return apiResponse;
         }
 

@@ -31,6 +31,18 @@ public class BaseController {
         apiResponse.setResCode(commonResponse.getResCode());
         apiResponse.setResMsg(commonResponse.getResMsg());
     }
+    
+    
+    /**
+     * 包装具体的校验出错信息
+     * 
+     * @param apiResponse
+     * @param errorMsg
+     */
+    public void copyValidatorResponse(ApiResponse apiResponse, String errorMsg) {
+        apiResponse.setResCode("40000");
+        apiResponse.setResMsg(errorMsg);
+    }
 
     
     /**
