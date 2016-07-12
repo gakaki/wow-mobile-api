@@ -1,7 +1,5 @@
 package com.wow.order;
 
-import com.wow.order.model.Order;
-import com.wow.order.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wow.order.service.OrderService;
+import com.wow.order.vo.response.OrderResponse;
+
 @SpringBootApplication
 @RestController
 public class OrderApplication {
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderApplication.class);
+    //private static final Logger logger = LoggerFactory.getLogger(OrderApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(OrderApplication.class, args);
@@ -26,7 +27,7 @@ public class OrderApplication {
     private OrderService orderService;
 
     @RequestMapping(value = "/orders/{orderId}", method = RequestMethod.GET)
-    public Order getOrderById(@PathVariable Integer orderId) {
+    public OrderResponse getOrderById(@PathVariable Integer orderId) {
         return orderService.queryOrderById(orderId);
     }
 

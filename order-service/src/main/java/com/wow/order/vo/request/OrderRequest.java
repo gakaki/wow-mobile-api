@@ -1,8 +1,10 @@
-package com.wow.mobileapi.dto.request;
+package com.wow.order.vo.request;
 
 import java.math.BigDecimal;
 
-public class OrderRequest extends CommonRequest {
+import com.wow.common.request.ApiRequest;
+
+public class OrderRequest extends ApiRequest {
 
     /**  */
     private static final long serialVersionUID = 1L;

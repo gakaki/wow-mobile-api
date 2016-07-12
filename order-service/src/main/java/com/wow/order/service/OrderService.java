@@ -1,11 +1,12 @@
 package com.wow.order.service;
 
+import java.util.List;
+
 import com.wow.order.model.Order;
 import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.vo.OrderVo;
-
-import java.util.List;
+import com.wow.order.vo.response.OrderResponse;
 
 /**
  * 订单服务
@@ -31,7 +32,7 @@ public interface OrderService {
      * @param orderId
      * @return
      */
-    Order queryOrderById(int orderId);
+    OrderResponse queryOrderById(int orderId);
 
     /**
      * @param orderCode

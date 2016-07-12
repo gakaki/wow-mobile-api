@@ -1,12 +1,7 @@
 package com.wow.mobileapi.controller;
 
-import com.wow.common.util.RedisUtil;
-import com.wow.common.util.ValidatorUtil;
-import com.wow.mobileapi.dto.response.ApiResponse;
-import com.wow.mobileapi.util.ResponseUtil;
-import com.wow.user.service.SessionService;
-import com.wow.user.vo.LoginRequestVo;
-import com.wow.user.vo.LoginResultVo;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.util.ResponseUtil;
+import com.wow.user.service.SessionService;
+import com.wow.user.vo.LoginRequestVo;
+import com.wow.user.vo.LoginResultVo;
 
 /**
  * 登录、登出

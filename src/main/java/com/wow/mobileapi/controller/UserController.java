@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wow.common.error.ErrorRepositoryManager;
+import com.wow.common.response.ApiResponse;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.dto.MobileRequestVo;
-import com.wow.mobileapi.dto.response.ApiResponse;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.model.EndUser;
 import com.wow.user.service.UserService;
