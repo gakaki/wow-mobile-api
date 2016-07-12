@@ -2,6 +2,8 @@ package com.wow.mobileapi.controller;
 
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.mobileapi.constant.ErrorCodeConstant;
 
 /**
  * controller基类 用以处理controller中的一些通用方法
@@ -27,7 +29,7 @@ public class BaseController {
      * @param apiResponse
      * @param commonResponse
      */
-    public void copyResponse(ApiResponse apiResponse, CommonResponse commonResponse) {
+    public void setServiceErrorResponse(ApiResponse apiResponse, CommonResponse commonResponse) {
         apiResponse.setResCode(commonResponse.getResCode());
         apiResponse.setResMsg(commonResponse.getResMsg());
     }
@@ -39,8 +41,8 @@ public class BaseController {
      * @param apiResponse
      * @param errorMsg
      */
-    public void copyValidatorResponse(ApiResponse apiResponse, String errorMsg) {
-        apiResponse.setResCode("40000");
+    public void setInvalidParameterResponse(ApiResponse apiResponse, String errorMsg) {
+        apiResponse.setResCode(ErrorCodeConstant.INVALID_PARAMETER);
         apiResponse.setResMsg(errorMsg);
     }
 
@@ -50,9 +52,9 @@ public class BaseController {
      * 
      * @param apiResponse
      */
-    public void setParseError(ApiResponse apiResponse) {
-        apiResponse.setResCode("40001");
-        apiResponse.setResMsg("paramJson参数格式有误");
+    public void setParamJsonParseErrorResponse(ApiResponse apiResponse) {
+        apiResponse.setResCode(ErrorCodeConstant.INVALID_PARAMJSON);
+        apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INVALID_PARAMJSON));
     }
 
     /**
@@ -60,9 +62,9 @@ public class BaseController {
      *
      * @param apiResponse
      */
-    public void setInternalError(ApiResponse apiResponse) {
-        apiResponse.setResCode("50000");
-        apiResponse.setResMsg("服务端异常");
+    public void setInternalErrorResponse(ApiResponse apiResponse) {
+        apiResponse.setResCode(ErrorCodeConstant.INTERNAL_ERROR);
+        apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INTERNAL_ERROR));
     }
 
 }
