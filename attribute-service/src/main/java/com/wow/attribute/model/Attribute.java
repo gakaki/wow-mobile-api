@@ -8,9 +8,9 @@ import java.util.Date;
 public class Attribute implements Serializable {
     private Integer id;
 
-    @NotEmpty(message = "属性名不能为空")
+    @NotEmpty
     private String attributeName;
-    @NotEmpty(message = "属性显示名不能为空")
+    @NotEmpty
     private String showName;
 
     private Boolean canMultipleSelected;

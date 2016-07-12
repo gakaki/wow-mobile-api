@@ -1,27 +1,21 @@
 package com.wow.mobileapi.controller;
 
 
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.attribute.model.Attribute;
 import com.wow.attribute.service.AttributeService;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class AttributeController {
+public class
+AttributeController {
 
     private static final Logger logger = LoggerFactory.getLogger(AttributeController.class);
 
@@ -35,9 +29,8 @@ public class AttributeController {
     public ApiResponse createAttribute(@Validated @RequestBody Attribute newAttribute, BindingResult result) {
         ApiResponse apiResponse = new ApiResponse();
         if (result.hasErrors()) {
-            responseUtil.setResponse(apiResponse, "40000");
-            Map<String, String> map = ValidatorUtil.getErrors(result);
-            apiResponse.setData(map);
+            apiResponse.setResCode("40000");
+            apiResponse.setResMsg(ValidatorUtil.getError(result));
         } else {
             logger.info("start to add attribute:" + newAttribute);
             int createdCnt = attributeService.createAttribute(newAttribute);

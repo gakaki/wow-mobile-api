@@ -1,24 +1,17 @@
 package com.wow.mobileapi.controller;
 
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.service.SessionService;
 import com.wow.user.vo.LoginRequestVo;
 import com.wow.user.vo.LoginResultVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 登录、登出
@@ -45,9 +38,8 @@ public class SessionController {
                              BindingResult result) {
         ApiResponse apiResponse = new ApiResponse();
         if (result.hasErrors()) {
-            responseUtil.setResponse(apiResponse, "40000");
-            Map<String, String> map = ValidatorUtil.getErrors(result);
-            apiResponse.setData(map);
+            apiResponse.setResCode("40000");
+            apiResponse.setResMsg(ValidatorUtil.getError(result));
         } else {
             //TODO: 可能会需要从header中获取部分信息,放到LoginRequestVo,比如login channel
             LoginResultVo loginResultVo = sessionService.login(loginRequestVo);
