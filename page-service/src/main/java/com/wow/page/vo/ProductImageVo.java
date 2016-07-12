@@ -1,9 +1,14 @@
 package com.wow.page.vo;
 
+import java.io.Serializable;
+
 /**
  * Created by fangying@wowdsgn on 2016/7/8.
  */
-public class ProductImageVo {
+public class ProductImageVo  implements Serializable{
+    /**  */
+    private static final long serialVersionUID = 1L;
+
     private Integer productId;
 
     private String imgName;

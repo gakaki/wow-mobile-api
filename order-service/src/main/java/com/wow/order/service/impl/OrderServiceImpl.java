@@ -53,6 +53,9 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse queryOrderById(int orderId) {
         OrderResponse orderResponse=new OrderResponse();
         
+        orderResponse.setResCode("12121");
+        orderResponse.setResMsg("订单号不存在");
+        
         return orderResponse;
     }
 

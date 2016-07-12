@@ -1,9 +1,5 @@
 package com.wow.page.vo;
 
-import com.wow.product.model.ProductImage;
-import com.wow.product.model.ProductShortListInTopic;
-import com.wow.product.model.Topic;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,6 +7,8 @@ import java.util.List;
  * Created by fangying@wowdsgn on 2016/7/8.
  */
 public class PageTopicVo implements Serializable {
+    /**  */
+    private static final long serialVersionUID = 1L;
     private Integer id;
     private String topicName;
     private String topicImg;
@@ -20,24 +18,12 @@ public class PageTopicVo implements Serializable {
     private Byte topicType;
     private Integer groupId;
     private String topicContentDetails;
-    private  List<ProductImageVo> productImageVos;
+    private List<ProductImageVo> productImageVos;
 
     @Override
     public String toString() {
-        return "PageTopicVo{" +
-                "id=" + id +
-                ", topicName='" + topicName + '\'' +
-                ", topicImg='" + topicImg + '\'' +
-                ", topicImgLink='" + topicImgLink + '\'' +
-                ", topicMainTitle='" + topicMainTitle + '\'' +
-                ", topicDesc='" + topicDesc + '\'' +
-                ", topicType=" + topicType +
-                ", groupId=" + groupId +
-                ", topicContentDetails='" + topicContentDetails + '\'' +
-                ", images=" + productImageVos +
-                '}';
+        return "PageTopicVo{" + "id=" + id + ", topicName='" + topicName + '\'' + ", topicImg='" + topicImg + '\'' + ", topicImgLink='" + topicImgLink + '\'' + ", topicMainTitle='" + topicMainTitle + '\'' + ", topicDesc='" + topicDesc + '\'' + ", topicType=" + topicType + ", groupId=" + groupId + ", topicContentDetails='" + topicContentDetails + '\'' + ", images=" + productImageVos + '}';
     }
-
 
     public List<ProductImageVo> getImages() {
         return productImageVos;
@@ -118,6 +104,5 @@ public class PageTopicVo implements Serializable {
     public void setTopicContentDetails(String topicContentDetails) {
         this.topicContentDetails = topicContentDetails;
     }
-
 
 }

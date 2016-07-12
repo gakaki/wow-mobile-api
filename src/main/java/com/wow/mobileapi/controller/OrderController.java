@@ -17,7 +17,7 @@ import com.wow.order.vo.response.OrderResponse;
  */
 @RestController
 @RequestMapping
-public class OrderController {
+public class OrderController extends BaseController {
 
     //private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
@@ -33,23 +33,20 @@ public class OrderController {
     @RequestMapping(value = "/v1/orders", method = RequestMethod.GET)
     public ApiResponse getOrderList(ApiRequest request) {
         OrderRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderRequest.class);
-        
         ApiResponse apiResponse = new ApiResponse();
 
         //判断json格式参数是否有误
         if (orderRequest == null) {
-            apiResponse.setResCode("22323");
-            apiResponse.setResMsg("paramJson参数格式有误");
-            
+            warpJsonParseErrorInfo(apiResponse);
+
             return apiResponse;
         }
 
         OrderResponse orderResponse = orderService.queryOrderById(orderRequest.getId());
 
         //如果处理失败 则返回错误信息
-        if (!"0".equals(orderResponse.getResCode())) {
-            apiResponse.setResCode(orderResponse.getResCode());
-            apiResponse.setResMsg(orderResponse.getResMsg());
+        if (!executeIsSuccess(orderResponse.getResCode())) {
+            warpBussinessErrorInfo(apiResponse, orderResponse);
 
             return apiResponse;
         }
