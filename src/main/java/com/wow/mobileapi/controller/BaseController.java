@@ -17,7 +17,7 @@ public class BaseController {
      * @param errorCode
      * @return
      */
-    public boolean executeIsSuccess(String errorCode) {
+    public boolean isServiceCallSuccess(String errorCode) {
         return "0".equals(errorCode);
     }
 
@@ -41,6 +41,16 @@ public class BaseController {
     public void setParseError(ApiResponse apiResponse) {
         apiResponse.setResCode("40001");
         apiResponse.setResMsg("paramJson参数格式有误");
+    }
+
+    /**
+     * 包装json参数解析错误信息
+     *
+     * @param apiResponse
+     */
+    public void setInternalError(ApiResponse apiResponse) {
+        apiResponse.setResCode("50000");
+        apiResponse.setResMsg("服务端异常");
     }
 
 }
