@@ -32,9 +32,9 @@ public class OrderController {
      */
     @RequestMapping(value = "/v1/orders", method = RequestMethod.GET)
     public ApiResponse getOrderList(ApiRequest request) {
-        ApiResponse apiResponse = new ApiResponse();
-
         OrderRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderRequest.class);
+        
+        ApiResponse apiResponse = new ApiResponse();
 
         //判断json格式参数是否有误
         if (orderRequest == null) {
@@ -46,7 +46,7 @@ public class OrderController {
 
         OrderResponse orderResponse = orderService.queryOrderById(orderRequest.getId());
 
-        //如果请求错误
+        //如果处理失败 则返回错误信息
         if (!"0".equals(orderResponse.getResCode())) {
             apiResponse.setResCode(orderResponse.getResCode());
             apiResponse.setResMsg(orderResponse.getResMsg());
