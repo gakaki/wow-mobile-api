@@ -1,8 +1,22 @@
 package com.wow.user.service.impl;
 
-import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+import java.util.Date;
+import java.util.List;
 
-import com.wow.common.error.ErrorRepositoryManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
+
+import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.RedisUtil;
 import com.wow.user.mapper.EndUserMapper;
@@ -22,20 +36,6 @@ import com.wow.user.util.PasswordUtil;
 import com.wow.user.vo.RegisterRequestVo;
 import com.wow.user.vo.RegisterResultVo;
 import com.wow.user.vo.WechatBindingStatusVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.annotation.Validated;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/21.
@@ -58,12 +58,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private SmsSender smsSender;
 
-    @Autowired
-    private RedisUtil redisUtil;
-
-    @Autowired
-    private ErrorRepositoryManager errorRepositoryManager;
-
     @Value("${redis.captcha.timeout}")
     private long captchaTimeout;
 
@@ -81,18 +75,18 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(mobile)) {
             registerResultVo.setSuccess(false);
             registerResultVo.setResCode("40000");
-            registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("40000"));
+            registerResultVo.setResMsg(ErrorCodeUtil.getErrorMsg("40000"));
         } else {
             //判断验证码是否与服务端一致,且服务端验证码未过期
             String captchaOnServer = getCaptchaOnServer(mobile);
             if (StringUtils.isEmpty(captchaOnServer)) {
                 registerResultVo.setSuccess(false);
                 registerResultVo.setResCode("40201");
-                registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("40201"));
+                registerResultVo.setResMsg(ErrorCodeUtil.getErrorMsg("40201"));
             } else if (!registerRequestVo.getCaptcha().equals(captchaOnServer)) {
                 registerResultVo.setSuccess(false);
                 registerResultVo.setResCode("40202");
-                registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("40202"));
+                registerResultVo.setResMsg(ErrorCodeUtil.getErrorMsg("40202"));
             } else {
                 registerRequestVo.getEndUser().setPassword(
                         PasswordUtil.passwordHashGenerate(registerRequestVo.getEndUser().getPassword()));
@@ -102,7 +96,7 @@ public class UserServiceImpl implements UserService {
                 //注册成功,需要将用户ID返回
                 registerResultVo.setEndUserId(registerRequestVo.getEndUser().getId());
                 registerResultVo.setResCode("0");
-                registerResultVo.setResMsg(errorRepositoryManager.getErrorMsg("0"));
+                registerResultVo.setResMsg(ErrorCodeUtil.getErrorMsg("0"));
             }
         }
         return registerResultVo;
@@ -229,7 +223,7 @@ public class UserServiceImpl implements UserService {
 
         //3. store digit into redis
         //TODO: 是否所有验证码的过期时间一样,还是需要配置?
-        redisUtil.set(mobile,randomNum,captchaTimeout);//缓存无限长,需要做成配置
+        RedisUtil.set(mobile,randomNum,captchaTimeout);//缓存无限长,需要做成配置
 
         return randomNum;
     }
@@ -276,7 +270,7 @@ public class UserServiceImpl implements UserService {
     private String getCaptchaOnServer(String mobile) {
         String captchaOnServer = "";
         //get from redis
-        Object captcha = redisUtil.get(mobile);
+        Object captcha = RedisUtil.get(mobile);
         if (captcha != null) {
             captchaOnServer = (String) captcha;
         }

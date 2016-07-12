@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.order.model.Order;
 import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
@@ -25,6 +26,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @param orderVo
      */
+    @Override
     public void placeOrder(OrderVo orderVo) {
         //从OrderVo中获取信息,创建订单,概要步骤如下
         /**
@@ -41,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @param order
      */
+    @Override
     public void cancelOrder(Order order) {
 
     }
@@ -53,8 +56,9 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse queryOrderById(int orderId) {
         OrderResponse orderResponse=new OrderResponse();
         
-        orderResponse.setResCode("12121");
-        orderResponse.setResMsg("订单号不存在");
+        //设置错误码和错误信息
+        orderResponse.setResCode("40001");
+        orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40001"));
         
         return orderResponse;
     }
@@ -63,6 +67,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderCode
      * @return
      */
+    @Override
     public Order queryOrderByOrderCode(String orderCode) {
         return null;
     }
@@ -71,6 +76,7 @@ public class OrderServiceImpl implements OrderService {
      * @param endUserId
      * @return
      */
+    @Override
     public List<Order> queryOrdersByUserId(int endUserId) {
         return null;
     }
@@ -78,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * @param orderLog
      */
+    @Override
     public void createOrderLog(OrderLog orderLog) {
 
     }
@@ -86,6 +93,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderId
      * @return
      */
+    @Override
     public List<OrderLog> queryOrderLogsByOrderId(int orderId) {
         return null;
     }
@@ -96,6 +104,7 @@ public class OrderServiceImpl implements OrderService {
      * @param returnOrder
      * @return
      */
+    @Override
     public int placeReturnOrder(ReturnOrder returnOrder) {
         return 0;
     }
@@ -106,6 +115,7 @@ public class OrderServiceImpl implements OrderService {
      * @param returnOrder
      * @return
      */
+    @Override
     public int approveReturnOrder(ReturnOrder returnOrder) {
         return 0;
     }
@@ -116,6 +126,7 @@ public class OrderServiceImpl implements OrderService {
      * @param returnOrder
      * @return
      */
+    @Override
     public int rejectReturnOrder(ReturnOrder returnOrder) {
         return 0;
     }
@@ -125,6 +136,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @param order
      */
+    @Override
     public boolean deliverGoods(Order order) {
         return false;
     }
@@ -134,6 +146,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @param order
      */
+    @Override
     public boolean deliverDelayedGoods(Order order) {
         return false;
     }

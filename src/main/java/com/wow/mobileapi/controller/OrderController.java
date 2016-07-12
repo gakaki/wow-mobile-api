@@ -32,7 +32,7 @@ public class OrderController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/v1/orders", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/orders", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
     public ApiResponse getOrderList(ApiRequest request) {
         OrderRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderRequest.class);
         ApiResponse apiResponse = new ApiResponse();

@@ -11,12 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Created by zhengzhiqing on 16/6/18.
- */
-
-import com.wow.common.error.ErrorRepositoryManager;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.product.model.Brand;
 import com.wow.product.model.Product;
 import com.wow.product.service.BrandService;
@@ -32,8 +28,6 @@ public class ProductController {
     private BrandService brandService;
     @Autowired
     private ProductService productService;
-    @Autowired
-    private ErrorRepositoryManager errorRepositoryManager;
 
     @RequestMapping(value = "/{productId}", method = RequestMethod.GET)
     public ApiResponse getProduct(@PathVariable Integer productId) {
@@ -45,7 +39,7 @@ public class ProductController {
             apiResponse.setData(product);
         } else {
             apiResponse.setResCode("40201");
-            apiResponse.setResMsg(errorRepositoryManager.getErrorMsg("40201"));
+            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40201"));
         }
         return apiResponse;
     }
