@@ -1,12 +1,5 @@
 package com.wow.mobileapi.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.JsonUtil;
@@ -15,6 +8,12 @@ import com.wow.common.util.ValidatorUtil;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.request.OrderRequest;
 import com.wow.order.vo.response.OrderResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by zhengzhiqing on 16/7/2.
@@ -41,16 +40,17 @@ public class OrderController extends BaseController {
 
         //判断json格式参数是否有误
         if (orderRequest == null) {
-            setParseError(apiResponse);
+            setParamJsonParseErrorResponse(apiResponse);
 
             return apiResponse;
         }
-
-        String errorMsg = ValidatorUtil.getError(orderRequest);
+        //TODO:
+//        String errorMsg = ValidatorUtil.getError(orderRequest);
+        String errorMsg = "入参错误";
 
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
-            copyValidatorResponse(apiResponse, errorMsg);
+            setInvalidParameterResponse(apiResponse, errorMsg);
 
             return apiResponse;
         }
@@ -61,13 +61,13 @@ public class OrderController extends BaseController {
 
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(orderResponse.getResCode())) {
-                copyResponse(apiResponse, orderResponse);
+                setServiceErrorResponse(apiResponse, orderResponse);
             } else {
                 apiResponse.setData(orderResponse.getOrder());
             }
         } catch (Exception e) {
             logger.error("获取订单列表信息错误---" + e);
-            setInternalError(apiResponse);
+            setInternalErrorResponse(apiResponse);
         }
 
         return apiResponse;

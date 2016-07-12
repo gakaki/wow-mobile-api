@@ -1,13 +1,11 @@
-package com.wow.user.vo;
+package com.wow.user.vo.request;
 
-import java.io.Serializable;
+import com.wow.common.request.ApiRequest;
 
 /**
  * Created by zhengzhiqing on 16/6/28.
  */
-public class LoginRequestVo implements Serializable{
-
-    private static final long serialVersionUID = 1L;
+public class LoginRequest extends ApiRequest {
 
     private String userName;
     private String password;

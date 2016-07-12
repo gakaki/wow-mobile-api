@@ -1,8 +1,19 @@
 package com.wow.user.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
+import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.RandomGenerator;
+import com.wow.common.util.RedisUtil;
+import com.wow.user.mapper.EndUserMapper;
+import com.wow.user.mapper.EndUserWechatMapper;
+import com.wow.user.model.*;
+import com.wow.user.service.SessionService;
+import com.wow.user.service.UserService;
+import com.wow.user.thirdparty.SmsSender;
+import com.wow.user.util.PasswordUtil;
+import com.wow.user.vo.request.RegisterRequest;
+import com.wow.user.vo.response.RegisterResponse;
+import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,29 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.annotation.Validated;
 
-import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.RandomGenerator;
-import com.wow.common.util.RedisUtil;
-import com.wow.user.mapper.EndUserMapper;
-import com.wow.user.mapper.EndUserWechatMapper;
-import com.wow.user.model.EndUser;
-import com.wow.user.model.EndUserExample;
-import com.wow.user.model.EndUserShareBrand;
-import com.wow.user.model.EndUserShareDesigner;
-import com.wow.user.model.EndUserShareProduct;
-import com.wow.user.model.EndUserShareScene;
-import com.wow.user.model.EndUserWechat;
-import com.wow.user.model.EndUserWechatExample;
-import com.wow.user.service.SessionService;
-import com.wow.user.service.UserService;
-import com.wow.user.thirdparty.SmsSender;
-import com.wow.user.util.PasswordUtil;
-import com.wow.user.vo.RegisterRequestVo;
-import com.wow.user.vo.RegisterResultVo;
-import com.wow.user.vo.WechatBindingStatusVo;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/21.
@@ -64,42 +55,36 @@ public class UserServiceImpl implements UserService {
     /**
      * 用户注册
      *
-     * @param registerRequestVo
+     * @param registerRequest
      * @return
      */
     @Override
-    public RegisterResultVo register(@Validated RegisterRequestVo registerRequestVo) {
-        RegisterResultVo registerResultVo = new RegisterResultVo();
+    public RegisterResponse register(RegisterRequest registerRequest) {
+        RegisterResponse registerResponse = new RegisterResponse();
         //TODO: validation required, use hibernate validator?
-        String mobile = registerRequestVo.getEndUser().getMobile();
+        String mobile = registerRequest.getEndUser().getMobile();
         if (StringUtils.isEmpty(mobile)) {
-            registerResultVo.setSuccess(false);
-            registerResultVo.setResCode("40000");
-            registerResultVo.setResMsg(ErrorCodeUtil.getErrorMsg("40000"));
+            registerResponse.setResCode("40000");
+            registerResponse.setResMsg("手机号不能为空");
         } else {
             //判断验证码是否与服务端一致,且服务端验证码未过期
             String captchaOnServer = getCaptchaOnServer(mobile);
             if (StringUtils.isEmpty(captchaOnServer)) {
-                registerResultVo.setSuccess(false);
-                registerResultVo.setResCode("40201");
-                registerResultVo.setResMsg(ErrorCodeUtil.getErrorMsg("40201"));
-            } else if (!registerRequestVo.getCaptcha().equals(captchaOnServer)) {
-                registerResultVo.setSuccess(false);
-                registerResultVo.setResCode("40202");
-                registerResultVo.setResMsg(ErrorCodeUtil.getErrorMsg("40202"));
+                registerResponse.setResCode("40102");
+                registerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40102"));
+            } else if (!registerRequest.getCaptcha().equals(captchaOnServer)) {
+                registerResponse.setResCode("40103");
+                registerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40103"));
             } else {
-                registerRequestVo.getEndUser().setPassword(
-                        PasswordUtil.passwordHashGenerate(registerRequestVo.getEndUser().getPassword()));
-                endUserMapper.insertSelective(registerRequestVo.getEndUser());
+                registerRequest.getEndUser().setPassword(
+                        PasswordUtil.passwordHashGenerate(registerRequest.getEndUser().getPassword()));
+                endUserMapper.insertSelective(registerRequest.getEndUser());
                 //TODO: 如果该用户是通过好友推荐进来注册的,需要更新推荐相关信息,通过消息通知营销系统,否则要双向依赖
-                registerResultVo.setSuccess(true);
                 //注册成功,需要将用户ID返回
-                registerResultVo.setEndUserId(registerRequestVo.getEndUser().getId());
-                registerResultVo.setResCode("0");
-                registerResultVo.setResMsg(ErrorCodeUtil.getErrorMsg("0"));
+                registerResponse.setEndUserId(registerRequest.getEndUser().getId());
             }
         }
-        return registerResultVo;
+        return registerResponse;
     }
 
     /**
@@ -110,65 +95,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
-    public boolean isExistedUserByUserName(String userName) {
-        EndUser user = getEndUserByUserName(userName);
-        logger.info("user=" + user);
-        return (user != null);
-    }
-
-    /**
-     * 根据手机号判断是否已注册用户
-     *
-     * @param mobile
-     * @return
-     */
-    @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
-    public boolean isExistedUserByMobile(String mobile) {
-        EndUser user = getEndUserByMobile(mobile);
-        logger.info("user=" + user);
-        return (user != null);
-    }
-
-    /**
-     * 检查手机号的注册和绑定微信状态
-     *
-     * @param mobile
-     * @return
-     */
-    @Override
-    public WechatBindingStatusVo checkWechatBindStatus(String mobile) {
-        WechatBindingStatusVo wechatBindingStatusVo = new WechatBindingStatusVo();
-        wechatBindingStatusVo.setMobile(mobile);
-        wechatBindingStatusVo.setRegistered(isExistedUserByMobile(mobile));
-        EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
-        EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
-        criteria.andMobileEqualTo(mobile);
-        criteria.andWechatIdIsNotNull();
-        criteria.andIsBindEqualTo(true);
-        List<EndUserWechat> list = endUserWechatMapper.selectByExample(endUserWechatExample);
-        if (list != null && list.size()==1) {
-            EndUserWechat endUserWechat = list.get(0);
-            wechatBindingStatusVo.setBindWechat(true);
-            wechatBindingStatusVo.setWechatId(endUserWechat.getWechatId());
-        } else if (list == null || list.size()==0){
-            wechatBindingStatusVo.setBindWechat(false);
-        } else if (list.size() > 1) {
-            //异常
-            wechatBindingStatusVo.setBindWechat(false);
-        }
-        return wechatBindingStatusVo;
-    }
-
-    /**
-     * 绑定微信
-     *
-     * @param endUserWechat
-     * @return
-     */
-    @Override
-    public int bindWechatToUser(EndUserWechat endUserWechat) {
-        return endUserWechatMapper.insertSelective(endUserWechat);
+    public UserCheckResponse isExistedUserByUserName(String userName) {
+        UserCheckResponse userCheckResponse = new UserCheckResponse();
+        EndUser user = getEndUserByUserName(userName).getEndUser();
+        userCheckResponse.setExistedUser(user != null);
+        return userCheckResponse;
     }
 
     /**
@@ -179,11 +110,74 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
-    public boolean isExistedUserByNickName(String nickName) {
-        EndUser user = getEndUserByNickName(nickName);
-        logger.info("user=" + user);
-        return (user != null);
+    public UserCheckResponse isExistedUserByNickName(String nickName) {
+        UserCheckResponse userCheckResponse = new UserCheckResponse();
+        EndUser user = getEndUserByNickName(nickName).getEndUser();
+        userCheckResponse.setExistedUser(user!= null);
+        return userCheckResponse;
     }
+
+    /**
+     * 根据手机号判断是否已注册用户
+     *
+     * @param mobile
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public UserCheckResponse isExistedUserByMobile(String mobile) {
+        UserCheckResponse userCheckResponse = new UserCheckResponse();
+        UserResponse userResponse = getEndUserByMobile(mobile);
+        userCheckResponse.setExistedUser(userResponse.getEndUser() != null);
+        return userCheckResponse;
+    }
+
+    /**
+     * 检查手机号的注册和绑定微信状态
+     *
+     * @param mobile
+     * @return
+     */
+    @Override
+    public WechatBindingStatusResponse checkWechatBindStatus(String mobile) {
+        WechatBindingStatusResponse wechatBindingStatusResponse = new WechatBindingStatusResponse();
+        wechatBindingStatusResponse.setMobile(mobile);
+        wechatBindingStatusResponse.setRegistered(isExistedUserByMobile(mobile).isExistedUser());
+        EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
+        EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
+        criteria.andMobileEqualTo(mobile);
+        criteria.andWechatIdIsNotNull();
+        criteria.andIsBindEqualTo(true);
+        List<EndUserWechat> list = endUserWechatMapper.selectByExample(endUserWechatExample);
+        if (list != null && list.size()==1) {
+            EndUserWechat endUserWechat = list.get(0);
+            wechatBindingStatusResponse.setBinded(true);
+            wechatBindingStatusResponse.setWechatId(endUserWechat.getWechatId());
+        } else if (list == null || list.size()==0){
+            wechatBindingStatusResponse.setBinded(false);
+        } else if (list.size() > 1) {
+            wechatBindingStatusResponse.setResCode("50101");
+            wechatBindingStatusResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50101"));
+        }
+        return wechatBindingStatusResponse;
+    }
+
+    /**
+     * 绑定微信
+     *
+     * @param endUserWechat
+     * @return
+     */
+    @Override
+    public WechatBindingStatusResponse bindWechatToUser(EndUserWechat endUserWechat) {
+        WechatBindingStatusResponse wechatBindingStatusResponse = new WechatBindingStatusResponse();
+        int i = endUserWechatMapper.insertSelective(endUserWechat);
+        wechatBindingStatusResponse.setBinded(i>0);
+        wechatBindingStatusResponse.setMobile(endUserWechat.getMobile());
+        return wechatBindingStatusResponse;
+    }
+
+
 
     /**
      * 用户信息更新
@@ -193,8 +187,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @CacheEvict(value = "UserCache",key="'USER_ID_'+#endUserId")
-    public int updateEndUser(EndUser endUser) {
-        return endUserMapper.updateByPrimaryKeySelective(endUser);
+    public UserUpdateResponse updateEndUser(EndUser endUser) {
+        UserUpdateResponse userUpdateResponse = new UserUpdateResponse();
+        int i= endUserMapper.updateByPrimaryKeySelective(endUser);
+        userUpdateResponse.setSuccess(i>0);
+        return userUpdateResponse;
     }
 
     /**
@@ -204,7 +201,9 @@ public class UserServiceImpl implements UserService {
      * @param mobile
      * @return 验证码
      */
-    public String sendCaptcha(String mobile) {
+    public CaptchaResponse sendCaptcha(String mobile) {
+
+        CaptchaResponse captchaResponse = new CaptchaResponse();
 
         //调用阿里大鱼的短信接口,往目标手机发送随机生成的6位数字,并将6位数字存储到Redis中
         //1. generate 6-bit digit randomly
@@ -225,7 +224,9 @@ public class UserServiceImpl implements UserService {
         //TODO: 是否所有验证码的过期时间一样,还是需要配置?
         RedisUtil.set(mobile,randomNum,captchaTimeout);//缓存无限长,需要做成配置
 
-        return randomNum;
+        captchaResponse.setCaptcha(randomNum);
+
+        return captchaResponse;
     }
 
     /**
@@ -238,13 +239,16 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @CacheEvict(value = "UserCache", key="'USER_MOBILE_'+#mobile")
-    public boolean resetPassword(String mobile, String captcha, String newPwd) {
+    public ResetPwdResponse resetPassword(String mobile, String captcha, String newPwd) {
+        ResetPwdResponse resetPwdResponse = new ResetPwdResponse();
         String captchaForMobile = getCaptchaOnServer(mobile);
         if (captchaForMobile.equals(captcha)) {
-            EndUser endUser = getEndUserByMobile(mobile);
-            if(endUser == null) {
+            UserResponse userResponse = getEndUserByMobile(mobile);
+            EndUser endUser = userResponse.getEndUser();
+            if(endUser== null) {
                 logger.error("该用户不存在");
-                return false;
+                resetPwdResponse.setResCode("50599");
+                resetPwdResponse.setResCode(ErrorCodeUtil.getErrorMsg("50599"));
             }
             endUser.setPassword(PasswordUtil.passwordHashGenerate(newPwd));
             endUser.setUpdateTime(new Date());
@@ -252,13 +256,15 @@ public class UserServiceImpl implements UserService {
                 //需要设置当前有效的session token失效(所有登录渠道)
                 sessionService.invalidateSessionToken(endUser.getId());
             } else {
-                //修改密码失败
+                resetPwdResponse.setResCode("50519");
+                resetPwdResponse.setResCode(ErrorCodeUtil.getErrorMsg("50519"));
             }
         } else {
             logger.info("验证码无效,请重新获取");
-            return false;
+            resetPwdResponse.setResCode("50598");
+            resetPwdResponse.setResCode(ErrorCodeUtil.getErrorMsg("50598"));
         }
-        return true;
+        return resetPwdResponse;
     }
 
     /**
@@ -284,10 +290,17 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
-    @Cacheable(value = "UserCache",key="'USER_ID_'+#endUserId")
-    public EndUser getEndUserById(int endUserId) {
-        logger.info("无缓存的时候调用这里");
-        return endUserMapper.selectByPrimaryKey(endUserId);
+//    @Cacheable(value = "UserCache",key="'USER_ID_'+#endUserId")
+    public UserResponse getEndUserById(int endUserId) {
+        UserResponse userResponse = new UserResponse();
+        EndUser endUser = endUserMapper.selectByPrimaryKey(endUserId);
+        if (endUser != null) {
+            userResponse.setEndUser(endUser);
+        } else {
+            userResponse.setResCode("50505");
+            userResponse.setResMsg("该用户不存在");
+        }
+        return userResponse;
     }
 
     /**
@@ -299,20 +312,26 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
     @Cacheable(value = "UserCache",key="'USER_NAME_'+#userName")
-    public EndUser getEndUserByUserName(String userName) {
+    public UserResponse getEndUserByUserName(String userName) {
+        UserResponse userResponse = new UserResponse();
         EndUserExample endUserExample = new EndUserExample();
         EndUserExample.Criteria criteria = endUserExample.createCriteria();
         criteria.andUserNameEqualTo(userName);
         criteria.andIsDeletedEqualTo(false);
         List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
+        EndUser endUser;
         if (userList.size() > 1) {
-            logger.error("username should be unique");
-            return null;
+            logger.error("找到多条该用户名对应的用户");
+            userResponse.setResCode("50505");
+            userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50505"));
         } else if (userList.size() == 1) {
-            return userList.get(0);
+            endUser =  userList.get(0);
         } else {
-            return null;
+            logger.error("找不到该用户名对应的用户");
+            userResponse.setResCode("50506");
+            userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50506"));
         }
+        return userResponse;
     }
 
     /**
@@ -323,21 +342,28 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
-    @Cacheable(value = "UserCache", key="'USER_MOBILE_'+#mobile")
-    public EndUser getEndUserByMobile(String mobile) {
+//    @Cacheable(value = "UserCache", key="'USER_MOBILE_'+#mobile")
+    public UserResponse getEndUserByMobile(String mobile) {
+        UserResponse userResponse = new UserResponse();
         EndUserExample endUserExample = new EndUserExample();
         EndUserExample.Criteria criteria = endUserExample.createCriteria();
         criteria.andMobileEqualTo(mobile);
         criteria.andIsDeletedEqualTo(false);
+        EndUser endUser;
         List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
         if (userList.size() > 1) {
-            logger.error("mobile should be unique");
-            return null;
+            logger.error("找到多条该手机对应的用户");
+            userResponse.setResCode("50505");
+            userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50505"));
         } else if (userList.size() == 1) {
-            return userList.get(0);
+            endUser =  userList.get(0);
         } else {
-            return null;
+            logger.error("找不到该手机对应的用户");
+            userResponse.setResCode("50506");
+            userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50506"));
         }
+
+        return userResponse;
     }
 
     /**
@@ -349,20 +375,27 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
     @Cacheable(value = "UserCache")
-    public EndUser getEndUserByNickName(String nickName) {
+    public UserResponse getEndUserByNickName(String nickName) {
+        UserResponse userResponse = new UserResponse();
         EndUserExample endUserExample = new EndUserExample();
         EndUserExample.Criteria criteria = endUserExample.createCriteria();
         criteria.andNickNameEqualTo(nickName);
         criteria.andIsDeletedEqualTo(false);
+        EndUser endUser;
         List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
         if (userList.size() > 1) {
-            logger.error("nickname should be unique");
-            return null;
+            logger.error("找到多条该昵称对应的用户");
+            userResponse.setResCode("50505");
+            userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50505"));
         } else if (userList.size() == 1) {
-            return userList.get(0);
+            endUser =  userList.get(0);
         } else {
-            return null;
+            logger.error("找不到该昵称对应的用户");
+            userResponse.setResCode("50506");
+            userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50506"));
         }
+
+        return userResponse;
     }
 
     /**
@@ -388,15 +421,18 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Transactional(propagation= Propagation.SUPPORTS)
-    public EndUser authenticate(String userName, String password) {
-        EndUser endUser = getEndUserByUserName(userName);
+    public UserResponse authenticate(String userName, String password) {
+        UserResponse userResponse = new UserResponse();
+        EndUser endUser = getEndUserByUserName(userName).getEndUser();
         if (endUser!=null
                 && endUser.getPassword()!=null
                 && PasswordUtil.passwordHashValidate(password, endUser.getPassword())) {
-                return endUser;
+            userResponse.setEndUser(endUser);
         } else {
-            return null;
+            userResponse.setResCode("50503");
+            userResponse.setResCode(ErrorCodeUtil.getErrorMsg("50503"));
         }
+        return userResponse;
     }
 
     /**

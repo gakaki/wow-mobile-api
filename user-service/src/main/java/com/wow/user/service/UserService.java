@@ -1,9 +1,9 @@
 package com.wow.user.service;
 
 import com.wow.user.model.*;
-import com.wow.user.vo.RegisterRequestVo;
-import com.wow.user.vo.RegisterResultVo;
-import com.wow.user.vo.WechatBindingStatusVo;
+import com.wow.user.vo.request.RegisterRequest;
+import com.wow.user.vo.response.RegisterResponse;
+import com.wow.user.vo.response.*;
 
 import java.util.List;
 
@@ -11,49 +11,47 @@ import java.util.List;
  * Created by zhengzhiqing on 16/6/16.
  */
 public interface UserService {
-    //Table: end_user
 
     /**
      * 用户注册
-     * @param registerRequestVo
+     * @param registerRequest
      * @return
      */
-    RegisterResultVo register(RegisterRequestVo registerRequestVo);
+    RegisterResponse register(RegisterRequest registerRequest);
 
     /**
      * 根据用户名判断是否已注册用户
      * @param userName
      * @return
      */
-    boolean isExistedUserByUserName(String userName);
-
-    /**
-     * 根据手机号判断是否已注册用户
-     * @param mobile
-     * @return
-     */
-    boolean isExistedUserByMobile(String mobile);
-
-    /**
-     * 检查手机号的注册和绑定微信状态
-     * @param mobile
-     * @return
-     */
-    WechatBindingStatusVo checkWechatBindStatus(String mobile);
-
-    /**
-     * 绑定微信
-     * @param endUserWechat
-     * @return
-     */
-    int bindWechatToUser(EndUserWechat endUserWechat);
+    UserCheckResponse isExistedUserByUserName(String userName);
 
     /**
      * 根据昵称判断是否已注册用户
      * @param nickName
      * @return
      */
-    boolean isExistedUserByNickName(String nickName);
+    UserCheckResponse isExistedUserByNickName(String nickName);
+    /**
+     * 根据手机号判断是否已注册用户
+     * @param mobile
+     * @return
+     */
+    UserCheckResponse isExistedUserByMobile(String mobile);
+
+    /**
+     * 检查手机号的注册和绑定微信状态
+     * @param mobile
+     * @return
+     */
+    WechatBindingStatusResponse checkWechatBindStatus(String mobile);
+
+    /**
+     * 绑定微信
+     * @param endUserWechat
+     * @return
+     */
+    WechatBindingStatusResponse bindWechatToUser(EndUserWechat endUserWechat);
 
     /**
      * 用户信息更新
@@ -61,14 +59,14 @@ public interface UserService {
      * @param endUser
      * @return
      */
-    int updateEndUser(EndUser endUser);
+    UserUpdateResponse updateEndUser(EndUser endUser);
 
     /**
      * 获取验证码
      * @param mobile
      * @return 验证码
      */
-    String sendCaptcha(String mobile);
+    CaptchaResponse sendCaptcha(String mobile);
 
     /**
      * 用户重置密码
@@ -77,7 +75,7 @@ public interface UserService {
      * @param newPwd
      * @return
      */
-    boolean resetPassword(String mobile, String captcha, String newPwd);
+    ResetPwdResponse resetPassword(String mobile, String captcha, String newPwd);
 
     /**
      * 根据Id获取用户信息
@@ -85,7 +83,7 @@ public interface UserService {
      * @param endUserId
      * @return
      */
-    EndUser getEndUserById(int endUserId);
+    UserResponse getEndUserById(int endUserId);
 
     /**
      * 根据用户名获取用户信息
@@ -93,7 +91,7 @@ public interface UserService {
      * @param userName
      * @return
      */
-    EndUser getEndUserByUserName(String userName);
+    UserResponse getEndUserByUserName(String userName);
 
     /**
      * 根据手机号获取用户信息
@@ -101,7 +99,7 @@ public interface UserService {
      * @param mobile
      * @return
      */
-    EndUser getEndUserByMobile(String mobile);
+    UserResponse getEndUserByMobile(String mobile);
 
     /**
      * 根据昵称获取用户信息
@@ -109,7 +107,7 @@ public interface UserService {
      * @param nickName
      * @return
      */
-    EndUser getEndUserByNickName(String nickName);
+    UserResponse getEndUserByNickName(String nickName);
 
     /**
      * 批量查询多个用户
@@ -126,7 +124,7 @@ public interface UserService {
      * @param password
      * @return
      */
-    EndUser authenticate(String userName, String password);
+    UserResponse authenticate(String userName, String password);
 
     //table: end_user_share_brand
 
