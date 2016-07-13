@@ -38,28 +38,21 @@ public class OrderController extends BaseController {
     public ApiResponse getOrderList(ApiRequest request) {
         OrderRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderRequest.class);
         ApiResponse apiResponse = new ApiResponse();
-
         //判断json格式参数是否有误
         if (orderRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
-
             return apiResponse;
         }
 
-        //参数校验
         String errorMsg = ValidatorUtil.getError(orderRequest);
-
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
             setInvalidParameterResponse(apiResponse, errorMsg);
-
             return apiResponse;
         }
-
         OrderResponse orderResponse = null;
         try {
             orderResponse = orderService.queryOrderById(orderRequest.getId());
-
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(orderResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderResponse);
@@ -70,7 +63,6 @@ public class OrderController extends BaseController {
             logger.error("获取订单列表信息错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
-
         return apiResponse;
     }
 
