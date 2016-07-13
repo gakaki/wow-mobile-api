@@ -1,16 +1,16 @@
-package com.wow.user.vo;
+package com.wow.user.vo.response;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.wow.common.response.CommonResponse;
 
 /**
  * Created by zhengzhiqing on 16/7/9.
  */
-public class WechatBindingStatusVo implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+public class WechatBindingStatusResponse extends CommonResponse {
 
     private boolean registered;
-    private boolean bindWechat;
+    private boolean binded;
     private String mobile;
     private String wechatId;
 
@@ -22,12 +22,12 @@ public class WechatBindingStatusVo implements Serializable {
         this.registered = registered;
     }
 
-    public boolean isBindWechat() {
-        return bindWechat;
+    public boolean isBinded() {
+        return binded;
     }
 
-    public void setBindWechat(boolean bindWechat) {
-        this.bindWechat = bindWechat;
+    public void setBinded(boolean binded) {
+        this.binded = binded;
     }
 
     public String getMobile() {

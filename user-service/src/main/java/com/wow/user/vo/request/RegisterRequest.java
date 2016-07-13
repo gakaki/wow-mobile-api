@@ -1,15 +1,12 @@
-package com.wow.user.vo;
+package com.wow.user.vo.request;
 
+import com.wow.common.request.ApiRequest;
 import com.wow.user.model.EndUser;
-
-import java.io.Serializable;
 
 /**
  * Created by zhengzhiqing on 16/7/6.
  */
-public class RegisterRequestVo implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class RegisterRequest extends ApiRequest {
 
     private EndUser endUser;
     private String captcha;
@@ -30,7 +27,4 @@ public class RegisterRequestVo implements Serializable {
         this.captcha = captcha;
     }
 
-    public String toString() {
-        return "captchar:" + captcha + "endUser:" + endUser.toString();
-    }
 }
