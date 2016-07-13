@@ -2,6 +2,7 @@ package com.wow.mobileapi.controller;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.util.BeanUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.model.EndUser;
@@ -108,7 +109,8 @@ public class UserController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        EndUser endUser = userUpdateRequest.getEndUser();
+        EndUser endUser = new EndUser();
+        BeanUtil.copyProperties(userUpdateRequest,endUser);
         try {
             UserUpdateResponse userUpdateResponse = userService.updateEndUser(endUser);
             //如果处理失败 则返回错误信息
