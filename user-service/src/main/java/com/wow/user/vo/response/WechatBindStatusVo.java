@@ -1,13 +1,13 @@
 package com.wow.user.vo.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.wow.common.response.CommonResponse;
+import java.io.Serializable;
 
 /**
- * Created by zhengzhiqing on 16/7/9.
+ * Created by zhengzhiqing on 16/7/13.
  */
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class WechatBindingStatusResponse extends CommonResponse {
+public class WechatBindStatusVo implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     private boolean registered;
     private boolean binded;
@@ -19,7 +19,7 @@ public class WechatBindingStatusResponse extends CommonResponse {
     }
 
     public void setRegistered(boolean registered) {
-        this.registered = registered;
+        registered = registered;
     }
 
     public boolean isBinded() {
@@ -27,7 +27,7 @@ public class WechatBindingStatusResponse extends CommonResponse {
     }
 
     public void setBinded(boolean binded) {
-        this.binded = binded;
+        binded = binded;
     }
 
     public String getMobile() {
