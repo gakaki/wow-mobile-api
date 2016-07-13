@@ -1,8 +1,10 @@
 package com.wow.user.service;
 
-import com.wow.user.model.ShoppingCart;
-
 import java.util.List;
+
+import com.wow.common.response.CommonResponse;
+import com.wow.user.model.ShoppingCart;
+import com.wow.user.vo.request.ShoppingCartRequest;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
@@ -13,7 +15,7 @@ public interface ShoppingCartService {
      * @param shoppingCart
      * @return
      */
-    int addProductIntoCart(ShoppingCart shoppingCart);
+    CommonResponse addProductIntoCart(ShoppingCartRequest request);
 
     /**
      * 修改购物车里的产品

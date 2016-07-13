@@ -101,4 +101,14 @@ public class DateUtil {
         }
         return date;
     }
+    
+    
+    /**
+     * 获取当前日期
+     * 
+     * @return
+     */
+    public static Date currentDate() {
+        return new Date();
+    }
 }
