@@ -27,4 +27,6 @@ public interface PageProductConfigMapper {
     int updateByPrimaryKeySelective(PageProductConfig record);
 
     int updateByPrimaryKey(PageProductConfig record);
+
+    List<PageProductConfig> selectByPageType(@Param("pageType") int pageType);
 }

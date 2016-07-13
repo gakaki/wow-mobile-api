@@ -271,4 +271,11 @@
       is_enabled = #{isEnabled,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByPageType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from page_product_config
+    where page_type = #{pageType,jdbcType=TINYINT}
+  </select>
 </mapper>
