@@ -27,6 +27,7 @@ public interface ShoppingCartMapper {
     int updateByPrimaryKeySelective(ShoppingCart record);
 
     int updateByPrimaryKey(ShoppingCart record);
+    
 
     /**
      * 查找用户购物车信息
@@ -34,4 +35,13 @@ public interface ShoppingCartMapper {
      * @return
      */
     List<ShoppingCart> selectByEndUser(@Param("endUserId") int endUserId);
+    
+    /**
+     * 
+     * 根据用户和产品id更新用户购物车信息表
+     * @param record
+     * @return
+     */
+    int updateByProductAndEndUserId(ShoppingCart record);
+
 }
