@@ -41,16 +41,17 @@ public class OrderController extends BaseController {
 
         //判断json格式参数是否有误
         if (orderRequest == null) {
-            setParseError(apiResponse);
+            setParamJsonParseErrorResponse(apiResponse);
 
             return apiResponse;
         }
 
+        //参数校验
         String errorMsg = ValidatorUtil.getError(orderRequest);
 
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
-            copyValidatorResponse(apiResponse, errorMsg);
+            setInvalidParameterResponse(apiResponse, errorMsg);
 
             return apiResponse;
         }
@@ -61,13 +62,13 @@ public class OrderController extends BaseController {
 
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(orderResponse.getResCode())) {
-                copyResponse(apiResponse, orderResponse);
+                setServiceErrorResponse(apiResponse, orderResponse);
             } else {
                 apiResponse.setData(orderResponse.getOrder());
             }
         } catch (Exception e) {
             logger.error("获取订单列表信息错误---" + e);
-            setInternalError(apiResponse);
+            setInternalErrorResponse(apiResponse);
         }
 
         return apiResponse;
