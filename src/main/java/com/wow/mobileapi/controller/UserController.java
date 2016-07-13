@@ -31,7 +31,7 @@ public class UserController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/users/user", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/user", method = RequestMethod.GET)
     public ApiResponse getEndUserById(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         UserQueryRequest userQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), UserQueryRequest.class);
@@ -65,7 +65,7 @@ public class UserController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/user", method = RequestMethod.POST)
     public ApiResponse register(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
@@ -98,10 +98,10 @@ public class UserController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/users", method = RequestMethod.PUT)
+    @RequestMapping(value = "/v1/user/change", method = RequestMethod.POST)
     public ApiResponse updateUser(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-
+        logger.info("paramJson=" + apiRequest.getParamJson());
         UserUpdateRequest userUpdateRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), UserUpdateRequest.class);
         //判断json格式参数是否有误
         if (userUpdateRequest == null) {
@@ -130,7 +130,7 @@ public class UserController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/users/mobile", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/user/is-mobile-existed", method = RequestMethod.GET)
     public ApiResponse isExistedUserByMobile(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         UserCheckRequest userCheckRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), UserCheckRequest.class);
@@ -157,7 +157,7 @@ public class UserController extends BaseController {
         return apiResponse;
     }
 
-    @RequestMapping(value = "/v1/users/nickname", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/user/is-nickname-existed", method = RequestMethod.GET)
     public ApiResponse isExistedUserByNickName(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         UserCheckRequest userCheckRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), UserCheckRequest.class);
@@ -168,7 +168,7 @@ public class UserController extends BaseController {
         }
 
         try {
-            UserCheckResponse userCheckResponse = userService.isExistedUserByNickName(userCheckRequest.getMobile());
+            UserCheckResponse userCheckResponse = userService.isExistedUserByNickName(userCheckRequest.getNickName());
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(userCheckResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, userCheckResponse);
@@ -183,7 +183,7 @@ public class UserController extends BaseController {
         return apiResponse;
     }
 
-    @RequestMapping(value = "/v1/users/captcha", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/user/captcha", method = RequestMethod.POST)
     public ApiResponse requestCaptcha(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
@@ -215,7 +215,7 @@ public class UserController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/users/wechat-bind-status", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/user/wechat-bind-status", method = RequestMethod.GET)
     public ApiResponse checkWechatBindStatus(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         WechatBindQueryRequest wechatBindQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
@@ -246,7 +246,7 @@ public class UserController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/users/wechat-bind", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/user/wechat-bind", method = RequestMethod.POST)
     public ApiResponse bindWechat(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();

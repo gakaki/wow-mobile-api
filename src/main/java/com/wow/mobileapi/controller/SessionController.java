@@ -21,7 +21,6 @@ import com.wow.user.vo.response.LogoutResponse;
  * Created by zhengzhiqing on 16/6/23.
  */
 @RestController
-@RequestMapping("/v1/sessions")
 public class SessionController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionController.class);
@@ -34,7 +33,7 @@ public class SessionController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value="/v1/session/login", method = RequestMethod.POST)
     public ApiResponse login(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
@@ -68,9 +67,9 @@ public class SessionController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(value="/v1/session/logout", method = RequestMethod.POST)
     public ApiResponse logout(ApiRequest apiRequest) {
-
+        logger.info("paramJson=" + apiRequest.getParamJson());
         ApiResponse apiResponse = new ApiResponse();
         LogoutRequest logoutRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LogoutRequest.class);
         //判断json格式参数是否有误

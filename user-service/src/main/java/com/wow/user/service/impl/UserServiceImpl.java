@@ -1,6 +1,7 @@
 package com.wow.user.service.impl;
 
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+import com.wow.common.util.BeanUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.RedisUtil;
@@ -12,7 +13,6 @@ import com.wow.user.service.UserService;
 import com.wow.user.thirdparty.SmsSender;
 import com.wow.user.util.PasswordUtil;
 import com.wow.user.vo.request.RegisterRequest;
-import com.wow.user.vo.response.RegisterResponse;
 import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,27 +62,40 @@ public class UserServiceImpl implements UserService {
     public RegisterResponse register(RegisterRequest registerRequest) {
         RegisterResponse registerResponse = new RegisterResponse();
         //TODO: validation required, use hibernate validator?
-        String mobile = registerRequest.getEndUser().getMobile();
+        String mobile = registerRequest.getMobile();
+
         if (StringUtils.isEmpty(mobile)) {
             registerResponse.setResCode("40000");
             registerResponse.setResMsg("手机号不能为空");
+            return registerResponse;
+        }
+
+        //判断该手机号是否已经注册
+        if (isExistedUserByMobile(mobile).isExistedUser()) {
+            registerResponse.setResCode("40104");
+            registerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40104"));
+            return registerResponse;
+        }
+
+        //判断验证码是否与服务端一致,且服务端验证码未过期
+        String captchaOnServer = getCaptchaOnServer(mobile);
+        if (StringUtils.isEmpty(captchaOnServer)) {
+            registerResponse.setResCode("40102");
+            registerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40102"));
+        } else if (!registerRequest.getCaptcha().equals(captchaOnServer)) {
+            registerResponse.setResCode("40103");
+            registerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40103"));
         } else {
-            //判断验证码是否与服务端一致,且服务端验证码未过期
-            String captchaOnServer = getCaptchaOnServer(mobile);
-            if (StringUtils.isEmpty(captchaOnServer)) {
-                registerResponse.setResCode("40102");
-                registerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40102"));
-            } else if (!registerRequest.getCaptcha().equals(captchaOnServer)) {
-                registerResponse.setResCode("40103");
-                registerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40103"));
-            } else {
-                registerRequest.getEndUser().setPassword(
-                        PasswordUtil.passwordHashGenerate(registerRequest.getEndUser().getPassword()));
-                endUserMapper.insertSelective(registerRequest.getEndUser());
-                //TODO: 如果该用户是通过好友推荐进来注册的,需要更新推荐相关信息,通过消息通知营销系统,否则要双向依赖
-                //注册成功,需要将用户ID返回
-                registerResponse.setEndUserId(registerRequest.getEndUser().getId());
-            }
+            registerRequest.setPassword(
+                    PasswordUtil.passwordHashGenerate(registerRequest.getPassword()));
+            //bean copy from registerRequest to endUser
+            EndUser endUser = new EndUser();
+            BeanUtil.copyProperties(registerRequest,endUser,"captcha");
+
+            endUserMapper.insertSelective(endUser);
+            //TODO: 如果该用户是通过好友推荐进来注册的,需要更新推荐相关信息,通过消息通知营销系统,否则要双向依赖
+            //注册成功,需要将用户ID返回
+            registerResponse.setEndUserId(endUser.getId());
         }
         return registerResponse;
     }
@@ -189,8 +202,13 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(value = "UserCache",key="'USER_ID_'+#endUserId")
     public UserUpdateResponse updateEndUser(EndUser endUser) {
         UserUpdateResponse userUpdateResponse = new UserUpdateResponse();
-        int i= endUserMapper.updateByPrimaryKeySelective(endUser);
-        userUpdateResponse.setSuccess(i>0);
+        if (endUser != null && endUser.getId() != null) {
+            int i= endUserMapper.updateByPrimaryKeySelective(endUser);
+            userUpdateResponse.setSuccess(i>0);
+        } else {
+            userUpdateResponse.setResCode("40106");
+            userUpdateResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40106"));
+        }
         return userUpdateResponse;
     }
 
@@ -274,12 +292,12 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional(propagation= Propagation.SUPPORTS)
     private String getCaptchaOnServer(String mobile) {
-        String captchaOnServer = "";
-        //get from redis
-        Object captcha = RedisUtil.get(mobile);
-        if (captcha != null) {
-            captchaOnServer = (String) captcha;
-        }
+        String captchaOnServer = "111111"; //TODO, hard code for test only
+//        //get from redis
+//        Object captcha = RedisUtil.get(mobile);
+//        if (captcha != null) {
+//            captchaOnServer = (String) captcha;
+//        }
         return captchaOnServer;
     }
     /**
@@ -326,6 +344,7 @@ public class UserServiceImpl implements UserService {
             userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50505"));
         } else if (userList.size() == 1) {
             endUser =  userList.get(0);
+            userResponse.setEndUser(endUser);
         } else {
             logger.error("找不到该用户名对应的用户");
             userResponse.setResCode("50506");
@@ -357,6 +376,7 @@ public class UserServiceImpl implements UserService {
             userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50505"));
         } else if (userList.size() == 1) {
             endUser =  userList.get(0);
+            userResponse.setEndUser(endUser);
         } else {
             logger.error("找不到该手机对应的用户");
             userResponse.setResCode("50506");
@@ -389,6 +409,7 @@ public class UserServiceImpl implements UserService {
             userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50505"));
         } else if (userList.size() == 1) {
             endUser =  userList.get(0);
+            userResponse.setEndUser(endUser);
         } else {
             logger.error("找不到该昵称对应的用户");
             userResponse.setResCode("50506");
