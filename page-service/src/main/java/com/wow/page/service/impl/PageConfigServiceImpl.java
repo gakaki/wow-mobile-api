@@ -1,6 +1,7 @@
 package com.wow.page.service.impl;
 
 import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.page.mapper.PageBannerConfigMapper;
 import com.wow.page.mapper.PageProductConfigMapper;
 import com.wow.page.mapper.PageSceneConfigMapper;
@@ -12,6 +13,9 @@ import com.wow.page.model.PageTopicConfig;
 import com.wow.page.service.PageConfigService;
 import com.wow.page.vo.PageTopicVo;
 import com.wow.page.vo.ProductImageVo;
+import com.wow.page.vo.response.PageBannerResponse;
+import com.wow.page.vo.response.PageSceneResponse;
+import com.wow.page.vo.response.PageTopicResponse;
 import com.wow.page.vo.response.SerialResponse;
 import com.wow.product.model.*;
 import com.wow.product.service.*;
@@ -24,7 +28,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 
@@ -67,8 +70,16 @@ public class PageConfigServiceImpl implements PageConfigService {
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
     @Cacheable(value = "PageCache",key="'BANNERS_IN_PAGE_TYPE_'+#pageType")
-    public List<PageBannerConfig> getBannersByPageType(int pageType) {
-        return pageBannerConfigMapper.selectByPageType(pageType);
+    public PageBannerResponse getBannersByPageType(int pageType) {
+        PageBannerResponse pageBannerResponse = new PageBannerResponse();
+        List<PageBannerConfig> pageBannerConfigList = pageBannerConfigMapper.selectByPageType(pageType);
+        if (CollectionUtil.isNotEmpty(pageBannerConfigList)) {
+            pageBannerResponse.setPageBannerConfigList(pageBannerConfigList);
+        } else {
+            pageBannerResponse.setResCode("50301");
+            pageBannerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50301"));
+        }
+        return pageBannerResponse;
     }
 
     /**
@@ -79,20 +90,23 @@ public class PageConfigServiceImpl implements PageConfigService {
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
     @Cacheable(value = "PageCache",key="'SCENES_IN_PAGE_TYPE_'+#pageType")
-    public List<Scene> getScenesByPageType(int pageType) {
-        List<PageSceneConfig> sceneList = pageSceneConfigMapper.selectByPageType(pageType);
-        List<Scene> scenes=new ArrayList<>();
-       if(CollectionUtil.isNotEmpty(sceneList))
-           sceneList.forEach(
-                new Consumer<PageSceneConfig>() {
-                    @Override
-                    public void accept(PageSceneConfig pageSceneConfig) {
-                        Scene scene= sceneService.getSceneById(pageSceneConfig.getSceneId());
-                        if(scene!=null)
-                            scenes.add(scene);
-                    }
-                });
-        return scenes;
+    public PageSceneResponse getScenesByPageType(int pageType) {
+        PageSceneResponse pageSceneResponse = new PageSceneResponse();
+        List<PageSceneConfig> pageSceneConfigList =  pageSceneConfigMapper.selectByPageType(pageType);
+        List<Scene> scenes =new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(pageSceneConfigList)) {
+            for (PageSceneConfig pageSceneConfig : pageSceneConfigList) {
+                Scene scene = sceneService.getSceneById(pageSceneConfig.getSceneId());
+                if (scene != null) {
+                    scenes.add(scene);
+                }
+            }
+            pageSceneResponse.setSceneList(scenes);
+        } else {
+            pageSceneResponse.setResCode("50302");
+            pageSceneResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50302"));
+        }
+        return pageSceneResponse;
     }
 
     /**
@@ -103,7 +117,8 @@ public class PageConfigServiceImpl implements PageConfigService {
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
     @Cacheable(value = "PageCache",key="'TOPICS_IN_PAGE_TYPE_'+#pageType")
-    public List<PageTopicVo> getTopicsByPageType(int pageType) {
+    public PageTopicResponse getTopicsByPageType(int pageType) {
+        PageTopicResponse pageTopicResponse = new PageTopicResponse();
         List<PageTopicConfig> topicList = pageTopicConfigMapper.selectByPageType(pageType);
         List<PageTopicVo> pageTopicVos=new ArrayList<>();
         if(!topicList.isEmpty())
@@ -156,7 +171,8 @@ public class PageConfigServiceImpl implements PageConfigService {
                     }
                 }
             });
-        return pageTopicVos;
+        pageTopicResponse.setPageTopicVoList(pageTopicVos);
+        return pageTopicResponse;
     }
 
     @Override
@@ -230,12 +246,12 @@ public class PageConfigServiceImpl implements PageConfigService {
                 }
                 serialResponse.setBanner(list);
             }
-            ProductPrice productPrice= productService.getProductPrice(productId);
-            if(productPrice!=null)
-            {
-                serialResponse.setSellPrice(productPrice.getSellPrice());
-                serialResponse.setOriginalPrice(productPrice.getOriginalPrice());
-            }
+//            ProductPrice productPrice= productService.getProductPrice(productId);
+//            if(productPrice!=null)
+//            {
+//                serialResponse.setSellPrice(productPrice.getSellPrice());
+//                serialResponse.setOriginalPrice(productPrice.getOriginalPrice());
+//            }
         }
         return  serialResponse;
     }
