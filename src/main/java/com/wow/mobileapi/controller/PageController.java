@@ -3,13 +3,11 @@ package com.wow.mobileapi.controller;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.JsonUtil;
-import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.page.service.PageConfigService;
 import com.wow.page.vo.request.PageRequest;
 import com.wow.page.vo.response.PageBannerResponse;
 import com.wow.page.vo.response.PageSceneResponse;
 import com.wow.page.vo.response.PageTopicResponse;
-import com.wow.product.service.SceneService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +24,6 @@ public class PageController extends BaseController {
 
     @Autowired
     private PageConfigService pageConfigService;
-
-    @Autowired
-    private SceneService sceneService;
-
-
-    @Autowired
-    private ResponseUtil responseUtil;
 
     @RequestMapping(value = "/v1/page/banners", method = RequestMethod.GET)
     public ApiResponse getBannersOnPage(ApiRequest apiRequest) {
