@@ -7,6 +7,8 @@ import java.util.Date;
 public class Product implements Serializable {
     private Integer id;
 
+    private String code;
+
     private String productName;
 
     private String productCode;
@@ -19,7 +21,7 @@ public class Product implements Serializable {
 
     private String productModel;
 
-    private String material;
+    private String materialText;
 
     private String sellingPoint;
 
@@ -33,9 +35,7 @@ public class Product implements Serializable {
 
     private String originCountry;
 
-    private Integer originAreaId;
-
-    private String originText;
+    private String originCity;
 
     private Boolean isImport;
 
@@ -63,7 +63,7 @@ public class Product implements Serializable {
 
     private String tips;
 
-    private String applicableScene;
+    private String applicableSceneText;
 
     private String postSaleServiceDesc;
 
@@ -109,20 +109,28 @@ public class Product implements Serializable {
         this.id = id;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code == null ? null : code.trim();
+    }
+
     public String getProductName() {
         return productName;
     }
 
     public void setProductName(String productName) {
-        this.productName = productName;
+        this.productName = productName == null ? null : productName.trim();
     }
 
     public String getProductCode() {
         return productCode;
     }
 
-  public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode == null ? null : productCode.trim();
     }
 
     public Byte getProductType() {
@@ -154,15 +162,15 @@ public class Product implements Serializable {
     }
 
     public void setProductModel(String productModel) {
-        this.productModel = productModel;
+        this.productModel = productModel == null ? null : productModel.trim();
     }
 
-    public String getMaterial() {
-        return material;
+    public String getMaterialText() {
+        return materialText;
     }
 
-    public void setMaterial(String material) {
-        this.material = material;
+    public void setMaterialText(String materialText) {
+        this.materialText = materialText == null ? null : materialText.trim();
     }
 
     public String getSellingPoint() {
@@ -170,7 +178,7 @@ public class Product implements Serializable {
     }
 
     public void setSellingPoint(String sellingPoint) {
-        this.sellingPoint = sellingPoint;
+        this.sellingPoint = sellingPoint == null ? null : sellingPoint.trim();
     }
 
     public String getDetailDescription() {
@@ -178,7 +186,7 @@ public class Product implements Serializable {
     }
 
     public void setDetailDescription(String detailDescription) {
-        this.detailDescription = detailDescription;
+        this.detailDescription = detailDescription == null ? null : detailDescription.trim();
     }
 
     public Boolean getCanSale() {
@@ -210,23 +218,15 @@ public class Product implements Serializable {
     }
 
     public void setOriginCountry(String originCountry) {
-        this.originCountry = originCountry;
+        this.originCountry = originCountry == null ? null : originCountry.trim();
     }
 
-    public Integer getOriginAreaId() {
-        return originAreaId;
+    public String getOriginCity() {
+        return originCity;
     }
 
-    public void setOriginAreaId(Integer originAreaId) {
-        this.originAreaId = originAreaId;
-    }
-
-    public String getOriginText() {
-        return originText;
-    }
-
-    public void setOriginText(String originText) {
-        this.originText = originText;
+    public void setOriginCity(String originCity) {
+        this.originCity = originCity == null ? null : originCity.trim();
     }
 
     public Boolean getIsImport() {
@@ -266,7 +266,7 @@ public class Product implements Serializable {
     }
 
     public void setSizeText(String sizeText) {
-        this.sizeText = sizeText;
+        this.sizeText = sizeText == null ? null : sizeText.trim();
     }
 
     public BigDecimal getWeight() {
@@ -282,7 +282,7 @@ public class Product implements Serializable {
     }
 
     public void setWeightText(String weightText) {
-        this.weightText = weightText;
+        this.weightText = weightText == null ? null : weightText.trim();
     }
 
     public String getSpec() {
@@ -290,7 +290,7 @@ public class Product implements Serializable {
     }
 
     public void setSpec(String spec) {
-        this.spec = spec;
+        this.spec = spec == null ? null : spec.trim();
     }
 
     public String getSpecImg() {
@@ -298,7 +298,7 @@ public class Product implements Serializable {
     }
 
     public void setSpecImg(String specImg) {
-        this.specImg = specImg;
+        this.specImg = specImg == null ? null : specImg.trim();
     }
 
     public String getColor() {
@@ -306,7 +306,7 @@ public class Product implements Serializable {
     }
 
     public void setColor(String color) {
-        this.color = color;
+        this.color = color == null ? null : color.trim();
     }
 
     public String getStyle() {
@@ -314,7 +314,7 @@ public class Product implements Serializable {
     }
 
     public void setStyle(String style) {
-        this.style = style;
+        this.style = style == null ? null : style.trim();
     }
 
     public String getVerboseInfo() {
@@ -322,7 +322,7 @@ public class Product implements Serializable {
     }
 
     public void setVerboseInfo(String verboseInfo) {
-        this.verboseInfo = verboseInfo;
+        this.verboseInfo = verboseInfo == null ? null : verboseInfo.trim();
     }
 
     public String getTips() {
@@ -330,15 +330,15 @@ public class Product implements Serializable {
     }
 
     public void setTips(String tips) {
-        this.tips = tips;
+        this.tips = tips == null ? null : tips.trim();
     }
 
-    public String getApplicableScene() {
-        return applicableScene;
+    public String getApplicableSceneText() {
+        return applicableSceneText;
     }
 
-    public void setApplicableScene(String applicableScene) {
-        this.applicableScene = applicableScene;
+    public void setApplicableSceneText(String applicableSceneText) {
+        this.applicableSceneText = applicableSceneText == null ? null : applicableSceneText.trim();
     }
 
     public String getPostSaleServiceDesc() {
@@ -346,7 +346,7 @@ public class Product implements Serializable {
     }
 
     public void setPostSaleServiceDesc(String postSaleServiceDesc) {
-        this.postSaleServiceDesc = postSaleServiceDesc;
+        this.postSaleServiceDesc = postSaleServiceDesc == null ? null : postSaleServiceDesc.trim();
     }
 
     public Byte getDeliveryFeeType() {
@@ -370,7 +370,7 @@ public class Product implements Serializable {
     }
 
     public void setAssembleTips(String assembleTips) {
-        this.assembleTips = assembleTips;
+        this.assembleTips = assembleTips == null ? null : assembleTips.trim();
     }
 
     public Boolean getIsFragile() {
@@ -410,7 +410,7 @@ public class Product implements Serializable {
     }
 
     public void setRejectReason(String rejectReason) {
-        this.rejectReason = rejectReason;
+        this.rejectReason = rejectReason == null ? null : rejectReason.trim();
     }
 
     public Date getOnShelfTime() {
@@ -458,7 +458,7 @@ public class Product implements Serializable {
     }
 
     public void setSeoTitle(String seoTitle) {
-        this.seoTitle = seoTitle;
+        this.seoTitle = seoTitle == null ? null : seoTitle.trim();
     }
 
     public String getSeoDesc() {
@@ -466,7 +466,7 @@ public class Product implements Serializable {
     }
 
     public void setSeoDesc(String seoDesc) {
-        this.seoDesc = seoDesc;
+        this.seoDesc = seoDesc == null ? null : seoDesc.trim();
     }
 
     public String getSeoKey() {
@@ -474,7 +474,7 @@ public class Product implements Serializable {
     }
 
     public void setSeoKey(String seoKey) {
-        this.seoKey = seoKey;
+        this.seoKey = seoKey == null ? null : seoKey.trim();
     }
 
     @Override
@@ -484,21 +484,21 @@ public class Product implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", code=").append(code);
         sb.append(", productName=").append(productName);
         sb.append(", productCode=").append(productCode);
         sb.append(", productType=").append(productType);
         sb.append(", categoryId=").append(categoryId);
         sb.append(", brandId=").append(brandId);
         sb.append(", productModel=").append(productModel);
-        sb.append(", material=").append(material);
+        sb.append(", materialText=").append(materialText);
         sb.append(", sellingPoint=").append(sellingPoint);
         sb.append(", detailDescription=").append(detailDescription);
         sb.append(", canSale=").append(canSale);
         sb.append(", canShow=").append(canShow);
         sb.append(", viewPlatform=").append(viewPlatform);
         sb.append(", originCountry=").append(originCountry);
-        sb.append(", originAreaId=").append(originAreaId);
-        sb.append(", originText=").append(originText);
+        sb.append(", originCity=").append(originCity);
         sb.append(", isImport=").append(isImport);
         sb.append(", length=").append(length);
         sb.append(", width=").append(width);
@@ -512,7 +512,7 @@ public class Product implements Serializable {
         sb.append(", style=").append(style);
         sb.append(", verboseInfo=").append(verboseInfo);
         sb.append(", tips=").append(tips);
-        sb.append(", applicableScene=").append(applicableScene);
+        sb.append(", applicableSceneText=").append(applicableSceneText);
         sb.append(", postSaleServiceDesc=").append(postSaleServiceDesc);
         sb.append(", deliveryFeeType=").append(deliveryFeeType);
         sb.append(", needAssemble=").append(needAssemble);

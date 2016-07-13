@@ -1,6 +1,5 @@
 package com.wow.product.service;
 
-import com.wow.product.model.Product;
 import com.wow.product.model.ProductSerial;
 
 import java.util.List;

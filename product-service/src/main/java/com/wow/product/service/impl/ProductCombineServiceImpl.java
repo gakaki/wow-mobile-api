@@ -67,7 +67,7 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
         return getProductCombineByProductId(productId).isEmpty();
     }
 
-    private List<ProductCombine> getProductCombineByProductId(int productId) {
+    public List<ProductCombine> getProductCombineByProductId(int productId) {
         ProductCombineExample productCombineExample=new ProductCombineExample();
         ProductCombineExample.Criteria criteria=productCombineExample.createCriteria();
         criteria.andProductIdEqualTo(productId);

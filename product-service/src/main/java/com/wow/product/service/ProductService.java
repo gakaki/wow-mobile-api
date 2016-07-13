@@ -119,4 +119,15 @@ public interface ProductService {
      * @return
      */
     int updateProductMaterial(List<ProductMaterial> productMaterials);
+
+    /**
+     * 产品价格
+     * @return
+     */
+    int createProductPrice(ProductPrice productPrice);
+
+    int updateProductPrice(ProductPrice productPrice);
+
+    ProductPrice getProductPrice(Integer productId) throws Exception ;
+
 }

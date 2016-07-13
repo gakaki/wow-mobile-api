@@ -49,6 +49,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private MaterialMapper materialMapper;
+
+    @Autowired
+    private  ProductPriceMapper productPriceMapper;
     /**
      * 创建产品(注意要调用生码接口)
      *
@@ -257,6 +260,24 @@ public class ProductServiceImpl implements ProductService {
         if(!productMaterials.isEmpty())
             productMaterials.forEach(o->productMaterialMapper.updateByPrimaryKeySelective(o));
         return 0;
+    }
+
+    @Override
+    public int createProductPrice(ProductPrice productPrice) {
+        return 0;
+    }
+
+    @Override
+    public int updateProductPrice(ProductPrice productPrice) {
+        return 0;
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public ProductPrice getProductPrice(Integer productId) throws Exception {
+        ProductPriceExample productPriceExample=new ProductPriceExample();
+        productPriceExample.or().andProductIdEqualTo(productId);
+        return productPriceMapper.selectByExample(productPriceExample).get(0);
     }
 
 }

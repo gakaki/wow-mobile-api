@@ -1,11 +1,9 @@
 package com.wow.product.controller;
 
 import com.wow.product.model.Product;
-import com.wow.product.model.ProductCombine;
 import com.wow.product.model.ProductSerial;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
-import org.hibernate.validator.cfg.defs.DecimalMaxDef;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +31,6 @@ public class ProductTestController {
         product.setId(2);
         product.setUpdateTime(new java.util.Date());
         product.setCreateTime(new java.util.Date());
-        product.setApplicableScene("");
         product.setApprovalTime(new java.util.Date());
         product.setIsDeleted(false);
         product.setAssembleTips("");
@@ -49,12 +46,11 @@ public class ProductTestController {
         product.setIsImport(false);
         product.setIsPresale(false);
         product.setLength((short)0);
-       product.setMaterial("");
+       product.setMaterialText("");
         product.setNeedAssemble(false);
         product.setOnShelfTime(new java.util.Date());
         product.setDetailDescription("");
-        product.setOriginAreaId(1);
-        product.setOriginText("");
+        product.setOriginCity("");
         product.setPostSaleServiceDesc("");
         product.setProductModel("");
         product.setProductName("");

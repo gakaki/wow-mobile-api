@@ -5,11 +5,6 @@ import java.util.List;
 import com.wow.product.model.Brand;
 import com.wow.product.model.Designer;
 import com.wow.product.model.Product;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * 品牌服务

@@ -56,4 +56,6 @@ public interface ProductCombineService {
      * @return List<ProductCombine> 子品列表
      */
     List<ProductCombine> getSubProductInfo(int productId);
+
+    List<ProductCombine> getProductCombineByProductId(int productId);
 }

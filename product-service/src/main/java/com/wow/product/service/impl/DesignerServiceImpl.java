@@ -143,6 +143,6 @@ public class DesignerServiceImpl implements DesignerService {
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
     public Designer getPrimaryDesignerByProduct(Product product) throws Exception {
-              return getDesignersByProduct(product).stream().findAny().get();
+              return getDesignersByProduct(product).get(0);
     }
 }
