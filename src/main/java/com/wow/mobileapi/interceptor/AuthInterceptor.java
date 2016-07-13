@@ -38,14 +38,14 @@ public class AuthInterceptor implements HandlerInterceptor {
         byte loginChannel = getLoginChannel(request, response);
 
         //check whether token is valid, by search it from redis or mysql
-        if (!sessionService.isValidSessionToken(token,loginChannel)) {
-            logger.warn("session token is invalid");
-            responseUtil.setResponse(apiResponse,"10000");
-            apiResponse.setData("您的会话已过期,请重新登录");
-            response.setContentType("application/json");
-            response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
-            return false;
-        }
+//        if (!sessionService.isValidSessionToken(token,loginChannel)) {
+//            logger.warn("session token is invalid");
+//            responseUtil.setResponse(apiResponse,"10000");
+//            apiResponse.setData("您的会话已过期,请重新登录");
+//            response.setContentType("application/json");
+//            response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
+//            return false;
+//        }
         return true;
     }
 

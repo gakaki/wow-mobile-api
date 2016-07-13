@@ -15,7 +15,7 @@ public class BaseController {
 
     /**
      * 
-     * 判断调用service方法是否成功
+     * 判断业务调用方法是否成功
      * @param errorCode
      * @return
      */
@@ -24,7 +24,7 @@ public class BaseController {
     }
 
     /**
-     * 包装具体的业务错误信息
+     * 设置具体的业务错误信息
      * 
      * @param apiResponse
      * @param commonResponse
@@ -33,10 +33,9 @@ public class BaseController {
         apiResponse.setResCode(commonResponse.getResCode());
         apiResponse.setResMsg(commonResponse.getResMsg());
     }
-    
-    
+
     /**
-     * 包装具体的校验出错信息
+     * 设置具体的校验出错信息
      * 
      * @param apiResponse
      * @param errorMsg
@@ -46,9 +45,8 @@ public class BaseController {
         apiResponse.setResMsg(errorMsg);
     }
 
-    
     /**
-     * 包装json参数解析错误信息
+     * 设置json参数解析错误信息
      * 
      * @param apiResponse
      */
@@ -58,7 +56,7 @@ public class BaseController {
     }
 
     /**
-     * 包装json参数解析错误信息
+     * 设置服务器内部错误信息
      *
      * @param apiResponse
      */

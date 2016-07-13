@@ -9,61 +9,62 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.response.CommonResponse;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
-import com.wow.order.service.OrderService;
-import com.wow.order.vo.request.OrderRequest;
-import com.wow.order.vo.response.OrderResponse;
+import com.wow.user.service.ShoppingCartService;
+import com.wow.user.vo.request.ShoppingCartRequest;
 
 /**
- * Created by zhengzhiqing on 16/7/2.
+ * 购物车相关controller
+ * 
+ * @author chenkaiwei
+ * @version $Id: V1.0 2016年7月13日 下午2:26:51 Exp $
  */
 @RestController
-@RequestMapping
-public class OrderController extends BaseController {
+@RequestMapping("/v1/cart")
+public class ShoppingCartController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
-    private OrderService orderService;
+    private ShoppingCartService shoppingCartService;
 
     /**
-     * 获取订单列表信息
+     * 添加指定的产品到购物车
      * 
      * @param request
      * @return
      */
-    @RequestMapping(value = "/v1/orders", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
-    public ApiResponse getOrderList(ApiRequest request) {
-        OrderRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderRequest.class);
+    @RequestMapping(value = "/add", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    public ApiResponse addProductIntoCart(ApiRequest request) {
+        ShoppingCartRequest shoppingCartRequest = JsonUtil.fromJSON(request.getParamJson(), ShoppingCartRequest.class);
         ApiResponse apiResponse = new ApiResponse();
+
         //判断json格式参数是否有误
-        if (orderRequest == null) {
+        if (shoppingCartRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
 
-        String errorMsg = ValidatorUtil.getError(orderRequest);
+        String errorMsg = ValidatorUtil.getError(shoppingCartRequest);
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
             setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
-        OrderResponse orderResponse = null;
         try {
-            orderResponse = orderService.queryOrderById(orderRequest.getId());
+            CommonResponse commonResponse = shoppingCartService.addProductIntoCart(shoppingCartRequest);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(orderResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, orderResponse);
-            } else {
-                apiResponse.setData(orderResponse.getOrder());
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("获取订单列表信息错误---" + e);
+            logger.error("添加产品到购物车信息错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
+
         return apiResponse;
     }
-
 }
