@@ -6,6 +6,7 @@ import com.wow.attribute.model.CategoryExample;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.common.response.CommonResponse;
 import com.wow.common.util.ErrorCodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,11 +37,10 @@ public class CategoryServiceImpl implements CategoryService {
      * @param category
      * @return
      */
-    public CategoryResponse createCategory(Category category) {
-        CategoryResponse categoryResponse = new CategoryResponse();
+    public CommonResponse createCategory(Category category) {
+        CommonResponse response = new CommonResponse();
         categoryMapper.insertSelective(category);
-        categoryResponse.setCategory(category);
-        return categoryResponse;
+        return response;
     }
 
     /**
@@ -49,11 +49,10 @@ public class CategoryServiceImpl implements CategoryService {
      * @param category
      * @return
      */
-    public CategoryResponse updateCategory(Category category) {
-        CategoryResponse categoryResponse = new CategoryResponse();
+    public CommonResponse updateCategory(Category category) {
+        CommonResponse response = new CommonResponse();
         categoryMapper.updateByPrimaryKeySelective(category);
-        categoryResponse.setCategory(category);
-        return categoryResponse;
+        return response;
     }
 
     /**
@@ -61,13 +60,13 @@ public class CategoryServiceImpl implements CategoryService {
      * @param categoryId
      * @return
      */
-    public CategoryResponse deleteCategoryById(int categoryId) {
-        CategoryResponse categoryResponse = new CategoryResponse();
+    public CommonResponse deleteCategoryById(int categoryId) {
+        CommonResponse response = new CommonResponse();
         Category category=new Category();
         category.setId(categoryId);
         category.setIsDeleted(true);
-        categoryResponse = updateCategory(category);
-        return categoryResponse;
+        updateCategory(category);
+        return response;
     }
 
     /**

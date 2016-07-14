@@ -3,6 +3,7 @@ package com.wow.attribute.service;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.common.response.CommonResponse;
 
 /**
  * 类目服务
@@ -16,21 +17,21 @@ public interface CategoryService {
      * @param category
      * @return
      */
-    CategoryResponse createCategory(Category category);
+    CommonResponse createCategory(Category category);
     /**
      * 更新类目
      *
      * @param category
      * @return
      */
-    CategoryResponse updateCategory(Category category);
+    CommonResponse updateCategory(Category category);
 
     /**
      * 根据ID删除属性
      * @param categoryId
      * @return
      */
-    CategoryResponse deleteCategoryById(int categoryId);
+    CommonResponse deleteCategoryById(int categoryId);
 
     /**
      * 根据Id查询属性
