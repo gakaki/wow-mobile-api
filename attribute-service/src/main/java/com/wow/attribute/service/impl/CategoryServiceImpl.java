@@ -7,6 +7,7 @@ import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.response.CommonResponse;
+import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
-
-    @Autowired
-    private CategoryExample categoryExample;
 
     private final int CATEGORY_LEVEL_FIRST=0;
 
@@ -94,11 +92,17 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(propagation= Propagation.SUPPORTS)
     public CategoryListResponse getSubCategory(int categoryId) {
         CategoryListResponse categoryListResponse = new CategoryListResponse();
+        CategoryExample categoryExample = new CategoryExample();
         CategoryExample.Criteria criteria=categoryExample.createCriteria();
         criteria.andParentCategoryIdEqualTo(categoryId);
         criteria.andIsDeletedEqualTo(false);
         List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
-        categoryListResponse.setCategoryList(categoryList);
+        if (CollectionUtil.isEmpty(categoryList)) {
+            categoryListResponse.setResCode("40402");
+            categoryListResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40402"));
+        } else {
+            categoryListResponse.setCategoryList(categoryList);
+        }
         return categoryListResponse;
     }
 
@@ -129,6 +133,11 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Transactional(propagation= Propagation.SUPPORTS)
     public CategoryListResponse getFirstLevelCategory() {
-        return getSubCategory(CATEGORY_LEVEL_FIRST);
+        CategoryListResponse categoryListResponse =  getSubCategory(CATEGORY_LEVEL_FIRST);
+        if ("40402".equals(categoryListResponse.getResCode())) {
+            categoryListResponse.setResCode("40403");
+            categoryListResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40403"));
+        }
+        return categoryListResponse;
     }
 }
