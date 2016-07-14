@@ -61,7 +61,82 @@ public class ShoppingCartController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("添加产品到购物车信息错误---" + e);
+            logger.error("添加产品到购物车错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 修改购物车产品数量
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/modify", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    public ApiResponse modifyCart(ApiRequest request) {
+        ShoppingCartRequest shoppingCartRequest = JsonUtil.fromJSON(request.getParamJson(), ShoppingCartRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+
+        //判断json格式参数是否有误
+        if (shoppingCartRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(shoppingCartRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+        try {
+            CommonResponse commonResponse = shoppingCartService.updateProductInCart(shoppingCartRequest);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
+            }
+        } catch (Exception e) {
+            logger.error("修改购物车产品数量错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+    
+    
+    /**
+     * 删除购物车产品
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/remove", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    public ApiResponse removeProductsFromCart(ApiRequest request) {
+        ShoppingCartRequest shoppingCartRequest = JsonUtil.fromJSON(request.getParamJson(), ShoppingCartRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+
+        //判断json格式参数是否有误
+        if (shoppingCartRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(shoppingCartRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+        try {
+            CommonResponse commonResponse = shoppingCartService.removeProductsFromCart(shoppingCartRequest);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
+            }
+        } catch (Exception e) {
+            logger.error("删除购物车产品错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
 

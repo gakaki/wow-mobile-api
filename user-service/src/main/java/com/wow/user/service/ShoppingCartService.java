@@ -22,14 +22,14 @@ public interface ShoppingCartService {
      * @param shoppingCart
      * @return
      */
-    int updateProductInCart(ShoppingCart shoppingCart);
+    CommonResponse updateProductInCart(ShoppingCartRequest request);
 
     /**
-     * 从购物车里删除产品
+     * 从购物车里批量删除产品
      * @param shoppingCartIds
      * @return
      */
-    int removeProductsFromCart(List<Integer> shoppingCartIds);
+    CommonResponse removeProductsFromCart(ShoppingCartRequest request);
 
     /**
      * 查询购物车信息
@@ -37,4 +37,13 @@ public interface ShoppingCartService {
      * @return
      */
     List<ShoppingCart> queryShoppingCart(int endUserId);
+    
+    /**
+     * 获取用户购物车信息列表明细
+     * 
+     * @param request
+     * @return
+     */
+    CommonResponse  queryByUserId(ShoppingCartRequest request);
+    
 }
