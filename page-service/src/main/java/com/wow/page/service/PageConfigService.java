@@ -4,7 +4,7 @@ import com.wow.page.model.PageBannerConfig;
 
 
 import com.wow.page.vo.PageTopicVo;
-import com.wow.page.vo.response.SerialResponse;
+import com.wow.product.Vo.Response.SerialResponse;
 import com.wow.product.model.Scene;
 
 
@@ -36,5 +36,4 @@ public interface PageConfigService {
      */
     List<PageTopicVo> getTopicsByPageType(int pageType);
 
-    List<SerialResponse> getSerialByPageType(int pageType) throws Exception;
 }
