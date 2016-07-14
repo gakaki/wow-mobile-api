@@ -5,6 +5,7 @@ import com.wow.attribute.model.*;
 import com.wow.attribute.service.AttributeService;
 
 import com.wow.attribute.service.CategoryService;
+import com.wow.price.service.PriceService;
 import com.wow.product.mapper.*;
 import com.wow.product.model.*;
 import com.wow.product.service.ProductService;
@@ -50,8 +51,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private MaterialMapper materialMapper;
 
-    @Autowired
-    private  ProductPriceMapper productPriceMapper;
     /**
      * 创建产品(注意要调用生码接口)
      *
@@ -262,22 +261,6 @@ public class ProductServiceImpl implements ProductService {
         return 0;
     }
 
-    @Override
-    public int createProductPrice(ProductPrice productPrice) {
-        return 0;
-    }
 
-    @Override
-    public int updateProductPrice(ProductPrice productPrice) {
-        return 0;
-    }
-
-    @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
-    public ProductPrice getProductPrice(Integer productId) throws Exception {
-        ProductPriceExample productPriceExample=new ProductPriceExample();
-        productPriceExample.or().andProductIdEqualTo(productId);
-        return productPriceMapper.selectByExample(productPriceExample).get(0);
-    }
 
 }
