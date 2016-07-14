@@ -44,14 +44,14 @@ public interface UserService {
      * @param mobile
      * @return
      */
-    WechatBindingStatusResponse checkWechatBindStatus(String mobile);
+    WechatBindStatusResponse checkWechatBindStatus(String mobile);
 
     /**
      * 绑定微信
      * @param endUserWechat
      * @return
      */
-    WechatBindingStatusResponse bindWechatToUser(EndUserWechat endUserWechat);
+    WechatBindStatusResponse bindWechatToUser(EndUserWechat endUserWechat);
 
     /**
      * 用户信息更新
@@ -118,13 +118,13 @@ public interface UserService {
     List<EndUser> getEndUsersByIds(int[] endUserIds);
 
     /**
-     * 验证用户名、密码是否匹配
+     * 验证手机号(也是用户名)、密码是否匹配
      *
-     * @param userName
+     * @param mobile
      * @param password
      * @return
      */
-    UserResponse authenticate(String userName, String password);
+    UserResponse authenticate(String mobile, String password);
 
     //table: end_user_share_brand
 

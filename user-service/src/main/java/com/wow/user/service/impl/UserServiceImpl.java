@@ -152,10 +152,11 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public WechatBindingStatusResponse checkWechatBindStatus(String mobile) {
-        WechatBindingStatusResponse wechatBindingStatusResponse = new WechatBindingStatusResponse();
-        wechatBindingStatusResponse.setMobile(mobile);
-        wechatBindingStatusResponse.setRegistered(isExistedUserByMobile(mobile).isExistedUser());
+    public WechatBindStatusResponse checkWechatBindStatus(String mobile) {
+        WechatBindStatusResponse wechatBindStatusResponse = new WechatBindStatusResponse();
+        WechatBindStatusVo wechatBindStatusVo = new WechatBindStatusVo();
+        wechatBindStatusVo.setMobile(mobile);
+        wechatBindStatusVo.setRegistered(isExistedUserByMobile(mobile).isExistedUser());
         EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
         EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
         criteria.andMobileEqualTo(mobile);
@@ -164,15 +165,16 @@ public class UserServiceImpl implements UserService {
         List<EndUserWechat> list = endUserWechatMapper.selectByExample(endUserWechatExample);
         if (list != null && list.size()==1) {
             EndUserWechat endUserWechat = list.get(0);
-            wechatBindingStatusResponse.setBinded(true);
-            wechatBindingStatusResponse.setWechatId(endUserWechat.getWechatId());
+            wechatBindStatusVo.setBinded(true);
+            wechatBindStatusVo.setWechatId(endUserWechat.getWechatId());
         } else if (list == null || list.size()==0){
-            wechatBindingStatusResponse.setBinded(false);
+            wechatBindStatusVo.setBinded(false);
         } else if (list.size() > 1) {
-            wechatBindingStatusResponse.setResCode("50101");
-            wechatBindingStatusResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50101"));
+            wechatBindStatusResponse.setResCode("50101");
+            wechatBindStatusResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50101"));
         }
-        return wechatBindingStatusResponse;
+        wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+        return wechatBindStatusResponse;
     }
 
     /**
@@ -182,12 +184,14 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public WechatBindingStatusResponse bindWechatToUser(EndUserWechat endUserWechat) {
-        WechatBindingStatusResponse wechatBindingStatusResponse = new WechatBindingStatusResponse();
+    public WechatBindStatusResponse bindWechatToUser(EndUserWechat endUserWechat) {
+        WechatBindStatusResponse wechatBindStatusResponse = new WechatBindStatusResponse();
+        WechatBindStatusVo wechatBindStatusVo = new WechatBindStatusVo();
         int i = endUserWechatMapper.insertSelective(endUserWechat);
-        wechatBindingStatusResponse.setBinded(i>0);
-        wechatBindingStatusResponse.setMobile(endUserWechat.getMobile());
-        return wechatBindingStatusResponse;
+        wechatBindStatusVo.setBinded(i>0);
+        wechatBindStatusVo.setMobile(endUserWechat.getMobile());
+        wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+        return wechatBindStatusResponse;
     }
 
 
@@ -435,16 +439,16 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 验证用户名、密码是否匹配
+     * 验证手机号(也是用户名)、密码是否匹配
      *
-     * @param userName
+     * @param mobile
      * @param password
      * @return
      */
     @Transactional(propagation= Propagation.SUPPORTS)
-    public UserResponse authenticate(String userName, String password) {
+    public UserResponse authenticate(String mobile, String password) {
         UserResponse userResponse = new UserResponse();
-        EndUser endUser = getEndUserByUserName(userName).getEndUser();
+        EndUser endUser = getEndUserByMobile(mobile).getEndUser();
         if (endUser!=null
                 && endUser.getPassword()!=null
                 && PasswordUtil.passwordHashValidate(password, endUser.getPassword())) {

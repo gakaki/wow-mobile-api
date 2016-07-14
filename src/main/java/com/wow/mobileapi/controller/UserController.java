@@ -2,15 +2,18 @@ package com.wow.mobileapi.controller;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.util.BeanUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.model.EndUser;
+import com.wow.user.model.EndUserWechat;
 import com.wow.user.service.UserService;
 import com.wow.user.vo.request.*;
 import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -108,7 +111,8 @@ public class UserController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        EndUser endUser = userUpdateRequest.getEndUser();
+        EndUser endUser = new EndUser();
+        BeanUtil.copyProperties(userUpdateRequest,endUser);
         try {
             UserUpdateResponse userUpdateResponse = userService.updateEndUser(endUser);
             //如果处理失败 则返回错误信息
@@ -226,12 +230,12 @@ public class UserController extends BaseController {
         }
 
         try {
-            WechatBindingStatusResponse wechatBindingStatusResponse = userService.checkWechatBindStatus(wechatBindQueryRequest.getMobile());
+            WechatBindStatusResponse wechatBindStatusResponse = userService.checkWechatBindStatus(wechatBindQueryRequest.getMobile());
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(wechatBindingStatusResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, wechatBindingStatusResponse);
+            if (!isServiceCallSuccess(wechatBindStatusResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, wechatBindStatusResponse);
             } else {
-                apiResponse.setData(wechatBindingStatusResponse);
+                apiResponse.setData(wechatBindStatusResponse.getWechatBindStatusVo());
             }
         } catch (Exception e) {
             logger.error("发送验证码发生错误---" + e);
@@ -256,14 +260,15 @@ public class UserController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-
+        EndUserWechat endUserWechat = new EndUserWechat();
+        BeanUtil.copyProperties(wechatBindRequest,endUserWechat);
         try {
-            WechatBindingStatusResponse wechatBindingStatusResponse = userService.bindWechatToUser(wechatBindRequest.getEndUserWechat());
+            WechatBindStatusResponse wechatBindStatusResponse = userService.bindWechatToUser(endUserWechat);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(wechatBindingStatusResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, wechatBindingStatusResponse);
+            if (!isServiceCallSuccess(wechatBindStatusResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, wechatBindStatusResponse);
             } else {
-                apiResponse.setData(wechatBindingStatusResponse);
+                apiResponse.setData(wechatBindStatusResponse);
             }
         } catch (Exception e) {
             logger.error("发送验证码发生错误---" + e);
