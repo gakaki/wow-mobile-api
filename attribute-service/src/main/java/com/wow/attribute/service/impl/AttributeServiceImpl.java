@@ -3,10 +3,15 @@ package com.wow.attribute.service.impl;
 
 import com.wow.attribute.mapper.AttributeMapper;
 import com.wow.attribute.mapper.AttributeValueMapper;
-import com.wow.attribute.model.*;
+import com.wow.attribute.model.Attribute;
+import com.wow.attribute.model.AttributeExample;
+import com.wow.attribute.model.AttributeValue;
+import com.wow.attribute.model.Category;
+import com.wow.attribute.model.CategoryAttribute;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryAttributeService;
 import com.wow.attribute.service.CategoryService;
+import com.wow.attribute.vo.response.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,7 +21,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Created by zhengzhiqing on 16/6/19.
@@ -184,7 +188,8 @@ public class AttributeServiceImpl implements AttributeService {
      */
     @Transactional(propagation= Propagation.SUPPORTS)
     public List<Attribute> getAttributesInCategory(int categoryId) {
-        Category category=categoryService.getCategoryById(categoryId);
+        CategoryResponse categoryResponse=categoryService.getCategoryById(categoryId);
+        Category category = categoryResponse.getCategory();
         if(category==null)
         return null;
         List<CategoryAttribute> categoryAttributes= categoryAttributeService.getCategoryAttributeByCategoryId(category.getId());

@@ -1,8 +1,8 @@
 package com.wow.attribute.service;
 
 import com.wow.attribute.model.Category;
-
-import java.util.List;
+import com.wow.attribute.vo.response.CategoryListResponse;
+import com.wow.attribute.vo.response.CategoryResponse;
 
 /**
  * 类目服务
@@ -10,28 +10,27 @@ import java.util.List;
  */
 public interface CategoryService {
 
-    // Table: attribute
     /**
      * 创建类目
      *
      * @param category
      * @return
      */
-    int createCategory(Category category);
+    CategoryResponse createCategory(Category category);
     /**
      * 更新类目
      *
      * @param category
      * @return
      */
-    int updateCategory(Category category);
+    CategoryResponse updateCategory(Category category);
 
     /**
      * 根据ID删除属性
      * @param categoryId
      * @return
      */
-    int deleteCategoryById(int categoryId);
+    CategoryResponse deleteCategoryById(int categoryId);
 
     /**
      * 根据Id查询属性
@@ -39,14 +38,14 @@ public interface CategoryService {
      * @param categoryId
      * @return
      */
-    Category getCategoryById(int categoryId);
+    CategoryResponse getCategoryById(int categoryId);
     /**
      * 查询指定类目的子类目
      *
      * @param categoryId
      * @return
      */
-    List<Category> getSubCategory(int categoryId);
+    CategoryListResponse getSubCategory(int categoryId);
 
     /**
      * 查询指定类目的父类目
@@ -54,12 +53,12 @@ public interface CategoryService {
      * @param categoryId
      * @return
      */
-    Category getParentCategory(int categoryId);
+    CategoryResponse getParentCategory(int categoryId);
 
     /**
      * 查询所有一级类目
      *
      * @return
      */
-    List<Category> getFirstLevelCategory();
+    CategoryListResponse getFirstLevelCategory();
 }
