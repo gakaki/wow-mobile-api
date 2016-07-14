@@ -1,12 +1,8 @@
 package com.wow.page.service;
 
-import com.wow.page.model.PageBannerConfig;
-
-
-import com.wow.page.vo.PageTopicVo;
-import com.wow.product.Vo.Response.SerialResponse;
-import com.wow.product.model.Scene;
-
+import com.wow.page.vo.response.PageBannerResponse;
+import com.wow.page.vo.response.PageSceneResponse;
+import com.wow.page.vo.response.PageTopicResponse;
 
 import java.util.List;
 
@@ -20,20 +16,20 @@ public interface PageConfigService {
      * @param pageType
      * @return
      */
-    List<PageBannerConfig>  getBannersByPageType(int pageType);
+    PageBannerResponse getBannersByPageType(int pageType);
 
     /**
      * 根据页面类型查询应该显示的场景
      * @param pageType
      * @return
      */
-    List<Scene> getScenesByPageType(int pageType);
+    PageSceneResponse getScenesByPageType(int pageType);
 
     /**
      * 根据页面类型查询应该显示的Topic
      * @param pageType
      * @return
      */
-    List<PageTopicVo> getTopicsByPageType(int pageType);
+    PageTopicResponse getTopicsByPageType(int pageType);
 
 }
