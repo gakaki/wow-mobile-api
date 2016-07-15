@@ -1,7 +1,10 @@
 package com.wow.price.service;
 
+import com.wow.common.response.CommonResponse;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.model.ProductPriceChangeLog;
+import com.wow.price.vo.ProductListPriceResponse;
+import com.wow.price.vo.ProductPriceResponse;
 
 import java.util.List;
 
@@ -13,7 +16,6 @@ public interface PriceService {
      * @param productPrice
      * @return
      */
-    //table: product_price, product_price_change_log
 
     /**
      * 创建产品价格(一般在首次产品上架的时候)
@@ -21,7 +23,7 @@ public interface PriceService {
      * @param productPrice
      * @return
      */
-    int createProductPrice(ProductPrice productPrice);
+    CommonResponse createProductPrice(ProductPrice productPrice);
 
     /**
      * 更新产品价格
@@ -29,7 +31,7 @@ public interface PriceService {
      * @param productPrice
      * @return
      */
-    int updateProductPrice(ProductPrice productPrice);
+    CommonResponse updateProductPrice(ProductPrice productPrice);
 
     /**
      * 查询产品价格
@@ -37,7 +39,7 @@ public interface PriceService {
      * @param productId
      * @return
      */
-    ProductPrice queryProductPrice(int productId);
+    ProductPriceResponse queryProductPrice(int productId);
 
     /**
      * 批量查询产品价格
@@ -45,7 +47,7 @@ public interface PriceService {
      * @param productIds
      * @return
      */
-    List<ProductPrice> queryProductPriceList(int[] productIds);
+    ProductListPriceResponse queryProductPriceList(List<Integer> productIds);
 
     /**
      * 添加价格变更日志
@@ -53,7 +55,7 @@ public interface PriceService {
      * @param productPriceChangeLog
      * @return
      */
-    int createPriceChangeLog(ProductPriceChangeLog productPriceChangeLog);
+    CommonResponse createPriceChangeLog(ProductPriceChangeLog productPriceChangeLog);
 
     /**
      * 查询产品价格变更日志

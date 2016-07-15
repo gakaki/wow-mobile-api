@@ -300,6 +300,7 @@
     update_date = now()
     where product_id = #{productId,jdbcType=INTEGER}
     and warehouse_id= #{warehouseId,jdbcType=INTEGER}
+    and real_stock_qty + #{adjustNum,jdbcType=SMALLINT} >= 0 <!--调减不能非负数-->
     and is_active = true
     and is_deleted = false
   </update>

@@ -1,6 +1,7 @@
 package com.wow.stock.service.impl;
 
 import com.wow.common.response.CommonResponse;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.product.mapper.WarehouseMapper;
 import com.wow.product.model.Warehouse;
 import com.wow.stock.mapper.ProductVirtualStockMapper;
@@ -77,7 +78,11 @@ public class StockServiceImpl implements StockService {
     public CommonResponse adjustWarehouseRealStock(int productId, int warehouseId, int adjustNum) {
         //先更新真实库存
         CommonResponse commonResponse = new CommonResponse();
-        productWarehouseStockMapper.adjustWarehouseRealStock(productId, warehouseId, adjustNum);
+        int i = productWarehouseStockMapper.adjustWarehouseRealStock(productId, warehouseId, adjustNum);
+        if (i < 1) {
+            commonResponse.setResCode("50602");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50602"));
+        }
         return commonResponse;
         //考虑到目前虚拟库存的情况并不多,通过每天的定时任务来扫描虚拟库存订单,而不是在这里主动去满足那些订单,以后再优化
         //或者做成消息通知模式,一旦有产品到货,通知订单子系统处理虚拟库存的订单
@@ -113,7 +118,11 @@ public class StockServiceImpl implements StockService {
     @Override
     public CommonResponse adjustVirtualStock(int productId, int adjustNum) {
         CommonResponse commonResponse = new CommonResponse();
-        productVirtualStockMapper.adjustVirtualStock(productId, adjustNum);
+        int i = productVirtualStockMapper.adjustVirtualStock(productId, adjustNum);
+        if (i < 1) {
+            commonResponse.setResCode("50603");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50603"));
+        }
         return commonResponse;
     }
 
@@ -128,7 +137,11 @@ public class StockServiceImpl implements StockService {
     @Override
     public CommonResponse freezeWarehouseStock(int productId, int warehouseId, int productQty) {
         CommonResponse commonResponse = new CommonResponse();
-        productWarehouseStockMapper.freezeWarehouseStock(productId,warehouseId,productQty);
+        int i = productWarehouseStockMapper.freezeWarehouseStock(productId,warehouseId,productQty);
+        if (i == 0) {
+            commonResponse.setResCode("50601");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50601"));
+        }
         return commonResponse;
     }
 
@@ -142,7 +155,11 @@ public class StockServiceImpl implements StockService {
     @Override
     public CommonResponse unfreezeWarehouseStock(int productId, int warehouseId, int productQty) {
         CommonResponse commonResponse = new CommonResponse();
-        productWarehouseStockMapper.unfreezeWarehouseStock(productId,warehouseId,productQty);
+        int i = productWarehouseStockMapper.unfreezeWarehouseStock(productId,warehouseId,productQty);
+        if (i == 0) {
+            commonResponse.setResCode("50604");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50604"));
+        }
         return commonResponse;
     }
 
@@ -155,7 +172,11 @@ public class StockServiceImpl implements StockService {
     @Override
     public CommonResponse unfreezeVirtualStock(int productId, int productQty) {
         CommonResponse commonResponse = new CommonResponse();
-        productVirtualStockMapper.unfreezeVirtualStock(productId, productQty);
+        int i = productVirtualStockMapper.unfreezeVirtualStock(productId, productQty);
+        if (i == 0) {
+            commonResponse.setResCode("50605");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50605"));
+        }
         return commonResponse;
     }
 
@@ -277,12 +298,16 @@ public class StockServiceImpl implements StockService {
     @Override
     public CommonResponse shipOutGoods(int productId, int warehouseId, int productQty) {
         CommonResponse commonResponse = new CommonResponse();
-        productWarehouseStockMapper.shipOutWarehouseGoods(productId,warehouseId,productQty);
+        int i = productWarehouseStockMapper.shipOutWarehouseGoods(productId,warehouseId,productQty);
+        if (i == 0) {
+            commonResponse.setResCode("50606");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50606"));
+        }
         return commonResponse;
     }
 
     /**
-     * 创建仓库(自营的创建自营仓库,供应商的创建供应商虚拟仓库)
+     * 创建仓库(只适用于自营)
      *
      * @param warehouse
      * @return
@@ -307,17 +332,17 @@ public class StockServiceImpl implements StockService {
         return commonResponse;
     }
 
-    /**
-     * 查询产品所在仓库列表
-     *
-     * @param productId
-     * @return
-     */
-    @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public List<Integer> selectWarehouseByProductId(int productId) {
-        return productWarehouseStockMapper.selectWarehouseByProductId(productId);
-    }
+//    /**
+//     * 查询产品所在仓库列表
+//     *
+//     * @param productId
+//     * @return
+//     */
+//    @Override
+//    @Transactional(propagation = Propagation.SUPPORTS)
+//    public List<Integer> selectWarehouseByProductId(int productId) {
+//        return productWarehouseStockMapper.selectWarehouseByProductId(productId);
+//    }
 
     /**
      * 查找所有有虚拟冻结的产品库存信息

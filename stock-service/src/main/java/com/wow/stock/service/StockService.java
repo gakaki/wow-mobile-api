@@ -115,13 +115,13 @@ public interface StockService {
      */
     CommonResponse updateWarehouse(Warehouse warehouse);
 
-    /**
-     * 查询产品所在仓库列表
-     *
-     * @param productId
-     * @return
-     */
-    List<Integer> selectWarehouseByProductId(int productId);
+//    /**
+//     * 查询产品所在仓库列表
+//     *
+//     * @param productId
+//     * @return
+//     */
+//    List<Integer> selectWarehouseByProductId(int productId);
 
     /**
      * 查找所有有虚拟冻结的产品库存信息
