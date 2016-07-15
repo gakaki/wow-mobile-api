@@ -36,6 +36,9 @@ public class HttpRequestUtil {
             }
         } else {
             ip = request.getRemoteAddr();
+            if ("0:0:0:0:0:0:0:1".equals(ip)) {//使用localhost访问的时候
+                ip = "127.0.0.1";
+            }
             return ip;
         }
     }
