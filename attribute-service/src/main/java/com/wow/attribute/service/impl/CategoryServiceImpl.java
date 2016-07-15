@@ -4,12 +4,16 @@ import com.wow.attribute.mapper.CategoryMapper;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.model.CategoryExample;
 import com.wow.attribute.service.CategoryService;
+import com.wow.attribute.vo.response.CategoryListResponse;
+import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -18,22 +22,23 @@ import java.util.List;
  */
 @Service
 @Transactional(value = "attributeTransactionManager")
-public class CategoryServiceImpl  implements CategoryService {
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
 
-    private final int parentFirstLevelCategory=0;
+    private final int CATEGORY_LEVEL_FIRST=0;
 
-    private CategoryExample categoryExample;
     /**
      * 创建类目
      *
      * @param category
      * @return
      */
-    public int createCategory(Category category) {
-        return categoryMapper.insertSelective(category);
+    public CommonResponse createCategory(Category category) {
+        CommonResponse response = new CommonResponse();
+        categoryMapper.insertSelective(category);
+        return response;
     }
 
     /**
@@ -42,8 +47,10 @@ public class CategoryServiceImpl  implements CategoryService {
      * @param category
      * @return
      */
-    public int updateCategory(Category category) {
-        return categoryMapper.updateByPrimaryKeySelective(category);
+    public CommonResponse updateCategory(Category category) {
+        CommonResponse response = new CommonResponse();
+        categoryMapper.updateByPrimaryKeySelective(category);
+        return response;
     }
 
     /**
@@ -51,11 +58,13 @@ public class CategoryServiceImpl  implements CategoryService {
      * @param categoryId
      * @return
      */
-    public int deleteCategoryById(int categoryId) {
+    public CommonResponse deleteCategoryById(int categoryId) {
+        CommonResponse response = new CommonResponse();
         Category category=new Category();
         category.setId(categoryId);
         category.setIsDeleted(true);
-        return updateCategory(category);
+        updateCategory(category);
+        return response;
     }
 
     /**
@@ -65,8 +74,11 @@ public class CategoryServiceImpl  implements CategoryService {
      * @return
      */
     @Transactional(propagation= Propagation.SUPPORTS)
-    public Category getCategoryById(int categoryId) {
-        return categoryMapper.selectByPrimaryKey(categoryId);
+    public CategoryResponse getCategoryById(int categoryId) {
+        CategoryResponse categoryResponse = new CategoryResponse();
+        Category category =  categoryMapper.selectByPrimaryKey(categoryId);
+        categoryResponse.setCategory(category);
+        return categoryResponse;
     }
 
 
@@ -78,12 +90,20 @@ public class CategoryServiceImpl  implements CategoryService {
      * @return
      */
     @Transactional(propagation= Propagation.SUPPORTS)
-    public List<Category> getSubCategory(int categoryId) {
-        categoryExample=new CategoryExample();
+    public CategoryListResponse getSubCategory(int categoryId) {
+        CategoryListResponse categoryListResponse = new CategoryListResponse();
+        CategoryExample categoryExample = new CategoryExample();
         CategoryExample.Criteria criteria=categoryExample.createCriteria();
         criteria.andParentCategoryIdEqualTo(categoryId);
         criteria.andIsDeletedEqualTo(false);
-        return categoryMapper.selectByExample(categoryExample);
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+        if (CollectionUtil.isEmpty(categoryList)) {
+            categoryListResponse.setResCode("40402");
+            categoryListResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40402"));
+        } else {
+            categoryListResponse.setCategoryList(categoryList);
+        }
+        return categoryListResponse;
     }
 
     /**
@@ -93,11 +113,17 @@ public class CategoryServiceImpl  implements CategoryService {
      * @return
      */
     @Transactional(propagation= Propagation.SUPPORTS)
-    public Category getParentCategory(int categoryId) {
+    public CategoryResponse getParentCategory(int categoryId) {
+        CategoryResponse categoryResponse = new CategoryResponse();
         Category category= categoryMapper.selectByPrimaryKey(categoryId);
-        if(category==null)
-              return null;
-       return categoryMapper.selectByPrimaryKey(category.getParentCategoryId());
+        if(category.getParentCategoryId() != null) {
+            category = categoryMapper.selectByPrimaryKey(category.getParentCategoryId());
+        } else {
+            categoryResponse.setResCode("40401");
+            categoryResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40401"));
+        }
+        categoryResponse.setCategory(category);
+        return categoryResponse;
     }
 
     /**
@@ -106,9 +132,12 @@ public class CategoryServiceImpl  implements CategoryService {
      * @return
      */
     @Transactional(propagation= Propagation.SUPPORTS)
-    public List<Category> getFirstLevelCategory() {
-        return getSubCategory(parentFirstLevelCategory);
+    public CategoryListResponse getFirstLevelCategory() {
+        CategoryListResponse categoryListResponse =  getSubCategory(CATEGORY_LEVEL_FIRST);
+        if ("40402".equals(categoryListResponse.getResCode())) {
+            categoryListResponse.setResCode("40403");
+            categoryListResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40403"));
+        }
+        return categoryListResponse;
     }
-
-
 }
