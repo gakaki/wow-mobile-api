@@ -8,6 +8,7 @@ import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.user.LoginRequest;
 import com.wow.mobileapi.request.user.LogoutRequest;
+import com.wow.mobileapi.util.HttpRequestUtil;
 import com.wow.user.service.SessionService;
 import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.response.LoginResponse;
@@ -18,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 登录、登出
@@ -37,7 +40,7 @@ public class SessionController extends BaseController {
      * @return
      */
     @RequestMapping(value="/v1/session/login", method = RequestMethod.POST)
-    public ApiResponse login(ApiRequest apiRequest) {
+    public ApiResponse login(ApiRequest apiRequest, HttpServletRequest request) {
 
         ApiResponse apiResponse = new ApiResponse();
         LoginRequest loginRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LoginRequest.class);
@@ -54,9 +57,9 @@ public class SessionController extends BaseController {
             return apiResponse;
         }
 
-        //TODO: 可能会需要从header中获取部分信息,放到LoginRequest,比如login channel
         LoginVo loginVo = new LoginVo();
         BeanUtil.copyProperties(loginRequest, loginVo);
+        loginVo.setLoginIp(HttpRequestUtil.getIpAddr(request));
 
         try {
             LoginResponse loginResponse = sessionService.login(loginVo);
