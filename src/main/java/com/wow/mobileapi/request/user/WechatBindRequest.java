@@ -2,21 +2,23 @@ package com.wow.mobileapi.request.user;
 
 import com.wow.common.request.ApiRequest;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by zhengzhiqing on 16/7/6.
  */
 public class WechatBindRequest extends ApiRequest {
 
     private static final long serialVersionUID = 1L;
-
+    @NotNull
     private Integer endUserId;
 
     private String mobile;
-
+    @NotNull
     private String wechatId;
-
+    @NotNull
     private String wechatNickName;
-
+    @NotNull
     private String wechatAvatar;
 
     public Integer getEndUserId() {
