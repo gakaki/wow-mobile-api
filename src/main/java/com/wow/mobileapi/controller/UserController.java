@@ -4,16 +4,17 @@ import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.request.user.*;
 import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserWechat;
 import com.wow.user.service.UserService;
-import com.wow.user.vo.request.*;
 import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +44,14 @@ public class UserController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        //hibernate validator
+
+        String errorMsg = ValidatorUtil.getError(userQueryRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
         int endUserId = userQueryRequest.getEndUserId();
 
         logger.info("根据ID查询用户:" + endUserId);
@@ -80,8 +88,18 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        String errorMsg = ValidatorUtil.getError(registerRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        EndUser endUser = new EndUser();
+        BeanUtil.copyProperties(registerRequest,endUser);
+
         try {
-            RegisterResponse registerResponse = userService.register(registerRequest);
+            RegisterResponse registerResponse = userService.register(endUser, registerRequest.getCaptcha());
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(registerResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, registerResponse);
@@ -111,6 +129,14 @@ public class UserController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
+
+        String errorMsg = ValidatorUtil.getError(userUpdateRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
         EndUser endUser = new EndUser();
         BeanUtil.copyProperties(userUpdateRequest,endUser);
         try {
@@ -144,6 +170,13 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        String errorMsg = ValidatorUtil.getError(userCheckRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
         logger.info("检查是否存在指定手机号的用户:" + userCheckRequest.getMobile());
 
         try {
@@ -171,6 +204,13 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        String errorMsg = ValidatorUtil.getError(userCheckRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
         try {
             UserCheckResponse userCheckResponse = userService.isExistedUserByNickName(userCheckRequest.getNickName());
             //如果处理失败 则返回错误信息
@@ -195,6 +235,13 @@ public class UserController extends BaseController {
         //判断json格式参数是否有误
         if (captchaRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(captchaRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
 
@@ -229,6 +276,13 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        String errorMsg = ValidatorUtil.getError(wechatBindQueryRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
         try {
             WechatBindStatusResponse wechatBindStatusResponse = userService.checkWechatBindStatus(wechatBindQueryRequest.getMobile());
             //如果处理失败 则返回错误信息
@@ -260,6 +314,14 @@ public class UserController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
+
+        String errorMsg = ValidatorUtil.getError(wechatBindRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
         EndUserWechat endUserWechat = new EndUserWechat();
         BeanUtil.copyProperties(wechatBindRequest,endUserWechat);
         try {
@@ -274,9 +336,6 @@ public class UserController extends BaseController {
             logger.error("发送验证码发生错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
-
         return apiResponse;
-
     }
-
 }
