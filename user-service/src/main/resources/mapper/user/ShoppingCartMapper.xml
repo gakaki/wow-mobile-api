@@ -310,7 +310,7 @@
 		</if>
 	</select>
 
-	<update id="updateByPrimaryKeys"   parameterType="com.wow.user.vo.request.ShoppingCartRequest">
+	<update id="updateByPrimaryKeys"   parameterType="com.wow.user.model.ShoppingCart">
 			update shopping_cart set  is_deleted = #{isDeleted}, update_time= #{updateTime}
 			     where id in
 			   <foreach collection="shoppingCartIds"   item="item"  open="(" close=")"  separator="," >
@@ -320,10 +320,11 @@
 	
 	<!-- 获取用户购物车信息列表明细 -->
 	<select id="queryByUserId"   resultType="com.wow.user.vo.ShoppingCartResultVo"
-		parameterType="com.wow.user.vo.request.ShoppingCartRequest">
+		parameterType="com.wow.user.vo.ShoppingCartQueryVo">
 			SELECT 
 				  sc.id shoppingCartId,
 				  sc.product_qty productQty,
+				  p.id productId,
 				  p.product_name productName,
 				  p.color color,
 				  p.spec spec,
