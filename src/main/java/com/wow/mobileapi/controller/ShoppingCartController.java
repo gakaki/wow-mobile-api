@@ -13,10 +13,10 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.request.user.ShoppingCartRequest;
 import com.wow.user.model.ShoppingCart;
 import com.wow.user.service.ShoppingCartService;
 import com.wow.user.vo.ShoppingCartQueryVo;
-import com.wow.user.vo.request.ShoppingCartRequest;
 import com.wow.user.vo.response.ShoppingCartResponse;
 
 /**
@@ -29,7 +29,7 @@ import com.wow.user.vo.response.ShoppingCartResponse;
 @RequestMapping("/v1/cart")
 public class ShoppingCartController extends BaseController {
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ShoppingCartController.class);
 
     @Autowired
     private ShoppingCartService shoppingCartService;
