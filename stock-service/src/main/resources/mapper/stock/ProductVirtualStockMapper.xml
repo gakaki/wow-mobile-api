@@ -294,6 +294,18 @@
     and is_deleted = false
   </select>
 
+  <select id="getAvailableVirtualStocks" parameterType="java.lang.Integer" resultType="com.wow.stock.vo.VirtualStockVo" >
+    select product_id productId, virtual_stock_qty-frozen_virtual_stock_qty as availableVirtualStock
+    from product_virtual_stock
+    <!--where product_id = #{productId,jdbcType=INTEGER}-->
+    <where>
+      product_id in
+      <foreach collection="productIds" item="productId" index="index" open="(" separator="," close=")">#{productId}</foreach>
+    </where>
+    and is_active = true
+    and is_deleted = false
+  </select>
+
   <select id="getFrozenVirtualStock" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
     select frozen_virtual_stock_qty
     from product_virtual_stock

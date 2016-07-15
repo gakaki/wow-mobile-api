@@ -1,9 +1,12 @@
 package com.wow.stock.service;
 
+import com.wow.common.response.CommonResponse;
 import com.wow.product.model.Warehouse;
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.model.ProductWarehouseStock;
-import com.wow.stock.vo.AvailableStock;
+import com.wow.stock.vo.AvailableStockVo;
+import com.wow.stock.vo.response.AvailableStockResponse;
+import com.wow.stock.vo.response.AvailableStocksResponse;
 
 import java.util.List;
 
@@ -17,7 +20,7 @@ public interface StockService {
      * @param productWarehouseStock
      * @return
      */
-    int createProductWarehouseStock(ProductWarehouseStock productWarehouseStock);
+    CommonResponse createProductWarehouseStock(ProductWarehouseStock productWarehouseStock);
 
     /**
      * 如果支持虚拟库存,第一次时创建虚拟库存
@@ -25,7 +28,7 @@ public interface StockService {
      * @param productVirtualStock
      * @return
      */
-    int createProductVirtualStock(ProductVirtualStock productVirtualStock);
+    CommonResponse createProductVirtualStock(ProductVirtualStock productVirtualStock);
 
     /**
      * 调整仓库实际库存(调增,调减都可以)
@@ -34,7 +37,7 @@ public interface StockService {
      * @param warehouseId
      * @param adjustNum
      */
-    int adjustWarehouseRealStock(int productId, int warehouseId, int adjustNum);
+    CommonResponse adjustWarehouseRealStock(int productId, int warehouseId, int adjustNum);
 
     /**
      * 调整虚拟库存(调增,调减都可以)
@@ -42,7 +45,7 @@ public interface StockService {
      * @param productId
      * @param adjustNum
      */
-    int adjustVirtualStock(int productId, int adjustNum);
+    CommonResponse adjustVirtualStock(int productId, int adjustNum);
 
     /**
      * 冻结库存(一般是下单时)
@@ -51,7 +54,7 @@ public interface StockService {
      * @param warehouseId
      * @param productQty 产品数量-正整数
      */
-    int freezeWarehouseStock(int productId, int warehouseId, int productQty);
+    CommonResponse freezeWarehouseStock(int productId, int warehouseId, int productQty);
 
     /**
      * 解冻仓库库存(一般是取消订单)
@@ -60,7 +63,7 @@ public interface StockService {
      * @param warehouseId
      * @param productQty 产品数量-正整数
      */
-    int unfreezeWarehouseStock(int productId, int warehouseId, int productQty);
+    CommonResponse unfreezeWarehouseStock(int productId, int warehouseId, int productQty);
 
     /**
      * 解冻虚拟库存(一般是取消订单)
@@ -68,7 +71,7 @@ public interface StockService {
      * @param productId
      * @param productQty 产品数量-正整数
      */
-    int unfreezeVirtualStock(int productId, int productQty);
+    CommonResponse unfreezeVirtualStock(int productId, int productQty);
 
     /**
      * 计算可用库存=仓库可用库存+虚拟可用库存
@@ -76,7 +79,15 @@ public interface StockService {
      * @param productId
      * @return
      */
-    AvailableStock getAvailableStock(int productId);
+    AvailableStockResponse getAvailableStock(int productId);
+
+    /**
+     * 批量计算可用库存=仓库可用库存+虚拟可用库存
+     *
+     * @param productIds
+     * @return
+     */
+    AvailableStocksResponse batchGetAvailableStock(List<Integer> productIds);
 
     /**
      * 发货出库-同时减少实际库存和冻结库存
@@ -85,7 +96,7 @@ public interface StockService {
      * @param warehouseId
      * @param productQty 产品数量-正整数
      */
-    int shipOutGoods(int productId, int warehouseId, int productQty);
+    CommonResponse shipOutGoods(int productId, int warehouseId, int productQty);
 
 
     /**
@@ -94,7 +105,7 @@ public interface StockService {
      * @param warehouse
      * @return
      */
-    int createWarehouse(Warehouse warehouse);
+    CommonResponse createWarehouse(Warehouse warehouse);
 
     /**
      * 变更仓库信息
@@ -102,7 +113,7 @@ public interface StockService {
      * @param warehouse
      * @return
      */
-    int updateWarehouse(Warehouse warehouse);
+    CommonResponse updateWarehouse(Warehouse warehouse);
 
     /**
      * 查询产品所在仓库列表
