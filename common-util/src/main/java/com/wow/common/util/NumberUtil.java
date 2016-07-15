@@ -242,7 +242,7 @@ public class NumberUtil {
      * 
      * @param sellPrice
      */
-    public static BigDecimal convertToFen(long sellPrice) {
+    public static BigDecimal convertToYuan(long sellPrice) {
         String sellPriceString = String.valueOf(sellPrice);
 
         StringBuilder sb = new StringBuilder();

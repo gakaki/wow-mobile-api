@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.wow.common.response.CommonResponse;
 import com.wow.user.model.ShoppingCart;
+import com.wow.user.vo.ShoppingCartQueryVo;
+import com.wow.user.vo.response.ShoppingCartResponse;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
@@ -14,21 +16,21 @@ public interface ShoppingCartService {
      * @param shoppingCart
      * @return
      */
-    CommonResponse addProductIntoCart(ShoppingCartRequest request);
+    CommonResponse addProductIntoCart(ShoppingCart shoppingCart);
 
     /**
      * 修改购物车里的产品
      * @param shoppingCart
      * @return
      */
-    CommonResponse updateProductInCart(ShoppingCartRequest request);
+    CommonResponse updateProductInCart(ShoppingCartQueryVo query);
 
     /**
      * 从购物车里批量删除产品
      * @param shoppingCartIds
      * @return
      */
-    CommonResponse removeProductsFromCart(ShoppingCartRequest request);
+    CommonResponse removeProductsFromCart(ShoppingCartQueryVo query);
 
     /**
      * 查询购物车信息
@@ -36,13 +38,13 @@ public interface ShoppingCartService {
      * @return
      */
     List<ShoppingCart> queryShoppingCart(int endUserId);
-    
+
     /**
      * 获取用户购物车信息列表明细
      * 
      * @param request
      * @return
      */
-    CommonResponse  queryByUserId(ShoppingCartRequest request);
-    
+    ShoppingCartResponse queryShoppingCartByUserId(ShoppingCartQueryVo query);
+
 }

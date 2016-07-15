@@ -13,8 +13,11 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
+import com.wow.user.model.ShoppingCart;
 import com.wow.user.service.ShoppingCartService;
+import com.wow.user.vo.ShoppingCartQueryVo;
 import com.wow.user.vo.request.ShoppingCartRequest;
+import com.wow.user.vo.response.ShoppingCartResponse;
 
 /**
  * 购物车相关controller
@@ -55,7 +58,14 @@ public class ShoppingCartController extends BaseController {
             return apiResponse;
         }
         try {
-            CommonResponse commonResponse = shoppingCartService.addProductIntoCart(shoppingCartRequest);
+            //包装购物车对象
+            ShoppingCart shoppingCart = new ShoppingCart();
+
+            shoppingCart.setEndUserId(shoppingCartRequest.getEndUserId());
+            shoppingCart.setProductId(shoppingCartRequest.getProductId());
+            shoppingCart.setProductQty(shoppingCartRequest.getProductQty());
+
+            CommonResponse commonResponse = shoppingCartService.addProductIntoCart(shoppingCart);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
@@ -92,7 +102,13 @@ public class ShoppingCartController extends BaseController {
             return apiResponse;
         }
         try {
-            CommonResponse commonResponse = shoppingCartService.updateProductInCart(shoppingCartRequest);
+            //包装购物车查询对象
+            ShoppingCartQueryVo query = new ShoppingCartQueryVo();
+
+            query.setShoppingCartId(shoppingCartRequest.getShoppingCartId());
+            query.setProductQty(shoppingCartRequest.getProductQty());
+
+            CommonResponse commonResponse = shoppingCartService.updateProductInCart(query);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
@@ -104,8 +120,7 @@ public class ShoppingCartController extends BaseController {
 
         return apiResponse;
     }
-    
-    
+
     /**
      * 删除购物车产品
      * 
@@ -130,13 +145,62 @@ public class ShoppingCartController extends BaseController {
             return apiResponse;
         }
         try {
-            CommonResponse commonResponse = shoppingCartService.removeProductsFromCart(shoppingCartRequest);
+            //包装购物车查询对象
+            ShoppingCartQueryVo query = new ShoppingCartQueryVo();
+
+            query.setShoppingCartIds(shoppingCartRequest.getShoppingCartIds());
+
+            CommonResponse commonResponse = shoppingCartService.removeProductsFromCart(query);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
             logger.error("删除购物车产品错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 获取用户购物车产品信息
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/get", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    public ApiResponse queryShoppingCartByUserId(ApiRequest request) {
+        ShoppingCartRequest shoppingCartRequest = JsonUtil.fromJSON(request.getParamJson(), ShoppingCartRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+
+        //判断json格式参数是否有误
+        if (shoppingCartRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(shoppingCartRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+        try {
+            //包装购物车查询对象
+            ShoppingCartQueryVo query = new ShoppingCartQueryVo();
+
+            query.setEndUserId(shoppingCartRequest.getEndUserId());
+
+            ShoppingCartResponse shoppingCartResponse = shoppingCartService.queryShoppingCartByUserId(query);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(shoppingCartResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, shoppingCartResponse);
+            } else{
+                apiResponse.setData(shoppingCartResponse);
+            }
+        } catch (Exception e) {
+            logger.error("获取用户购物车产品错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
 
