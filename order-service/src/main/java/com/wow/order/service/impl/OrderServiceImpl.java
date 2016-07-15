@@ -11,7 +11,7 @@ import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderVo;
-import com.wow.order.vo.response.OrderResponse;
+import com.wow.order.vo.response.OrderSettleResponse;
 
 /**
  * 订单服务
@@ -53,8 +53,8 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public OrderResponse queryOrderById(int orderId) {
-        OrderResponse orderResponse=new OrderResponse();
+    public OrderSettleResponse queryOrderById(int orderId) {
+        OrderSettleResponse orderResponse=new OrderSettleResponse();
         
         //设置错误码和错误信息
         orderResponse.setResCode("40001");

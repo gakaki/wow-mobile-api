@@ -2,7 +2,9 @@ package com.wow.common.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -19,18 +21,39 @@ public class ErrorCodeUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ErrorCodeUtil.class);
 
-    private static final String PROPSPATH = "errorcode.properties"; //错误码对应的属性文件
+    private static final List<String> PROPSPATHS = new ArrayList<String>(9);
 
     private static final Map<String, String> PROPSMAP = new HashMap<String, String>(50);
+
+    static {
+        PROPSPATHS.add("errorcode.properties");
+        PROPSPATHS.add("errorcode_attribute.properties");
+        PROPSPATHS.add("errorcode_order.properties");
+        PROPSPATHS.add("errorcode_product.properties");
+        PROPSPATHS.add("errorcode_user.properties");
+        PROPSPATHS.add("errorcode_marketing.properties");
+        PROPSPATHS.add("errorcode_page.properties");
+        PROPSPATHS.add("errorcode_price.properties");
+        PROPSPATHS.add("errorcode_stock.properties");
+    }
+
+    /**
+     * 批量加载错误属性文件
+     */
+    public static void loadProps() {
+        for (String propspath : PROPSPATHS) {
+            loadProp(propspath);
+        }
+    }
 
     /**
      * 加载错误码属性文件
      */
-    public static Properties loadProps() {
+    public static Properties loadProp(String propspath) {
         Properties props = new Properties();
         InputStream is = null;
         try {
-            is = getClassLoader().getResourceAsStream(PROPSPATH);
+            is = getClassLoader().getResourceAsStream(propspath);
             if (is != null) {
                 props.load(is);
             }
@@ -69,7 +92,6 @@ public class ErrorCodeUtil {
 
     }
 
-    
     /**
      * 根据错误码获取相关的错误属性信息
      * 

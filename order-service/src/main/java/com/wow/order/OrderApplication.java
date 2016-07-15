@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wow.order.service.OrderService;
-import com.wow.order.vo.response.OrderResponse;
+import com.wow.order.vo.response.OrderSettleResponse;
 
 @SpringBootApplication
 @RestController
@@ -27,7 +27,7 @@ public class OrderApplication {
     private OrderService orderService;
 
     @RequestMapping(value = "/orders/{orderId}", method = RequestMethod.GET)
-    public OrderResponse getOrderById(@PathVariable Integer orderId) {
+    public OrderSettleResponse getOrderById(@PathVariable Integer orderId) {
         return orderService.queryOrderById(orderId);
     }
 

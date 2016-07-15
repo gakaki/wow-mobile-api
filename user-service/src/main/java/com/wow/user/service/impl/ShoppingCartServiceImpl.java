@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
@@ -40,6 +41,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
     private ProductService productService;
+
+//    @Autowired
+//    private StockService stockService;
 
     /**
      * 添加商品到购物车 暂不考虑组合产品 仅在用户登录的情况下调用
@@ -176,7 +180,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             return response;
         }
 
-        query.setIsDeleted(Boolean.FALSE);
         List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByUserId(query);
 
         response.setShoppingCartResult(shoppingCartResult);
@@ -202,6 +205,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         long totalPrice = 0L;
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            //转化产品状态名称
+            if (shoppingCart.getProductStatus() != null) {
+                shoppingCart.setProductStatusName(ProductStatusEnum.get((int) shoppingCart.getProductStatus()));
+            }
+            //获取产品库存 调用stockservice服务
+            
+            //如果产品已下架则不计算价格
+            if(shoppingCart.getProductStatus().intValue()==ProductStatusEnum.ORDER_STATUS_OFF_SHELVE.getKey()){
+                continue;
+            }
+            
             long productPrice = NumberUtil.convertToFen(shoppingCart.getSellPrice());
             totalPrice += productPrice * shoppingCart.getProductQty();
         }
