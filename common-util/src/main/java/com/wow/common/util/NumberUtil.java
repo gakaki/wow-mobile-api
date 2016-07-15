@@ -279,8 +279,4 @@ public class NumberUtil {
         return Long.parseLong(sellPrice.toString().replace(".", ""));
     }
 
-    public static void main(String[] args) {
-        System.out.println(convertToFen(new BigDecimal("10.00")));
-    }
-
 }
