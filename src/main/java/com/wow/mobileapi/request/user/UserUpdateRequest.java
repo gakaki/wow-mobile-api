@@ -2,6 +2,7 @@ package com.wow.mobileapi.request.user;
 
 import com.wow.common.request.ApiRequest;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  */
 public class UserUpdateRequest extends ApiRequest {
 
+    @NotNull
     private Integer id;
 
     private String userName;

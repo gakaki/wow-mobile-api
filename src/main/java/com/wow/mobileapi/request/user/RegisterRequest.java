@@ -2,6 +2,7 @@ package com.wow.mobileapi.request.user;
 
 import com.wow.common.request.ApiRequest;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -9,10 +10,11 @@ import java.util.Date;
  */
 public class RegisterRequest extends ApiRequest {
 
+    @NotNull
     private String captcha;
-
+    @NotNull
     private String mobile;
-
+    @NotNull
     private String password;
 
     private String userName;

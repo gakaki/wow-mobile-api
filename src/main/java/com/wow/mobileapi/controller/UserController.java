@@ -11,7 +11,12 @@ import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserWechat;
 import com.wow.user.service.UserService;
-import com.wow.user.vo.response.*;
+import com.wow.user.vo.response.CaptchaResponse;
+import com.wow.user.vo.response.RegisterResponse;
+import com.wow.user.vo.response.UserCheckResponse;
+import com.wow.user.vo.response.UserResponse;
+import com.wow.user.vo.response.UserUpdateResponse;
+import com.wow.user.vo.response.WechatBindStatusResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,7 +175,10 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
-        String errorMsg = ValidatorUtil.getError(userCheckRequest);
+        String errorMsg = null;
+        if(userCheckRequest.getMobile()==null) {
+            errorMsg = "手机号不能为空";
+        }
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
             setInvalidParameterResponse(apiResponse, errorMsg);
@@ -204,7 +212,11 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
-        String errorMsg = ValidatorUtil.getError(userCheckRequest);
+        String errorMsg = null;
+        if(StringUtil.isEmpty(userCheckRequest.getNickName())) {
+            errorMsg = "昵称不能为空";
+        }
+
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
             setInvalidParameterResponse(apiResponse, errorMsg);
