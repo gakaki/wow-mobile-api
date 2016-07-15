@@ -1,11 +1,11 @@
 package com.wow.product.service.impl;
 
 
-import com.wow.attribute.model.*;
+import com.wow.attribute.model.Attribute;
+import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
-
 import com.wow.attribute.service.CategoryService;
-import com.wow.price.service.PriceService;
+import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.product.mapper.*;
 import com.wow.product.model.*;
 import com.wow.product.service.ProductService;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -189,7 +188,8 @@ public class ProductServiceImpl implements ProductService {
     public List<Attribute> getAttributesInProduct(Product product){
         if(product==null)
             return null;
-      Category category= categoryService.getCategoryById(product.getCategoryId());
+        CategoryResponse categoryResponse= categoryService.getCategoryById(product.getCategoryId());
+        Category category = categoryResponse.getCategory();
         if(category!=null)
            return attributeService.getAttributesInCategory(category.getId());
 
