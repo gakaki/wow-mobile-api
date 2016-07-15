@@ -7,18 +7,18 @@ import java.io.Serializable;
  */
 public class LoginVo implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String userName;
+    private String mobile;
     private String password;
     private String loginIp;
     private Byte loginChannel;
     private String userAgent;
 
-    public String getUserName() {
-        return userName;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getPassword() {

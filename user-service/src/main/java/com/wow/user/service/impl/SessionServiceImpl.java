@@ -61,7 +61,7 @@ public class SessionServiceImpl implements SessionService {
         LoginResponse loginResponse = new LoginResponse();
         EndUserSession endUserSession = null;
         //先检查数据库,看用户名和密码是否匹配
-        EndUser endUser = userService.authenticate(loginVo.getUserName(), loginVo.getPassword()).getEndUser();
+        EndUser endUser = userService.authenticate(loginVo.getMobile(), loginVo.getPassword()).getEndUser();
         if (endUser != null) { //验证成功
             //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
             endUserSession = getSessionByUserIdAndChannel(endUser.getId(), loginVo.getLoginChannel());

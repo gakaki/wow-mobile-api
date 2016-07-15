@@ -1,16 +1,13 @@
 package com.wow.attribute.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import java.io.Serializable;
 import java.util.Date;
 
 public class Attribute implements Serializable {
     private Integer id;
 
-    @NotEmpty
     private String attributeName;
-    @NotEmpty
+
     private String showName;
 
     private Boolean canMultipleSelected;
