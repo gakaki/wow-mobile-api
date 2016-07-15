@@ -336,22 +336,4 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from shipping_info
-    where end_user_id = #{endUserId,jdbcType=INTEGER}
-    and is_deleted = false
-  </select>
-
-
-  <select id="selectDefault" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from shipping_info
-    where end_user_id = #{endUserId,jdbcType=INTEGER}
-    and is_default = true
-    and is_deleted = false
-  </select>
-
 </mapper>

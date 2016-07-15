@@ -34,7 +34,7 @@ public class AreaServiceImpl implements AreaService{
      */
     @Override
     public int createArea(Area area) {
-        return areaMapper.insert(area);
+        return areaMapper.insertSelective(area);
     }
 
     /**

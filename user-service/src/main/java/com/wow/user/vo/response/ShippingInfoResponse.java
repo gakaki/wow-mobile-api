@@ -10,6 +10,8 @@ import com.wow.user.model.ShippingInfo;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ShippingInfoResponse extends CommonResponse {
 
+    private static final long serialVersionUID = 1L;
+
     private ShippingInfo shippingInfo;
 
     public ShippingInfo getShippingInfo() {

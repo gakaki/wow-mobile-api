@@ -24,6 +24,14 @@ public interface ShippingInfoService {
     CommonResponse updateShippingInfo(ShippingInfo shippingInfo);
 
     /**
+     * 设为默认收货信息
+     * @param shippingInfoId
+     * @param endUserId
+     * @return
+     */
+    CommonResponse setAsDefaultShippingInfo(int shippingInfoId, int endUserId);
+
+    /**
      * 删除收货信息
      * @param shippingInfoId
      * @return

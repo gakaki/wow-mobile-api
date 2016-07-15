@@ -29,7 +29,7 @@ public class PriceServiceImpl implements PriceService {
      * @return
      */
     public int createProductPrice(ProductPrice productPrice) {
-        return productPriceMapper.insert(productPrice);
+        return productPriceMapper.insertSelective(productPrice);
     }
 
     /**
@@ -69,7 +69,7 @@ public class PriceServiceImpl implements PriceService {
      * @return
      */
     public int createPriceChangeLog(ProductPriceChangeLog productPriceChangeLog) {
-        return productPriceChangeLogMapper.insert(productPriceChangeLog);
+        return productPriceChangeLogMapper.insertSelective(productPriceChangeLog);
     }
 
     /**

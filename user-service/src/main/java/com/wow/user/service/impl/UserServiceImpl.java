@@ -1,7 +1,6 @@
 package com.wow.user.service.impl;
 
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
-import com.wow.common.util.BeanUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.RedisUtil;
@@ -12,7 +11,6 @@ import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.thirdparty.SmsSender;
 import com.wow.user.util.PasswordUtil;
-import com.wow.user.vo.request.RegisterRequest;
 import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,15 +52,15 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 用户注册
-     *
-     * @param registerRequest
+     * @param endUser
+     * @param captcha
      * @return
      */
     @Override
-    public RegisterResponse register(RegisterRequest registerRequest) {
+    public RegisterResponse register(EndUser endUser, String captcha) {
         RegisterResponse registerResponse = new RegisterResponse();
         //TODO: validation required, use hibernate validator?
-        String mobile = registerRequest.getMobile();
+        String mobile = endUser.getMobile();
 
         if (StringUtils.isEmpty(mobile)) {
             registerResponse.setResCode("40000");
@@ -82,15 +80,12 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(captchaOnServer)) {
             registerResponse.setResCode("40102");
             registerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40102"));
-        } else if (!registerRequest.getCaptcha().equals(captchaOnServer)) {
+        } else if (!captcha.equals(captchaOnServer)) {
             registerResponse.setResCode("40103");
             registerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40103"));
         } else {
-            registerRequest.setPassword(
-                    PasswordUtil.passwordHashGenerate(registerRequest.getPassword()));
-            //bean copy from registerRequest to endUser
-            EndUser endUser = new EndUser();
-            BeanUtil.copyProperties(registerRequest,endUser,"captcha");
+            endUser.setPassword(
+                    PasswordUtil.passwordHashGenerate(endUser.getPassword()));
 
             endUserMapper.insertSelective(endUser);
             //TODO: 如果该用户是通过好友推荐进来注册的,需要更新推荐相关信息,通过消息通知营销系统,否则要双向依赖

@@ -12,7 +12,7 @@ import com.wow.user.model.EndUserSessionExample;
 import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.util.IpConvertUtil;
-import com.wow.user.vo.request.LoginRequest;
+import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.response.LoginResponse;
 import com.wow.user.vo.response.LogoutResponse;
 import org.slf4j.Logger;
@@ -54,18 +54,18 @@ public class SessionServiceImpl implements SessionService {
     /**
      * 用户登录
      *
-     * @param loginRequest
+     * @param loginVo
      * @return
      */
-    public LoginResponse login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginVo loginVo) {
         LoginResponse loginResponse = new LoginResponse();
         EndUserSession endUserSession = null;
         //先检查数据库,看用户名和密码是否匹配
-        EndUser endUser = userService.authenticate(loginRequest.getUserName(), loginRequest.getPassword()).getEndUser();
+        EndUser endUser = userService.authenticate(loginVo.getUserName(), loginVo.getPassword()).getEndUser();
         if (endUser != null) { //验证成功
             //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
-            endUserSession = getSessionByUserIdAndChannel(endUser.getId(), loginRequest.getLoginChannel());
-            long loginIp = IpConvertUtil.ipToLong(loginRequest.getLoginIp());
+            endUserSession = getSessionByUserIdAndChannel(endUser.getId(), loginVo.getLoginChannel());
+            long loginIp = IpConvertUtil.ipToLong(loginVo.getLoginIp());
             Date now = new Date();
             //token生成算法,暂用UUID,可以替换
             String sessionToken = UUID.randomUUID().toString();
@@ -76,35 +76,35 @@ public class SessionServiceImpl implements SessionService {
                 endUserSession.setLastLoginIp(loginIp);
                 endUserSession.setLastRefreshTime(now);
                 endUserSession.setLastLoginTime(now);
-                endUserSession.setLoginChannel(loginRequest.getLoginChannel());
+                endUserSession.setLoginChannel(loginVo.getLoginChannel());
                 endUserSession.setLogoutTime(null);
                 endUserSession.setSessionToken(sessionToken);
-                endUserSession.setUserAgentInfo(loginRequest.getUserAgent());
+                endUserSession.setUserAgentInfo(loginVo.getUserAgent());
                 endUserSessionMapper.insertSelective(endUserSession);
             } else {
                 endUserSession.setIsLogout(false);
                 endUserSession.setLastLoginIp(loginIp);
                 endUserSession.setLastRefreshTime(now);
                 endUserSession.setLastLoginTime(now);
-                endUserSession.setLoginChannel(loginRequest.getLoginChannel());
+                endUserSession.setLoginChannel(loginVo.getLoginChannel());
                 endUserSession.setLogoutTime(null);
                 endUserSession.setSessionToken(sessionToken);
-                endUserSession.setUserAgentInfo(loginRequest.getUserAgent());
+                endUserSession.setUserAgentInfo(loginVo.getUserAgent());
                 //此处不用updateByPrimaryKeySelective,因为setLogoutTime(null)
                 endUserSessionMapper.updateByPrimaryKey(endUserSession);
             }
 
             //记录登录日志
             EndUserLoginLog endUserLoginLog = new EndUserLoginLog();
-            endUserLoginLog.setUserAgentInfo(loginRequest.getUserAgent());
-            endUserLoginLog.setLoginChannel(loginRequest.getLoginChannel());
+            endUserLoginLog.setUserAgentInfo(loginVo.getUserAgent());
+            endUserLoginLog.setLoginChannel(loginVo.getLoginChannel());
             endUserLoginLog.setEndUserId(endUser.getId());
             endUserLoginLog.setLoginIp(loginIp);
             endUserLoginLog.setLoginTime(now);
             endUserLoginLog.setSessionToken(sessionToken);
-            endUserLoginLogMapper.insert(endUserLoginLog);
+            endUserLoginLogMapper.insertSelective(endUserLoginLog);
 
-//            loginResponse.setUserName(loginRequest.getUserName());
+//            loginResponse.setUserName(loginVo.getUserName());
 //            loginResponse.setValidUser(true);
 //            loginResponse.setErrorMsg(null);
             loginResponse.setEndUserSession(endUserSession);
@@ -112,7 +112,7 @@ public class SessionServiceImpl implements SessionService {
 
             loginResponse.setResCode("40101");
             loginResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40101"));
-//            loginResponse.setUserName(loginRequest.getUserName());
+//            loginResponse.setUserName(loginVo.getUserName());
 //            loginResponse.setValidUser(false);
 //            loginResponse.setErrorMsg("用户名和密码不匹配,请重新输入");
 //            loginResponse.setEndUserSession(null);

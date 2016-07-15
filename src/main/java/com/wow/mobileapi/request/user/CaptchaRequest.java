@@ -1,11 +1,11 @@
-package com.wow.user.vo.request;
+package com.wow.mobileapi.request.user;
 
 import com.wow.common.request.ApiRequest;
 
 /**
  * Created by zhengzhiqing on 16/7/6.
  */
-public class WechatBindQueryRequest extends ApiRequest {
+public class CaptchaRequest extends ApiRequest {
 
     private String mobile;
 

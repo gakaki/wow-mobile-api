@@ -39,7 +39,7 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     public int createProductWarehouseStock(ProductWarehouseStock productWarehouseStock) {
-        return productWarehouseStockMapper.insert(productWarehouseStock);
+        return productWarehouseStockMapper.insertSelective(productWarehouseStock);
     }
 
     /**
@@ -49,7 +49,7 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     public int createProductVirtualStock(ProductVirtualStock productVirtualStock) {
-        return productVirtualStockMapper.insert(productVirtualStock);
+        return productVirtualStockMapper.insertSelective(productVirtualStock);
     }
 
     /**
@@ -184,7 +184,7 @@ public class StockServiceImpl implements StockService {
      */
     @Override
     public int createWarehouse(Warehouse warehouse) {
-        return warehouseMapper.insert(warehouse);
+        return warehouseMapper.insertSelective(warehouse);
     }
 
     /**

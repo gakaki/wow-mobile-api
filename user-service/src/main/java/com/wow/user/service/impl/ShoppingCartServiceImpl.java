@@ -22,7 +22,6 @@ import com.wow.user.model.ShoppingCart;
 import com.wow.user.model.ShoppingCartExample;
 import com.wow.user.service.ShoppingCartService;
 import com.wow.user.vo.ShoppingCartResultVo;
-import com.wow.user.vo.request.ShoppingCartRequest;
 import com.wow.user.vo.response.ShoppingCartResponse;
 
 /**
@@ -78,7 +77,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             //否则将该产品加入到用户购物车表
             shoppingCart = wrapShoppingCart(request);
 
-            shoppingCartMapper.insert(shoppingCart);
+            shoppingCartMapper.insertSelective(shoppingCart);
         }
 
         return response;

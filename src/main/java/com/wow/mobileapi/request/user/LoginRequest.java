@@ -1,4 +1,4 @@
-package com.wow.user.vo.request;
+package com.wow.mobileapi.request.user;
 
 import com.wow.common.request.ApiRequest;
 

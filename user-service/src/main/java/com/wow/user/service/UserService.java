@@ -1,7 +1,6 @@
 package com.wow.user.service;
 
 import com.wow.user.model.*;
-import com.wow.user.vo.request.RegisterRequest;
 import com.wow.user.vo.response.RegisterResponse;
 import com.wow.user.vo.response.*;
 
@@ -14,10 +13,11 @@ public interface UserService {
 
     /**
      * 用户注册
-     * @param registerRequest
+     * @param endUser
+     * @param captcha
      * @return
      */
-    RegisterResponse register(RegisterRequest registerRequest);
+    RegisterResponse register(EndUser endUser, String captcha);
 
     /**
      * 根据用户名判断是否已注册用户

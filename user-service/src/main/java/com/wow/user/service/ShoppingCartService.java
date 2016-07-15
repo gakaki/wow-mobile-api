@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.wow.common.response.CommonResponse;
 import com.wow.user.model.ShoppingCart;
-import com.wow.user.vo.request.ShoppingCartRequest;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
