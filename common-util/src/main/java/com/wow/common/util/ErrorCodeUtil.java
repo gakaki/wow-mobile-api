@@ -31,9 +31,10 @@ public class ErrorCodeUtil {
         PROPSPATHS.add("errorcode_order.properties");
         PROPSPATHS.add("errorcode_product.properties");
         PROPSPATHS.add("errorcode_user.properties");
-        PROPSPATHS.add("errorcode_attribute.properties");
-        PROPSPATHS.add("errorcode_attribute.properties");
-        PROPSPATHS.add("errorcode_attribute.properties");
+        PROPSPATHS.add("errorcode_marketing.properties");
+        PROPSPATHS.add("errorcode_page.properties");
+        PROPSPATHS.add("errorcode_price.properties");
+        PROPSPATHS.add("errorcode_stock.properties");
     }
 
     /**
