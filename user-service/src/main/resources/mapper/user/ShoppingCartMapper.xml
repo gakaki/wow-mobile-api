@@ -319,7 +319,7 @@
 	</update>
 	
 	<!-- 获取用户购物车信息列表明细 -->
-	<select id=queryByUserId   resultType="com.wow.user.vo.ShoppingCartResultVo"
+	<select id="queryByUserId"   resultType="com.wow.user.vo.ShoppingCartResultVo"
 		parameterType="com.wow.user.vo.request.ShoppingCartRequest">
 			SELECT 
 				  sc.id shoppingCartId,
