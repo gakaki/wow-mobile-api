@@ -328,7 +328,7 @@
 				  p.product_name productName,
 				  p.color color,
 				  p.spec spec,
-				  p.product_status,
+				  p.product_status productStatus,
 				  pp.sell_price sellPrice
 			FROM
 			  shopping_cart sc
@@ -336,7 +336,7 @@
 			    ON sc.product_id = p.id
 			  INNER JOIN product_price pp
 			    ON sc.product_id = pp.product_id
-			WHERE sc.is_deleted =#{isDeleted}
+			WHERE sc.is_deleted =false
 			  AND sc.end_user_id = #{endUserId}
 	</select>
 

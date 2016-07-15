@@ -6,7 +6,7 @@ import com.wow.order.model.Order;
 import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.vo.OrderVo;
-import com.wow.order.vo.response.OrderResponse;
+import com.wow.order.vo.response.OrderSettleResponse;
 
 /**
  * 订单服务
@@ -32,7 +32,7 @@ public interface OrderService {
      * @param orderId
      * @return
      */
-    OrderResponse queryOrderById(int orderId);
+    OrderSettleResponse queryOrderById(int orderId);
 
     /**
      * @param orderCode

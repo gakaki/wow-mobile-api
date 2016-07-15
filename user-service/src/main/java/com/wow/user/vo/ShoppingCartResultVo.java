@@ -3,7 +3,7 @@ package com.wow.user.vo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import com.wow.common.enums.ProductStatusEnum;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * 用户购物车列表
@@ -11,6 +11,7 @@ import com.wow.common.enums.ProductStatusEnum;
  * @author chenkaiwei
  * @version $Id: V1.0 2016年7月14日 下午4:28:55 Exp $
  */
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ShoppingCartResultVo implements Serializable{
     
     /**  */
@@ -21,6 +22,9 @@ public class ShoppingCartResultVo implements Serializable{
     
     //产品id
     private Integer productId;
+    
+    //产品库存数目
+    private Short productStock;
     
     //产品数量范围为1-127
     private Byte productQty;
@@ -38,12 +42,19 @@ public class ShoppingCartResultVo implements Serializable{
     private Byte productStatus;
     
     //产品状态名称
-    @SuppressWarnings("unused")
     private String productStatusName;
     
     //产品销售价格
     private BigDecimal sellPrice;
     
+    public Short getProductStock() {
+        return productStock;
+    }
+
+    public void setProductStock(Short productStock) {
+        this.productStock = productStock;
+    }
+
     public Integer getProductId() {
         return productId;
     }
@@ -53,7 +64,7 @@ public class ShoppingCartResultVo implements Serializable{
     }
 
     public String getProductStatusName() {
-        return ProductStatusEnum.get((int)productStatus);
+        return productStatusName;
     }
 
     public void setProductStatusName(String productStatusName) {
