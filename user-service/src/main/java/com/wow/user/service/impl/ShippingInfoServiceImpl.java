@@ -1,8 +1,11 @@
 package com.wow.user.service.impl;
 
+import com.wow.common.response.CommonResponse;
 import com.wow.user.mapper.ShippingInfoMapper;
 import com.wow.user.model.ShippingInfo;
 import com.wow.user.service.ShippingInfoService;
+import com.wow.user.vo.response.ShippingInfoListResponse;
+import com.wow.user.vo.response.ShippingInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,8 +30,10 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      * @return
      */
     @Override
-    public int createShippingInfo(ShippingInfo shippingInfo) {
-        return shippingInfoMapper.insert(shippingInfo);
+    public CommonResponse createShippingInfo(ShippingInfo shippingInfo) {
+        CommonResponse commonResponse = new CommonResponse();
+        shippingInfoMapper.insert(shippingInfo);
+        return commonResponse;
     }
 
     /**
@@ -38,8 +43,10 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      * @return
      */
     @Override
-    public int updateShippingInfo(ShippingInfo shippingInfo) {
-        return shippingInfoMapper.updateByPrimaryKeySelective(shippingInfo);
+    public CommonResponse updateShippingInfo(ShippingInfo shippingInfo) {
+        CommonResponse commonResponse = new CommonResponse();
+        shippingInfoMapper.updateByPrimaryKeySelective(shippingInfo);
+        return commonResponse;
     }
 
     /**
@@ -49,8 +56,10 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      * @return
      */
     @Override
-    public int deleteShippingInfo(int shippingInfoId) {
-        return shippingInfoMapper.deleteByPrimaryKey(shippingInfoId);
+    public CommonResponse deleteShippingInfo(int shippingInfoId) {
+        CommonResponse commonResponse = new CommonResponse();
+        shippingInfoMapper.deleteByPrimaryKey(shippingInfoId);
+        return commonResponse;
     }
 
     /**
@@ -61,8 +70,11 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      */
     @Override
     @Transactional(propagation= Propagation.SUPPORTS)
-    public List<ShippingInfo> getShippingInfoByUserId(int endUserId) {
-        return shippingInfoMapper.selectByUserId(endUserId);
+    public ShippingInfoListResponse getShippingInfoByUserId(int endUserId) {
+        ShippingInfoListResponse shippingInfoListResponse = new ShippingInfoListResponse();
+        List<ShippingInfo> shippingInfoList = shippingInfoMapper.selectByUserId(endUserId);
+        shippingInfoListResponse.setShippingInfoList(shippingInfoList);
+        return shippingInfoListResponse;
     }
 
     /**
@@ -71,7 +83,10 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      * @return
      */
     @Transactional(propagation= Propagation.SUPPORTS)
-    public ShippingInfo getDefaultShippingInfoByUserId(int endUserId) {
-        return shippingInfoMapper.selectDefault(endUserId);
+    public ShippingInfoResponse getDefaultShippingInfoByUserId(int endUserId) {
+        ShippingInfoResponse shippingInfoResponse = new ShippingInfoResponse();
+        ShippingInfo shippingInfo =  shippingInfoMapper.selectDefault(endUserId);
+        shippingInfoResponse.setShippingInfo(shippingInfo);
+        return shippingInfoResponse;
     }
 }
