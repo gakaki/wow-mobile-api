@@ -67,7 +67,7 @@ public class ProductGroupServiceImpl implements ProductGroupService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Product> getProductsInGroup(int groupId) {
         List<ProductGroup> list= getProductsGroupByGroupId(groupId);
         if(!list.isEmpty())

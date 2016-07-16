@@ -27,7 +27,7 @@ public class ProductSummaryServiceImpl implements ProductSummaryService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ProductSummary> getProductSummary(int productId) {
         ProductSummaryExample productSummaryExample=new ProductSummaryExample();
         ProductSummaryExample.Criteria criteria=productSummaryExample.createCriteria();

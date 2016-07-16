@@ -187,7 +187,7 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public AvailableStockResponse getAvailableStock(int productId) {
         AvailableStockResponse availableStockResponse = new AvailableStockResponse();
         AvailableStockVo availableStockVo = new AvailableStockVo();
@@ -224,7 +224,7 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public AvailableStocksResponse batchGetAvailableStock(List<Integer> productIds) {
 
         AvailableStocksResponse availableStocksResponse = new AvailableStocksResponse();
@@ -339,7 +339,7 @@ public class StockServiceImpl implements StockService {
 //     * @return
 //     */
 //    @Override
-//    @Transactional(propagation = Propagation.SUPPORTS)
+//    @Transactional(propagation = Propagation.NOT_SUPPORTED)
 //    public List<Integer> selectWarehouseByProductId(int productId) {
 //        return productWarehouseStockMapper.selectWarehouseByProductId(productId);
 //    }
@@ -350,7 +350,7 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public List<ProductVirtualStock> selectAllProductsWithFrozenVirtualStock() {
         return productVirtualStockMapper.selectAllProductsWithFrozenVirtualStock();
     }

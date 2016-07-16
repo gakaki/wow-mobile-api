@@ -118,7 +118,7 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ShippingInfoListResponse getShippingInfoByUserId(int endUserId) {
         ShippingInfoListResponse shippingInfoListResponse = new ShippingInfoListResponse();
 
@@ -141,7 +141,7 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      * @param endUserId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ShippingInfoResponse getDefaultShippingInfoByUserId(int endUserId) {
         ShippingInfoResponse shippingInfoResponse = new ShippingInfoResponse();
         ShippingInfoExample shippingInfoExample = new ShippingInfoExample();

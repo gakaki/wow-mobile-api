@@ -1,11 +1,17 @@
 package com.wow.user.service.impl;
 
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
 import com.wow.user.constant.ThirdPartyPlatformType;
-import com.wow.user.mapper.EndUserLoginLogMapper;
 import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.EndUserSessionMapper;
-import com.wow.user.model.*;
+import com.wow.user.model.EndUser;
+import com.wow.user.model.EndUserLoginLog;
+import com.wow.user.model.EndUserSession;
+import com.wow.user.model.EndUserSessionExample;
+import com.wow.user.service.LoginLogService;
 import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.util.IpConvertUtil;
@@ -14,6 +20,7 @@ import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
 import com.wow.user.vo.response.LogoutResponse;
+import com.wow.user.vo.response.TokenValidateResponse;
 import com.wow.user.vo.response.WechatBindStatusResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +50,10 @@ public class SessionServiceImpl implements SessionService {
     private EndUserSessionMapper endUserSessionMapper;
 
     @Autowired
-    private EndUserLoginLogMapper endUserLoginLogMapper;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    private LoginLogService loginLogService;
 
     @Value("${session.expirationTime}")
     private long sessionExpirationTime;
@@ -61,16 +68,15 @@ public class SessionServiceImpl implements SessionService {
         LoginResponse loginResponse = new LoginResponse();
         LoginResponseVo loginResponseVo = new LoginResponseVo();
         EndUserSession endUserSession = null;
-        //先检查数据库,看用户名和密码是否匹配
+        //先检查数据库,看手机号和密码是否匹配
         EndUser endUser = userService.authenticate(loginVo.getMobile(), loginVo.getPassword()).getEndUser();
         if (endUser != null) { //验证成功
-            commonLogin(endUserSession, loginVo, endUser.getId(),null);
+            saveOrUpdateSession(endUserSession, loginVo, endUser.getId(),null);
             loginResponseVo.setSessionToken(endUserSession.getSessionToken());
             loginResponseVo.setNickName(endUser.getNickName());
             loginResponse.setLoginResponseVo(loginResponseVo);
         } else {
-            loginResponse.setResCode("40101");
-            loginResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40101"));
+            ErrorResponseUtil.setErrorResponse(loginResponse,"40101");
         }
         return loginResponse;
     }
@@ -105,7 +111,7 @@ public class SessionServiceImpl implements SessionService {
                     loginVo.setLoginChannel(thirdPartyLoginVo.getLoginChannel());
                     loginVo.setMobile(statusResponse.getWechatBindStatusVo().getMobile());
                     loginVo.setUserAgent(thirdPartyLoginVo.getUserAgent());
-                    commonLogin(endUserSession, loginVo,
+                    saveOrUpdateSession(endUserSession, loginVo,
                             statusResponse.getWechatBindStatusVo().getEndUserId(),thirdPartyPlatformType);
                     loginResponseVo.setNickName(statusResponse.getWechatBindStatusVo().getNickName());
                     loginResponseVo.setSessionToken(endUserSession.getSessionToken());
@@ -120,14 +126,14 @@ public class SessionServiceImpl implements SessionService {
     }
 
     /**
-     *
+     * 创建或更新会话信息,记录登录日志
      * @param endUserSession
      * @param loginVo
      * @param endUserId
      * @param thirdPartyPlatformType - 第三方登录平台(如微信,QQ,微博等)
      */
-    private void commonLogin(EndUserSession endUserSession, LoginVo loginVo,
-                             int endUserId, Integer thirdPartyPlatformType) {
+    private void saveOrUpdateSession(EndUserSession endUserSession, LoginVo loginVo,
+                                     int endUserId, Integer thirdPartyPlatformType) {
         endUserSession = getSessionByUserIdAndChannel(endUserId, loginVo.getLoginChannel());
         long loginIp = IpConvertUtil.ipToLong(loginVo.getLoginIp());
         Date now = new Date();
@@ -169,7 +175,7 @@ public class SessionServiceImpl implements SessionService {
         if (thirdPartyPlatformType != null) {
             endUserLoginLog.setThirdPartyPlatformType(thirdPartyPlatformType.byteValue());
         }
-        endUserLoginLogMapper.insertSelective(endUserLoginLog);
+        loginLogService.addLoginLog(endUserLoginLog);
     }
 
     /**
@@ -179,18 +185,16 @@ public class SessionServiceImpl implements SessionService {
      * @param loginChannel
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
-    public EndUserSession getSessionByUserIdAndChannel (int userId, byte loginChannel) {
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    private EndUserSession getSessionByUserIdAndChannel (int userId, byte loginChannel) {
         EndUserSession endUserSession = null;
         EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
         EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
         criteria.andEndUserIdEqualTo(userId);
         criteria.andLoginChannelEqualTo(loginChannel);
         List<EndUserSession> endUserSessions = endUserSessionMapper.selectByExample(endUserSessionExample);
-        if (endUserSessions != null && endUserSessions.size()==1) {
+        if (CollectionUtil.isNotEmpty(endUserSessions)) {
             endUserSession = endUserSessions.get(0);
-        } else if (endUserSessions.size() > 1) {
-            //异常,不应该有多条记录
         }
         return endUserSession;
     }
@@ -201,7 +205,7 @@ public class SessionServiceImpl implements SessionService {
      * @param endUserSession
      * @return
      */
-    private int refreshSession(EndUserSession endUserSession) {
+    private void refreshSession(EndUserSession endUserSession) {
         EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
         EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
         criteria.andEndUserIdEqualTo(endUserSession.getEndUserId());
@@ -209,22 +213,10 @@ public class SessionServiceImpl implements SessionService {
         criteria.andIsLogoutEqualTo(false);
         criteria.andIsActiveEqualTo(true);
         endUserSession.setLastRefreshTime(new Date());
-        return endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
+        endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
     }
 
-    /**
-     * 查询用户登录日志
-     *
-     * @param endUserId
-     * @return
-     */
-    @Transactional(propagation= Propagation.SUPPORTS)
-    public List<EndUserLoginLog> getLoginLogsByUserId(int endUserId) {
-        EndUserLoginLogExample endUserLoginLogExample = new EndUserLoginLogExample();
-        EndUserLoginLogExample.Criteria criteria = endUserLoginLogExample.createCriteria();
-        criteria.andEndUserIdEqualTo(endUserId);
-        return endUserLoginLogMapper.selectByExample(endUserLoginLogExample);
-    }
+
 
     /**
      * 用户登出
@@ -254,22 +246,25 @@ public class SessionServiceImpl implements SessionService {
      * @return
      */
     @Override
-    public boolean isValidSessionToken(String sessionToken, byte loginChannel) {
-        logger.info("check whether is valid session token:" + sessionToken + ", loginChannel:" + loginChannel);
+    public TokenValidateResponse isValidSessionToken(String sessionToken, byte loginChannel) {
+        TokenValidateResponse tokenValidateResponse = new TokenValidateResponse();
         boolean isValid = false;
+        Integer endUserId = null;
         long currentTime = System.currentTimeMillis();
         Date mustRefreshAfter = new Date(currentTime - sessionExpirationTime);
         EndUserSession endUserSession = getValidUserSessionBySessionToken(
                 sessionToken, loginChannel, mustRefreshAfter);
-        logger.info("endUserSession:" + endUserSession);
         if (endUserSession != null && endUserSession.getId() != null) {
             isValid = true;
+            endUserId = endUserSession.getEndUserId();
             //刷新过期时间,不是每次都刷新,仅仅在当前时间与上次刷新时间之间间隔 < 过期时间的25%处刷新
             if (currentTime - endUserSession.getLastRefreshTime().getTime() < sessionExpirationTime*0.25) {
                 refreshSession(endUserSession);
             }
         }
-        return isValid;
+        tokenValidateResponse.setValid(isValid);
+        tokenValidateResponse.setEndUserId(endUserId);
+        return tokenValidateResponse;
     }
 
     /**
@@ -308,7 +303,8 @@ public class SessionServiceImpl implements SessionService {
      * @return
      */
     @Override
-    public int invalidateSessionToken(int endUserId) {
+    public CommonResponse invalidateSessionToken(int endUserId) {
+        CommonResponse commonResponse = new CommonResponse();
         EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
         EndUserSessionExample.Criteria criteria=endUserSessionExample.createCriteria();
         criteria.andIdEqualTo(endUserId);
@@ -317,7 +313,7 @@ public class SessionServiceImpl implements SessionService {
             endUserSession.setIsActive(false);
             endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
         }
-        return endUserSessions.size();
+        return commonResponse;
     }
 
     /**

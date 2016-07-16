@@ -1,13 +1,12 @@
 package com.wow.user.service;
 
-import com.wow.user.model.EndUserLoginLog;
+import com.wow.common.response.CommonResponse;
 import com.wow.user.model.EndUserSession;
 import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
 import com.wow.user.vo.response.LogoutResponse;
-
-import java.util.List;
+import com.wow.user.vo.response.TokenValidateResponse;
 
 /**
  * Created by zhengzhiqing on 16/6/16.
@@ -30,23 +29,6 @@ public interface SessionService {
     LoginResponse thirdPartyLogin(ThirdPartyLoginVo thirdPartyLoginVo);
 
     /**
-     * 根据userId和登录渠道查询会话
-     *
-     * @param userId
-     * @param loginChannel
-     * @return
-     */
-    EndUserSession getSessionByUserIdAndChannel(int userId, byte loginChannel);
-
-    /**
-     * 查询用户登录日志
-     *
-     * @param endUserId
-     * @return
-     */
-    List<EndUserLoginLog> getLoginLogsByUserId(int endUserId);
-
-    /**
      * 用户登出
      *
      * @param endUserId
@@ -60,13 +42,13 @@ public interface SessionService {
      * @param loginChannel
      * @return
      */
-    boolean isValidSessionToken(String sessionToken, byte loginChannel);
+    TokenValidateResponse isValidSessionToken(String sessionToken, byte loginChannel);
 
     /**
      * 使会话失效 - 常用在修改密码之后
      * @param endUserId
      * @return
      */
-    int invalidateSessionToken(int endUserId);
+    CommonResponse invalidateSessionToken(int endUserId);
 
 }

@@ -58,7 +58,7 @@ public class PageConfigServiceImpl implements PageConfigService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     @Cacheable(value = "PageCache",key="'BANNERS_IN_PAGE_TYPE_'+#pageType")
     public PageBannerResponse getBannersByPageType(int pageType) {
         PageBannerResponse pageBannerResponse = new PageBannerResponse();
@@ -78,7 +78,7 @@ public class PageConfigServiceImpl implements PageConfigService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     @Cacheable(value = "PageCache",key="'SCENES_IN_PAGE_TYPE_'+#pageType")
     public PageSceneResponse getScenesByPageType(int pageType) {
         PageSceneResponse pageSceneResponse = new PageSceneResponse();
@@ -105,7 +105,7 @@ public class PageConfigServiceImpl implements PageConfigService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     @Cacheable(value = "PageCache",key="'TOPICS_IN_PAGE_TYPE_'+#pageType")
     public PageTopicResponse getTopicsByPageType(int pageType) {
         PageTopicResponse pageTopicResponse = new PageTopicResponse();

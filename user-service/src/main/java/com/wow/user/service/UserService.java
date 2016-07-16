@@ -1,8 +1,12 @@
 package com.wow.user.service;
 
-import com.wow.user.model.*;
+import com.wow.common.response.CommonResponse;
+import com.wow.user.model.EndUser;
+import com.wow.user.model.EndUserWechat;
 import com.wow.user.vo.response.RegisterResponse;
-import com.wow.user.vo.response.*;
+import com.wow.user.vo.response.UserCheckResponse;
+import com.wow.user.vo.response.UserResponse;
+import com.wow.user.vo.response.WechatBindStatusResponse;
 
 import java.util.List;
 
@@ -19,12 +23,12 @@ public interface UserService {
      */
     RegisterResponse register(EndUser endUser, String captcha);
 
-    /**
-     * 根据用户名判断是否已注册用户
-     * @param userName
-     * @return
-     */
-    UserCheckResponse isExistedUserByUserName(String userName);
+//    /**
+//     * 根据用户名判断是否已注册用户
+//     * @param userName
+//     * @return
+//     */
+//    UserCheckResponse isExistedUserByUserName(String userName);
 
     /**
      * 根据昵称判断是否已注册用户
@@ -66,14 +70,7 @@ public interface UserService {
      * @param endUser
      * @return
      */
-    UserUpdateResponse updateEndUser(EndUser endUser);
-
-    /**
-     * 获取验证码
-     * @param mobile
-     * @return 验证码
-     */
-    CaptchaResponse sendCaptcha(String mobile);
+    CommonResponse updateEndUser(EndUser endUser);
 
     /**
      * 用户重置密码
@@ -82,7 +79,7 @@ public interface UserService {
      * @param newPwd
      * @return
      */
-    ResetPwdResponse resetPassword(String mobile, String captcha, String newPwd);
+    CommonResponse resetPassword(String mobile, String captcha, String newPwd);
 
     /**
      * 根据Id获取用户信息
@@ -133,35 +130,4 @@ public interface UserService {
      */
     UserResponse authenticate(String mobile, String password);
 
-    //table: end_user_share_brand
-
-    /**
-     * 用户分享品牌
-     *
-     * @param endUserShareBrand
-     * @return
-     */
-    int shareBrand(EndUserShareBrand endUserShareBrand);
-    //table: end_user_share_designer
-
-    /**
-     * 用户分享设计师
-     *
-     * @param endUserShareDesigner
-     * @return
-     */
-    int shareDesigner(EndUserShareDesigner endUserShareDesigner);
-    //table: end_user_share_product
-
-    /**
-     * 用户分享设计师
-     *
-     * @param endUserShareProduct
-     * @return
-     */
-    int shareProduct(EndUserShareProduct endUserShareProduct);
-
-    //table: end_user_share_scene
-    //用户分享场景
-    int shareScene(EndUserShareScene endUserShareScene);
 }

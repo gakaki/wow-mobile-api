@@ -75,7 +75,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ProductSerial> getProductSerials(int productId) {
         ProductSerialExample productSerialExample=new ProductSerialExample();
         ProductSerialExample.Criteria criteria=productSerialExample.createCriteria();
@@ -140,7 +140,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductSerial getPrimarySubProductOfProductSerial(int productId) {
         return  getProductSerials(productId).stream().filter(o->o.getIsPrimary()==true).findAny().get();
     }

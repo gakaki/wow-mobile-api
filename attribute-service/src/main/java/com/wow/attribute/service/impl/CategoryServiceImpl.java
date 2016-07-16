@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param categoryId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public CategoryResponse getCategoryById(int categoryId) {
         CategoryResponse categoryResponse = new CategoryResponse();
         Category category =  categoryMapper.selectByPrimaryKey(categoryId);
@@ -89,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param categoryId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public CategoryListResponse getSubCategory(int categoryId) {
         CategoryListResponse categoryListResponse = new CategoryListResponse();
         CategoryExample categoryExample = new CategoryExample();
@@ -112,7 +112,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param categoryId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public CategoryResponse getParentCategory(int categoryId) {
         CategoryResponse categoryResponse = new CategoryResponse();
         Category category= categoryMapper.selectByPrimaryKey(categoryId);
@@ -131,7 +131,7 @@ public class CategoryServiceImpl implements CategoryService {
      *
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public CategoryListResponse getFirstLevelCategory() {
         CategoryListResponse categoryListResponse =  getSubCategory(CATEGORY_LEVEL_FIRST);
         if ("40402".equals(categoryListResponse.getResCode())) {

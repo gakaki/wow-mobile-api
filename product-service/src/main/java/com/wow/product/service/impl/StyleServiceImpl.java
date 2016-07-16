@@ -38,14 +38,14 @@ public class StyleServiceImpl implements StyleService{
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Style getStyleById(Integer styleId) {
 
            return styleMapper.selectByPrimaryKey(styleId);
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Style getStyleByName(String styleName) throws Exception {
         StyleExample example=new StyleExample();
         example.or().andStyleNameEqualTo(styleName).andIsDeletedEqualTo(false);
@@ -53,7 +53,7 @@ public class StyleServiceImpl implements StyleService{
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Style> getAllStyles() {
         return styleMapper.selectAll();
     }

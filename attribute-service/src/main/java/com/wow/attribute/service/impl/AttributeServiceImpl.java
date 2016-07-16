@@ -3,11 +3,7 @@ package com.wow.attribute.service.impl;
 
 import com.wow.attribute.mapper.AttributeMapper;
 import com.wow.attribute.mapper.AttributeValueMapper;
-import com.wow.attribute.model.Attribute;
-import com.wow.attribute.model.AttributeExample;
-import com.wow.attribute.model.AttributeValue;
-import com.wow.attribute.model.Category;
-import com.wow.attribute.model.CategoryAttribute;
+import com.wow.attribute.model.*;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryAttributeService;
 import com.wow.attribute.service.CategoryService;
@@ -72,7 +68,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @param attributeId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Attribute getAttributeById(int attributeId) {
         return attributeMapper.selectByPrimaryKey(attributeId);
     }
@@ -83,7 +79,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @param attributeName
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Attribute getAttributeByName(String attributeName) {
         return attributeMapper.selectAttributeByName(attributeName);
     }
@@ -93,7 +89,7 @@ public class AttributeServiceImpl implements AttributeService {
      *
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Attribute> getAllAttributes() {
         return attributeMapper.selectAll();
     }
@@ -186,7 +182,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @param categoryId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Attribute> getAttributesInCategory(int categoryId) {
         CategoryResponse categoryResponse=categoryService.getCategoryById(categoryId);
         Category category = categoryResponse.getCategory();
@@ -233,7 +229,7 @@ public class AttributeServiceImpl implements AttributeService {
      * @param attributeId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<AttributeValue> getAttributeValues(int attributeId) {
         return attributeValueMapper.selectAll();
     }

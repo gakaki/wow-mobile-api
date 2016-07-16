@@ -56,13 +56,13 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Topic getTopicById(int topicId) {
         return topicMapper.selectByPrimaryKey(topicId);
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Topic getTopicByName(String topicName) throws Exception{
 
             TopicExample topicExample=new TopicExample();
@@ -71,7 +71,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Topic> getAllTopics() {
         return topicMapper.selectAll();
     }
@@ -100,7 +100,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ProductShortListInTopic> getProductShortListInTopic(int topicId) {
         ProductShortListInTopicExample productShortListInTopicExample=new ProductShortListInTopicExample();
         productShortListInTopicExample.or().andIsDeletedEqualTo(false).andTopicIdEqualTo(topicId);

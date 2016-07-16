@@ -2,18 +2,25 @@ package com.wow.mobileapi.controller;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.user.*;
+import com.wow.user.constant.CaptchaTemplate;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserWechat;
+import com.wow.user.service.CaptchaService;
 import com.wow.user.service.UserService;
-import com.wow.user.vo.response.*;
+import com.wow.user.vo.response.RegisterResponse;
+import com.wow.user.vo.response.UserCheckResponse;
+import com.wow.user.vo.response.UserResponse;
+import com.wow.user.vo.response.WechatBindStatusResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +32,12 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CaptchaService captchaService;
+
+    @Value("${redis.captcha.register.timeout}")
+    private long registerCaptchaTimeout;
 
     /**
      * 根据ID查找用户信息
@@ -136,12 +149,10 @@ public class UserController extends BaseController {
         EndUser endUser = new EndUser();
         BeanUtil.copyProperties(userUpdateRequest,endUser);
         try {
-            UserUpdateResponse userUpdateResponse = userService.updateEndUser(endUser);
+            CommonResponse commonResponse = userService.updateEndUser(endUser);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(userUpdateResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, userUpdateResponse);
-            } else {
-                apiResponse.setData(userUpdateResponse.isSuccess());
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
             logger.error("修改用户发生错误---" + e);
@@ -249,12 +260,11 @@ public class UserController extends BaseController {
         }
 
         try {
-            CaptchaResponse captchaResponse = userService.sendCaptcha(captchaRequest.getMobile());
+            CommonResponse commonResponse = captchaService.sendCaptcha(
+                    captchaRequest.getMobile(), CaptchaTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(captchaResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, captchaResponse);
-            } else {
-                apiResponse.setData(captchaResponse.getCaptcha());
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
             logger.error("发送验证码发生错误---" + e);
@@ -340,5 +350,43 @@ public class UserController extends BaseController {
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
+    }
+
+    /**
+     * 修改用户信息
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/user/reset-password", method = RequestMethod.POST)
+    public ApiResponse resetPassword(ApiRequest apiRequest) {
+        ApiResponse apiResponse = new ApiResponse();
+        logger.info("paramJson=" + apiRequest.getParamJson());
+        ResetPwdRequest resetPwdRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ResetPwdRequest.class);
+        //判断json格式参数是否有误
+        if (resetPwdRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(resetPwdRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        try {
+            CommonResponse commonResponse = userService.resetPassword(
+                    resetPwdRequest.getMobile(),resetPwdRequest.getCaptcha(),resetPwdRequest.getNewPwd());
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
+            }
+        } catch (Exception e) {
+            logger.error("重置密码发生错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+
     }
 }

@@ -267,7 +267,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      * @return
      */
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public List<ShoppingCart> queryShoppingCart(int endUserId) {
         return shoppingCartMapper.selectByEndUser(endUserId);
     }

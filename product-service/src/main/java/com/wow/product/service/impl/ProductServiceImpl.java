@@ -79,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
      * @param productId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Product getProductById(int productId) {
         return productMapper.selectByPrimaryKey(productId);
     }
@@ -137,7 +137,7 @@ public class ProductServiceImpl implements ProductService {
      * @param productId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ProductImage> getProductImages(int productId) {
         ProductImageExample productImageExample=new ProductImageExample();
         ProductImageExample.Criteria criteria=productImageExample.createCriteria();
@@ -184,7 +184,7 @@ public class ProductServiceImpl implements ProductService {
      * @param product
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Attribute> getAttributesInProduct(Product product){
         if(product==null)
             return null;
@@ -225,7 +225,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Material> getMaterialInProduct(Integer productId) {
 
             ProductMaterialExample productMaterialExample=new ProductMaterialExample();

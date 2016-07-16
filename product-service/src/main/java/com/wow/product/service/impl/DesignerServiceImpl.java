@@ -35,7 +35,7 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Designer getDesignerById(int designerId) {
         return designerMapper.selectByPrimaryKey(designerId);
     }
@@ -46,7 +46,7 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Designer> getDesignersByCountry(String country) {
         DesignerExample designerExample=new DesignerExample();
         designerExample.or().andIsDeletedEqualTo(false).andDesignerCountryEqualTo(country);
@@ -66,7 +66,7 @@ public class DesignerServiceImpl implements DesignerService {
         return designerMapper.selectByExample(designerExample);
     }
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Designer> getDesignersByStyle(String style) {
         DesignerExample designerExample=new DesignerExample();
         designerExample.or().andIsDeletedEqualTo(false).andDesignerStyleEqualTo(style);
@@ -74,7 +74,7 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Product> getProductsByDesigner(int designerId) {
         productDesignerExample=new ProductDesignerExample();
         productDesignerExample.or().andDesignerIdEqualTo(designerId).andIsDeletedEqualTo(false);
@@ -83,7 +83,7 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Product> getProductsByDesigner(String designerName) {
         Designer designer= getDesignersByName(designerName).stream().findAny().get();
         if(designer==null)
@@ -119,7 +119,7 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Designer> getDesignersByProduct(Product product) {
         if(product!=null) {
             productDesignerExample=new ProductDesignerExample();
@@ -141,7 +141,7 @@ public class DesignerServiceImpl implements DesignerService {
         return  null;
     }
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Designer getPrimaryDesignerByProduct(Product product) throws Exception {
               return getDesignersByProduct(product).get(0);
     }

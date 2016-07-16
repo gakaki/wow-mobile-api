@@ -39,13 +39,13 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Warehouse getWarehouseById(Integer warehouseId) {
             return warehouseMapper.selectByPrimaryKey(warehouseId);
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Warehouse getWarehouseByName(String warehouseName) throws Exception {
             WarehouseExample warehouseExample=new WarehouseExample();
             warehouseExample.or().andIsDeletedEqualTo(false).andWarehouseNameEqualTo(warehouseName);
@@ -55,7 +55,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Warehouse> getAllWarehouses() {
         return warehouseMapper.selectAll();
     }

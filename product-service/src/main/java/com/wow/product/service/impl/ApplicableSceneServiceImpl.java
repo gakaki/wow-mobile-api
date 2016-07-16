@@ -47,12 +47,12 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ApplicableScene getApplicableSceneById(int applicableSceneId) {
         return applicableSceneMapper.selectByPrimaryKey(applicableSceneId);
     }
 
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ApplicableScene> getApplicableSceneById(List<Integer> applicableSceneIds)
     {
         ApplicableSceneExample applicableSceneExample=new ApplicableSceneExample();
@@ -61,7 +61,7 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ApplicableScene getApplicableSceneByName(String applicableSceneName) throws Exception {
         ApplicableSceneExample applicableSceneExample=new ApplicableSceneExample();
         applicableSceneExample.or().andIsDeletedEqualTo(false).andApplicableSceneNameEqualTo(applicableSceneName);
@@ -69,13 +69,13 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ApplicableScene> getAllApplicableScene() {
         return applicableSceneMapper.selectAll();
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ApplicableScene> getApplicableSceneInProduct(int productId) {
         ProductApplicableSceneExample productApplicableSceneExample=new ProductApplicableSceneExample();
         productApplicableSceneExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo(productId);

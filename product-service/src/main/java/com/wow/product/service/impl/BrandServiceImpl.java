@@ -58,12 +58,12 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Brand getBrandById(int brandId) {
         return brandMapper.selectByPrimaryKey(brandId);
     }
 
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Brand> getBrandById(List<Integer> brandIds)
     {
         BrandExample brandExample=new BrandExample();
@@ -76,7 +76,7 @@ public class BrandServiceImpl implements BrandService {
      * @param firstLetter
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Brand> getBrandsByFirstLetter(String firstLetter) {
         BrandExample brandExample=new BrandExample();
         brandExample.or().andBrandNameFirstLetterEqualTo(firstLetter);
@@ -88,7 +88,7 @@ public class BrandServiceImpl implements BrandService {
      *
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Brand> getAllBrands() {
         return brandMapper.selectAll();
     }
@@ -99,7 +99,7 @@ public class BrandServiceImpl implements BrandService {
      * @param brand
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Product> getProductsByBrand(Brand brand) {
         if(brand!=null)
         return productService.getProductByBrandId(brand.getId());
@@ -112,7 +112,7 @@ public class BrandServiceImpl implements BrandService {
      * @param brand
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Designer> getDesignersByBrand(Brand brand) throws Exception {
         List<Product> products=getProductsByBrand(brand);
         List<Designer> designers=new ArrayList<>();

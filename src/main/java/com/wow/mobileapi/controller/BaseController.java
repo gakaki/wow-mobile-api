@@ -3,7 +3,15 @@ package com.wow.mobileapi.controller;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.mobileapi.constant.ApiConstant;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
+import com.wow.user.service.SessionService;
+import com.wow.user.vo.response.TokenValidateResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * controller基类 用以处理controller中的一些通用方法
@@ -12,6 +20,11 @@ import com.wow.mobileapi.constant.ErrorCodeConstant;
  * @version $Id: V1.0 2016年7月12日 上午10:56:17 Exp $
  */
 public class BaseController {
+
+    private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
+
+    @Autowired
+    private SessionService sessionService;
 
     /**
      * 
@@ -73,6 +86,30 @@ public class BaseController {
     public void removeDuplicateResponse(CommonResponse commonResponse) {
         commonResponse.setResCode(null);
         commonResponse.setResMsg(null);
+    }
+
+    /**
+     * 根据token和channel
+     * @param request
+     * @return 如果session依然有效,返回对应的end_user_id,否则返回null
+     */
+    public Integer getUserIdByTokenChannel(HttpServletRequest request) {
+        Integer endUserId = null;
+        try {
+            String token = request.getParameter(ApiConstant.REQUEST_PARAMETER_TOKEN);
+            byte channel = Byte.valueOf(request.getParameter(ApiConstant.REQUEST_PARAMETER_CHANNEL));
+            //check whether token is valid, by search it from redis or mysql
+            TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(token,channel);
+            if (tokenValidateResponse==null || !tokenValidateResponse.isValid()) {
+                logger.warn("session token is invalid:" + token);
+            } else {
+                endUserId = tokenValidateResponse.getEndUserId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("查询Token发生错误---" + e);
+        }
+        return endUserId;
     }
 
 }
