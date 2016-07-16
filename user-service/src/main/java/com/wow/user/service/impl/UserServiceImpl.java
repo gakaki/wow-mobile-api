@@ -11,6 +11,7 @@ import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.thirdparty.SmsSender;
 import com.wow.user.util.PasswordUtil;
+import com.wow.user.vo.WechatBindStatusVo;
 import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -189,7 +190,46 @@ public class UserServiceImpl implements UserService {
         return wechatBindStatusResponse;
     }
 
-
+    /**
+     * 判断微信号是否已经绑定了一个账号
+     *
+     * @param wechatId
+     * @return
+     */
+    @Override
+    public WechatBindStatusResponse checkIfWechatIdBindToUserId(String wechatId) {
+        WechatBindStatusResponse wechatBindStatusResponse = new WechatBindStatusResponse();
+        WechatBindStatusVo wechatBindStatusVo = endUserWechatMapper.selectByWechatId(wechatId);
+        if (wechatBindStatusVo == null) {
+            wechatBindStatusVo = new WechatBindStatusVo();
+            wechatBindStatusVo.setBinded(false);
+        } else if (wechatBindStatusVo.isBinded()) {
+            wechatBindStatusVo.setRegistered(true);
+        }
+        wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+//        EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
+//        EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
+//        criteria.andWechatIdEqualTo(String.valueOf(wechatId));
+//        criteria.andEndUserIdIsNotNull();
+//        criteria.andIsBindEqualTo(true);
+//        List<EndUserWechat> endUserWechatList = endUserWechatMapper.selectByExample(endUserWechatExample);
+//        if (CollectionUtil.isEmpty(endUserWechatList)) {
+//            wechatBindStatusVo.setBinded(false);
+//            wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+//        } else if (endUserWechatList.size() > 1) {
+//            wechatBindStatusResponse.setResCode("50105");
+//            wechatBindStatusResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50105"));
+//        } else {
+//            EndUserWechat endUserWechat = endUserWechatList.get(0);
+//            wechatBindStatusVo.setBinded(true);
+//            wechatBindStatusVo.setMobile(endUserWechat.getMobile());
+//            wechatBindStatusVo.setRegistered(true);
+//            wechatBindStatusVo.setWechatId(String.valueOf(wechatId));
+//            wechatBindStatusVo.setEndUserId(endUserWechat.getEndUserId());
+//            wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+//        }
+        return wechatBindStatusResponse;
+    }
 
     /**
      * 用户信息更新

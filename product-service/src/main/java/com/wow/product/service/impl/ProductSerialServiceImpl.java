@@ -192,7 +192,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
                 }
                 serialResponse.setBanner(list);
             }
-            ProductPrice productPrice= priceService.queryProductPrice(productId);
+            ProductPrice productPrice= priceService.queryProductPrice(productId).getProductPrice();
             if(productPrice!=null)
             {
                 serialResponse.setSellPrice(productPrice.getSellPrice());

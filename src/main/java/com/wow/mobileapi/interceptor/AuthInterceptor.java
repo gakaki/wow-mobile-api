@@ -1,8 +1,8 @@
 package com.wow.mobileapi.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.wow.common.response.ApiResponse;
+import com.wow.mobileapi.constant.ApiConstant;
+import com.wow.user.service.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wow.common.response.ApiResponse;
-import com.wow.common.util.JsonUtil;
-import com.wow.mobileapi.constant.ApiConstant;
-import com.wow.mobileapi.util.ResponseUtil;
-import com.wow.user.service.SessionService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 拦截未登录的用户
@@ -25,8 +22,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
     @Autowired
     private SessionService sessionService;
-    @Autowired
-    private ResponseUtil responseUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request,

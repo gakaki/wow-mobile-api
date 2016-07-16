@@ -6,11 +6,14 @@ import com.wow.common.util.BeanUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.request.user.LoginByWechatRequest;
 import com.wow.mobileapi.request.user.LoginRequest;
 import com.wow.mobileapi.request.user.LogoutRequest;
 import com.wow.mobileapi.util.HttpRequestUtil;
+import com.wow.user.constant.ThirdPartyPlatformType;
 import com.wow.user.service.SessionService;
 import com.wow.user.vo.LoginVo;
+import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
 import com.wow.user.vo.response.LogoutResponse;
 import org.slf4j.Logger;
@@ -60,6 +63,7 @@ public class SessionController extends BaseController {
         LoginVo loginVo = new LoginVo();
         BeanUtil.copyProperties(loginRequest, loginVo);
         loginVo.setLoginIp(HttpRequestUtil.getIpAddr(request));
+        loginVo.setUserAgent(HttpRequestUtil.getUserAgent(request));
 
         try {
             LoginResponse loginResponse = sessionService.login(loginVo);
@@ -67,7 +71,53 @@ public class SessionController extends BaseController {
             if (!isServiceCallSuccess(loginResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, loginResponse);
             } else {
-                apiResponse.setData(loginResponse.getEndUserSession());
+                apiResponse.setData(loginResponse.getLoginResponseVo());
+            }
+        } catch (Exception e) {
+            logger.error("login发生错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+
+    }
+
+    /**
+     * 创建新的会话(登入)
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value="/v1/session/login/wechat", method = RequestMethod.POST)
+    public ApiResponse loginByWechat(ApiRequest apiRequest, HttpServletRequest request) {
+
+        ApiResponse apiResponse = new ApiResponse();
+        LoginByWechatRequest loginByWechatRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LoginByWechatRequest.class);
+        //判断json格式参数是否有误
+        if (loginByWechatRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(loginByWechatRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        ThirdPartyLoginVo thirdPartyLoginVo = new ThirdPartyLoginVo();
+        thirdPartyLoginVo.setThirdPartyPlatformType(ThirdPartyPlatformType.THIRD_PARTY_PLATFORM_WECHAT);
+        thirdPartyLoginVo.setThirdPartyPlatformUserId(loginByWechatRequest.getWechatId());
+        thirdPartyLoginVo.setLoginChannel(loginByWechatRequest.getLoginChannel());
+        thirdPartyLoginVo.setLoginIp(HttpRequestUtil.getIpAddr(request));
+        thirdPartyLoginVo.setUserAgent(HttpRequestUtil.getUserAgent(request));
+
+        try {
+            LoginResponse loginResponse = sessionService.thirdPartyLogin(thirdPartyLoginVo);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(loginResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, loginResponse);
+            } else {
+                apiResponse.setData(loginResponse.getLoginResponseVo());
             }
         } catch (Exception e) {
             logger.error("login发生错误---" + e);

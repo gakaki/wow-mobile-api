@@ -1,20 +1,20 @@
 package com.wow.user.service.impl;
 
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.user.constant.ThirdPartyPlatformType;
 import com.wow.user.mapper.EndUserLoginLogMapper;
 import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.EndUserSessionMapper;
-import com.wow.user.model.EndUser;
-import com.wow.user.model.EndUserLoginLog;
-import com.wow.user.model.EndUserLoginLogExample;
-import com.wow.user.model.EndUserSession;
-import com.wow.user.model.EndUserSessionExample;
+import com.wow.user.model.*;
 import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.util.IpConvertUtil;
+import com.wow.user.vo.LoginResponseVo;
 import com.wow.user.vo.LoginVo;
+import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
 import com.wow.user.vo.response.LogoutResponse;
+import com.wow.user.vo.response.WechatBindStatusResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,67 +59,118 @@ public class SessionServiceImpl implements SessionService {
      */
     public LoginResponse login(LoginVo loginVo) {
         LoginResponse loginResponse = new LoginResponse();
+        LoginResponseVo loginResponseVo = new LoginResponseVo();
         EndUserSession endUserSession = null;
         //先检查数据库,看用户名和密码是否匹配
         EndUser endUser = userService.authenticate(loginVo.getMobile(), loginVo.getPassword()).getEndUser();
         if (endUser != null) { //验证成功
-            //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
-            endUserSession = getSessionByUserIdAndChannel(endUser.getId(), loginVo.getLoginChannel());
-            long loginIp = IpConvertUtil.ipToLong(loginVo.getLoginIp());
-            Date now = new Date();
-            //token生成算法,暂用UUID,可以替换
-            String sessionToken = UUID.randomUUID().toString();
-            if (endUserSession == null) {
-                endUserSession = new EndUserSession();
-                endUserSession.setEndUserId(endUser.getId());
-                endUserSession.setIsLogout(false);
-                endUserSession.setLastLoginIp(loginIp);
-                endUserSession.setLastRefreshTime(now);
-                endUserSession.setLastLoginTime(now);
-                endUserSession.setLoginChannel(loginVo.getLoginChannel());
-                endUserSession.setLogoutTime(null);
-                endUserSession.setSessionToken(sessionToken);
-                endUserSession.setUserAgentInfo(loginVo.getUserAgent());
-                endUserSessionMapper.insertSelective(endUserSession);
-            } else {
-                endUserSession.setIsLogout(false);
-                endUserSession.setLastLoginIp(loginIp);
-                endUserSession.setLastRefreshTime(now);
-                endUserSession.setLastLoginTime(now);
-                endUserSession.setLoginChannel(loginVo.getLoginChannel());
-                endUserSession.setLogoutTime(null);
-                endUserSession.setSessionToken(sessionToken);
-                endUserSession.setUserAgentInfo(loginVo.getUserAgent());
-                //此处不用updateByPrimaryKeySelective,因为setLogoutTime(null)
-                endUserSessionMapper.updateByPrimaryKey(endUserSession);
-            }
-
-            //记录登录日志
-            EndUserLoginLog endUserLoginLog = new EndUserLoginLog();
-            endUserLoginLog.setUserAgentInfo(loginVo.getUserAgent());
-            endUserLoginLog.setLoginChannel(loginVo.getLoginChannel());
-            endUserLoginLog.setEndUserId(endUser.getId());
-            endUserLoginLog.setLoginIp(loginIp);
-            endUserLoginLog.setLoginTime(now);
-            endUserLoginLog.setSessionToken(sessionToken);
-            endUserLoginLogMapper.insertSelective(endUserLoginLog);
-
-//            loginResponse.setUserName(loginVo.getUserName());
-//            loginResponse.setValidUser(true);
-//            loginResponse.setErrorMsg(null);
-            loginResponse.setEndUserSession(endUserSession);
+            commonLogin(endUserSession, loginVo, endUser.getId(),null);
+            loginResponseVo.setSessionToken(endUserSession.getSessionToken());
+            loginResponseVo.setNickName(endUser.getNickName());
+            loginResponse.setLoginResponseVo(loginResponseVo);
         } else {
-
             loginResponse.setResCode("40101");
             loginResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40101"));
-//            loginResponse.setUserName(loginVo.getUserName());
-//            loginResponse.setValidUser(false);
-//            loginResponse.setErrorMsg("用户名和密码不匹配,请重新输入");
-//            loginResponse.setEndUserSession(null);
         }
         return loginResponse;
     }
 
+    /**
+     * 第三方登录
+     *
+     * @param thirdPartyLoginVo
+     * @return
+     */
+    @Override
+    public LoginResponse thirdPartyLogin(ThirdPartyLoginVo thirdPartyLoginVo) {
+        LoginResponse loginResponse = new LoginResponse();
+        LoginResponseVo loginResponseVo = new LoginResponseVo();
+        EndUserSession endUserSession = null;
+
+        int thirdPartyPlatformType = thirdPartyLoginVo.getThirdPartyPlatformType();
+        String thirdPartyPlatformUserId = thirdPartyLoginVo.getThirdPartyPlatformUserId();
+
+        if (thirdPartyPlatformType == ThirdPartyPlatformType.THIRD_PARTY_PLATFORM_WECHAT) {
+            //检查end_user_wechat,查看该id是否已经绑定一个已注册用户
+            WechatBindStatusResponse statusResponse = userService.checkIfWechatIdBindToUserId(thirdPartyPlatformUserId);
+            if (statusResponse != null && statusResponse.getWechatBindStatusVo() !=null) {
+                boolean binded = statusResponse.getWechatBindStatusVo().isBinded();
+                if (!binded) {
+                    loginResponse.setResCode("50106");
+                    loginResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50106"));
+                } else {
+                    //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
+                    LoginVo loginVo = new LoginVo();
+                    loginVo.setLoginIp(thirdPartyLoginVo.getLoginIp());
+                    loginVo.setLoginChannel(thirdPartyLoginVo.getLoginChannel());
+                    loginVo.setMobile(statusResponse.getWechatBindStatusVo().getMobile());
+                    loginVo.setUserAgent(thirdPartyLoginVo.getUserAgent());
+                    commonLogin(endUserSession, loginVo,
+                            statusResponse.getWechatBindStatusVo().getEndUserId(),thirdPartyPlatformType);
+                    loginResponseVo.setNickName(statusResponse.getWechatBindStatusVo().getNickName());
+                    loginResponseVo.setSessionToken(endUserSession.getSessionToken());
+                    loginResponse.setLoginResponseVo(loginResponseVo);
+                }
+            } else {
+                loginResponse.setResCode("50106");
+                loginResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50106"));
+            }
+        }
+        return loginResponse;
+    }
+
+    /**
+     *
+     * @param endUserSession
+     * @param loginVo
+     * @param endUserId
+     * @param thirdPartyPlatformType - 第三方登录平台(如微信,QQ,微博等)
+     */
+    private void commonLogin(EndUserSession endUserSession, LoginVo loginVo,
+                             int endUserId, Integer thirdPartyPlatformType) {
+        endUserSession = getSessionByUserIdAndChannel(endUserId, loginVo.getLoginChannel());
+        long loginIp = IpConvertUtil.ipToLong(loginVo.getLoginIp());
+        Date now = new Date();
+        //token生成算法,暂用UUID,可以替换
+        String sessionToken = UUID.randomUUID().toString();
+        if (endUserSession == null) {
+            endUserSession = new EndUserSession();
+            endUserSession.setEndUserId(endUserId);
+            endUserSession.setIsLogout(false);
+            endUserSession.setLastLoginIp(loginIp);
+            endUserSession.setLastRefreshTime(now);
+            endUserSession.setLastLoginTime(now);
+            endUserSession.setLoginChannel(loginVo.getLoginChannel());
+            endUserSession.setLogoutTime(null);
+            endUserSession.setSessionToken(sessionToken);
+            endUserSession.setUserAgentInfo(loginVo.getUserAgent());
+            endUserSessionMapper.insertSelective(endUserSession);
+        } else {
+            endUserSession.setIsLogout(false);
+            endUserSession.setLastLoginIp(loginIp);
+            endUserSession.setLastRefreshTime(now);
+            endUserSession.setLastLoginTime(now);
+            endUserSession.setLoginChannel(loginVo.getLoginChannel());
+            endUserSession.setLogoutTime(null);
+            endUserSession.setSessionToken(sessionToken);
+            endUserSession.setUserAgentInfo(loginVo.getUserAgent());
+            //此处不用updateByPrimaryKeySelective,因为setLogoutTime(null)
+            endUserSessionMapper.updateByPrimaryKey(endUserSession);
+        }
+
+        //记录登录日志
+        EndUserLoginLog endUserLoginLog = new EndUserLoginLog();
+        endUserLoginLog.setUserAgentInfo(loginVo.getUserAgent());
+        endUserLoginLog.setLoginChannel(loginVo.getLoginChannel());
+        endUserLoginLog.setEndUserId(endUserId);
+        endUserLoginLog.setLoginIp(loginIp);
+        endUserLoginLog.setLoginTime(now);
+        endUserLoginLog.setSessionToken(sessionToken);
+        if (thirdPartyPlatformType != null) {
+            endUserLoginLog.setThirdPartyPlatformType(thirdPartyPlatformType.byteValue());
+        }
+        endUserLoginLogMapper.insertSelective(endUserLoginLog);
+    }
 
     /**
      * 根据userId和登录渠道查询会话

@@ -1,4 +1,4 @@
-package com.wow.user.vo.response;
+package com.wow.user.vo;
 
 import java.io.Serializable;
 
@@ -13,6 +13,24 @@ public class WechatBindStatusVo implements Serializable{
     private boolean binded;
     private String mobile;
     private String wechatId;
+    private int endUserId;
+    private String nickName;
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public int getEndUserId() {
+        return endUserId;
+    }
+
+    public void setEndUserId(int endUserId) {
+        this.endUserId = endUserId;
+    }
 
     public boolean isRegistered() {
         return registered;

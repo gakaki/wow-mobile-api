@@ -271,4 +271,13 @@
       unbind_time = #{unbindTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByWechatId" resultMap="com.wow.user.vo.WechatBindStatusVo" parameterType="java.lang.Integer" >
+    select enw.is_bind binded, enw.end_user_id endUserId, eu.nick_name nickName, eu.mobile mobile
+    from end_user_wechat euw
+    inner join end_user eu
+    on euw.end_user_id = eu.id
+    where euw.wechat_id = #{wechatId,jdbcType=VARCHAR}
+    and eu.is_deleted = false
+  </select>
 </mapper>

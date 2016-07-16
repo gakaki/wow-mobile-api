@@ -54,6 +54,13 @@ public interface UserService {
     WechatBindStatusResponse bindWechatToUser(EndUserWechat endUserWechat);
 
     /**
+     * 检查微信号是否已经绑定到一个已注册用户
+     * @param wechatId
+     * @return
+     */
+    WechatBindStatusResponse checkIfWechatIdBindToUserId(String wechatId);
+
+    /**
      * 用户信息更新
      *
      * @param endUser

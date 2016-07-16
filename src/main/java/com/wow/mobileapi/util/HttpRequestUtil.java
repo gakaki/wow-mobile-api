@@ -42,4 +42,14 @@ public class HttpRequestUtil {
             return ip;
         }
     }
+
+    /**
+     * 获取访问者User-Agent
+     *
+     * @param request
+     * @return
+     */
+    public static String getUserAgent(HttpServletRequest request) {
+        return request.getHeader("User-Agent");
+    }
 }

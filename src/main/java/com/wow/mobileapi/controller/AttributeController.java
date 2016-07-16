@@ -5,7 +5,6 @@ import com.wow.attribute.model.Attribute;
 import com.wow.attribute.service.AttributeService;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ValidatorUtil;
-import com.wow.mobileapi.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,6 @@ AttributeController {
 
     @Autowired
     private AttributeService attributeService;
-
-    @Autowired
-    private ResponseUtil responseUtil;
 
     @RequestMapping(value = "/v1/attributes", method = RequestMethod.POST)
     public ApiResponse createAttribute(@Validated @RequestBody Attribute newAttribute, BindingResult result) {
@@ -46,7 +42,7 @@ AttributeController {
         ApiResponse apiResponse = new ApiResponse();
         logger.info("get attribute, id=" + id);
         if(id==null || id <=0 ) {
-            responseUtil.setResponse(apiResponse, "40401");
+//            responseUtil.setResponse(apiResponse, "40401");
         } else {
             try {
                 Attribute attribute = attributeService.getAttributeById(id);
@@ -84,7 +80,7 @@ AttributeController {
         ApiResponse apiResponse = new ApiResponse();
         logger.info("get attribute, id=" + id);
         if(id==null || id <=0 ) {
-            responseUtil.setResponse(apiResponse, "40401");
+//            responseUtil.setResponse(apiResponse, "40401");
         } else {
             try {
                 Attribute attribute = attributeService.getAttributeById(id);

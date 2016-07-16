@@ -9,6 +9,7 @@
     <result column="login_ip" property="loginIp" jdbcType="BIGINT" />
     <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
     <result column="session_token" property="sessionToken" jdbcType="VARCHAR" />
+    <result column="third_party_platform_type" property="thirdPartyPlatformType" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, end_user_id, login_channel, user_agent_info, login_ip, login_time, session_token
+    id, end_user_id, login_channel, user_agent_info, login_ip, login_time, session_token, 
+    third_party_platform_type
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.EndUserLoginLogExample" >
     select
@@ -106,11 +108,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into end_user_login_log (end_user_id, login_channel, user_agent_info, 
-      login_ip, login_time, session_token
-      )
+      login_ip, login_time, session_token, 
+      third_party_platform_type)
     values (#{endUserId,jdbcType=INTEGER}, #{loginChannel,jdbcType=TINYINT}, #{userAgentInfo,jdbcType=VARCHAR}, 
-      #{loginIp,jdbcType=BIGINT}, #{loginTime,jdbcType=TIMESTAMP}, #{sessionToken,jdbcType=VARCHAR}
-      )
+      #{loginIp,jdbcType=BIGINT}, #{loginTime,jdbcType=TIMESTAMP}, #{sessionToken,jdbcType=VARCHAR}, 
+      #{thirdPartyPlatformType,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.user.model.EndUserLoginLog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -136,6 +138,9 @@
       <if test="sessionToken != null" >
         session_token,
       </if>
+      <if test="thirdPartyPlatformType != null" >
+        third_party_platform_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="endUserId != null" >
@@ -155,6 +160,9 @@
       </if>
       <if test="sessionToken != null" >
         #{sessionToken,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdPartyPlatformType != null" >
+        #{thirdPartyPlatformType,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -188,6 +196,9 @@
       <if test="record.sessionToken != null" >
         session_token = #{record.sessionToken,jdbcType=VARCHAR},
       </if>
+      <if test="record.thirdPartyPlatformType != null" >
+        third_party_platform_type = #{record.thirdPartyPlatformType,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +212,8 @@
       user_agent_info = #{record.userAgentInfo,jdbcType=VARCHAR},
       login_ip = #{record.loginIp,jdbcType=BIGINT},
       login_time = #{record.loginTime,jdbcType=TIMESTAMP},
-      session_token = #{record.sessionToken,jdbcType=VARCHAR}
+      session_token = #{record.sessionToken,jdbcType=VARCHAR},
+      third_party_platform_type = #{record.thirdPartyPlatformType,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +239,9 @@
       <if test="sessionToken != null" >
         session_token = #{sessionToken,jdbcType=VARCHAR},
       </if>
+      <if test="thirdPartyPlatformType != null" >
+        third_party_platform_type = #{thirdPartyPlatformType,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -237,7 +252,8 @@
       user_agent_info = #{userAgentInfo,jdbcType=VARCHAR},
       login_ip = #{loginIp,jdbcType=BIGINT},
       login_time = #{loginTime,jdbcType=TIMESTAMP},
-      session_token = #{sessionToken,jdbcType=VARCHAR}
+      session_token = #{sessionToken,jdbcType=VARCHAR},
+      third_party_platform_type = #{thirdPartyPlatformType,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

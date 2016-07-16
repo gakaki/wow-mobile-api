@@ -7,16 +7,10 @@ import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.user.*;
-import com.wow.mobileapi.util.ResponseUtil;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserWechat;
 import com.wow.user.service.UserService;
-import com.wow.user.vo.response.CaptchaResponse;
-import com.wow.user.vo.response.RegisterResponse;
-import com.wow.user.vo.response.UserCheckResponse;
-import com.wow.user.vo.response.UserResponse;
-import com.wow.user.vo.response.UserUpdateResponse;
-import com.wow.user.vo.response.WechatBindStatusResponse;
+import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +25,6 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private ResponseUtil responseUtil;
 
     /**
      * 根据ID查找用户信息

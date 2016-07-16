@@ -3,6 +3,7 @@ package com.wow.user.service;
 import com.wow.user.model.EndUserLoginLog;
 import com.wow.user.model.EndUserSession;
 import com.wow.user.vo.LoginVo;
+import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
 import com.wow.user.vo.response.LogoutResponse;
 
@@ -20,6 +21,13 @@ public interface SessionService {
      * @return
      */
     LoginResponse login(LoginVo loginVo);
+
+    /**
+     * 第三方登录
+     * @param thirdPartyLoginVo
+     * @return
+     */
+    LoginResponse thirdPartyLogin(ThirdPartyLoginVo thirdPartyLoginVo);
 
     /**
      * 根据userId和登录渠道查询会话

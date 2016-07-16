@@ -1,32 +1,25 @@
 package com.wow.mobileapi.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.wow.common.request.ApiRequest;
-import com.wow.common.response.CommonResponse;
+import com.wow.common.response.ApiResponse;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.stock.StockBatchQueryRequest;
 import com.wow.mobileapi.request.stock.StockQueryRequest;
-import com.wow.mobileapi.request.user.UserQueryRequest;
+import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
 import com.wow.stock.vo.response.AvailableStockResponse;
 import com.wow.stock.vo.response.AvailableStocksResponse;
-import com.wow.user.vo.response.UserResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wow.common.response.ApiResponse;
-import com.wow.mobileapi.util.ResponseUtil;
-import com.wow.stock.service.StockService;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhengzhiqing on 16/6/23.
@@ -37,18 +30,6 @@ public class StockController extends BaseController {
 
     @Autowired
     private StockService stockService;
-    @Autowired
-    private ResponseUtil responseUtil;
-
-    @RequestMapping(value = "/{productId}", method = RequestMethod.GET)
-    public ApiResponse getProductWarehouses(@PathVariable Integer productId) {
-        logger.info("start to get warehouses in which product stored");
-        ApiResponse apiResponse = new ApiResponse();
-        List<Integer> warehouseList = stockService.selectWarehouseByProductId(productId);
-        responseUtil.setResponse(apiResponse,"0");
-        apiResponse.setData(warehouseList);
-        return apiResponse;
-    }
 
     /**
      * 根据productId查找可用库存
