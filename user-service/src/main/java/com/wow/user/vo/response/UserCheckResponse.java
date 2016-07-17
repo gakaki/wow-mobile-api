@@ -8,13 +8,16 @@ import com.wow.common.response.CommonResponse;
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class UserCheckResponse extends CommonResponse {
-    private boolean isExistedUser;
+
+    private static final long serialVersionUID = 1L;
+
+    private boolean existedUser;
 
     public boolean isExistedUser() {
-        return isExistedUser;
+        return existedUser;
     }
 
     public void setExistedUser(boolean existedUser) {
-        isExistedUser = existedUser;
+        this.existedUser = existedUser;
     }
 }

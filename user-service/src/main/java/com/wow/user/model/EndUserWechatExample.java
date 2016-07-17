@@ -295,73 +295,73 @@ public class EndUserWechatExample {
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdIsNull() {
-            addCriterion("wechat_id is null");
+        public Criteria andOpenIdIsNull() {
+            addCriterion("open_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdIsNotNull() {
-            addCriterion("wechat_id is not null");
+        public Criteria andOpenIdIsNotNull() {
+            addCriterion("open_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdEqualTo(String value) {
-            addCriterion("wechat_id =", value, "wechatId");
+        public Criteria andOpenIdEqualTo(String value) {
+            addCriterion("open_id =", value, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdNotEqualTo(String value) {
-            addCriterion("wechat_id <>", value, "wechatId");
+        public Criteria andOpenIdNotEqualTo(String value) {
+            addCriterion("open_id <>", value, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdGreaterThan(String value) {
-            addCriterion("wechat_id >", value, "wechatId");
+        public Criteria andOpenIdGreaterThan(String value) {
+            addCriterion("open_id >", value, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdGreaterThanOrEqualTo(String value) {
-            addCriterion("wechat_id >=", value, "wechatId");
+        public Criteria andOpenIdGreaterThanOrEqualTo(String value) {
+            addCriterion("open_id >=", value, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdLessThan(String value) {
-            addCriterion("wechat_id <", value, "wechatId");
+        public Criteria andOpenIdLessThan(String value) {
+            addCriterion("open_id <", value, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdLessThanOrEqualTo(String value) {
-            addCriterion("wechat_id <=", value, "wechatId");
+        public Criteria andOpenIdLessThanOrEqualTo(String value) {
+            addCriterion("open_id <=", value, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdLike(String value) {
-            addCriterion("wechat_id like", value, "wechatId");
+        public Criteria andOpenIdLike(String value) {
+            addCriterion("open_id like", value, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdNotLike(String value) {
-            addCriterion("wechat_id not like", value, "wechatId");
+        public Criteria andOpenIdNotLike(String value) {
+            addCriterion("open_id not like", value, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdIn(List<String> values) {
-            addCriterion("wechat_id in", values, "wechatId");
+        public Criteria andOpenIdIn(List<String> values) {
+            addCriterion("open_id in", values, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdNotIn(List<String> values) {
-            addCriterion("wechat_id not in", values, "wechatId");
+        public Criteria andOpenIdNotIn(List<String> values) {
+            addCriterion("open_id not in", values, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdBetween(String value1, String value2) {
-            addCriterion("wechat_id between", value1, value2, "wechatId");
+        public Criteria andOpenIdBetween(String value1, String value2) {
+            addCriterion("open_id between", value1, value2, "openId");
             return (Criteria) this;
         }
 
-        public Criteria andWechatIdNotBetween(String value1, String value2) {
-            addCriterion("wechat_id not between", value1, value2, "wechatId");
+        public Criteria andOpenIdNotBetween(String value1, String value2) {
+            addCriterion("open_id not between", value1, value2, "openId");
             return (Criteria) this;
         }
 
@@ -691,7 +691,7 @@ public class EndUserWechatExample {
         }
 
         public Criteria andWechatIdLikeInsensitive(String value) {
-            addCriterion("upper(wechat_id) like", value.toUpperCase(), "wechatId");
+            addCriterion("upper(open_id) like", value.toUpperCase(), "openId");
             return (Criteria) this;
         }
 

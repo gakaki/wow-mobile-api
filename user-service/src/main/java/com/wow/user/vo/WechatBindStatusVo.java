@@ -1,10 +1,13 @@
 package com.wow.user.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 
 /**
  * Created by zhengzhiqing on 16/7/13.
  */
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class WechatBindStatusVo implements Serializable{
 
     private static final long serialVersionUID = 1L;
@@ -12,7 +15,7 @@ public class WechatBindStatusVo implements Serializable{
     private boolean registered;
     private boolean binded;
     private String mobile;
-    private String wechatId;
+    private String openId;
     private int endUserId;
     private String nickName;
 
@@ -37,7 +40,7 @@ public class WechatBindStatusVo implements Serializable{
     }
 
     public void setRegistered(boolean registered) {
-        registered = registered;
+        this.registered = registered;
     }
 
     public boolean isBinded() {
@@ -45,7 +48,7 @@ public class WechatBindStatusVo implements Serializable{
     }
 
     public void setBinded(boolean binded) {
-        binded = binded;
+        this.binded = binded;
     }
 
     public String getMobile() {
@@ -56,11 +59,11 @@ public class WechatBindStatusVo implements Serializable{
         this.mobile = mobile;
     }
 
-    public String getWechatId() {
-        return wechatId;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setWechatId(String wechatId) {
-        this.wechatId = wechatId;
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

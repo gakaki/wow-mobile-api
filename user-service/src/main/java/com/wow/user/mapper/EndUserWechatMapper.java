@@ -31,5 +31,5 @@ public interface EndUserWechatMapper {
     int updateByPrimaryKey(EndUserWechat record);
 
     //自定义部分
-    WechatBindStatusVo selectByWechatId(@Param("wechatId") String wechatId);
+    WechatBindStatusVo selectByOpenId(@Param("openId") String openId);
 }
