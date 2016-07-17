@@ -18,8 +18,9 @@ import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderItemVo;
+import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
-import com.wow.order.vo.OrderVo;
+import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
 import com.wow.user.mapper.ShoppingCartMapper;
 import com.wow.user.vo.ShoppingCartQueryVo;
@@ -38,19 +39,30 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 下单
-     *
+     *   1. 保存订单相关信息 扣减库存
+          2. 每一个包裹里的每种产品做成一个订单项order_item
+          3. 订单价格校验 客户端传递订单总价，服务器再次计算价格
      * @param orderVo
      */
     @Override
-    public void placeOrder(OrderVo orderVo) {
-        //从OrderVo中获取信息,创建订单,概要步骤如下
-        /**
-         * 1. 根据包裹信息,在相应仓库上冻结库存,注意组合品的库存计算
-         * 2. 每一个包裹做成一个子单order,拥有共同的父单parent_order
-         * 3. 每一个包裹里的每种产品做成一个订单项order_item
-         * 4. 如果是组合产品,在order_item里有父子两层关系
-         * 5. 其他如发货地址,发票信息,支付信息都维护在父单上
-         */
+    public OrderResponse createOrder(OrderQuery query) {
+        OrderResponse orderResponse = new OrderResponse();
+        
+        // 业务校验开始
+        //判断用户购物车id列表是否为空
+        if (CollectionUtil.isEmpty(query.getShoppingCartIds())) {
+            orderResponse.setResCode("40304");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40304"));
+
+            return orderResponse;
+        }
+        //业务校验结束
+        
+        //判断库存是否足够
+        //计算订单金额
+        
+
+        return orderResponse;
     }
 
     /**

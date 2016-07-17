@@ -35,26 +35,26 @@ public class AuthInterceptor implements HandlerInterceptor {
         String token = getSessionToken(request, response);
         byte loginChannel = getLoginChannel(request, response);
 
-        try {
-            //check whether token is valid, by search it from redis or mysql
-            TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(token,loginChannel);
-            if (tokenValidateResponse==null || !tokenValidateResponse.isValid()) {
-                logger.warn("session token is invalid:" + token);
-                apiResponse.setResCode("10000");
-                apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("10000"));
-                response.setContentType("application/json");
-                response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询Token发生错误---" + e);
-            apiResponse.setResCode(ErrorCodeConstant.INTERNAL_ERROR);
-            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INTERNAL_ERROR));
-            response.setContentType("application/json");
-            response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
-            return false;
-        }
+//        try {
+//            //check whether token is valid, by search it from redis or mysql
+//            TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(token,loginChannel);
+//            if (tokenValidateResponse==null || !tokenValidateResponse.isValid()) {
+//                logger.warn("session token is invalid:" + token);
+//                apiResponse.setResCode("10000");
+//                apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("10000"));
+//                response.setContentType("application/json");
+//                response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
+//                return false;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            logger.error("查询Token发生错误---" + e);
+//            apiResponse.setResCode(ErrorCodeConstant.INTERNAL_ERROR);
+//            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INTERNAL_ERROR));
+//            response.setContentType("application/json");
+//            response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
+//            return false;
+//        }
         return true;
     }
 

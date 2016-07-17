@@ -5,8 +5,9 @@ import java.util.List;
 import com.wow.order.model.Order;
 import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
+import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
-import com.wow.order.vo.OrderVo;
+import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
 
 /**
@@ -29,7 +30,7 @@ public interface OrderService {
      *
      * @param orderVo
      */
-    void placeOrder(OrderVo orderVo);
+    OrderResponse createOrder(OrderQuery query);
 
     /**
      * 在发货之前取消订单

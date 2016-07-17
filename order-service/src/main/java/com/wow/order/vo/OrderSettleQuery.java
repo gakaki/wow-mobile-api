@@ -1,5 +1,6 @@
 package com.wow.order.vo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,10 @@ import java.util.List;
  * @author chenkaiwei
  * @version $Id: V1.0 2016年7月17日 上午11:42:47 Exp $
  */
-public class OrderSettleQuery {
+public class OrderSettleQuery implements Serializable {
+    /**  */
+    private static final long serialVersionUID = 1L;
+
     //用户购买的购物车id列表
     private List<Integer> shoppingCartIds;
     
