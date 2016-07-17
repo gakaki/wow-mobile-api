@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrderExample {
+public class SaleOrderExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public OrderExample() {
+    public SaleOrderExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -473,6 +473,66 @@ public class OrderExample {
 
         public Criteria andDeliveryFeeNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("delivery_fee not between", value1, value2, "deliveryFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountIsNull() {
+            addCriterion("coupon_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountIsNotNull() {
+            addCriterion("coupon_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountEqualTo(BigDecimal value) {
+            addCriterion("coupon_amount =", value, "couponAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountNotEqualTo(BigDecimal value) {
+            addCriterion("coupon_amount <>", value, "couponAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountGreaterThan(BigDecimal value) {
+            addCriterion("coupon_amount >", value, "couponAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("coupon_amount >=", value, "couponAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountLessThan(BigDecimal value) {
+            addCriterion("coupon_amount <", value, "couponAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("coupon_amount <=", value, "couponAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountIn(List<BigDecimal> values) {
+            addCriterion("coupon_amount in", values, "couponAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountNotIn(List<BigDecimal> values) {
+            addCriterion("coupon_amount not in", values, "couponAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("coupon_amount between", value1, value2, "couponAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCouponAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("coupon_amount not between", value1, value2, "couponAmount");
             return (Criteria) this;
         }
 
@@ -2466,66 +2526,6 @@ public class OrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderCreateTimeIsNull() {
-            addCriterion("order_create_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeIsNotNull() {
-            addCriterion("order_create_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeEqualTo(Date value) {
-            addCriterion("order_create_time =", value, "orderCreateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeNotEqualTo(Date value) {
-            addCriterion("order_create_time <>", value, "orderCreateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeGreaterThan(Date value) {
-            addCriterion("order_create_time >", value, "orderCreateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("order_create_time >=", value, "orderCreateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeLessThan(Date value) {
-            addCriterion("order_create_time <", value, "orderCreateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("order_create_time <=", value, "orderCreateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeIn(List<Date> values) {
-            addCriterion("order_create_time in", values, "orderCreateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeNotIn(List<Date> values) {
-            addCriterion("order_create_time not in", values, "orderCreateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeBetween(Date value1, Date value2) {
-            addCriterion("order_create_time between", value1, value2, "orderCreateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderCreateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("order_create_time not between", value1, value2, "orderCreateTime");
-            return (Criteria) this;
-        }
-
         public Criteria andOrderSourceIsNull() {
             addCriterion("order_source is null");
             return (Criteria) this;
@@ -2713,6 +2713,66 @@ public class OrderExample {
 
         public Criteria andSellerRemarksNotBetween(String value1, String value2) {
             addCriterion("seller_remarks not between", value1, value2, "sellerRemarks");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeIsNull() {
+            addCriterion("order_create_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeIsNotNull() {
+            addCriterion("order_create_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeEqualTo(Date value) {
+            addCriterion("order_create_time =", value, "orderCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeNotEqualTo(Date value) {
+            addCriterion("order_create_time <>", value, "orderCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeGreaterThan(Date value) {
+            addCriterion("order_create_time >", value, "orderCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("order_create_time >=", value, "orderCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeLessThan(Date value) {
+            addCriterion("order_create_time <", value, "orderCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("order_create_time <=", value, "orderCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeIn(List<Date> values) {
+            addCriterion("order_create_time in", values, "orderCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeNotIn(List<Date> values) {
+            addCriterion("order_create_time not in", values, "orderCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("order_create_time between", value1, value2, "orderCreateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("order_create_time not between", value1, value2, "orderCreateTime");
             return (Criteria) this;
         }
 

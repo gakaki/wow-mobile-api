@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OrderItem implements Serializable {
+public class SaleOrderItem implements Serializable {
     private Integer id;
 
-    private Integer orderId;
+    private Integer saleOrderId;
 
     private Integer productId;
 
@@ -53,12 +53,12 @@ public class OrderItem implements Serializable {
         this.id = id;
     }
 
-    public Integer getOrderId() {
-        return orderId;
+    public Integer getSaleOrderId() {
+        return saleOrderId;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setSaleOrderId(Integer saleOrderId) {
+        this.saleOrderId = saleOrderId;
     }
 
     public Integer getProductId() {
@@ -204,7 +204,7 @@ public class OrderItem implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", orderId=").append(orderId);
+        sb.append(", saleOrderId=").append(saleOrderId);
         sb.append(", productId=").append(productId);
         sb.append(", orderItemAmount=").append(orderItemAmount);
         sb.append(", orderItemPrice=").append(orderItemPrice);

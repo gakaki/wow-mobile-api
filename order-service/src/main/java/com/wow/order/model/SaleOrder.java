@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Order implements Serializable {
+public class SaleOrder implements Serializable {
     private Integer id;
 
     private String orderCode;
@@ -16,6 +16,8 @@ public class Order implements Serializable {
     private BigDecimal productAmount;
 
     private BigDecimal deliveryFee;
+
+    private BigDecimal couponAmount;
 
     private String receiverName;
 
@@ -79,13 +81,13 @@ public class Order implements Serializable {
 
     private Integer parentOrderId;
 
-    private Date orderCreateTime;
-
     private Byte orderSource;
 
     private Integer orderIp;
 
     private String sellerRemarks;
+
+    private Date orderCreateTime;
 
     private Date updateTime;
 
@@ -104,7 +106,7 @@ public class Order implements Serializable {
     }
 
     public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+        this.orderCode = orderCode == null ? null : orderCode.trim();
     }
 
     public Integer getEndUserId() {
@@ -139,12 +141,20 @@ public class Order implements Serializable {
         this.deliveryFee = deliveryFee;
     }
 
+    public BigDecimal getCouponAmount() {
+        return couponAmount;
+    }
+
+    public void setCouponAmount(BigDecimal couponAmount) {
+        this.couponAmount = couponAmount;
+    }
+
     public String getReceiverName() {
         return receiverName;
     }
 
     public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
+        this.receiverName = receiverName == null ? null : receiverName.trim();
     }
 
     public String getReceiverProvince() {
@@ -152,7 +162,7 @@ public class Order implements Serializable {
     }
 
     public void setReceiverProvince(String receiverProvince) {
-        this.receiverProvince = receiverProvince;
+        this.receiverProvince = receiverProvince == null ? null : receiverProvince.trim();
     }
 
     public String getReceiverCity() {
@@ -160,7 +170,7 @@ public class Order implements Serializable {
     }
 
     public void setReceiverCity(String receiverCity) {
-        this.receiverCity = receiverCity;
+        this.receiverCity = receiverCity == null ? null : receiverCity.trim();
     }
 
     public String getReceiverCounty() {
@@ -168,7 +178,7 @@ public class Order implements Serializable {
     }
 
     public void setReceiverCounty(String receiverCounty) {
-        this.receiverCounty = receiverCounty;
+        this.receiverCounty = receiverCounty == null ? null : receiverCounty.trim();
     }
 
     public String getReceiverTown() {
@@ -176,7 +186,7 @@ public class Order implements Serializable {
     }
 
     public void setReceiverTown(String receiverTown) {
-        this.receiverTown = receiverTown;
+        this.receiverTown = receiverTown == null ? null : receiverTown.trim();
     }
 
     public String getReceiverPostcode() {
@@ -184,7 +194,7 @@ public class Order implements Serializable {
     }
 
     public void setReceiverPostcode(String receiverPostcode) {
-        this.receiverPostcode = receiverPostcode;
+        this.receiverPostcode = receiverPostcode == null ? null : receiverPostcode.trim();
     }
 
     public String getReceiverAddress() {
@@ -192,7 +202,7 @@ public class Order implements Serializable {
     }
 
     public void setReceiverAddress(String receiverAddress) {
-        this.receiverAddress = receiverAddress;
+        this.receiverAddress = receiverAddress == null ? null : receiverAddress.trim();
     }
 
     public String getReceiverMobile() {
@@ -200,7 +210,7 @@ public class Order implements Serializable {
     }
 
     public void setReceiverMobile(String receiverMobile) {
-        this.receiverMobile = receiverMobile;
+        this.receiverMobile = receiverMobile == null ? null : receiverMobile.trim();
     }
 
     public String getEndUserRemarks() {
@@ -208,7 +218,7 @@ public class Order implements Serializable {
     }
 
     public void setEndUserRemarks(String endUserRemarks) {
-        this.endUserRemarks = endUserRemarks;
+        this.endUserRemarks = endUserRemarks == null ? null : endUserRemarks.trim();
     }
 
     public Byte getOrderStatus() {
@@ -272,7 +282,7 @@ public class Order implements Serializable {
     }
 
     public void setDeliveryCompanyName(String deliveryCompanyName) {
-        this.deliveryCompanyName = deliveryCompanyName;
+        this.deliveryCompanyName = deliveryCompanyName == null ? null : deliveryCompanyName.trim();
     }
 
     public String getDeliveryOrderNo() {
@@ -280,7 +290,7 @@ public class Order implements Serializable {
     }
 
     public void setDeliveryOrderNo(String deliveryOrderNo) {
-        this.deliveryOrderNo = deliveryOrderNo;
+        this.deliveryOrderNo = deliveryOrderNo == null ? null : deliveryOrderNo.trim();
     }
 
     public Date getDeliveryDate() {
@@ -336,7 +346,7 @@ public class Order implements Serializable {
     }
 
     public void setCancelReason(String cancelReason) {
-        this.cancelReason = cancelReason;
+        this.cancelReason = cancelReason == null ? null : cancelReason.trim();
     }
 
     public Date getCancelApprovedTime() {
@@ -368,7 +378,7 @@ public class Order implements Serializable {
     }
 
     public void setOperatorName(String operatorName) {
-        this.operatorName = operatorName;
+        this.operatorName = operatorName == null ? null : operatorName.trim();
     }
 
     public Boolean getIsLeaf() {
@@ -385,14 +395,6 @@ public class Order implements Serializable {
 
     public void setParentOrderId(Integer parentOrderId) {
         this.parentOrderId = parentOrderId;
-    }
-
-    public Date getOrderCreateTime() {
-        return orderCreateTime;
-    }
-
-    public void setOrderCreateTime(Date orderCreateTime) {
-        this.orderCreateTime = orderCreateTime;
     }
 
     public Byte getOrderSource() {
@@ -416,7 +418,15 @@ public class Order implements Serializable {
     }
 
     public void setSellerRemarks(String sellerRemarks) {
-        this.sellerRemarks = sellerRemarks;
+        this.sellerRemarks = sellerRemarks == null ? null : sellerRemarks.trim();
+    }
+
+    public Date getOrderCreateTime() {
+        return orderCreateTime;
+    }
+
+    public void setOrderCreateTime(Date orderCreateTime) {
+        this.orderCreateTime = orderCreateTime;
     }
 
     public Date getUpdateTime() {
@@ -439,6 +449,7 @@ public class Order implements Serializable {
         sb.append(", orderAmount=").append(orderAmount);
         sb.append(", productAmount=").append(productAmount);
         sb.append(", deliveryFee=").append(deliveryFee);
+        sb.append(", couponAmount=").append(couponAmount);
         sb.append(", receiverName=").append(receiverName);
         sb.append(", receiverProvince=").append(receiverProvince);
         sb.append(", receiverCity=").append(receiverCity);
@@ -470,10 +481,10 @@ public class Order implements Serializable {
         sb.append(", operatorName=").append(operatorName);
         sb.append(", isLeaf=").append(isLeaf);
         sb.append(", parentOrderId=").append(parentOrderId);
-        sb.append(", orderCreateTime=").append(orderCreateTime);
         sb.append(", orderSource=").append(orderSource);
         sb.append(", orderIp=").append(orderIp);
         sb.append(", sellerRemarks=").append(sellerRemarks);
+        sb.append(", orderCreateTime=").append(orderCreateTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
