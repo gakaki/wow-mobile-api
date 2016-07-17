@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.order.mapper.OrderItemMapper" >
-  <resultMap id="BaseResultMap" type="com.wow.order.model.OrderItem" >
+<mapper namespace="com.wow.order.mapper.SaleOrderItemMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.order.model.SaleOrderItem" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="sale_order_id" property="saleOrderId" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="order_item_amount" property="orderItemAmount" jdbcType="DECIMAL" />
     <result column="order_item_price" property="orderItemPrice" jdbcType="DECIMAL" />
@@ -81,18 +81,18 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, order_id, product_id, order_item_amount, order_item_price, order_item_qty, product_name, 
-    need_assemble, product_sale_type, parent_order_item_id, is_item_leaf, product_supplier_id, 
-    warehouse_id, frozen_real_stock_qty, frozen_virtual_stock_qty, is_virtual_stock_ready, 
-    create_time, update_time, is_deleted
+    id, sale_order_id, product_id, order_item_amount, order_item_price, order_item_qty, 
+    product_name, need_assemble, product_sale_type, parent_order_item_id, is_item_leaf, 
+    product_supplier_id, warehouse_id, frozen_real_stock_qty, frozen_virtual_stock_qty, 
+    is_virtual_stock_ready, create_time, update_time, is_deleted
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.order.model.OrderItemExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.order.model.SaleOrderItemExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from order_item
+    from sale_order_item
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -103,31 +103,31 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from order_item
+    from sale_order_item
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from order_item
+    delete from sale_order_item
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wow.order.model.OrderItemExample" >
-    delete from order_item
+  <delete id="deleteByExample" parameterType="com.wow.order.model.SaleOrderItemExample" >
+    delete from sale_order_item
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wow.order.model.OrderItem" >
+  <insert id="insert" parameterType="com.wow.order.model.SaleOrderItem" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into order_item (order_id, product_id, order_item_amount, 
+    insert into sale_order_item (sale_order_id, product_id, order_item_amount, 
       order_item_price, order_item_qty, product_name, 
       need_assemble, product_sale_type, parent_order_item_id, 
       is_item_leaf, product_supplier_id, warehouse_id, 
       frozen_real_stock_qty, frozen_virtual_stock_qty, 
       is_virtual_stock_ready, create_time, update_time, 
       is_deleted)
-    values (#{orderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{orderItemAmount,jdbcType=DECIMAL}, 
+    values (#{saleOrderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{orderItemAmount,jdbcType=DECIMAL}, 
       #{orderItemPrice,jdbcType=DECIMAL}, #{orderItemQty,jdbcType=TINYINT}, #{productName,jdbcType=VARCHAR}, 
       #{needAssemble,jdbcType=BIT}, #{productSaleType,jdbcType=TINYINT}, #{parentOrderItemId,jdbcType=INTEGER}, 
       #{isItemLeaf,jdbcType=BIT}, #{productSupplierId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, 
@@ -135,14 +135,14 @@
       #{isVirtualStockReady,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{isDeleted,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.order.model.OrderItem" >
+  <insert id="insertSelective" parameterType="com.wow.order.model.SaleOrderItem" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into order_item
+    insert into sale_order_item
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
-        order_id,
+      <if test="saleOrderId != null" >
+        sale_order_id,
       </if>
       <if test="productId != null" >
         product_id,
@@ -197,8 +197,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
-        #{orderId,jdbcType=INTEGER},
+      <if test="saleOrderId != null" >
+        #{saleOrderId,jdbcType=INTEGER},
       </if>
       <if test="productId != null" >
         #{productId,jdbcType=INTEGER},
@@ -253,20 +253,20 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wow.order.model.OrderItemExample" resultType="java.lang.Integer" >
-    select count(*) from order_item
+  <select id="countByExample" parameterType="com.wow.order.model.SaleOrderItemExample" resultType="java.lang.Integer" >
+    select count(*) from sale_order_item
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update order_item
+    update sale_order_item
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.orderId != null" >
-        order_id = #{record.orderId,jdbcType=INTEGER},
+      <if test="record.saleOrderId != null" >
+        sale_order_id = #{record.saleOrderId,jdbcType=INTEGER},
       </if>
       <if test="record.productId != null" >
         product_id = #{record.productId,jdbcType=INTEGER},
@@ -325,9 +325,9 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update order_item
+    update sale_order_item
     set id = #{record.id,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=INTEGER},
+      sale_order_id = #{record.saleOrderId,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       order_item_amount = #{record.orderItemAmount,jdbcType=DECIMAL},
       order_item_price = #{record.orderItemPrice,jdbcType=DECIMAL},
@@ -349,11 +349,11 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wow.order.model.OrderItem" >
-    update order_item
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.order.model.SaleOrderItem" >
+    update sale_order_item
     <set >
-      <if test="orderId != null" >
-        order_id = #{orderId,jdbcType=INTEGER},
+      <if test="saleOrderId != null" >
+        sale_order_id = #{saleOrderId,jdbcType=INTEGER},
       </if>
       <if test="productId != null" >
         product_id = #{productId,jdbcType=INTEGER},
@@ -409,9 +409,9 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.order.model.OrderItem" >
-    update order_item
-    set order_id = #{orderId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.wow.order.model.SaleOrderItem" >
+    update sale_order_item
+    set sale_order_id = #{saleOrderId,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
       order_item_amount = #{orderItemAmount,jdbcType=DECIMAL},
       order_item_price = #{orderItemPrice,jdbcType=DECIMAL},
