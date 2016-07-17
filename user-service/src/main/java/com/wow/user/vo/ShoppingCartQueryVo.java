@@ -26,7 +26,7 @@ public class ShoppingCartQueryVo implements Serializable {
     //产品数量范围为1-127
     private Byte productQty;
 
-    //产品id列表 仅在删除购物车产品时使用
+    //购物车id列表 仅在删除购物车产品时使用
     private List<Integer> shoppingCartIds;
     
     //是否删除

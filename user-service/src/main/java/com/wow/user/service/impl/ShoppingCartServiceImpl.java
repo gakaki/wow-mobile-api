@@ -1,7 +1,9 @@
 package com.wow.user.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,14 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.MapUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.product.model.Product;
 import com.wow.product.service.ProductService;
+import com.wow.stock.service.StockService;
+import com.wow.stock.vo.AvailableStockVo;
+import com.wow.stock.vo.response.AvailableStocksResponse;
 import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.ShoppingCartMapper;
 import com.wow.user.model.EndUser;
@@ -42,8 +49,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Autowired
     private ProductService productService;
 
-//    @Autowired
-//    private StockService stockService;
+    @Autowired
+    private StockService stockService;
 
     /**
      * 添加商品到购物车 暂不考虑组合产品 仅在用户登录的情况下调用
@@ -182,25 +189,86 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByUserId(query);
 
-        response.setShoppingCartResult(shoppingCartResult);
+        if (CollectionUtil.isEmpty(shoppingCartResult)) {
+            return response;
+        }
+
+        //购物车产品id列表
+        List<Integer> productIds = getProductIds(shoppingCartResult);
+
+        //调用获取产品库存服务
+        AvailableStocksResponse stocksResponse = stockService.batchGetAvailableStock(productIds);
+
+        //判断服务是否调用成功 如果处理失败 则返回错误信息
+        if (!ErrorResponseUtil.isServiceCallSuccess(stocksResponse.getResCode())) {
+            response.setResCode(stocksResponse.getResCode());
+            response.setResMsg(stocksResponse.getResMsg());
+
+            return response;
+        }
+
+        //设置产品库存
+        setProductStock(shoppingCartResult, stocksResponse.getAvailableStockVoMap());
 
         //计算购物车商品总价
         BigDecimal totalPrice = calculateShoppingCartPrice(shoppingCartResult);
 
+        response.setShoppingCartResult(shoppingCartResult);
         response.setTotalPrice(totalPrice);
 
         return response;
     }
 
     /**
+     * 获取产品id列表
      * 
-     * 计算用户购物车总价 单位为分进行计算
+     * @param shoppingCartResult
+     * @return
+     */
+    private List<Integer> getProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
+        List<Integer> productIds = new ArrayList<>(shoppingCartResult.size());
+
+        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            productIds.add(shoppingCart.getProductId());
+        }
+
+        return productIds;
+    }
+
+    /**
+    * 设置相应产品的库存
+    * 
+    * @param shoppingCartResult
+    * @param stockMap
+    * @return
+    */
+    private void setProductStock(List<ShoppingCartResultVo> shoppingCartResult, Map<Integer, AvailableStockVo> stockMap) {
+        if (MapUtil.isEmpty(stockMap)) {
+            return;
+        }
+
+        AvailableStockVo stockVo = null;
+
+        //设置产品可用库存信息
+        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            stockVo = stockMap.get(shoppingCart.getProductId());
+
+            //设置产品库存
+            if (stockVo != null) {
+                shoppingCart.setProductStock((short) stockVo.getTotalAvailableStockQty());
+            }
+        }
+    }
+
+    /**
+     * 
+     * 计算用户购物车总价(单位为分进行计算)以及获取产品的库存 
      * @param shoppingCartResult
      * @return
      */
     private BigDecimal calculateShoppingCartPrice(List<ShoppingCartResultVo> shoppingCartResult) {
         if (CollectionUtil.isEmpty(shoppingCartResult)) {
-            return new BigDecimal("0.00");
+            return NumberUtil.ZEROB_IGDECIMAL;
         }
 
         long totalPrice = 0L;
@@ -209,13 +277,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             if (shoppingCart.getProductStatus() != null) {
                 shoppingCart.setProductStatusName(ProductStatusEnum.get((int) shoppingCart.getProductStatus()));
             }
-            //获取产品库存 调用stockservice服务
-            
+
             //如果产品已下架则不计算价格
-            if(shoppingCart.getProductStatus().intValue()==ProductStatusEnum.ORDER_STATUS_OFF_SHELVE.getKey()){
+            if (shoppingCart.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_OFF_SHELVE.getKey()) {
                 continue;
             }
-            
+
             long productPrice = NumberUtil.convertToFen(shoppingCart.getSellPrice());
             totalPrice += productPrice * shoppingCart.getProductQty();
         }
@@ -233,6 +300,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         //判断该产品用户是否已经加入到购物车
         ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
         ShoppingCartExample.Criteria criteria = shoppingCartExample.createCriteria();
+        
         criteria.andEndUserIdEqualTo(shoppingCart.getEndUserId());
         criteria.andProductIdEqualTo(shoppingCart.getProductId());
         criteria.andIsDeletedEqualTo(Boolean.FALSE);

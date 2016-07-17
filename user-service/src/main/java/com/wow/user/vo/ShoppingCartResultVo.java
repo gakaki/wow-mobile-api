@@ -23,8 +23,8 @@ public class ShoppingCartResultVo implements Serializable{
     //产品id
     private Integer productId;
     
-    //产品库存数目
-    private Short productStock;
+    //产品当前可用库存数目 默认为0(即没有库存)
+    private Short productStock=0;
     
     //产品数量范围为1-127
     private Byte productQty;

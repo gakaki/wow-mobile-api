@@ -9,7 +9,10 @@ import java.math.BigDecimal;
  * @version $Id: V1.0 2016年7月14日 下午5:50:14 Exp $
  */
 public class NumberUtil {
-
+    
+    //定义数值为0.00的BigDecimal
+    public static  final BigDecimal ZEROB_IGDECIMAL=new BigDecimal("0.00");
+    
     /**
      * 提供精确的加法运算。
      * 
