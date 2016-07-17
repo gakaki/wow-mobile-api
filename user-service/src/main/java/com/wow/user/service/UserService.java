@@ -59,10 +59,10 @@ public interface UserService {
 
     /**
      * 检查微信号是否已经绑定到一个已注册用户
-     * @param wechatId
+     * @param openId
      * @return
      */
-    WechatBindStatusResponse checkIfWechatIdBindToUserId(String wechatId);
+    WechatBindStatusResponse checkIfWechatIdBindToUserId(String openId);
 
     /**
      * 用户信息更新

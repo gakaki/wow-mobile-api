@@ -2,7 +2,6 @@ package com.wow.user.service.impl;
 
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.user.constant.ThirdPartyPlatformType;
 import com.wow.user.mapper.EndUserMapper;
@@ -250,7 +249,7 @@ public class SessionServiceImpl implements SessionService {
         Integer endUserId = null;
         long currentTime = System.currentTimeMillis();
         Date mustRefreshAfter = new Date(currentTime - sessionExpirationTime);
-        EndUserSession endUserSession = getValidUserSessionBySessionToken(
+        EndUserSession endUserSession = getValidSessionByTokenChannel(
                 sessionToken, loginChannel, mustRefreshAfter);
         if (endUserSession != null && endUserSession.getId() != null) {
             isValid = true;
@@ -261,7 +260,9 @@ public class SessionServiceImpl implements SessionService {
             }
         }
         tokenValidateResponse.setValid(isValid);
-        tokenValidateResponse.setEndUserId(endUserId);
+        if (endUserId != null) {
+            tokenValidateResponse.setEndUserId(endUserId);
+        }
         return tokenValidateResponse;
     }
 
@@ -272,7 +273,7 @@ public class SessionServiceImpl implements SessionService {
      * @param mustRefreshAfter
      * @return
      */
-    private EndUserSession getValidUserSessionBySessionToken(
+    private EndUserSession getValidSessionByTokenChannel(
             String sessionToken, byte loginChannel, Date mustRefreshAfter) {
         EndUserSession endUserSession = null;
         EndUserSessionExample endUserSessionExample = new EndUserSessionExample();

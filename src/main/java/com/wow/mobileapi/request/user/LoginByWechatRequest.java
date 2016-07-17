@@ -12,7 +12,7 @@ public class LoginByWechatRequest extends ApiRequest {
     /**  */
     private static final long serialVersionUID = 1L;
     @NotNull
-    private String wechatId;
+    private String openId;
     @NotNull
     private Byte loginChannel;
 
@@ -24,11 +24,11 @@ public class LoginByWechatRequest extends ApiRequest {
         this.loginChannel = loginChannel;
     }
 
-    public String getWechatId() {
-        return wechatId;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setWechatId(String wechatId) {
-        this.wechatId = wechatId;
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

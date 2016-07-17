@@ -107,7 +107,7 @@ public class SessionController extends BaseController {
 
         ThirdPartyLoginVo thirdPartyLoginVo = new ThirdPartyLoginVo();
         thirdPartyLoginVo.setThirdPartyPlatformType(ThirdPartyPlatformType.THIRD_PARTY_PLATFORM_WECHAT);
-        thirdPartyLoginVo.setThirdPartyPlatformUserId(loginByWechatRequest.getWechatId());
+        thirdPartyLoginVo.setThirdPartyPlatformUserId(loginByWechatRequest.getOpenId());
         thirdPartyLoginVo.setLoginChannel(loginByWechatRequest.getLoginChannel());
         thirdPartyLoginVo.setLoginIp(HttpRequestUtil.getIpAddr(request));
         thirdPartyLoginVo.setUserAgent(HttpRequestUtil.getUserAgent(request));

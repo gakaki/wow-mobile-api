@@ -1,12 +1,5 @@
 package com.wow.mobileapi.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.JsonUtil;
@@ -16,6 +9,12 @@ import com.wow.mobileapi.request.order.OrderSettleRequest;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderSettleResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by zhengzhiqing on 16/7/2.

@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="wechat_id" property="wechatId" jdbcType="VARCHAR" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
     <result column="wechat_nick_name" property="wechatNickName" jdbcType="VARCHAR" />
     <result column="wechat_avatar" property="wechatAvatar" jdbcType="VARCHAR" />
     <result column="is_bind" property="isBind" jdbcType="BIT" />
@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, end_user_id, mobile, wechat_id, wechat_nick_name, wechat_avatar, is_bind, bind_time, 
+    id, end_user_id, mobile, open_id, wechat_nick_name, wechat_avatar, is_bind, bind_time,
     unbind_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.EndUserWechatExample" >
@@ -108,10 +108,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into end_user_wechat (end_user_id, mobile, wechat_id, 
+    insert into end_user_wechat (end_user_id, mobile, open_id,
       wechat_nick_name, wechat_avatar, is_bind, 
       bind_time, unbind_time)
-    values (#{endUserId,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{wechatId,jdbcType=VARCHAR}, 
+    values (#{endUserId,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR},
       #{wechatNickName,jdbcType=VARCHAR}, #{wechatAvatar,jdbcType=VARCHAR}, #{isBind,jdbcType=BIT}, 
       #{bindTime,jdbcType=TIMESTAMP}, #{unbindTime,jdbcType=TIMESTAMP})
   </insert>
@@ -127,8 +127,8 @@
       <if test="mobile != null" >
         mobile,
       </if>
-      <if test="wechatId != null" >
-        wechat_id,
+      <if test="openId != null" >
+        open_id,
       </if>
       <if test="wechatNickName != null" >
         wechat_nick_name,
@@ -153,8 +153,8 @@
       <if test="mobile != null" >
         #{mobile,jdbcType=VARCHAR},
       </if>
-      <if test="wechatId != null" >
-        #{wechatId,jdbcType=VARCHAR},
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
       </if>
       <if test="wechatNickName != null" >
         #{wechatNickName,jdbcType=VARCHAR},
@@ -191,8 +191,8 @@
       <if test="record.mobile != null" >
         mobile = #{record.mobile,jdbcType=VARCHAR},
       </if>
-      <if test="record.wechatId != null" >
-        wechat_id = #{record.wechatId,jdbcType=VARCHAR},
+      <if test="record.openId != null" >
+        open_id = #{record.openId,jdbcType=VARCHAR},
       </if>
       <if test="record.wechatNickName != null" >
         wechat_nick_name = #{record.wechatNickName,jdbcType=VARCHAR},
@@ -219,7 +219,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       end_user_id = #{record.endUserId,jdbcType=INTEGER},
       mobile = #{record.mobile,jdbcType=VARCHAR},
-      wechat_id = #{record.wechatId,jdbcType=VARCHAR},
+      open_id = #{record.openId,jdbcType=VARCHAR},
       wechat_nick_name = #{record.wechatNickName,jdbcType=VARCHAR},
       wechat_avatar = #{record.wechatAvatar,jdbcType=VARCHAR},
       is_bind = #{record.isBind,jdbcType=BIT},
@@ -238,8 +238,8 @@
       <if test="mobile != null" >
         mobile = #{mobile,jdbcType=VARCHAR},
       </if>
-      <if test="wechatId != null" >
-        wechat_id = #{wechatId,jdbcType=VARCHAR},
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
       </if>
       <if test="wechatNickName != null" >
         wechat_nick_name = #{wechatNickName,jdbcType=VARCHAR},
@@ -251,7 +251,7 @@
         is_bind = #{isBind,jdbcType=BIT},
       </if>
       <if test="bindTime != null" >
-        bind_time = #{bindTime,jdbcType=TIMESTAMP},gra
+        bind_time = #{bindTime,jdbcType=TIMESTAMP},
       </if>
       <if test="unbindTime != null" >
         unbind_time = #{unbindTime,jdbcType=TIMESTAMP},
@@ -263,7 +263,7 @@
     update end_user_wechat
     set end_user_id = #{endUserId,jdbcType=INTEGER},
       mobile = #{mobile,jdbcType=VARCHAR},
-      wechat_id = #{wechatId,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
       wechat_nick_name = #{wechatNickName,jdbcType=VARCHAR},
       wechat_avatar = #{wechatAvatar,jdbcType=VARCHAR},
       is_bind = #{isBind,jdbcType=BIT},
@@ -272,12 +272,12 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectByWechatId" resultType="com.wow.user.vo.WechatBindStatusVo" parameterType="java.lang.Integer" >
-    select enw.is_bind binded, enw.end_user_id endUserId, eu.nick_name nickName, eu.mobile mobile
-    from end_user_wechat euw
-    inner join end_user eu
-    on euw.end_user_id = eu.id
-    where euw.wechat_id = #{wechatId,jdbcType=VARCHAR}
-    and eu.is_deleted = false
+  <select id="selectByOpenId" resultType="com.wow.user.vo.WechatBindStatusVo" parameterType="java.lang.String" >
+    select end_user_wechat.is_bind binded, end_user_wechat.end_user_id endUserId, end_user.nick_name nickName, end_user.mobile mobile
+    from end_user_wechat
+    inner join end_user
+    on end_user_wechat.end_user_id = end_user.id
+    where end_user_wechat.open_id = #{openId,jdbcType=VARCHAR}
+    and end_user.is_deleted = 0
   </select>
 </mapper>

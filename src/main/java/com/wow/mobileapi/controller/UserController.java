@@ -3,10 +3,7 @@ package com.wow.mobileapi.controller;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
+import com.wow.common.util.*;
 import com.wow.mobileapi.request.user.*;
 import com.wow.user.constant.CaptchaTemplate;
 import com.wow.user.model.EndUser;
@@ -24,6 +21,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class UserController extends BaseController {
@@ -319,8 +318,7 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/v1/user/wechat-bind", method = RequestMethod.POST)
-    public ApiResponse bindWechat(ApiRequest apiRequest) {
-
+    public ApiResponse bindWechat(ApiRequest apiRequest, HttpServletRequest request) {
         ApiResponse apiResponse = new ApiResponse();
         WechatBindRequest wechatBindRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindRequest.class);
         //判断json格式参数是否有误
@@ -338,13 +336,22 @@ public class UserController extends BaseController {
 
         EndUserWechat endUserWechat = new EndUserWechat();
         BeanUtil.copyProperties(wechatBindRequest,endUserWechat);
+
+        Integer endUserId = getUserIdByTokenChannel(request);
+        if (endUserId != null) {
+            endUserWechat.setEndUserId(endUserId);
+        } else {
+            ErrorResponseUtil.setErrorResponse(apiResponse,"10000");
+            return apiResponse;
+        }
+
         try {
             WechatBindStatusResponse wechatBindStatusResponse = userService.bindWechatToUser(endUserWechat);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(wechatBindStatusResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, wechatBindStatusResponse);
             } else {
-                apiResponse.setData(wechatBindStatusResponse);
+                apiResponse.setData(wechatBindStatusResponse.getWechatBindStatusVo());
             }
         } catch (Exception e) {
             logger.error("绑定微信发生错误---" + e);
@@ -359,7 +366,7 @@ public class UserController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/is-wechat-bind-user", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/user/is-wechat-bind-user", method = RequestMethod.GET)
     public ApiResponse checkIfWechatBindToUser(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
@@ -387,10 +394,11 @@ public class UserController extends BaseController {
             if (!isServiceCallSuccess(wechatBindStatusResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, wechatBindStatusResponse);
             } else {
-                apiResponse.setData(wechatBindStatusResponse);
+                apiResponse.setData(wechatBindStatusResponse.getWechatBindStatusVo());
             }
         } catch (Exception e) {
             logger.error("检查微信是否已绑定用户发生错误---" + e);
+            e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;

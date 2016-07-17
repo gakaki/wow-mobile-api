@@ -132,8 +132,16 @@ public class UserServiceImpl implements UserService {
     public UserCheckResponse isExistedUserByMobile(String mobile) {
         UserCheckResponse userCheckResponse = new UserCheckResponse();
         UserResponse userResponse = getEndUserByMobile(mobile);
-        userCheckResponse.setExistedUser(userResponse.getEndUser() != null);
-        logger.info("is existed user:" + userCheckResponse);
+        EndUser endUser = userResponse.getEndUser();
+        logger.info("endUser in userResponse:" + endUser);
+        if (endUser !=null && endUser.getId() !=null) {
+            logger.info("set to true");
+            userCheckResponse.setExistedUser(true);
+        } else {
+            logger.info("set to false");
+            userCheckResponse.setExistedUser(false);
+        }
+        logger.info("is existed user:" + userCheckResponse.isExistedUser());
         return userCheckResponse;
     }
 
@@ -145,25 +153,31 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public WechatBindStatusResponse checkWechatBindStatus(String mobile) {
+        logger.info("start to check if mobile registered and bind to wechat...");
         WechatBindStatusResponse wechatBindStatusResponse = new WechatBindStatusResponse();
         WechatBindStatusVo wechatBindStatusVo = new WechatBindStatusVo();
         wechatBindStatusVo.setMobile(mobile);
-        wechatBindStatusVo.setRegistered(isExistedUserByMobile(mobile).isExistedUser());
+        UserCheckResponse userCheckResponse = isExistedUserByMobile(mobile);
+        boolean existedUser = userCheckResponse.isExistedUser();
+        logger.info("isRegistered:" + existedUser);
+        wechatBindStatusVo.setRegistered(existedUser);
+        logger.info("isRegistered:" + wechatBindStatusVo.isRegistered());
         EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
         EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
         criteria.andMobileEqualTo(mobile);
-        criteria.andWechatIdIsNotNull();
+        criteria.andOpenIdIsNotNull();
         criteria.andIsBindEqualTo(true);
         List<EndUserWechat> list = endUserWechatMapper.selectByExample(endUserWechatExample);
         if (CollectionUtil.isNotEmpty(list)) {
             EndUserWechat endUserWechat = list.get(0);
             wechatBindStatusVo.setBinded(true);
-            wechatBindStatusVo.setWechatId(endUserWechat.getWechatId());
+            wechatBindStatusVo.setOpenId(endUserWechat.getOpenId());
             wechatBindStatusVo.setEndUserId(endUserWechat.getEndUserId());
         } else {
             wechatBindStatusVo.setBinded(false);
         }
         wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+        logger.info("isRegistered:" + wechatBindStatusVo.isRegistered());
         return wechatBindStatusResponse;
     }
 
@@ -177,23 +191,44 @@ public class UserServiceImpl implements UserService {
     public WechatBindStatusResponse bindWechatToUser(EndUserWechat endUserWechat) {
         WechatBindStatusResponse wechatBindStatusResponse = new WechatBindStatusResponse();
         WechatBindStatusVo wechatBindStatusVo = new WechatBindStatusVo();
-        int i = endUserWechatMapper.insertSelective(endUserWechat);
-        wechatBindStatusVo.setBinded(i>0);
-        wechatBindStatusVo.setMobile(endUserWechat.getMobile());
-        wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+        //判断是否已经绑定过
+        EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
+        EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
+        criteria.andEndUserIdEqualTo(endUserWechat.getEndUserId());
+        List<EndUserWechat> list = endUserWechatMapper.selectByExample(endUserWechatExample);
+        if (CollectionUtil.isNotEmpty(list)) {
+            EndUserWechat existedEndUserWechat = list.get(0);
+            if (existedEndUserWechat.getIsBind()) {
+                ErrorResponseUtil.setErrorResponse(wechatBindStatusResponse,"50107");
+            } else { //曾经绑定又解除绑定了,更新绑定信息
+                endUserWechat.setId(existedEndUserWechat.getId());
+                endUserWechat.setIsBind(true);
+                endUserWechat.setBindTime(new Date());
+                int i = endUserWechatMapper.updateByPrimaryKeySelective(endUserWechat);
+                wechatBindStatusVo.setBinded(i>0);
+                wechatBindStatusVo.setMobile(endUserWechat.getMobile());
+                wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+            }
+        } else {
+            int i = endUserWechatMapper.insertSelective(endUserWechat);
+            wechatBindStatusVo.setBinded(i>0);
+            wechatBindStatusVo.setMobile(endUserWechat.getMobile());
+            wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+        }
+
         return wechatBindStatusResponse;
     }
 
     /**
      * 判断微信号是否已经绑定了一个账号
      *
-     * @param wechatId
+     * @param openId
      * @return
      */
     @Override
-    public WechatBindStatusResponse checkIfWechatIdBindToUserId(String wechatId) {
+    public WechatBindStatusResponse checkIfWechatIdBindToUserId(String openId) {
         WechatBindStatusResponse wechatBindStatusResponse = new WechatBindStatusResponse();
-        WechatBindStatusVo wechatBindStatusVo = endUserWechatMapper.selectByWechatId(wechatId);
+        WechatBindStatusVo wechatBindStatusVo = endUserWechatMapper.selectByOpenId(openId);
         if (wechatBindStatusVo == null) {
             wechatBindStatusVo = new WechatBindStatusVo();
             wechatBindStatusVo.setBinded(false);
@@ -203,7 +238,7 @@ public class UserServiceImpl implements UserService {
         wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
 //        EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
 //        EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
-//        criteria.andWechatIdEqualTo(String.valueOf(wechatId));
+//        criteria.andOpenIdEqualTo(String.valueOf(openId));
 //        criteria.andEndUserIdIsNotNull();
 //        criteria.andIsBindEqualTo(true);
 //        List<EndUserWechat> endUserWechatList = endUserWechatMapper.selectByExample(endUserWechatExample);
@@ -218,7 +253,7 @@ public class UserServiceImpl implements UserService {
 //            wechatBindStatusVo.setBinded(true);
 //            wechatBindStatusVo.setMobile(endUserWechat.getMobile());
 //            wechatBindStatusVo.setRegistered(true);
-//            wechatBindStatusVo.setWechatId(String.valueOf(wechatId));
+//            wechatBindStatusVo.setOpenId(String.valueOf(openId));
 //            wechatBindStatusVo.setEndUserId(endUserWechat.getEndUserId());
 //            wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
 //        }
@@ -369,6 +404,7 @@ public class UserServiceImpl implements UserService {
             userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50505"));
         } else if (userList.size() == 1) {
             endUser =  userList.get(0);
+            logger.info("找到该手机对应的用户:" + endUser);
             userResponse.setEndUser(endUser);
         } else {
             logger.error("找不到该手机对应的用户");
