@@ -2,9 +2,9 @@ package com.wow.order.service;
 
 import java.util.List;
 
-import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
+import com.wow.order.model.SaleOrderLog;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderResponse;
@@ -60,13 +60,13 @@ public interface OrderService {
     /**
      * @param orderLog
      */
-    void createOrderLog(OrderLog orderLog);
+    void createOrderLog(SaleOrderLog orderLog);
 
     /**
      * @param orderId
      * @return
      */
-    List<OrderLog> queryOrderLogsByOrderId(int orderId);
+    List<SaleOrderLog> queryOrderLogsByOrderId(int orderId);
 
     /**
      * 下退货单

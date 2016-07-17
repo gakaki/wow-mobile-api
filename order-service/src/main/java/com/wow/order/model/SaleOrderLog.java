@@ -3,7 +3,7 @@ package com.wow.order.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class OrderLog implements Serializable {
+public class SaleOrderLog implements Serializable {
     private Integer id;
 
     private Integer orderId;
@@ -35,7 +35,7 @@ public class OrderLog implements Serializable {
     }
 
     public void setEventLog(String eventLog) {
-        this.eventLog = eventLog;
+        this.eventLog = eventLog == null ? null : eventLog.trim();
     }
 
     public Date getEventTime() {

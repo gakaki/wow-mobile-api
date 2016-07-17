@@ -2,7 +2,7 @@ package com.wow.order.model;
 
 import java.io.Serializable;
 
-public class OrderInvoice implements Serializable {
+public class SaleOrderInvoice implements Serializable {
     private Integer id;
 
     private Integer endUserId;
@@ -64,7 +64,7 @@ public class OrderInvoice implements Serializable {
     }
 
     public void setInvoiceTitle(String invoiceTitle) {
-        this.invoiceTitle = invoiceTitle;
+        this.invoiceTitle = invoiceTitle == null ? null : invoiceTitle.trim();
     }
 
     public Boolean getNeedProductList() {

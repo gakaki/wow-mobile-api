@@ -3,14 +3,14 @@ package com.wow.order.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderInvoiceExample {
+public class SaleOrderInvoiceExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public OrderInvoiceExample() {
+    public SaleOrderInvoiceExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

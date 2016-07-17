@@ -13,9 +13,9 @@ import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.NumberUtil;
-import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
+import com.wow.order.model.SaleOrderLog;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderItemVo;
 import com.wow.order.vo.OrderQuery;
@@ -112,7 +112,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderLog
      */
     @Override
-    public void createOrderLog(OrderLog orderLog) {
+    public void createOrderLog(SaleOrderLog orderLog) {
 
     }
 
@@ -121,7 +121,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public List<OrderLog> queryOrderLogsByOrderId(int orderId) {
+    public List<SaleOrderLog> queryOrderLogsByOrderId(int orderId) {
         return null;
     }
 
