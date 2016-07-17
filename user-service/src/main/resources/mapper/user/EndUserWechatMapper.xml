@@ -251,7 +251,7 @@
         is_bind = #{isBind,jdbcType=BIT},
       </if>
       <if test="bindTime != null" >
-        bind_time = #{bindTime,jdbcType=TIMESTAMP},
+        bind_time = #{bindTime,jdbcType=TIMESTAMP},gra
       </if>
       <if test="unbindTime != null" >
         unbind_time = #{unbindTime,jdbcType=TIMESTAMP},
@@ -272,7 +272,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectByWechatId" resultMap="com.wow.user.vo.WechatBindStatusVo" parameterType="java.lang.Integer" >
+  <select id="selectByWechatId" resultType="com.wow.user.vo.WechatBindStatusVo" parameterType="java.lang.Integer" >
     select enw.is_bind binded, enw.end_user_id endUserId, eu.nick_name nickName, eu.mobile mobile
     from end_user_wechat euw
     inner join end_user eu

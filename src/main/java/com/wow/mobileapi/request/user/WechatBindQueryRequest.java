@@ -9,8 +9,19 @@ import javax.validation.constraints.NotNull;
  */
 public class WechatBindQueryRequest extends ApiRequest {
 
-    @NotNull
+    private static final long serialVersionUID = 1L;
+
     private String mobile;
+
+    private String openId;
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     public String getMobile() {
         return mobile;

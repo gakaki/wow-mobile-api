@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService {
         UserCheckResponse userCheckResponse = new UserCheckResponse();
         UserResponse userResponse = getEndUserByMobile(mobile);
         userCheckResponse.setExistedUser(userResponse.getEndUser() != null);
+        logger.info("is existed user:" + userCheckResponse);
         return userCheckResponse;
     }
 

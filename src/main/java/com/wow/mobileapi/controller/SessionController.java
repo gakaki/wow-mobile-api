@@ -75,6 +75,7 @@ public class SessionController extends BaseController {
             }
         } catch (Exception e) {
             logger.error("login发生错误---" + e);
+            e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
