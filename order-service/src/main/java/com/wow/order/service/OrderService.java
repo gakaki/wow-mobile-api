@@ -5,6 +5,7 @@ import java.util.List;
 import com.wow.order.model.Order;
 import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
+import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.OrderVo;
 import com.wow.order.vo.response.OrderSettleResponse;
 
@@ -14,6 +15,15 @@ import com.wow.order.vo.response.OrderSettleResponse;
  * Created by zhengzhiqing on 16/6/16.
  */
 public interface OrderService {
+
+    /**
+     * 订单结算
+     * 
+     * @param orderVo
+     * @return
+     */
+    OrderSettleResponse settleOrder(OrderSettleQuery query);
+
     /**
      * 下单
      *

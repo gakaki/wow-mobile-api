@@ -339,5 +339,30 @@
 			WHERE sc.is_deleted =false
 			  AND sc.end_user_id = #{endUserId}
 	</select>
+	
+	<!-- 获取用户购物车信息列表明细 -->
+	<select id="queryByShoppingCartIds"   resultType="com.wow.user.vo.ShoppingCartResultVo"
+		parameterType="com.wow.user.vo.ShoppingCartQueryVo">
+			SELECT 
+				  sc.id shoppingCartId,
+				  sc.product_qty productQty,
+				  p.id productId,
+				  p.product_name productName,
+				  p.color color,
+				  p.spec spec,
+				  p.product_status productStatus,
+				  pp.sell_price sellPrice
+			FROM
+			  shopping_cart sc
+			  INNER JOIN product p
+			    ON sc.product_id = p.id
+			  INNER JOIN product_price pp
+			    ON sc.product_id = pp.product_id
+			WHERE sc.is_deleted =false
+			  AND sc.id in
+			  <foreach collection="shoppingCartIds"   item="item"  open="(" close=")"  separator="," >
+	                    #{item}
+	          </foreach>
+	</select>
 
 </mapper>

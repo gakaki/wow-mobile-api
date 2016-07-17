@@ -9,13 +9,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.request.order.OrderSettleRequest;
 import com.wow.order.service.OrderService;
+import com.wow.order.vo.OrderSettleQuery;
+import com.wow.order.vo.response.OrderSettleResponse;
 
 /**
  * Created by zhengzhiqing on 16/7/2.
  */
 @RestController
-@RequestMapping
+@RequestMapping(value = "/v1/orders")
 public class OrderController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -24,41 +30,47 @@ public class OrderController extends BaseController {
     private OrderService orderService;
 
     /**
-     * 获取订单列表信息
+     * 获取用户购买的产品结算信息
      * 
      * @param request
      * @return
      */
-    @RequestMapping(value = "/v1/orders", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
-    public ApiResponse getOrderList(ApiRequest request) {
-        //        OrderRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderRequest.class);
-        //        ApiResponse apiResponse = new ApiResponse();
-        //        //判断json格式参数是否有误
-        //        if (orderRequest == null) {
-        //            setParamJsonParseErrorResponse(apiResponse);
-        //            return apiResponse;
-        //        }
-        //
-        //        String errorMsg = ValidatorUtil.getError(orderRequest);
-        //        //如果校验错误 则返回
-        //        if (StringUtil.isNotEmpty(errorMsg)) {
-        //            setInvalidParameterResponse(apiResponse, errorMsg);
-        //            return apiResponse;
-        //        }
-        //        OrderResponse orderResponse = null;
-        //        try {
-        //            orderResponse = orderService.queryOrderById(orderRequest.getId());
-        //            //如果处理失败 则返回错误信息
-        //            if (!isServiceCallSuccess(orderResponse.getResCode())) {
-        //                setServiceErrorResponse(apiResponse, orderResponse);
-        //            } else {
-        //                apiResponse.setData(orderResponse.getOrder());
-        //            }
-        //        } catch (Exception e) {
-        //            logger.error("获取订单列表信息错误---" + e);
-        //            setInternalErrorResponse(apiResponse);
-        //        }
-        return null;
+    @RequestMapping(value = "settleOrder", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    public ApiResponse settleOrder(ApiRequest request) {
+        OrderSettleRequest orderSettleRequest = JsonUtil.fromJSON(request.getParamJson(), OrderSettleRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+        //判断json格式参数是否有误
+        if (orderSettleRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(orderSettleRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+        OrderSettleResponse orderSettleResponse = null;
+        try {
+            OrderSettleQuery query = new OrderSettleQuery();
+            
+            query.setEndUserId(orderSettleRequest.getEndUserId());
+            query.setShoppingCartIds(orderSettleRequest.getShoppingCartIds());
+
+            orderSettleResponse = orderService.settleOrder(query);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(orderSettleResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, orderSettleResponse);
+            } else {
+                apiResponse.setData(orderSettleResponse);
+            }
+        } catch (Exception e) {
+            logger.error("获取产品结算信息错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
     }
 
 }

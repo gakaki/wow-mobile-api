@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.wow.common.constant.CommonConstant;
 import com.wow.common.response.CommonResponse;
 import com.wow.order.vo.OrderItemVo;
 
@@ -22,8 +23,8 @@ public class OrderSettleResponse extends CommonResponse {
     //用户购买的产品列表
     private List<OrderItemVo> orderItems;
     
-    //订单运费
-    private BigDecimal deliveryFee;
+    //订单运费 默认为0.00
+    private BigDecimal deliveryFee=CommonConstant.ZEROB_IGDECIMAL;
     
     //订单总价
     private BigDecimal totalAmount;

@@ -70,4 +70,12 @@ public interface ShoppingCartMapper {
      * @return
      */
     List<ShoppingCartResultVo> queryByUserId(ShoppingCartQueryVo query);
+    
+    /**
+     * 
+     * 根据用户购物车id列表 获取用户购物车信息列表明细
+     * @param request
+     * @return
+     */
+    List<ShoppingCartResultVo> queryByShoppingCartIds(ShoppingCartQueryVo query);
 }

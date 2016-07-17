@@ -1,17 +1,29 @@
 package com.wow.order.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wow.common.constant.CommonConstant;
+import com.wow.common.enums.ProductStatusEnum;
+import com.wow.common.util.BeanUtil;
+import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.NumberUtil;
 import com.wow.order.model.Order;
 import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.service.OrderService;
+import com.wow.order.vo.OrderItemVo;
+import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.OrderVo;
 import com.wow.order.vo.response.OrderSettleResponse;
+import com.wow.user.mapper.ShoppingCartMapper;
+import com.wow.user.vo.ShoppingCartQueryVo;
+import com.wow.user.vo.ShoppingCartResultVo;
 
 /**
  * 订单服务
@@ -21,6 +33,9 @@ import com.wow.order.vo.response.OrderSettleResponse;
 @Service
 @Transactional("orderTransactionManager")
 public class OrderServiceImpl implements OrderService {
+    @Autowired
+    private ShoppingCartMapper shoppingCartMapper;
+
     /**
      * 下单
      *
@@ -54,12 +69,12 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderSettleResponse queryOrderById(int orderId) {
-        OrderSettleResponse orderResponse=new OrderSettleResponse();
-        
+        OrderSettleResponse orderResponse = new OrderSettleResponse();
+
         //设置错误码和错误信息
         orderResponse.setResCode("40001");
         orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40001"));
-        
+
         return orderResponse;
     }
 
@@ -149,6 +164,87 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean deliverDelayedGoods(Order order) {
         return false;
+    }
+
+    @Override
+    public OrderSettleResponse settleOrder(OrderSettleQuery query) {
+        OrderSettleResponse response = new OrderSettleResponse();
+
+        // 业务校验开始
+        //判断用户购物车id列表是否为空
+        if (CollectionUtil.isEmpty(query.getShoppingCartIds())) {
+            response.setResCode("40304");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40304"));
+
+            return response;
+        }
+        //业务校验结束
+
+        ShoppingCartQueryVo shoppingCartQuery = new ShoppingCartQueryVo();
+        shoppingCartQuery.setShoppingCartIds(query.getShoppingCartIds());
+
+        //根据用户购物车id列表 获取用户购物车信息列表
+        List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByShoppingCartIds(shoppingCartQuery);
+
+        if (CollectionUtil.isEmpty(shoppingCartResult)) {
+            return response;
+        }
+
+        wrapOrderSettleResponse(response, shoppingCartResult);
+
+        return response;
+    }
+
+    /**
+     * 包装订单产品项响应类
+     * 
+     * @param shoppingCartResult
+     * @return
+     */
+    private OrderSettleResponse wrapOrderSettleResponse(OrderSettleResponse response, List<ShoppingCartResultVo> shoppingCartResult) {
+        OrderItemVo orderItemVo = null;
+        long totalPrice = 0L; //订单总价
+        List<OrderItemVo> orderItems = new ArrayList<OrderItemVo>(shoppingCartResult.size());
+
+        for (ShoppingCartResultVo shoppingCartResultVo : shoppingCartResult) {
+            orderItemVo = new OrderItemVo();
+
+            BeanUtil.copyProperties(shoppingCartResultVo, orderItemVo);
+
+            //转化产品状态名称
+            if (orderItemVo.getProductStatus() != null) {
+                orderItemVo.setProductStatusName(ProductStatusEnum.get((int) orderItemVo.getProductStatus()));
+            }
+
+            //产品单价
+            long productPrice = NumberUtil.convertToFen(orderItemVo.getSellPrice());
+            //计算该产品销售总价( 产品单价乘以数量)
+            long sellTotalAmount = productPrice * orderItemVo.getProductQty();
+            //仅计算已经上架的产品价格
+            if (orderItemVo.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_SHELVE.getKey()) {
+                //计算订单总价
+                totalPrice += sellTotalAmount;
+            }
+
+            orderItemVo.setSellTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+
+            orderItems.add(orderItemVo);
+        }
+
+        //设置订单项信息
+        response.setOrderItems(orderItems);
+
+        //订单金额小于指定的阀值时计算运费
+        if (totalPrice < NumberUtil.convertToFen(CommonConstant.THRESHOLD)) {
+            response.setDeliveryFee(CommonConstant.DELIVERYFEE);
+            //计算运费
+            totalPrice += NumberUtil.convertToFen(CommonConstant.DELIVERYFEE);
+        }
+
+        //计算订单总价
+        response.setTotalAmount(NumberUtil.convertToYuan(totalPrice));
+
+        return response;
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wow.common.constant.CommonConstant;
 import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
@@ -172,8 +173,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         // 业务校验开始
         //判断用户id是否为空
         if (query.getEndUserId() == null) {
-            response.setResCode("40304");
-            response.setResMsg(ErrorCodeUtil.getErrorMsg("40304"));
+            response.setResCode("40303");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40303"));
 
             return response;
         }
@@ -268,7 +269,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      */
     private BigDecimal calculateShoppingCartPrice(List<ShoppingCartResultVo> shoppingCartResult) {
         if (CollectionUtil.isEmpty(shoppingCartResult)) {
-            return NumberUtil.ZEROB_IGDECIMAL;
+            return CommonConstant.ZEROB_IGDECIMAL;
         }
 
         long totalPrice = 0L;
@@ -278,13 +279,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 shoppingCart.setProductStatusName(ProductStatusEnum.get((int) shoppingCart.getProductStatus()));
             }
 
-            //如果产品已下架则不计算价格
-            if (shoppingCart.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_OFF_SHELVE.getKey()) {
-                continue;
+            //仅计算已经上架的产品价格
+            if (shoppingCart.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_SHELVE.getKey()) {
+                long productPrice = NumberUtil.convertToFen(shoppingCart.getSellPrice());
+                totalPrice += productPrice * shoppingCart.getProductQty();
             }
 
-            long productPrice = NumberUtil.convertToFen(shoppingCart.getSellPrice());
-            totalPrice += productPrice * shoppingCart.getProductQty();
         }
 
         return NumberUtil.convertToYuan(totalPrice);
@@ -300,7 +300,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         //判断该产品用户是否已经加入到购物车
         ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
         ShoppingCartExample.Criteria criteria = shoppingCartExample.createCriteria();
-        
+
         criteria.andEndUserIdEqualTo(shoppingCart.getEndUserId());
         criteria.andProductIdEqualTo(shoppingCart.getProductId());
         criteria.andIsDeletedEqualTo(Boolean.FALSE);
