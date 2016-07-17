@@ -67,11 +67,10 @@ public class SessionServiceImpl implements SessionService {
     public LoginResponse login(LoginVo loginVo) {
         LoginResponse loginResponse = new LoginResponse();
         LoginResponseVo loginResponseVo = new LoginResponseVo();
-        EndUserSession endUserSession = null;
         //先检查数据库,看手机号和密码是否匹配
         EndUser endUser = userService.authenticate(loginVo.getMobile(), loginVo.getPassword()).getEndUser();
         if (endUser != null) { //验证成功
-            saveOrUpdateSession(endUserSession, loginVo, endUser.getId(),null);
+            EndUserSession endUserSession = saveOrUpdateSession(loginVo, endUser.getId(),null);
             loginResponseVo.setSessionToken(endUserSession.getSessionToken());
             loginResponseVo.setNickName(endUser.getNickName());
             loginResponse.setLoginResponseVo(loginResponseVo);
@@ -91,7 +90,6 @@ public class SessionServiceImpl implements SessionService {
     public LoginResponse thirdPartyLogin(ThirdPartyLoginVo thirdPartyLoginVo) {
         LoginResponse loginResponse = new LoginResponse();
         LoginResponseVo loginResponseVo = new LoginResponseVo();
-        EndUserSession endUserSession = null;
 
         int thirdPartyPlatformType = thirdPartyLoginVo.getThirdPartyPlatformType();
         String thirdPartyPlatformUserId = thirdPartyLoginVo.getThirdPartyPlatformUserId();
@@ -102,8 +100,7 @@ public class SessionServiceImpl implements SessionService {
             if (statusResponse != null && statusResponse.getWechatBindStatusVo() !=null) {
                 boolean binded = statusResponse.getWechatBindStatusVo().isBinded();
                 if (!binded) {
-                    loginResponse.setResCode("50106");
-                    loginResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50106"));
+                    ErrorResponseUtil.setErrorResponse(loginResponse, "50106");
                 } else {
                     //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
                     LoginVo loginVo = new LoginVo();
@@ -111,15 +108,14 @@ public class SessionServiceImpl implements SessionService {
                     loginVo.setLoginChannel(thirdPartyLoginVo.getLoginChannel());
                     loginVo.setMobile(statusResponse.getWechatBindStatusVo().getMobile());
                     loginVo.setUserAgent(thirdPartyLoginVo.getUserAgent());
-                    saveOrUpdateSession(endUserSession, loginVo,
+                    EndUserSession endUserSession = saveOrUpdateSession(loginVo,
                             statusResponse.getWechatBindStatusVo().getEndUserId(),thirdPartyPlatformType);
                     loginResponseVo.setNickName(statusResponse.getWechatBindStatusVo().getNickName());
                     loginResponseVo.setSessionToken(endUserSession.getSessionToken());
                     loginResponse.setLoginResponseVo(loginResponseVo);
                 }
             } else {
-                loginResponse.setResCode("50106");
-                loginResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50106"));
+                ErrorResponseUtil.setErrorResponse(loginResponse, "50106");
             }
         }
         return loginResponse;
@@ -127,19 +123,19 @@ public class SessionServiceImpl implements SessionService {
 
     /**
      * 创建或更新会话信息,记录登录日志
-     * @param endUserSession
      * @param loginVo
      * @param endUserId
      * @param thirdPartyPlatformType - 第三方登录平台(如微信,QQ,微博等)
      */
-    private void saveOrUpdateSession(EndUserSession endUserSession, LoginVo loginVo,
+    private EndUserSession saveOrUpdateSession(LoginVo loginVo,
                                      int endUserId, Integer thirdPartyPlatformType) {
-        endUserSession = getSessionByUserIdAndChannel(endUserId, loginVo.getLoginChannel());
+        EndUserSession endUserSession = getSessionByUserIdAndChannel(endUserId, loginVo.getLoginChannel());
         long loginIp = IpConvertUtil.ipToLong(loginVo.getLoginIp());
         Date now = new Date();
         //token生成算法,暂用UUID,可以替换
         String sessionToken = UUID.randomUUID().toString();
         if (endUserSession == null) {
+            logger.info("首次登录");
             endUserSession = new EndUserSession();
             endUserSession.setEndUserId(endUserId);
             endUserSession.setIsLogout(false);
@@ -152,6 +148,7 @@ public class SessionServiceImpl implements SessionService {
             endUserSession.setUserAgentInfo(loginVo.getUserAgent());
             endUserSessionMapper.insertSelective(endUserSession);
         } else {
+            logger.info("修改会话");
             endUserSession.setIsLogout(false);
             endUserSession.setLastLoginIp(loginIp);
             endUserSession.setLastRefreshTime(now);
@@ -163,7 +160,7 @@ public class SessionServiceImpl implements SessionService {
             //此处不用updateByPrimaryKeySelective,因为setLogoutTime(null)
             endUserSessionMapper.updateByPrimaryKey(endUserSession);
         }
-
+        logger.info("endUserSession=" + endUserSession);
         //记录登录日志
         EndUserLoginLog endUserLoginLog = new EndUserLoginLog();
         endUserLoginLog.setUserAgentInfo(loginVo.getUserAgent());
@@ -176,6 +173,7 @@ public class SessionServiceImpl implements SessionService {
             endUserLoginLog.setThirdPartyPlatformType(thirdPartyPlatformType.byteValue());
         }
         loginLogService.addLoginLog(endUserLoginLog);
+        return endUserSession;
     }
 
     /**

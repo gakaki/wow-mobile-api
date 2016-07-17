@@ -74,6 +74,7 @@ public class UserController extends BaseController {
             }
         } catch (Exception e) {
             logger.error("根据ID查找用户错误---" + e);
+            e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
         logger.info("根据ID查询用户,返回结果:" + JsonUtil.pojo2Json(apiResponse));
@@ -346,7 +347,50 @@ public class UserController extends BaseController {
                 apiResponse.setData(wechatBindStatusResponse);
             }
         } catch (Exception e) {
-            logger.error("发送验证码发生错误---" + e);
+            logger.error("绑定微信发生错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+
+
+    /**
+     * 微信是否已绑定用户
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/user/is-wechat-bind-user", method = RequestMethod.POST)
+    public ApiResponse checkIfWechatBindToUser(ApiRequest apiRequest) {
+
+        ApiResponse apiResponse = new ApiResponse();
+        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
+        //判断json格式参数是否有误
+        if (wechatBindQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+//        String errorMsg = ValidatorUtil.getError(wechatBindQueryRequest);
+        String errorMsg  = null;
+        String openId = wechatBindQueryRequest.getOpenId();
+        if (StringUtil.isEmpty(openId)) {
+            errorMsg = "请传入openId";
+        }
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+        try {
+            WechatBindStatusResponse wechatBindStatusResponse = userService.checkIfWechatIdBindToUserId(openId);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(wechatBindStatusResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, wechatBindStatusResponse);
+            } else {
+                apiResponse.setData(wechatBindStatusResponse);
+            }
+        } catch (Exception e) {
+            logger.error("检查微信是否已绑定用户发生错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
