@@ -83,7 +83,7 @@ public class SaleOrder implements Serializable {
 
     private Byte orderSource;
 
-    private Integer orderIp;
+    private Long orderIp;
 
     private String sellerRemarks;
 
@@ -405,11 +405,11 @@ public class SaleOrder implements Serializable {
         this.orderSource = orderSource;
     }
 
-    public Integer getOrderIp() {
+    public Long getOrderIp() {
         return orderIp;
     }
 
-    public void setOrderIp(Integer orderIp) {
+    public void setOrderIp(Long orderIp) {
         this.orderIp = orderIp;
     }
 

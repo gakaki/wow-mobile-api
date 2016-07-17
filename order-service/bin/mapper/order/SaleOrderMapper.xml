@@ -41,7 +41,7 @@
     <result column="is_leaf" property="isLeaf" jdbcType="BIT" />
     <result column="parent_order_id" property="parentOrderId" jdbcType="INTEGER" />
     <result column="order_source" property="orderSource" jdbcType="TINYINT" />
-    <result column="order_ip" property="orderIp" jdbcType="INTEGER" />
+    <result column="order_ip" property="orderIp" jdbcType="LONG" />
     <result column="seller_remarks" property="sellerRemarks" jdbcType="VARCHAR" />
     <result column="order_create_time" property="orderCreateTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -568,7 +568,7 @@
         order_source = #{record.orderSource,jdbcType=TINYINT},
       </if>
       <if test="record.orderIp != null" >
-        order_ip = #{record.orderIp,jdbcType=INTEGER},
+        order_ip = #{record.orderIp,jdbcType=LONG},
       </if>
       <if test="record.sellerRemarks != null" >
         seller_remarks = #{record.sellerRemarks,jdbcType=VARCHAR},
@@ -625,7 +625,7 @@
       is_leaf = #{record.isLeaf,jdbcType=BIT},
       parent_order_id = #{record.parentOrderId,jdbcType=INTEGER},
       order_source = #{record.orderSource,jdbcType=TINYINT},
-      order_ip = #{record.orderIp,jdbcType=INTEGER},
+      order_ip = #{record.orderIp,jdbcType=LONG},
       seller_remarks = #{record.sellerRemarks,jdbcType=VARCHAR},
       order_create_time = #{record.orderCreateTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
@@ -751,7 +751,7 @@
         order_source = #{orderSource,jdbcType=TINYINT},
       </if>
       <if test="orderIp != null" >
-        order_ip = #{orderIp,jdbcType=INTEGER},
+        order_ip = #{orderIp,jdbcType=LONG},
       </if>
       <if test="sellerRemarks != null" >
         seller_remarks = #{sellerRemarks,jdbcType=VARCHAR},
@@ -805,7 +805,7 @@
       is_leaf = #{isLeaf,jdbcType=BIT},
       parent_order_id = #{parentOrderId,jdbcType=INTEGER},
       order_source = #{orderSource,jdbcType=TINYINT},
-      order_ip = #{orderIp,jdbcType=INTEGER},
+      order_ip = #{orderIp,jdbcType=LONG},
       seller_remarks = #{sellerRemarks,jdbcType=VARCHAR},
       order_create_time = #{orderCreateTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

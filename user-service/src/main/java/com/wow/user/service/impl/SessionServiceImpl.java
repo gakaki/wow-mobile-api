@@ -1,8 +1,21 @@
 package com.wow.user.service.impl;
 
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.IpConvertUtil;
 import com.wow.user.constant.ThirdPartyPlatformType;
 import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.EndUserSessionMapper;
@@ -13,7 +26,6 @@ import com.wow.user.model.EndUserSessionExample;
 import com.wow.user.service.LoginLogService;
 import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
-import com.wow.user.util.IpConvertUtil;
 import com.wow.user.vo.LoginResponseVo;
 import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.ThirdPartyLoginVo;
@@ -21,17 +33,6 @@ import com.wow.user.vo.response.LoginResponse;
 import com.wow.user.vo.response.LogoutResponse;
 import com.wow.user.vo.response.TokenValidateResponse;
 import com.wow.user.vo.response.WechatBindStatusResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by zhengzhiqing on 16/6/16.
