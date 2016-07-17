@@ -2,9 +2,9 @@ package com.wow.order.service;
 
 import java.util.List;
 
-import com.wow.order.model.Order;
 import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
+import com.wow.order.model.SaleOrder;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderResponse;
@@ -37,7 +37,7 @@ public interface OrderService {
      *
      * @param order
      */
-    void cancelOrder(Order order);
+    void cancelOrder(SaleOrder order);
 
     /**
      * @param orderId
@@ -49,13 +49,13 @@ public interface OrderService {
      * @param orderCode
      * @return
      */
-    Order queryOrderByOrderCode(String orderCode);
+    SaleOrder queryOrderByOrderCode(String orderCode);
 
     /**
      * @param endUserId
      * @return
      */
-    List<Order> queryOrdersByUserId(int endUserId);
+    List<SaleOrder> queryOrdersByUserId(int endUserId);
 
     /**
      * @param orderLog
@@ -97,13 +97,13 @@ public interface OrderService {
      *
      * @param order
      */
-    boolean deliverGoods(Order order);
+    boolean deliverGoods(SaleOrder order);
 
     /**
      * 虚拟库存到货之后发货
      *
      * @param order
      */
-    boolean deliverDelayedGoods(Order order);
+    boolean deliverDelayedGoods(SaleOrder order);
 
 }

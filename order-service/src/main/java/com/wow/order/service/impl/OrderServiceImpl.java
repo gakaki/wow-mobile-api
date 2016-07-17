@@ -13,9 +13,9 @@ import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.NumberUtil;
-import com.wow.order.model.Order;
 import com.wow.order.model.OrderLog;
 import com.wow.order.model.ReturnOrder;
+import com.wow.order.model.SaleOrder;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderItemVo;
 import com.wow.order.vo.OrderQuery;
@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
      * @param order
      */
     @Override
-    public void cancelOrder(Order order) {
+    public void cancelOrder(SaleOrder order) {
 
     }
 
@@ -95,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public Order queryOrderByOrderCode(String orderCode) {
+    public SaleOrder queryOrderByOrderCode(String orderCode) {
         return null;
     }
 
@@ -104,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public List<Order> queryOrdersByUserId(int endUserId) {
+    public List<SaleOrder> queryOrdersByUserId(int endUserId) {
         return null;
     }
 
@@ -164,7 +164,7 @@ public class OrderServiceImpl implements OrderService {
      * @param order
      */
     @Override
-    public boolean deliverGoods(Order order) {
+    public boolean deliverGoods(SaleOrder order) {
         return false;
     }
 
@@ -174,7 +174,7 @@ public class OrderServiceImpl implements OrderService {
      * @param order
      */
     @Override
-    public boolean deliverDelayedGoods(Order order) {
+    public boolean deliverDelayedGoods(SaleOrder order) {
         return false;
     }
 
