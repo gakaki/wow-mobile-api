@@ -167,6 +167,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
     public ShoppingCartResponse queryShoppingCartByUserId(ShoppingCartQueryVo query) {
         ShoppingCartResponse response = new ShoppingCartResponse();
 
@@ -182,8 +183,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         EndUser endUser = endUserMapper.selectByPrimaryKey(query.getEndUserId());
 
         if (endUser == null) {
-            response.setResCode("40305");
-            response.setResMsg(ErrorCodeUtil.getErrorMsg("40305"));
+            response.setResCode("40304");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40304"));
 
             return response;
         }
@@ -274,15 +275,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         long totalPrice = 0L;
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
-            //转化产品状态名称
             if (shoppingCart.getProductStatus() != null) {
+                //转化产品状态名称
                 shoppingCart.setProductStatusName(ProductStatusEnum.get((int) shoppingCart.getProductStatus()));
-            }
 
-            //仅计算已经上架的产品价格
-            if (shoppingCart.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_SHELVE.getKey()) {
                 long productPrice = NumberUtil.convertToFen(shoppingCart.getSellPrice());
-                totalPrice += productPrice * shoppingCart.getProductQty();
+                long sellTotalAmount = productPrice * shoppingCart.getProductQty();
+                shoppingCart.setSellTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+
+                //仅计算已经上架的产品价格
+                if (shoppingCart.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_SHELVE.getKey()) {
+                    totalPrice += sellTotalAmount;
+                }
             }
 
         }

@@ -10,7 +10,17 @@ public class ShippingInfo implements Serializable {
 
     private String receiverName;
 
-    private Integer areaId;
+    private Integer provinceId;
+
+    private Integer cityId;
+
+    private Integer countyId;
+
+    private String provinceName;
+
+    private String cityName;
+
+    private String countyName;
 
     private String addressDetail;
 
@@ -19,6 +29,8 @@ public class ShippingInfo implements Serializable {
     private String receiverMobile;
 
     private String receiverPhone;
+
+    private String receiverPostcode;
 
     private String receiverEmail;
 
@@ -53,15 +65,55 @@ public class ShippingInfo implements Serializable {
     }
 
     public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
+        this.receiverName = receiverName == null ? null : receiverName.trim();
     }
 
-    public Integer getAreaId() {
-        return areaId;
+    public Integer getProvinceId() {
+        return provinceId;
     }
 
-    public void setAreaId(Integer areaId) {
-        this.areaId = areaId;
+    public void setProvinceId(Integer provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public Integer getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
+    }
+
+    public Integer getCountyId() {
+        return countyId;
+    }
+
+    public void setCountyId(Integer countyId) {
+        this.countyId = countyId;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName == null ? null : provinceName.trim();
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName == null ? null : cityName.trim();
+    }
+
+    public String getCountyName() {
+        return countyName;
+    }
+
+    public void setCountyName(String countyName) {
+        this.countyName = countyName == null ? null : countyName.trim();
     }
 
     public String getAddressDetail() {
@@ -69,7 +121,7 @@ public class ShippingInfo implements Serializable {
     }
 
     public void setAddressDetail(String addressDetail) {
-        this.addressDetail = addressDetail;
+        this.addressDetail = addressDetail == null ? null : addressDetail.trim();
     }
 
     public String getAddressAlias() {
@@ -77,7 +129,7 @@ public class ShippingInfo implements Serializable {
     }
 
     public void setAddressAlias(String addressAlias) {
-        this.addressAlias = addressAlias;
+        this.addressAlias = addressAlias == null ? null : addressAlias.trim();
     }
 
     public String getReceiverMobile() {
@@ -85,7 +137,7 @@ public class ShippingInfo implements Serializable {
     }
 
     public void setReceiverMobile(String receiverMobile) {
-        this.receiverMobile = receiverMobile;
+        this.receiverMobile = receiverMobile == null ? null : receiverMobile.trim();
     }
 
     public String getReceiverPhone() {
@@ -93,7 +145,15 @@ public class ShippingInfo implements Serializable {
     }
 
     public void setReceiverPhone(String receiverPhone) {
-        this.receiverPhone = receiverPhone;
+        this.receiverPhone = receiverPhone == null ? null : receiverPhone.trim();
+    }
+
+    public String getReceiverPostcode() {
+        return receiverPostcode;
+    }
+
+    public void setReceiverPostcode(String receiverPostcode) {
+        this.receiverPostcode = receiverPostcode == null ? null : receiverPostcode.trim();
     }
 
     public String getReceiverEmail() {
@@ -101,7 +161,7 @@ public class ShippingInfo implements Serializable {
     }
 
     public void setReceiverEmail(String receiverEmail) {
-        this.receiverEmail = receiverEmail;
+        this.receiverEmail = receiverEmail == null ? null : receiverEmail.trim();
     }
 
     public Boolean getIsDefault() {
@@ -145,11 +205,17 @@ public class ShippingInfo implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", endUserId=").append(endUserId);
         sb.append(", receiverName=").append(receiverName);
-        sb.append(", areaId=").append(areaId);
+        sb.append(", provinceId=").append(provinceId);
+        sb.append(", cityId=").append(cityId);
+        sb.append(", countyId=").append(countyId);
+        sb.append(", provinceName=").append(provinceName);
+        sb.append(", cityName=").append(cityName);
+        sb.append(", countyName=").append(countyName);
         sb.append(", addressDetail=").append(addressDetail);
         sb.append(", addressAlias=").append(addressAlias);
         sb.append(", receiverMobile=").append(receiverMobile);
         sb.append(", receiverPhone=").append(receiverPhone);
+        sb.append(", receiverPostcode=").append(receiverPostcode);
         sb.append(", receiverEmail=").append(receiverEmail);
         sb.append(", isDefault=").append(isDefault);
         sb.append(", createTime=").append(createTime);

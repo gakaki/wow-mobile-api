@@ -1,9 +1,11 @@
 package com.wow.user.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.user.model.Area;
 import com.wow.user.model.AreaExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface AreaMapper {
     int countByExample(AreaExample example);
@@ -27,4 +29,7 @@ public interface AreaMapper {
     int updateByPrimaryKeySelective(Area record);
 
     int updateByPrimaryKey(Area record);
+    
+    List<Area> selectByIds(List<Integer> ids);
+    
 }

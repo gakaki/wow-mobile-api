@@ -27,5 +27,4 @@ public interface ShippingInfoMapper {
     int updateByPrimaryKeySelective(ShippingInfo record);
 
     int updateByPrimaryKey(ShippingInfo record);
-
 }

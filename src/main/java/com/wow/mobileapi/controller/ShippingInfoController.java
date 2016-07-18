@@ -1,5 +1,11 @@
 package com.wow.mobileapi.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
@@ -13,18 +19,12 @@ import com.wow.user.model.ShippingInfo;
 import com.wow.user.service.ShippingInfoService;
 import com.wow.user.vo.response.ShippingInfoListResponse;
 import com.wow.user.vo.response.ShippingInfoResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by zhengzhiqing on 16/7/12.
  */
 @RestController
-public class ShippingInfoController extends BaseController{
+public class ShippingInfoController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ShippingInfoController.class);
 
@@ -39,7 +39,8 @@ public class ShippingInfoController extends BaseController{
     @RequestMapping(value = "/v1/user/shippinginfo/create", method = RequestMethod.POST)
     ApiResponse createShippingInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        ShippingInfoRequest shippingInfoRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
+        ShippingInfoRequest shippingInfoRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
         //判断json格式参数是否有误
         if (shippingInfoRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -78,7 +79,8 @@ public class ShippingInfoController extends BaseController{
     @RequestMapping(value = "/v1/user/shippinginfo/update", method = RequestMethod.POST)
     ApiResponse updateShippingInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        ShippingInfoRequest shippingInfoRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
+        ShippingInfoRequest shippingInfoRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
         //判断json格式参数是否有误
         if (shippingInfoRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -116,7 +118,8 @@ public class ShippingInfoController extends BaseController{
     @RequestMapping(value = "/v1/user/shippinginfo/delete", method = RequestMethod.POST)
     ApiResponse deleteShippingInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        ShippingInfoRequest shippingInfoRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
+        ShippingInfoRequest shippingInfoRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
         //判断json格式参数是否有误
         if (shippingInfoRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -129,12 +132,12 @@ public class ShippingInfoController extends BaseController{
             setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
-
-        ShippingInfo shippingInfo = new ShippingInfo();
-        BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
+        //
+        //        ShippingInfo shippingInfo = new ShippingInfo();
+        //        BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
 
         try {
-            CommonResponse commonResponse = shippingInfoService.deleteShippingInfo(shippingInfo.getId());
+            CommonResponse commonResponse = shippingInfoService.deleteShippingInfo(shippingInfoRequest.getId());
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
@@ -154,7 +157,8 @@ public class ShippingInfoController extends BaseController{
     @RequestMapping(value = "/v1/user/shippinginfo/list", method = RequestMethod.GET)
     ApiResponse getShippingInfoByUserId(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        ShippingInfoRequest shippingInfoRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
+        ShippingInfoRequest shippingInfoRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
         //判断json格式参数是否有误
         if (shippingInfoRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -168,11 +172,12 @@ public class ShippingInfoController extends BaseController{
             return apiResponse;
         }
 
-        ShippingInfo shippingInfo = new ShippingInfo();
-        BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
+        //        ShippingInfo shippingInfo = new ShippingInfo();
+        //        BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
+        Integer endUserId = 30;
 
         try {
-            ShippingInfoListResponse shippingInfoListResponse = shippingInfoService.getShippingInfoByUserId(shippingInfo.getEndUserId());
+            ShippingInfoListResponse shippingInfoListResponse = shippingInfoService.getShippingInfoByUserId(endUserId);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(shippingInfoListResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, shippingInfoListResponse);
@@ -194,7 +199,8 @@ public class ShippingInfoController extends BaseController{
     @RequestMapping(value = "/v1/user/shippinginfo/default", method = RequestMethod.GET)
     ApiResponse getDefaultShippingInfoByUserId(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        ShippingInfoRequest shippingInfoRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
+        ShippingInfoRequest shippingInfoRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
         //判断json格式参数是否有误
         if (shippingInfoRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -212,12 +218,13 @@ public class ShippingInfoController extends BaseController{
         BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
 
         try {
-            ShippingInfoResponse shippingInfoResponse = shippingInfoService.getDefaultShippingInfoByUserId(shippingInfo.getEndUserId());
+            ShippingInfoResponse shippingInfoResponse = shippingInfoService
+                .getDefaultShippingInfoByUserId(shippingInfo.getEndUserId());
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(shippingInfoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, shippingInfoResponse);
             } else {
-                ShippingInfo defaultShippingInfo = shippingInfoResponse.getShippingInfo();
+                //ShippingInfo defaultShippingInfo = shippingInfoResponse.getShippingInfo();
 
                 apiResponse.setData(shippingInfoResponse.getShippingInfo());
             }
@@ -236,7 +243,8 @@ public class ShippingInfoController extends BaseController{
     @RequestMapping(value = "/v1/user/shippinginfo/set-default", method = RequestMethod.POST)
     ApiResponse setAsDefaultShippingInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        ShippingInfoRequest shippingInfoRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
+        ShippingInfoRequest shippingInfoRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
         //判断json格式参数是否有误
         if (shippingInfoRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -254,7 +262,8 @@ public class ShippingInfoController extends BaseController{
         BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
 
         try {
-            CommonResponse commonResponse = shippingInfoService.setAsDefaultShippingInfo(shippingInfo.getId(),shippingInfo.getEndUserId());
+            CommonResponse commonResponse = shippingInfoService
+                .setAsDefaultShippingInfo(shippingInfo.getId(), shippingInfo.getEndUserId());
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);

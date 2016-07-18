@@ -208,4 +208,15 @@
       is_leaf = #{isLeaf,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+   <!-- 根据id列表查询相关的区域信息 -->
+    <select id="selectByIds"  resultMap="BaseResultMap"  parameterType="List" >
+	       select 
+		    <include refid="Base_Column_List" />
+		    from area
+		    where id in  
+		     <foreach collection="items"   item="item"  open="(" close=")"  separator="," >
+			       #{item}
+			  </foreach>
+  </select>
 </mapper>

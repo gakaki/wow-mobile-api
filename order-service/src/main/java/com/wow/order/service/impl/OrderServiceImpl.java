@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wow.common.constant.CommonConstant;
@@ -128,15 +129,15 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setPaymentStatus(CommonConstant.UNPAY);
         saleOrder.setIsUseCoupon(query.getCouponId() == null ? Boolean.FALSE : Boolean.TRUE);
         saleOrder.setEndUserCouponId(query.getCouponId());
-        
+
         //目前都不是父订单
-        saleOrder.setIsLeaf(Boolean.FALSE );
+        saleOrder.setIsLeaf(Boolean.FALSE);
         saleOrder.setOrderSource(query.getOrderSource());
         saleOrder.setOrderIp(IpConvertUtil.ipToLong(query.getOrderIp()));
-        
+
         saleOrder.setOrderCreateTime(DateUtil.currentDate());
         saleOrder.setUpdateTime(DateUtil.currentDate());
-        
+
         return saleOrder;
     }
 
@@ -185,6 +186,7 @@ public class OrderServiceImpl implements OrderService {
             totalPrice += productPrice * shoppingCart.getProductQty();
         }
 
+        //设置订单产品总价
         query.setProductAmount(NumberUtil.convertToYuan(totalPrice));
 
         //计算订单优惠金额
@@ -325,6 +327,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
     public OrderSettleResponse settleOrder(OrderSettleQuery query) {
         OrderSettleResponse response = new OrderSettleResponse();
 
@@ -366,11 +369,10 @@ public class OrderServiceImpl implements OrderService {
 
         for (ShoppingCartResultVo shoppingCartResultVo : shoppingCartResult) {
             orderItemVo = new OrderItemVo();
-
             BeanUtil.copyProperties(shoppingCartResultVo, orderItemVo);
 
-            //转化产品状态名称
             if (orderItemVo.getProductStatus() != null) {
+                //转化产品状态名称
                 orderItemVo.setProductStatusName(ProductStatusEnum.get((int) orderItemVo.getProductStatus()));
             }
 
@@ -378,13 +380,10 @@ public class OrderServiceImpl implements OrderService {
             long productPrice = NumberUtil.convertToFen(orderItemVo.getSellPrice());
             //计算该产品销售总价( 产品单价乘以数量)
             long sellTotalAmount = productPrice * orderItemVo.getProductQty();
-            //仅计算已经上架的产品价格
-            if (orderItemVo.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_SHELVE.getKey()) {
-                //计算订单总价
-                totalPrice += sellTotalAmount;
-            }
-
             orderItemVo.setSellTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+
+            //计算订单总价
+            totalPrice += sellTotalAmount;
 
             orderItems.add(orderItemVo);
         }

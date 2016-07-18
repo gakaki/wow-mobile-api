@@ -5,11 +5,17 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
     <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
-    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="county_id" property="countyId" jdbcType="INTEGER" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="county_name" property="countyName" jdbcType="VARCHAR" />
     <result column="address_detail" property="addressDetail" jdbcType="VARCHAR" />
     <result column="address_alias" property="addressAlias" jdbcType="VARCHAR" />
     <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR" />
     <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR" />
+    <result column="receiver_postcode" property="receiverPostcode" jdbcType="VARCHAR" />
     <result column="receiver_email" property="receiverEmail" jdbcType="VARCHAR" />
     <result column="is_default" property="isDefault" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -75,8 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, end_user_id, receiver_name, area_id, address_detail, address_alias, receiver_mobile, 
-    receiver_phone, receiver_email, is_default, create_time, update_time, is_deleted
+    id, end_user_id, receiver_name, province_id, city_id, county_id, province_name, city_name, 
+    county_name, address_detail, address_alias, receiver_mobile, receiver_phone, receiver_postcode, 
+    receiver_email, is_default, create_time, update_time, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.ShippingInfoExample" >
     select
@@ -112,14 +119,18 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shipping_info (end_user_id, receiver_name, area_id, 
-      address_detail, address_alias, receiver_mobile, 
-      receiver_phone, receiver_email, is_default, 
+    insert into shipping_info (end_user_id, receiver_name, province_id, 
+      city_id, county_id, province_name, 
+      city_name, county_name, address_detail, 
+      address_alias, receiver_mobile, receiver_phone, 
+      receiver_postcode, receiver_email, is_default, 
       create_time, update_time, is_deleted
       )
-    values (#{endUserId,jdbcType=INTEGER}, #{receiverName,jdbcType=VARCHAR}, #{areaId,jdbcType=INTEGER}, 
-      #{addressDetail,jdbcType=VARCHAR}, #{addressAlias,jdbcType=VARCHAR}, #{receiverMobile,jdbcType=VARCHAR}, 
-      #{receiverPhone,jdbcType=VARCHAR}, #{receiverEmail,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}, 
+    values (#{endUserId,jdbcType=INTEGER}, #{receiverName,jdbcType=VARCHAR}, #{provinceId,jdbcType=INTEGER}, 
+      #{cityId,jdbcType=INTEGER}, #{countyId,jdbcType=INTEGER}, #{provinceName,jdbcType=VARCHAR}, 
+      #{cityName,jdbcType=VARCHAR}, #{countyName,jdbcType=VARCHAR}, #{addressDetail,jdbcType=VARCHAR}, 
+      #{addressAlias,jdbcType=VARCHAR}, #{receiverMobile,jdbcType=VARCHAR}, #{receiverPhone,jdbcType=VARCHAR}, 
+      #{receiverPostcode,jdbcType=VARCHAR}, #{receiverEmail,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
       )
   </insert>
@@ -135,8 +146,23 @@
       <if test="receiverName != null" >
         receiver_name,
       </if>
-      <if test="areaId != null" >
-        area_id,
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="countyId != null" >
+        county_id,
+      </if>
+      <if test="provinceName != null" >
+        province_name,
+      </if>
+      <if test="cityName != null" >
+        city_name,
+      </if>
+      <if test="countyName != null" >
+        county_name,
       </if>
       <if test="addressDetail != null" >
         address_detail,
@@ -149,6 +175,9 @@
       </if>
       <if test="receiverPhone != null" >
         receiver_phone,
+      </if>
+      <if test="receiverPostcode != null" >
+        receiver_postcode,
       </if>
       <if test="receiverEmail != null" >
         receiver_email,
@@ -173,8 +202,23 @@
       <if test="receiverName != null" >
         #{receiverName,jdbcType=VARCHAR},
       </if>
-      <if test="areaId != null" >
-        #{areaId,jdbcType=INTEGER},
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="countyId != null" >
+        #{countyId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceName != null" >
+        #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="countyName != null" >
+        #{countyName,jdbcType=VARCHAR},
       </if>
       <if test="addressDetail != null" >
         #{addressDetail,jdbcType=VARCHAR},
@@ -187,6 +231,9 @@
       </if>
       <if test="receiverPhone != null" >
         #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPostcode != null" >
+        #{receiverPostcode,jdbcType=VARCHAR},
       </if>
       <if test="receiverEmail != null" >
         #{receiverEmail,jdbcType=VARCHAR},
@@ -223,8 +270,23 @@
       <if test="record.receiverName != null" >
         receiver_name = #{record.receiverName,jdbcType=VARCHAR},
       </if>
-      <if test="record.areaId != null" >
-        area_id = #{record.areaId,jdbcType=INTEGER},
+      <if test="record.provinceId != null" >
+        province_id = #{record.provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="record.cityId != null" >
+        city_id = #{record.cityId,jdbcType=INTEGER},
+      </if>
+      <if test="record.countyId != null" >
+        county_id = #{record.countyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.provinceName != null" >
+        province_name = #{record.provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityName != null" >
+        city_name = #{record.cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countyName != null" >
+        county_name = #{record.countyName,jdbcType=VARCHAR},
       </if>
       <if test="record.addressDetail != null" >
         address_detail = #{record.addressDetail,jdbcType=VARCHAR},
@@ -237,6 +299,9 @@
       </if>
       <if test="record.receiverPhone != null" >
         receiver_phone = #{record.receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiverPostcode != null" >
+        receiver_postcode = #{record.receiverPostcode,jdbcType=VARCHAR},
       </if>
       <if test="record.receiverEmail != null" >
         receiver_email = #{record.receiverEmail,jdbcType=VARCHAR},
@@ -263,11 +328,17 @@
     set id = #{record.id,jdbcType=INTEGER},
       end_user_id = #{record.endUserId,jdbcType=INTEGER},
       receiver_name = #{record.receiverName,jdbcType=VARCHAR},
-      area_id = #{record.areaId,jdbcType=INTEGER},
+      province_id = #{record.provinceId,jdbcType=INTEGER},
+      city_id = #{record.cityId,jdbcType=INTEGER},
+      county_id = #{record.countyId,jdbcType=INTEGER},
+      province_name = #{record.provinceName,jdbcType=VARCHAR},
+      city_name = #{record.cityName,jdbcType=VARCHAR},
+      county_name = #{record.countyName,jdbcType=VARCHAR},
       address_detail = #{record.addressDetail,jdbcType=VARCHAR},
       address_alias = #{record.addressAlias,jdbcType=VARCHAR},
       receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
       receiver_phone = #{record.receiverPhone,jdbcType=VARCHAR},
+      receiver_postcode = #{record.receiverPostcode,jdbcType=VARCHAR},
       receiver_email = #{record.receiverEmail,jdbcType=VARCHAR},
       is_default = #{record.isDefault,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -286,8 +357,23 @@
       <if test="receiverName != null" >
         receiver_name = #{receiverName,jdbcType=VARCHAR},
       </if>
-      <if test="areaId != null" >
-        area_id = #{areaId,jdbcType=INTEGER},
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="countyId != null" >
+        county_id = #{countyId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceName != null" >
+        province_name = #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="countyName != null" >
+        county_name = #{countyName,jdbcType=VARCHAR},
       </if>
       <if test="addressDetail != null" >
         address_detail = #{addressDetail,jdbcType=VARCHAR},
@@ -300,6 +386,9 @@
       </if>
       <if test="receiverPhone != null" >
         receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPostcode != null" >
+        receiver_postcode = #{receiverPostcode,jdbcType=VARCHAR},
       </if>
       <if test="receiverEmail != null" >
         receiver_email = #{receiverEmail,jdbcType=VARCHAR},
@@ -323,11 +412,17 @@
     update shipping_info
     set end_user_id = #{endUserId,jdbcType=INTEGER},
       receiver_name = #{receiverName,jdbcType=VARCHAR},
-      area_id = #{areaId,jdbcType=INTEGER},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      county_id = #{countyId,jdbcType=INTEGER},
+      province_name = #{provinceName,jdbcType=VARCHAR},
+      city_name = #{cityName,jdbcType=VARCHAR},
+      county_name = #{countyName,jdbcType=VARCHAR},
       address_detail = #{addressDetail,jdbcType=VARCHAR},
       address_alias = #{addressAlias,jdbcType=VARCHAR},
       receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
       receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      receiver_postcode = #{receiverPostcode,jdbcType=VARCHAR},
       receiver_email = #{receiverEmail,jdbcType=VARCHAR},
       is_default = #{isDefault,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -335,5 +430,4 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
 </mapper>
