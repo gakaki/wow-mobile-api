@@ -10,10 +10,9 @@ import javax.validation.constraints.NotNull;
 public class WechatBindRequest extends ApiRequest {
 
     private static final long serialVersionUID = 1L;
-//    @NotNull
-//    private Integer endUserId;
-//
-//    private String mobile;
+
+    @NotNull
+    private String mobile;
     @NotNull
     private String openId;
     @NotNull
@@ -21,21 +20,13 @@ public class WechatBindRequest extends ApiRequest {
     @NotNull
     private String wechatAvatar;
 
-//    public Integer getEndUserId() {
-//        return endUserId;
-//    }
-//
-//    public void setEndUserId(Integer endUserId) {
-//        this.endUserId = endUserId;
-//    }
-//
-//    public String getMobile() {
-//        return mobile;
-//    }
-//
-//    public void setMobile(String mobile) {
-//        this.mobile = mobile;
-//    }
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getOpenId() {
         return openId;

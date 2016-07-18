@@ -1,40 +1,31 @@
 package com.wow.mobileapi.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
-import com.wow.mobileapi.request.user.CaptchaRequest;
-import com.wow.mobileapi.request.user.RegisterRequest;
-import com.wow.mobileapi.request.user.ResetPwdRequest;
-import com.wow.mobileapi.request.user.UserCheckRequest;
-import com.wow.mobileapi.request.user.UserQueryRequest;
-import com.wow.mobileapi.request.user.UserUpdateRequest;
-import com.wow.mobileapi.request.user.WechatBindQueryRequest;
-import com.wow.mobileapi.request.user.WechatBindRequest;
+import com.wow.common.util.*;
+import com.wow.mobileapi.request.user.*;
+import com.wow.mobileapi.util.HttpRequestUtil;
 import com.wow.user.constant.CaptchaTemplate;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserWechat;
 import com.wow.user.service.CaptchaService;
+import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
-import com.wow.user.vo.response.RegisterResponse;
-import com.wow.user.vo.response.UserCheckResponse;
-import com.wow.user.vo.response.UserResponse;
-import com.wow.user.vo.response.WechatBindStatusResponse;
+import com.wow.user.util.PasswordUtil;
+import com.wow.user.vo.LoginVo;
+import com.wow.user.vo.response.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @RestController
 public class UserController extends BaseController {
@@ -43,6 +34,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SessionService sessionService;
 
     @Autowired
     private CaptchaService captchaService;
@@ -56,27 +50,22 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/v1/user", method = RequestMethod.GET)
-    public ApiResponse getEndUserById(ApiRequest apiRequest) {
+    public ApiResponse getUserInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        UserQueryRequest userQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), UserQueryRequest.class);
-        //判断json格式参数是否有误
-        if (userQueryRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(userQueryRequest);
+        String errorMsg = checkTokenChannel(apiRequest);
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
             setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
+        Integer endUserId = getUserIdByTokenChannel(apiRequest);
+        if (endUserId == null) {
+            ErrorResponseUtil.setErrorResponse(apiResponse,"10000");
+            return apiResponse;
+        }
 
-        int endUserId = userQueryRequest.getEndUserId();
-
-        logger.info("根据ID查询用户:" + endUserId);
         try {
-            UserResponse userResponse = userService.getEndUserById(endUserId);
+            UserResponse userResponse = userService.getUserById(endUserId);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(userResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, userResponse);
@@ -84,21 +73,35 @@ public class UserController extends BaseController {
                 apiResponse.setData(userResponse.getEndUser());
             }
         } catch (Exception e) {
-            logger.error("根据ID查找用户错误---" + e);
+            logger.error("查找用户信息错误---" + e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
-        logger.info("根据ID查询用户,返回结果:" + JsonUtil.pojo2Json(apiResponse));
         return apiResponse;
     }
 
     /**
-     * 用户注册(创建新用户)
+     *
+     * @param mobile
+     * @return
+     */
+    private String getCaptchaOnServer(String mobile) {
+        String captchaOnServer = "111111"; //TODO, hard code for test only
+//        //get from redis
+//        Object captcha = RedisUtil.get(mobile);
+//        if (captcha != null) {
+//            captchaOnServer = (String) captcha;
+//        }
+        return captchaOnServer;
+    }
+
+    /**
+     * 用户注册,并自动登录
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user", method = RequestMethod.POST)
-    public ApiResponse register(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/register", method = RequestMethod.POST)
+    public ApiResponse registerAndLogin(ApiRequest apiRequest, HttpServletRequest request) {
 
         ApiResponse apiResponse = new ApiResponse();
 
@@ -116,16 +119,52 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        String mobile = registerRequest.getMobile();
+        String captcha = registerRequest.getCaptcha();
         EndUser endUser = new EndUser();
-        BeanUtil.copyProperties(registerRequest, endUser);
+        BeanUtil.copyProperties(registerRequest,endUser);
+
+        //判断验证码是否与服务端一致,且服务端验证码未过期
+        String captchaOnServer = getCaptchaOnServer(mobile);
+        if (StringUtil.isEmpty(captchaOnServer)) {
+            ErrorResponseUtil.setErrorResponse(apiResponse,"40102");
+        } else if (!captcha.equals(captchaOnServer)) {
+            ErrorResponseUtil.setErrorResponse(apiResponse, "40103");
+        }
 
         try {
-            RegisterResponse registerResponse = userService.register(endUser, registerRequest.getCaptcha());
+            UserCheckResponse userCheckResponse = userService.isExistedUserByMobile(mobile);
+            if (userCheckResponse.isExistedUser()) {
+                ErrorResponseUtil.setErrorResponse(apiResponse,"50111");
+                return apiResponse;
+            }
+
+            CommonResponse commonResponse = userService.register(endUser);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(registerResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, registerResponse);
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
+                return apiResponse;
             } else {
-                apiResponse.setData(registerResponse.getEndUserId());
+                //做一次自动登录
+                LoginVo loginVo = new LoginVo();
+                BeanUtil.copyProperties(registerRequest, loginVo);
+                loginVo.setLoginIp(HttpRequestUtil.getIpAddr(request));
+                loginVo.setUserAgent(HttpRequestUtil.getUserAgent(request));
+                loginVo.setLoginChannel(apiRequest.getChannel());
+
+                try {
+                    LoginResponse loginResponse = sessionService.login(loginVo);
+                    //如果处理失败 则返回错误信息
+                    if (!isServiceCallSuccess(loginResponse.getResCode())) {
+                        setServiceErrorResponse(apiResponse, loginResponse);
+                    } else {
+                        apiResponse.setData(loginResponse.getLoginResponseVo());
+                    }
+                } catch (Exception e) {
+                    logger.error("login发生错误---" + e);
+                    e.printStackTrace();
+                    setInternalErrorResponse(apiResponse);
+                }
             }
         } catch (Exception e) {
             logger.error("注册发生错误---" + e);
@@ -152,6 +191,9 @@ public class UserController extends BaseController {
         }
 
         String errorMsg = ValidatorUtil.getError(userUpdateRequest);
+        if (StringUtil.isEmpty(errorMsg)) {
+            errorMsg = checkTokenChannel(apiRequest);
+        }
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
             setInvalidParameterResponse(apiResponse, errorMsg);
@@ -159,9 +201,18 @@ public class UserController extends BaseController {
         }
 
         EndUser endUser = new EndUser();
-        BeanUtil.copyProperties(userUpdateRequest, endUser);
+        BeanUtil.copyProperties(userUpdateRequest,endUser);
+
+        Integer endUserId = getUserIdByTokenChannel(apiRequest);
+        if (endUserId != null) {
+            endUser.setId(endUserId);
+        } else {
+            ErrorResponseUtil.setErrorResponse(apiResponse,"10000");
+            return apiResponse;
+        }
+
         try {
-            CommonResponse commonResponse = userService.updateEndUser(endUser);
+            CommonResponse commonResponse = userService.updateUser(endUser);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
@@ -190,7 +241,7 @@ public class UserController extends BaseController {
         }
 
         String errorMsg = null;
-        if (userCheckRequest.getMobile() == null) {
+        if(userCheckRequest.getMobile()==null) {
             errorMsg = "手机号不能为空";
         }
         //如果校验错误 则返回
@@ -227,7 +278,7 @@ public class UserController extends BaseController {
         }
 
         String errorMsg = null;
-        if (StringUtil.isEmpty(userCheckRequest.getNickName())) {
+        if(StringUtil.isEmpty(userCheckRequest.getNickName())) {
             errorMsg = "昵称不能为空";
         }
 
@@ -253,6 +304,13 @@ public class UserController extends BaseController {
         return apiResponse;
     }
 
+    /**
+     * 手机注册页面获取验证码
+     * 如果手机号已注册,直接返回,不发验证码
+     * 如果手机号未注册,发验证码
+     * @param apiRequest
+     * @return
+     */
     @RequestMapping(value = "/v1/user/captcha", method = RequestMethod.POST)
     public ApiResponse requestCaptcha(ApiRequest apiRequest) {
 
@@ -271,9 +329,18 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        String mobile = captchaRequest.getMobile();
+
         try {
-            CommonResponse commonResponse = captchaService
-                .sendCaptcha(captchaRequest.getMobile(), CaptchaTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
+
+            UserCheckResponse userCheckResponse = userService.isExistedUserByMobile(mobile);
+            if (userCheckResponse.isExistedUser()) {//如果是已注册用户,直接返回,不发送验证码
+                ErrorResponseUtil.setErrorResponse(apiResponse,"50111");
+                return apiResponse;
+            }
+
+            CommonResponse commonResponse = captchaService.sendCaptcha(
+                    captchaRequest.getMobile(), CaptchaTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
@@ -287,15 +354,64 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 检查是否绑定微信
+     * 绑定微信页面获取验证码
+     * 检查手机号是否已注册,是否已绑定微信。
+     * 如果已注册且已绑定,则不发送验证码,提示此手机号已被注册
+     * 如果未注册或者已注册但未绑定账号,则发送验证码
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/user/captcha-for-wechat-bind", method = RequestMethod.POST)
+    public ApiResponse requestCaptchaBindWechat(ApiRequest apiRequest) {
+
+        ApiResponse apiResponse = new ApiResponse();
+        CaptchaRequest captchaRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), CaptchaRequest.class);
+        //判断json格式参数是否有误
+        if (captchaRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(captchaRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        String mobile = captchaRequest.getMobile();
+
+        try {
+            RegisterBindStatusResponse registerBindStatusResponse = userService.getRegisterBindStatus(mobile);
+            //如果已注册且已绑定,则不发送验证码,直接返回:此手机号已被注册
+            if (registerBindStatusResponse.isRegistered() && registerBindStatusResponse.isBinded()) {
+                ErrorResponseUtil.setErrorResponse(apiResponse,"50111");
+                return apiResponse;
+            }
+            //如果未注册或者已注册但未绑定账号,则发送验证码
+            CommonResponse commonResponse = captchaService.sendCaptcha(
+                    captchaRequest.getMobile(), CaptchaTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
+            }
+        } catch (Exception e) {
+            logger.error("发送验证码发生错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 检查手机号是否已注册以及是否已绑定微信
      * @param apiRequest
      * @return
      */
     @RequestMapping(value = "/v1/user/wechat-bind-status", method = RequestMethod.GET)
-    public ApiResponse checkWechatBindStatus(ApiRequest apiRequest) {
+    public ApiResponse checkIfRegisteredAndBindedWechatByMobile(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil
-            .fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
+        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
         //判断json格式参数是否有误
         if (wechatBindQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -310,13 +426,13 @@ public class UserController extends BaseController {
         }
 
         try {
-            WechatBindStatusResponse wechatBindStatusResponse = userService
-                .checkWechatBindStatus(wechatBindQueryRequest.getMobile());
+            RegisterBindStatusResponse registerBindStatusResponse = userService.getRegisterBindStatus(wechatBindQueryRequest.getMobile());
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(wechatBindStatusResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, wechatBindStatusResponse);
+            if (!isServiceCallSuccess(registerBindStatusResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, registerBindStatusResponse);
             } else {
-                apiResponse.setData(wechatBindStatusResponse.getWechatBindStatusVo());
+                removeDuplicateResponse(registerBindStatusResponse);
+                apiResponse.setData(registerBindStatusResponse);
             }
         } catch (Exception e) {
             logger.error("发送验证码发生错误---" + e);
@@ -328,51 +444,129 @@ public class UserController extends BaseController {
 
     /**
      * 绑定微信
+     * 1. 先判断手机号是否已注册,如果未注册,先注册
+     * 2. 然后绑定微信
+     * 3. 然后自动登录
+     *
      * @param apiRequest
      * @return
      */
     @RequestMapping(value = "/v1/user/wechat-bind", method = RequestMethod.POST)
     public ApiResponse bindWechat(ApiRequest apiRequest, HttpServletRequest request) {
+
         ApiResponse apiResponse = new ApiResponse();
-        WechatBindRequest wechatBindRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindRequest.class);
+
+        RegisterAndBindWechatRequest registerAndBindWechatRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), RegisterAndBindWechatRequest.class);
         //判断json格式参数是否有误
-        if (wechatBindRequest == null) {
+        if (registerAndBindWechatRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
 
-        String errorMsg = ValidatorUtil.getError(wechatBindRequest);
+        String errorMsg = ValidatorUtil.getError(registerAndBindWechatRequest);
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
             setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
 
-        EndUserWechat endUserWechat = new EndUserWechat();
-        BeanUtil.copyProperties(wechatBindRequest, endUserWechat);
+        String mobile = registerAndBindWechatRequest.getMobile();
+        String password = registerAndBindWechatRequest.getPassword();
+        String captcha = registerAndBindWechatRequest.getCaptcha();
 
-        Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        if (endUserId != null) {
-            endUserWechat.setEndUserId(endUserId);
-        } else {
-            ErrorResponseUtil.setErrorResponse(apiResponse, "10000");
+        String captchaOnServer = getCaptchaOnServer(mobile);
+        if (StringUtil.isEmpty(captchaOnServer)) {
+            ErrorResponseUtil.setErrorResponse(apiResponse,"40102");
+            return apiResponse;
+        } else if (!captcha.equals(captchaOnServer)) {
+            ErrorResponseUtil.setErrorResponse(apiResponse,"40103");
             return apiResponse;
         }
 
+        EndUser endUser = new EndUser();
+        endUser.setMobile(mobile);
+        endUser.setPassword(password);
+
+        EndUserWechat endUserWechat = new EndUserWechat();
+        BeanUtil.copyProperties(registerAndBindWechatRequest.getUserInfoFromWechat(),endUserWechat);
+
+        //判断是否已注册/已绑定
+        RegisterBindStatusResponse registerBindStatusResponse = userService.getRegisterBindStatus(mobile);
+        boolean isRegistered = registerBindStatusResponse.isRegistered();
+        boolean isBinded = registerBindStatusResponse.isBinded();
+
+        //如果已经绑定,返回错误:该手机已经绑定微信
+        if (isBinded) {
+            ErrorResponseUtil.setErrorResponse(apiResponse,"50107");
+            return apiResponse;
+        }
+
+        int endUserId;
+
+        //未注册的情况下,先注册
+        if(!isRegistered) {
+            try {
+                RegisterResponse registerResponse = userService.register(endUser);
+                if (registerResponse == null || !"0".equals(registerResponse.getResCode())) {
+                    ErrorResponseUtil.setErrorResponse(apiResponse,registerResponse.getResCode());
+                    return apiResponse;
+                }
+                endUserId = registerResponse.getEndUserId();
+            } catch (Exception e) {
+                logger.error("注册和绑定微信发生错误---" + e);
+                setInternalErrorResponse(apiResponse);
+                return apiResponse;
+            }
+        } else {
+            //已注册的情况下获得end_user_id
+            endUserId = userService.getUserByMobile(mobile).getEndUser().getId();
+        }
+
+        //注册之后绑定微信
+        endUserWechat.setMobile(endUser.getMobile());
+        endUserWechat.setEndUserId(endUserId);
+
+        //已有用户绑定微信
         try {
-            WechatBindStatusResponse wechatBindStatusResponse = userService.bindWechatToUser(endUserWechat);
+            CommonResponse commonResponse = userService.bindWechat(endUserWechat);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(wechatBindStatusResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, wechatBindStatusResponse);
-            } else {
-                apiResponse.setData(wechatBindStatusResponse.getWechatBindStatusVo());
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
+                return apiResponse;
             }
         } catch (Exception e) {
             logger.error("绑定微信发生错误---" + e);
             setInternalErrorResponse(apiResponse);
+            return apiResponse;
         }
+
+        //进行一次自动登录
+        LoginVo loginVo = new LoginVo();
+        BeanUtil.copyProperties(registerAndBindWechatRequest, loginVo);
+        loginVo.setLoginIp(HttpRequestUtil.getIpAddr(request));
+        loginVo.setUserAgent(HttpRequestUtil.getUserAgent(request));
+        loginVo.setLoginChannel(apiRequest.getChannel());
+
+        try {
+            LoginResponse loginResponse = sessionService.login(loginVo);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(loginResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, loginResponse);
+                return apiResponse;
+            } else {
+                apiResponse.setData(loginResponse.getLoginResponseVo());
+            }
+        } catch (Exception e) {
+            logger.error("login发生错误---" + e);
+            e.printStackTrace();
+            setInternalErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
         return apiResponse;
+
     }
+
 
     /**
      * 微信是否已绑定用户
@@ -383,16 +577,15 @@ public class UserController extends BaseController {
     public ApiResponse checkIfWechatBindToUser(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
-        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil
-            .fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
+        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
         //判断json格式参数是否有误
         if (wechatBindQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
 
-        //        String errorMsg = ValidatorUtil.getError(wechatBindQueryRequest);
-        String errorMsg = null;
+//        String errorMsg = ValidatorUtil.getError(wechatBindQueryRequest);
+        String errorMsg  = null;
         String openId = wechatBindQueryRequest.getOpenId();
         if (StringUtil.isEmpty(openId)) {
             errorMsg = "请传入openId";
@@ -403,12 +596,12 @@ public class UserController extends BaseController {
             return apiResponse;
         }
         try {
-            WechatBindStatusResponse wechatBindStatusResponse = userService.checkIfWechatIdBindToUserId(openId);
+            UserResponse userResponse = userService.getUserByOpenId(openId);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(wechatBindStatusResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, wechatBindStatusResponse);
+            if (!isServiceCallSuccess(userResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, userResponse);
             } else {
-                apiResponse.setData(wechatBindStatusResponse.getWechatBindStatusVo());
+                apiResponse.setData(userResponse.getEndUser());
             }
         } catch (Exception e) {
             logger.error("检查微信是否已绑定用户发生错误---" + e);
@@ -441,9 +634,21 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        String mobile = resetPwdRequest.getMobile();
+        String captcha = resetPwdRequest.getCaptcha();
+
+        String captchaOnServer = getCaptchaOnServer(mobile);
+        if (StringUtil.isEmpty(captchaOnServer)) {
+            ErrorResponseUtil.setErrorResponse(apiResponse,"40102");
+            return apiResponse;
+        } else if (!captcha.equals(captchaOnServer)) {
+            ErrorResponseUtil.setErrorResponse(apiResponse,"40103");
+            return apiResponse;
+        }
+
         try {
-            CommonResponse commonResponse = userService
-                .resetPassword(resetPwdRequest.getMobile(), resetPwdRequest.getCaptcha(), resetPwdRequest.getNewPwd());
+            CommonResponse commonResponse = userService.resetPassword(
+                    resetPwdRequest.getMobile(),resetPwdRequest.getNewPwd());
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
@@ -455,4 +660,53 @@ public class UserController extends BaseController {
         return apiResponse;
 
     }
+
+//    /**
+//     * 用户注册并绑定微信
+//     * @param apiRequest
+//     * @return
+//     */
+//    @RequestMapping(value = "/v1/user/register-and-bind-wechat", method = RequestMethod.POST)
+//    public ApiResponse registerAndBindWechat(ApiRequest apiRequest) {
+//
+//        ApiResponse apiResponse = new ApiResponse();
+//
+//        RegisterAndBindWechatRequest registerAndBindWechatRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), RegisterAndBindWechatRequest.class);
+//        //判断json格式参数是否有误
+//        if (registerAndBindWechatRequest == null) {
+//            setParamJsonParseErrorResponse(apiResponse);
+//            return apiResponse;
+//        }
+//
+//        String errorMsg = ValidatorUtil.getError(registerAndBindWechatRequest);
+//        //如果校验错误 则返回
+//        if (StringUtil.isNotEmpty(errorMsg)) {
+//            setInvalidParameterResponse(apiResponse, errorMsg);
+//            return apiResponse;
+//        }
+//
+//        EndUser endUser = new EndUser();
+//        endUser.setMobile(registerAndBindWechatRequest.getMobile());
+//        endUser.setPassword(registerAndBindWechatRequest.getPassword());
+//
+//        EndUserWechat endUserWechat = new EndUserWechat();
+//        BeanUtil.copyProperties(registerAndBindWechatRequest.getUserInfoFromWechat(),endUserWechat);
+//
+//        String captcha = registerAndBindWechatRequest.getCaptcha();
+//
+//        try {
+//            RegisterAndBindResponse registerAndBindResponse = userService.registerAndBindWechat(endUser, endUserWechat, captcha);
+//            //如果处理失败 则返回错误信息
+//            if (!isServiceCallSuccess(registerAndBindResponse.getResCode())) {
+//                setServiceErrorResponse(apiResponse, registerAndBindResponse);
+//            } else {
+//                apiResponse.setData(registerAndBindResponse);
+//            }
+//        } catch (Exception e) {
+//            logger.error("注册发生错误---" + e);
+//            setInternalErrorResponse(apiResponse);
+//        }
+//        logger.info("用户注册,返回结果:" + JsonUtil.pojo2Json(apiResponse));
+//        return apiResponse;
+//    }
 }

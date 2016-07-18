@@ -9,14 +9,11 @@ import javax.validation.constraints.NotNull;
  */
 public class LoginRequest extends ApiRequest {
 
-    /**  */
     private static final long serialVersionUID = 1L;
     @NotNull
     private String mobile;
     @NotNull
     private String password;
-    @NotNull
-    private Byte loginChannel;
 
     public String getMobile() {
         return mobile;
@@ -34,11 +31,4 @@ public class LoginRequest extends ApiRequest {
         this.password = password;
     }
 
-    public Byte getLoginChannel() {
-        return loginChannel;
-    }
-
-    public void setLoginChannel(Byte loginChannel) {
-        this.loginChannel = loginChannel;
-    }
 }

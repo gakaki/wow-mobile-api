@@ -2,8 +2,6 @@ package com.wow.mobileapi.request.user;
 
 import com.wow.common.request.ApiRequest;
 
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -11,16 +9,11 @@ import java.util.Date;
  */
 public class UserUpdateRequest extends ApiRequest {
 
-    @NotNull
-    private Integer id;
-
-    private String userName;
-
-    private String password;
-
     private String nickName;
 
     private String realName;
+
+    private String userName;
 
     private Byte sex;
 
@@ -42,8 +35,6 @@ public class UserUpdateRequest extends ApiRequest {
 
     private Byte constellation;
 
-    private String mobile;
-
     private String email;
 
     private String hobby;
@@ -62,46 +53,12 @@ public class UserUpdateRequest extends ApiRequest {
 
     private String selfIntroduction;
 
-    private Boolean signAgreement;
-
-    private Boolean isForbidden;
-
-    private String forbidReason;
-
-    private BigDecimal totalAmount;
-
-    private Integer totalScore;
-
-    private Byte memberLevel;
-
-    private Date registerTime;
-
-    private Date updateTime;
-
-    private Boolean isDeleted;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getUserName() {
         return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getNickName() {
@@ -200,14 +157,6 @@ public class UserUpdateRequest extends ApiRequest {
         this.constellation = constellation;
     }
 
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -280,75 +229,4 @@ public class UserUpdateRequest extends ApiRequest {
         this.selfIntroduction = selfIntroduction;
     }
 
-    public Boolean getSignAgreement() {
-        return signAgreement;
-    }
-
-    public void setSignAgreement(Boolean signAgreement) {
-        this.signAgreement = signAgreement;
-    }
-
-    public Boolean getForbidden() {
-        return isForbidden;
-    }
-
-    public void setForbidden(Boolean forbidden) {
-        isForbidden = forbidden;
-    }
-
-    public String getForbidReason() {
-        return forbidReason;
-    }
-
-    public void setForbidReason(String forbidReason) {
-        this.forbidReason = forbidReason;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public Integer getTotalScore() {
-        return totalScore;
-    }
-
-    public void setTotalScore(Integer totalScore) {
-        this.totalScore = totalScore;
-    }
-
-    public Byte getMemberLevel() {
-        return memberLevel;
-    }
-
-    public void setMemberLevel(Byte memberLevel) {
-        this.memberLevel = memberLevel;
-    }
-
-    public Date getRegisterTime() {
-        return registerTime;
-    }
-
-    public void setRegisterTime(Date registerTime) {
-        this.registerTime = registerTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
 }

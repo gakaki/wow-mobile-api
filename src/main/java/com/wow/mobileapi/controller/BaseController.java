@@ -123,7 +123,7 @@ public class BaseController {
         String token = request.getSessionToken();
         byte channel = request.getChannel();
         if (StringUtil.isEmpty(token) || channel <= 0) {
-            retMsg = "token和channel不能为空";
+            retMsg = "token和channel不能为空:" + token + "," + channel;
         }
         return retMsg;
     }
