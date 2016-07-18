@@ -83,7 +83,10 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
         if(!productApplicableScenes.isEmpty())
         {
             HashSet<Integer> productApplicableScenes1=new HashSet<>();
-            productApplicableScenes.forEach(o->productApplicableScenes1.add(o.getApplicableSceneId()));
+            for(ProductApplicableScene productApplicableScene:productApplicableScenes)
+            {
+                productApplicableScenes1.add(productApplicableScene.getApplicableSceneId());
+            }
             return getApplicableSceneById(new ArrayList<Integer>(productApplicableScenes1));
         }
         return null;
@@ -92,14 +95,20 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
     @Override
     public int createProductApplicableScene(List<ProductApplicableScene> applicableScenes) {
         if(!applicableScenes.isEmpty())
-          applicableScenes.forEach(o->productApplicableSceneMapper.insertSelective(o));
+            for(ProductApplicableScene productApplicableScene:applicableScenes)
+            {
+                productApplicableSceneMapper.insertSelective(productApplicableScene);
+            }
         return 0;
     }
 
     @Override
     public int updateProductApplicableScene(List<ProductApplicableScene> applicableScenes) {
         if(!applicableScenes.isEmpty())
-            applicableScenes.forEach(o->productApplicableSceneMapper.updateByPrimaryKeySelective(o));
+            for(ProductApplicableScene productApplicableScene:applicableScenes)
+            {
+                productApplicableSceneMapper.updateByPrimaryKeySelective(productApplicableScene) ;
+            }
         return 0;
     }
 
