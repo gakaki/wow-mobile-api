@@ -2,8 +2,9 @@ package com.wow.user.mapper;
 
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface EndUserMapper {
     int countByExample(EndUserExample example);
@@ -27,4 +28,7 @@ public interface EndUserMapper {
     int updateByPrimaryKeySelective(EndUser record);
 
     int updateByPrimaryKey(EndUser record);
+
+    //自定义部分
+    EndUser selectByOpenId(@Param("openId") String openId);
 }

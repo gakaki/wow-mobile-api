@@ -99,6 +99,9 @@ public class SessionServiceImpl implements SessionService {
             UserResponse userResponse = userService.getUserByOpenId(thirdPartyPlatformUserId);
 
             if (userResponse != null && userResponse.getEndUser() != null) {
+
+                logger.info("enduser:" + userResponse.getEndUser());
+                logger.info("nickname:" + userResponse.getEndUser().getNickName());
                 //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
                 LoginVo loginVo = new LoginVo();
                 loginVo.setLoginIp(thirdPartyLoginVo.getLoginIp());

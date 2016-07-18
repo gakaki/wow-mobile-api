@@ -253,10 +253,12 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserByOpenId(String openId) {
         UserResponse userResponse = new UserResponse();
         logger.info("start to get user by openId:" + openId);
-        EndUser endUser = endUserWechatMapper.selectUserByOpenId(openId);
+        EndUser endUser = endUserMapper.selectByOpenId(openId);
+        logger.info("endUser=" + endUser);
         if (endUser != null) {
             userResponse.setEndUser(endUser);
         }
+        logger.info("getUserByOpenId:" + userResponse.getEndUser());
         return userResponse;
     }
 

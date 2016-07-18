@@ -31,6 +31,4 @@ public interface EndUserWechatMapper {
 
     int updateByPrimaryKey(EndUserWechat record);
 
-    //自定义部分
-    EndUser selectUserByOpenId(@Param("openId") String openId);
 }

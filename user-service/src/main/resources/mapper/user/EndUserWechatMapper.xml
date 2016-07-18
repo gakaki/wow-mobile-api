@@ -350,13 +350,4 @@
       unbind_time = #{unbindTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectUserByOpenId" resultType="com.wow.user.model.EndUser" parameterType="java.lang.String" >
-    select end_user.id, end_user.mobile, end_user.nick_name, end_user.avatar
-    from end_user_wechat
-    inner join end_user
-    on end_user_wechat.end_user_id = end_user.id
-    where end_user_wechat.open_id = #{openId,jdbcType=VARCHAR}
-    and end_user.is_deleted = 0
-    and end_user_wechat.is_bind = 1
-  </select>
 </mapper>
