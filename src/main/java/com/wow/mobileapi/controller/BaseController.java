@@ -1,17 +1,16 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.ErrorCodeUtil;
-import com.wow.mobileapi.constant.ApiConstant;
+import com.wow.common.util.StringUtil;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.user.service.SessionService;
 import com.wow.user.vo.response.TokenValidateResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * controller基类 用以处理controller中的一些通用方法
@@ -93,11 +92,11 @@ public class BaseController {
      * @param request
      * @return 如果session依然有效,返回对应的end_user_id,否则返回null
      */
-    public Integer getUserIdByTokenChannel(HttpServletRequest request) {
+    public Integer getUserIdByTokenChannel(ApiRequest request) {
         Integer endUserId = null;
         try {
-            String token = request.getParameter(ApiConstant.REQUEST_PARAMETER_TOKEN);
-            byte channel = Byte.valueOf(request.getParameter(ApiConstant.REQUEST_PARAMETER_CHANNEL));
+            String token = request.getSessionToken();
+            byte channel = request.getChannel();
             //check whether token is valid, by search it from redis or mysql
             TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(token,channel);
             if (tokenValidateResponse==null || !tokenValidateResponse.isValid()) {
@@ -110,6 +109,22 @@ public class BaseController {
             logger.error("查询Token发生错误---" + e);
         }
         return endUserId;
+    }
+
+
+    /**
+     * 根据token和channel
+     * @param request
+     * @return 如果session依然有效,返回对应的end_user_id,否则返回null
+     */
+    public String checkTokenChannel(ApiRequest request) {
+        String retMsg = "";
+        String token = request.getSessionToken();
+        byte channel = request.getChannel();
+        if (StringUtil.isEmpty(token) || channel <= 0) {
+            retMsg = "token和channel不能为空";
+        }
+        return retMsg;
     }
 
 }
