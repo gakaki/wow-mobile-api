@@ -20,7 +20,17 @@ public class ApiRequest implements Serializable {
     
     //传递的参数 json格式表示
     private String paramJson;
-    
+
+    //1:android, 2:iOS, 3:others
+    private byte channel;
+
+    public byte getChannel() {
+        return channel;
+    }
+
+    public void setChannel(byte channel) {
+        this.channel = channel;
+    }
 
     public String getParamJson() {
         return paramJson;
