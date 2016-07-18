@@ -1,10 +1,31 @@
 package com.wow.mobileapi.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.*;
-import com.wow.mobileapi.request.user.*;
+import com.wow.common.util.BeanUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.request.user.CaptchaRequest;
+import com.wow.mobileapi.request.user.RegisterRequest;
+import com.wow.mobileapi.request.user.ResetPwdRequest;
+import com.wow.mobileapi.request.user.UserCheckRequest;
+import com.wow.mobileapi.request.user.UserQueryRequest;
+import com.wow.mobileapi.request.user.UserUpdateRequest;
+import com.wow.mobileapi.request.user.WechatBindQueryRequest;
+import com.wow.mobileapi.request.user.WechatBindRequest;
 import com.wow.user.constant.CaptchaTemplate;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserWechat;
@@ -14,15 +35,6 @@ import com.wow.user.vo.response.RegisterResponse;
 import com.wow.user.vo.response.UserCheckResponse;
 import com.wow.user.vo.response.UserResponse;
 import com.wow.user.vo.response.WechatBindStatusResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class UserController extends BaseController {
@@ -105,7 +117,7 @@ public class UserController extends BaseController {
         }
 
         EndUser endUser = new EndUser();
-        BeanUtil.copyProperties(registerRequest,endUser);
+        BeanUtil.copyProperties(registerRequest, endUser);
 
         try {
             RegisterResponse registerResponse = userService.register(endUser, registerRequest.getCaptcha());
@@ -147,7 +159,7 @@ public class UserController extends BaseController {
         }
 
         EndUser endUser = new EndUser();
-        BeanUtil.copyProperties(userUpdateRequest,endUser);
+        BeanUtil.copyProperties(userUpdateRequest, endUser);
         try {
             CommonResponse commonResponse = userService.updateEndUser(endUser);
             //如果处理失败 则返回错误信息
@@ -178,7 +190,7 @@ public class UserController extends BaseController {
         }
 
         String errorMsg = null;
-        if(userCheckRequest.getMobile()==null) {
+        if (userCheckRequest.getMobile() == null) {
             errorMsg = "手机号不能为空";
         }
         //如果校验错误 则返回
@@ -215,7 +227,7 @@ public class UserController extends BaseController {
         }
 
         String errorMsg = null;
-        if(StringUtil.isEmpty(userCheckRequest.getNickName())) {
+        if (StringUtil.isEmpty(userCheckRequest.getNickName())) {
             errorMsg = "昵称不能为空";
         }
 
@@ -260,8 +272,8 @@ public class UserController extends BaseController {
         }
 
         try {
-            CommonResponse commonResponse = captchaService.sendCaptcha(
-                    captchaRequest.getMobile(), CaptchaTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
+            CommonResponse commonResponse = captchaService
+                .sendCaptcha(captchaRequest.getMobile(), CaptchaTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
@@ -282,7 +294,8 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/v1/user/wechat-bind-status", method = RequestMethod.GET)
     public ApiResponse checkWechatBindStatus(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
+        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
         //判断json格式参数是否有误
         if (wechatBindQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -297,7 +310,8 @@ public class UserController extends BaseController {
         }
 
         try {
-            WechatBindStatusResponse wechatBindStatusResponse = userService.checkWechatBindStatus(wechatBindQueryRequest.getMobile());
+            WechatBindStatusResponse wechatBindStatusResponse = userService
+                .checkWechatBindStatus(wechatBindQueryRequest.getMobile());
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(wechatBindStatusResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, wechatBindStatusResponse);
@@ -335,13 +349,13 @@ public class UserController extends BaseController {
         }
 
         EndUserWechat endUserWechat = new EndUserWechat();
-        BeanUtil.copyProperties(wechatBindRequest,endUserWechat);
+        BeanUtil.copyProperties(wechatBindRequest, endUserWechat);
 
-        Integer endUserId = getUserIdByTokenChannel(request);
+        Integer endUserId = getUserIdByTokenChannel(apiRequest);
         if (endUserId != null) {
             endUserWechat.setEndUserId(endUserId);
         } else {
-            ErrorResponseUtil.setErrorResponse(apiResponse,"10000");
+            ErrorResponseUtil.setErrorResponse(apiResponse, "10000");
             return apiResponse;
         }
 
@@ -360,7 +374,6 @@ public class UserController extends BaseController {
         return apiResponse;
     }
 
-
     /**
      * 微信是否已绑定用户
      * @param apiRequest
@@ -370,15 +383,16 @@ public class UserController extends BaseController {
     public ApiResponse checkIfWechatBindToUser(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
-        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
+        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
         //判断json格式参数是否有误
         if (wechatBindQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
 
-//        String errorMsg = ValidatorUtil.getError(wechatBindQueryRequest);
-        String errorMsg  = null;
+        //        String errorMsg = ValidatorUtil.getError(wechatBindQueryRequest);
+        String errorMsg = null;
         String openId = wechatBindQueryRequest.getOpenId();
         if (StringUtil.isEmpty(openId)) {
             errorMsg = "请传入openId";
@@ -428,8 +442,8 @@ public class UserController extends BaseController {
         }
 
         try {
-            CommonResponse commonResponse = userService.resetPassword(
-                    resetPwdRequest.getMobile(),resetPwdRequest.getCaptcha(),resetPwdRequest.getNewPwd());
+            CommonResponse commonResponse = userService
+                .resetPassword(resetPwdRequest.getMobile(), resetPwdRequest.getCaptcha(), resetPwdRequest.getNewPwd());
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);

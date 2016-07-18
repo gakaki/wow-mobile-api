@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wow.common.constant.CommonConstant;
@@ -18,6 +19,9 @@ import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.IpConvertUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.common.util.RandomGenerator;
+import com.wow.order.mapper.SaleOrderItemMapper;
+import com.wow.order.mapper.SaleOrderLogMapper;
+import com.wow.order.mapper.SaleOrderMapper;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderItem;
@@ -48,6 +52,15 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ShippingInfoMapper shippingInfoMapper;
 
+    @Autowired
+    private SaleOrderMapper saleOrderMapper;
+
+    @Autowired
+    private SaleOrderLogMapper saleOrderLogMapper;
+
+    @Autowired
+    private SaleOrderItemMapper saleOrderItemMapper;
+
     /**
      * 下单
      *   1. 保存订单相关信息 扣减库存
@@ -76,7 +89,6 @@ public class OrderServiceImpl implements OrderService {
 
             return orderResponse;
         }
-        //业务校验结束
 
         query.setShippingInfo(shippingInfo);
 
@@ -91,13 +103,46 @@ public class OrderServiceImpl implements OrderService {
 
         //计算订单总金额
         BigDecimal totalPrice = calculateOrderPrice(query);
-        //计算订单优惠金额
 
-        wrapOrder(query);
+        //如果客户端计算的金额和服务端计算的不一致 则提示订单金额不正确
+        if (NumberUtil.isNotEquals(query.getOrderAmount(), totalPrice)) {
+            orderResponse.setResCode("40306");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40306"));
 
-        wrapOrderItem(query);
+            return orderResponse;
+        }
+
+        //业务校验结束
+
+        //包装订单对象
+        SaleOrder saleOrder = wrapOrder(query);
+        saleOrder.setOrderAmount(totalPrice);
+        //保存订单
+        saleOrderMapper.insertSelective(saleOrder);
+
+        //包装订单项目
+        List<SaleOrderItem> wrapOrderItems = wrapOrderItem(query);
+
+        saleOrderItemMapper.insertSelective(wrapOrderItems.get(0));
+
+        //saleOrderItemMapper.batchInsertSelective(wrapOrderItems);
+
+        //写入客户提交订单日志
+        SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40357"));
+        saleOrderLogMapper.insertSelective(warpOrderLog);
 
         return orderResponse;
+    }
+
+    //包装订单日志
+    private SaleOrderLog warpOrderLog(Integer orderId, String eventLog) {
+        SaleOrderLog saleOrderLog = new SaleOrderLog();
+
+        saleOrderLog.setOrderId(orderId);
+        saleOrderLog.setEventLog(eventLog);
+        saleOrderLog.setEventTime(DateUtil.currentDate());
+
+        return saleOrderLog;
     }
 
     /**
@@ -122,21 +167,32 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setEndUserRemarks(query.getRemark());
 
         //设置收货人地址信息
-        // ShippingInfo shippingInfo = query.getShippingInfo();
+        ShippingInfo shippingInfo = query.getShippingInfo();
+        
+        saleOrder.setReceiverName(shippingInfo.getReceiverName());
+        saleOrder.setReceiverProvince(shippingInfo.getProvinceName());
+        saleOrder.setReceiverCity(shippingInfo.getCityName());
+        saleOrder.setReceiverCounty(shippingInfo.getCountyName());
+        saleOrder.setReceiverAddress(shippingInfo.getAddressDetail());
+        saleOrder.setReceiverMobile(shippingInfo.getReceiverMobile());
+        saleOrder.setReceiverPostcode(shippingInfo.getReceiverPostcode());
+        
+        saleOrder.setEndUserRemarks(query.getRemark());
+
         //设置订单状态为待付款
         saleOrder.setOrderStatus(SaleOrderStatusEnum.TO_BE_PAID.getKey().byteValue());
         saleOrder.setPaymentStatus(CommonConstant.UNPAY);
         saleOrder.setIsUseCoupon(query.getCouponId() == null ? Boolean.FALSE : Boolean.TRUE);
         saleOrder.setEndUserCouponId(query.getCouponId());
-        
+
         //目前都不是父订单
-        saleOrder.setIsLeaf(Boolean.FALSE );
+        saleOrder.setIsLeaf(Boolean.FALSE);
         saleOrder.setOrderSource(query.getOrderSource());
         saleOrder.setOrderIp(IpConvertUtil.ipToLong(query.getOrderIp()));
-        
+
         saleOrder.setOrderCreateTime(DateUtil.currentDate());
         saleOrder.setUpdateTime(DateUtil.currentDate());
-        
+
         return saleOrder;
     }
 
@@ -147,7 +203,21 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     private List<SaleOrderItem> wrapOrderItem(OrderQuery query) {
-        List<SaleOrderItem> saleOrderItems = new ArrayList<>();
+        List<SaleOrderItem> saleOrderItems = new ArrayList<SaleOrderItem>();
+
+        List<ShoppingCartResultVo> shoppingCartResult = query.getShoppingCartResult();
+        
+        SaleOrderItem saleOrderItem=new SaleOrderItem();
+
+        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            saleOrderItem.setSaleOrderId(query.getOrderId());
+            
+            saleOrderItem.setProductId(shoppingCart.getProductId());
+            saleOrderItem.setProductName(shoppingCart.getProductName());
+            saleOrderItem.setOrderItemAmount(shoppingCart.getSellTotalAmount());
+            saleOrderItem.setOrderItemPrice(shoppingCart.getSellPrice());
+            saleOrderItem.setOrderItemQty(shoppingCart.getProductQty());
+        }
 
         return saleOrderItems;
     }
@@ -185,6 +255,7 @@ public class OrderServiceImpl implements OrderService {
             totalPrice += productPrice * shoppingCart.getProductQty();
         }
 
+        //设置订单产品总价
         query.setProductAmount(NumberUtil.convertToYuan(totalPrice));
 
         //计算订单优惠金额
@@ -325,6 +396,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
     public OrderSettleResponse settleOrder(OrderSettleQuery query) {
         OrderSettleResponse response = new OrderSettleResponse();
 
@@ -366,11 +438,10 @@ public class OrderServiceImpl implements OrderService {
 
         for (ShoppingCartResultVo shoppingCartResultVo : shoppingCartResult) {
             orderItemVo = new OrderItemVo();
-
             BeanUtil.copyProperties(shoppingCartResultVo, orderItemVo);
 
-            //转化产品状态名称
             if (orderItemVo.getProductStatus() != null) {
+                //转化产品状态名称
                 orderItemVo.setProductStatusName(ProductStatusEnum.get((int) orderItemVo.getProductStatus()));
             }
 
@@ -378,13 +449,10 @@ public class OrderServiceImpl implements OrderService {
             long productPrice = NumberUtil.convertToFen(orderItemVo.getSellPrice());
             //计算该产品销售总价( 产品单价乘以数量)
             long sellTotalAmount = productPrice * orderItemVo.getProductQty();
-            //仅计算已经上架的产品价格
-            if (orderItemVo.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_SHELVE.getKey()) {
-                //计算订单总价
-                totalPrice += sellTotalAmount;
-            }
-
             orderItemVo.setSellTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+
+            //计算订单总价
+            totalPrice += sellTotalAmount;
 
             orderItems.add(orderItemVo);
         }

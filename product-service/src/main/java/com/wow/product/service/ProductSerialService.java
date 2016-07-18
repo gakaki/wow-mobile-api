@@ -1,10 +1,10 @@
 package com.wow.product.service;
 
-import com.wow.product.Vo.Response.SerialResponse;
-import com.wow.product.Vo.Response.SpecResponse;
-import com.wow.product.model.ProductSerial;
-
 import java.util.List;
+
+import com.wow.product.model.ProductSerial;
+import com.wow.product.vo.response.SerialResponse;
+import com.wow.product.vo.response.SpecResponse;
 
 /**
  * 系列产品服务

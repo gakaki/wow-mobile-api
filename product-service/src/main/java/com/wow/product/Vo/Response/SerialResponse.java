@@ -1,4 +1,4 @@
-package com.wow.product.Vo.Response;
+package com.wow.product.vo.response;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -10,6 +10,8 @@ import java.util.Map;
  */
 public class SerialResponse implements Serializable {
 
+    /**  */
+    private static final long serialVersionUID = 1L;
     private String productName;
     private String tips;
     private String verboseInfo;

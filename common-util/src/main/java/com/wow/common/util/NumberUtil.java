@@ -9,7 +9,29 @@ import java.math.BigDecimal;
  * @version $Id: V1.0 2016年7月14日 下午5:50:14 Exp $
  */
 public class NumberUtil {
-    
+
+    /**
+     * 判断2个数是否相等
+     * 
+     * @param v1
+     * @param v2
+     * @return
+     */
+    public static boolean isEquals(BigDecimal v1, BigDecimal v2) {
+        return v1.compareTo(v2) == 0 ? true : false;
+    }
+
+    /**
+     * 判断2个数是否不相等
+     * 
+     * @param v1
+     * @param v2
+     * @return
+     */
+    public static boolean isNotEquals(BigDecimal v1, BigDecimal v2) {
+        return !isEquals(v1, v2);
+    }
+
     /**
      * 提供精确的加法运算。
      * 

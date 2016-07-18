@@ -1,9 +1,20 @@
-package com.wow.user.model;
+package com.wow.user.vo;
 
 import java.io.Serializable;
-import java.util.Date;
 
-public class ShippingInfo implements Serializable {
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+/**
+ * 用户收货地址结果
+ * 
+ * @author chenkaiwei
+ * @version $Id: V1.0 2016年7月18日 下午4:14:21 Exp $
+ */
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+public class ShippingInfoResult implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
+    
     private Integer id;
 
     private Integer endUserId;
@@ -24,8 +35,6 @@ public class ShippingInfo implements Serializable {
 
     private String addressDetail;
 
-    private String addressAlias;
-
     private String receiverMobile;
 
     private String receiverPhone;
@@ -35,14 +44,6 @@ public class ShippingInfo implements Serializable {
     private String receiverEmail;
 
     private Boolean isDefault;
-
-    private Date createTime;
-
-    private Date updateTime;
-
-    private Boolean isDeleted;
-
-    private static final long serialVersionUID = 1L;
 
     public Integer getId() {
         return id;
@@ -124,14 +125,6 @@ public class ShippingInfo implements Serializable {
         this.addressDetail = addressDetail == null ? null : addressDetail.trim();
     }
 
-    public String getAddressAlias() {
-        return addressAlias;
-    }
-
-    public void setAddressAlias(String addressAlias) {
-        this.addressAlias = addressAlias == null ? null : addressAlias.trim();
-    }
-
     public String getReceiverMobile() {
         return receiverMobile;
     }
@@ -172,30 +165,6 @@ public class ShippingInfo implements Serializable {
         this.isDefault = isDefault;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Boolean getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -212,16 +181,11 @@ public class ShippingInfo implements Serializable {
         sb.append(", cityName=").append(cityName);
         sb.append(", countyName=").append(countyName);
         sb.append(", addressDetail=").append(addressDetail);
-        sb.append(", addressAlias=").append(addressAlias);
         sb.append(", receiverMobile=").append(receiverMobile);
         sb.append(", receiverPhone=").append(receiverPhone);
         sb.append(", receiverPostcode=").append(receiverPostcode);
         sb.append(", receiverEmail=").append(receiverEmail);
         sb.append(", isDefault=").append(isDefault);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
     }
