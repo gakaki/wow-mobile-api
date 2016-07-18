@@ -10,6 +10,11 @@
     <result column="wechat_avatar" property="wechatAvatar" jdbcType="VARCHAR" />
     <result column="is_bind" property="isBind" jdbcType="BIT" />
     <result column="bind_time" property="bindTime" jdbcType="TIMESTAMP" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="union_id" property="unionId" jdbcType="VARCHAR" />
     <result column="unbind_time" property="unbindTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -71,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, end_user_id, mobile, open_id, wechat_nick_name, wechat_avatar, is_bind, bind_time,
-    unbind_time
+    id, end_user_id, mobile, open_id, wechat_nick_name, wechat_avatar, is_bind, bind_time, 
+    sex, country, province, city, union_id, unbind_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.EndUserWechatExample" >
     select
@@ -108,12 +113,16 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into end_user_wechat (end_user_id, mobile, open_id,
+    insert into end_user_wechat (end_user_id, mobile, open_id, 
       wechat_nick_name, wechat_avatar, is_bind, 
-      bind_time, unbind_time)
-    values (#{endUserId,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR},
+      bind_time, sex, country, 
+      province, city, union_id, 
+      unbind_time)
+    values (#{endUserId,jdbcType=INTEGER}, #{mobile,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
       #{wechatNickName,jdbcType=VARCHAR}, #{wechatAvatar,jdbcType=VARCHAR}, #{isBind,jdbcType=BIT}, 
-      #{bindTime,jdbcType=TIMESTAMP}, #{unbindTime,jdbcType=TIMESTAMP})
+      #{bindTime,jdbcType=TIMESTAMP}, #{sex,jdbcType=TINYINT}, #{country,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{unionId,jdbcType=VARCHAR}, 
+      #{unbindTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.user.model.EndUserWechat" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -142,6 +151,21 @@
       <if test="bindTime != null" >
         bind_time,
       </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="unionId != null" >
+        union_id,
+      </if>
       <if test="unbindTime != null" >
         unbind_time,
       </if>
@@ -167,6 +191,21 @@
       </if>
       <if test="bindTime != null" >
         #{bindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="unionId != null" >
+        #{unionId,jdbcType=VARCHAR},
       </if>
       <if test="unbindTime != null" >
         #{unbindTime,jdbcType=TIMESTAMP},
@@ -206,6 +245,21 @@
       <if test="record.bindTime != null" >
         bind_time = #{record.bindTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=TINYINT},
+      </if>
+      <if test="record.country != null" >
+        country = #{record.country,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null" >
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null" >
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unionId != null" >
+        union_id = #{record.unionId,jdbcType=VARCHAR},
+      </if>
       <if test="record.unbindTime != null" >
         unbind_time = #{record.unbindTime,jdbcType=TIMESTAMP},
       </if>
@@ -224,6 +278,11 @@
       wechat_avatar = #{record.wechatAvatar,jdbcType=VARCHAR},
       is_bind = #{record.isBind,jdbcType=BIT},
       bind_time = #{record.bindTime,jdbcType=TIMESTAMP},
+      sex = #{record.sex,jdbcType=TINYINT},
+      country = #{record.country,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      union_id = #{record.unionId,jdbcType=VARCHAR},
       unbind_time = #{record.unbindTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -253,6 +312,21 @@
       <if test="bindTime != null" >
         bind_time = #{bindTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="unionId != null" >
+        union_id = #{unionId,jdbcType=VARCHAR},
+      </if>
       <if test="unbindTime != null" >
         unbind_time = #{unbindTime,jdbcType=TIMESTAMP},
       </if>
@@ -268,16 +342,21 @@
       wechat_avatar = #{wechatAvatar,jdbcType=VARCHAR},
       is_bind = #{isBind,jdbcType=BIT},
       bind_time = #{bindTime,jdbcType=TIMESTAMP},
+      sex = #{sex,jdbcType=TINYINT},
+      country = #{country,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      union_id = #{unionId,jdbcType=VARCHAR},
       unbind_time = #{unbindTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <select id="selectByOpenId" resultType="com.wow.user.vo.WechatBindStatusVo" parameterType="java.lang.String" >
-    select end_user_wechat.is_bind binded, end_user_wechat.end_user_id endUserId, end_user.nick_name nickName, end_user.mobile mobile
+  <select id="selectUserByOpenId" resultType="com.wow.user.model.EndUser" parameterType="java.lang.String" >
+    select end_user.id, end_user.mobile, end_user.nick_name, end_user.avatar
     from end_user_wechat
     inner join end_user
     on end_user_wechat.end_user_id = end_user.id
     where end_user_wechat.open_id = #{openId,jdbcType=VARCHAR}
     and end_user.is_deleted = 0
+    and end_user_wechat.is_bind = 1
   </select>
 </mapper>

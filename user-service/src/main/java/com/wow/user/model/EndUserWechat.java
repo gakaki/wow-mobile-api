@@ -20,6 +20,16 @@ public class EndUserWechat implements Serializable {
 
     private Date bindTime;
 
+    private Byte sex;
+
+    private String country;
+
+    private String province;
+
+    private String city;
+
+    private String unionId;
+
     private Date unbindTime;
 
     private static final long serialVersionUID = 1L;
@@ -88,6 +98,46 @@ public class EndUserWechat implements Serializable {
         this.bindTime = bindTime;
     }
 
+    public Byte getSex() {
+        return sex;
+    }
+
+    public void setSex(Byte sex) {
+        this.sex = sex;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country == null ? null : country.trim();
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province == null ? null : province.trim();
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId == null ? null : unionId.trim();
+    }
+
     public Date getUnbindTime() {
         return unbindTime;
     }
@@ -110,6 +160,11 @@ public class EndUserWechat implements Serializable {
         sb.append(", wechatAvatar=").append(wechatAvatar);
         sb.append(", isBind=").append(isBind);
         sb.append(", bindTime=").append(bindTime);
+        sb.append(", sex=").append(sex);
+        sb.append(", country=").append(country);
+        sb.append(", province=").append(province);
+        sb.append(", city=").append(city);
+        sb.append(", unionId=").append(unionId);
         sb.append(", unbindTime=").append(unbindTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

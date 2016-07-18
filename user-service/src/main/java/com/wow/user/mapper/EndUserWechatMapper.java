@@ -1,11 +1,12 @@
 package com.wow.user.mapper;
 
+import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserWechat;
 import com.wow.user.model.EndUserWechatExample;
+import java.util.List;
+
 import com.wow.user.vo.WechatBindStatusVo;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 public interface EndUserWechatMapper {
     int countByExample(EndUserWechatExample example);
@@ -31,5 +32,5 @@ public interface EndUserWechatMapper {
     int updateByPrimaryKey(EndUserWechat record);
 
     //自定义部分
-    WechatBindStatusVo selectByOpenId(@Param("openId") String openId);
+    EndUser selectUserByOpenId(@Param("openId") String openId);
 }
