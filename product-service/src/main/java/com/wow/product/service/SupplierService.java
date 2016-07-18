@@ -33,7 +33,7 @@ public interface SupplierService {
      * @param supplierName
      * @return
      */
-    Supplier getSupplierByName(String supplierName);
+    Supplier getSupplierByName(String supplierName) throws Exception ;
 
     /**
      * 查询所有供应商
