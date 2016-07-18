@@ -1,17 +1,5 @@
 package com.wow.user.service.impl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorResponseUtil;
@@ -30,9 +18,19 @@ import com.wow.user.vo.LoginResponseVo;
 import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
-import com.wow.user.vo.response.LogoutResponse;
 import com.wow.user.vo.response.TokenValidateResponse;
-import com.wow.user.vo.response.WechatBindStatusResponse;
+import com.wow.user.vo.response.UserResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by zhengzhiqing on 16/6/16.
@@ -67,7 +65,7 @@ public class SessionServiceImpl implements SessionService {
     public LoginResponse login(LoginVo loginVo) {
         LoginResponse loginResponse = new LoginResponse();
         LoginResponseVo loginResponseVo = new LoginResponseVo();
-        //先检查数据库,看手机号和密码是否匹配
+        //检查数据库,看手机号和密码是否匹配
         EndUser endUser = userService.authenticate(loginVo.getMobile(), loginVo.getPassword()).getEndUser();
         if (endUser != null) { //验证成功
             EndUserSession endUserSession = saveOrUpdateSession(loginVo, endUser.getId(),null);
@@ -92,28 +90,26 @@ public class SessionServiceImpl implements SessionService {
         LoginResponseVo loginResponseVo = new LoginResponseVo();
 
         int thirdPartyPlatformType = thirdPartyLoginVo.getThirdPartyPlatformType();
+        logger.info("third party platform:" + thirdPartyPlatformType);
         String thirdPartyPlatformUserId = thirdPartyLoginVo.getThirdPartyPlatformUserId();
 
         if (thirdPartyPlatformType == ThirdPartyPlatformType.THIRD_PARTY_PLATFORM_WECHAT) {
+
             //检查end_user_wechat,查看该id是否已经绑定一个已注册用户
-            WechatBindStatusResponse statusResponse = userService.checkIfWechatIdBindToUserId(thirdPartyPlatformUserId);
-            if (statusResponse != null && statusResponse.getWechatBindStatusVo() !=null) {
-                boolean binded = statusResponse.getWechatBindStatusVo().isBinded();
-                if (!binded) {
-                    ErrorResponseUtil.setErrorResponse(loginResponse, "50106");
-                } else {
-                    //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
-                    LoginVo loginVo = new LoginVo();
-                    loginVo.setLoginIp(thirdPartyLoginVo.getLoginIp());
-                    loginVo.setLoginChannel(thirdPartyLoginVo.getLoginChannel());
-                    loginVo.setMobile(statusResponse.getWechatBindStatusVo().getMobile());
-                    loginVo.setUserAgent(thirdPartyLoginVo.getUserAgent());
-                    EndUserSession endUserSession = saveOrUpdateSession(loginVo,
-                            statusResponse.getWechatBindStatusVo().getEndUserId(),thirdPartyPlatformType);
-                    loginResponseVo.setNickName(statusResponse.getWechatBindStatusVo().getNickName());
-                    loginResponseVo.setSessionToken(endUserSession.getSessionToken());
-                    loginResponse.setLoginResponseVo(loginResponseVo);
-                }
+            UserResponse userResponse = userService.getUserByOpenId(thirdPartyPlatformUserId);
+
+            if (userResponse != null && userResponse.getEndUser() != null) {
+                //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
+                LoginVo loginVo = new LoginVo();
+                loginVo.setLoginIp(thirdPartyLoginVo.getLoginIp());
+                loginVo.setLoginChannel(thirdPartyLoginVo.getLoginChannel());
+                loginVo.setMobile(userResponse.getEndUser().getMobile());
+                loginVo.setUserAgent(thirdPartyLoginVo.getUserAgent());
+                EndUserSession endUserSession = saveOrUpdateSession(loginVo,
+                        userResponse.getEndUser().getId(),thirdPartyPlatformType);
+                loginResponseVo.setNickName(userResponse.getEndUser().getNickName());
+                loginResponseVo.setSessionToken(endUserSession.getSessionToken());
+                loginResponse.setLoginResponseVo(loginResponseVo);
             } else {
                 ErrorResponseUtil.setErrorResponse(loginResponse, "50106");
             }
@@ -172,6 +168,7 @@ public class SessionServiceImpl implements SessionService {
         if (thirdPartyPlatformType != null) {
             endUserLoginLog.setThirdPartyPlatformType(thirdPartyPlatformType.byteValue());
         }
+        logger.info("endUserLoginLog:" + endUserLoginLog);
         loginLogService.addLoginLog(endUserLoginLog);
         return endUserSession;
     }
@@ -219,21 +216,21 @@ public class SessionServiceImpl implements SessionService {
     /**
      * 用户登出
      *
-     * @param endUserId
+     * @param sessionToken
+     * @param loginChannel
      * @return
      */
-    public LogoutResponse logout(int endUserId, byte loginChannel) {
-        LogoutResponse logoutResponse = new LogoutResponse();
+    public CommonResponse logout(String sessionToken, byte loginChannel) {
+        CommonResponse commonResponse = new CommonResponse();
         EndUserSession endUserSession = new EndUserSession();
         endUserSession.setIsLogout(true);
         endUserSession.setLogoutTime(new Date());
         EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
         EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
-        criteria.andEndUserIdEqualTo(endUserId);
+        criteria.andSessionTokenEqualTo(sessionToken);
         criteria.andLoginChannelEqualTo(loginChannel);
-        int i = endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
-        logoutResponse.setSuccess(i == 1);
-        return logoutResponse;
+        endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
+        return commonResponse;
     }
 
     /**

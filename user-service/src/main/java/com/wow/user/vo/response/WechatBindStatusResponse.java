@@ -9,6 +9,9 @@ import com.wow.user.vo.WechatBindStatusVo;
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class WechatBindStatusResponse extends CommonResponse {
+
+    private static final long serialVersionUID = 1L;
+
     private WechatBindStatusVo wechatBindStatusVo;
 
     public WechatBindStatusVo getWechatBindStatusVo() {

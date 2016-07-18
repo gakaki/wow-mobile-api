@@ -3,12 +3,10 @@ package com.wow.user.service;
 import com.wow.common.response.CommonResponse;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserWechat;
+import com.wow.user.vo.response.RegisterBindStatusResponse;
 import com.wow.user.vo.response.RegisterResponse;
 import com.wow.user.vo.response.UserCheckResponse;
 import com.wow.user.vo.response.UserResponse;
-import com.wow.user.vo.response.WechatBindStatusResponse;
-
-import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/16.
@@ -18,51 +16,44 @@ public interface UserService {
     /**
      * 用户注册
      * @param endUser
-     * @param captcha
-     * @return
+     * @return 需要返回注册完成之后的end_user_id
      */
-    RegisterResponse register(EndUser endUser, String captcha);
-
-//    /**
-//     * 根据用户名判断是否已注册用户
-//     * @param userName
-//     * @return
-//     */
-//    UserCheckResponse isExistedUserByUserName(String userName);
+    RegisterResponse register(EndUser endUser);
 
     /**
      * 根据昵称判断是否已注册用户
      * @param nickName
-     * @return
+     * @return 是否已经存在的用户
      */
     UserCheckResponse isExistedUserByNickName(String nickName);
+
     /**
      * 根据手机号判断是否已注册用户
      * @param mobile
-     * @return
+     * @return 是否已经存在的用户
      */
     UserCheckResponse isExistedUserByMobile(String mobile);
 
     /**
      * 检查手机号的注册和绑定微信状态
      * @param mobile
-     * @return
+     * @return 是否已注册和已绑定
      */
-    WechatBindStatusResponse checkWechatBindStatus(String mobile);
+    RegisterBindStatusResponse getRegisterBindStatus(String mobile);
 
     /**
      * 绑定微信
      * @param endUserWechat
      * @return
      */
-    WechatBindStatusResponse bindWechatToUser(EndUserWechat endUserWechat);
+    CommonResponse bindWechat(EndUserWechat endUserWechat);
 
     /**
-     * 检查微信号是否已经绑定到一个已注册用户
+     * 根据微信号查找注册用户
      * @param openId
      * @return
      */
-    WechatBindStatusResponse checkIfWechatIdBindToUserId(String openId);
+    UserResponse getUserByOpenId(String openId);
 
     /**
      * 用户信息更新
@@ -70,16 +61,15 @@ public interface UserService {
      * @param endUser
      * @return
      */
-    CommonResponse updateEndUser(EndUser endUser);
+    CommonResponse updateUser(EndUser endUser);
 
     /**
      * 用户重置密码
      * @param mobile
-     * @param captcha
      * @param newPwd
      * @return
      */
-    CommonResponse resetPassword(String mobile, String captcha, String newPwd);
+    CommonResponse resetPassword(String mobile, String newPwd);
 
     /**
      * 根据Id获取用户信息
@@ -87,15 +77,7 @@ public interface UserService {
      * @param endUserId
      * @return
      */
-    UserResponse getEndUserById(int endUserId);
-
-    /**
-     * 根据用户名获取用户信息
-     *
-     * @param userName
-     * @return
-     */
-    UserResponse getEndUserByUserName(String userName);
+    UserResponse getUserById(int endUserId);
 
     /**
      * 根据手机号获取用户信息
@@ -103,7 +85,7 @@ public interface UserService {
      * @param mobile
      * @return
      */
-    UserResponse getEndUserByMobile(String mobile);
+    UserResponse getUserByMobile(String mobile);
 
     /**
      * 根据昵称获取用户信息
@@ -111,18 +93,10 @@ public interface UserService {
      * @param nickName
      * @return
      */
-    UserResponse getEndUserByNickName(String nickName);
+    UserResponse getUserByNickName(String nickName);
 
     /**
-     * 批量查询多个用户
-     *
-     * @param endUserIds
-     * @return
-     */
-    List<EndUser> getEndUsersByIds(int[] endUserIds);
-
-    /**
-     * 验证手机号(也是用户名)、密码是否匹配
+     * 验证手机号、密码是否匹配
      *
      * @param mobile
      * @param password

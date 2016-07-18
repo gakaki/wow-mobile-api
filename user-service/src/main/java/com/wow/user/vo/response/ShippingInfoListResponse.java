@@ -1,10 +1,10 @@
 package com.wow.user.vo.response;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
-import com.wow.user.vo.ShippingInfoResult;
+import com.wow.user.model.ShippingInfo;
+
+import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/28.
@@ -12,16 +12,13 @@ import com.wow.user.vo.ShippingInfoResult;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ShippingInfoListResponse extends CommonResponse {
 
-    /**  */
-    private static final long serialVersionUID = 1L;
-    private List<ShippingInfoResult> shippingInfoResultList;
+    private List<ShippingInfo> shippingInfoList;
 
-    public List<ShippingInfoResult> getShippingInfoResultList() {
-        return shippingInfoResultList;
+    public List<ShippingInfo> getShippingInfoList() {
+        return shippingInfoList;
     }
 
-    public void setShippingInfoResultList(List<ShippingInfoResult> shippingInfoResultList) {
-        this.shippingInfoResultList = shippingInfoResultList;
+    public void setShippingInfoList(List<ShippingInfo> shippingInfoList) {
+        this.shippingInfoList = shippingInfoList;
     }
-
 }

@@ -1,11 +1,9 @@
 package com.wow.user.service;
 
 import com.wow.common.response.CommonResponse;
-import com.wow.user.model.EndUserSession;
 import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
-import com.wow.user.vo.response.LogoutResponse;
 import com.wow.user.vo.response.TokenValidateResponse;
 
 /**
@@ -31,10 +29,11 @@ public interface SessionService {
     /**
      * 用户登出
      *
-     * @param endUserId
+     * @param sessionToken
+     * @param loginChannel
      * @return
      */
-    LogoutResponse logout(int endUserId, byte loginChannel);
+    CommonResponse logout(String sessionToken, byte loginChannel);
 
     /**
      * 判断是否有效session

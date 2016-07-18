@@ -15,10 +15,7 @@ import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.util.PasswordUtil;
 import com.wow.user.vo.WechatBindStatusVo;
-import com.wow.user.vo.response.RegisterResponse;
-import com.wow.user.vo.response.UserCheckResponse;
-import com.wow.user.vo.response.UserResponse;
-import com.wow.user.vo.response.WechatBindStatusResponse;
+import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +50,11 @@ public class UserServiceImpl implements UserService {
     /**
      * 用户注册
      * @param endUser
-     * @param captcha
      * @return
      */
     @Override
-    public RegisterResponse register(EndUser endUser, String captcha) {
+    public RegisterResponse register(EndUser endUser) {
         RegisterResponse registerResponse = new RegisterResponse();
-        //TODO: validation required, use hibernate validator?
         String mobile = endUser.getMobile();
 
         if (StringUtils.isEmpty(mobile)) {
@@ -74,22 +69,52 @@ public class UserServiceImpl implements UserService {
             return registerResponse;
         }
 
-        //判断验证码是否与服务端一致,且服务端验证码未过期
-        String captchaOnServer = getCaptchaOnServer(mobile);
-        if (StringUtils.isEmpty(captchaOnServer)) {
-            ErrorResponseUtil.setErrorResponse(registerResponse,"40102");
-        } else if (!captcha.equals(captchaOnServer)) {
-            ErrorResponseUtil.setErrorResponse(registerResponse,"40103");
-        } else {
-            endUser.setPassword(
-                    PasswordUtil.passwordHashGenerate(endUser.getPassword()));
-            endUserMapper.insertSelective(endUser);
-            //TODO: 如果该用户是通过好友推荐进来注册的,需要更新推荐相关信息,通过消息通知营销系统,否则要双向依赖
-            //注册成功,需要将用户ID返回
-            registerResponse.setEndUserId(endUser.getId());
-        }
+        endUser.setPassword(
+                PasswordUtil.passwordHashGenerate(endUser.getPassword()));
+        endUserMapper.insertSelective(endUser);
+        //TODO: 如果该用户是通过好友推荐进来注册的,需要更新推荐相关信息,通过消息通知营销系统,否则要双向依赖
+
+        //注册成功,需要将用户ID返回
+        registerResponse.setEndUserId(endUser.getId());
         return registerResponse;
     }
+
+//    /**
+//     * 用户注册并绑定微信
+//     *
+//     * @param endUser
+//     * @param endUserWechat
+//     * @param captcha
+//     * @return
+//     */
+//    @Override
+//    public RegisterAndBindResponse registerAndBindWechat(EndUser endUser, EndUserWechat endUserWechat, String captcha) {
+//        RegisterAndBindResponse registerAndBindResponse = new RegisterAndBindResponse();
+//        RegisterResponse registerResponse = register(endUser,captcha);
+//        if (registerResponse == null || !"0".equals(registerResponse.getResCode())) {
+//            ErrorResponseUtil.setErrorResponse(registerAndBindResponse,registerResponse.getResCode());
+//            return registerAndBindResponse;
+//        } else {
+//            int endUserId = registerResponse.getEndUserId();
+//            endUserWechat.setMobile(endUser.getMobile());
+//            endUserWechat.setEndUserId(endUserId);
+//            WechatBindStatusResponse wechatBindStatusResponse = bindWechatToUser(endUserWechat);
+//            if (wechatBindStatusResponse != null && wechatBindStatusResponse.getWechatBindStatusVo() != null) {
+//                boolean isBinded = wechatBindStatusResponse.getWechatBindStatusVo().isBinded();
+//                if (!isBinded) {
+//                    ErrorResponseUtil.setErrorResponse(registerAndBindResponse,"50109");
+//                    return registerAndBindResponse;
+//                }
+//            } else {
+//                ErrorResponseUtil.setErrorResponse(registerAndBindResponse,"50109");
+//                return registerAndBindResponse;
+//            }
+//            registerAndBindResponse.setEndUserId(endUserId);
+//            registerAndBindResponse.setRegistered(true);
+//            registerAndBindResponse.setBinded(true);
+//            return registerAndBindResponse;
+//        }
+//    }
 
 //    /**
 //     * 根据用户名判断是否已注册用户
@@ -116,7 +141,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public UserCheckResponse isExistedUserByNickName(String nickName) {
         UserCheckResponse userCheckResponse = new UserCheckResponse();
-        EndUser user = getEndUserByNickName(nickName).getEndUser();
+        EndUser user = getUserByNickName(nickName).getEndUser();
         userCheckResponse.setExistedUser(user!= null);
         return userCheckResponse;
     }
@@ -131,17 +156,13 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public UserCheckResponse isExistedUserByMobile(String mobile) {
         UserCheckResponse userCheckResponse = new UserCheckResponse();
-        UserResponse userResponse = getEndUserByMobile(mobile);
+        UserResponse userResponse = getUserByMobile(mobile);
         EndUser endUser = userResponse.getEndUser();
-        logger.info("endUser in userResponse:" + endUser);
         if (endUser !=null && endUser.getId() !=null) {
-            logger.info("set to true");
             userCheckResponse.setExistedUser(true);
         } else {
-            logger.info("set to false");
             userCheckResponse.setExistedUser(false);
         }
-        logger.info("is existed user:" + userCheckResponse.isExistedUser());
         return userCheckResponse;
     }
 
@@ -152,71 +173,74 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public WechatBindStatusResponse checkWechatBindStatus(String mobile) {
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public RegisterBindStatusResponse getRegisterBindStatus(String mobile) {
         logger.info("start to check if mobile registered and bind to wechat...");
-        WechatBindStatusResponse wechatBindStatusResponse = new WechatBindStatusResponse();
-        WechatBindStatusVo wechatBindStatusVo = new WechatBindStatusVo();
-        wechatBindStatusVo.setMobile(mobile);
+
+        RegisterBindStatusResponse registerBindStatusResponse = new RegisterBindStatusResponse();
+
         UserCheckResponse userCheckResponse = isExistedUserByMobile(mobile);
-        boolean existedUser = userCheckResponse.isExistedUser();
-        logger.info("isRegistered:" + existedUser);
-        wechatBindStatusVo.setRegistered(existedUser);
-        logger.info("isRegistered:" + wechatBindStatusVo.isRegistered());
-        EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
-        EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
-        criteria.andMobileEqualTo(mobile);
-        criteria.andOpenIdIsNotNull();
-        criteria.andIsBindEqualTo(true);
-        List<EndUserWechat> list = endUserWechatMapper.selectByExample(endUserWechatExample);
-        if (CollectionUtil.isNotEmpty(list)) {
-            EndUserWechat endUserWechat = list.get(0);
-            wechatBindStatusVo.setBinded(true);
-            wechatBindStatusVo.setOpenId(endUserWechat.getOpenId());
-            wechatBindStatusVo.setEndUserId(endUserWechat.getEndUserId());
+
+        if (userCheckResponse != null && userCheckResponse.isExistedUser()) {
+            registerBindStatusResponse.setRegistered(true);
+
+            EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
+            EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
+            criteria.andMobileEqualTo(mobile);
+            criteria.andIsBindEqualTo(true);
+            List<EndUserWechat> list = endUserWechatMapper.selectByExample(endUserWechatExample);
+            if (CollectionUtil.isNotEmpty(list)) {
+                EndUserWechat endUserWechat = list.get(0);
+                registerBindStatusResponse.setBinded(true);
+            } else {
+                registerBindStatusResponse.setBinded(false);
+            }
         } else {
-            wechatBindStatusVo.setBinded(false);
+            registerBindStatusResponse.setRegistered(false);
         }
-        wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
-        logger.info("isRegistered:" + wechatBindStatusVo.isRegistered());
-        return wechatBindStatusResponse;
+        logger.info("mobile-" + mobile + ", [registered:" + registerBindStatusResponse.isRegistered() + ", binded:" + registerBindStatusResponse.isBinded() + "]");
+        return registerBindStatusResponse;
     }
 
     /**
-     * 绑定微信
+     * 已有用户绑定微信
      *
      * @param endUserWechat
      * @return
      */
     @Override
-    public WechatBindStatusResponse bindWechatToUser(EndUserWechat endUserWechat) {
-        WechatBindStatusResponse wechatBindStatusResponse = new WechatBindStatusResponse();
-        WechatBindStatusVo wechatBindStatusVo = new WechatBindStatusVo();
-        //判断是否已经绑定过
-        EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
-        EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
-        criteria.andEndUserIdEqualTo(endUserWechat.getEndUserId());
-        List<EndUserWechat> list = endUserWechatMapper.selectByExample(endUserWechatExample);
-        if (CollectionUtil.isNotEmpty(list)) {
-            EndUserWechat existedEndUserWechat = list.get(0);
-            if (existedEndUserWechat.getIsBind()) {
-                ErrorResponseUtil.setErrorResponse(wechatBindStatusResponse,"50107");
-            } else { //曾经绑定又解除绑定了,更新绑定信息
-                endUserWechat.setId(existedEndUserWechat.getId());
-                endUserWechat.setIsBind(true);
-                endUserWechat.setBindTime(new Date());
-                int i = endUserWechatMapper.updateByPrimaryKeySelective(endUserWechat);
-                wechatBindStatusVo.setBinded(i>0);
-                wechatBindStatusVo.setMobile(endUserWechat.getMobile());
-                wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
-            }
-        } else {
-            int i = endUserWechatMapper.insertSelective(endUserWechat);
-            wechatBindStatusVo.setBinded(i>0);
-            wechatBindStatusVo.setMobile(endUserWechat.getMobile());
-            wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
+    public CommonResponse bindWechat(EndUserWechat endUserWechat) {
+        CommonResponse response = new CommonResponse();
+        String mobile = endUserWechat.getMobile();
+        Integer endUserId = endUserWechat.getEndUserId();
+        String openId = endUserWechat.getOpenId();
+
+        if (endUserId == null || StringUtil.isEmpty(openId)) {
+            response.setResCode("40000");
+            response.setResMsg("用户ID和openId不能为空");
+            return response;
         }
 
-        return wechatBindStatusResponse;
+        RegisterBindStatusResponse registerBindStatusResponse = getRegisterBindStatus(mobile);
+
+        boolean isRegistered = registerBindStatusResponse.isRegistered();
+        boolean isBinded = registerBindStatusResponse.isBinded();
+
+        if (isBinded) {
+            ErrorResponseUtil.setErrorResponse(response, "50107");
+            return response;
+        }
+
+        if (!isRegistered) {
+            ErrorResponseUtil.setErrorResponse(response, "40105");
+            return response;
+        }
+
+        endUserWechat.setIsBind(true);
+        endUserWechat.setBindTime(new Date());
+        endUserWechatMapper.insertSelective(endUserWechat);
+
+        return response;
     }
 
     /**
@@ -226,38 +250,14 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public WechatBindStatusResponse checkIfWechatIdBindToUserId(String openId) {
-        WechatBindStatusResponse wechatBindStatusResponse = new WechatBindStatusResponse();
-        WechatBindStatusVo wechatBindStatusVo = endUserWechatMapper.selectByOpenId(openId);
-        if (wechatBindStatusVo == null) {
-            wechatBindStatusVo = new WechatBindStatusVo();
-            wechatBindStatusVo.setBinded(false);
-        } else if (wechatBindStatusVo.isBinded()) {
-            wechatBindStatusVo.setRegistered(true);
+    public UserResponse getUserByOpenId(String openId) {
+        UserResponse userResponse = new UserResponse();
+        logger.info("start to get user by openId:" + openId);
+        EndUser endUser = endUserWechatMapper.selectUserByOpenId(openId);
+        if (endUser != null) {
+            userResponse.setEndUser(endUser);
         }
-        wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
-//        EndUserWechatExample endUserWechatExample = new EndUserWechatExample();
-//        EndUserWechatExample.Criteria criteria = endUserWechatExample.createCriteria();
-//        criteria.andOpenIdEqualTo(String.valueOf(openId));
-//        criteria.andEndUserIdIsNotNull();
-//        criteria.andIsBindEqualTo(true);
-//        List<EndUserWechat> endUserWechatList = endUserWechatMapper.selectByExample(endUserWechatExample);
-//        if (CollectionUtil.isEmpty(endUserWechatList)) {
-//            wechatBindStatusVo.setBinded(false);
-//            wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
-//        } else if (endUserWechatList.size() > 1) {
-//            wechatBindStatusResponse.setResCode("50105");
-//            wechatBindStatusResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50105"));
-//        } else {
-//            EndUserWechat endUserWechat = endUserWechatList.get(0);
-//            wechatBindStatusVo.setBinded(true);
-//            wechatBindStatusVo.setMobile(endUserWechat.getMobile());
-//            wechatBindStatusVo.setRegistered(true);
-//            wechatBindStatusVo.setOpenId(String.valueOf(openId));
-//            wechatBindStatusVo.setEndUserId(endUserWechat.getEndUserId());
-//            wechatBindStatusResponse.setWechatBindStatusVo(wechatBindStatusVo);
-//        }
-        return wechatBindStatusResponse;
+        return userResponse;
     }
 
     /**
@@ -268,7 +268,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @CacheEvict(value = "UserCache",key="'USER_ID_'+#endUserId")
-    public CommonResponse updateEndUser(EndUser endUser) {
+    public CommonResponse updateUser(EndUser endUser) {
         CommonResponse commonResponse = new CommonResponse();
         if (endUser == null || endUser.getId() == null) {
             commonResponse.setResCode("40000");
@@ -283,15 +283,14 @@ public class UserServiceImpl implements UserService {
      * 用户忘记密码/重置密码 - 需要手机验证(以后可支持邮件验证?)
      *
      * @param mobile
-     * @param captcha
      * @param newPwd
      * @return
      */
     @Override
     @CacheEvict(value = "UserCache", key="'USER_MOBILE_'+#mobile")
-    public CommonResponse resetPassword(String mobile, String captcha, String newPwd) {
+    public CommonResponse resetPassword(String mobile, String newPwd) {
         CommonResponse commonResponse = new CommonResponse();
-        UserResponse userResponse = getEndUserByMobile(mobile);
+        UserResponse userResponse = getUserByMobile(mobile);
         EndUser endUser = userResponse.getEndUser();
         if(endUser== null) {
             commonResponse.setResCode("40105");
@@ -299,35 +298,15 @@ public class UserServiceImpl implements UserService {
             return commonResponse;
         }
 
-        String captchaForMobile = getCaptchaOnServer(mobile);
-        if (StringUtil.isNotEmpty(captchaForMobile) && captchaForMobile.equals(captcha)) {
-            endUser.setPassword(PasswordUtil.passwordHashGenerate(newPwd));
-            endUser.setUpdateTime(new Date());
-            endUserMapper.updateByPrimaryKeySelective(endUser);
-            //需要设置当前有效的session token失效(所有登录渠道)
-            sessionService.invalidateSessionToken(endUser.getId());
-        } else {
-            commonResponse.setResCode("40103");
-            commonResponse.setResCode(ErrorCodeUtil.getErrorMsg("40103"));
-        }
+        endUser.setPassword(PasswordUtil.passwordHashGenerate(newPwd));
+        endUser.setUpdateTime(new Date());
+        endUserMapper.updateByPrimaryKeySelective(endUser);
+        //需要设置当前有效的session token失效(所有登录渠道)
+        sessionService.invalidateSessionToken(endUser.getId());
+
         return commonResponse;
     }
 
-    /**
-     * 获取服务器上生成的验证码
-     * @param mobile
-     * @return
-     */
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    private String getCaptchaOnServer(String mobile) {
-        String captchaOnServer = "111111"; //TODO, hard code for test only
-//        //get from redis
-//        Object captcha = RedisUtil.get(mobile);
-//        if (captcha != null) {
-//            captchaOnServer = (String) captcha;
-//        }
-        return captchaOnServer;
-    }
     /**
      * 根据Id获取用户信息
      *
@@ -337,7 +316,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
 //    @Cacheable(value = "UserCache",key="'USER_ID_'+#endUserId")
-    public UserResponse getEndUserById(int endUserId) {
+    public UserResponse getUserById(int endUserId) {
         UserResponse userResponse = new UserResponse();
         EndUser endUser = endUserMapper.selectByPrimaryKey(endUserId);
         if (endUser != null) {
@@ -345,38 +324,6 @@ public class UserServiceImpl implements UserService {
         } else {
             userResponse.setResCode("50505");
             userResponse.setResMsg("该用户不存在");
-        }
-        return userResponse;
-    }
-
-    /**
-     * 根据用户名获取用户信息
-     *
-     * @param userName
-     * @return
-     */
-    @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    @Cacheable(value = "UserCache",key="'USER_NAME_'+#userName")
-    public UserResponse getEndUserByUserName(String userName) {
-        UserResponse userResponse = new UserResponse();
-        EndUserExample endUserExample = new EndUserExample();
-        EndUserExample.Criteria criteria = endUserExample.createCriteria();
-        criteria.andUserNameEqualTo(userName);
-        criteria.andIsDeletedEqualTo(false);
-        List<EndUser> userList = endUserMapper.selectByExample(endUserExample);
-        EndUser endUser;
-        if (userList.size() > 1) {
-            logger.error("找到多条该用户名对应的用户");
-            userResponse.setResCode("50505");
-            userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50505"));
-        } else if (userList.size() == 1) {
-            endUser =  userList.get(0);
-            userResponse.setEndUser(endUser);
-        } else {
-            logger.error("找不到该用户名对应的用户");
-            userResponse.setResCode("50506");
-            userResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50506"));
         }
         return userResponse;
     }
@@ -390,7 +337,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
 //    @Cacheable(value = "UserCache", key="'USER_MOBILE_'+#mobile")
-    public UserResponse getEndUserByMobile(String mobile) {
+    public UserResponse getUserByMobile(String mobile) {
         UserResponse userResponse = new UserResponse();
         EndUserExample endUserExample = new EndUserExample();
         EndUserExample.Criteria criteria = endUserExample.createCriteria();
@@ -424,7 +371,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     @Cacheable(value = "UserCache")
-    public UserResponse getEndUserByNickName(String nickName) {
+    public UserResponse getUserByNickName(String nickName) {
         UserResponse userResponse = new UserResponse();
         EndUserExample endUserExample = new EndUserExample();
         EndUserExample.Criteria criteria = endUserExample.createCriteria();
@@ -449,21 +396,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 批量查询多个用户
-     * 一般是运营后台调用
-     *
-     * @param endUserIds
-     * @return
-     */
-    @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    @Cacheable(value = "UserCache")
-    public List<EndUser> getEndUsersByIds(int[] endUserIds) {
-        //TODO:
-        return null;
-    }
-
-    /**
      * 验证手机号(也是用户名)、密码是否匹配
      *
      * @param mobile
@@ -473,7 +405,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public UserResponse authenticate(String mobile, String password) {
         UserResponse userResponse = new UserResponse();
-        EndUser endUser = getEndUserByMobile(mobile).getEndUser();
+        EndUser endUser = getUserByMobile(mobile).getEndUser();
         if (endUser!=null
                 && endUser.getPassword()!=null
                 && PasswordUtil.passwordHashValidate(password, endUser.getPassword())) {

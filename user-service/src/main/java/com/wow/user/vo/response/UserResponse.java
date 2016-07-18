@@ -10,6 +10,8 @@ import com.wow.user.model.EndUser;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class UserResponse extends CommonResponse {
 
+    private static final long serialVersionUID = 1L;
+
     private EndUser endUser;
 
     public EndUser getEndUser() {
