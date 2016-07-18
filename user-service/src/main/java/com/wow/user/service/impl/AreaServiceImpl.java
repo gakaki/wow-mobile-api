@@ -34,7 +34,7 @@ public class AreaServiceImpl implements AreaService{
      */
     @Override
     public int createArea(Area area) {
-        return areaMapper.insert(area);
+        return areaMapper.insertSelective(area);
     }
 
     /**
@@ -54,7 +54,7 @@ public class AreaServiceImpl implements AreaService{
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Area> getFirstLevelArea() {
         AreaExample areaExample = new AreaExample();
         AreaExample.Criteria criteria = areaExample.createCriteria();
@@ -71,7 +71,7 @@ public class AreaServiceImpl implements AreaService{
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Area> getNextLevelArea(int areaId) {
         AreaExample areaExample = new AreaExample();
         AreaExample.Criteria criteria = areaExample.createCriteria();

@@ -83,7 +83,7 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
      * @return List<ProductCombine> 子品列表
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ProductCombine> getSubProductInfo(int productId) {
 
         List<ProductCombine> lists= getProductCombineByProductId(productId);

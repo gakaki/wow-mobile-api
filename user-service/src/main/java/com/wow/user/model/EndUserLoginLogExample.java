@@ -545,6 +545,66 @@ public class EndUserLoginLogExample {
             return (Criteria) this;
         }
 
+        public Criteria andThirdPartyPlatformTypeIsNull() {
+            addCriterion("third_party_platform_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeIsNotNull() {
+            addCriterion("third_party_platform_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeEqualTo(Byte value) {
+            addCriterion("third_party_platform_type =", value, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeNotEqualTo(Byte value) {
+            addCriterion("third_party_platform_type <>", value, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeGreaterThan(Byte value) {
+            addCriterion("third_party_platform_type >", value, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("third_party_platform_type >=", value, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeLessThan(Byte value) {
+            addCriterion("third_party_platform_type <", value, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("third_party_platform_type <=", value, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeIn(List<Byte> values) {
+            addCriterion("third_party_platform_type in", values, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeNotIn(List<Byte> values) {
+            addCriterion("third_party_platform_type not in", values, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeBetween(Byte value1, Byte value2) {
+            addCriterion("third_party_platform_type between", value1, value2, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdPartyPlatformTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("third_party_platform_type not between", value1, value2, "thirdPartyPlatformType");
+            return (Criteria) this;
+        }
+
         public Criteria andUserAgentInfoLikeInsensitive(String value) {
             addCriterion("upper(user_agent_info) like", value.toUpperCase(), "userAgentInfo");
             return (Criteria) this;

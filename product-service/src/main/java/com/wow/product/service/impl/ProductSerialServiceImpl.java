@@ -15,9 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 
@@ -74,7 +75,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ProductSerial> getProductSerials(int productId) {
         ProductSerialExample productSerialExample=new ProductSerialExample();
         ProductSerialExample.Criteria criteria=productSerialExample.createCriteria();
@@ -139,7 +140,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductSerial getPrimarySubProductOfProductSerial(int productId) {
         return  getProductSerials(productId).stream().filter(o->o.getIsPrimary()==true).findAny().get();
     }
@@ -191,7 +192,7 @@ public class ProductSerialServiceImpl implements ProductSerialService {
                 }
                 serialResponse.setBanner(list);
             }
-            ProductPrice productPrice= priceService.queryProductPrice(productId);
+            ProductPrice productPrice= priceService.queryProductPrice(productId).getProductPrice();
             if(productPrice!=null)
             {
                 serialResponse.setSellPrice(productPrice.getSellPrice());

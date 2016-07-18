@@ -17,6 +17,12 @@ public class ApiResponse extends CommonResponse {
     }
 
     public void setData(Object data) {
+        if (data instanceof CommonResponse) {
+            CommonResponse commonResponse = (CommonResponse) data;
+            commonResponse.setResCode(null);
+            commonResponse.setResMsg(null);
+        }
+        
         this.data = data;
     }
 

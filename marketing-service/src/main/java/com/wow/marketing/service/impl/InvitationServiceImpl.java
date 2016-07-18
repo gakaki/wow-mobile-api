@@ -38,7 +38,7 @@ public class InvitationServiceImpl implements InvitationService {
      * @param endUserId
      * @return
      */
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<EndUserInviteFriends> getUserInvitationByUserId(int endUserId) {
         EndUserInviteFriendsExample endUserInviteFriendsExample = new EndUserInviteFriendsExample();
         EndUserInviteFriendsExample.Criteria criteria = endUserInviteFriendsExample.createCriteria();

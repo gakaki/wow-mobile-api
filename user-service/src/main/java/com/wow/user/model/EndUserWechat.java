@@ -10,7 +10,7 @@ public class EndUserWechat implements Serializable {
 
     private String mobile;
 
-    private String wechatId;
+    private String openId;
 
     private String wechatNickName;
 
@@ -48,12 +48,12 @@ public class EndUserWechat implements Serializable {
         this.mobile = mobile == null ? null : mobile.trim();
     }
 
-    public String getWechatId() {
-        return wechatId;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setWechatId(String wechatId) {
-        this.wechatId = wechatId == null ? null : wechatId.trim();
+    public void setOpenId(String openId) {
+        this.openId = openId == null ? null : openId.trim();
     }
 
     public String getWechatNickName() {
@@ -105,7 +105,7 @@ public class EndUserWechat implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", endUserId=").append(endUserId);
         sb.append(", mobile=").append(mobile);
-        sb.append(", wechatId=").append(wechatId);
+        sb.append(", openId=").append(openId);
         sb.append(", wechatNickName=").append(wechatNickName);
         sb.append(", wechatAvatar=").append(wechatAvatar);
         sb.append(", isBind=").append(isBind);

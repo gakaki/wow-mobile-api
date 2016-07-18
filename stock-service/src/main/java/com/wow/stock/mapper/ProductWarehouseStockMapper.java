@@ -2,10 +2,11 @@ package com.wow.stock.mapper;
 
 import com.wow.stock.model.ProductWarehouseStock;
 import com.wow.stock.model.ProductWarehouseStockExample;
+import com.wow.stock.vo.WarehouseStockVo;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
 
 public interface ProductWarehouseStockMapper {
     int countByExample(ProductWarehouseStockExample example);
@@ -36,7 +37,9 @@ public interface ProductWarehouseStockMapper {
 
     int unfreezeWarehouseStock(@Param("productId")int productId, @Param("warehouseId")int warehouseId, @Param("productQty")int productQty);
 
-    Map<Integer,Integer> getWarehouseAvailableStock(@Param("productId")int productId);
+    List<WarehouseStockVo> getWarehouseAvailableStock(@Param("productId")int productId);
+
+    List<WarehouseStockVo> getWarehouseAvailableStocks(@Param("productIds")List<Integer> productIds);
 
     int shipOutWarehouseGoods(@Param("productId")int productId, @Param("warehouseId")int warehouseId, @Param("productQty")int productQty);
 

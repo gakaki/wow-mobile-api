@@ -28,7 +28,7 @@ public class SceneServiceImpl implements SceneService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Scene getSceneById(int sceneId) {
         return sceneMapper.selectByPrimaryKey(sceneId);
     }
@@ -67,7 +67,7 @@ public class SceneServiceImpl implements SceneService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Scene> getScenes() {
         return sceneMapper.selectAll();
     }

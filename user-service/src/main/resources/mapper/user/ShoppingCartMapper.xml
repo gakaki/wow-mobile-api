@@ -1,283 +1,368 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.user.mapper.ShoppingCartMapper" >
-  <resultMap id="BaseResultMap" type="com.wow.user.model.ShoppingCart" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
-    <result column="product_id" property="productId" jdbcType="INTEGER" />
-    <result column="product_qty" property="productQty" jdbcType="TINYINT" />
-    <result column="product_price" property="productPrice" jdbcType="DECIMAL" />
-    <result column="weight" property="weight" jdbcType="DECIMAL" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    id, end_user_id, product_id, product_qty, product_price, weight, create_time, update_time, 
-    is_deleted
-  </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.ShoppingCartExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from shopping_cart
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from shopping_cart
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from shopping_cart
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.wow.user.model.ShoppingCartExample" >
-    delete from shopping_cart
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.wow.user.model.ShoppingCart" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into shopping_cart (end_user_id, product_id, product_qty, 
-      product_price, weight, create_time, 
-      update_time, is_deleted)
-    values (#{endUserId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{productQty,jdbcType=TINYINT}, 
-      #{productPrice,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.wow.user.model.ShoppingCart" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into shopping_cart
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="endUserId != null" >
-        end_user_id,
-      </if>
-      <if test="productId != null" >
-        product_id,
-      </if>
-      <if test="productQty != null" >
-        product_qty,
-      </if>
-      <if test="productPrice != null" >
-        product_price,
-      </if>
-      <if test="weight != null" >
-        weight,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="endUserId != null" >
-        #{endUserId,jdbcType=INTEGER},
-      </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=INTEGER},
-      </if>
-      <if test="productQty != null" >
-        #{productQty,jdbcType=TINYINT},
-      </if>
-      <if test="productPrice != null" >
-        #{productPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="weight != null" >
-        #{weight,jdbcType=DECIMAL},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null" >
-        #{isDeleted,jdbcType=BIT},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.wow.user.model.ShoppingCartExample" resultType="java.lang.Integer" >
-    select count(*) from shopping_cart
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update shopping_cart
-    <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.endUserId != null" >
-        end_user_id = #{record.endUserId,jdbcType=INTEGER},
-      </if>
-      <if test="record.productId != null" >
-        product_id = #{record.productId,jdbcType=INTEGER},
-      </if>
-      <if test="record.productQty != null" >
-        product_qty = #{record.productQty,jdbcType=TINYINT},
-      </if>
-      <if test="record.productPrice != null" >
-        product_price = #{record.productPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="record.weight != null" >
-        weight = #{record.weight,jdbcType=DECIMAL},
-      </if>
-      <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.isDeleted != null" >
-        is_deleted = #{record.isDeleted,jdbcType=BIT},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update shopping_cart
-    set id = #{record.id,jdbcType=INTEGER},
-      end_user_id = #{record.endUserId,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=INTEGER},
-      product_qty = #{record.productQty,jdbcType=TINYINT},
-      product_price = #{record.productPrice,jdbcType=DECIMAL},
-      weight = #{record.weight,jdbcType=DECIMAL},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      is_deleted = #{record.isDeleted,jdbcType=BIT}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wow.user.model.ShoppingCart" >
-    update shopping_cart
-    <set >
-      <if test="endUserId != null" >
-        end_user_id = #{endUserId,jdbcType=INTEGER},
-      </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=INTEGER},
-      </if>
-      <if test="productQty != null" >
-        product_qty = #{productQty,jdbcType=TINYINT},
-      </if>
-      <if test="productPrice != null" >
-        product_price = #{productPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="weight != null" >
-        weight = #{weight,jdbcType=DECIMAL},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted = #{isDeleted,jdbcType=BIT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.user.model.ShoppingCart" >
-    update shopping_cart
-    set end_user_id = #{endUserId,jdbcType=INTEGER},
-      product_id = #{productId,jdbcType=INTEGER},
-      product_qty = #{productQty,jdbcType=TINYINT},
-      product_price = #{productPrice,jdbcType=DECIMAL},
-      weight = #{weight,jdbcType=DECIMAL},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=BIT}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+<mapper namespace="com.wow.user.mapper.ShoppingCartMapper">
+	<resultMap id="BaseResultMap" type="com.wow.user.model.ShoppingCart">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
+		<result column="product_id" property="productId" jdbcType="INTEGER" />
+		<result column="product_qty" property="productQty" jdbcType="TINYINT" />
+		<result column="product_price" property="productPrice"
+			jdbcType="DECIMAL" />
+		<result column="weight" property="weight" jdbcType="DECIMAL" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, end_user_id, product_id, product_qty, product_price, weight,
+		create_time, update_time,
+		is_deleted
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.wow.user.model.ShoppingCartExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shopping_cart
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from shopping_cart
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from shopping_cart
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.wow.user.model.ShoppingCartExample">
+		delete from shopping_cart
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.wow.user.model.ShoppingCart">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into shopping_cart (end_user_id, product_id, product_qty,
+		product_price, weight, create_time,
+		update_time, is_deleted)
+		values (#{endUserId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER},
+		#{productQty,jdbcType=TINYINT},
+		#{productPrice,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.wow.user.model.ShoppingCart">
+		<selectKey resultType="java.lang.Integer" keyProperty="id"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into shopping_cart
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="endUserId != null">
+				end_user_id,
+			</if>
+			<if test="productId != null">
+				product_id,
+			</if>
+			<if test="productQty != null">
+				product_qty,
+			</if>
+			<if test="productPrice != null">
+				product_price,
+			</if>
+			<if test="weight != null">
+				weight,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="endUserId != null">
+				#{endUserId,jdbcType=INTEGER},
+			</if>
+			<if test="productId != null">
+				#{productId,jdbcType=INTEGER},
+			</if>
+			<if test="productQty != null">
+				#{productQty,jdbcType=TINYINT},
+			</if>
+			<if test="productPrice != null">
+				#{productPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="weight != null">
+				#{weight,jdbcType=DECIMAL},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.wow.user.model.ShoppingCartExample"
+		resultType="java.lang.Integer">
+		select count(*) from shopping_cart
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shopping_cart
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.endUserId != null">
+				end_user_id = #{record.endUserId,jdbcType=INTEGER},
+			</if>
+			<if test="record.productId != null">
+				product_id = #{record.productId,jdbcType=INTEGER},
+			</if>
+			<if test="record.productQty != null">
+				product_qty = #{record.productQty,jdbcType=TINYINT},
+			</if>
+			<if test="record.productPrice != null">
+				product_price = #{record.productPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.weight != null">
+				weight = #{record.weight,jdbcType=DECIMAL},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shopping_cart
+		set id = #{record.id,jdbcType=INTEGER},
+		end_user_id = #{record.endUserId,jdbcType=INTEGER},
+		product_id = #{record.productId,jdbcType=INTEGER},
+		product_qty = #{record.productQty,jdbcType=TINYINT},
+		product_price = #{record.productPrice,jdbcType=DECIMAL},
+		weight = #{record.weight,jdbcType=DECIMAL},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.wow.user.model.ShoppingCart">
+		update shopping_cart
+		<set>
+			<if test="endUserId != null">
+				end_user_id = #{endUserId,jdbcType=INTEGER},
+			</if>
+			<if test="productId != null">
+				product_id = #{productId,jdbcType=INTEGER},
+			</if>
+			<if test="productQty != null">
+				product_qty = #{productQty,jdbcType=TINYINT},
+			</if>
+			<if test="productPrice != null">
+				product_price = #{productPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="weight != null">
+				weight = #{weight,jdbcType=DECIMAL},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.wow.user.model.ShoppingCart">
+		update shopping_cart
+		set end_user_id = #{endUserId,jdbcType=INTEGER},
+		product_id = #{productId,jdbcType=INTEGER},
+		product_qty = #{productQty,jdbcType=TINYINT},
+		product_price = #{productPrice,jdbcType=DECIMAL},
+		weight = #{weight,jdbcType=DECIMAL},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
 
-  <select id="selectByEndUser" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from shopping_cart
-    where end_user_id = #{endUserId,jdbcType=INTEGER}
-    and is_deleted = false
-  </select>
+	<select id="selectByEndUser" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from shopping_cart
+		where end_user_id = #{endUserId,jdbcType=INTEGER}
+		and is_deleted = false
+	</select>
+
+	<select id="selectUniqueByExample"  resultMap="BaseResultMap"
+		parameterType="com.wow.user.model.ShoppingCartExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shopping_cart
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<update id="updateByPrimaryKeys"   parameterType="com.wow.user.model.ShoppingCart">
+			update shopping_cart set  is_deleted = #{isDeleted}, update_time= #{updateTime}
+			     where id in
+			   <foreach collection="shoppingCartIds"   item="item"  open="(" close=")"  separator="," >
+	                    #{item}
+	          </foreach>
+	</update>
+	
+	<!-- 获取用户购物车信息列表明细 -->
+	<select id="queryByUserId"   resultType="com.wow.user.vo.ShoppingCartResultVo"
+		parameterType="com.wow.user.vo.ShoppingCartQueryVo">
+			SELECT 
+				  sc.id shoppingCartId,
+				  sc.product_qty productQty,
+				  p.id productId,
+				  p.product_name productName,
+				  p.color color,
+				  p.spec spec,
+				  p.product_status productStatus,
+				  pp.sell_price sellPrice
+			FROM
+			  shopping_cart sc
+			  INNER JOIN product p
+			    ON sc.product_id = p.id
+			  INNER JOIN product_price pp
+			    ON sc.product_id = pp.product_id
+			WHERE sc.is_deleted =false
+			  AND sc.end_user_id = #{endUserId}
+	</select>
+	
+	<!-- 获取用户购物车信息列表明细 -->
+	<select id="queryByShoppingCartIds"   resultType="com.wow.user.vo.ShoppingCartResultVo"
+		parameterType="com.wow.user.vo.ShoppingCartQueryVo">
+			SELECT 
+				  sc.id shoppingCartId,
+				  sc.product_qty productQty,
+				  p.id productId,
+				  p.product_name productName,
+				  p.color color,
+				  p.spec spec,
+				  p.product_status productStatus,
+				  pp.sell_price sellPrice
+			FROM
+			  shopping_cart sc
+			  INNER JOIN product p
+			    ON sc.product_id = p.id
+			  INNER JOIN product_price pp
+			    ON sc.product_id = pp.product_id
+			WHERE sc.is_deleted =false
+			  AND sc.id in
+			  <foreach collection="shoppingCartIds"   item="item"  open="(" close=")"  separator="," >
+	                    #{item}
+	          </foreach>
+	</select>
 
 </mapper>

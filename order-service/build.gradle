@@ -50,7 +50,7 @@ task dbgen << {
             classname: 'org.mybatis.generator.ant.GeneratorAntTask',
             classpath: configurations.mybatisGenerator.asPath
     )
-    ant.mbgenerator(overwrite: false,
+    ant.mbgenerator(overwrite: true,
             configfile: 'src/main/resources/generator/generatorConfig.xml', verbose: true) {
         propertyset {
             propertyref(name: 'targetProject')

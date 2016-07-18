@@ -1,14 +1,22 @@
 package com.wow.price.service.impl;
 
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.price.mapper.ProductPriceChangeLogMapper;
 import com.wow.price.mapper.ProductPriceMapper;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.model.ProductPriceChangeLog;
 import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductListPriceResponse;
+import com.wow.price.vo.ProductPriceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhengzhiqing on 16/6/17.
@@ -28,8 +36,14 @@ public class PriceServiceImpl implements PriceService {
      * @param productPrice
      * @return
      */
-    public int createProductPrice(ProductPrice productPrice) {
-        return productPriceMapper.insert(productPrice);
+    public CommonResponse createProductPrice(ProductPrice productPrice) {
+        CommonResponse commonResponse = new CommonResponse();
+        int i =  productPriceMapper.insertSelective(productPrice);
+        if (i < 1) {
+            commonResponse.setResCode("50501");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50501"));
+        }
+        return commonResponse;
     }
 
     /**
@@ -38,8 +52,15 @@ public class PriceServiceImpl implements PriceService {
      * @param productPrice
      * @return
      */
-    public int updateProductPrice(ProductPrice productPrice) {
-        return productPriceMapper.updateByPrimaryKeySelective(productPrice);
+    public CommonResponse updateProductPrice(ProductPrice productPrice) {
+        CommonResponse commonResponse = new CommonResponse();
+        //可以考虑做一下价格预警校验,满足阈值的不允许修改并报出警告
+        int i = productPriceMapper.updateByPrimaryKeySelective(productPrice);
+        if (i < 1) {
+            commonResponse.setResCode("50502");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50502"));
+        }
+        return commonResponse;
     }
 
     /**
@@ -48,8 +69,18 @@ public class PriceServiceImpl implements PriceService {
      * @param productId
      * @return
      */
-    public ProductPrice queryProductPrice(int productId) {
-        return productPriceMapper.selectByProductId(productId);
+    public ProductPriceResponse queryProductPrice(int productId) {
+        ProductPriceResponse productPriceResponse = new ProductPriceResponse();
+        ProductPrice productPrice = productPriceMapper.selectByProductId(productId);
+        if (productPrice == null) {
+            productPriceResponse.setResCode("50504");
+            productPriceResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50504"));
+        } else if (productPrice.getSellPrice()==new BigDecimal(0.0)) {
+            productPriceResponse.setResCode("50505");
+            productPriceResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50505"));
+        }
+        productPriceResponse.setProductPrice(productPrice);
+        return productPriceResponse;
     }
 
     /**
@@ -58,8 +89,21 @@ public class PriceServiceImpl implements PriceService {
      * @param productIds
      * @return
      */
-    public List<ProductPrice> queryProductPriceList(int[] productIds) {
-        return productPriceMapper.selectByProductIds(productIds);
+    public ProductListPriceResponse queryProductPriceList(List<Integer> productIds) {
+        ProductListPriceResponse productListPriceResponse = new ProductListPriceResponse();
+        List<ProductPrice> productPriceList = productPriceMapper.selectByProductIds(productIds);
+        if (CollectionUtil.isEmpty(productPriceList)) {
+            productListPriceResponse.setResCode("50506");
+            productListPriceResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50506"));
+            return productListPriceResponse;
+        }
+        Map<Integer, ProductPrice> map = new HashMap<Integer, ProductPrice>();
+        for (ProductPrice productPrice:productPriceList) {
+            int productId = productPrice.getProductId();
+            map.put(productId, productPrice);
+        }
+        productListPriceResponse.setMap(map);
+        return productListPriceResponse;
     }
 
     /**
@@ -68,8 +112,14 @@ public class PriceServiceImpl implements PriceService {
      * @param productPriceChangeLog
      * @return
      */
-    public int createPriceChangeLog(ProductPriceChangeLog productPriceChangeLog) {
-        return productPriceChangeLogMapper.insert(productPriceChangeLog);
+    public CommonResponse createPriceChangeLog(ProductPriceChangeLog productPriceChangeLog) {
+        CommonResponse commonResponse = new CommonResponse();
+        int i = productPriceChangeLogMapper.insertSelective(productPriceChangeLog);
+        if (i < 1) {
+            commonResponse.setResCode("50503");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50503"));
+        }
+        return commonResponse;
     }
 
     /**

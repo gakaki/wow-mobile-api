@@ -27,3 +27,6 @@ src/main/resources/ds_user.properties
 
 # logging setting
 src/main/resources/logback.properties
+
+# mybatis generator
+# 进入各个service之后执行gradle dbgen, 注意不能覆盖自己写的mapper方法

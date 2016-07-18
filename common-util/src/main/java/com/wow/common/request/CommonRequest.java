@@ -15,6 +15,9 @@ public class CommonRequest implements Serializable {
     //token令牌
     private String token;
 
+    //channel - android:1, ios:2, other:3
+    private byte channel;
+
     //app key每个客户端不一样
     private String appKey;
 
@@ -30,6 +33,14 @@ public class CommonRequest implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public byte getChannel() {
+        return channel;
+    }
+
+    public void setChannel(byte channel) {
+        this.channel = channel;
     }
 
     public String getAppKey() {

@@ -2,8 +2,10 @@ package com.wow.stock.mapper;
 
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.model.ProductVirtualStockExample;
-import java.util.List;
+import com.wow.stock.vo.VirtualStockVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ProductVirtualStockMapper {
     int countByExample(ProductVirtualStockExample example);
@@ -30,9 +32,11 @@ public interface ProductVirtualStockMapper {
 
     int adjustVirtualStock(@Param("productId")int productId, @Param("adjustNum")int adjustNum);
 
-    int getAvailableVirtualStock(@Param("productId")int productId);
+    Integer getAvailableVirtualStock(@Param("productId")int productId);
 
-    int getFrozenVirtualStock(@Param("productId")int productId);
+    List<VirtualStockVo> getAvailableVirtualStocks(@Param("productIds")List<Integer> productIds);
+
+    Integer getFrozenVirtualStock(@Param("productId")int productId);
 
     int unfreezeVirtualStock(@Param("productId")int productId, @Param("productQty")int productQty);
 

@@ -2,6 +2,7 @@ package com.wow.user.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
+import com.wow.user.vo.WechatBindStatusVo;
 
 /**
  * Created by zhengzhiqing on 16/7/9.

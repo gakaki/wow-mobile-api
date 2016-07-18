@@ -48,13 +48,13 @@ public class CategoryAttributeServiceImpl implements CategoryAttributeService{
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public CategoryAttribute getCategoryAttributeById(int categoryAttributeId) {
         return categoryAttributeMapper.selectByPrimaryKey(categoryAttributeId);
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<CategoryAttribute> getCategoryAttributeByCategoryId(int categoryId) {
         categoryAttributeExample=new CategoryAttributeExample();
         CategoryAttributeExample.Criteria criteria=categoryAttributeExample.createCriteria();

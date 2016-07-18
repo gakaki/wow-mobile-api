@@ -43,13 +43,13 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Supplier getSupplierById(int supplierId) {
         return supplierMapper.selectByPrimaryKey(supplierId);
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Supplier getSupplierByName(String supplierName) {
         SupplierExample supplierExample=new SupplierExample();
         SupplierExample.Criteria criteria=supplierExample.createCriteria();
@@ -59,7 +59,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Supplier> getAllSuppliers() {
         return supplierMapper.selectAll();
     }
@@ -69,7 +69,7 @@ public class SupplierServiceImpl implements SupplierService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Brand> getBrandsBySupplier(int supplierId) {
         SupplierBrandExample supplierBrandExample=new SupplierBrandExample();
         supplierBrandExample.or().andSupplierIdEqualTo(supplierId).andIsDeleteNotEqualTo(false);
@@ -104,7 +104,7 @@ public class SupplierServiceImpl implements SupplierService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public int getProductSupplier(int productId) throws Exception {
 
              ProductSupplierExample productSupplierExample=new ProductSupplierExample();
@@ -117,7 +117,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Product> getProductsBySupplier(int supplierId) {
 
         ProductSupplierExample productSupplierExample = new ProductSupplierExample();
@@ -144,7 +144,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ProductSupplyLog> getSupplyLogsByProduct(int productId) {
         ProductSupplyLogExample productSupplyLogExample=new ProductSupplyLogExample();
         ProductSupplyLogExample.Criteria criteria=productSupplyLogExample.createCriteria();
@@ -154,7 +154,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    @Transactional(propagation= Propagation.SUPPORTS)
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ProductSupplyLog> getSupplyLogsBySupplier(int supplierId) {
         ProductSupplyLogExample productSupplyLogExample=new ProductSupplyLogExample();
         ProductSupplyLogExample.Criteria criteria=productSupplyLogExample.createCriteria();

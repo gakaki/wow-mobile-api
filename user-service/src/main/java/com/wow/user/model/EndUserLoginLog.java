@@ -18,6 +18,8 @@ public class EndUserLoginLog implements Serializable {
 
     private String sessionToken;
 
+    private Byte thirdPartyPlatformType;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -49,7 +51,7 @@ public class EndUserLoginLog implements Serializable {
     }
 
     public void setUserAgentInfo(String userAgentInfo) {
-        this.userAgentInfo = userAgentInfo;
+        this.userAgentInfo = userAgentInfo == null ? null : userAgentInfo.trim();
     }
 
     public Long getLoginIp() {
@@ -73,7 +75,15 @@ public class EndUserLoginLog implements Serializable {
     }
 
     public void setSessionToken(String sessionToken) {
-        this.sessionToken = sessionToken;
+        this.sessionToken = sessionToken == null ? null : sessionToken.trim();
+    }
+
+    public Byte getThirdPartyPlatformType() {
+        return thirdPartyPlatformType;
+    }
+
+    public void setThirdPartyPlatformType(Byte thirdPartyPlatformType) {
+        this.thirdPartyPlatformType = thirdPartyPlatformType;
     }
 
     @Override
@@ -89,6 +99,7 @@ public class EndUserLoginLog implements Serializable {
         sb.append(", loginIp=").append(loginIp);
         sb.append(", loginTime=").append(loginTime);
         sb.append(", sessionToken=").append(sessionToken);
+        sb.append(", thirdPartyPlatformType=").append(thirdPartyPlatformType);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

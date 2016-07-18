@@ -30,5 +30,5 @@ public interface ProductPriceMapper {
 
     ProductPrice selectByProductId(@Param("productId") int productId);
 
-    List<ProductPrice> selectByProductIds(@Param("productIds") int[] productIds);
+    List<ProductPrice> selectByProductIds(@Param("productIds") List<Integer> productIds);
 }
