@@ -13,20 +13,17 @@ import com.wow.user.model.EndUserWechat;
 import com.wow.user.service.CaptchaService;
 import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
-import com.wow.user.util.PasswordUtil;
 import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 
 @RestController
 public class UserController extends BaseController {
@@ -405,45 +402,6 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 检查手机号是否已注册以及是否已绑定微信
-     * @param apiRequest
-     * @return
-     */
-    @RequestMapping(value = "/v1/user/wechat-bind-status", method = RequestMethod.GET)
-    public ApiResponse checkIfRegisteredAndBindedWechatByMobile(ApiRequest apiRequest) {
-        ApiResponse apiResponse = new ApiResponse();
-        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
-        //判断json格式参数是否有误
-        if (wechatBindQueryRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(wechatBindQueryRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
-
-        try {
-            RegisterBindStatusResponse registerBindStatusResponse = userService.getRegisterBindStatus(wechatBindQueryRequest.getMobile());
-            //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(registerBindStatusResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, registerBindStatusResponse);
-            } else {
-                removeDuplicateResponse(registerBindStatusResponse);
-                apiResponse.setData(registerBindStatusResponse);
-            }
-        } catch (Exception e) {
-            logger.error("发送验证码发生错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-
-        return apiResponse;
-    }
-
-    /**
      * 绑定微信
      * 1. 先判断手机号是否已注册,如果未注册,先注册
      * 2. 然后绑定微信
@@ -568,50 +526,6 @@ public class UserController extends BaseController {
 
     }
 
-
-    /**
-     * 微信是否已绑定用户
-     * @param apiRequest
-     * @return
-     */
-    @RequestMapping(value = "/v1/user/is-wechat-bind-user", method = RequestMethod.GET)
-    public ApiResponse checkIfWechatBindToUser(ApiRequest apiRequest) {
-
-        ApiResponse apiResponse = new ApiResponse();
-        WechatBindQueryRequest wechatBindQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), WechatBindQueryRequest.class);
-        //判断json格式参数是否有误
-        if (wechatBindQueryRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-//        String errorMsg = ValidatorUtil.getError(wechatBindQueryRequest);
-        String errorMsg  = null;
-        String openId = wechatBindQueryRequest.getOpenId();
-        if (StringUtil.isEmpty(openId)) {
-            errorMsg = "请传入openId";
-        }
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
-        try {
-            UserResponse userResponse = userService.getUserByOpenId(openId);
-            //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(userResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, userResponse);
-            } else {
-                apiResponse.setData(userResponse.getEndUser());
-            }
-        } catch (Exception e) {
-            logger.error("检查微信是否已绑定用户发生错误---" + e);
-            e.printStackTrace();
-            setInternalErrorResponse(apiResponse);
-        }
-        return apiResponse;
-    }
-
     /**
      * 修改用户信息
      * @param apiRequest
@@ -661,53 +575,4 @@ public class UserController extends BaseController {
         return apiResponse;
 
     }
-
-//    /**
-//     * 用户注册并绑定微信
-//     * @param apiRequest
-//     * @return
-//     */
-//    @RequestMapping(value = "/v1/user/register-and-bind-wechat", method = RequestMethod.POST)
-//    public ApiResponse registerAndBindWechat(ApiRequest apiRequest) {
-//
-//        ApiResponse apiResponse = new ApiResponse();
-//
-//        RegisterAndBindWechatRequest registerAndBindWechatRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), RegisterAndBindWechatRequest.class);
-//        //判断json格式参数是否有误
-//        if (registerAndBindWechatRequest == null) {
-//            setParamJsonParseErrorResponse(apiResponse);
-//            return apiResponse;
-//        }
-//
-//        String errorMsg = ValidatorUtil.getError(registerAndBindWechatRequest);
-//        //如果校验错误 则返回
-//        if (StringUtil.isNotEmpty(errorMsg)) {
-//            setInvalidParameterResponse(apiResponse, errorMsg);
-//            return apiResponse;
-//        }
-//
-//        EndUser endUser = new EndUser();
-//        endUser.setMobile(registerAndBindWechatRequest.getMobile());
-//        endUser.setPassword(registerAndBindWechatRequest.getPassword());
-//
-//        EndUserWechat endUserWechat = new EndUserWechat();
-//        BeanUtil.copyProperties(registerAndBindWechatRequest.getUserInfoFromWechat(),endUserWechat);
-//
-//        String captcha = registerAndBindWechatRequest.getCaptcha();
-//
-//        try {
-//            RegisterAndBindResponse registerAndBindResponse = userService.registerAndBindWechat(endUser, endUserWechat, captcha);
-//            //如果处理失败 则返回错误信息
-//            if (!isServiceCallSuccess(registerAndBindResponse.getResCode())) {
-//                setServiceErrorResponse(apiResponse, registerAndBindResponse);
-//            } else {
-//                apiResponse.setData(registerAndBindResponse);
-//            }
-//        } catch (Exception e) {
-//            logger.error("注册发生错误---" + e);
-//            setInternalErrorResponse(apiResponse);
-//        }
-//        logger.info("用户注册,返回结果:" + JsonUtil.pojo2Json(apiResponse));
-//        return apiResponse;
-//    }
 }
