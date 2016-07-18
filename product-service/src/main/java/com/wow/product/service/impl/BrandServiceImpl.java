@@ -117,7 +117,10 @@ public class BrandServiceImpl implements BrandService {
         List<Product> products=getProductsByBrand(brand);
         List<Designer> designers=new ArrayList<>();
         if(!products.isEmpty())
-            products.forEach(o-> designers.addAll(designerService.getDesignersByProduct(o)) );
+            for(Product product:products)
+            {
+                designers.addAll(designerService.getDesignersByProduct(product));
+            }
         return  designers;
     }
 

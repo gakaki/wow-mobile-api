@@ -69,21 +69,22 @@ public class CategoryAttributeServiceImpl implements CategoryAttributeService{
         CategoryAttributeExample.Criteria criteria=categoryAttributeExample.createCriteria();
         criteria.andCategoryIdEqualTo(categoryId);
         List<CategoryAttribute> attributes=getCategoryAttributeByCategoryId(categoryId);
-        attributes.forEach(new Consumer<CategoryAttribute>() {
-            @Override
-            public void accept(CategoryAttribute categoryAttribute) {
-                categoryAttribute.setIsDeleted(true);
-                categoryAttributeMapper.updateByExampleSelective(categoryAttribute,categoryAttributeExample);
-            }
-        });
+        for(CategoryAttribute categoryAttribute:attributes)
+        {
+            categoryAttribute.setIsDeleted(true);
+            categoryAttributeMapper.updateByExampleSelective(categoryAttribute,categoryAttributeExample);
+        }
         return 0;
     }
 
     @Override
     public int createCategoryAttribute(List<CategoryAttribute> categoryAttributes) {
         if(!CollectionUtils.isEmpty(categoryAttributes))
-            categoryAttributes.forEach(o->createCategoryAttribute(o));
-        return 0;
+            for(CategoryAttribute categoryAttribute:categoryAttributes)
+            {
+                createCategoryAttribute(categoryAttribute);
+            }
+        return categoryAttributes.size();
     }
 
 }

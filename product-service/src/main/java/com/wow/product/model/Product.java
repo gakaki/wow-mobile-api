@@ -79,7 +79,7 @@ public class Product implements Serializable {
 
     private Boolean isBundling;
 
-    private Short productStatus;
+    private Byte productStatus;
 
     private String rejectReason;
 
@@ -397,11 +397,11 @@ public class Product implements Serializable {
         this.isBundling = isBundling;
     }
 
-    public Short getProductStatus() {
+    public Byte getProductStatus() {
         return productStatus;
     }
 
-    public void setProductStatus(Short productStatus) {
+    public void setProductStatus(Byte productStatus) {
         this.productStatus = productStatus;
     }
 
