@@ -36,7 +36,10 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
     @Override
     public int createProductCombines(List<ProductCombine> productCombines) {
         if(!productCombines.isEmpty())
-            productCombines.forEach(o->productCombineMapper.insertSelective(o));
+            for(ProductCombine productCombine:productCombines)
+            {
+                productCombineMapper.insertSelective(productCombine);
+            }
         return 0;
     }
 
@@ -50,7 +53,10 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
     @Override
     public int updateProductCombines(List<ProductCombine> productCombines) {
         if(!productCombines.isEmpty())
-        productCombines.forEach(o->productCombineMapper.updateByPrimaryKeySelective(o));
+            for(ProductCombine productCombine:productCombines)
+            {
+                productCombineMapper.updateByPrimaryKeySelective(productCombine);
+            }
         return 0;
     }
 
@@ -91,8 +97,14 @@ public class ProductCombineServiceImpl  implements ProductCombineService{
         {
             List<ProductCombine> resultLists=new ArrayList<>();
             HashSet<Integer> set=new HashSet();
-            lists.forEach(o->set.add(o.getSubProductId()));
-            set.forEach(o-> resultLists.addAll(getProductCombineByProductId(o)));
+            for(ProductCombine productCombine:lists)
+            {
+                set.add(productCombine.getSubProductId());
+            }
+            for(Integer i:set)
+            {
+                resultLists.addAll(getProductCombineByProductId(i)) ;
+            }
             return resultLists;
         }
         return null;
