@@ -39,7 +39,7 @@
     <result column="is_fragile" jdbcType="BIT" property="isFragile" />
     <result column="is_presale" jdbcType="BIT" property="isPresale" />
     <result column="is_bundling" jdbcType="BIT" property="isBundling" />
-    <result column="product_status" jdbcType="DECIMAL" property="productStatus" />
+    <result column="product_status" jdbcType="TINYINT" property="productStatus" />
     <result column="reject_reason" jdbcType="VARCHAR" property="rejectReason" />
     <result column="on_shelf_time" jdbcType="TIMESTAMP" property="onShelfTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -202,7 +202,7 @@
       #{tips,jdbcType=VARCHAR}, #{applicableSceneText,jdbcType=VARCHAR}, #{postSaleServiceDesc,jdbcType=VARCHAR}, 
       #{deliveryFeeType,jdbcType=TINYINT}, #{needAssemble,jdbcType=BIT}, #{assembleTips,jdbcType=VARCHAR}, 
       #{isFragile,jdbcType=BIT}, #{isPresale,jdbcType=BIT}, #{isBundling,jdbcType=BIT}, 
-      #{productStatus,jdbcType=DECIMAL}, #{rejectReason,jdbcType=VARCHAR}, #{onShelfTime,jdbcType=TIMESTAMP}, 
+      #{productStatus,jdbcType=TINYINT}, #{rejectReason,jdbcType=VARCHAR}, #{onShelfTime,jdbcType=TIMESTAMP},
       #{createTime,jdbcType=TIMESTAMP}, #{approvalTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{isDeleted,jdbcType=BIT}, #{seoTitle,jdbcType=LONGVARCHAR}, #{seoDesc,jdbcType=LONGVARCHAR}, 
       #{seoKey,jdbcType=LONGVARCHAR})
@@ -462,7 +462,7 @@
         #{isBundling,jdbcType=BIT},
       </if>
       <if test="productStatus != null">
-        #{productStatus,jdbcType=DECIMAL},
+        #{productStatus,jdbcType=TINYINT},
       </if>
       <if test="rejectReason != null">
         #{rejectReason,jdbcType=VARCHAR},
@@ -614,7 +614,7 @@
         is_bundling = #{record.isBundling,jdbcType=BIT},
       </if>
       <if test="record.productStatus != null">
-        product_status = #{record.productStatus,jdbcType=DECIMAL},
+        product_status = #{record.productStatus,jdbcType=TINYINT},
       </if>
       <if test="record.rejectReason != null">
         reject_reason = #{record.rejectReason,jdbcType=VARCHAR},
@@ -687,7 +687,7 @@
       is_fragile = #{record.isFragile,jdbcType=BIT},
       is_presale = #{record.isPresale,jdbcType=BIT},
       is_bundling = #{record.isBundling,jdbcType=BIT},
-      product_status = #{record.productStatus,jdbcType=DECIMAL},
+      product_status = #{record.productStatus,jdbcType=TINYINT},
       reject_reason = #{record.rejectReason,jdbcType=VARCHAR},
       on_shelf_time = #{record.onShelfTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -740,7 +740,7 @@
       is_fragile = #{record.isFragile,jdbcType=BIT},
       is_presale = #{record.isPresale,jdbcType=BIT},
       is_bundling = #{record.isBundling,jdbcType=BIT},
-      product_status = #{record.productStatus,jdbcType=DECIMAL},
+      product_status = #{record.productStatus,jdbcType=TINYINT},
       reject_reason = #{record.rejectReason,jdbcType=VARCHAR},
       on_shelf_time = #{record.onShelfTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -863,7 +863,7 @@
         is_bundling = #{isBundling,jdbcType=BIT},
       </if>
       <if test="productStatus != null">
-        product_status = #{productStatus,jdbcType=DECIMAL},
+        product_status = #{productStatus,jdbcType=TINYINT},
       </if>
       <if test="rejectReason != null">
         reject_reason = #{rejectReason,jdbcType=VARCHAR},
@@ -933,7 +933,7 @@
       is_fragile = #{isFragile,jdbcType=BIT},
       is_presale = #{isPresale,jdbcType=BIT},
       is_bundling = #{isBundling,jdbcType=BIT},
-      product_status = #{productStatus,jdbcType=DECIMAL},
+      product_status = #{productStatus,jdbcType=TINYINT},
       reject_reason = #{rejectReason,jdbcType=VARCHAR},
       on_shelf_time = #{onShelfTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -983,7 +983,7 @@
       is_fragile = #{isFragile,jdbcType=BIT},
       is_presale = #{isPresale,jdbcType=BIT},
       is_bundling = #{isBundling,jdbcType=BIT},
-      product_status = #{productStatus,jdbcType=DECIMAL},
+      product_status = #{productStatus,jdbcType=TINYINT},
       reject_reason = #{rejectReason,jdbcType=VARCHAR},
       on_shelf_time = #{onShelfTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},

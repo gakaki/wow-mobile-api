@@ -135,7 +135,10 @@ public class DesignerServiceImpl implements DesignerService {
     {
         if(!productDesigners.isEmpty()) {
             HashSet<Integer> set = new HashSet<>();
-            productDesigners.forEach(o->set.add(o.getDesignerId()));
+            for(ProductDesigner productDesigner:productDesigners)
+            {
+                set.add(productDesigner.getDesignerId());
+            }
             return  getDesignerById(new ArrayList<Integer>(set));
         }
         return  null;

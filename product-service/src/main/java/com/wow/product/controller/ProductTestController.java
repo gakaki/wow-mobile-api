@@ -54,7 +54,7 @@ public class ProductTestController {
         product.setPostSaleServiceDesc("");
         product.setProductModel("");
         product.setProductName("");
-        product.setProductStatus((short)0);
+        product.setProductStatus((byte)0);
         product.setProductType(new Byte((byte) 0));
         product.setOnShelfTime(new java.util.Date());
         product.setOriginCountry("");

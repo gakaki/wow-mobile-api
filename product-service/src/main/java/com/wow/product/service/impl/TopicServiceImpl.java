@@ -79,21 +79,30 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public int createProductShortListInTopic(List<ProductShortListInTopic> productShortListInTopics) {
         if(!productShortListInTopics.isEmpty())
-            productShortListInTopics.forEach(o-> productShortListInTopicMapper.insertSelective(o));
+            for(ProductShortListInTopic productShortListInTopic:productShortListInTopics)
+            {
+                productShortListInTopicMapper.insertSelective(productShortListInTopic);
+            }
         return 0;
     }
 
     @Override
     public int updateProductShortListInTopic(List<ProductShortListInTopic> productShortListInTopics) {
         if(!productShortListInTopics.isEmpty())
-            productShortListInTopics.forEach(o-> productShortListInTopicMapper.updateByPrimaryKeySelective(o));
+            for(ProductShortListInTopic productShortListInTopic:productShortListInTopics)
+            {
+                productShortListInTopicMapper.updateByPrimaryKeySelective(productShortListInTopic);
+            }
         return 0;
     }
 
     @Override
     public int deleteProductShortListInTopic(List<ProductShortListInTopic> productShortListInTopics) {
         if(!productShortListInTopics.isEmpty()) {
-            productShortListInTopics.forEach(o -> o.setIsDeleted(true));
+            for(ProductShortListInTopic productShortListInTopic:productShortListInTopics)
+            {
+                productShortListInTopic.setIsDeleted(true);
+            }
             updateProductShortListInTopic(productShortListInTopics);
         }
         return 0;

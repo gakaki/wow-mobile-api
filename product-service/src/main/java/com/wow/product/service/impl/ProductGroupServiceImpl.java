@@ -74,7 +74,10 @@ public class ProductGroupServiceImpl implements ProductGroupService {
         {
             List<Product> listProduct=new ArrayList<>();
             HashSet<Integer> productIds=new HashSet<>();
-            list.forEach(o->productIds.add(o.getProductId()));
+            for(ProductGroup productGroup:list)
+            {
+                productIds.add(productGroup.getProductId());
+            }
             productService.getProductById(new ArrayList<Integer>(productIds));
           return listProduct;
         }

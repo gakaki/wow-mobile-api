@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Created by fangying@wowdsgn on 2016/7/4.
@@ -48,14 +47,16 @@ public class SupplierServiceImpl implements SupplierService {
         return supplierMapper.selectByPrimaryKey(supplierId);
     }
 
-    @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public Supplier getSupplierByName(String supplierName) {
+
+
+    @Transactional(propagation= Propagation.SUPPORTS)
+    public Supplier getSupplierByName(String supplierName) throws Exception {
+
         SupplierExample supplierExample=new SupplierExample();
         SupplierExample.Criteria criteria=supplierExample.createCriteria();
         criteria.andSupplierNameEqualTo(supplierName);
         criteria.andIsDeletedEqualTo(false);
-        return supplierMapper.selectByExample(supplierExample).stream().findAny().get();
+        return supplierMapper.selectByExample(supplierExample).get(0);
     }
 
     @Override
@@ -76,7 +77,10 @@ public class SupplierServiceImpl implements SupplierService {
         List< SupplierBrand> supplierBrands=supplierBrandMapper.selectByExample(supplierBrandExample);
         if(!supplierBrands.isEmpty()) {
             HashSet<Integer> set=new HashSet<>();
-            supplierBrands.forEach(o->set.add(o.getBrandId()));
+            for(SupplierBrand supplierBrand:supplierBrands)
+            {
+                set.add(supplierBrand.getBrandId());
+            }
             return brandService.getBrandById(new ArrayList(set));
         }
         return null;
@@ -127,7 +131,10 @@ public class SupplierServiceImpl implements SupplierService {
         List<ProductSupplier> list = productSupplierMapper.selectByExample(productSupplierExample);
         if (!list.isEmpty()) {
             HashSet<Integer> productIds = new HashSet<>();
-            list.forEach(o -> productIds.add(o.getProductId()));
+            for(ProductSupplier productSupplier:list)
+            {
+                productIds.add(productSupplier.getProductId());
+            }
             return  productService.getProductById(new ArrayList<Integer>(productIds));
         }
         return  null;
