@@ -13,6 +13,8 @@ public interface SaleOrderItemMapper {
     int deleteByPrimaryKey(Integer id);
 
     int insert(SaleOrderItem record);
+    
+    int batchInsertSelective(List<SaleOrderItem> records);
 
     int insertSelective(SaleOrderItem record);
 

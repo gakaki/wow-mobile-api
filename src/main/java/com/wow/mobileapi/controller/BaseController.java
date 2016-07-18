@@ -1,5 +1,9 @@
 package com.wow.mobileapi.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
@@ -8,9 +12,6 @@ import com.wow.common.util.StringUtil;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.user.service.SessionService;
 import com.wow.user.vo.response.TokenValidateResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * controller基类 用以处理controller中的一些通用方法

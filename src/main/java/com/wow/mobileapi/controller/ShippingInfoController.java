@@ -17,6 +17,7 @@ import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.user.ShippingInfoRequest;
 import com.wow.user.model.ShippingInfo;
 import com.wow.user.service.ShippingInfoService;
+import com.wow.user.vo.ShippingInfoResult;
 import com.wow.user.vo.response.ShippingInfoListResponse;
 import com.wow.user.vo.response.ShippingInfoResponse;
 
@@ -37,7 +38,7 @@ public class ShippingInfoController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/v1/user/shippinginfo/create", method = RequestMethod.POST)
-    ApiResponse createShippingInfo(ApiRequest apiRequest) {
+    public ApiResponse createShippingInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ShippingInfoRequest shippingInfoRequest = JsonUtil
             .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
@@ -56,6 +57,9 @@ public class ShippingInfoController extends BaseController {
 
         ShippingInfo shippingInfo = new ShippingInfo();
         BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
+
+        //设置用户id
+        shippingInfo.setEndUserId(35);
 
         try {
             CommonResponse commonResponse = shippingInfoService.createShippingInfo(shippingInfo);
@@ -72,12 +76,12 @@ public class ShippingInfoController extends BaseController {
     }
 
     /**
-     * 更新收货信息
+     * 更新收货信息  有且仅有1个是默认
      * @param apiRequest
      * @return
      */
     @RequestMapping(value = "/v1/user/shippinginfo/update", method = RequestMethod.POST)
-    ApiResponse updateShippingInfo(ApiRequest apiRequest) {
+    public ApiResponse updateShippingInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ShippingInfoRequest shippingInfoRequest = JsonUtil
             .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
@@ -96,6 +100,9 @@ public class ShippingInfoController extends BaseController {
 
         ShippingInfo shippingInfo = new ShippingInfo();
         BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
+
+        //设置用户id
+        shippingInfo.setEndUserId(30);
 
         try {
             CommonResponse commonResponse = shippingInfoService.updateShippingInfo(shippingInfo);
@@ -116,7 +123,7 @@ public class ShippingInfoController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/v1/user/shippinginfo/delete", method = RequestMethod.POST)
-    ApiResponse deleteShippingInfo(ApiRequest apiRequest) {
+    public ApiResponse deleteShippingInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ShippingInfoRequest shippingInfoRequest = JsonUtil
             .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
@@ -132,9 +139,6 @@ public class ShippingInfoController extends BaseController {
             setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
-        //
-        //        ShippingInfo shippingInfo = new ShippingInfo();
-        //        BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
 
         try {
             CommonResponse commonResponse = shippingInfoService.deleteShippingInfo(shippingInfoRequest.getId());
@@ -155,7 +159,48 @@ public class ShippingInfoController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/v1/user/shippinginfo/list", method = RequestMethod.GET)
-    ApiResponse getShippingInfoByUserId(ApiRequest apiRequest) {
+    public ApiResponse getShippingInfoByUserId(ApiRequest apiRequest) {
+        ApiResponse apiResponse = new ApiResponse();
+        ShippingInfoRequest shippingInfoRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
+        //判断json格式参数是否有误
+        if (shippingInfoRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(shippingInfoRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        Integer endUserId = 35;
+
+        try {
+            ShippingInfoListResponse shippingInfoListResponse = shippingInfoService.getShippingInfoByUserId(endUserId);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(shippingInfoListResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, shippingInfoListResponse);
+            } else {
+                apiResponse.setData(shippingInfoListResponse.getShippingInfoResultList());
+            }
+        } catch (Exception e) {
+            logger.error("查询所有收货信息发生错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 查询用户默认收货地址
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/user/shippinginfo/default", method = RequestMethod.GET)
+    public ApiResponse getDefaultShippingInfoByUserId(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ShippingInfoRequest shippingInfoRequest = JsonUtil
             .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
@@ -174,59 +219,18 @@ public class ShippingInfoController extends BaseController {
 
         //        ShippingInfo shippingInfo = new ShippingInfo();
         //        BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
-        Integer endUserId = 30;
+        Integer endUserId = 35;
 
         try {
-            ShippingInfoListResponse shippingInfoListResponse = shippingInfoService.getShippingInfoByUserId(endUserId);
-            //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(shippingInfoListResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, shippingInfoListResponse);
-            } else {
-                apiResponse.setData(shippingInfoListResponse.getShippingInfoList());
-            }
-        } catch (Exception e) {
-            logger.error("查询所有收货信息发生错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-        return apiResponse;
-    }
-
-    /**
-     * 查询用户所有收货信息
-     * @param apiRequest
-     * @return
-     */
-    @RequestMapping(value = "/v1/user/shippinginfo/default", method = RequestMethod.GET)
-    ApiResponse getDefaultShippingInfoByUserId(ApiRequest apiRequest) {
-        ApiResponse apiResponse = new ApiResponse();
-        ShippingInfoRequest shippingInfoRequest = JsonUtil
-            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
-        //判断json格式参数是否有误
-        if (shippingInfoRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(shippingInfoRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
-
-        ShippingInfo shippingInfo = new ShippingInfo();
-        BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
-
-        try {
-            ShippingInfoResponse shippingInfoResponse = shippingInfoService
-                .getDefaultShippingInfoByUserId(shippingInfo.getEndUserId());
+            ShippingInfoResponse shippingInfoResponse = shippingInfoService.getDefaultShippingInfoByUserId(endUserId);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(shippingInfoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, shippingInfoResponse);
             } else {
-                //ShippingInfo defaultShippingInfo = shippingInfoResponse.getShippingInfo();
+                ShippingInfoResult shippingInfoResult = new ShippingInfoResult();
+                BeanUtil.copyProperties(shippingInfoResponse.getShippingInfo(), shippingInfoResult);
 
-                apiResponse.setData(shippingInfoResponse.getShippingInfo());
+                apiResponse.setData(shippingInfoResult);
             }
         } catch (Exception e) {
             logger.error("查询默认收货信息发生错误---" + e);
@@ -236,12 +240,12 @@ public class ShippingInfoController extends BaseController {
     }
 
     /**
-     * 更新收货信息
+     * 设置默认地址信息
      * @param apiRequest
      * @return
      */
     @RequestMapping(value = "/v1/user/shippinginfo/set-default", method = RequestMethod.POST)
-    ApiResponse setAsDefaultShippingInfo(ApiRequest apiRequest) {
+    public ApiResponse setAsDefaultShippingInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ShippingInfoRequest shippingInfoRequest = JsonUtil
             .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
@@ -258,12 +262,11 @@ public class ShippingInfoController extends BaseController {
             return apiResponse;
         }
 
-        ShippingInfo shippingInfo = new ShippingInfo();
-        BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
+        Integer endUserId = 30;
 
         try {
             CommonResponse commonResponse = shippingInfoService
-                .setAsDefaultShippingInfo(shippingInfo.getId(), shippingInfo.getEndUserId());
+                .setAsDefaultShippingInfo(shippingInfoRequest.getId(), endUserId);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
@@ -273,6 +276,7 @@ public class ShippingInfoController extends BaseController {
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
+        
         return apiResponse;
     }
 

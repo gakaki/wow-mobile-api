@@ -30,10 +30,10 @@ public class OrderQuery implements Serializable {
 
     //订单总价 客户端传递 用以校验价格是否发生变化
     private BigDecimal orderAmount;
-    
+
     //用户ip
     private String orderIp;
-    
+
     //订单来源
     private Byte orderSource;
 
@@ -54,7 +54,18 @@ public class OrderQuery implements Serializable {
 
     //用户收货地址信息
     private ShippingInfo shippingInfo;
+
+    //订单id
+    private Integer orderId;
     
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
     public String getOrderIp() {
         return orderIp;
     }

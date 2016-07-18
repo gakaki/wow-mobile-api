@@ -18,6 +18,7 @@ import com.wow.user.model.Area;
 import com.wow.user.model.ShippingInfo;
 import com.wow.user.model.ShippingInfoExample;
 import com.wow.user.service.ShippingInfoService;
+import com.wow.user.vo.ShippingInfoResult;
 import com.wow.user.vo.response.ShippingInfoListResponse;
 import com.wow.user.vo.response.ShippingInfoResponse;
 
@@ -56,7 +57,7 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
         } else {
             //如果没有任何收货地址,则第一次插入的强制设置为默认
             ShippingInfoListResponse shippingInfoListResponse = getShippingInfoByUserId(shippingInfo.getEndUserId());
-            if (CollectionUtil.isEmpty(shippingInfoListResponse.getShippingInfoList())) {
+            if (CollectionUtil.isEmpty(shippingInfoListResponse.getShippingInfoResultList())) {
                 shippingInfo.setIsDefault(true);
             }
         }
@@ -215,12 +216,12 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
         criteria.andEndUserIdEqualTo(endUserId);
         criteria.andIsDeletedEqualTo(false);
 
-        List<ShippingInfo> shippingInfoList = shippingInfoMapper.selectByExample(shippingInfoExample);
-        if (CollectionUtil.isEmpty(shippingInfoList)) {
+        List<ShippingInfoResult> shippingInfoResultList = shippingInfoMapper.selectByUserId(shippingInfoExample);
+        if (CollectionUtil.isEmpty(shippingInfoResultList)) {
             shippingInfoListResponse.setResCode("50104");
             shippingInfoListResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50104"));
         } else {
-            shippingInfoListResponse.setShippingInfoList(shippingInfoList);
+            shippingInfoListResponse.setShippingInfoResultList(shippingInfoResultList);
         }
 
         return shippingInfoListResponse;
@@ -237,6 +238,8 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
 
         ShippingInfoExample shippingInfoExample = new ShippingInfoExample();
         ShippingInfoExample.Criteria criteria = shippingInfoExample.createCriteria();
+        
+        criteria.andEndUserIdEqualTo(endUserId);
         criteria.andIsDefaultEqualTo(true);
         criteria.andIsDeletedEqualTo(false);
 

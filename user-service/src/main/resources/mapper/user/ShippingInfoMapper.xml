@@ -85,6 +85,13 @@
     county_name, address_detail, address_alias, receiver_mobile, receiver_phone, receiver_postcode, 
     receiver_email, is_default, create_time, update_time, is_deleted
   </sql>
+    <sql id="User_Column_List" >
+    id id, end_user_id endUserId, receiver_name receiverName, province_id provinceId, city_id cityId, county_id countyId, 
+    province_name provinceName, city_name cityName, 
+    county_name countyName, address_detail addressDetail, receiver_mobile receiverMobile, receiver_phone receiverPhone, 
+    receiver_postcode receiverPostcode, 
+    receiver_email receiverEmail, is_default isDefault
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.ShippingInfoExample" >
     select
     <if test="distinct" >
@@ -430,4 +437,19 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectByUserId"  resultType="com.wow.user.vo.ShippingInfoResult"  parameterType="com.wow.user.model.ShippingInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="User_Column_List" />
+    from shipping_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
 </mapper>

@@ -215,7 +215,7 @@
 		    <include refid="Base_Column_List" />
 		    from area
 		    where id in  
-		     <foreach collection="items"   item="item"  open="(" close=")"  separator="," >
+		     <foreach collection="collection"   item="item"  open="(" close=")"  separator="," >
 			       #{item}
 			  </foreach>
   </select>
