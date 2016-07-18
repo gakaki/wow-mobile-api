@@ -127,7 +127,10 @@ public class ProductServiceImpl implements ProductService {
      */
     public int addProductImages(List<ProductImage> productImages) {
         if(!productImages.isEmpty())
-            productImages.forEach(o->addProductImage(o));
+            for(ProductImage productImage:productImages)
+            {
+                addProductImage(productImage);
+            }
         return 0;
     }
 
@@ -164,16 +167,14 @@ public class ProductServiceImpl implements ProductService {
      */
     public int deleteProductImages(List<ProductImage> productImages) {
         if(!productImages.isEmpty()) {
-            productImages.forEach(new Consumer<ProductImage>() {
-                @Override
-                public void accept(ProductImage productImage) {
-                    productImage.setIsDeleted(true);
-                    updateProductImage(productImage);
-                }
-            });
-            return 0;
+            for(ProductImage productImage:productImages)
+            {
+                productImage.setIsDeleted(true);
+                updateProductImage(productImage);
+            }
+
         }
-        return -1;
+        return 0;
     }
 
     //table: product_attribute
@@ -204,10 +205,12 @@ public class ProductServiceImpl implements ProductService {
      */
     public int createProductAttribute(List<ProductAttribute> productAttributes) {
         if(!productAttributes.isEmpty()) {
-            productAttributes.forEach(o -> productAttributeMapper.insertSelective(o));
-            return 0;
+            for(ProductAttribute productAttribute:productAttributes)
+            {
+                productAttributeMapper.insertSelective(productAttribute);
+            }
         }
-        return -1;
+        return 0;
     }
 
     /**
@@ -218,10 +221,12 @@ public class ProductServiceImpl implements ProductService {
      */
     public int updateProductAttribute(List<ProductAttribute> productAttributes) {
         if(!productAttributes.isEmpty()) {
-            productAttributes.forEach(o -> productAttributeMapper.updateByPrimaryKeySelective(o));
-            return 0;
+            for(ProductAttribute productAttribute:productAttributes)
+            {
+                productAttributeMapper.updateByPrimaryKeySelective(productAttribute);
+            }
         }
-        return -1;
+        return 0;
     }
 
     @Override
@@ -234,7 +239,10 @@ public class ProductServiceImpl implements ProductService {
          if(!productMaterials.isEmpty())
          {
              HashSet<Integer> materialIds=new HashSet<>();
-             productMaterials.forEach(o->materialIds.add(o.getMaterialId()));
+             for(ProductMaterial productMaterial:productMaterials)
+             {
+                 materialIds.add(productMaterial.getMaterialId());
+             }
              return getMaterialById(new ArrayList<>(materialIds));
          }
 
@@ -250,14 +258,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public int createProductMaterial(List<ProductMaterial> productMaterials) {
         if(!productMaterials.isEmpty())
-            productMaterials.forEach(o->productMaterialMapper.insertSelective(o));
+            for(ProductMaterial productMaterial:productMaterials)
+            {
+                productMaterialMapper.insertSelective(productMaterial);
+            }
         return 0;
     }
 
     @Override
     public int updateProductMaterial(List<ProductMaterial> productMaterials) {
         if(!productMaterials.isEmpty())
-            productMaterials.forEach(o->productMaterialMapper.updateByPrimaryKeySelective(o));
+            for(ProductMaterial productMaterial:productMaterials)
+            {
+                productMaterialMapper.updateByPrimaryKeySelective(productMaterial);
+            }
         return 0;
     }
 
