@@ -134,14 +134,13 @@ public class AttributeServiceImpl implements AttributeService {
         List<CategoryAttribute> list=new ArrayList<>();
         for (Attribute attribute:attributes)
         {
-            attributeMapper.insertSelective(attribute);
-            list.add(getCategoryAttribute(categoryId, attribute));
+            list.add(setCategoryAttribute(categoryId, attribute));
         }
         categoryAttributeService.createCategoryAttribute(list);
         return 0;
     }
 
-    private CategoryAttribute getCategoryAttribute(int categoryId, Attribute attribute) {
+    private CategoryAttribute setCategoryAttribute(int categoryId, Attribute attribute) {
         CategoryAttribute categoryAttribute =new CategoryAttribute();
         categoryAttribute.setCategoryId(categoryId);
         categoryAttribute.setAttributeId(attribute.getId());
@@ -163,8 +162,11 @@ public class AttributeServiceImpl implements AttributeService {
     public int deleteAttributesInCategory(int categoryId, Integer[] attributeIds)  {
 
         try{
-            List list=Arrays.asList(attributeIds);
-            list.forEach(o->  deleteAttributeById((Integer) o));
+            List<Integer> list=Arrays.asList(attributeIds);
+            for (Integer i:list)
+            {
+                deleteAttributeById(i);
+            }
             categoryService.deleteCategoryById(categoryId);
             categoryAttributeService.deleteCategoryAttributeByCategoryId(categoryId);
         }
