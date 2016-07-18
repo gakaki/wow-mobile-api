@@ -4,6 +4,7 @@ import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.*;
+import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.mobileapi.request.user.LoginByWechatRequest;
 import com.wow.mobileapi.request.user.LoginRequest;
 import com.wow.mobileapi.util.HttpRequestUtil;
@@ -13,6 +14,7 @@ import com.wow.user.service.UserService;
 import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
+import com.wow.user.vo.response.TokenValidateResponse;
 import com.wow.user.vo.response.UserResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,6 +153,15 @@ public class SessionController extends BaseController {
         //如果校验错误 则返回
         if (StringUtil.isNotEmpty(errorMsg)) {
             setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        String sessionToken = apiRequest.getSessionToken();
+        byte channel = apiRequest.getChannel();
+
+        TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(sessionToken, channel);
+        if (tokenValidateResponse == null || ! tokenValidateResponse.isValid()) {
+            ErrorResponseUtil.setErrorResponse(apiResponse, ErrorCodeConstant.INVALID_TOKEN);
             return apiResponse;
         }
 

@@ -2,6 +2,7 @@ package com.wow.mobileapi.interceptor;
 
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.constant.ApiConstant;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
@@ -40,8 +41,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(token,loginChannel);
             if (tokenValidateResponse==null || !tokenValidateResponse.isValid()) {
                 logger.warn("session token is invalid:" + token);
-                apiResponse.setResCode("10000");
-                apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("10000"));
+                ErrorResponseUtil.setErrorResponse(apiResponse,ErrorCodeConstant.INVALID_TOKEN);
                 response.setContentType("application/json");
                 response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
                 return false;

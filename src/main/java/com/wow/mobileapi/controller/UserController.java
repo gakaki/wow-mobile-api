@@ -4,6 +4,7 @@ import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.*;
+import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.mobileapi.request.user.*;
 import com.wow.mobileapi.util.HttpRequestUtil;
 import com.wow.user.constant.CaptchaTemplate;
@@ -60,7 +61,7 @@ public class UserController extends BaseController {
         }
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
         if (endUserId == null) {
-            ErrorResponseUtil.setErrorResponse(apiResponse,"10000");
+            ErrorResponseUtil.setErrorResponse(apiResponse, ErrorCodeConstant.INVALID_TOKEN);
             return apiResponse;
         }
 
@@ -207,7 +208,7 @@ public class UserController extends BaseController {
         if (endUserId != null) {
             endUser.setId(endUserId);
         } else {
-            ErrorResponseUtil.setErrorResponse(apiResponse,"10000");
+            ErrorResponseUtil.setErrorResponse(apiResponse,ErrorCodeConstant.INVALID_TOKEN);
             return apiResponse;
         }
 
