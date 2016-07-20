@@ -4,7 +4,7 @@ import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.RedisUtil;
-import com.wow.user.constant.CaptchaTemplate;
+import com.wow.user.constant.SmsTemplate;
 import com.wow.user.service.CaptchaService;
 import com.wow.user.thirdparty.SmsSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         // 示例：18600000000,13911111111,13322222222
         req.setRecNum(mobile);
         //短信模板ID，传入的模板必须是在阿里大鱼“管理中心-短信模板管理”中的可用模板。示例：SMS_585014
-        req.setSmsTemplateCode(CaptchaTemplate.getTemplateByType(templateType));
+        req.setSmsTemplateCode(SmsTemplate.getTemplateByType(templateType));
         smsSender.sendValidateCode(req);
 
         //3. cache digit into redis
