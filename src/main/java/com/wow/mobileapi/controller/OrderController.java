@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.BeanUtil;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
@@ -64,7 +65,7 @@ public class OrderController extends BaseController {
 
             orderSettleResponse = orderService.settleOrder(query);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(orderSettleResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(orderSettleResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderSettleResponse);
             } else {
                 apiResponse.setData(orderSettleResponse);
@@ -108,7 +109,7 @@ public class OrderController extends BaseController {
 
             orderResponse = orderService.createOrder(query);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(orderResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(orderResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderResponse);
             } else {
                 apiResponse.setData(orderResponse);

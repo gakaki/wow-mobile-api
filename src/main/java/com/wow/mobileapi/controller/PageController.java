@@ -1,19 +1,21 @@
 package com.wow.mobileapi.controller;
 
-import com.wow.common.request.ApiRequest;
-import com.wow.common.response.ApiResponse;
-import com.wow.common.util.JsonUtil;
-import com.wow.mobileapi.request.page.PageRequest;
-import com.wow.page.service.PageConfigService;
-import com.wow.page.vo.response.PageBannerResponse;
-import com.wow.page.vo.response.PageSceneResponse;
-import com.wow.page.vo.response.PageTopicResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.wow.common.request.ApiRequest;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.mobileapi.request.page.PageRequest;
+import com.wow.page.service.PageConfigService;
+import com.wow.page.vo.response.PageBannerResponse;
+import com.wow.page.vo.response.PageSceneResponse;
+import com.wow.page.vo.response.PageTopicResponse;
 
 /**
  * Created by zhengzhiqing on 16/6/23.
@@ -39,7 +41,7 @@ public class PageController extends BaseController {
         try {
             PageBannerResponse pageBannerResponse = pageConfigService.getBannersByPageType(pageRequest.getPageType());
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(pageBannerResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(pageBannerResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageBannerResponse);
             } else {
                 apiResponse.setData(pageBannerResponse.getPageBannerConfigList());
@@ -66,7 +68,7 @@ public class PageController extends BaseController {
         try {
             PageSceneResponse pageSceneResponse = pageConfigService.getScenesByPageType(pageType);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(pageSceneResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(pageSceneResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageSceneResponse);
             } else {
                 apiResponse.setData(pageSceneResponse.getSceneList());
@@ -95,7 +97,7 @@ public class PageController extends BaseController {
         try {
             PageTopicResponse pageTopicResponse = pageConfigService.getTopicsByPageType(pageType);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(pageTopicResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(pageTopicResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageTopicResponse);
             } else {
                 apiResponse.setData(pageTopicResponse.getPageTopicVoList());

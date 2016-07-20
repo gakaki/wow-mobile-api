@@ -15,7 +15,6 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
 import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.product.model.Product;
 import com.wow.product.service.ProductService;
@@ -200,7 +199,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         AvailableStocksResponse stocksResponse = stockService.batchGetAvailableStock(productIds);
 
         //判断服务是否调用成功 如果处理失败 则返回错误信息
-        if (!ErrorResponseUtil.isServiceCallSuccess(stocksResponse.getResCode())) {
+        if (!ErrorCodeUtil.isSuccessResponse(stocksResponse.getResCode())) {
             response.setResCode(stocksResponse.getResCode());
             response.setResMsg(stocksResponse.getResMsg());
 

@@ -72,7 +72,7 @@ public class SessionController extends BaseController {
         try {
             LoginResponse loginResponse = sessionService.login(loginVo);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(loginResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(loginResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, loginResponse);
             } else {
                 apiResponse.setData(loginResponse.getLoginResponseVo());
@@ -128,7 +128,7 @@ public class SessionController extends BaseController {
         try {
             LoginResponse loginResponse = sessionService.thirdPartyLogin(thirdPartyLoginVo);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(loginResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(loginResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, loginResponse);
             } else {
                 apiResponse.setData(loginResponse.getLoginResponseVo());
@@ -168,7 +168,7 @@ public class SessionController extends BaseController {
         try {
             CommonResponse commonResponse = sessionService.logout(apiRequest.getSessionToken(), apiRequest.getChannel());
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
