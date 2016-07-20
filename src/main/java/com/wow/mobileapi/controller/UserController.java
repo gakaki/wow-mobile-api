@@ -2,6 +2,7 @@ package com.wow.mobileapi.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.wow.user.vo.LoginResponseVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ import com.wow.user.vo.response.RegisterResponse;
 import com.wow.user.vo.response.UserCheckResponse;
 import com.wow.user.vo.response.UserResponse;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 @RestController
@@ -571,6 +573,29 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        //判断用户是否有昵称和头像,如果没有,用微信的覆盖
+        try {
+            UserResponse userResponse = userService.getUserById(endUserId);
+            if (userResponse != null && userResponse.getEndUser() != null) {
+                String nickName = userResponse.getEndUser().getNickName();
+                String avatar = userResponse.getEndUser().getAvatar();
+
+                EndUser endUserToBeUpdate = new EndUser();
+                endUserToBeUpdate.setId(endUserId);
+                if (StringUtil.isEmpty(nickName)) {
+                    endUserToBeUpdate.setNickName(encodedNickName);
+                }
+                if (StringUtil.isEmpty(avatar)) {
+                    endUserToBeUpdate.setAvatar(endUserWechat.getWechatAvatar());
+                }
+                if (StringUtil.isNotEmpty(endUserToBeUpdate.getAvatar()) || StringUtil.isNotEmpty(endUserToBeUpdate.getNickName())) {
+                    userService.updateUser(endUserToBeUpdate);
+                }
+            }
+        } catch (Exception ignore) {
+            logger.error("覆写昵称和头像错误--" + ignore);
+        }
+
         //进行一次自动登录
         LoginVo loginVo = new LoginVo();
         BeanUtil.copyProperties(registerAndBindWechatRequest, loginVo);
@@ -585,6 +610,8 @@ public class UserController extends BaseController {
                 setServiceErrorResponse(apiResponse, loginResponse);
                 return apiResponse;
             } else {
+                LoginResponseVo loginResponseVo = loginResponse.getLoginResponseVo();
+                loginResponseVo.setNickName(URLDecoder.decode(loginResponseVo.getNickName(),"utf-8"));
                 apiResponse.setData(loginResponse.getLoginResponseVo());
             }
         } catch (Exception e) {
