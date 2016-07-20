@@ -1,6 +1,7 @@
 package com.wow.stock.service.impl;
 
 import com.wow.common.response.CommonResponse;
+import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.product.service.WarehouseService;
@@ -351,6 +352,31 @@ public class StockServiceImpl implements StockService {
         if (i == 0) {
             commonResponse.setResCode("50605");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50605"));
+        }
+        return commonResponse;
+    }
+
+    /**
+     * 解冻库存(通用,一般是取消订单)
+     *
+     * @param unfreezeStockVo
+     */
+    @Override
+    public CommonResponse unfreezeStock(UnfreezeStockVo unfreezeStockVo) {
+        CommonResponse commonResponse = new CommonResponse();
+        List<ProductQtyVo> productQtyVoList = unfreezeStockVo.getProductQtyVoList();
+        List<ProductWarehouseQtyVo> productWarehouseQtyVoList = unfreezeStockVo.getProductWarehouseQtyVoList();
+        //解冻仓库库存
+        if (CollectionUtil.isNotEmpty(productWarehouseQtyVoList)) {
+            for (ProductWarehouseQtyVo productWarehouseQtyVo : productWarehouseQtyVoList) {
+                unfreezeWarehouseStock(productWarehouseQtyVo.getProductId(), productWarehouseQtyVo.getWarehouseId(), productWarehouseQtyVo.getProductQty());
+            }
+        }
+        //解冻虚拟库存
+        if (CollectionUtil.isNotEmpty(productQtyVoList)) {
+            for (ProductQtyVo productQtyVo : productQtyVoList) {
+                unfreezeVirtualStock(productQtyVo.getProductId(),  productQtyVo.getProductQty());
+            }
         }
         return commonResponse;
     }
