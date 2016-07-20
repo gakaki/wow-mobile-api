@@ -35,6 +35,8 @@ import com.wow.order.vo.response.OrderSettleResponse;
 import com.wow.product.mapper.ProductSupplierMapper;
 import com.wow.product.model.ProductSupplier;
 import com.wow.product.model.ProductSupplierExample;
+import com.wow.stock.service.StockService;
+import com.wow.stock.vo.ProductQtyVo;
 import com.wow.user.mapper.ShippingInfoMapper;
 import com.wow.user.mapper.ShoppingCartMapper;
 import com.wow.user.model.ShippingInfo;
@@ -66,6 +68,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductSupplierMapper productSupplierMapper;
+
+    @Autowired
+    private StockService stockService;
 
     /**
      * 下单
@@ -110,7 +115,6 @@ public class OrderServiceImpl implements OrderService {
         //计算订单总金额
         BigDecimal orderAmount = calculateOrderPrice(query);
 
-
         if (NumberUtil.isNotEquals(query.getOrderAmount(), orderAmount)) {
             orderResponse.setResCode("40306");
             orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40306"));
@@ -125,7 +129,12 @@ public class OrderServiceImpl implements OrderService {
         SaleOrder saleOrder = wrapOrder(query);
 
         /*** 保存订单开始*/
-        
+
+        //锁定产品相关的库存
+        List<ProductQtyVo> productQtyVoList = wrapProductQty(shoppingCartResult);
+
+        stockService.batchFreezeStock(productQtyVoList);
+
         saleOrderMapper.insertSelective(saleOrder);
         //设置订单id
         query.setOrderId(saleOrder.getId());
@@ -141,7 +150,7 @@ public class OrderServiceImpl implements OrderService {
 
         //清空购物车中用户购买的产品
         ShoppingCartQueryVo shoppingCartQueryVo = new ShoppingCartQueryVo();
-        
+
         shoppingCartQueryVo.setIsDeleted(Boolean.TRUE);
         shoppingCartQueryVo.setUpdateTime(DateUtil.currentDate());
         shoppingCartQueryVo.setShoppingCartIds(query.getShoppingCartIds());
@@ -155,6 +164,27 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setOrderCode(saleOrder.getOrderCode());
 
         return orderResponse;
+    }
+
+    /**
+     * 包装产品锁定数量集合
+     * 
+     * @param shoppingCartResult
+     * @return
+     */
+    private List<ProductQtyVo> wrapProductQty(List<ShoppingCartResultVo> shoppingCartResult) {
+        List<ProductQtyVo> productQtyVos = new ArrayList<ProductQtyVo>(shoppingCartResult.size());
+
+        ProductQtyVo productQtyVo = null;
+        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            productQtyVo = new ProductQtyVo();
+            productQtyVo.setProductId(shoppingCart.getProductId());
+            productQtyVo.setProductQty(shoppingCart.getProductQty());
+
+            productQtyVos.add(productQtyVo);
+        }
+
+        return productQtyVos;
     }
 
     //包装订单日志
@@ -259,14 +289,13 @@ public class OrderServiceImpl implements OrderService {
                 saleOrderItem.setProductSaleType(productSupplier.getProductSaleType());
             }
 
-
             saleOrderItem.setNeedAssemble(Boolean.FALSE);
             saleOrderItem.setIsItemLeaf(Boolean.FALSE);
 
             saleOrderItem.setCreateTime(DateUtil.currentDate());
             saleOrderItem.setUpdateTime(DateUtil.currentDate());
             saleOrderItem.setIsDeleted(Boolean.FALSE);
-			
+
             saleOrderItems.add(saleOrderItem);
         }
 
@@ -289,7 +318,6 @@ public class OrderServiceImpl implements OrderService {
 
         return productSupplierMapper.selectByExample(productSupplierExample);
     }
-
 
     /**
      * 根据产品id查询相关供应商信息

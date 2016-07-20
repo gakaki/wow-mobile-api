@@ -1,5 +1,14 @@
 package com.wow.mobileapi.controller;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
@@ -14,15 +23,6 @@ import com.wow.stock.vo.AvailableStockVo;
 import com.wow.stock.vo.response.AvailableStockResponse;
 import com.wow.stock.vo.response.AvailableStocksResponse;
 import com.wow.stock.vo.response.FreezeStockResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zhengzhiqing on 16/6/23.
@@ -61,7 +61,7 @@ public class StockController extends BaseController {
         try {
             AvailableStockResponse availableStockResponse = stockService.getAvailableStock(productId);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(availableStockResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(availableStockResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, availableStockResponse);
             } else {
                 AvailableStockVo availableStockVo = availableStockResponse.getAvailableStockVo();
@@ -103,7 +103,7 @@ public class StockController extends BaseController {
         try {
             AvailableStocksResponse availableStocksResponse = stockService.batchGetAvailableStock(productIdList);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(availableStocksResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(availableStocksResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, availableStocksResponse);
             } else {
                 List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
@@ -149,7 +149,7 @@ public class StockController extends BaseController {
         try {
             FreezeStockResponse freezeStockResponse = stockService.freezeStock(productId, productQty);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(freezeStockResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(freezeStockResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, freezeStockResponse);
             } else {
                 apiResponse.setData(freezeStockResponse);

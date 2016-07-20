@@ -1,20 +1,7 @@
 package com.wow.mobileapi.controller;
 
-import com.wow.common.request.ApiRequest;
-import com.wow.common.response.ApiResponse;
-import com.wow.common.response.CommonResponse;
-import com.wow.common.util.*;
-import com.wow.mobileapi.constant.ErrorCodeConstant;
-import com.wow.mobileapi.request.user.*;
-import com.wow.mobileapi.util.HttpRequestUtil;
-import com.wow.user.constant.SmsTemplate;
-import com.wow.user.model.EndUser;
-import com.wow.user.model.EndUserWechat;
-import com.wow.user.service.CaptchaService;
-import com.wow.user.service.SessionService;
-import com.wow.user.service.UserService;
-import com.wow.user.vo.LoginVo;
-import com.wow.user.vo.response.*;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +10,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import com.wow.common.request.ApiRequest;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.BeanUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.constant.ErrorCodeConstant;
+import com.wow.mobileapi.request.user.CaptchaRequest;
+import com.wow.mobileapi.request.user.RegisterAndBindWechatRequest;
+import com.wow.mobileapi.request.user.RegisterRequest;
+import com.wow.mobileapi.request.user.ResetPwdRequest;
+import com.wow.mobileapi.request.user.UserCheckRequest;
+import com.wow.mobileapi.request.user.UserUpdateRequest;
+import com.wow.mobileapi.util.HttpRequestUtil;
+import com.wow.user.constant.SmsTemplate;
+import com.wow.user.model.EndUser;
+import com.wow.user.model.EndUserWechat;
+import com.wow.user.service.CaptchaService;
+import com.wow.user.service.SessionService;
+import com.wow.user.service.UserService;
+import com.wow.user.vo.LoginVo;
+import com.wow.user.vo.response.LoginResponse;
+import com.wow.user.vo.response.RegisterBindStatusResponse;
+import com.wow.user.vo.response.RegisterResponse;
+import com.wow.user.vo.response.UserCheckResponse;
+import com.wow.user.vo.response.UserResponse;
 
 @RestController
 public class UserController extends BaseController {
@@ -65,7 +80,7 @@ public class UserController extends BaseController {
         try {
             UserResponse userResponse = userService.getUserById(endUserId);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(userResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(userResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, userResponse);
             } else {
                 apiResponse.setData(userResponse.getEndUser());
@@ -139,7 +154,7 @@ public class UserController extends BaseController {
 
             CommonResponse commonResponse = userService.register(endUser);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
                 return apiResponse;
             } else {
@@ -153,7 +168,7 @@ public class UserController extends BaseController {
                 try {
                     LoginResponse loginResponse = sessionService.login(loginVo);
                     //如果处理失败 则返回错误信息
-                    if (ErrorCodeUtil.isFailedResponse(loginResponse.getResCode())) {
+                    if (!ErrorCodeUtil.isSuccessResponse(loginResponse.getResCode())) {
                         setServiceErrorResponse(apiResponse, loginResponse);
                     } else {
                         apiResponse.setData(loginResponse.getLoginResponseVo());
@@ -212,7 +227,7 @@ public class UserController extends BaseController {
         try {
             CommonResponse commonResponse = userService.updateUser(endUser);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -253,7 +268,7 @@ public class UserController extends BaseController {
         try {
             UserCheckResponse userCheckResponse = userService.isExistedUserByMobile(userCheckRequest.getMobile());
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(userCheckResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(userCheckResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, userCheckResponse);
             } else {
                 apiResponse.setData(userCheckResponse.isExistedUser());
@@ -289,7 +304,7 @@ public class UserController extends BaseController {
         try {
             UserCheckResponse userCheckResponse = userService.isExistedUserByNickName(userCheckRequest.getNickName());
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(userCheckResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(userCheckResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, userCheckResponse);
             } else {
                 apiResponse.setData(userCheckResponse.isExistedUser());
@@ -340,7 +355,7 @@ public class UserController extends BaseController {
             CommonResponse commonResponse = captchaService.sendCaptcha(
                     captchaRequest.getMobile(), SmsTemplate.TEMPLATE_RESETPWD, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -389,7 +404,7 @@ public class UserController extends BaseController {
             CommonResponse commonResponse = captchaService.sendCaptcha(
                     captchaRequest.getMobile(), SmsTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -439,7 +454,7 @@ public class UserController extends BaseController {
             CommonResponse commonResponse = captchaService.sendCaptcha(
                     captchaRequest.getMobile(), SmsTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -538,7 +553,7 @@ public class UserController extends BaseController {
         try {
             CommonResponse commonResponse = userService.bindWechat(endUserWechat);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
                 return apiResponse;
             }
@@ -558,7 +573,7 @@ public class UserController extends BaseController {
         try {
             LoginResponse loginResponse = sessionService.login(loginVo);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(loginResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(loginResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, loginResponse);
                 return apiResponse;
             } else {
@@ -614,7 +629,7 @@ public class UserController extends BaseController {
             CommonResponse commonResponse = userService.resetPassword(
                     resetPwdRequest.getMobile(),resetPwdRequest.getNewPwd());
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {

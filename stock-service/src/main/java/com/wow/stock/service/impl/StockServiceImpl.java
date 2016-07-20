@@ -301,7 +301,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public BatchFreezeStockResponse batchFreezeStock(List<ProductQtyVo> productQtyVoList) {
         BatchFreezeStockResponse batchFreezeStockResponse = new BatchFreezeStockResponse();
-        List<FreezeStockVo> list = new ArrayList<>();
+        List<FreezeStockVo> list = new ArrayList<FreezeStockVo>();
         for (ProductQtyVo productQtyVo : productQtyVoList) {
             FreezeStockResponse freezeStockResponse = freezeStock(productQtyVo.getProductId(), productQtyVo.getProductQty());
             if (freezeStockResponse == null) {

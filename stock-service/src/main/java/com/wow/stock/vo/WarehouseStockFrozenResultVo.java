@@ -9,8 +9,13 @@ public class WarehouseStockFrozenResultVo implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
+    //产品id
     private int productId;
+    
+    //仓库id
     private int warehouseId;
+    
+    //冻结的库存个数
     private int frozenStock;
 
     public int getProductId() {
