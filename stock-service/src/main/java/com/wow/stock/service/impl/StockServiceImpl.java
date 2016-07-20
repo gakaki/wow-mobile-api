@@ -1,5 +1,20 @@
 package com.wow.stock.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
@@ -10,19 +25,18 @@ import com.wow.stock.mapper.ProductWarehouseStockMapper;
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.model.ProductWarehouseStock;
 import com.wow.stock.service.StockService;
-import com.wow.stock.vo.*;
+import com.wow.stock.vo.AvailableStockVo;
+import com.wow.stock.vo.FreezeStockVo;
+import com.wow.stock.vo.ProductQtyVo;
+import com.wow.stock.vo.ProductWarehouseQtyVo;
+import com.wow.stock.vo.UnfreezeStockVo;
+import com.wow.stock.vo.VirtualStockVo;
+import com.wow.stock.vo.WarehouseStockFrozenResultVo;
+import com.wow.stock.vo.WarehouseStockVo;
 import com.wow.stock.vo.response.AvailableStockResponse;
 import com.wow.stock.vo.response.AvailableStocksResponse;
 import com.wow.stock.vo.response.BatchFreezeStockResponse;
 import com.wow.stock.vo.response.FreezeStockResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 /**
  * Created by zhengzhiqing on 16/6/17.
@@ -87,25 +101,25 @@ public class StockServiceImpl implements StockService {
         //或者做成消息通知模式,一旦有产品到货,通知订单子系统处理虚拟库存的订单
         //消息考虑redis mq 或者 rabbit mq
 
-//        //如果是调增库存(比如进货),需要先满足之前冻结的虚拟库存
-//        if(adjustNum > 0) {
-//            //当前冻结的虚拟库存数量
-//            int frozenVirtualStockQty = productVirtualStockMapper.getFrozenVirtualStock(productId);
-//            //需要解冻的虚拟库存数量
-//            int unfreezeVirtualStockQty = 0;
-//            if (adjustNum >= frozenVirtualStockQty) {
-//                unfreezeVirtualStockQty = frozenVirtualStockQty;
-//            } else {
-//                unfreezeVirtualStockQty = adjustNum;
-//            }
-//            if (unfreezeVirtualStockQty > 0) {
-//                //虚拟冻结转真实冻结
-//                productVirtualStockMapper.shipOutVirtualStock(productId, unfreezeVirtualStockQty);
-//                productWarehouseStockMapper.freezeWarehouseStock(productId, warehouseId, unfreezeVirtualStockQty);
-//                //更新订单状态
-//                //TODO:查看order_item中有虚拟冻结的产品,修改冻结状态和冻结数量。提醒发货员发货等
-//            }
-//        }
+        //        //如果是调增库存(比如进货),需要先满足之前冻结的虚拟库存
+        //        if(adjustNum > 0) {
+        //            //当前冻结的虚拟库存数量
+        //            int frozenVirtualStockQty = productVirtualStockMapper.getFrozenVirtualStock(productId);
+        //            //需要解冻的虚拟库存数量
+        //            int unfreezeVirtualStockQty = 0;
+        //            if (adjustNum >= frozenVirtualStockQty) {
+        //                unfreezeVirtualStockQty = frozenVirtualStockQty;
+        //            } else {
+        //                unfreezeVirtualStockQty = adjustNum;
+        //            }
+        //            if (unfreezeVirtualStockQty > 0) {
+        //                //虚拟冻结转真实冻结
+        //                productVirtualStockMapper.shipOutVirtualStock(productId, unfreezeVirtualStockQty);
+        //                productWarehouseStockMapper.freezeWarehouseStock(productId, warehouseId, unfreezeVirtualStockQty);
+        //                //更新订单状态
+        //                //TODO:查看order_item中有虚拟冻结的产品,修改冻结状态和冻结数量。提醒发货员发货等
+        //            }
+        //        }
     }
 
     /**
@@ -136,7 +150,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public CommonResponse freezeWarehouseStock(int productId, int warehouseId, int productQty) {
         CommonResponse commonResponse = new CommonResponse();
-        int i = productWarehouseStockMapper.freezeWarehouseStock(productId,warehouseId,productQty);
+        int i = productWarehouseStockMapper.freezeWarehouseStock(productId, warehouseId, productQty);
         if (i == 0) {
             commonResponse.setResCode("50601");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50601"));
@@ -156,7 +170,7 @@ public class StockServiceImpl implements StockService {
         CommonResponse commonResponse = new CommonResponse();
         int i = productVirtualStockMapper.freezeVirtualStock(productId, productQty);
         if (i == 0) {
-            ErrorResponseUtil.setErrorResponse(commonResponse,"50609");
+            ErrorResponseUtil.setErrorResponse(commonResponse, "50609");
         }
         return commonResponse;
     }
@@ -180,8 +194,8 @@ public class StockServiceImpl implements StockService {
          * 4. 如果虚拟库存不足,报错误码:该产品库存不足
          */
         AvailableStockResponse availableStockResponse = getAvailableStock(productId);
-        if (availableStockResponse == null || availableStockResponse.getAvailableStockVo() ==null) {
-            ErrorResponseUtil.setErrorResponse(freezeStockResponse,"50608");
+        if (availableStockResponse == null || availableStockResponse.getAvailableStockVo() == null) {
+            ErrorResponseUtil.setErrorResponse(freezeStockResponse, "50608");
             return freezeStockResponse;
         }
 
@@ -193,7 +207,7 @@ public class StockServiceImpl implements StockService {
         List<WarehouseStockVo> warehouseStockVoList = availableStockVo.getWarehouseStockVoList();
         //总库存不满足,直接返回
         if (total < productQty) {
-            ErrorResponseUtil.setErrorResponse(freezeStockResponse,"50608");
+            ErrorResponseUtil.setErrorResponse(freezeStockResponse, "50608");
             return freezeStockResponse;
         }
 
@@ -205,7 +219,7 @@ public class StockServiceImpl implements StockService {
             List<WarehouseStockFrozenResultVo> list = new ArrayList<WarehouseStockFrozenResultVo>();
 
             //如果仓库只有一个
-            if (warehouseStockVoList.size()==1) {
+            if (warehouseStockVoList.size() == 1) {
                 WarehouseStockVo warehouseStockVo = warehouseStockVoList.get(0);
                 if (warehouseStockVo.getAvailableStock() >= restQty) {
                     freezeWarehouseStock(productId, warehouseStockVo.getWarehouseId(), restQty);
@@ -218,7 +232,8 @@ public class StockServiceImpl implements StockService {
                     freezeStockResponse.setFreezeStockVo(freezeStockVo);
                     return freezeStockResponse;
                 } else if (warehouseStockVo.getAvailableStock() > 0) {
-                    freezeWarehouseStock(productId, warehouseStockVo.getWarehouseId(), warehouseStockVo.getAvailableStock());
+                    freezeWarehouseStock(productId, warehouseStockVo.getWarehouseId(), warehouseStockVo
+                        .getAvailableStock());
                     WarehouseStockFrozenResultVo warehouseStockFrozenResultVo = new WarehouseStockFrozenResultVo();
                     warehouseStockFrozenResultVo.setProductId(productId);
                     warehouseStockFrozenResultVo.setWarehouseId(warehouseStockVo.getWarehouseId());
@@ -234,7 +249,7 @@ public class StockServiceImpl implements StockService {
                 List<WarehouseStockVo> privateWarehouseStock = new ArrayList<WarehouseStockVo>();
                 List<WarehouseStockVo> thirdPartyWarehouseStock = new ArrayList<WarehouseStockVo>();
 
-                for(WarehouseStockVo warehouseStockVo: warehouseStockVoList) {
+                for (WarehouseStockVo warehouseStockVo : warehouseStockVoList) {
                     int warehouseId = warehouseStockVo.getWarehouseId();
                     if (warehouseId <= 100) { //假设我们会扩展到100个仓库,wow,wow
                         privateWarehouseStock.add(warehouseStockVo);
@@ -245,7 +260,7 @@ public class StockServiceImpl implements StockService {
                 //自有仓库按库存多少排序
                 sort(privateWarehouseStock);
 
-                for (WarehouseStockVo warehouseStockVo:privateWarehouseStock) {
+                for (WarehouseStockVo warehouseStockVo : privateWarehouseStock) {
                     if (restQty > 0) {
                         //单仓可满足剩余库存
                         if (warehouseStockVo.getAvailableStock() >= restQty) {
@@ -259,7 +274,8 @@ public class StockServiceImpl implements StockService {
                             break;
                         } else if (warehouseStockVo.getAvailableStock() > 0) {
                             //单仓不满足,全部冻结掉
-                            freezeWarehouseStock(productId, warehouseStockVo.getWarehouseId(), warehouseStockVo.getAvailableStock());
+                            freezeWarehouseStock(productId, warehouseStockVo.getWarehouseId(), warehouseStockVo
+                                .getAvailableStock());
                             WarehouseStockFrozenResultVo warehouseStockFrozenResultVo = new WarehouseStockFrozenResultVo();
                             warehouseStockFrozenResultVo.setProductId(productId);
                             warehouseStockFrozenResultVo.setWarehouseId(warehouseStockVo.getWarehouseId());
@@ -271,7 +287,7 @@ public class StockServiceImpl implements StockService {
                 }
             }
             freezeStockVo.setWarehouseStockFrozenResultVoList(list);
-            if(restQty<=0) {
+            if (restQty <= 0) {
                 freezeStockVo.setFrozenVirtualStockQty(0);
                 freezeStockVo.setFrozenWarehouseStockTotalQty(productQty);
                 freezeStockResponse.setFreezeStockVo(freezeStockVo);
@@ -286,7 +302,7 @@ public class StockServiceImpl implements StockService {
             freezeStockResponse.setFreezeStockVo(freezeStockVo);
         } else {
             //虚拟库存不足
-            ErrorResponseUtil.setErrorResponse(freezeStockResponse,"50609");
+            ErrorResponseUtil.setErrorResponse(freezeStockResponse, "50609");
             return freezeStockResponse;
         }
         return freezeStockResponse;
@@ -303,12 +319,13 @@ public class StockServiceImpl implements StockService {
         BatchFreezeStockResponse batchFreezeStockResponse = new BatchFreezeStockResponse();
         List<FreezeStockVo> list = new ArrayList<FreezeStockVo>();
         for (ProductQtyVo productQtyVo : productQtyVoList) {
-            FreezeStockResponse freezeStockResponse = freezeStock(productQtyVo.getProductId(), productQtyVo.getProductQty());
+            FreezeStockResponse freezeStockResponse = freezeStock(productQtyVo.getProductId(), productQtyVo
+                .getProductQty());
             if (freezeStockResponse == null) {
-                ErrorResponseUtil.setErrorResponse(batchFreezeStockResponse,"50608");
+                ErrorResponseUtil.setErrorResponse(batchFreezeStockResponse, "50608");
                 return batchFreezeStockResponse;
             }
-            if (ErrorCodeUtil.isSuccessResponse(freezeStockResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(freezeStockResponse.getResCode())) {
                 list.add(freezeStockResponse.getFreezeStockVo());
             } else {
                 batchFreezeStockResponse.setResCode("50608");
@@ -341,7 +358,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public CommonResponse unfreezeWarehouseStock(int productId, int warehouseId, int productQty) {
         CommonResponse commonResponse = new CommonResponse();
-        int i = productWarehouseStockMapper.unfreezeWarehouseStock(productId,warehouseId,productQty);
+        int i = productWarehouseStockMapper.unfreezeWarehouseStock(productId, warehouseId, productQty);
         if (i == 0) {
             commonResponse.setResCode("50604");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50604"));
@@ -379,13 +396,14 @@ public class StockServiceImpl implements StockService {
         //解冻仓库库存
         if (CollectionUtil.isNotEmpty(productWarehouseQtyVoList)) {
             for (ProductWarehouseQtyVo productWarehouseQtyVo : productWarehouseQtyVoList) {
-                unfreezeWarehouseStock(productWarehouseQtyVo.getProductId(), productWarehouseQtyVo.getWarehouseId(), productWarehouseQtyVo.getProductQty());
+                unfreezeWarehouseStock(productWarehouseQtyVo.getProductId(), productWarehouseQtyVo
+                    .getWarehouseId(), productWarehouseQtyVo.getProductQty());
             }
         }
         //解冻虚拟库存
         if (CollectionUtil.isNotEmpty(productQtyVoList)) {
             for (ProductQtyVo productQtyVo : productQtyVoList) {
-                unfreezeVirtualStock(productQtyVo.getProductId(),  productQtyVo.getProductQty());
+                unfreezeVirtualStock(productQtyVo.getProductId(), productQtyVo.getProductQty());
             }
         }
         return commonResponse;
@@ -398,7 +416,7 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public AvailableStockResponse getAvailableStock(int productId) {
         AvailableStockResponse availableStockResponse = new AvailableStockResponse();
         AvailableStockVo availableStockVo = new AvailableStockVo();
@@ -409,10 +427,10 @@ public class StockServiceImpl implements StockService {
         List<WarehouseStockVo> warehouseStockVoList = productWarehouseStockMapper.getWarehouseAvailableStock(productId);
         int totalAvailableRealStock = 0;
         for (WarehouseStockVo warehouseStockVo : warehouseStockVoList) {
-//            map.put(warehouseStockVo.getWarehouseId(),warehouseStockVo.getAvailableStock());
+            //            map.put(warehouseStockVo.getWarehouseId(),warehouseStockVo.getAvailableStock());
             totalAvailableRealStock += warehouseStockVo.getAvailableStock();
         }
-//        availableStockVo.setAvailableRealStockQtyMap(map);
+        //        availableStockVo.setAvailableRealStockQtyMap(map);
         availableStockVo.setWarehouseStockVoList(warehouseStockVoList);
 
         availableStockVo.setTotalAvailableWarehouseStockQty(totalAvailableRealStock);
@@ -436,34 +454,35 @@ public class StockServiceImpl implements StockService {
      * @return
      */
     @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public AvailableStocksResponse batchGetAvailableStock(List<Integer> productIds) {
 
         AvailableStocksResponse availableStocksResponse = new AvailableStocksResponse();
 
-//        Map<Integer, AvailableStockVo> map = new HashMap<Integer, AvailableStockVo>();
+        //        Map<Integer, AvailableStockVo> map = new HashMap<Integer, AvailableStockVo>();
 
         List<AvailableStockVo> availableStockVoList = new ArrayList<>();
 
         //首先遍历所有仓库,查找仓库可用库存
-        List<WarehouseStockVo> warehouseStockVoList= productWarehouseStockMapper.getWarehouseAvailableStocks(productIds);
+        List<WarehouseStockVo> warehouseStockVoList = productWarehouseStockMapper
+            .getWarehouseAvailableStocks(productIds);
 
         //然后计算虚拟可用库存
         List<VirtualStockVo> virtualStockVoList = productVirtualStockMapper.getAvailableVirtualStocks(productIds);
 
         //productId: warehouseStockVoList
-//        Map<Integer, List<WarehouseStockVo>> map = new HashMap<Integer, List<WarehouseStockVo>>();
+        //        Map<Integer, List<WarehouseStockVo>> map = new HashMap<Integer, List<WarehouseStockVo>>();
 
         Map<Integer, AvailableStockVo> map = new HashMap<Integer, AvailableStockVo>();
 
-//        AvailableStockVo availableStockVo = new AvailableStockVo();
+        //        AvailableStockVo availableStockVo = new AvailableStockVo();
 
-        for (WarehouseStockVo warehouseStockVo: warehouseStockVoList) {
+        for (WarehouseStockVo warehouseStockVo : warehouseStockVoList) {
             int productId = warehouseStockVo.getProductId();
             int warehouseId = warehouseStockVo.getWarehouseId();
             int availableStock = warehouseStockVo.getAvailableStock();
 
-            if (map.get(productId)==null) {
+            if (map.get(productId) == null) {
                 AvailableStockVo availableStockVo = new AvailableStockVo();
                 availableStockVo.setProductId(productId);
                 map.put(productId, availableStockVo);
@@ -475,38 +494,40 @@ public class StockServiceImpl implements StockService {
                 map.get(productId).setTotalAvailableWarehouseStockQty(availableStock);
                 map.get(productId).setTotalAvailableStockQty(availableStock);
             } else {
-                map.get(productId).setTotalAvailableWarehouseStockQty(map.get(productId).getTotalAvailableWarehouseStockQty() + availableStock);
-                map.get(productId).setTotalAvailableStockQty(map.get(productId).getTotalAvailableStockQty() + availableStock);
+                map.get(productId).setTotalAvailableWarehouseStockQty(map.get(productId)
+                    .getTotalAvailableWarehouseStockQty() + availableStock);
+                map.get(productId)
+                    .setTotalAvailableStockQty(map.get(productId).getTotalAvailableStockQty() + availableStock);
             }
             map.get(productId).getWarehouseStockVoList().add(warehouseStockVo);
         }
 
-//                warehouseStockVos.setAvailableRealStockQtyMap(warehouseMap);
-//                warehouseStockVos.setTotalAvailableWarehouseStockQty(availableStock);
-//                warehouseStockVos.setTotalAvailableStockQty(availableStockVo.getTotalAvailableWarehouseStockQty());
-//                map.put(productId, availableStockVo);
-//            } else {
-//                map.get(productId).add(warehouseStockVo);
-//                if (availableStockVo.getAvailableRealStockQtyMap()==null) {
-//                    availableStockVo.setAvailableRealStockQtyMap(warehouseMap);
-//                    availableStockVo.setTotalAvailableWarehouseStockQty(availableStock);
-//                    availableStockVo.setTotalAvailableStockQty(availableStockVo.getTotalAvailableWarehouseStockQty());
-//                } else {
-//                    availableStockVo.getAvailableRealStockQtyMap().put(warehouseId, availableStock);
-//                    availableStockVo.setTotalAvailableWarehouseStockQty(availableStockVo.getTotalAvailableStockQty() + availableStock);
-//                    availableStockVo.setTotalAvailableStockQty(availableStockVo.getTotalAvailableWarehouseStockQty());
-//                }
-//            }
-//        }
+        //                warehouseStockVos.setAvailableRealStockQtyMap(warehouseMap);
+        //                warehouseStockVos.setTotalAvailableWarehouseStockQty(availableStock);
+        //                warehouseStockVos.setTotalAvailableStockQty(availableStockVo.getTotalAvailableWarehouseStockQty());
+        //                map.put(productId, availableStockVo);
+        //            } else {
+        //                map.get(productId).add(warehouseStockVo);
+        //                if (availableStockVo.getAvailableRealStockQtyMap()==null) {
+        //                    availableStockVo.setAvailableRealStockQtyMap(warehouseMap);
+        //                    availableStockVo.setTotalAvailableWarehouseStockQty(availableStock);
+        //                    availableStockVo.setTotalAvailableStockQty(availableStockVo.getTotalAvailableWarehouseStockQty());
+        //                } else {
+        //                    availableStockVo.getAvailableRealStockQtyMap().put(warehouseId, availableStock);
+        //                    availableStockVo.setTotalAvailableWarehouseStockQty(availableStockVo.getTotalAvailableStockQty() + availableStock);
+        //                    availableStockVo.setTotalAvailableStockQty(availableStockVo.getTotalAvailableWarehouseStockQty());
+        //                }
+        //            }
+        //        }
 
-        for (VirtualStockVo virtualStockVo: virtualStockVoList) {
+        for (VirtualStockVo virtualStockVo : virtualStockVoList) {
 
             int productId = virtualStockVo.getProductId();
             int availableVirtualStock = virtualStockVo.getAvailableVirtualStock();
 
             AvailableStockVo availableStockVo = map.get(productId);
 
-            if (availableStockVo==null) {
+            if (availableStockVo == null) {
                 availableStockVo = new AvailableStockVo();
                 availableStockVo.setProductId(productId);
                 availableStockVo.setAvailableVirtualStockQty(availableVirtualStock);
@@ -514,7 +535,8 @@ public class StockServiceImpl implements StockService {
                 map.put(productId, availableStockVo);
             } else {
                 availableStockVo.setAvailableVirtualStockQty(availableVirtualStock);
-                availableStockVo.setTotalAvailableStockQty(availableStockVo.getTotalAvailableStockQty() + availableVirtualStock);
+                availableStockVo
+                    .setTotalAvailableStockQty(availableStockVo.getTotalAvailableStockQty() + availableVirtualStock);
             }
         }
 
@@ -537,7 +559,7 @@ public class StockServiceImpl implements StockService {
     @Override
     public CommonResponse shipOutGoods(int productId, int warehouseId, int productQty) {
         CommonResponse commonResponse = new CommonResponse();
-        int i = productWarehouseStockMapper.shipOutWarehouseGoods(productId,warehouseId,productQty);
+        int i = productWarehouseStockMapper.shipOutWarehouseGoods(productId, warehouseId, productQty);
         if (i == 0) {
             commonResponse.setResCode("50606");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50606"));

@@ -29,8 +29,6 @@ public class SaleOrderItem implements Serializable {
 
     private Integer productSupplierId;
 
-    private Integer warehouseId;
-
     private Integer frozenRealStockQty;
 
     private Integer frozenVirtualStockQty;
@@ -141,14 +139,6 @@ public class SaleOrderItem implements Serializable {
         this.productSupplierId = productSupplierId;
     }
 
-    public Integer getWarehouseId() {
-        return warehouseId;
-    }
-
-    public void setWarehouseId(Integer warehouseId) {
-        this.warehouseId = warehouseId;
-    }
-
     public Integer getFrozenRealStockQty() {
         return frozenRealStockQty;
     }
@@ -215,7 +205,6 @@ public class SaleOrderItem implements Serializable {
         sb.append(", parentOrderItemId=").append(parentOrderItemId);
         sb.append(", isItemLeaf=").append(isItemLeaf);
         sb.append(", productSupplierId=").append(productSupplierId);
-        sb.append(", warehouseId=").append(warehouseId);
         sb.append(", frozenRealStockQty=").append(frozenRealStockQty);
         sb.append(", frozenVirtualStockQty=").append(frozenVirtualStockQty);
         sb.append(", isVirtualStockReady=").append(isVirtualStockReady);
