@@ -225,6 +225,66 @@ public class PageBannerConfigExample {
             return (Criteria) this;
         }
 
+        public Criteria andPageModuleTypeIsNull() {
+            addCriterion("page_module_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeIsNotNull() {
+            addCriterion("page_module_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeEqualTo(Byte value) {
+            addCriterion("page_module_type =", value, "pageModuleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeNotEqualTo(Byte value) {
+            addCriterion("page_module_type <>", value, "pageModuleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeGreaterThan(Byte value) {
+            addCriterion("page_module_type >", value, "pageModuleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("page_module_type >=", value, "pageModuleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeLessThan(Byte value) {
+            addCriterion("page_module_type <", value, "pageModuleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("page_module_type <=", value, "pageModuleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeIn(List<Byte> values) {
+            addCriterion("page_module_type in", values, "pageModuleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeNotIn(List<Byte> values) {
+            addCriterion("page_module_type not in", values, "pageModuleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeBetween(Byte value1, Byte value2) {
+            addCriterion("page_module_type between", value1, value2, "pageModuleType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPageModuleTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("page_module_type not between", value1, value2, "pageModuleType");
+            return (Criteria) this;
+        }
+
         public Criteria andBannerTitleIsNull() {
             addCriterion("banner_title is null");
             return (Criteria) this;
@@ -625,6 +685,76 @@ public class PageBannerConfigExample {
             return (Criteria) this;
         }
 
+        public Criteria andSortOrderIsNull() {
+            addCriterion("sort_order is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderIsNotNull() {
+            addCriterion("sort_order is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderEqualTo(String value) {
+            addCriterion("sort_order =", value, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderNotEqualTo(String value) {
+            addCriterion("sort_order <>", value, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderGreaterThan(String value) {
+            addCriterion("sort_order >", value, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderGreaterThanOrEqualTo(String value) {
+            addCriterion("sort_order >=", value, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderLessThan(String value) {
+            addCriterion("sort_order <", value, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderLessThanOrEqualTo(String value) {
+            addCriterion("sort_order <=", value, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderLike(String value) {
+            addCriterion("sort_order like", value, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderNotLike(String value) {
+            addCriterion("sort_order not like", value, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderIn(List<String> values) {
+            addCriterion("sort_order in", values, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderNotIn(List<String> values) {
+            addCriterion("sort_order not in", values, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderBetween(String value1, String value2) {
+            addCriterion("sort_order between", value1, value2, "sortOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderNotBetween(String value1, String value2) {
+            addCriterion("sort_order not between", value1, value2, "sortOrder");
+            return (Criteria) this;
+        }
+
         public Criteria andActiveFromIsNull() {
             addCriterion("active_from is null");
             return (Criteria) this;
@@ -745,6 +875,66 @@ public class PageBannerConfigExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsEnabledIsNull() {
+            addCriterion("is_enabled is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledIsNotNull() {
+            addCriterion("is_enabled is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledEqualTo(Boolean value) {
+            addCriterion("is_enabled =", value, "isEnabled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledNotEqualTo(Boolean value) {
+            addCriterion("is_enabled <>", value, "isEnabled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledGreaterThan(Boolean value) {
+            addCriterion("is_enabled >", value, "isEnabled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_enabled >=", value, "isEnabled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledLessThan(Boolean value) {
+            addCriterion("is_enabled <", value, "isEnabled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_enabled <=", value, "isEnabled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledIn(List<Boolean> values) {
+            addCriterion("is_enabled in", values, "isEnabled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledNotIn(List<Boolean> values) {
+            addCriterion("is_enabled not in", values, "isEnabled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_enabled between", value1, value2, "isEnabled");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEnabledNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_enabled not between", value1, value2, "isEnabled");
+            return (Criteria) this;
+        }
+
         public Criteria andBannerTitleLikeInsensitive(String value) {
             addCriterion("upper(banner_title) like", value.toUpperCase(), "bannerTitle");
             return (Criteria) this;
@@ -762,6 +952,11 @@ public class PageBannerConfigExample {
 
         public Criteria andBannerLinkUrlLikeInsensitive(String value) {
             addCriterion("upper(banner_link_url) like", value.toUpperCase(), "bannerLinkUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andSortOrderLikeInsensitive(String value) {
+            addCriterion("upper(sort_order) like", value.toUpperCase(), "sortOrder");
             return (Criteria) this;
         }
     }

@@ -4,14 +4,17 @@
   <resultMap id="BaseResultMap" type="com.wow.page.model.PageBannerConfig" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="page_type" property="pageType" jdbcType="TINYINT" />
+    <result column="page_module_type" property="pageModuleType" jdbcType="TINYINT" />
     <result column="banner_title" property="bannerTitle" jdbcType="VARCHAR" />
     <result column="banner_desc" property="bannerDesc" jdbcType="VARCHAR" />
     <result column="banner_img_src" property="bannerImgSrc" jdbcType="VARCHAR" />
     <result column="banner_link_type" property="bannerLinkType" jdbcType="TINYINT" />
     <result column="banner_link_url" property="bannerLinkUrl" jdbcType="VARCHAR" />
     <result column="banner_link_target_id" property="bannerLinkTargetId" jdbcType="INTEGER" />
+    <result column="sort_order" property="sortOrder" jdbcType="VARCHAR" />
     <result column="active_from" property="activeFrom" jdbcType="TIMESTAMP" />
     <result column="active_to" property="activeTo" jdbcType="TIMESTAMP" />
+    <result column="is_enabled" property="isEnabled" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -72,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, page_type, banner_title, banner_desc, banner_img_src, banner_link_type, banner_link_url, 
-    banner_link_target_id, active_from, active_to
+    id, page_type, page_module_type, banner_title, banner_desc, banner_img_src, banner_link_type, 
+    banner_link_url, banner_link_target_id, sort_order, active_from, active_to, is_enabled
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.page.model.PageBannerConfigExample" >
     select
@@ -109,13 +112,15 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into page_banner_config (page_type, banner_title, banner_desc, 
-      banner_img_src, banner_link_type, banner_link_url, 
-      banner_link_target_id, active_from, active_to
+    insert into page_banner_config (page_type, page_module_type, banner_title, 
+      banner_desc, banner_img_src, banner_link_type, 
+      banner_link_url, banner_link_target_id, sort_order, 
+      active_from, active_to, is_enabled
       )
-    values (#{pageType,jdbcType=TINYINT}, #{bannerTitle,jdbcType=VARCHAR}, #{bannerDesc,jdbcType=VARCHAR}, 
-      #{bannerImgSrc,jdbcType=VARCHAR}, #{bannerLinkType,jdbcType=TINYINT}, #{bannerLinkUrl,jdbcType=VARCHAR}, 
-      #{bannerLinkTargetId,jdbcType=INTEGER}, #{activeFrom,jdbcType=TIMESTAMP}, #{activeTo,jdbcType=TIMESTAMP}
+    values (#{pageType,jdbcType=TINYINT}, #{pageModuleType,jdbcType=TINYINT}, #{bannerTitle,jdbcType=VARCHAR}, 
+      #{bannerDesc,jdbcType=VARCHAR}, #{bannerImgSrc,jdbcType=VARCHAR}, #{bannerLinkType,jdbcType=TINYINT}, 
+      #{bannerLinkUrl,jdbcType=VARCHAR}, #{bannerLinkTargetId,jdbcType=INTEGER}, #{sortOrder,jdbcType=VARCHAR}, 
+      #{activeFrom,jdbcType=TIMESTAMP}, #{activeTo,jdbcType=TIMESTAMP}, #{isEnabled,jdbcType=BIT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wow.page.model.PageBannerConfig" >
@@ -126,6 +131,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="pageType != null" >
         page_type,
+      </if>
+      <if test="pageModuleType != null" >
+        page_module_type,
       </if>
       <if test="bannerTitle != null" >
         banner_title,
@@ -145,16 +153,25 @@
       <if test="bannerLinkTargetId != null" >
         banner_link_target_id,
       </if>
+      <if test="sortOrder != null" >
+        sort_order,
+      </if>
       <if test="activeFrom != null" >
         active_from,
       </if>
       <if test="activeTo != null" >
         active_to,
       </if>
+      <if test="isEnabled != null" >
+        is_enabled,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="pageType != null" >
         #{pageType,jdbcType=TINYINT},
+      </if>
+      <if test="pageModuleType != null" >
+        #{pageModuleType,jdbcType=TINYINT},
       </if>
       <if test="bannerTitle != null" >
         #{bannerTitle,jdbcType=VARCHAR},
@@ -174,11 +191,17 @@
       <if test="bannerLinkTargetId != null" >
         #{bannerLinkTargetId,jdbcType=INTEGER},
       </if>
+      <if test="sortOrder != null" >
+        #{sortOrder,jdbcType=VARCHAR},
+      </if>
       <if test="activeFrom != null" >
         #{activeFrom,jdbcType=TIMESTAMP},
       </if>
       <if test="activeTo != null" >
         #{activeTo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isEnabled != null" >
+        #{isEnabled,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -196,6 +219,9 @@
       </if>
       <if test="record.pageType != null" >
         page_type = #{record.pageType,jdbcType=TINYINT},
+      </if>
+      <if test="record.pageModuleType != null" >
+        page_module_type = #{record.pageModuleType,jdbcType=TINYINT},
       </if>
       <if test="record.bannerTitle != null" >
         banner_title = #{record.bannerTitle,jdbcType=VARCHAR},
@@ -215,11 +241,17 @@
       <if test="record.bannerLinkTargetId != null" >
         banner_link_target_id = #{record.bannerLinkTargetId,jdbcType=INTEGER},
       </if>
+      <if test="record.sortOrder != null" >
+        sort_order = #{record.sortOrder,jdbcType=VARCHAR},
+      </if>
       <if test="record.activeFrom != null" >
         active_from = #{record.activeFrom,jdbcType=TIMESTAMP},
       </if>
       <if test="record.activeTo != null" >
         active_to = #{record.activeTo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isEnabled != null" >
+        is_enabled = #{record.isEnabled,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -230,14 +262,17 @@
     update page_banner_config
     set id = #{record.id,jdbcType=INTEGER},
       page_type = #{record.pageType,jdbcType=TINYINT},
+      page_module_type = #{record.pageModuleType,jdbcType=TINYINT},
       banner_title = #{record.bannerTitle,jdbcType=VARCHAR},
       banner_desc = #{record.bannerDesc,jdbcType=VARCHAR},
       banner_img_src = #{record.bannerImgSrc,jdbcType=VARCHAR},
       banner_link_type = #{record.bannerLinkType,jdbcType=TINYINT},
       banner_link_url = #{record.bannerLinkUrl,jdbcType=VARCHAR},
       banner_link_target_id = #{record.bannerLinkTargetId,jdbcType=INTEGER},
+      sort_order = #{record.sortOrder,jdbcType=VARCHAR},
       active_from = #{record.activeFrom,jdbcType=TIMESTAMP},
-      active_to = #{record.activeTo,jdbcType=TIMESTAMP}
+      active_to = #{record.activeTo,jdbcType=TIMESTAMP},
+      is_enabled = #{record.isEnabled,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -247,6 +282,9 @@
     <set >
       <if test="pageType != null" >
         page_type = #{pageType,jdbcType=TINYINT},
+      </if>
+      <if test="pageModuleType != null" >
+        page_module_type = #{pageModuleType,jdbcType=TINYINT},
       </if>
       <if test="bannerTitle != null" >
         banner_title = #{bannerTitle,jdbcType=VARCHAR},
@@ -266,11 +304,17 @@
       <if test="bannerLinkTargetId != null" >
         banner_link_target_id = #{bannerLinkTargetId,jdbcType=INTEGER},
       </if>
+      <if test="sortOrder != null" >
+        sort_order = #{sortOrder,jdbcType=VARCHAR},
+      </if>
       <if test="activeFrom != null" >
         active_from = #{activeFrom,jdbcType=TIMESTAMP},
       </if>
       <if test="activeTo != null" >
         active_to = #{activeTo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isEnabled != null" >
+        is_enabled = #{isEnabled,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -278,23 +322,17 @@
   <update id="updateByPrimaryKey" parameterType="com.wow.page.model.PageBannerConfig" >
     update page_banner_config
     set page_type = #{pageType,jdbcType=TINYINT},
+      page_module_type = #{pageModuleType,jdbcType=TINYINT},
       banner_title = #{bannerTitle,jdbcType=VARCHAR},
       banner_desc = #{bannerDesc,jdbcType=VARCHAR},
       banner_img_src = #{bannerImgSrc,jdbcType=VARCHAR},
       banner_link_type = #{bannerLinkType,jdbcType=TINYINT},
       banner_link_url = #{bannerLinkUrl,jdbcType=VARCHAR},
       banner_link_target_id = #{bannerLinkTargetId,jdbcType=INTEGER},
+      sort_order = #{sortOrder,jdbcType=VARCHAR},
       active_from = #{activeFrom,jdbcType=TIMESTAMP},
-      active_to = #{activeTo,jdbcType=TIMESTAMP}
+      active_to = #{activeTo,jdbcType=TIMESTAMP},
+      is_enabled = #{isEnabled,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-  <select id="selectByPageType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from page_banner_config
-    where page_type = #{pageType,jdbcType=TINYINT}
-  </select>
-
-
 </mapper>

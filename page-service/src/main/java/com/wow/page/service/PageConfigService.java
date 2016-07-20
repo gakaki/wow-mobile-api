@@ -16,7 +16,7 @@ public interface PageConfigService {
      * @param pageType
      * @return
      */
-    PageBannerResponse getBannersByPageType(int pageType);
+    PageBannerResponse getBannersByPageType(byte pageType);
 
     /**
      * 根据页面类型查询应该显示的场景
