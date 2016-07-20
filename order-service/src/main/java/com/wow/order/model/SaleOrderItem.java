@@ -31,9 +31,9 @@ public class SaleOrderItem implements Serializable {
 
     private Integer warehouseId;
 
-    private Short frozenRealStockQty;
+    private Integer frozenRealStockQty;
 
-    private Short frozenVirtualStockQty;
+    private Integer frozenVirtualStockQty;
 
     private Boolean isVirtualStockReady;
 
@@ -149,19 +149,19 @@ public class SaleOrderItem implements Serializable {
         this.warehouseId = warehouseId;
     }
 
-    public Short getFrozenRealStockQty() {
+    public Integer getFrozenRealStockQty() {
         return frozenRealStockQty;
     }
 
-    public void setFrozenRealStockQty(Short frozenRealStockQty) {
+    public void setFrozenRealStockQty(Integer frozenRealStockQty) {
         this.frozenRealStockQty = frozenRealStockQty;
     }
 
-    public Short getFrozenVirtualStockQty() {
+    public Integer getFrozenVirtualStockQty() {
         return frozenVirtualStockQty;
     }
 
-    public void setFrozenVirtualStockQty(Short frozenVirtualStockQty) {
+    public void setFrozenVirtualStockQty(Integer frozenVirtualStockQty) {
         this.frozenVirtualStockQty = frozenVirtualStockQty;
     }
 

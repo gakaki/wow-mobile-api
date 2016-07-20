@@ -15,7 +15,7 @@ public class FreezeStockVo implements Serializable {
 
     private int productId;
 
-    //冻结的仓库库存数量
+    //冻结的真实库存
     private int frozenWarehouseStockTotalQty;
 
     //冻结的虚拟库存 只有真实库存不存在的情况下才会冻结虚拟库存

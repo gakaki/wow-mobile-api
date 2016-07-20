@@ -10,11 +10,11 @@ public class ProductWarehouseStock implements Serializable {
 
     private Integer warehouseId;
 
-    private Short realStockQty;
+    private Integer realStockQty;
 
-    private Short frozenStockQty;
+    private Integer frozenStockQty;
 
-    private Short lockStockQty;
+    private Integer lockStockQty;
 
     private Boolean isActive;
 
@@ -50,27 +50,27 @@ public class ProductWarehouseStock implements Serializable {
         this.warehouseId = warehouseId;
     }
 
-    public Short getRealStockQty() {
+    public Integer getRealStockQty() {
         return realStockQty;
     }
 
-    public void setRealStockQty(Short realStockQty) {
+    public void setRealStockQty(Integer realStockQty) {
         this.realStockQty = realStockQty;
     }
 
-    public Short getFrozenStockQty() {
+    public Integer getFrozenStockQty() {
         return frozenStockQty;
     }
 
-    public void setFrozenStockQty(Short frozenStockQty) {
+    public void setFrozenStockQty(Integer frozenStockQty) {
         this.frozenStockQty = frozenStockQty;
     }
 
-    public Short getLockStockQty() {
+    public Integer getLockStockQty() {
         return lockStockQty;
     }
 
-    public void setLockStockQty(Short lockStockQty) {
+    public void setLockStockQty(Integer lockStockQty) {
         this.lockStockQty = lockStockQty;
     }
 
