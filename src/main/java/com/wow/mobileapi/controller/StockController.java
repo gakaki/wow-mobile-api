@@ -6,11 +6,13 @@ import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.stock.StockBatchQueryRequest;
+import com.wow.mobileapi.request.stock.StockFreezeRequest;
 import com.wow.mobileapi.request.stock.StockQueryRequest;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
 import com.wow.stock.vo.response.AvailableStockResponse;
 import com.wow.stock.vo.response.AvailableStocksResponse;
+import com.wow.stock.vo.response.FreezeStockResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +64,7 @@ public class StockController extends BaseController {
                 setServiceErrorResponse(apiResponse, availableStockResponse);
             } else {
                 AvailableStockVo availableStockVo = availableStockResponse.getAvailableStockVo();
-                removeDuplicateResponse(availableStockVo);
+//                removeDuplicateResponse(availableStockVo);
                 apiResponse.setData(availableStockVo);
             }
         } catch (Exception e) {
@@ -103,15 +105,56 @@ public class StockController extends BaseController {
             if (!isServiceCallSuccess(availableStocksResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, availableStocksResponse);
             } else {
-                Map<Integer, AvailableStockVo> availableStockVoMap = availableStocksResponse.getAvailableStockVoMap();
-                for (Map.Entry<Integer, AvailableStockVo> entry: availableStockVoMap.entrySet()) {
-                    AvailableStockVo availableStockVo = entry.getValue();
-                    removeDuplicateResponse(availableStockVo);
-                }
-                apiResponse.setData(availableStockVoMap);
+                List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
+//                for (AvailableStockVo availableStockVo : availableStockVoList) {
+//                    removeDuplicateResponse(availableStockVo);
+//                }
+                apiResponse.setData(availableStockVoList);
             }
         } catch (Exception e) {
             logger.error("批量查找可用库存发生错误---" + e);
+            e.printStackTrace();
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+
+
+    /**
+     * 根据productId查找可用库存
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/stock/freeze", method = RequestMethod.POST)
+    public ApiResponse freezeStock(ApiRequest apiRequest) {
+        ApiResponse apiResponse = new ApiResponse();
+        StockFreezeRequest stockFreezeRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), StockFreezeRequest.class);
+        //判断json格式参数是否有误
+        if (stockFreezeRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(stockFreezeRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        int productId = stockFreezeRequest.getProductId();
+        int productQty = stockFreezeRequest.getProductQty();
+
+        try {
+            FreezeStockResponse freezeStockResponse = stockService.freezeStock(productId, productQty);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(freezeStockResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, freezeStockResponse);
+            } else {
+                apiResponse.setData(freezeStockResponse);
+            }
+        } catch (Exception e) {
+            logger.error("冻结库存发生错误---" + e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }

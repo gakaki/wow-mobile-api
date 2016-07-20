@@ -585,123 +585,123 @@ public class WarehouseExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseIsNull() {
-            addCriterion("is_real_warehouse is null");
+        public Criteria andIsPrivateWarehouseIsNull() {
+            addCriterion("is_private_warehouse is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseIsNotNull() {
-            addCriterion("is_real_warehouse is not null");
+        public Criteria andIsPrivateWarehouseIsNotNull() {
+            addCriterion("is_private_warehouse is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseEqualTo(Boolean value) {
-            addCriterion("is_real_warehouse =", value, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseEqualTo(Boolean value) {
+            addCriterion("is_private_warehouse =", value, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseNotEqualTo(Boolean value) {
-            addCriterion("is_real_warehouse <>", value, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseNotEqualTo(Boolean value) {
+            addCriterion("is_private_warehouse <>", value, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseGreaterThan(Boolean value) {
-            addCriterion("is_real_warehouse >", value, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseGreaterThan(Boolean value) {
+            addCriterion("is_private_warehouse >", value, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_real_warehouse >=", value, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_private_warehouse >=", value, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseLessThan(Boolean value) {
-            addCriterion("is_real_warehouse <", value, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseLessThan(Boolean value) {
+            addCriterion("is_private_warehouse <", value, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_real_warehouse <=", value, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_private_warehouse <=", value, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseIn(List<Boolean> values) {
-            addCriterion("is_real_warehouse in", values, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseIn(List<Boolean> values) {
+            addCriterion("is_private_warehouse in", values, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseNotIn(List<Boolean> values) {
-            addCriterion("is_real_warehouse not in", values, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseNotIn(List<Boolean> values) {
+            addCriterion("is_private_warehouse not in", values, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_real_warehouse between", value1, value2, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_private_warehouse between", value1, value2, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andIsRealWarehouseNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_real_warehouse not between", value1, value2, "isRealWarehouse");
+        public Criteria andIsPrivateWarehouseNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_private_warehouse not between", value1, value2, "isPrivateWarehouse");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityIsNull() {
-            addCriterion("capaicity is null");
+        public Criteria andCapacityIsNull() {
+            addCriterion("capacity is null");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityIsNotNull() {
-            addCriterion("capaicity is not null");
+        public Criteria andCapacityIsNotNull() {
+            addCriterion("capacity is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityEqualTo(Short value) {
-            addCriterion("capaicity =", value, "capaicity");
+        public Criteria andCapacityEqualTo(Short value) {
+            addCriterion("capacity =", value, "capacity");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityNotEqualTo(Short value) {
-            addCriterion("capaicity <>", value, "capaicity");
+        public Criteria andCapacityNotEqualTo(Short value) {
+            addCriterion("capacity <>", value, "capacity");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityGreaterThan(Short value) {
-            addCriterion("capaicity >", value, "capaicity");
+        public Criteria andCapacityGreaterThan(Short value) {
+            addCriterion("capacity >", value, "capacity");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityGreaterThanOrEqualTo(Short value) {
-            addCriterion("capaicity >=", value, "capaicity");
+        public Criteria andCapacityGreaterThanOrEqualTo(Short value) {
+            addCriterion("capacity >=", value, "capacity");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityLessThan(Short value) {
-            addCriterion("capaicity <", value, "capaicity");
+        public Criteria andCapacityLessThan(Short value) {
+            addCriterion("capacity <", value, "capacity");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityLessThanOrEqualTo(Short value) {
-            addCriterion("capaicity <=", value, "capaicity");
+        public Criteria andCapacityLessThanOrEqualTo(Short value) {
+            addCriterion("capacity <=", value, "capacity");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityIn(List<Short> values) {
-            addCriterion("capaicity in", values, "capaicity");
+        public Criteria andCapacityIn(List<Short> values) {
+            addCriterion("capacity in", values, "capacity");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityNotIn(List<Short> values) {
-            addCriterion("capaicity not in", values, "capaicity");
+        public Criteria andCapacityNotIn(List<Short> values) {
+            addCriterion("capacity not in", values, "capacity");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityBetween(Short value1, Short value2) {
-            addCriterion("capaicity between", value1, value2, "capaicity");
+        public Criteria andCapacityBetween(Short value1, Short value2) {
+            addCriterion("capacity between", value1, value2, "capacity");
             return (Criteria) this;
         }
 
-        public Criteria andCapaicityNotBetween(Short value1, Short value2) {
-            addCriterion("capaicity not between", value1, value2, "capaicity");
+        public Criteria andCapacityNotBetween(Short value1, Short value2) {
+            addCriterion("capacity not between", value1, value2, "capacity");
             return (Criteria) this;
         }
 

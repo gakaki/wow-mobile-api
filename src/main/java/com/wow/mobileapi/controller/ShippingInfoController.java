@@ -102,7 +102,7 @@ public class ShippingInfoController extends BaseController {
         BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
 
         //设置用户id
-        shippingInfo.setEndUserId(30);
+        shippingInfo.setEndUserId(35);
 
         try {
             CommonResponse commonResponse = shippingInfoService.updateShippingInfo(shippingInfo);
@@ -262,7 +262,7 @@ public class ShippingInfoController extends BaseController {
             return apiResponse;
         }
 
-        Integer endUserId = 30;
+        Integer endUserId = 35;
 
         try {
             CommonResponse commonResponse = shippingInfoService

@@ -1,53 +1,61 @@
 package com.wow.stock.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.wow.common.response.CommonResponse;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class AvailableStockVo extends CommonResponse {
+public class AvailableStockVo {
 
     private static final long serialVersionUID = 1L;
 
-    private long totalAvailableStockQty;
-    private long availableVirtualStockQty;
-    private long totalAvailableRealStockQty;
-    //仓库有多少可用库存,用Map表示
-    private Map<Integer, Integer> availableRealStockQtyMap;
+    private int productId;
+    private int totalAvailableStockQty;
+    private int availableVirtualStockQty;
+    private int totalAvailableWarehouseStockQty;
+    //仓库有多少可用库存,用list表示
+    private List<WarehouseStockVo> warehouseStockVoList;
 
-    public long getTotalAvailableStockQty() {
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public int getTotalAvailableStockQty() {
         return totalAvailableStockQty;
     }
 
-    public void setTotalAvailableStockQty(long totalAvailableStockQty) {
+    public void setTotalAvailableStockQty(int totalAvailableStockQty) {
         this.totalAvailableStockQty = totalAvailableStockQty;
     }
 
-    public long getAvailableVirtualStockQty() {
+    public int getAvailableVirtualStockQty() {
         return availableVirtualStockQty;
     }
 
-    public void setAvailableVirtualStockQty(long availableVirtualStockQty) {
+    public void setAvailableVirtualStockQty(int availableVirtualStockQty) {
         this.availableVirtualStockQty = availableVirtualStockQty;
     }
 
-    public long getTotalAvailableRealStockQty() {
-        return totalAvailableRealStockQty;
+    public int getTotalAvailableWarehouseStockQty() {
+        return totalAvailableWarehouseStockQty;
     }
 
-    public void setTotalAvailableRealStockQty(long totalAvailableRealStockQty) {
-        this.totalAvailableRealStockQty = totalAvailableRealStockQty;
+    public void setTotalAvailableWarehouseStockQty(int totalAvailableWarehouseStockQty) {
+        this.totalAvailableWarehouseStockQty = totalAvailableWarehouseStockQty;
     }
 
-    public Map<Integer, Integer> getAvailableRealStockQtyMap() {
-        return availableRealStockQtyMap;
+    public List<WarehouseStockVo> getWarehouseStockVoList() {
+        return warehouseStockVoList;
     }
 
-    public void setAvailableRealStockQtyMap(Map<Integer, Integer> availableRealStockQtyMap) {
-        this.availableRealStockQtyMap = availableRealStockQtyMap;
+    public void setWarehouseStockVoList(List<WarehouseStockVo> warehouseStockVoList) {
+        this.warehouseStockVoList = warehouseStockVoList;
     }
 }

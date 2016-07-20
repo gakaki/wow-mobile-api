@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
 import com.wow.stock.vo.AvailableStockVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,13 +15,13 @@ public class AvailableStocksResponse extends CommonResponse {
 
     private static final long serialVersionUID = 1L;
 
-    private Map<Integer, AvailableStockVo> availableStockVoMap;
+    private List<AvailableStockVo> availableStockVoList;
 
-    public Map<Integer, AvailableStockVo> getAvailableStockVoMap() {
-        return availableStockVoMap;
+    public List<AvailableStockVo> getAvailableStockVoList() {
+        return availableStockVoList;
     }
 
-    public void setAvailableStockVoMap(Map<Integer, AvailableStockVo> availableStockVoMap) {
-        this.availableStockVoMap = availableStockVoMap;
+    public void setAvailableStockVoList(List<AvailableStockVo> availableStockVoList) {
+        this.availableStockVoList = availableStockVoList;
     }
 }

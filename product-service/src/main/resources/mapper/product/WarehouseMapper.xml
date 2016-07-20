@@ -9,8 +9,8 @@
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="county" property="county" jdbcType="VARCHAR" />
     <result column="town" property="town" jdbcType="VARCHAR" />
-    <result column="is_real_warehouse" property="isRealWarehouse" jdbcType="BIT" />
-    <result column="capaicity" property="capaicity" jdbcType="SMALLINT" />
+    <result column="is_private_warehouse" property="isPrivateWarehouse" jdbcType="BIT" />
+    <result column="capacity" property="capacity" jdbcType="SMALLINT" />
     <result column="daily_order_limit" property="dailyOrderLimit" jdbcType="TINYINT" />
     <result column="worker_qty" property="workerQty" jdbcType="TINYINT" />
     <result column="admin_name" property="adminName" jdbcType="VARCHAR" />
@@ -82,8 +82,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, warehouse_name, address, province, city, county, town, is_real_warehouse, capaicity, 
-    daily_order_limit, worker_qty, admin_name, admin_mobile, admin_phone, admin_email, 
+    id, warehouse_name, address, province, city, county, town, is_private_warehouse, 
+    capacity, daily_order_limit, worker_qty, admin_name, admin_mobile, admin_phone, admin_email, 
     create_time, create_by, update_time, update_by, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.WarehouseExample" >
@@ -106,11 +106,6 @@
     from warehouse
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap"  >
-    select
-    <include refid="Base_Column_List" />
-    from warehouse
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from warehouse
     where id = #{id,jdbcType=INTEGER}
@@ -127,14 +122,14 @@
     </selectKey>
     insert into warehouse (warehouse_name, address, province, 
       city, county, town, 
-      is_real_warehouse, capaicity, daily_order_limit, 
+      is_private_warehouse, capacity, daily_order_limit, 
       worker_qty, admin_name, admin_mobile, 
       admin_phone, admin_email, create_time, 
       create_by, update_time, update_by, 
       is_deleted)
     values (#{warehouseName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
       #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR}, 
-      #{isRealWarehouse,jdbcType=BIT}, #{capaicity,jdbcType=SMALLINT}, #{dailyOrderLimit,jdbcType=TINYINT}, 
+      #{isPrivateWarehouse,jdbcType=BIT}, #{capacity,jdbcType=SMALLINT}, #{dailyOrderLimit,jdbcType=TINYINT}, 
       #{workerQty,jdbcType=TINYINT}, #{adminName,jdbcType=VARCHAR}, #{adminMobile,jdbcType=VARCHAR}, 
       #{adminPhone,jdbcType=VARCHAR}, #{adminEmail,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
@@ -164,11 +159,11 @@
       <if test="town != null" >
         town,
       </if>
-      <if test="isRealWarehouse != null" >
-        is_real_warehouse,
+      <if test="isPrivateWarehouse != null" >
+        is_private_warehouse,
       </if>
-      <if test="capaicity != null" >
-        capaicity,
+      <if test="capacity != null" >
+        capacity,
       </if>
       <if test="dailyOrderLimit != null" >
         daily_order_limit,
@@ -223,11 +218,11 @@
       <if test="town != null" >
         #{town,jdbcType=VARCHAR},
       </if>
-      <if test="isRealWarehouse != null" >
-        #{isRealWarehouse,jdbcType=BIT},
+      <if test="isPrivateWarehouse != null" >
+        #{isPrivateWarehouse,jdbcType=BIT},
       </if>
-      <if test="capaicity != null" >
-        #{capaicity,jdbcType=SMALLINT},
+      <if test="capacity != null" >
+        #{capacity,jdbcType=SMALLINT},
       </if>
       <if test="dailyOrderLimit != null" >
         #{dailyOrderLimit,jdbcType=TINYINT},
@@ -294,11 +289,11 @@
       <if test="record.town != null" >
         town = #{record.town,jdbcType=VARCHAR},
       </if>
-      <if test="record.isRealWarehouse != null" >
-        is_real_warehouse = #{record.isRealWarehouse,jdbcType=BIT},
+      <if test="record.isPrivateWarehouse != null" >
+        is_private_warehouse = #{record.isPrivateWarehouse,jdbcType=BIT},
       </if>
-      <if test="record.capaicity != null" >
-        capaicity = #{record.capaicity,jdbcType=SMALLINT},
+      <if test="record.capacity != null" >
+        capacity = #{record.capacity,jdbcType=SMALLINT},
       </if>
       <if test="record.dailyOrderLimit != null" >
         daily_order_limit = #{record.dailyOrderLimit,jdbcType=TINYINT},
@@ -347,8 +342,8 @@
       city = #{record.city,jdbcType=VARCHAR},
       county = #{record.county,jdbcType=VARCHAR},
       town = #{record.town,jdbcType=VARCHAR},
-      is_real_warehouse = #{record.isRealWarehouse,jdbcType=BIT},
-      capaicity = #{record.capaicity,jdbcType=SMALLINT},
+      is_private_warehouse = #{record.isPrivateWarehouse,jdbcType=BIT},
+      capacity = #{record.capacity,jdbcType=SMALLINT},
       daily_order_limit = #{record.dailyOrderLimit,jdbcType=TINYINT},
       worker_qty = #{record.workerQty,jdbcType=TINYINT},
       admin_name = #{record.adminName,jdbcType=VARCHAR},
@@ -385,11 +380,11 @@
       <if test="town != null" >
         town = #{town,jdbcType=VARCHAR},
       </if>
-      <if test="isRealWarehouse != null" >
-        is_real_warehouse = #{isRealWarehouse,jdbcType=BIT},
+      <if test="isPrivateWarehouse != null" >
+        is_private_warehouse = #{isPrivateWarehouse,jdbcType=BIT},
       </if>
-      <if test="capaicity != null" >
-        capaicity = #{capaicity,jdbcType=SMALLINT},
+      <if test="capacity != null" >
+        capacity = #{capacity,jdbcType=SMALLINT},
       </if>
       <if test="dailyOrderLimit != null" >
         daily_order_limit = #{dailyOrderLimit,jdbcType=TINYINT},
@@ -435,8 +430,8 @@
       city = #{city,jdbcType=VARCHAR},
       county = #{county,jdbcType=VARCHAR},
       town = #{town,jdbcType=VARCHAR},
-      is_real_warehouse = #{isRealWarehouse,jdbcType=BIT},
-      capaicity = #{capaicity,jdbcType=SMALLINT},
+      is_private_warehouse = #{isPrivateWarehouse,jdbcType=BIT},
+      capacity = #{capacity,jdbcType=SMALLINT},
       daily_order_limit = #{dailyOrderLimit,jdbcType=TINYINT},
       worker_qty = #{workerQty,jdbcType=TINYINT},
       admin_name = #{adminName,jdbcType=VARCHAR},

@@ -18,6 +18,8 @@ public class ProductImage implements Serializable {
 
     private Boolean isPrimary;
 
+    private Byte sortOrder;
+
     private Date createTime;
 
     private String createBy;
@@ -51,7 +53,7 @@ public class ProductImage implements Serializable {
     }
 
     public void setImgName(String imgName) {
-        this.imgName = imgName;
+        this.imgName = imgName == null ? null : imgName.trim();
     }
 
     public String getImgUrl() {
@@ -59,7 +61,7 @@ public class ProductImage implements Serializable {
     }
 
     public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+        this.imgUrl = imgUrl == null ? null : imgUrl.trim();
     }
 
     public String getImgDesc() {
@@ -67,7 +69,7 @@ public class ProductImage implements Serializable {
     }
 
     public void setImgDesc(String imgDesc) {
-        this.imgDesc = imgDesc;
+        this.imgDesc = imgDesc == null ? null : imgDesc.trim();
     }
 
     public Byte getViewPlatform() {
@@ -86,6 +88,14 @@ public class ProductImage implements Serializable {
         this.isPrimary = isPrimary;
     }
 
+    public Byte getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(Byte sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -99,7 +109,7 @@ public class ProductImage implements Serializable {
     }
 
     public void setCreateBy(String createBy) {
-        this.createBy = createBy;
+        this.createBy = createBy == null ? null : createBy.trim();
     }
 
     public Date getUdpateTime() {
@@ -115,7 +125,7 @@ public class ProductImage implements Serializable {
     }
 
     public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
+        this.updateBy = updateBy == null ? null : updateBy.trim();
     }
 
     public Boolean getIsDeleted() {
@@ -139,6 +149,7 @@ public class ProductImage implements Serializable {
         sb.append(", imgDesc=").append(imgDesc);
         sb.append(", viewPlatform=").append(viewPlatform);
         sb.append(", isPrimary=").append(isPrimary);
+        sb.append(", sortOrder=").append(sortOrder);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", udpateTime=").append(udpateTime);

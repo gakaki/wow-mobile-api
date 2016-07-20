@@ -32,6 +32,9 @@ import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
+import com.wow.product.mapper.ProductSupplierMapper;
+import com.wow.product.model.ProductSupplier;
+import com.wow.product.model.ProductSupplierExample;
 import com.wow.user.mapper.ShippingInfoMapper;
 import com.wow.user.mapper.ShoppingCartMapper;
 import com.wow.user.model.ShippingInfo;
@@ -60,6 +63,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private SaleOrderItemMapper saleOrderItemMapper;
+
+    @Autowired
+    private ProductSupplierMapper productSupplierMapper;
 
     /**
      * 下单
@@ -92,40 +98,43 @@ public class OrderServiceImpl implements OrderService {
 
         query.setShippingInfo(shippingInfo);
 
-        //判断库存是否足够 调用库存服务
         ShoppingCartQueryVo shoppingCartQuery = new ShoppingCartQueryVo();
         shoppingCartQuery.setShoppingCartIds(query.getShoppingCartIds());
 
         //根据用户购物车id列表 获取用户购物车信息列表
         List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByShoppingCartIds(shoppingCartQuery);
-
+        
+        
+        //判断库存是否足够 调用库存服务
         query.setShoppingCartResult(shoppingCartResult);
 
         //计算订单总金额
         BigDecimal totalPrice = calculateOrderPrice(query);
 
         //如果客户端计算的金额和服务端计算的不一致 则提示订单金额不正确
-        if (NumberUtil.isNotEquals(query.getOrderAmount(), totalPrice)) {
-            orderResponse.setResCode("40306");
-            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40306"));
-
-            return orderResponse;
-        }
+//        if (NumberUtil.isNotEquals(query.getOrderAmount(), totalPrice)) {
+//            orderResponse.setResCode("40306");
+//            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40306"));
+//
+//            return orderResponse;
+//        }
+        
+        query.setOrderAmount(totalPrice);
 
         //业务校验结束
 
         //包装订单对象
         SaleOrder saleOrder = wrapOrder(query);
-        saleOrder.setOrderAmount(totalPrice);
+        
         //保存订单
         saleOrderMapper.insertSelective(saleOrder);
-
+        //设置订单id
+        query.setOrderId(saleOrder.getId());
+        
         //包装订单项目
         List<SaleOrderItem> wrapOrderItems = wrapOrderItem(query);
-
-        saleOrderItemMapper.insertSelective(wrapOrderItems.get(0));
-
-        //saleOrderItemMapper.batchInsertSelective(wrapOrderItems);
+        
+        saleOrderItemMapper.batchInsertSelective(wrapOrderItems);
 
         //写入客户提交订单日志
         SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40357"));
@@ -168,7 +177,7 @@ public class OrderServiceImpl implements OrderService {
 
         //设置收货人地址信息
         ShippingInfo shippingInfo = query.getShippingInfo();
-        
+
         saleOrder.setReceiverName(shippingInfo.getReceiverName());
         saleOrder.setReceiverProvince(shippingInfo.getProvinceName());
         saleOrder.setReceiverCity(shippingInfo.getCityName());
@@ -176,7 +185,7 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setReceiverAddress(shippingInfo.getAddressDetail());
         saleOrder.setReceiverMobile(shippingInfo.getReceiverMobile());
         saleOrder.setReceiverPostcode(shippingInfo.getReceiverPostcode());
-        
+
         saleOrder.setEndUserRemarks(query.getRemark());
 
         //设置订单状态为待付款
@@ -206,20 +215,95 @@ public class OrderServiceImpl implements OrderService {
         List<SaleOrderItem> saleOrderItems = new ArrayList<SaleOrderItem>();
 
         List<ShoppingCartResultVo> shoppingCartResult = query.getShoppingCartResult();
-        
-        SaleOrderItem saleOrderItem=new SaleOrderItem();
+
+        //根据产品id列表获取供应商信息
+        List<ProductSupplier> productSuppliers = getSupplierByProductIds(shoppingCartResult);
+
+        SaleOrderItem saleOrderItem = null;
+        ProductSupplier productSupplier = null;
 
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            saleOrderItem = new SaleOrderItem();
+
             saleOrderItem.setSaleOrderId(query.getOrderId());
-            
             saleOrderItem.setProductId(shoppingCart.getProductId());
             saleOrderItem.setProductName(shoppingCart.getProductName());
             saleOrderItem.setOrderItemAmount(shoppingCart.getSellTotalAmount());
             saleOrderItem.setOrderItemPrice(shoppingCart.getSellPrice());
             saleOrderItem.setOrderItemQty(shoppingCart.getProductQty());
+
+            //获取产品对应的供应商id
+            productSupplier = getSupplierByProductId(productSuppliers, shoppingCart.getProductId());
+            if(productSupplier!=null){
+                saleOrderItem.setProductSupplierId(productSupplier.getSupplierId());
+                saleOrderItem.setProductSaleType(productSupplier.getProductSaleType());
+            }
+            
+            saleOrderItem.setNeedAssemble(Boolean.FALSE);
+            saleOrderItem.setIsItemLeaf(Boolean.FALSE);
+
+            saleOrderItem.setCreateTime(DateUtil.currentDate());
+            saleOrderItem.setUpdateTime(DateUtil.currentDate());
+            saleOrderItem.setIsDeleted(Boolean.FALSE);
+            
+            saleOrderItems.add(saleOrderItem);
         }
 
         return saleOrderItems;
+    }
+
+    /**
+     * 
+     * 根据产品id列表获取供应商信息
+     * @param shoppingCartResult
+     */
+    private List<ProductSupplier> getSupplierByProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
+        List<Integer> productIds = getProductIds(shoppingCartResult);
+
+        ProductSupplierExample productSupplierExample = new ProductSupplierExample();
+        ProductSupplierExample.Criteria criteria = productSupplierExample.createCriteria();
+
+        criteria.andProductIdIn(productIds);
+        criteria.andIsDeletedEqualTo(Boolean.FALSE);
+
+        return productSupplierMapper.selectByExample(productSupplierExample);
+    }
+
+    
+    /**
+     * 根据产品id查询相关供应商信息
+     * 
+     * @param areas
+     * @param integer
+     */
+    private ProductSupplier getSupplierByProductId(List<ProductSupplier> productSuppliers, Integer productId) {
+        if(CollectionUtil.isEmpty(productSuppliers)){
+            return null;
+        }
+        
+        for (ProductSupplier productSupplier : productSuppliers) {
+            if (productId.intValue() == productSupplier.getProductId().intValue()) {
+                return productSupplier;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取产品id列表
+     * 
+     * @param shoppingCartResult
+     * @return
+     */
+    private List<Integer> getProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
+        List<Integer> productIds = new ArrayList<>(shoppingCartResult.size());
+
+        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            productIds.add(shoppingCart.getProductId());
+        }
+
+        return productIds;
     }
 
     /**

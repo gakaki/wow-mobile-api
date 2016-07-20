@@ -18,9 +18,9 @@ public class Warehouse implements Serializable {
 
     private String town;
 
-    private Boolean isRealWarehouse;
+    private Boolean isPrivateWarehouse;
 
-    private Short capaicity;
+    private Short capacity;
 
     private Byte dailyOrderLimit;
 
@@ -59,7 +59,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setWarehouseName(String warehouseName) {
-        this.warehouseName = warehouseName;
+        this.warehouseName = warehouseName == null ? null : warehouseName.trim();
     }
 
     public String getAddress() {
@@ -67,7 +67,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.address = address == null ? null : address.trim();
     }
 
     public String getProvince() {
@@ -75,7 +75,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setProvince(String province) {
-        this.province = province;
+        this.province = province == null ? null : province.trim();
     }
 
     public String getCity() {
@@ -83,7 +83,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.city = city == null ? null : city.trim();
     }
 
     public String getCounty() {
@@ -91,7 +91,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setCounty(String county) {
-        this.county = county;
+        this.county = county == null ? null : county.trim();
     }
 
     public String getTown() {
@@ -99,23 +99,23 @@ public class Warehouse implements Serializable {
     }
 
     public void setTown(String town) {
-        this.town = town;
+        this.town = town == null ? null : town.trim();
     }
 
-    public Boolean getIsRealWarehouse() {
-        return isRealWarehouse;
+    public Boolean getIsPrivateWarehouse() {
+        return isPrivateWarehouse;
     }
 
-    public void setIsRealWarehouse(Boolean isRealWarehouse) {
-        this.isRealWarehouse = isRealWarehouse;
+    public void setIsPrivateWarehouse(Boolean isPrivateWarehouse) {
+        this.isPrivateWarehouse = isPrivateWarehouse;
     }
 
-    public Short getCapaicity() {
-        return capaicity;
+    public Short getCapacity() {
+        return capacity;
     }
 
-    public void setCapaicity(Short capaicity) {
-        this.capaicity = capaicity;
+    public void setCapacity(Short capacity) {
+        this.capacity = capacity;
     }
 
     public Byte getDailyOrderLimit() {
@@ -139,7 +139,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setAdminName(String adminName) {
-        this.adminName = adminName;
+        this.adminName = adminName == null ? null : adminName.trim();
     }
 
     public String getAdminMobile() {
@@ -147,7 +147,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setAdminMobile(String adminMobile) {
-        this.adminMobile = adminMobile;
+        this.adminMobile = adminMobile == null ? null : adminMobile.trim();
     }
 
     public String getAdminPhone() {
@@ -155,7 +155,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setAdminPhone(String adminPhone) {
-        this.adminPhone = adminPhone;
+        this.adminPhone = adminPhone == null ? null : adminPhone.trim();
     }
 
     public String getAdminEmail() {
@@ -163,7 +163,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setAdminEmail(String adminEmail) {
-        this.adminEmail = adminEmail;
+        this.adminEmail = adminEmail == null ? null : adminEmail.trim();
     }
 
     public Date getCreateTime() {
@@ -179,7 +179,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setCreateBy(String createBy) {
-        this.createBy = createBy;
+        this.createBy = createBy == null ? null : createBy.trim();
     }
 
     public Date getUpdateTime() {
@@ -195,7 +195,7 @@ public class Warehouse implements Serializable {
     }
 
     public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
+        this.updateBy = updateBy == null ? null : updateBy.trim();
     }
 
     public Boolean getIsDeleted() {
@@ -219,8 +219,8 @@ public class Warehouse implements Serializable {
         sb.append(", city=").append(city);
         sb.append(", county=").append(county);
         sb.append(", town=").append(town);
-        sb.append(", isRealWarehouse=").append(isRealWarehouse);
-        sb.append(", capaicity=").append(capaicity);
+        sb.append(", isPrivateWarehouse=").append(isPrivateWarehouse);
+        sb.append(", capacity=").append(capacity);
         sb.append(", dailyOrderLimit=").append(dailyOrderLimit);
         sb.append(", workerQty=").append(workerQty);
         sb.append(", adminName=").append(adminName);

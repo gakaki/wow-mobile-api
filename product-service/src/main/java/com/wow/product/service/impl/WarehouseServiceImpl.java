@@ -53,10 +53,4 @@ public class WarehouseServiceImpl implements WarehouseService {
 
 
     }
-
-    @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<Warehouse> getAllWarehouses() {
-        return warehouseMapper.selectAll();
-    }
 }

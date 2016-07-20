@@ -431,4 +431,27 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <insert id="batchInsertSelective"  parameterType="List" >
+		    <selectKey resultType="java.lang.Integer"  keyProperty="id"  order="AFTER" >
+		      SELECT LAST_INSERT_ID()
+		    </selectKey>
+		    insert into sale_order_item (sale_order_id, product_id, order_item_amount, 
+		      order_item_price, order_item_qty, product_name, 
+		      need_assemble, product_sale_type, parent_order_item_id, 
+		      is_item_leaf, product_supplier_id, warehouse_id, 
+		      frozen_real_stock_qty, frozen_virtual_stock_qty, 
+		      is_virtual_stock_ready, create_time, update_time, 
+		      is_deleted)
+		    values 
+		    <foreach collection="collection"  item="item"  separator=",">
+				  (#{item.saleOrderId,jdbcType=INTEGER}, #{item.productId,jdbcType=INTEGER}, #{item.orderItemAmount,jdbcType=DECIMAL}, 
+			      #{item.orderItemPrice,jdbcType=DECIMAL}, #{item.orderItemQty,jdbcType=TINYINT}, #{item.productName,jdbcType=VARCHAR}, 
+			      #{item.needAssemble,jdbcType=BIT}, #{item.productSaleType,jdbcType=TINYINT}, #{item.parentOrderItemId,jdbcType=INTEGER}, 
+			      #{item.isItemLeaf,jdbcType=BIT}, #{item.productSupplierId,jdbcType=INTEGER}, #{item.warehouseId,jdbcType=INTEGER}, 
+			      #{item.frozenRealStockQty,jdbcType=SMALLINT}, #{item.frozenVirtualStockQty,jdbcType=SMALLINT}, 
+			      #{item.isVirtualStockReady,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, 
+			      #{item.isDeleted,jdbcType=BIT})
+		   </foreach>
+  </insert>
 </mapper>

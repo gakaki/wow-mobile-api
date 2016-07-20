@@ -40,6 +40,8 @@ public interface ProductVirtualStockMapper {
 
     int unfreezeVirtualStock(@Param("productId")int productId, @Param("productQty")int productQty);
 
+    int freezeVirtualStock(@Param("productId")int productId, @Param("productQty")int productQty);
+
     //虚拟发货,同时扣减虚拟库存和虚拟冻结库存
     int shipOutVirtualStock(@Param("productId")int productId, @Param("productQty")int productQty);
 

@@ -42,10 +42,4 @@ public interface WarehouseService {
      */
     Warehouse getWarehouseByName(String warehouseName) throws Exception;
 
-    /**
-     * 查询所有仓库
-     * @return
-     */
-    List<Warehouse> getAllWarehouses();
-
 }

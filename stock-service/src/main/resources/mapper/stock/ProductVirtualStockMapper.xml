@@ -275,6 +275,16 @@
     and is_deleted = false
   </update>
 
+  <update id="freezeVirtualStock">
+    update product_virtual_stock
+    set frozen_virtual_stock_qty = frozen_virtual_stock_qty + #{productQty,jdbcType=SMALLINT},
+    update_time = now()
+    where product_id = #{productId,jdbcType=INTEGER}
+    and virtual_stock_qty - (frozen_virtual_stock_qty + #{productQty,jdbcType=SMALLINT}) >= 0 <!--防止超卖-->
+    and is_active = true
+    and is_deleted = false
+  </update>
+
   <update id="shipOutVirtualStock">
     update product_virtual_stock
     set frozen_virtual_stock_qty = frozen_virtual_stock_qty - #{productQty,jdbcType=SMALLINT},

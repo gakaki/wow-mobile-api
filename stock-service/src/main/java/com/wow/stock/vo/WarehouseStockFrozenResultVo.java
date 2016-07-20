@@ -5,13 +5,13 @@ import java.io.Serializable;
 /**
  * Created by zhengzhiqing on 16/7/15.
  */
-public class WarehouseStockVo implements Serializable{
+public class WarehouseStockFrozenResultVo implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
     private int productId;
     private int warehouseId;
-    private int availableStock;
+    private int frozenStock;
 
     public int getProductId() {
         return productId;
@@ -29,11 +29,11 @@ public class WarehouseStockVo implements Serializable{
         this.warehouseId = warehouseId;
     }
 
-    public int getAvailableStock() {
-        return availableStock;
+    public int getFrozenStock() {
+        return frozenStock;
     }
 
-    public void setAvailableStock(int availableStock) {
-        this.availableStock = availableStock;
+    public void setFrozenStock(int frozenStock) {
+        this.frozenStock = frozenStock;
     }
 }

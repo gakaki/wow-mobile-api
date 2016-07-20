@@ -1,12 +1,13 @@
 package com.wow.stock.service;
 
 import com.wow.common.response.CommonResponse;
-import com.wow.product.model.Warehouse;
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.model.ProductWarehouseStock;
-import com.wow.stock.vo.AvailableStockVo;
+import com.wow.stock.vo.ProductQtyVo;
 import com.wow.stock.vo.response.AvailableStockResponse;
 import com.wow.stock.vo.response.AvailableStocksResponse;
+import com.wow.stock.vo.response.BatchFreezeStockResponse;
+import com.wow.stock.vo.response.FreezeStockResponse;
 
 import java.util.List;
 
@@ -48,13 +49,36 @@ public interface StockService {
     CommonResponse adjustVirtualStock(int productId, int adjustNum);
 
     /**
-     * 冻结库存(一般是下单时)
+     * 冻结仓库库存
      *
      * @param productId
      * @param warehouseId
      * @param productQty 产品数量-正整数
      */
     CommonResponse freezeWarehouseStock(int productId, int warehouseId, int productQty);
+
+    /**
+     * 冻结库存(通用方法,可能会冻结仓库库存和/或虚拟库存)
+     * @param productId
+     * @param productQty
+     * @return
+     */
+    FreezeStockResponse freezeStock(int productId, int productQty);
+
+    /**
+     * 批量冻结库存
+     * @param productQtyVoList
+     * @return
+     */
+    BatchFreezeStockResponse batchFreezeStock(List<ProductQtyVo> productQtyVoList);
+
+    /**
+     * 冻结虚拟库存
+     * @param productId
+     * @param productQty
+     * @return
+     */
+    CommonResponse freezeVirtualStock(int productId, int productQty);
 
     /**
      * 解冻仓库库存(一般是取消订单)
@@ -99,21 +123,21 @@ public interface StockService {
     CommonResponse shipOutGoods(int productId, int warehouseId, int productQty);
 
 
-    /**
-     * 创建仓库(自营的创建自营仓库,供应商的创建供应商虚拟仓库)
-     *
-     * @param warehouse
-     * @return
-     */
-    CommonResponse createWarehouse(Warehouse warehouse);
-
-    /**
-     * 变更仓库信息
-     *
-     * @param warehouse
-     * @return
-     */
-    CommonResponse updateWarehouse(Warehouse warehouse);
+//    /**
+//     * 创建仓库(自营的创建自营仓库,供应商的创建供应商虚拟仓库)
+//     *
+//     * @param warehouse
+//     * @return
+//     */
+//    CommonResponse createWarehouse(Warehouse warehouse);
+//
+//    /**
+//     * 变更仓库信息
+//     *
+//     * @param warehouse
+//     * @return
+//     */
+//    CommonResponse updateWarehouse(Warehouse warehouse);
 
 //    /**
 //     * 查询产品所在仓库列表
