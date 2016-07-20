@@ -1,23 +1,35 @@
 package com.wow.product.service.impl;
 
 
-import com.wow.attribute.model.Attribute;
-import com.wow.attribute.model.Category;
-import com.wow.attribute.service.AttributeService;
-import com.wow.attribute.service.CategoryService;
-import com.wow.attribute.vo.response.CategoryResponse;
-import com.wow.product.mapper.*;
-import com.wow.product.model.*;
-import com.wow.product.service.ProductService;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.function.Consumer;
+import com.wow.attribute.model.Attribute;
+import com.wow.attribute.model.Category;
+import com.wow.attribute.service.AttributeService;
+import com.wow.attribute.service.CategoryService;
+import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.product.mapper.MaterialMapper;
+import com.wow.product.mapper.ProductAttributeMapper;
+import com.wow.product.mapper.ProductImageMapper;
+import com.wow.product.mapper.ProductMapper;
+import com.wow.product.mapper.ProductMaterialMapper;
+import com.wow.product.model.Material;
+import com.wow.product.model.MaterialExample;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductAttribute;
+import com.wow.product.model.ProductExample;
+import com.wow.product.model.ProductImage;
+import com.wow.product.model.ProductImageExample;
+import com.wow.product.model.ProductMaterial;
+import com.wow.product.model.ProductMaterialExample;
+import com.wow.product.service.ProductService;
 
 
 /**
@@ -87,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProductById(List<Integer> productIds)
     {
         ProductExample productExample=new ProductExample();
-        productExample.or().andBrandIdIn(productIds).andIsDeletedEqualTo(false);
+        productExample.or().andIdIn(productIds).andIsDeletedEqualTo(false);
         return productMapper.selectByExample(productExample);
     }
     @Override

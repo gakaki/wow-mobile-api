@@ -3,7 +3,6 @@ package com.wow.user.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.MapUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.product.model.Product;
 import com.wow.product.service.ProductService;
@@ -210,7 +208,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
 
         //设置产品库存
-        setProductStock(shoppingCartResult, stocksResponse.getAvailableStockVoMap());
+        setProductStock(shoppingCartResult, stocksResponse.getAvailableStockVoList());
 
         //计算购物车商品总价
         BigDecimal totalPrice = calculateShoppingCartPrice(shoppingCartResult);
@@ -244,8 +242,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     * @param stockMap
     * @return
     */
-    private void setProductStock(List<ShoppingCartResultVo> shoppingCartResult, Map<Integer, AvailableStockVo> stockMap) {
-        if (MapUtil.isEmpty(stockMap)) {
+    private void setProductStock(List<ShoppingCartResultVo> shoppingCartResult, List<AvailableStockVo> stockList) {
+        if (CollectionUtil.isEmpty(stockList)) {
             return;
         }
 
@@ -253,13 +251,36 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         //设置产品可用库存信息
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
-            stockVo = stockMap.get(shoppingCart.getProductId());
+            stockVo=getStockByProductId(stockList,shoppingCart.getProductId());
 
             //设置产品库存
             if (stockVo != null) {
                 shoppingCart.setProductStock((short) stockVo.getTotalAvailableStockQty());
             }
         }
+    }
+    
+    
+    
+    /**
+     * 根据产品id获取产品库存
+     * @param stockList 
+     * 
+     * @param productId
+     * @return
+     */
+    private AvailableStockVo getStockByProductId(List<AvailableStockVo> stockList, Integer productId) {
+        if(CollectionUtil.isEmpty(stockList)){
+            return  null;
+        }
+        
+        for (AvailableStockVo stock : stockList) {
+            if(productId.intValue()==stock.getProductId()){
+                return stock;
+            }
+        }
+        
+        return null;
     }
 
     /**
