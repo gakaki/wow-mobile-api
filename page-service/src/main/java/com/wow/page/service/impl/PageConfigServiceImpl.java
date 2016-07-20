@@ -12,9 +12,7 @@ import com.wow.page.model.PageTopicConfig;
 import com.wow.page.service.PageConfigService;
 import com.wow.page.vo.PageTopicVo;
 import com.wow.page.vo.ProductImageVo;
-import com.wow.page.vo.response.PageBannerResponse;
-import com.wow.page.vo.response.PageSceneResponse;
-import com.wow.page.vo.response.PageTopicResponse;
+import com.wow.page.vo.response.*;
 import com.wow.product.model.*;
 import com.wow.product.service.*;
 import org.slf4j.Logger;
@@ -175,6 +173,32 @@ public class PageConfigServiceImpl implements PageConfigService {
         return pageTopicResponse;
     }
 
+    /**
+     * 根据页面类型查询页面上的商品配置
+     * 针对page_module_type(本周上新)
+     * 按是否有效和顺序展示,最多10个
+     * 如果发现不足10个(包括0个),自动获取最新上线的商品,补足
+     *
+     * 单品推荐的也一并返回
+     *
+     * @param pageType
+     * @return
+     */
+    @Override
+    public PageProductResponse getProductsOnPage(int pageType) {
+        return null;
+    }
+
+    /**
+     * 根据页面类型查询页面上的分类配置
+     *
+     * @param pageType
+     * @return
+     */
+    @Override
+    public PageCategoryResponse getCategoriesOnPage(int pageType) {
+        return null;
+    }
 
 
 }
