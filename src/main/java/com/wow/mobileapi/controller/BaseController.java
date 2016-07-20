@@ -27,16 +27,6 @@ public class BaseController {
     private SessionService sessionService;
 
     /**
-     * 
-     * 判断业务调用方法是否成功
-     * @param errorCode
-     * @return
-     */
-    public boolean isServiceCallSuccess(String errorCode) {
-        return "0".equals(errorCode);
-    }
-
-    /**
      * 设置具体的业务错误信息
      * 
      * @param apiResponse
