@@ -124,7 +124,8 @@ public class OrderServiceImpl implements OrderService {
         //包装订单对象
         SaleOrder saleOrder = wrapOrder(query);
 
-        //保存订单
+        /*** 保存订单开始*/
+        
         saleOrderMapper.insertSelective(saleOrder);
         //设置订单id
         query.setOrderId(saleOrder.getId());
@@ -146,6 +147,8 @@ public class OrderServiceImpl implements OrderService {
         shoppingCartQueryVo.setShoppingCartIds(query.getShoppingCartIds());
 
         shoppingCartMapper.updateByPrimaryKeys(shoppingCartQueryVo);
+
+        /*** 保存订单结束*/
 
         //设置返回信息
         orderResponse.setOrderId(saleOrder.getId());
