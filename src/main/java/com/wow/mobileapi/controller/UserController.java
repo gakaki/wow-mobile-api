@@ -40,6 +40,8 @@ import com.wow.user.vo.response.RegisterResponse;
 import com.wow.user.vo.response.UserCheckResponse;
 import com.wow.user.vo.response.UserResponse;
 
+import java.net.URLEncoder;
+
 @RestController
 public class UserController extends BaseController {
 
@@ -548,7 +550,13 @@ public class UserController extends BaseController {
         //注册之后绑定微信
         endUserWechat.setMobile(endUser.getMobile());
         endUserWechat.setEndUserId(endUserId);
-
+        String encodedNickName = "";
+        try {
+            encodedNickName = URLEncoder.encode(endUserWechat.getWechatNickName(), "utf-8");
+        } catch (Exception e) {
+            logger.info("转换微信昵称失败");
+        }
+        endUserWechat.setWechatNickName(encodedNickName);
         //已有用户绑定微信
         try {
             CommonResponse commonResponse = userService.bindWechat(endUserWechat);
