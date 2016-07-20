@@ -7,7 +7,7 @@ import com.wow.common.util.*;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.mobileapi.request.user.*;
 import com.wow.mobileapi.util.HttpRequestUtil;
-import com.wow.user.constant.CaptchaTemplate;
+import com.wow.user.constant.SmsTemplate;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserWechat;
 import com.wow.user.service.CaptchaService;
@@ -303,14 +303,63 @@ public class UserController extends BaseController {
     }
 
     /**
+     * 重置密码获取验证码
+     * 如果手机号已注册,直接返回,不发验证码
+     * 如果手机号未注册,发验证码
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/user/captcha/pwd-reset", method = RequestMethod.POST)
+    public ApiResponse requestResetPwdCaptcha(ApiRequest apiRequest) {
+
+        ApiResponse apiResponse = new ApiResponse();
+        CaptchaRequest captchaRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), CaptchaRequest.class);
+        //判断json格式参数是否有误
+        if (captchaRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(captchaRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        String mobile = captchaRequest.getMobile();
+
+        try {
+            //如果手机号未注册,报错返回
+            UserCheckResponse userCheckResponse = userService.isExistedUserByMobile(mobile);
+            if (!userCheckResponse.isExistedUser()) {
+                ErrorResponseUtil.setErrorResponse(apiResponse,"40105");
+                return apiResponse;
+            }
+
+            CommonResponse commonResponse = captchaService.sendCaptcha(
+                    captchaRequest.getMobile(), SmsTemplate.TEMPLATE_RESETPWD, registerCaptchaTimeout);
+            //如果处理失败 则返回错误信息
+            if (!isServiceCallSuccess(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
+            }
+        } catch (Exception e) {
+            logger.error("发送验证码发生错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
      * 手机注册页面获取验证码
      * 如果手机号已注册,直接返回,不发验证码
      * 如果手机号未注册,发验证码
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/captcha", method = RequestMethod.POST)
-    public ApiResponse requestCaptcha(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/captcha/register", method = RequestMethod.POST)
+    public ApiResponse requestRegisterCaptcha(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
         CaptchaRequest captchaRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), CaptchaRequest.class);
@@ -338,7 +387,7 @@ public class UserController extends BaseController {
             }
 
             CommonResponse commonResponse = captchaService.sendCaptcha(
-                    captchaRequest.getMobile(), CaptchaTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
+                    captchaRequest.getMobile(), SmsTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
@@ -359,7 +408,7 @@ public class UserController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/captcha-for-wechat-bind", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/user/captcha/wechat-bind", method = RequestMethod.POST)
     public ApiResponse requestCaptchaBindWechat(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
@@ -388,7 +437,7 @@ public class UserController extends BaseController {
             }
             //如果未注册或者已注册但未绑定账号,则发送验证码
             CommonResponse commonResponse = captchaService.sendCaptcha(
-                    captchaRequest.getMobile(), CaptchaTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
+                    captchaRequest.getMobile(), SmsTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
             if (!isServiceCallSuccess(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);

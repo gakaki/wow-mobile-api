@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by zhengzhiqing on 16/7/17.
  */
-public class CaptchaTemplate {
+public class SmsTemplate {
 
     public static final int TEMPLATE_REGISTER = 1;
     public static final int TEMPLATE_RESETPWD = 2;
