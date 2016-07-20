@@ -80,7 +80,7 @@ public class UserController extends BaseController {
         try {
             UserResponse userResponse = userService.getUserById(endUserId);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(userResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(userResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, userResponse);
             } else {
                 apiResponse.setData(userResponse.getEndUser());
@@ -154,7 +154,7 @@ public class UserController extends BaseController {
 
             CommonResponse commonResponse = userService.register(endUser);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
                 return apiResponse;
             } else {
@@ -168,7 +168,7 @@ public class UserController extends BaseController {
                 try {
                     LoginResponse loginResponse = sessionService.login(loginVo);
                     //如果处理失败 则返回错误信息
-                    if (!ErrorCodeUtil.isSuccessResponse(loginResponse.getResCode())) {
+                    if (ErrorCodeUtil.isFailedResponse(loginResponse.getResCode())) {
                         setServiceErrorResponse(apiResponse, loginResponse);
                     } else {
                         apiResponse.setData(loginResponse.getLoginResponseVo());
@@ -227,7 +227,7 @@ public class UserController extends BaseController {
         try {
             CommonResponse commonResponse = userService.updateUser(endUser);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -268,7 +268,7 @@ public class UserController extends BaseController {
         try {
             UserCheckResponse userCheckResponse = userService.isExistedUserByMobile(userCheckRequest.getMobile());
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(userCheckResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(userCheckResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, userCheckResponse);
             } else {
                 apiResponse.setData(userCheckResponse.isExistedUser());
@@ -304,7 +304,7 @@ public class UserController extends BaseController {
         try {
             UserCheckResponse userCheckResponse = userService.isExistedUserByNickName(userCheckRequest.getNickName());
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(userCheckResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(userCheckResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, userCheckResponse);
             } else {
                 apiResponse.setData(userCheckResponse.isExistedUser());
@@ -355,7 +355,7 @@ public class UserController extends BaseController {
             CommonResponse commonResponse = captchaService.sendCaptcha(
                     captchaRequest.getMobile(), SmsTemplate.TEMPLATE_RESETPWD, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -404,7 +404,7 @@ public class UserController extends BaseController {
             CommonResponse commonResponse = captchaService.sendCaptcha(
                     captchaRequest.getMobile(), SmsTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -454,7 +454,7 @@ public class UserController extends BaseController {
             CommonResponse commonResponse = captchaService.sendCaptcha(
                     captchaRequest.getMobile(), SmsTemplate.TEMPLATE_REGISTER, registerCaptchaTimeout);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -553,7 +553,7 @@ public class UserController extends BaseController {
         try {
             CommonResponse commonResponse = userService.bindWechat(endUserWechat);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
                 return apiResponse;
             }
@@ -573,7 +573,7 @@ public class UserController extends BaseController {
         try {
             LoginResponse loginResponse = sessionService.login(loginVo);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(loginResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(loginResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, loginResponse);
                 return apiResponse;
             } else {
@@ -629,7 +629,7 @@ public class UserController extends BaseController {
             CommonResponse commonResponse = userService.resetPassword(
                     resetPwdRequest.getMobile(),resetPwdRequest.getNewPwd());
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {

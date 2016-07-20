@@ -65,7 +65,7 @@ public class ShippingInfoController extends BaseController {
         try {
             CommonResponse commonResponse = shippingInfoService.createShippingInfo(shippingInfo);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class ShippingInfoController extends BaseController {
         try {
             CommonResponse commonResponse = shippingInfoService.updateShippingInfo(shippingInfo);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -144,7 +144,7 @@ public class ShippingInfoController extends BaseController {
         try {
             CommonResponse commonResponse = shippingInfoService.deleteShippingInfo(shippingInfoRequest.getId());
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -182,7 +182,7 @@ public class ShippingInfoController extends BaseController {
         try {
             ShippingInfoListResponse shippingInfoListResponse = shippingInfoService.getShippingInfoByUserId(endUserId);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(shippingInfoListResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(shippingInfoListResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, shippingInfoListResponse);
             } else {
                 apiResponse.setData(shippingInfoListResponse.getShippingInfoResultList());
@@ -225,7 +225,7 @@ public class ShippingInfoController extends BaseController {
         try {
             ShippingInfoResponse shippingInfoResponse = shippingInfoService.getDefaultShippingInfoByUserId(endUserId);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(shippingInfoResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(shippingInfoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, shippingInfoResponse);
             } else {
                 ShippingInfoResult shippingInfoResult = new ShippingInfoResult();
@@ -269,7 +269,7 @@ public class ShippingInfoController extends BaseController {
             CommonResponse commonResponse = shippingInfoService
                 .setAsDefaultShippingInfo(shippingInfoRequest.getId(), endUserId);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
