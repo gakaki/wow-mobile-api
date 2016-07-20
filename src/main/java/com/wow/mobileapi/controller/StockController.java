@@ -61,7 +61,7 @@ public class StockController extends BaseController {
         try {
             AvailableStockResponse availableStockResponse = stockService.getAvailableStock(productId);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(availableStockResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(availableStockResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, availableStockResponse);
             } else {
                 AvailableStockVo availableStockVo = availableStockResponse.getAvailableStockVo();
@@ -103,7 +103,7 @@ public class StockController extends BaseController {
         try {
             AvailableStocksResponse availableStocksResponse = stockService.batchGetAvailableStock(productIdList);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(availableStocksResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(availableStocksResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, availableStocksResponse);
             } else {
                 List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
@@ -149,7 +149,7 @@ public class StockController extends BaseController {
         try {
             FreezeStockResponse freezeStockResponse = stockService.freezeStock(productId, productQty);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(freezeStockResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(freezeStockResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, freezeStockResponse);
             } else {
                 apiResponse.setData(freezeStockResponse);

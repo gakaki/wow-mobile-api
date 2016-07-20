@@ -32,7 +32,6 @@ public class AuthInterceptor implements HandlerInterceptor {
                              HttpServletResponse response, Object handler) throws Exception {
         logger.info("AuthInterceptor preHandle:" + request);
         
-        System.out.println(handler.getClass().getName());
         ApiResponse apiResponse = new ApiResponse();
         String token = getSessionToken(request, response);
         byte loginChannel = getLoginChannel(request, response);

@@ -10,14 +10,4 @@ public class ErrorResponseUtil {
         commonResponse.setResCode(errorCode);
         commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg(errorCode));
     }
-
-    /**
-     * 
-     * 判断业务调用方法是否成功
-     * @param errorCode
-     * @return
-     */
-    public static boolean isServiceCallSuccess(String errorCode) {
-        return "0".equals(errorCode);
-    }
 }

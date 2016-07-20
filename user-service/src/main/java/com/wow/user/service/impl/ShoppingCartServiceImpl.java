@@ -199,7 +199,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         AvailableStocksResponse stocksResponse = stockService.batchGetAvailableStock(productIds);
 
         //判断服务是否调用成功 如果处理失败 则返回错误信息
-        if (!ErrorCodeUtil.isSuccessResponse(stocksResponse.getResCode())) {
+        if (ErrorCodeUtil.isFailedResponse(stocksResponse.getResCode())) {
             response.setResCode(stocksResponse.getResCode());
             response.setResMsg(stocksResponse.getResMsg());
 

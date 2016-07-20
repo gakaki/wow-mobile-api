@@ -40,8 +40,8 @@ public class ErrorCodeUtil {
      * @param errorCode
      * @return
      */
-    public static boolean isSuccessResponse(String errorCode) {
-        return ErrorCodeConstant.SUCCESS.equals(errorCode);
+    public static boolean isFailedResponse(String errorCode) {
+        return !ErrorCodeConstant.SUCCESS.equals(errorCode);
     }
 
     /**

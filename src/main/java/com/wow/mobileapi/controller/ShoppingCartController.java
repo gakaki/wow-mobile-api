@@ -68,7 +68,7 @@ public class ShoppingCartController extends BaseController {
 
             CommonResponse commonResponse = shoppingCartService.addProductIntoCart(shoppingCart);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -111,7 +111,7 @@ public class ShoppingCartController extends BaseController {
 
             CommonResponse commonResponse = shoppingCartService.updateProductInCart(query);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -153,7 +153,7 @@ public class ShoppingCartController extends BaseController {
 
             CommonResponse commonResponse = shoppingCartService.removeProductsFromCart(query);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(commonResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
@@ -195,7 +195,7 @@ public class ShoppingCartController extends BaseController {
 
             ShoppingCartResponse shoppingCartResponse = shoppingCartService.queryShoppingCartByUserId(query);
             //如果处理失败 则返回错误信息
-            if (!ErrorCodeUtil.isSuccessResponse(shoppingCartResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(shoppingCartResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, shoppingCartResponse);
             } else{
                 apiResponse.setData(shoppingCartResponse);
