@@ -1,11 +1,10 @@
 package com.wow.stock.vo.response;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
 import com.wow.stock.vo.AvailableStockVo;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
