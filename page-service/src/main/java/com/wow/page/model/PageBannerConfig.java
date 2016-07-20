@@ -8,6 +8,8 @@ public class PageBannerConfig implements Serializable {
 
     private Byte pageType;
 
+    private Byte pageModuleType;
+
     private String bannerTitle;
 
     private String bannerDesc;
@@ -20,9 +22,13 @@ public class PageBannerConfig implements Serializable {
 
     private Integer bannerLinkTargetId;
 
+    private String sortOrder;
+
     private Date activeFrom;
 
     private Date activeTo;
+
+    private Boolean isEnabled;
 
     private static final long serialVersionUID = 1L;
 
@@ -42,12 +48,20 @@ public class PageBannerConfig implements Serializable {
         this.pageType = pageType;
     }
 
+    public Byte getPageModuleType() {
+        return pageModuleType;
+    }
+
+    public void setPageModuleType(Byte pageModuleType) {
+        this.pageModuleType = pageModuleType;
+    }
+
     public String getBannerTitle() {
         return bannerTitle;
     }
 
     public void setBannerTitle(String bannerTitle) {
-        this.bannerTitle = bannerTitle;
+        this.bannerTitle = bannerTitle == null ? null : bannerTitle.trim();
     }
 
     public String getBannerDesc() {
@@ -55,7 +69,7 @@ public class PageBannerConfig implements Serializable {
     }
 
     public void setBannerDesc(String bannerDesc) {
-        this.bannerDesc = bannerDesc;
+        this.bannerDesc = bannerDesc == null ? null : bannerDesc.trim();
     }
 
     public String getBannerImgSrc() {
@@ -63,7 +77,7 @@ public class PageBannerConfig implements Serializable {
     }
 
     public void setBannerImgSrc(String bannerImgSrc) {
-        this.bannerImgSrc = bannerImgSrc;
+        this.bannerImgSrc = bannerImgSrc == null ? null : bannerImgSrc.trim();
     }
 
     public Byte getBannerLinkType() {
@@ -79,7 +93,7 @@ public class PageBannerConfig implements Serializable {
     }
 
     public void setBannerLinkUrl(String bannerLinkUrl) {
-        this.bannerLinkUrl = bannerLinkUrl;
+        this.bannerLinkUrl = bannerLinkUrl == null ? null : bannerLinkUrl.trim();
     }
 
     public Integer getBannerLinkTargetId() {
@@ -88,6 +102,14 @@ public class PageBannerConfig implements Serializable {
 
     public void setBannerLinkTargetId(Integer bannerLinkTargetId) {
         this.bannerLinkTargetId = bannerLinkTargetId;
+    }
+
+    public String getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder == null ? null : sortOrder.trim();
     }
 
     public Date getActiveFrom() {
@@ -106,6 +128,14 @@ public class PageBannerConfig implements Serializable {
         this.activeTo = activeTo;
     }
 
+    public Boolean getIsEnabled() {
+        return isEnabled;
+    }
+
+    public void setIsEnabled(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -114,14 +144,17 @@ public class PageBannerConfig implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", pageType=").append(pageType);
+        sb.append(", pageModuleType=").append(pageModuleType);
         sb.append(", bannerTitle=").append(bannerTitle);
         sb.append(", bannerDesc=").append(bannerDesc);
         sb.append(", bannerImgSrc=").append(bannerImgSrc);
         sb.append(", bannerLinkType=").append(bannerLinkType);
         sb.append(", bannerLinkUrl=").append(bannerLinkUrl);
         sb.append(", bannerLinkTargetId=").append(bannerLinkTargetId);
+        sb.append(", sortOrder=").append(sortOrder);
         sb.append(", activeFrom=").append(activeFrom);
         sb.append(", activeTo=").append(activeTo);
+        sb.append(", isEnabled=").append(isEnabled);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

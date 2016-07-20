@@ -6,6 +6,7 @@ import com.wow.page.mapper.PageBannerConfigMapper;
 import com.wow.page.mapper.PageSceneConfigMapper;
 import com.wow.page.mapper.PageTopicConfigMapper;
 import com.wow.page.model.PageBannerConfig;
+import com.wow.page.model.PageBannerConfigExample;
 import com.wow.page.model.PageSceneConfig;
 import com.wow.page.model.PageTopicConfig;
 import com.wow.page.service.PageConfigService;
@@ -59,10 +60,19 @@ public class PageConfigServiceImpl implements PageConfigService {
      */
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    @Cacheable(value = "PageCache",key="'BANNERS_IN_PAGE_TYPE_'+#pageType")
-    public PageBannerResponse getBannersByPageType(int pageType) {
+//    @Cacheable(value = "PageCache",key="'BANNERS_IN_PAGE_TYPE_'+#pageType")
+    public PageBannerResponse getBannersByPageType(byte pageType) {
         PageBannerResponse pageBannerResponse = new PageBannerResponse();
-        List<PageBannerConfig> pageBannerConfigList = pageBannerConfigMapper.selectByPageType(pageType);
+        PageBannerConfigExample pageBannerConfigExample = new PageBannerConfigExample();
+        pageBannerConfigExample.setOrderByClause("page_module_type asc, sort_order asc");
+        PageBannerConfigExample.Criteria criteria = pageBannerConfigExample.createCriteria();
+        criteria.andPageTypeEqualTo(pageType);
+        criteria.andIsEnabledEqualTo(true);
+        Date now = new Date();
+        criteria.andActiveFromLessThanOrEqualTo(now);
+        criteria.andActiveToGreaterThan(now);
+
+        List<PageBannerConfig> pageBannerConfigList = pageBannerConfigMapper.selectByExample(pageBannerConfigExample);
         if (CollectionUtil.isNotEmpty(pageBannerConfigList)) {
             pageBannerResponse.setPageBannerConfigList(pageBannerConfigList);
         } else {

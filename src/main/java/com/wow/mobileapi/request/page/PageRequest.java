@@ -7,13 +7,15 @@ import com.wow.common.request.ApiRequest;
  */
 public class PageRequest extends ApiRequest {
 
-    private int pageType;
+    private static final long serialVersionUID = 1L;
 
-    public int getPageType() {
+    private byte pageType;
+
+    public byte getPageType() {
         return pageType;
     }
 
-    public void setPageType(int pageType) {
+    public void setPageType(byte pageType) {
         this.pageType = pageType;
     }
 }

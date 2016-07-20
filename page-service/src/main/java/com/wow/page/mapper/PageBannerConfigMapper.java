@@ -27,6 +27,4 @@ public interface PageBannerConfigMapper {
     int updateByPrimaryKeySelective(PageBannerConfig record);
 
     int updateByPrimaryKey(PageBannerConfig record);
-
-    List<PageBannerConfig> selectByPageType(@Param("pageType") int pageType);
 }

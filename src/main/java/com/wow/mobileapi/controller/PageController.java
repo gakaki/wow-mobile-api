@@ -1,5 +1,6 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.mobileapi.constant.BizConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +29,18 @@ public class PageController extends BaseController {
     private PageConfigService pageConfigService;
 
     @RequestMapping(value = "/v1/page/banners", method = RequestMethod.GET)
-    public ApiResponse getBannersOnPage(ApiRequest apiRequest) {
+    public ApiResponse getBannersOnHomePage(ApiRequest apiRequest) {
         logger.info("start to get banners on page");
         ApiResponse apiResponse = new ApiResponse();
-        PageRequest pageRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), PageRequest.class);
-        //判断json格式参数是否有误
-        if (pageRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
+//        PageRequest pageRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), PageRequest.class);
+//        //判断json格式参数是否有误
+//        if (pageRequest == null) {
+//            setParamJsonParseErrorResponse(apiResponse);
+//            return apiResponse;
+//        }
 
         try {
-            PageBannerResponse pageBannerResponse = pageConfigService.getBannersByPageType(pageRequest.getPageType());
+            PageBannerResponse pageBannerResponse = pageConfigService.getBannersByPageType(BizConstant.PAGE_TYPE_HOME);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(pageBannerResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageBannerResponse);
@@ -57,16 +58,16 @@ public class PageController extends BaseController {
     public ApiResponse getScenesOnPage(ApiRequest apiRequest) {
         logger.info("start to get scenes on page");
         ApiResponse apiResponse = new ApiResponse();
-        PageRequest pageRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), PageRequest.class);
-        //判断json格式参数是否有误
-        if (pageRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        int pageType = pageRequest.getPageType();
+//        PageRequest pageRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), PageRequest.class);
+//        //判断json格式参数是否有误
+//        if (pageRequest == null) {
+//            setParamJsonParseErrorResponse(apiResponse);
+//            return apiResponse;
+//        }
+//        int pageType = pageRequest.getPageType();
 
         try {
-            PageSceneResponse pageSceneResponse = pageConfigService.getScenesByPageType(pageType);
+            PageSceneResponse pageSceneResponse = pageConfigService.getScenesByPageType(BizConstant.PAGE_TYPE_HOME);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(pageSceneResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageSceneResponse);
@@ -86,16 +87,16 @@ public class PageController extends BaseController {
         logger.info("start to get topics on page");
 
         ApiResponse apiResponse = new ApiResponse();
-        PageRequest pageRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), PageRequest.class);
-        //判断json格式参数是否有误
-        if (pageRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        int pageType = pageRequest.getPageType();
+//        PageRequest pageRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), PageRequest.class);
+//        //判断json格式参数是否有误
+//        if (pageRequest == null) {
+//            setParamJsonParseErrorResponse(apiResponse);
+//            return apiResponse;
+//        }
+//        int pageType = pageRequest.getPageType();
 
         try {
-            PageTopicResponse pageTopicResponse = pageConfigService.getTopicsByPageType(pageType);
+            PageTopicResponse pageTopicResponse = pageConfigService.getTopicsByPageType(BizConstant.PAGE_TYPE_HOME);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(pageTopicResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageTopicResponse);
