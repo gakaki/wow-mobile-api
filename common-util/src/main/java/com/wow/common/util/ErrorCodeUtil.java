@@ -40,7 +40,7 @@ public class ErrorCodeUtil {
      * @param errorCode
      * @return
      */
-    public boolean isSuccessResponse(String errorCode) {
+    public static boolean isSuccessResponse(String errorCode) {
         return ErrorCodeConstant.SUCCESS.equals(errorCode);
     }
 
