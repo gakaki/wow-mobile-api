@@ -39,7 +39,7 @@ public class PageController extends BaseController {
         try {
             PageBannerResponse pageBannerResponse = pageConfigService.getBannersByPageType(pageRequest.getPageType());
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(pageBannerResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(pageBannerResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageBannerResponse);
             } else {
                 apiResponse.setData(pageBannerResponse.getPageBannerConfigList());
@@ -66,7 +66,7 @@ public class PageController extends BaseController {
         try {
             PageSceneResponse pageSceneResponse = pageConfigService.getScenesByPageType(pageType);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(pageSceneResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(pageSceneResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageSceneResponse);
             } else {
                 apiResponse.setData(pageSceneResponse.getSceneList());
@@ -95,7 +95,7 @@ public class PageController extends BaseController {
         try {
             PageTopicResponse pageTopicResponse = pageConfigService.getTopicsByPageType(pageType);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(pageTopicResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(pageTopicResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageTopicResponse);
             } else {
                 apiResponse.setData(pageTopicResponse.getPageTopicVoList());

@@ -2,6 +2,7 @@ package com.wow.mobileapi.controller;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
@@ -60,7 +61,7 @@ public class StockController extends BaseController {
         try {
             AvailableStockResponse availableStockResponse = stockService.getAvailableStock(productId);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(availableStockResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(availableStockResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, availableStockResponse);
             } else {
                 AvailableStockVo availableStockVo = availableStockResponse.getAvailableStockVo();
@@ -102,7 +103,7 @@ public class StockController extends BaseController {
         try {
             AvailableStocksResponse availableStocksResponse = stockService.batchGetAvailableStock(productIdList);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(availableStocksResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(availableStocksResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, availableStocksResponse);
             } else {
                 List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
@@ -148,7 +149,7 @@ public class StockController extends BaseController {
         try {
             FreezeStockResponse freezeStockResponse = stockService.freezeStock(productId, productQty);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(freezeStockResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(freezeStockResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, freezeStockResponse);
             } else {
                 apiResponse.setData(freezeStockResponse);

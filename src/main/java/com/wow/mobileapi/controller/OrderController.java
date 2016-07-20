@@ -64,7 +64,7 @@ public class OrderController extends BaseController {
 
             orderSettleResponse = orderService.settleOrder(query);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(orderSettleResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(orderSettleResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderSettleResponse);
             } else {
                 apiResponse.setData(orderSettleResponse);
@@ -108,7 +108,7 @@ public class OrderController extends BaseController {
 
             orderResponse = orderService.createOrder(query);
             //如果处理失败 则返回错误信息
-            if (!isServiceCallSuccess(orderResponse.getResCode())) {
+            if (ErrorCodeUtil.isFailedResponse(orderResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderResponse);
             } else {
                 apiResponse.setData(orderResponse);
