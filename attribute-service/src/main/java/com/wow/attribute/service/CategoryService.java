@@ -62,4 +62,11 @@ public interface CategoryService {
      * @return
      */
     CategoryListResponse getFirstLevelCategory();
+
+    /**
+     * 查询指定分类所有三级分类(递归查询)
+     *
+     * @return
+     */
+    CategoryListResponse getLastLevelCategoryByCategory(int categoryId);
 }

@@ -26,8 +26,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
-
-    private final int CATEGORY_LEVEL_FIRST=0;
+    //一级分类的父分类:0
+    private final int PARENT_CATEGORY_OF_FIRST_LEVEL_CATEGORY=0;
 
     /**
      * 创建类目
@@ -133,11 +133,26 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public CategoryListResponse getFirstLevelCategory() {
-        CategoryListResponse categoryListResponse =  getSubCategory(CATEGORY_LEVEL_FIRST);
+        CategoryListResponse categoryListResponse =  getSubCategory(PARENT_CATEGORY_OF_FIRST_LEVEL_CATEGORY);
         if ("40402".equals(categoryListResponse.getResCode())) {
             categoryListResponse.setResCode("40403");
             categoryListResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40403"));
         }
         return categoryListResponse;
+    }
+
+    /**
+     * 查询指定分类所有三级分类(递归查询)
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public CategoryListResponse getLastLevelCategoryByCategory(int categoryId) {
+        //TODO:
+        //如果该分类已经是第三级(也是最后一级),返回该分类本身
+        //否则,递归查询该分类的子分类,直到最后一级
+        return null;
     }
 }
