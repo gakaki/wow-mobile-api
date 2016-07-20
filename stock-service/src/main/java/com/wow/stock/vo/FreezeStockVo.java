@@ -2,20 +2,23 @@ package com.wow.stock.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class FreezeStockVo {
+public class FreezeStockVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private int productId;
 
+    //冻结的仓库库存数量
     private int frozenWarehouseStockTotalQty;
 
+    //冻结的虚拟库存 只有真实库存不存在的情况下才会冻结虚拟库存
     private int frozenVirtualStockQty;
 
     private List<WarehouseStockFrozenResultVo> warehouseStockFrozenResultVoList;
