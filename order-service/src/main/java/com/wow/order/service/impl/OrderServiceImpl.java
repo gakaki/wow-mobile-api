@@ -20,11 +20,13 @@ import com.wow.common.util.IpConvertUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.common.util.RandomGenerator;
 import com.wow.order.mapper.SaleOrderItemMapper;
+import com.wow.order.mapper.SaleOrderItemWarehouseMapper;
 import com.wow.order.mapper.SaleOrderLogMapper;
 import com.wow.order.mapper.SaleOrderMapper;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderItem;
+import com.wow.order.model.SaleOrderItemWarehouse;
 import com.wow.order.model.SaleOrderLog;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderItemVo;
@@ -36,7 +38,10 @@ import com.wow.product.mapper.ProductSupplierMapper;
 import com.wow.product.model.ProductSupplier;
 import com.wow.product.model.ProductSupplierExample;
 import com.wow.stock.service.StockService;
+import com.wow.stock.vo.FreezeStockVo;
 import com.wow.stock.vo.ProductQtyVo;
+import com.wow.stock.vo.WarehouseStockFrozenResultVo;
+import com.wow.stock.vo.response.BatchFreezeStockResponse;
 import com.wow.user.mapper.ShippingInfoMapper;
 import com.wow.user.mapper.ShoppingCartMapper;
 import com.wow.user.model.ShippingInfo;
@@ -65,6 +70,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private SaleOrderItemMapper saleOrderItemMapper;
+
+    @Autowired
+    private SaleOrderItemWarehouseMapper saleOrderItemWarehouseMapper;
 
     @Autowired
     private ProductSupplierMapper productSupplierMapper;
@@ -109,12 +117,27 @@ public class OrderServiceImpl implements OrderService {
         //根据用户购物车id列表 获取用户购物车信息列表
         List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByShoppingCartIds(shoppingCartQuery);
 
-        //判断库存是否足够 调用库存服务
+        // 调用库存服务
+        List<ProductQtyVo> productQtyVoList = wrapProductQty(shoppingCartResult);
+        //调用批量锁定库存服务
+        BatchFreezeStockResponse batchFreezeResponse = stockService.batchFreezeStock(productQtyVoList);
+        //判断库存是否足够
+        if (ErrorCodeUtil.isFailedResponse(batchFreezeResponse.getResCode())) {
+            orderResponse.setResCode(batchFreezeResponse.getResCode());
+            orderResponse.setResMsg(batchFreezeResponse.getResMsg());
+
+            return orderResponse;
+        }
+
+        //设置产品库存使用情况
+        query.setFreezeStockVoList(batchFreezeResponse.getFreezeStockVoList());
+        //设置用户购买的产品信息列表
         query.setShoppingCartResult(shoppingCartResult);
 
         //计算订单总金额
         BigDecimal orderAmount = calculateOrderPrice(query);
 
+        //校验订单金额是否正确
         if (NumberUtil.isNotEquals(query.getOrderAmount(), orderAmount)) {
             orderResponse.setResCode("40306");
             orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40306"));
@@ -125,16 +148,10 @@ public class OrderServiceImpl implements OrderService {
         query.setOrderAmount(orderAmount);
         //业务校验结束
 
-        //包装订单对象
-        SaleOrder saleOrder = wrapOrder(query);
-
         /*** 保存订单开始*/
 
-        //锁定产品相关的库存
-        List<ProductQtyVo> productQtyVoList = wrapProductQty(shoppingCartResult);
-
-        stockService.batchFreezeStock(productQtyVoList);
-
+        //包装订单对象
+        SaleOrder saleOrder = wrapOrder(query);
         saleOrderMapper.insertSelective(saleOrder);
         //设置订单id
         query.setOrderId(saleOrder.getId());
@@ -143,6 +160,11 @@ public class OrderServiceImpl implements OrderService {
         List<SaleOrderItem> wrapOrderItems = wrapOrderItem(query);
 
         saleOrderItemMapper.batchInsertSelective(wrapOrderItems);
+
+        //保存订单项目仓库信息
+        List<SaleOrderItemWarehouse> orderItemWareHouses = wrapAllOrderItemWareHouse(wrapOrderItems, query);
+
+        saleOrderItemWarehouseMapper.batchInsertSelective(orderItemWareHouses);
 
         //写入客户提交订单日志
         SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40357"));
@@ -164,6 +186,79 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setOrderCode(saleOrder.getOrderCode());
 
         return orderResponse;
+    }
+
+    /**
+     * 包装订单产品全部项目仓库信息
+     * @param query 
+     * 
+     * @param wrapOrderItems
+     * @return
+     */
+    private List<SaleOrderItemWarehouse> wrapAllOrderItemWareHouse(List<SaleOrderItem> saleOrderItems, OrderQuery query) {
+        List<SaleOrderItemWarehouse> allOrderItemWareHouses = new ArrayList<SaleOrderItemWarehouse>();
+
+        for (SaleOrderItem saleOrderItem : saleOrderItems) {
+            FreezeStockVo freezeStockVo = getFreezeStock(query.getFreezeStockVoList(), saleOrderItem.getProductId());
+            if (freezeStockVo != null) {
+                List<SaleOrderItemWarehouse> orderItemWareHouses = wrapOrderItemWareHouse(saleOrderItem, freezeStockVo
+                    .getWarehouseStockFrozenResultVoList());
+
+                allOrderItemWareHouses.addAll(orderItemWareHouses);
+            }
+        }
+
+        return allOrderItemWareHouses;
+    }
+
+    /**
+     * 包装订单项目对应的仓库信息
+     * 
+     * @param saleOrderItem
+     * @param warehouseStockFrozenResultVoList
+     */
+    private List<SaleOrderItemWarehouse> wrapOrderItemWareHouse(SaleOrderItem saleOrderItem, List<WarehouseStockFrozenResultVo> warehouseStocks) {
+        List<SaleOrderItemWarehouse> orderItemWareHouses = new ArrayList<SaleOrderItemWarehouse>();
+
+        SaleOrderItemWarehouse saleOrderItemWarehouse = null;
+        for (WarehouseStockFrozenResultVo warehouseStock : warehouseStocks) {
+            saleOrderItemWarehouse = new SaleOrderItemWarehouse();
+
+            saleOrderItemWarehouse.setSaleOrderItemId(saleOrderItem.getId());
+            saleOrderItemWarehouse.setProductId(saleOrderItem.getProductId());
+
+            saleOrderItemWarehouse.setWarehouseId(warehouseStock.getWarehouseId());
+            saleOrderItemWarehouse.setFrozenRealStockQty(warehouseStock.getFrozenStock());
+
+            saleOrderItemWarehouse.setCreateTime(DateUtil.currentDate());
+            saleOrderItemWarehouse.setUpdateTime(DateUtil.currentDate());
+            saleOrderItemWarehouse.setIsDeleted(Boolean.FALSE);
+
+            orderItemWareHouses.add(saleOrderItemWarehouse);
+        }
+
+        return orderItemWareHouses;
+
+    }
+
+    /**
+     * 根据产品id获取锁定的库存信息
+     * 
+     * @param freezeStockVoList
+     * @param productId
+     */
+    private FreezeStockVo getFreezeStock(List<FreezeStockVo> freezeStockVoList, int productId) {
+        if (CollectionUtil.isEmpty(freezeStockVoList)) {
+            return null;
+        }
+
+        for (FreezeStockVo freezeStockVo : freezeStockVoList) {
+            if (freezeStockVo.getProductId() == productId) {
+                return freezeStockVo;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -266,6 +361,7 @@ public class OrderServiceImpl implements OrderService {
 
         SaleOrderItem saleOrderItem = null;
         ProductSupplier productSupplier = null;
+        FreezeStockVo freezeStockVo = null;
 
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
             saleOrderItem = new SaleOrderItem();
@@ -287,6 +383,17 @@ public class OrderServiceImpl implements OrderService {
             if (productSupplier != null) {
                 saleOrderItem.setProductSupplierId(productSupplier.getSupplierId());
                 saleOrderItem.setProductSaleType(productSupplier.getProductSaleType());
+            }
+
+            //获取产品使用的具体库存
+            freezeStockVo = getFreezeStock(query.getFreezeStockVoList(), shoppingCart.getProductId());
+            if (freezeStockVo != null) {
+                saleOrderItem.setFrozenRealStockQty(freezeStockVo.getFrozenWarehouseStockTotalQty());
+                saleOrderItem.setFrozenVirtualStockQty(freezeStockVo.getFrozenVirtualStockQty());
+                //如果使用虚拟库存的话 则设置虚拟库存是否准备 默认为null
+                if (freezeStockVo.getFrozenVirtualStockQty() > 0) {
+                    saleOrderItem.setIsVirtualStockReady(Boolean.FALSE); //默认为未准备好
+                }
             }
 
             saleOrderItem.setNeedAssemble(Boolean.FALSE);
@@ -326,7 +433,6 @@ public class OrderServiceImpl implements OrderService {
      * @param integer
      */
     private ProductSupplier getSupplierByProductId(List<ProductSupplier> productSuppliers, Integer productId) {
-
         if (CollectionUtil.isEmpty(productSuppliers)) {
             return null;
         }

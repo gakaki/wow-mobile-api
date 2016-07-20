@@ -19,10 +19,6 @@ dependencies {
     compile 'com.wow:price-service:1.0-SNAPSHOT'
     compile 'com.wow:stock-service:1.0-SNAPSHOT'
     compile 'com.wow:common-util:1.0-SNAPSHOT'
-
-    //ping++ sdk
-    compile 'Pingplusplus:pingpp-java:2.1.7'
-
 }
 
 def getDbProperties = {

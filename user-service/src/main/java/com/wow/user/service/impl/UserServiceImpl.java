@@ -1,5 +1,18 @@
 package com.wow.user.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
@@ -14,20 +27,10 @@ import com.wow.user.model.EndUserWechatExample;
 import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.util.PasswordUtil;
-import com.wow.user.vo.WechatBindStatusVo;
-import com.wow.user.vo.response.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
-import java.util.Date;
-import java.util.List;
+import com.wow.user.vo.response.RegisterBindStatusResponse;
+import com.wow.user.vo.response.RegisterResponse;
+import com.wow.user.vo.response.UserCheckResponse;
+import com.wow.user.vo.response.UserResponse;
 
 /**
  * Created by zhengzhiqing on 16/6/21.

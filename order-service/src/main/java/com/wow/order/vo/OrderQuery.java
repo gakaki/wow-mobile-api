@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.wow.stock.vo.FreezeStockVo;
 import com.wow.user.model.ShippingInfo;
 import com.wow.user.vo.ShoppingCartResultVo;
 
@@ -52,12 +53,23 @@ public class OrderQuery implements Serializable {
     //用户购买的产品信息
     private List<ShoppingCartResultVo> shoppingCartResult;
 
+    //锁定的产品库存信息
+    private List<FreezeStockVo> freezeStockVoList;
+
     //用户收货地址信息
     private ShippingInfo shippingInfo;
 
     //订单id
     private Integer orderId;
     
+    public List<FreezeStockVo> getFreezeStockVoList() {
+        return freezeStockVoList;
+    }
+
+    public void setFreezeStockVoList(List<FreezeStockVo> freezeStockVoList) {
+        this.freezeStockVoList = freezeStockVoList;
+    }
+
     public Integer getOrderId() {
         return orderId;
     }

@@ -29,11 +29,9 @@ public class SaleOrderItem implements Serializable {
 
     private Integer productSupplierId;
 
-    private Integer warehouseId;
+    private Integer frozenRealStockQty;
 
-    private Short frozenRealStockQty;
-
-    private Short frozenVirtualStockQty;
+    private Integer frozenVirtualStockQty;
 
     private Boolean isVirtualStockReady;
 
@@ -141,27 +139,19 @@ public class SaleOrderItem implements Serializable {
         this.productSupplierId = productSupplierId;
     }
 
-    public Integer getWarehouseId() {
-        return warehouseId;
-    }
-
-    public void setWarehouseId(Integer warehouseId) {
-        this.warehouseId = warehouseId;
-    }
-
-    public Short getFrozenRealStockQty() {
+    public Integer getFrozenRealStockQty() {
         return frozenRealStockQty;
     }
 
-    public void setFrozenRealStockQty(Short frozenRealStockQty) {
+    public void setFrozenRealStockQty(Integer frozenRealStockQty) {
         this.frozenRealStockQty = frozenRealStockQty;
     }
 
-    public Short getFrozenVirtualStockQty() {
+    public Integer getFrozenVirtualStockQty() {
         return frozenVirtualStockQty;
     }
 
-    public void setFrozenVirtualStockQty(Short frozenVirtualStockQty) {
+    public void setFrozenVirtualStockQty(Integer frozenVirtualStockQty) {
         this.frozenVirtualStockQty = frozenVirtualStockQty;
     }
 
@@ -215,7 +205,6 @@ public class SaleOrderItem implements Serializable {
         sb.append(", parentOrderItemId=").append(parentOrderItemId);
         sb.append(", isItemLeaf=").append(isItemLeaf);
         sb.append(", productSupplierId=").append(productSupplierId);
-        sb.append(", warehouseId=").append(warehouseId);
         sb.append(", frozenRealStockQty=").append(frozenRealStockQty);
         sb.append(", frozenVirtualStockQty=").append(frozenVirtualStockQty);
         sb.append(", isVirtualStockReady=").append(isVirtualStockReady);

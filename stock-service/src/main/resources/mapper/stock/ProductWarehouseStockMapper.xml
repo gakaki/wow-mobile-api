@@ -5,9 +5,9 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
-    <result column="real_stock_qty" property="realStockQty" jdbcType="SMALLINT" />
-    <result column="frozen_stock_qty" property="frozenStockQty" jdbcType="SMALLINT" />
-    <result column="lock_stock_qty" property="lockStockQty" jdbcType="SMALLINT" />
+    <result column="real_stock_qty" property="realStockQty" jdbcType="INTEGER" />
+    <result column="frozen_stock_qty" property="frozenStockQty" jdbcType="INTEGER" />
+    <result column="lock_stock_qty" property="lockStockQty" jdbcType="INTEGER" />
     <result column="is_active" property="isActive" jdbcType="BIT" />
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
@@ -118,8 +118,8 @@
       frozen_stock_qty, lock_stock_qty, is_active, 
       create_date, update_date, is_deleted
       )
-    values (#{productId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, #{realStockQty,jdbcType=SMALLINT}, 
-      #{frozenStockQty,jdbcType=SMALLINT}, #{lockStockQty,jdbcType=SMALLINT}, #{isActive,jdbcType=BIT}, 
+    values (#{productId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, #{realStockQty,jdbcType=INTEGER}, 
+      #{frozenStockQty,jdbcType=INTEGER}, #{lockStockQty,jdbcType=INTEGER}, #{isActive,jdbcType=BIT}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
       )
   </insert>
@@ -165,13 +165,13 @@
         #{warehouseId,jdbcType=INTEGER},
       </if>
       <if test="realStockQty != null" >
-        #{realStockQty,jdbcType=SMALLINT},
+        #{realStockQty,jdbcType=INTEGER},
       </if>
       <if test="frozenStockQty != null" >
-        #{frozenStockQty,jdbcType=SMALLINT},
+        #{frozenStockQty,jdbcType=INTEGER},
       </if>
       <if test="lockStockQty != null" >
-        #{lockStockQty,jdbcType=SMALLINT},
+        #{lockStockQty,jdbcType=INTEGER},
       </if>
       <if test="isActive != null" >
         #{isActive,jdbcType=BIT},
@@ -206,13 +206,13 @@
         warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
       </if>
       <if test="record.realStockQty != null" >
-        real_stock_qty = #{record.realStockQty,jdbcType=SMALLINT},
+        real_stock_qty = #{record.realStockQty,jdbcType=INTEGER},
       </if>
       <if test="record.frozenStockQty != null" >
-        frozen_stock_qty = #{record.frozenStockQty,jdbcType=SMALLINT},
+        frozen_stock_qty = #{record.frozenStockQty,jdbcType=INTEGER},
       </if>
       <if test="record.lockStockQty != null" >
-        lock_stock_qty = #{record.lockStockQty,jdbcType=SMALLINT},
+        lock_stock_qty = #{record.lockStockQty,jdbcType=INTEGER},
       </if>
       <if test="record.isActive != null" >
         is_active = #{record.isActive,jdbcType=BIT},
@@ -236,9 +236,9 @@
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
-      real_stock_qty = #{record.realStockQty,jdbcType=SMALLINT},
-      frozen_stock_qty = #{record.frozenStockQty,jdbcType=SMALLINT},
-      lock_stock_qty = #{record.lockStockQty,jdbcType=SMALLINT},
+      real_stock_qty = #{record.realStockQty,jdbcType=INTEGER},
+      frozen_stock_qty = #{record.frozenStockQty,jdbcType=INTEGER},
+      lock_stock_qty = #{record.lockStockQty,jdbcType=INTEGER},
       is_active = #{record.isActive,jdbcType=BIT},
       create_date = #{record.createDate,jdbcType=TIMESTAMP},
       update_date = #{record.updateDate,jdbcType=TIMESTAMP},
@@ -257,13 +257,13 @@
         warehouse_id = #{warehouseId,jdbcType=INTEGER},
       </if>
       <if test="realStockQty != null" >
-        real_stock_qty = #{realStockQty,jdbcType=SMALLINT},
+        real_stock_qty = #{realStockQty,jdbcType=INTEGER},
       </if>
       <if test="frozenStockQty != null" >
-        frozen_stock_qty = #{frozenStockQty,jdbcType=SMALLINT},
+        frozen_stock_qty = #{frozenStockQty,jdbcType=INTEGER},
       </if>
       <if test="lockStockQty != null" >
-        lock_stock_qty = #{lockStockQty,jdbcType=SMALLINT},
+        lock_stock_qty = #{lockStockQty,jdbcType=INTEGER},
       </if>
       <if test="isActive != null" >
         is_active = #{isActive,jdbcType=BIT},
@@ -284,9 +284,9 @@
     update product_warehouse_stock
     set product_id = #{productId,jdbcType=INTEGER},
       warehouse_id = #{warehouseId,jdbcType=INTEGER},
-      real_stock_qty = #{realStockQty,jdbcType=SMALLINT},
-      frozen_stock_qty = #{frozenStockQty,jdbcType=SMALLINT},
-      lock_stock_qty = #{lockStockQty,jdbcType=SMALLINT},
+      real_stock_qty = #{realStockQty,jdbcType=INTEGER},
+      frozen_stock_qty = #{frozenStockQty,jdbcType=INTEGER},
+      lock_stock_qty = #{lockStockQty,jdbcType=INTEGER},
       is_active = #{isActive,jdbcType=BIT},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
@@ -296,29 +296,29 @@
 
   <update id="adjustWarehouseRealStock">
     update product_warehouse_stock
-    set real_stock_qty = real_stock_qty + #{adjustNum,jdbcType=SMALLINT},
+    set real_stock_qty = real_stock_qty + #{adjustNum,jdbcType=INTEGER},
     update_date = now()
     where product_id = #{productId,jdbcType=INTEGER}
     and warehouse_id= #{warehouseId,jdbcType=INTEGER}
-    and real_stock_qty + #{adjustNum,jdbcType=SMALLINT} >= 0 <!--调减不能非负数-->
+    and real_stock_qty + #{adjustNum,jdbcType=INTEGER} >= 0 <!--调减不能非负数-->
     and is_active = true
     and is_deleted = false
   </update>
 
   <update id="freezeWarehouseStock">
     update product_warehouse_stock
-    set frozen_stock_qty = frozen_stock_qty + #{productQty,jdbcType=SMALLINT},
+    set frozen_stock_qty = frozen_stock_qty + #{productQty,jdbcType=INTEGER},
     update_date = now()
     where product_id = #{productId,jdbcType=INTEGER}
     and warehouse_id= #{warehouseId,jdbcType=INTEGER}
-    and (real_stock_qty - lock_stock_qty) - (frozen_stock_qty + #{productQty,jdbcType=SMALLINT}) >= 0 <!--防止超卖-->
+    and (real_stock_qty - lock_stock_qty) - (frozen_stock_qty + #{productQty,jdbcType=INTEGER}) >= 0 <!--防止超卖-->
     and is_active = true
     and is_deleted = false
   </update>
 
   <update id="unfreezeWarehouseStock">
     update product_warehouse_stock
-    set frozen_stock_qty = frozen_stock_qty - #{productQty,jdbcType=SMALLINT},
+    set frozen_stock_qty = frozen_stock_qty - #{productQty,jdbcType=INTEGER},
     update_date = now()
     where product_id = #{productId,jdbcType=INTEGER}
     and warehouse_id= #{warehouseId,jdbcType=INTEGER}
@@ -347,8 +347,8 @@
 
   <update id="shipOutWarehouseGoods">
     update product_warehouse_stock
-    set frozen_stock_qty = frozen_stock_qty - #{productQty,jdbcType=SMALLINT},
-    real_stock_qty = real_stock_qty - #{productQty,jdbcType=SMALLINT},
+    set frozen_stock_qty = frozen_stock_qty - #{productQty,jdbcType=INTEGER},
+    real_stock_qty = real_stock_qty - #{productQty,jdbcType=INTEGER},
     update_date = now()
     where product_id = #{productId,jdbcType=INTEGER}
     and warehouse_id= #{warehouseId,jdbcType=INTEGER}
