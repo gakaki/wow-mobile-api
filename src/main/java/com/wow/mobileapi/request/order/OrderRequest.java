@@ -28,11 +28,22 @@ public class OrderRequest extends ApiRequest {
     private Integer couponId;
     
     //订单总价 客户端传递 用以校验价格是否发生变化
-    private BigDecimal totalPrice;
+    private BigDecimal orderAmount;
+    
+    //订单来源
+    private Byte orderSource;
     
     //订单备注
     private String remark;
     
+    public Byte getOrderSource() {
+        return orderSource;
+    }
+
+    public void setOrderSource(Byte orderSource) {
+        this.orderSource = orderSource;
+    }
+
     public Integer getShippingInfoId() {
         return shippingInfoId;
     }
@@ -49,12 +60,12 @@ public class OrderRequest extends ApiRequest {
         this.couponId = couponId;
     }
 
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
     }
 
     public String getRemark() {

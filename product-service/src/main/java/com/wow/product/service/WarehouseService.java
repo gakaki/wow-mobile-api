@@ -2,8 +2,6 @@ package com.wow.product.service;
 
 import com.wow.product.model.Warehouse;
 
-import java.util.List;
-
 /**
  * Created by zhengzhiqing on 16/6/24.
  */

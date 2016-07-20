@@ -2,6 +2,8 @@ package com.wow.common.util;
 
 import java.math.BigDecimal;
 
+import com.wow.common.constant.CommonConstant;
+
 /**
  * 金额转换计算工具类
  * 
@@ -113,21 +115,6 @@ public class NumberUtil {
         BigDecimal b2 = new BigDecimal(Double.toString(v2));
 
         return b1.multiply(b2).doubleValue();
-    }
-
-    /**
-     * 获取相应折扣率的描述
-     * 
-     * @param v1
-     * @param v2
-     * @return
-     */
-    public static String getDiscountDesc(BigDecimal v1) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(v1.toString()).append("折");
-
-        return sb.toString();
     }
 
     /**
@@ -260,32 +247,18 @@ public class NumberUtil {
     }
 
     /**
-     * 将产品价格由分转换为元
+     * 将产品价格由分转换为元 0.08
      * 
      * @param sellPrice
      */
-    public static BigDecimal convertToYuan(long sellPrice) {
-        String sellPriceString = String.valueOf(sellPrice);
+    public static BigDecimal convertToYuan(long amount) {
+        if (amount == 0) {
+            return CommonConstant.ZEROB_IGDECIMAL;
+        }
 
-        StringBuilder sb = new StringBuilder();
+        BigDecimal divide = div(new BigDecimal(String.valueOf(amount)), CommonConstant.HUNDRED_IGDECIMAL);
 
-        //获取金额倒数第二位的位置
-        int startIndex = sellPriceString.length() - 2;
-        sb.append(sellPriceString.substring(0, startIndex));
-        sb.append(".");
-        sb.append(sellPriceString.substring(startIndex + 1));
-
-        return toFixedTwo(new BigDecimal(sb.toString()));
-    }
-
-    /**
-     * 将指定的数字进行四舍五入 保留2位数字
-     * 
-     * @param v1
-     * @return
-     */
-    public static BigDecimal toFixedTwo(BigDecimal v1) {
-        return v1.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return toFixedTwo(divide);
     }
 
     /**
@@ -299,6 +272,16 @@ public class NumberUtil {
         }
 
         return Long.parseLong(sellPrice.toString().replace(".", ""));
+    }
+
+    /**
+     * 将指定的数字进行四舍五入 保留2位数字
+     * 
+     * @param v1
+     * @return
+     */
+    public static BigDecimal toFixedTwo(BigDecimal v1) {
+        return v1.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
 }

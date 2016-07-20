@@ -103,42 +103,53 @@ public class OrderServiceImpl implements OrderService {
 
         //根据用户购物车id列表 获取用户购物车信息列表
         List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByShoppingCartIds(shoppingCartQuery);
-        
-        
+
         //判断库存是否足够 调用库存服务
         query.setShoppingCartResult(shoppingCartResult);
 
         //计算订单总金额
-        BigDecimal totalPrice = calculateOrderPrice(query);
+        BigDecimal orderAmount = calculateOrderPrice(query);
 
-        //如果客户端计算的金额和服务端计算的不一致 则提示订单金额不正确
-//        if (NumberUtil.isNotEquals(query.getOrderAmount(), totalPrice)) {
-//            orderResponse.setResCode("40306");
-//            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40306"));
-//
-//            return orderResponse;
-//        }
-        
-        query.setOrderAmount(totalPrice);
 
+        if (NumberUtil.isNotEquals(query.getOrderAmount(), orderAmount)) {
+            orderResponse.setResCode("40306");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40306"));
+
+            return orderResponse;
+        }
+
+        query.setOrderAmount(orderAmount);
         //业务校验结束
 
         //包装订单对象
         SaleOrder saleOrder = wrapOrder(query);
-        
+
         //保存订单
         saleOrderMapper.insertSelective(saleOrder);
         //设置订单id
         query.setOrderId(saleOrder.getId());
-        
+
         //包装订单项目
         List<SaleOrderItem> wrapOrderItems = wrapOrderItem(query);
-        
+
         saleOrderItemMapper.batchInsertSelective(wrapOrderItems);
 
         //写入客户提交订单日志
         SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40357"));
         saleOrderLogMapper.insertSelective(warpOrderLog);
+
+        //清空购物车中用户购买的产品
+        ShoppingCartQueryVo shoppingCartQueryVo = new ShoppingCartQueryVo();
+        
+        shoppingCartQueryVo.setIsDeleted(Boolean.TRUE);
+        shoppingCartQueryVo.setUpdateTime(DateUtil.currentDate());
+        shoppingCartQueryVo.setShoppingCartIds(query.getShoppingCartIds());
+
+        shoppingCartMapper.updateByPrimaryKeys(shoppingCartQueryVo);
+
+        //设置返回信息
+        orderResponse.setOrderId(saleOrder.getId());
+        orderResponse.setOrderCode(saleOrder.getOrderCode());
 
         return orderResponse;
     }
@@ -164,6 +175,7 @@ public class OrderServiceImpl implements OrderService {
         SaleOrder saleOrder = new SaleOrder();
 
         //设置订单号
+        saleOrder.setEndUserId(query.getEndUserId());
         saleOrder.setOrderCode(RandomGenerator.createRandom(true, 10));
         saleOrder.setEndUserCouponId(query.getEndUserId());
 
@@ -228,24 +240,30 @@ public class OrderServiceImpl implements OrderService {
             saleOrderItem.setSaleOrderId(query.getOrderId());
             saleOrderItem.setProductId(shoppingCart.getProductId());
             saleOrderItem.setProductName(shoppingCart.getProductName());
-            saleOrderItem.setOrderItemAmount(shoppingCart.getSellTotalAmount());
+
             saleOrderItem.setOrderItemPrice(shoppingCart.getSellPrice());
             saleOrderItem.setOrderItemQty(shoppingCart.getProductQty());
 
+            //计算产品总价
+            long productTotalPrice = calculateProductTotalPrice(shoppingCart.getSellPrice(), shoppingCart
+                .getProductQty());
+            saleOrderItem.setOrderItemAmount(NumberUtil.convertToYuan(productTotalPrice));
+
             //获取产品对应的供应商id
             productSupplier = getSupplierByProductId(productSuppliers, shoppingCart.getProductId());
-            if(productSupplier!=null){
+            if (productSupplier != null) {
                 saleOrderItem.setProductSupplierId(productSupplier.getSupplierId());
                 saleOrderItem.setProductSaleType(productSupplier.getProductSaleType());
             }
-            
+
+
             saleOrderItem.setNeedAssemble(Boolean.FALSE);
             saleOrderItem.setIsItemLeaf(Boolean.FALSE);
 
             saleOrderItem.setCreateTime(DateUtil.currentDate());
             saleOrderItem.setUpdateTime(DateUtil.currentDate());
             saleOrderItem.setIsDeleted(Boolean.FALSE);
-            
+			
             saleOrderItems.add(saleOrderItem);
         }
 
@@ -269,7 +287,7 @@ public class OrderServiceImpl implements OrderService {
         return productSupplierMapper.selectByExample(productSupplierExample);
     }
 
-    
+
     /**
      * 根据产品id查询相关供应商信息
      * 
@@ -277,10 +295,11 @@ public class OrderServiceImpl implements OrderService {
      * @param integer
      */
     private ProductSupplier getSupplierByProductId(List<ProductSupplier> productSuppliers, Integer productId) {
-        if(CollectionUtil.isEmpty(productSuppliers)){
+
+        if (CollectionUtil.isEmpty(productSuppliers)) {
             return null;
         }
-        
+
         for (ProductSupplier productSupplier : productSuppliers) {
             if (productId.intValue() == productSupplier.getProductId().intValue()) {
                 return productSupplier;
@@ -335,8 +354,11 @@ public class OrderServiceImpl implements OrderService {
 
         long totalPrice = 0L;
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
-            long productPrice = NumberUtil.convertToFen(shoppingCart.getSellPrice());
-            totalPrice += productPrice * shoppingCart.getProductQty();
+            //计算产品总价 产品单价乘以数量
+            long productTotalPrice = calculateProductTotalPrice(shoppingCart.getSellPrice(), shoppingCart
+                .getProductQty());
+
+            totalPrice += productTotalPrice;
         }
 
         //设置订单产品总价
@@ -353,6 +375,17 @@ public class OrderServiceImpl implements OrderService {
         totalPrice += deliveryfee;
 
         return NumberUtil.convertToYuan(totalPrice);
+    }
+
+    /**
+     * 计算产品总价 产品数量乘以单价
+     * 
+     * @param sellPrice
+     * @param productQty
+     * @return
+     */
+    private long calculateProductTotalPrice(BigDecimal sellPrice, Byte productQty) {
+        return NumberUtil.convertToFen(sellPrice) * productQty;
     }
 
     /**

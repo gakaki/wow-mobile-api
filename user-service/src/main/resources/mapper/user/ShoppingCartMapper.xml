@@ -310,7 +310,7 @@
 		</if>
 	</select>
 
-	<update id="updateByPrimaryKeys"   parameterType="com.wow.user.model.ShoppingCart">
+	<update id="updateByPrimaryKeys"   parameterType="com.wow.user.vo.ShoppingCartQueryVo">
 			update shopping_cart set  is_deleted = #{isDeleted}, update_time= #{updateTime}
 			     where id in
 			   <foreach collection="shoppingCartIds"   item="item"  open="(" close=")"  separator="," >

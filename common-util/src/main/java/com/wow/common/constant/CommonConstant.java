@@ -19,6 +19,9 @@ public class CommonConstant {
 
     //定义数值为0.00的BigDecimal
     public static final BigDecimal ZEROB_IGDECIMAL = new BigDecimal("0.00");
+    
+    //除数常量 100
+    public static final BigDecimal HUNDRED_IGDECIMAL = new BigDecimal("100");
 
     //是
     public static final Byte YES = 1;
