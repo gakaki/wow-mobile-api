@@ -1,15 +1,12 @@
 package com.wow.common.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
+import com.wow.common.constant.ErrorCodeConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * 错误码属性文件操作工具类
@@ -35,6 +32,16 @@ public class ErrorCodeUtil {
         PROPSPATHS.add("errorcode_page.properties");
         PROPSPATHS.add("errorcode_price.properties");
         PROPSPATHS.add("errorcode_stock.properties");
+    }
+
+    /**
+     *
+     * 判断业务调用方法是否成功
+     * @param errorCode
+     * @return
+     */
+    public boolean isSuccessResponse(String errorCode) {
+        return ErrorCodeConstant.SUCCESS.equals(errorCode);
     }
 
     /**
