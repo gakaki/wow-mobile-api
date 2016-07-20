@@ -304,7 +304,17 @@ public class StockServiceImpl implements StockService {
         List<FreezeStockVo> list = new ArrayList<FreezeStockVo>();
         for (ProductQtyVo productQtyVo : productQtyVoList) {
             FreezeStockResponse freezeStockResponse = freezeStock(productQtyVo.getProductId(), productQtyVo.getProductQty());
-            list.add(freezeStockResponse.getFreezeStockVo());
+            if (freezeStockResponse == null) {
+                ErrorResponseUtil.setErrorResponse(batchFreezeStockResponse,"50608");
+                return batchFreezeStockResponse;
+            }
+            if (ErrorCodeUtil.isSuccessResponse(freezeStockResponse.getResCode())) {
+                list.add(freezeStockResponse.getFreezeStockVo());
+            } else {
+                batchFreezeStockResponse.setResCode("50608");
+                batchFreezeStockResponse.setResMsg("库存不足 - productId:" + productQtyVo.getProductId());
+                return batchFreezeStockResponse;
+            }
         }
         batchFreezeStockResponse.setFreezeStockVoList(list);
         return batchFreezeStockResponse;
