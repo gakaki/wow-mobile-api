@@ -33,7 +33,7 @@ public interface DesignerService {
      * @param designerIds
      * @return
      */
-    List<Designer> getDesignerById(List<Integer> designerIds);
+    List<Designer> getDesignerByIds(List<Integer> designerIds);
 
     /**
      * 更新设计师
@@ -68,14 +68,6 @@ public interface DesignerService {
     List<Product> getProductsByDesigner(int designerId);
 
     /**
-     * 根据设计师名查询设计师设计的产品列表
-     *
-     * @param designerName
-     * @return
-     */
-    List<Product> getProductsByDesigner(String designerName);
-
-    /**
      * 设置产品设计师
      *
      * @param productDesigner
@@ -94,15 +86,23 @@ public interface DesignerService {
     /**
      * 查询产品的所有设计师
      *
-     * @param product
+     * @param productId
      * @return
      */
-    List<Designer> getDesignersByProduct(Product product);
+    List<Designer> getDesignersByProduct(int productId);
 
     /**
      * 查询产品的主设计师
-     * @param product
+     * @param productId
      * @return
      */
-    Designer getPrimaryDesignerByProduct(Product product);
+    Designer getPrimaryDesignerByProduct(int productId);
+
+    /**
+     * 查看品牌设计师列表
+     *
+     * @param brandId
+     * @return
+     */
+    List<Designer> getDesignersByBrand(int brandId) throws Exception;
 }

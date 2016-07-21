@@ -10,6 +10,8 @@ import java.util.Date;
  */
 public class RegisterRequest extends ApiRequest {
 
+    private static final long serialVersionUID = 1L;
+
     @NotNull
     private String captcha;
     @NotNull

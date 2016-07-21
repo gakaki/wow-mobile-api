@@ -8,7 +8,6 @@ import com.wow.common.request.ApiRequest;
  */
 public class ShippingInfoRequest extends ApiRequest {
 
-    /**  */
     private static final long serialVersionUID = 1L;
     
     //收货人地址id 仅在修改删除时传递

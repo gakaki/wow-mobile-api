@@ -1,5 +1,8 @@
 package com.wow.product.vo.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.wow.common.response.CommonResponse;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -8,7 +11,8 @@ import java.util.Map;
 /**
  * Created by fangying@wowdsgn on 2016/7/14.
  */
-public class ProductResponse implements Serializable {
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+public class ProductResponse extends CommonResponse {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,9 +54,10 @@ public class ProductResponse implements Serializable {
     private String detailDescription;
     //主图轮播
     private List<String> primaryImgs;
-    //细节描述
-    Map<String,String> details;
-
+    //细节图
+    private String firstNonPrimaryImgUrl;
+    //细节图描述
+    private String firstNonPrimaryImgDesc;
 
     public String getDetailDescription() {
         return detailDescription;
@@ -62,12 +67,20 @@ public class ProductResponse implements Serializable {
         this.detailDescription = detailDescription;
     }
 
-    public Map<String, String> getDetails() {
-        return details;
+    public String getFirstNonPrimaryImgUrl() {
+        return firstNonPrimaryImgUrl;
     }
 
-    public void setDetails(Map<String, String> details) {
-        this.details = details;
+    public void setFirstNonPrimaryImgUrl(String firstNonPrimaryImgUrl) {
+        this.firstNonPrimaryImgUrl = firstNonPrimaryImgUrl;
+    }
+
+    public String getFirstNonPrimaryImgDesc() {
+        return firstNonPrimaryImgDesc;
+    }
+
+    public void setFirstNonPrimaryImgDesc(String firstNonPrimaryImgDesc) {
+        this.firstNonPrimaryImgDesc = firstNonPrimaryImgDesc;
     }
 
     public String getProductName() {

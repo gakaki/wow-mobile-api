@@ -9,6 +9,7 @@ import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductPriceResponse;
 import com.wow.product.mapper.*;
 import com.wow.product.model.*;
 import com.wow.product.service.BrandService;
@@ -318,6 +319,8 @@ public class ProductServiceImpl implements ProductService {
         ProductResponse productResponse = new ProductResponse();
         Product product = getProductById(productId);
         if (product != null) {
+
+            //产品基本信息
             productResponse.setProductName(product.getProductName());
             productResponse.setTips(product.getTips());
             productResponse.setDetailDescription(product.getDetailDescription());
@@ -330,33 +333,53 @@ public class ProductServiceImpl implements ProductService {
             productResponse.setNeedAssemble(product.getNeedAssemble());
             productResponse.setStyle(product.getStyle());
             productResponse.setSellingPoint(product.getSellingPoint());
+
+            //品牌
             Brand brand = brandService.getBrandById(product.getBrandId());
             if (brand != null) {
                 productResponse.setBrandCname(brand.getBrandCname());
                 productResponse.setBrandLogoImg(brand.getBrandLogoImg());
             }
-            Designer designer = designerService.getPrimaryDesignerByProduct(product);
+
+            //主设计师
+            Designer designer = designerService.getPrimaryDesignerByProduct(productId);
             if (designer != null) {
                 productResponse.setDesignerName(designer.getDesignerName());
                 productResponse.setDesignerPhoto(designer.getDesignerPhoto());
             }
 
+            //产品图片(要求最多5张主图和一张细节图)
             List<ProductImage> productImages = getProductImages(productId);
             if (CollectionUtil.isNotEmpty(productImages)) {
-                List<String> primaryImglist = new ArrayList<>();
-                Map<String, String> map = new HashMap<>();
+                List<String> primaryImgUrlList = new ArrayList<>();
+
+                int primaryImgCnt = 0;
+                int nonPrimaryImgCnt = 0;
+
                 for (ProductImage productImage : productImages) {
-                    if (productImage.getIsPrimary() && primaryImglist.size() < productPrimaryImgCountLimit)
-                        primaryImglist.add(productImage.getImgUrl());
-                    if (!productImage.getIsPrimary())
-                        map.put(productImage.getImgUrl(), productImage.getImgDesc());
+                    if (primaryImgCnt == productPrimaryImgCountLimit && nonPrimaryImgCnt == 1) {
+                        break;
+                    }
+                    if (productImage.getIsPrimary() && primaryImgCnt < productPrimaryImgCountLimit) {
+                        primaryImgUrlList.add(productImage.getImgUrl());
+                        primaryImgCnt++;
+                    }
+                    if (!productImage.getIsPrimary() && nonPrimaryImgCnt < 1) {
+                        productResponse.setFirstNonPrimaryImgUrl(productImage.getImgUrl());
+                        productResponse.setFirstNonPrimaryImgDesc(productImage.getImgDesc());
+                        nonPrimaryImgCnt++;
+                    }
                 }
-                productResponse.setPrimaryImgs(primaryImglist);
+                productResponse.setPrimaryImgs(primaryImgUrlList);
             }
-            ProductPrice productPrice = priceService.queryProductPrice(productId).getProductPrice();
-            if (productPrice != null) {
-                productResponse.setSellPrice(productPrice.getSellPrice());
-                productResponse.setOriginalPrice(productPrice.getOriginalPrice());
+
+            //产品价格(售价和原价)
+            ProductPriceResponse productPriceResponse = priceService.queryProductPrice(productId);
+            if (productPriceResponse != null && productPriceResponse.getProductPrice() != null) {
+                productResponse.setSellPrice(productPriceResponse.getProductPrice().getSellPrice());
+                productResponse.setOriginalPrice(productPriceResponse.getProductPrice().getOriginalPrice());
+            } else {
+                //TODO 价格异常
             }
         }
         return productResponse;

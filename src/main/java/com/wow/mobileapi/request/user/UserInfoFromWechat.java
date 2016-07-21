@@ -7,6 +7,7 @@ import java.io.Serializable;
  * Created by zhengzhiqing on 16/7/17.
  */
 public class UserInfoFromWechat implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @NotNull

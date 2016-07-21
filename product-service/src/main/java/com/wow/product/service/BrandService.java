@@ -1,10 +1,8 @@
 package com.wow.product.service;
 
-import java.util.List;
-
 import com.wow.product.model.Brand;
-import com.wow.product.model.Designer;
-import com.wow.product.model.Product;
+
+import java.util.List;
 
 /**
  * 品牌服务
@@ -12,7 +10,6 @@ import com.wow.product.model.Product;
  * Created by zhengzhiqing on 16/6/16.
  */
 public interface BrandService {
-    //Table: brand
 
     /**
      * 创建品牌
@@ -30,9 +27,20 @@ public interface BrandService {
      */
     int updateBrand(Brand brand);
 
+    /**
+     * 查询品牌
+     * @param brandId
+     * @return
+     */
     Brand getBrandById(int brandId);
 
+    /**
+     * 批量查询品牌
+     * @param brandIds
+     * @return
+     */
     List<Brand> getBrandById(List<Integer> brandIds);
+
     /**
      * 根据首字母查询品牌
      *
@@ -47,21 +55,5 @@ public interface BrandService {
      * @return
      */
     List<Brand> getAllBrands();
-
-    /**
-     * 查看品牌产品列表
-     *
-     * @param brand
-     * @return
-     */
-    List<Product> getProductsByBrand(Brand brand) ;
-
-    /**
-     * 查看品牌设计师列表
-     *
-     * @param brand
-     * @return
-     */
-    List<Designer> getDesignersByBrand(Brand brand) throws Exception;
 
 }

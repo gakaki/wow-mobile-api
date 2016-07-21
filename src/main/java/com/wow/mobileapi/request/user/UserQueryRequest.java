@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
  */
 public class UserQueryRequest extends ApiRequest {
 
+    private static final long serialVersionUID = 1L;
+
     @NotNull
     private int endUserId;
 

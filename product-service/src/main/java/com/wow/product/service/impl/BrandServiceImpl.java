@@ -3,20 +3,13 @@ package com.wow.product.service.impl;
 import com.wow.product.mapper.BrandMapper;
 import com.wow.product.model.Brand;
 import com.wow.product.model.BrandExample;
-import com.wow.product.model.Designer;
-import com.wow.product.model.Product;
 import com.wow.product.service.BrandService;
-import com.wow.product.service.DesignerService;
-import com.wow.product.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-
-import java.util.ArrayList;
 
 import java.util.List;
 
@@ -31,11 +24,6 @@ public class BrandServiceImpl implements BrandService {
 
     @Autowired
     private BrandMapper brandMapper;
-     @Autowired
-     private ProductService productService;
-    @Autowired
-    private DesignerService designerService;
-    //Table: brand
 
     /**
      * 创建品牌
@@ -57,6 +45,11 @@ public class BrandServiceImpl implements BrandService {
         return brandMapper.updateByPrimaryKeySelective(brand);
     }
 
+    /**
+     *
+     * @param brandId
+     * @return
+     */
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Brand getBrandById(int brandId) {
@@ -91,37 +84,6 @@ public class BrandServiceImpl implements BrandService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Brand> getAllBrands() {
         return brandMapper.selectAll();
-    }
-
-    /**
-     * 查看品牌产品列表
-     *
-     * @param brand
-     * @return
-     */
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<Product> getProductsByBrand(Brand brand) {
-        if(brand!=null)
-        return productService.getProductByBrandId(brand.getId());
-        return null;
-    }
-
-    /**
-     * 查看品牌设计师列表
-     *
-     * @param brand
-     * @return
-     */
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<Designer> getDesignersByBrand(Brand brand) throws Exception {
-        List<Product> products=getProductsByBrand(brand);
-        List<Designer> designers=new ArrayList<>();
-        if(!products.isEmpty())
-            for(Product product:products)
-            {
-                designers.addAll(designerService.getDesignersByProduct(product));
-            }
-        return  designers;
     }
 
 }

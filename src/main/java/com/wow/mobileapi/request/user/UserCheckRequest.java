@@ -7,6 +7,8 @@ import com.wow.common.request.ApiRequest;
  */
 public class UserCheckRequest extends ApiRequest {
 
+    private static final long serialVersionUID = 1L;
+
     private String mobile;
     private String nickName;
     private String userName;

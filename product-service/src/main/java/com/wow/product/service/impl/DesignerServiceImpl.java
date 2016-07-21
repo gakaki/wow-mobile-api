@@ -1,8 +1,12 @@
 package com.wow.product.service.impl;
 
+import com.wow.common.util.CollectionUtil;
 import com.wow.product.mapper.DesignerMapper;
 import com.wow.product.mapper.ProductDesignerMapper;
-import com.wow.product.model.*;
+import com.wow.product.model.Designer;
+import com.wow.product.model.DesignerExample;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductDesigner;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,7 @@ import java.util.List;
 @Service
 @Transactional(value = "productTransactionManager")
 public class DesignerServiceImpl implements DesignerService {
+
     @Autowired
     private DesignerMapper designerMapper;
     @Autowired
@@ -28,7 +33,6 @@ public class DesignerServiceImpl implements DesignerService {
     @Autowired
     private ProductService productService;
 
-    private  ProductDesignerExample productDesignerExample;
     @Override
     public int createDesigner(Designer designer) {
         return designerMapper.insertSelective(designer);
@@ -53,18 +57,14 @@ public class DesignerServiceImpl implements DesignerService {
         return designerMapper.selectByExample(designerExample);
     }
 
-    public List<Designer> getDesignerById(List<Integer> designerIds)
-    {
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public List<Designer> getDesignerByIds(List<Integer> designerIds) {
         DesignerExample designerExample=new DesignerExample();
         designerExample.or().andIsDeletedEqualTo(false).andIdIn(designerIds);
         return designerMapper.selectByExample(designerExample);
     }
 
-    private List<Designer> getDesignersByName(String designerName) {
-        DesignerExample designerExample=new DesignerExample();
-        designerExample.or().andIsDeletedEqualTo(false).andDesignerNameEqualTo(designerName);
-        return designerMapper.selectByExample(designerExample);
-    }
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Designer> getDesignersByStyle(String style) {
@@ -76,23 +76,14 @@ public class DesignerServiceImpl implements DesignerService {
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Product> getProductsByDesigner(int designerId) {
-        productDesignerExample=new ProductDesignerExample();
-        productDesignerExample.or().andDesignerIdEqualTo(designerId).andIsDeletedEqualTo(false);
-        List<ProductDesigner> productDesigners=productDesignerMapper.selectByExample(productDesignerExample);
-        return getProducts(productDesigners);
-    }
-
-    @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<Product> getProductsByDesigner(String designerName) {
-        Designer designer= getDesignersByName(designerName).stream().findAny().get();
-        if(designer==null)
-            return  null;
-        productDesignerExample=new ProductDesignerExample();
-        productDesignerExample.or().andIsDeletedEqualTo(false).andDesignerIdEqualTo(designer.getId());
-        List<ProductDesigner> productDesigners=productDesignerMapper.selectByExample(productDesignerExample);
-        return getProducts(productDesigners);
-       // return null;
+//        ProductDesignerExample productDesignerExample=new ProductDesignerExample();
+//        ProductDesignerExample.Criteria criteria = productDesignerExample.createCriteria();
+//        criteria.andIsDeletedEqualTo(false);
+//        criteria.andDesignerIdEqualTo(designerId);
+//        List<ProductDesigner> productDesigners=productDesignerMapper.selectByExample(productDesignerExample);
+//        return getProducts(productDesigners);
+        //TODO
+        return null;
     }
 
     private List<Product> getProducts(List<ProductDesigner> productDesigners) {
@@ -113,39 +104,49 @@ public class DesignerServiceImpl implements DesignerService {
 
     @Override
     public int createProductDesigners(List<ProductDesigner> productDesigners) {
-        if(!productDesigners.isEmpty())
-            productDesigners.forEach(o->productDesignerMapper.insertSelective(o));
-        return 0;
+        if (CollectionUtil.isNotEmpty(productDesigners)) {
+            for (ProductDesigner productDesigner : productDesigners) {
+                productDesignerMapper.insertSelective(productDesigner);
+            }
+        }
+        return productDesigners.size();
     }
 
+    /**
+     * 查询产品的设计师(可以多个)
+     * @param productId
+     * @return
+     */
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<Designer> getDesignersByProduct(Product product) {
-        if(product!=null) {
-            productDesignerExample=new ProductDesignerExample();
-            productDesignerExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo( product.getId());
-          List<ProductDesigner> productDesigners= productDesignerMapper.selectByExample(productDesignerExample);
-            if(!productDesigners.isEmpty())
-              return  getDesigners(productDesigners);
-        }
+    public List<Designer> getDesignersByProduct(int productId) {
+        //TODO
         return null;
     }
 
-    private  List<Designer> getDesigners(List<ProductDesigner> productDesigners)
-    {
-        if(!productDesigners.isEmpty()) {
-            HashSet<Integer> set = new HashSet<>();
-            for(ProductDesigner productDesigner:productDesigners)
-            {
-                set.add(productDesigner.getDesignerId());
-            }
-            return  getDesignerById(new ArrayList<Integer>(set));
-        }
-        return  null;
-    }
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public Designer getPrimaryDesignerByProduct(Product product) {
-              return getDesignersByProduct(product).get(0);
+    public Designer getPrimaryDesignerByProduct(int productId) {
+        //TODO
+        return null;
+    }
+
+    /**
+     * 查看品牌设计师列表
+     *
+     * @param brandId
+     * @return
+     */
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public List<Designer> getDesignersByBrand(int brandId) throws Exception {
+//        List<Product> products=productService.getProductsByBrand(brandId);
+//        List<Designer> designers=new ArrayList<>();
+//        if(!products.isEmpty())
+//            for(Product product:products)
+//            {
+//                designers.addAll(designerService.getDesignersByProduct(product));
+//            }
+//        return  designers;
+        return null;
     }
 }

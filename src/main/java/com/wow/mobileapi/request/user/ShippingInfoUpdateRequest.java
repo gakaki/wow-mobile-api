@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
  * Created by zhengzhiqing on 16/7/12.
  */
 public class ShippingInfoUpdateRequest extends ApiRequest {
+
+    private static final long serialVersionUID = 1L;
+
     @NotNull
     private Integer id;
 
