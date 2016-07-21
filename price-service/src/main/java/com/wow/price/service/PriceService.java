@@ -39,7 +39,7 @@ public interface PriceService {
      * @param productId
      * @return
      */
-    ProductPriceResponse queryProductPrice(int productId);
+    ProductPriceResponse getProductPrice(int productId);
 
     /**
      * 批量查询产品价格
@@ -47,7 +47,7 @@ public interface PriceService {
      * @param productIds
      * @return
      */
-    ProductListPriceResponse queryProductPriceList(List<Integer> productIds);
+    ProductListPriceResponse getProductPriceList(List<Integer> productIds);
 
     /**
      * 添加价格变更日志
@@ -63,6 +63,6 @@ public interface PriceService {
      * @param productId
      * @return
      */
-    List<ProductPriceChangeLog> queryPriceChangeLog(int productId);
+    List<ProductPriceChangeLog> getPriceChangeLog(int productId);
 
 }

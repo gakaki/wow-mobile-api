@@ -1,10 +1,8 @@
 package com.wow.product.service;
 
-import java.util.List;
-
 import com.wow.product.model.ProductSerial;
-import com.wow.product.vo.response.ProductResponse;
-import com.wow.product.vo.response.SpecResponse;
+
+import java.util.List;
 
 /**
  * 系列产品服务
@@ -57,8 +55,4 @@ public interface ProductSerialService {
      * @return
      */
     ProductSerial getPrimarySubProductOfProductSerial(int productId);
-
-
-    List<SpecResponse> getSpecByProductId(Integer productId) throws  Exception;
-
 }

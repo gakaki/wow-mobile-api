@@ -69,7 +69,7 @@ public class PriceServiceImpl implements PriceService {
      * @param productId
      * @return
      */
-    public ProductPriceResponse queryProductPrice(int productId) {
+    public ProductPriceResponse getProductPrice(int productId) {
         ProductPriceResponse productPriceResponse = new ProductPriceResponse();
         ProductPrice productPrice = productPriceMapper.selectByProductId(productId);
         if (productPrice == null) {
@@ -89,7 +89,7 @@ public class PriceServiceImpl implements PriceService {
      * @param productIds
      * @return
      */
-    public ProductListPriceResponse queryProductPriceList(List<Integer> productIds) {
+    public ProductListPriceResponse getProductPriceList(List<Integer> productIds) {
         ProductListPriceResponse productListPriceResponse = new ProductListPriceResponse();
         List<ProductPrice> productPriceList = productPriceMapper.selectByProductIds(productIds);
         if (CollectionUtil.isEmpty(productPriceList)) {
@@ -128,7 +128,7 @@ public class PriceServiceImpl implements PriceService {
      * @param productId
      * @return
      */
-    public List<ProductPriceChangeLog> queryPriceChangeLog(int productId) {
+    public List<ProductPriceChangeLog> getPriceChangeLog(int productId) {
         return productPriceChangeLogMapper.selectPriceChangeLogsByProductId(productId);
     }
 

@@ -1,6 +1,5 @@
 package com.wow.product.service.impl;
 
-import com.wow.price.service.PriceService;
 import com.wow.product.mapper.ProductSerialMapper;
 import com.wow.product.model.ProductSerial;
 import com.wow.product.model.ProductSerialExample;
@@ -26,11 +25,9 @@ public class ProductSerialServiceImpl implements ProductSerialService {
 
     @Autowired
     ProductSerialMapper productSerialMapper;
-    @Autowired
-    ProductService productService;
 
     @Autowired
-    private PriceService priceService;
+    ProductService productService;
 
     @Autowired
     private BrandService brandService;
@@ -136,10 +133,5 @@ public class ProductSerialServiceImpl implements ProductSerialService {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public ProductSerial getPrimarySubProductOfProductSerial(int productId) {
         return getProductSerials(productId).stream().filter(o -> o.getIsPrimary() == true).findAny().get();
-    }
-
-    @Override
-    public List<SpecResponse> getSpecByProductId(Integer productId) throws Exception {
-        return null;
     }
 }

@@ -7,9 +7,6 @@ import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.util.CollectionUtil;
-import com.wow.price.model.ProductPrice;
-import com.wow.price.service.PriceService;
-import com.wow.price.vo.ProductPriceResponse;
 import com.wow.product.mapper.*;
 import com.wow.product.model.*;
 import com.wow.product.service.BrandService;
@@ -21,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 
 /**
@@ -52,9 +51,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     AttributeService attributeService;
-
-    @Autowired
-    private PriceService priceService;
 
     @Autowired
     private BrandService brandService;
@@ -371,15 +367,6 @@ public class ProductServiceImpl implements ProductService {
                     }
                 }
                 productResponse.setPrimaryImgs(primaryImgUrlList);
-            }
-
-            //产品价格(售价和原价)
-            ProductPriceResponse productPriceResponse = priceService.queryProductPrice(productId);
-            if (productPriceResponse != null && productPriceResponse.getProductPrice() != null) {
-                productResponse.setSellPrice(productPriceResponse.getProductPrice().getSellPrice());
-                productResponse.setOriginalPrice(productPriceResponse.getProductPrice().getOriginalPrice());
-            } else {
-                //TODO 价格异常
             }
         }
         return productResponse;
