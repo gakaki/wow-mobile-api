@@ -217,6 +217,11 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        if(StringUtil.isNotEmpty(endUser.getNickName())) {
+            String encodedNickName = encodeStr(endUser.getNickName());
+            endUser.setNickName(encodedNickName);
+        }
+
         try {
             CommonResponse commonResponse = userService.updateUser(endUser);
             //如果处理失败 则返回错误信息
@@ -543,12 +548,7 @@ public class UserController extends BaseController {
         //注册之后绑定微信(要先检查该微信是否已绑定已有用户)
         endUserWechat.setMobile(endUser.getMobile());
         endUserWechat.setEndUserId(endUserId);
-        String encodedNickName = "";
-        try {
-            encodedNickName = URLEncoder.encode(endUserWechat.getWechatNickName(), "utf-8");
-        } catch (Exception e) {
-            logger.info("转换微信昵称失败");
-        }
+        String encodedNickName = encodeStr(endUserWechat.getWechatNickName());
         endUserWechat.setWechatNickName(encodedNickName);
         //已有用户绑定微信
         try {
@@ -732,5 +732,20 @@ public class UserController extends BaseController {
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
+    }
+
+    /**
+     * 转换微信昵称
+     * @param nickName
+     * @return
+     */
+    private String encodeStr(String nickName) {
+        String encodedNickName = "";
+        try {
+            encodedNickName = URLEncoder.encode(nickName, "utf-8");
+        } catch (Exception e) {
+            logger.info("URLEncoder失败");
+        }
+        return encodedNickName;
     }
 }
