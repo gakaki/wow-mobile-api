@@ -1,10 +1,10 @@
 package com.wow.page.vo.response;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
-import com.wow.page.model.PageProductConfig;
-
-import java.util.List;
+import com.wow.page.vo.PageProductVo;
 
 /**
  * Created by zhengzhiqing on 16/7/13.
@@ -14,13 +14,13 @@ public class PageProductResponse extends CommonResponse {
 
     private static final long serialVersionUID = 1L;
 
-    private List<PageProductConfig> pageProductConfigList;
+    private List<PageProductVo> pageProductVoList;
 
-    public List<PageProductConfig> getPageProductConfigList() {
-        return pageProductConfigList;
+    public List<PageProductVo> getPageProductVoList() {
+        return pageProductVoList;
     }
 
-    public void setPageProductConfigList(List<PageProductConfig> pageProductConfigList) {
-        this.pageProductConfigList = pageProductConfigList;
+    public void setPageProductVoList(List<PageProductVo> pageProductVoList) {
+        this.pageProductVoList = pageProductVoList;
     }
 }

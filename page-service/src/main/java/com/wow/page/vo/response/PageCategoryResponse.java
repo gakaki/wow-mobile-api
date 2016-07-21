@@ -1,10 +1,10 @@
 package com.wow.page.vo.response;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
-import com.wow.page.model.PageCategoryConfig;
-
-import java.util.List;
+import com.wow.page.vo.PageCategoryVo;
 
 /**
  * Created by zhengzhiqing on 16/7/13.
@@ -14,13 +14,13 @@ public class PageCategoryResponse extends CommonResponse {
 
     private static final long serialVersionUID = 1L;
 
-    private List<PageCategoryConfig> pageCategoryConfigList;
+    private List<PageCategoryVo> pageCategoryVoList;
 
-    public List<PageCategoryConfig> getPageCategoryConfigList() {
-        return pageCategoryConfigList;
+    public List<PageCategoryVo> getPageCategoryVoList() {
+        return pageCategoryVoList;
     }
 
-    public void setPageCategoryConfigList(List<PageCategoryConfig> pageCategoryConfigList) {
-        this.pageCategoryConfigList = pageCategoryConfigList;
+    public void setPageCategoryVoList(List<PageCategoryVo> pageCategoryVoList) {
+        this.pageCategoryVoList = pageCategoryVoList;
     }
 }

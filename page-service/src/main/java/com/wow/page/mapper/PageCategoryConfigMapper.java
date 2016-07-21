@@ -2,6 +2,8 @@ package com.wow.page.mapper;
 
 import com.wow.page.model.PageCategoryConfig;
 import com.wow.page.model.PageCategoryConfigExample;
+import com.wow.page.vo.PageCategoryVo;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +29,6 @@ public interface PageCategoryConfigMapper {
     int updateByPrimaryKeySelective(PageCategoryConfig record);
 
     int updateByPrimaryKey(PageCategoryConfig record);
+    
+    List<PageCategoryVo> selectByParentCategoryId(@Param("pageType") int pageType,@Param("categoryPid") Integer categoryPid);
 }

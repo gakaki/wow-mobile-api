@@ -6,6 +6,9 @@ import com.wow.common.util.ErrorCodeUtil;
 import com.wow.mobileapi.constant.BizConstant;
 import com.wow.page.service.PageConfigService;
 import com.wow.page.vo.response.PageBannerResponse;
+import com.wow.page.vo.response.PageCategoryResponse;
+import com.wow.page.vo.response.PageProductResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,46 @@ public class PageController extends BaseController {
             }
         } catch (Exception e) {
             logger.error("查找Banner错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+    
+    @RequestMapping(value = "/v1/page/findproduct", method = RequestMethod.GET)
+    public ApiResponse getProductOnFindPage(ApiRequest apiRequest) {
+        logger.info("start to get product_find on page");
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+        	PageProductResponse pageProductsResponse = pageConfigService.getProductsOnPage(BizConstant.PAGE_TYPE_FIND);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(pageProductsResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, pageProductsResponse);
+            } else {
+                apiResponse.setData(pageProductsResponse.getPageProductVoList());
+            }
+        } catch (Exception e) {
+            logger.error("查找product_find错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+    
+    @RequestMapping(value = "/v1/page/category", method = RequestMethod.GET)
+    public ApiResponse getCategoryOnFindPage(ApiRequest apiRequest) {
+        logger.info("start to get category_find on page");
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+        	PageCategoryResponse pageCategoryResponse = pageConfigService.getCategoriesOnPage(BizConstant.PAGE_TYPE_FIND,BizConstant.PAGE_CATEGORY_LEVEL);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(pageCategoryResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, pageCategoryResponse);
+            } else {
+                apiResponse.setData(pageCategoryResponse.getPageCategoryVoList());
+            }
+        } catch (Exception e) {
+            logger.error("查找category_find错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;

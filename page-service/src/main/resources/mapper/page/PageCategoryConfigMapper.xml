@@ -12,6 +12,11 @@
     <result column="valid_to" property="validTo" jdbcType="TIMESTAMP" />
     <result column="is_enabled" property="isEnabled" jdbcType="BIT" />
   </resultMap>
+  <resultMap id="CategoryResultMap" type="com.wow.page.vo.PageCategoryVo" >
+    <id column="categoryId" property="categoryId" jdbcType="INTEGER" />
+    <result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
+    <result column="categoryBgImg" property="categoryBgImg" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -271,4 +276,11 @@
       is_enabled = #{isEnabled,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectByParentCategoryId" resultMap="CategoryResultMap" parameterType="map">
+  	  select pcc.category_id as categoryId,pcc.category_bgimg as categoryBgImg,c.category_name as categoryName
+  	   from page_category_config pcc 
+  	   inner join category c on c.id=pcc.category_id
+  	  where c.parent_category_id = #{categoryPid,jdbcType=INTEGER} and ppc.page_type = #{pageType,jdbcType=TINYINT}
+  </select>
 </mapper>

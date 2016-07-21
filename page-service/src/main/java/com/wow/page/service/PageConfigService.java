@@ -1,8 +1,10 @@
 package com.wow.page.service;
 
-import com.wow.page.vo.response.*;
-
-import java.util.List;
+import com.wow.page.vo.response.PageBannerResponse;
+import com.wow.page.vo.response.PageCategoryResponse;
+import com.wow.page.vo.response.PageProductResponse;
+import com.wow.page.vo.response.PageSceneResponse;
+import com.wow.page.vo.response.PageTopicResponse;
 
 
 /**
@@ -40,8 +42,9 @@ public interface PageConfigService {
     /**
      * 根据页面类型查询页面上的分类配置
      * @param pageType
+     * @param level
      * @return
      */
-    PageCategoryResponse getCategoriesOnPage(int pageType);
+    PageCategoryResponse getCategoriesOnPage(int pageType,int level);
 
 }
