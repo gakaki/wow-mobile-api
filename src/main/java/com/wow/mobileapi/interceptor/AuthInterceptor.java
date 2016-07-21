@@ -2,7 +2,9 @@ package com.wow.mobileapi.interceptor;
 
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
 import com.wow.mobileapi.constant.ApiConstant;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.user.service.SessionService;
@@ -33,16 +35,27 @@ public class AuthInterceptor implements HandlerInterceptor {
         logger.info("AuthInterceptor preHandle:" + request);
         
         ApiResponse apiResponse = new ApiResponse();
-        String token = getSessionToken(request, response);
-        byte loginChannel = getLoginChannel(request, response);
+
+        // 从请求体中获取token
+        String token = request.getParameter(ApiConstant.REQUEST_PARAMETER_TOKEN);
+        String channel = request.getParameter(ApiConstant.REQUEST_PARAMETER_CHANNEL);
+
+        if (StringUtil.isEmpty(token) || StringUtil.isEmpty(channel)) {
+            apiResponse.setResCode(ErrorCodeConstant.INVALID_PARAMETER);
+            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("请传入sessionToken和channel"));
+            response.setContentType("application/json");
+            response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
+            return false;
+        }
+
+        byte loginChannel = Byte.valueOf(channel);
 
         try {
             //check whether token is valid, by search it from redis or mysql
             TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(token,loginChannel);
             if (tokenValidateResponse==null || !tokenValidateResponse.isValid()) {
                 logger.warn("session token is invalid:" + token);
-                apiResponse.setResCode("10000");
-                apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("10000"));
+                ErrorResponseUtil.setErrorResponse(apiResponse,ErrorCodeConstant.INVALID_TOKEN);
                 response.setContentType("application/json");
                 response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
                 return false;
@@ -50,42 +63,12 @@ public class AuthInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("查询Token发生错误---" + e);
-            apiResponse.setResCode(ErrorCodeConstant.INTERNAL_ERROR);
-            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INTERNAL_ERROR));
+            ErrorResponseUtil.setErrorResponse(apiResponse,ErrorCodeConstant.INTERNAL_ERROR);
             response.setContentType("application/json");
             response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
             return false;
         }
         return true;
-    }
-
-    /**
-     * 获取传入的会话Token - 可从header, cookie或者request中获取
-     * @param request
-     * @param response
-     * @return
-     */
-    private String getSessionToken(HttpServletRequest request, HttpServletResponse response) {
-
-        // 从请求体中获取token
-        String token = request.getParameter(ApiConstant.REQUEST_PARAMETER_TOKEN);
-
-        if (token==null) {
-            token = "";
-        }
-        logger.info("session token is:" + token);
-        return token;
-    }
-
-    /**
-     * 获取传入的login channel
-     * @param request
-     * @param response
-     * @return
-     */
-    private byte getLoginChannel(HttpServletRequest request, HttpServletResponse response) {
-        byte loginChannel = Byte.valueOf(request.getParameter(ApiConstant.REQUEST_PARAMETER_CHANNEL));
-        return loginChannel;
     }
 
     @Override
@@ -98,7 +81,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request,
                                 HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
-
     }
 
 }

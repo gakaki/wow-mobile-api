@@ -326,11 +326,11 @@ public class StockServiceImpl implements StockService {
                 return batchFreezeStockResponse;
             }
             if (ErrorCodeUtil.isFailedResponse(freezeStockResponse.getResCode())) {
-                list.add(freezeStockResponse.getFreezeStockVo());
-            } else {
                 batchFreezeStockResponse.setResCode("50608");
                 batchFreezeStockResponse.setResMsg("库存不足 - productId:" + productQtyVo.getProductId());
                 return batchFreezeStockResponse;
+            } else {
+                list.add(freezeStockResponse.getFreezeStockVo());
             }
         }
         batchFreezeStockResponse.setFreezeStockVoList(list);
