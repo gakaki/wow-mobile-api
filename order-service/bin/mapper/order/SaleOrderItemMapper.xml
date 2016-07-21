@@ -439,4 +439,40 @@
 			      #{item.isDeleted,jdbcType=BIT})
 		   </foreach>
   </insert>
+  
+   <!-- 根据订单id获取订单项目中产品规格图片 -->
+    <select id="selectSpecImgByOrderIds"  parameterType="List"  resultType="com.wow.order.vo.OrderItemImgVo" >
+         SELECT 
+			  o.sale_order_id saleOrderId,
+			  p.spec_img specImg
+			FROM
+			  sale_order_item o 
+			  INNER JOIN product p 
+			    ON o.product_id = p.id 
+			WHERE o.sale_order_id in
+		  <foreach collection="collection"   item="item"  open="(" close=")"  separator="," >
+                   #{item}
+         </foreach>
+  </select>
+  
+    <!-- 查询订单id查询产品明细 -->
+  <select id="selectByOrderId"   resultType="com.wow.order.vo.OrderItemVo"  parameterType="Integer" >
+	       SELECT 
+				  so.product_id productId,
+				  so.product_name productName,
+				  p.spec_img specImg,
+				  so.order_item_price sellPrice,
+				  so.order_item_qty productQty,
+				  so.order_item_amount sellTotalAmount,
+				  p.color color,
+				  p.spec spec
+			FROM
+			  sale_order_item so 
+			  INNER JOIN product p 
+			    ON so.product_id = p.id 
+			  INNER JOIN product_price pp 
+			    ON so.product_id = pp.product_id 
+			WHERE so.is_deleted = FALSE 
+			  AND so.sale_order_id =#{orderId}
+  </select>
 </mapper>

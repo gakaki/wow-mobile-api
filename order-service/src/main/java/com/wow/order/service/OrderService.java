@@ -2,11 +2,15 @@ package com.wow.order.service;
 
 import java.util.List;
 
+import com.wow.common.response.CommonResponse;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderLog;
+import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
+import com.wow.order.vo.response.OrderDetailResponse;
+import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
 
@@ -33,11 +37,33 @@ public interface OrderService {
     OrderResponse createOrder(OrderQuery query);
 
     /**
+     * 查询用户订单列表
+     * 
+     * @param query
+     * @return
+     */
+    OrderListResponse queryOrderList(OrderListQuery query);
+
+    /**
+     * 订单支付
+     *
+     * @param order 订单号
+     */
+    CommonResponse payOrder(String orderCode);
+
+    /**
+     * 订单支付回调通知 ping++服务端调用
+     *
+     * @param order 订单号
+     */
+    CommonResponse payOrderCallBack(String orderCode);
+
+    /**
      * 在发货之前取消订单
      *
      * @param order
      */
-    void cancelOrder(SaleOrder order);
+    CommonResponse cancelOrder(SaleOrder order);
 
     /**
      * @param orderId
@@ -45,11 +71,11 @@ public interface OrderService {
      */
     OrderSettleResponse queryOrderById(int orderId);
 
-    /**
+    /**根据订单号查询订单明细
      * @param orderCode
      * @return
      */
-    SaleOrder queryOrderByOrderCode(String orderCode);
+    OrderDetailResponse queryOrderByOrderCode(String orderCode);
 
     /**
      * @param endUserId

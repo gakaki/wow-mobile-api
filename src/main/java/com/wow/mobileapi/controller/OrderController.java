@@ -14,11 +14,16 @@ import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.request.order.OrderDetailRequest;
+import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
 import com.wow.mobileapi.request.order.OrderSettleRequest;
 import com.wow.order.service.OrderService;
+import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
+import com.wow.order.vo.response.OrderDetailResponse;
+import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
 
@@ -26,7 +31,7 @@ import com.wow.order.vo.response.OrderSettleResponse;
  * Created by zhengzhiqing on 16/7/2.
  */
 @RestController
-@RequestMapping(value = "/v1/orders")
+@RequestMapping(value = "/v1/order")
 public class OrderController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -40,7 +45,7 @@ public class OrderController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/settleOrder", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    @RequestMapping(value = "/settle", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
     public ApiResponse settleOrder(ApiRequest request) {
         OrderSettleRequest orderSettleRequest = JsonUtil.fromJSON(request.getParamJson(), OrderSettleRequest.class);
         ApiResponse apiResponse = new ApiResponse();
@@ -84,7 +89,7 @@ public class OrderController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/createOrder", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     public ApiResponse createOrder(ApiRequest request) {
         OrderRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderRequest.class);
         ApiResponse apiResponse = new ApiResponse();
@@ -115,8 +120,83 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderResponse);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("创建订单错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 获取用户订单列表
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/get", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    public ApiResponse selectOrderList(ApiRequest request) {
+        OrderListRequest orderListRequest = JsonUtil.fromJSON(request.getParamJson(), OrderListRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+        //判断json格式参数是否有误
+        if (orderListRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(orderListRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        OrderListResponse orderListResponse = null;
+        try {
+            OrderListQuery query = new OrderListQuery();
+            query.setEndUserId(35);
+
+            orderListResponse = orderService.queryOrderList(query);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(orderListResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, orderListResponse);
+            } else {
+                apiResponse.setData(orderListResponse.getOrderLists());
+            }
+        } catch (Exception e) {
+            logger.error("查询订单列表错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 获取用户订单明细
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getDetail", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    public ApiResponse getOrderDetail(ApiRequest request) {
+        OrderDetailRequest orderDetailRequest = JsonUtil.fromJSON(request.getParamJson(), OrderDetailRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+        //判断json格式参数是否有误
+        if (orderDetailRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        OrderDetailResponse orderDetailResponse = null;
+        try {
+            orderDetailResponse = orderService.queryOrderByOrderCode(orderDetailRequest.getOrderCode());
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(orderDetailResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, orderDetailResponse);
+            } else {
+                apiResponse.setData(orderDetailResponse);
+            }
+        } catch (Exception e) {
+            logger.error("查询订单明细错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
 

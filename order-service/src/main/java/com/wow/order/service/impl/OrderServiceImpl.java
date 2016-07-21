@@ -2,7 +2,9 @@ package com.wow.order.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wow.common.constant.CommonConstant;
 import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.enums.SaleOrderStatusEnum;
+import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
@@ -19,6 +22,7 @@ import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.IpConvertUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.common.util.RandomGenerator;
+import com.wow.common.util.StringUtil;
 import com.wow.order.mapper.SaleOrderItemMapper;
 import com.wow.order.mapper.SaleOrderItemWarehouseMapper;
 import com.wow.order.mapper.SaleOrderLogMapper;
@@ -29,9 +33,15 @@ import com.wow.order.model.SaleOrderItem;
 import com.wow.order.model.SaleOrderItemWarehouse;
 import com.wow.order.model.SaleOrderLog;
 import com.wow.order.service.OrderService;
+import com.wow.order.vo.OrderItemImgVo;
 import com.wow.order.vo.OrderItemVo;
+import com.wow.order.vo.OrderListQuery;
+import com.wow.order.vo.OrderListVo;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
+import com.wow.order.vo.OrderSettleVo;
+import com.wow.order.vo.response.OrderDetailResponse;
+import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
 import com.wow.product.mapper.ProductSupplierMapper;
@@ -542,8 +552,10 @@ public class OrderServiceImpl implements OrderService {
      * @param order
      */
     @Override
-    public void cancelOrder(SaleOrder order) {
+    public CommonResponse cancelOrder(SaleOrder order) {
+        CommonResponse commonResponse = new CommonResponse();
 
+        return commonResponse;
     }
 
     /**
@@ -561,13 +573,71 @@ public class OrderServiceImpl implements OrderService {
         return orderResponse;
     }
 
-    /**
+    /**根据订单号获取订单明细
      * @param orderCode
      * @return
      */
     @Override
-    public SaleOrder queryOrderByOrderCode(String orderCode) {
-        return null;
+    public OrderDetailResponse queryOrderByOrderCode(String orderCode) {
+        OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
+
+        //校验订单号是否为空
+        if (StringUtil.isEmpty(orderCode)) {
+            orderDetailResponse.setResCode("40358");
+            orderDetailResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40358"));
+
+            return orderDetailResponse;
+        }
+
+        //根据订单号获取订单
+        SaleOrder saleOrder = saleOrderMapper.selectByOrderCode(orderCode);
+        //判断订单号是否存在
+        if (saleOrder == null) {
+            orderDetailResponse.setResCode("40359");
+            orderDetailResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40359"));
+
+            return orderDetailResponse;
+        }
+
+        //设置订单明细
+        setOrderDetail(orderDetailResponse, saleOrder);
+        
+        //获取订单对应的产品信息
+        List<OrderItemVo>  orderItemVos = saleOrderItemMapper.selectByOrderId(saleOrder.getId());
+        
+        orderDetailResponse.setOrderItemVos(orderItemVos);
+
+        return orderDetailResponse;
+    }
+
+    /**
+     * 设置订单明细
+     * 
+     * @param orderDetailResponse
+     * @param saleOrder
+     */
+    private void setOrderDetail(OrderDetailResponse orderDetailResponse, SaleOrder saleOrder) {
+        orderDetailResponse.setOrderId(saleOrder.getId());
+        orderDetailResponse.setOrderCode(saleOrder.getOrderCode());
+
+        orderDetailResponse.setReceiverName(saleOrder.getReceiverName());
+        orderDetailResponse.setReceiverMobile(saleOrder.getReceiverMobile());
+        orderDetailResponse.setReceiverAddress(saleOrder.getReceiverAddress());
+
+        orderDetailResponse.setOrderAmount(saleOrder.getOrderAmount());
+        orderDetailResponse.setDeliveryFee(saleOrder.getDeliveryFee());
+        orderDetailResponse.setCouponAmount(saleOrder.getCouponAmount());
+        orderDetailResponse.setTotalPackages(saleOrder.getTotalPackages());
+
+        orderDetailResponse.setOrderStatus(saleOrder.getOrderStatus());
+        orderDetailResponse.setOrderStatusName(SaleOrderStatusEnum.get(saleOrder.getOrderStatus().intValue()));
+        orderDetailResponse.setPaymentStatus(saleOrder.getPaymentStatus());
+        orderDetailResponse.setPaymentStatusName(CommonConstant.getPayStatusName(saleOrder.getPaymentStatus()));
+        orderDetailResponse.setPaymentMethod(saleOrder.getPaymentMethod());
+        orderDetailResponse.setPaymentMethodName(CommonConstant.getDeliveryMothodName(saleOrder.getPaymentMethod()));
+
+        //设置日期格式
+        orderDetailResponse.setOrderCreateTimeFormat(DateUtil.formatDatetime(saleOrder.getOrderCreateTime()));
     }
 
     /**
@@ -686,33 +756,33 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     private OrderSettleResponse wrapOrderSettleResponse(OrderSettleResponse response, List<ShoppingCartResultVo> shoppingCartResult) {
-        OrderItemVo orderItemVo = null;
+        List<OrderSettleVo> orderSettles = new ArrayList<OrderSettleVo>(shoppingCartResult.size());
         long totalPrice = 0L; //订单总价
-        List<OrderItemVo> orderItems = new ArrayList<OrderItemVo>(shoppingCartResult.size());
 
+        OrderSettleVo orderSettle = null;
         for (ShoppingCartResultVo shoppingCartResultVo : shoppingCartResult) {
-            orderItemVo = new OrderItemVo();
-            BeanUtil.copyProperties(shoppingCartResultVo, orderItemVo);
+            orderSettle = new OrderSettleVo();
+            BeanUtil.copyProperties(shoppingCartResultVo, orderSettle);
 
-            if (orderItemVo.getProductStatus() != null) {
+            if (orderSettle.getProductStatus() != null) {
                 //转化产品状态名称
-                orderItemVo.setProductStatusName(ProductStatusEnum.get((int) orderItemVo.getProductStatus()));
+                orderSettle.setProductStatusName(ProductStatusEnum.get((int) orderSettle.getProductStatus()));
             }
 
             //产品单价
-            long productPrice = NumberUtil.convertToFen(orderItemVo.getSellPrice());
+            long productPrice = NumberUtil.convertToFen(orderSettle.getSellPrice());
             //计算该产品销售总价( 产品单价乘以数量)
-            long sellTotalAmount = productPrice * orderItemVo.getProductQty();
-            orderItemVo.setSellTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+            long sellTotalAmount = productPrice * orderSettle.getProductQty();
+            orderSettle.setSellTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
 
             //计算订单总价
             totalPrice += sellTotalAmount;
 
-            orderItems.add(orderItemVo);
+            orderSettles.add(orderSettle);
         }
 
         //设置订单项信息
-        response.setOrderItems(orderItems);
+        response.setOrderSettles(orderSettles);
 
         //计算订单运费
         long deliveryfee = calculateDeliveryFee(totalPrice);
@@ -722,6 +792,95 @@ public class OrderServiceImpl implements OrderService {
         response.setTotalAmount(NumberUtil.convertToYuan(totalPrice));
 
         return response;
+    }
+
+    @Override
+    public OrderListResponse queryOrderList(OrderListQuery query) {
+        OrderListResponse response = new OrderListResponse();
+
+        // 业务校验开始
+        //判断用户id是否为空
+        if (query.getEndUserId() == null) {
+            response.setResCode("40304");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40304"));
+
+            return response;
+        }
+
+        List<OrderListVo> orderLists = saleOrderMapper.selectByEndUserId(query);
+        if (CollectionUtil.isEmpty(orderLists)) {
+            return response;
+        }
+
+        //业务校验结束
+
+        //获取订单id集合
+        List<Integer> orderIds = new ArrayList<Integer>(orderLists.size());
+        for (OrderListVo orderVo : orderLists) {
+            orderIds.add(orderVo.getOrderId());
+        }
+
+        List<OrderItemImgVo> orderItemImgs = saleOrderItemMapper.selectSpecImgByOrderIds(orderIds);
+
+        //包装订单产品对应的图片map
+        Map<Integer, List<String>> map = getSpecImgMap(orderItemImgs);
+
+        for (OrderListVo orderVo : orderLists) {
+            //设置订单状态名称
+            orderVo.setOrderStatusName(SaleOrderStatusEnum.get(orderVo.getOrderStatus().intValue()));
+            orderVo.setProductSpecImgs(map.get(orderVo.getOrderId()));
+        }
+
+        response.setOrderLists(orderLists);
+
+        return response;
+    }
+
+    /**
+     * 包装订单产品项目的图片信息
+     * 
+     * @param orderItemImgs
+     */
+    private Map<Integer, List<String>> getSpecImgMap(List<OrderItemImgVo> orderItemImgs) {
+        Map<Integer, List<String>> map = new HashMap<Integer, List<String>>();
+
+        for (OrderItemImgVo orderItemIm : orderItemImgs) {
+            if (map.containsKey(orderItemIm.getSaleOrderId())) {
+                map.get(orderItemIm.getSaleOrderId()).add(orderItemIm.getSpecImg());
+            } else {
+                List<String> orderItemImgList = new ArrayList<String>();
+                orderItemImgList.add(orderItemIm.getSpecImg());
+
+                map.put(orderItemIm.getSaleOrderId(), orderItemImgList);
+            }
+
+        }
+
+        return map;
+    }
+
+    /**
+     * 订单支付前的预处理
+     * 
+     * @param orderCode
+     * @return
+     */
+    @Override
+    public CommonResponse payOrder(String orderCode) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        return commonResponse;
+    }
+
+    /**
+     *支付回调通知
+     * 
+     * @param orderCode
+     * @return
+     */
+    @Override
+    public CommonResponse payOrderCallBack(String orderCode) {
+        return null;
     }
 
 }

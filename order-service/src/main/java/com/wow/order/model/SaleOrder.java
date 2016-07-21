@@ -48,6 +48,8 @@ public class SaleOrder implements Serializable {
     private Boolean isUseCoupon;
 
     private Integer endUserCouponId;
+    
+    private Integer totalPackages;
 
     private Byte deliveryMothod;
 
@@ -435,6 +437,14 @@ public class SaleOrder implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getTotalPackages() {
+        return totalPackages;
+    }
+
+    public void setTotalPackages(Integer totalPackages) {
+        this.totalPackages = totalPackages;
     }
 
     @Override

@@ -1,9 +1,13 @@
 package com.wow.order.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
+import com.wow.order.vo.OrderListQuery;
+import com.wow.order.vo.OrderListVo;
 
 public interface SaleOrderMapper {
     int countByExample(SaleOrderExample example);
@@ -19,7 +23,9 @@ public interface SaleOrderMapper {
     List<SaleOrder> selectByExample(SaleOrderExample example);
 
     SaleOrder selectByPrimaryKey(Integer id);
-
+    
+    SaleOrder selectByOrderCode(String orderCode);
+    
     int updateByExampleSelective(@Param("record") SaleOrder record, @Param("example") SaleOrderExample example);
 
     int updateByExample(@Param("record") SaleOrder record, @Param("example") SaleOrderExample example);
@@ -27,4 +33,6 @@ public interface SaleOrderMapper {
     int updateByPrimaryKeySelective(SaleOrder record);
 
     int updateByPrimaryKey(SaleOrder record);
+
+    List<OrderListVo> selectByEndUserId(OrderListQuery query);
 }

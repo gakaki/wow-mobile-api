@@ -41,6 +41,27 @@ public class DateUtil {
     public static String formatTime(long timestamp) {
         return timeFormat.format(new Date(timestamp));
     }
+    
+    /**
+     * 格式化日期与时间
+     */
+    public static String formatDatetime(Date timestamp) {
+        return datetimeFormat.format(timestamp);
+    }
+
+    /**
+     * 格式化日期
+     */
+    public static String formatDate(Date timestamp) {
+        return dateFormat.format(timestamp);
+    }
+
+    /**
+     * 格式化时间
+     */
+    public static String formatTime(Date timestamp) {
+        return timeFormat.format(timestamp);
+    }
 
     /**
      * 获取当前日期与时间

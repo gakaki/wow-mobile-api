@@ -55,6 +55,17 @@ public class CommonConstant {
 
     //数字6
     public static final Byte SIX = 6;
+    
+    //订单支付状态
+    //支付情况note:  1: paid     2: unpay
+    private static final Map<Byte, String> PAY_STATUS_MAP = new HashMap<Byte, String>() {
+        /**  */
+        private static final long serialVersionUID = 1L;
+        {
+            put(ONE, "已支付");
+            put(TWO, "未支付");
+        }
+    };
 
     //订单支付方式
     //1:网上支付-微信 2.网上支付-支付宝 3.货到付现金 4.货到刷卡 5.货到支付宝扫码支付 6.货到微信扫码支付
@@ -91,6 +102,11 @@ public class CommonConstant {
     /** 取得支付方式描述.*/
     public static String getPayMethodName(Byte code) {
         return PAY_METHOD_MAP.get(code);
+    }
+    
+    /** 取得支付状态描述.*/
+    public static String getPayStatusName(Byte code) {
+        return PAY_STATUS_MAP.get(code);
     }
 
 }

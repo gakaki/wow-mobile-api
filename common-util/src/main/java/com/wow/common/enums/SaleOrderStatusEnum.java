@@ -14,10 +14,10 @@ public enum SaleOrderStatusEnum  {
     TO_BE_PAID(0, "代付款"), 
     TO_BE_SHIPPED(1, "待发货"), 
     PARTIAL_SHIPPED(2, "部分发货"),
-    TO_BE_RECEIVED(0, "待收货"), 
-    COMPLETED(1, "已完成"), 
-    CANCELLED(2, "已取消"),
-    CLOSED(2, "交易关闭");
+    TO_BE_RECEIVED(3, "待收货"), 
+    COMPLETED(4, "已完成"), 
+    CANCELLED(5, "已取消"),
+    CLOSED(6, "交易关闭");
 
 	private Integer key;
 

@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.constant.CommonConstant;
 import com.wow.common.response.CommonResponse;
-import com.wow.order.vo.OrderItemVo;
+import com.wow.order.vo.OrderSettleVo;
 
 
 /**
@@ -20,8 +20,8 @@ public class OrderSettleResponse extends CommonResponse {
 
     private static final long serialVersionUID = 1L;
     
-    //用户购买的产品列表
-    private List<OrderItemVo> orderItems;
+    //结算产品列表
+    private List<OrderSettleVo> orderSettles;
     
     //订单运费 默认为0.00
     private BigDecimal deliveryFee=CommonConstant.ZEROB_IGDECIMAL;
@@ -29,12 +29,12 @@ public class OrderSettleResponse extends CommonResponse {
     //订单总价
     private BigDecimal totalAmount;
 
-    public List<OrderItemVo> getOrderItems() {
-        return orderItems;
+    public List<OrderSettleVo> getOrderSettles() {
+        return orderSettles;
     }
 
-    public void setOrderItems(List<OrderItemVo> orderItems) {
-        this.orderItems = orderItems;
+    public void setOrderSettles(List<OrderSettleVo> orderSettles) {
+        this.orderSettles = orderSettles;
     }
 
     public BigDecimal getDeliveryFee() {
