@@ -3,7 +3,7 @@ package com.wow.product.service;
 import java.util.List;
 
 import com.wow.product.model.ProductSerial;
-import com.wow.product.vo.response.SerialResponse;
+import com.wow.product.vo.response.ProductResponse;
 import com.wow.product.vo.response.SpecResponse;
 
 /**
@@ -58,7 +58,6 @@ public interface ProductSerialService {
      */
     ProductSerial getPrimarySubProductOfProductSerial(int productId);
 
-    SerialResponse getSerialByProductId(Integer productId) throws Exception;
 
     List<SpecResponse> getSpecByProductId(Integer productId) throws  Exception;
 

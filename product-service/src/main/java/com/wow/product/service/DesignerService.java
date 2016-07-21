@@ -11,7 +11,7 @@ import java.util.List;
  * Created by zhengzhiqing on 16/6/16.
  */
 public interface DesignerService {
-    //Table: designer
+
     /**
      * 创建设计师
      *
@@ -28,6 +28,11 @@ public interface DesignerService {
      */
     Designer getDesignerById(int designerId);
 
+    /**
+     * 批量查询设计师
+     * @param designerIds
+     * @return
+     */
     List<Designer> getDesignerById(List<Integer> designerIds);
 
     /**
@@ -70,7 +75,6 @@ public interface DesignerService {
      */
     List<Product> getProductsByDesigner(String designerName);
 
-    //table: product_designer
     /**
      * 设置产品设计师
      *
@@ -100,5 +104,5 @@ public interface DesignerService {
      * @param product
      * @return
      */
-    Designer getPrimaryDesignerByProduct(Product product) throws Exception;
+    Designer getPrimaryDesignerByProduct(Product product);
 }

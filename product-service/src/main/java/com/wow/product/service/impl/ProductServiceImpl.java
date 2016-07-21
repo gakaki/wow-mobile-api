@@ -1,35 +1,26 @@
 package com.wow.product.service.impl;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wow.attribute.model.Attribute;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryResponse;
-import com.wow.product.mapper.MaterialMapper;
-import com.wow.product.mapper.ProductAttributeMapper;
-import com.wow.product.mapper.ProductImageMapper;
-import com.wow.product.mapper.ProductMapper;
-import com.wow.product.mapper.ProductMaterialMapper;
-import com.wow.product.model.Material;
-import com.wow.product.model.MaterialExample;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductAttribute;
-import com.wow.product.model.ProductExample;
-import com.wow.product.model.ProductImage;
-import com.wow.product.model.ProductImageExample;
-import com.wow.product.model.ProductMaterial;
-import com.wow.product.model.ProductMaterialExample;
+import com.wow.common.util.CollectionUtil;
+import com.wow.price.model.ProductPrice;
+import com.wow.price.service.PriceService;
+import com.wow.product.mapper.*;
+import com.wow.product.model.*;
+import com.wow.product.service.BrandService;
+import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.response.ProductResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 
 /**
@@ -40,7 +31,6 @@ import com.wow.product.service.ProductService;
 @Transactional(value = "productTransactionManager")
 public class ProductServiceImpl implements ProductService {
 
-    //table: product
     @Autowired
     private ProductMapper productMapper;
 
@@ -62,6 +52,20 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private MaterialMapper materialMapper;
 
+    @Autowired
+    ProductService productService;
+
+    @Autowired
+    private PriceService priceService;
+
+    @Autowired
+    private BrandService brandService;
+
+    @Autowired
+    private DesignerService designerService;
+
+    private static final Integer productPrimaryImgCountLimit = 5;
+
     /**
      * 创建产品(注意要调用生码接口)
      *
@@ -80,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     private String generateProductCode() {
-
+        //TODO: 要求是数字,且不重复
         return java.util.UUID.randomUUID().toString();
     }
 
@@ -96,12 +100,24 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.selectByPrimaryKey(productId);
     }
 
+    /**
+     * 批量查询产品
+     * @param productIds
+     * @return
+     */
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Product> getProductById(List<Integer> productIds)
     {
         ProductExample productExample=new ProductExample();
         productExample.or().andIdIn(productIds).andIsDeletedEqualTo(false);
         return productMapper.selectByExample(productExample);
     }
+
+    /**
+     * 查看品牌产品
+     * @param brandId
+     * @return
+     */
     @Override
     public List<Product> getProductByBrandId(int brandId) {
         ProductExample productExample=new ProductExample();
@@ -118,8 +134,6 @@ public class ProductServiceImpl implements ProductService {
     public int updateProduct(Product product) {
         return productMapper.updateByPrimaryKeySelective(product);
     }
-
-    //table: product_image
 
     /**
      * 添加产品图片
@@ -138,11 +152,11 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int addProductImages(List<ProductImage> productImages) {
-        if(!productImages.isEmpty())
-            for(ProductImage productImage:productImages)
-            {
+        if (CollectionUtil.isNotEmpty(productImages)) {
+            for (ProductImage productImage : productImages) {
                 addProductImage(productImage);
             }
+        }
         return 0;
     }
 
@@ -152,21 +166,15 @@ public class ProductServiceImpl implements ProductService {
      * @param productId
      * @return
      */
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    @Override
     public List<ProductImage> getProductImages(int productId) {
-        ProductImageExample productImageExample=new ProductImageExample();
-        ProductImageExample.Criteria criteria=productImageExample.createCriteria();
+        ProductImageExample productImageExample = new ProductImageExample();
+        ProductImageExample.Criteria criteria = productImageExample.createCriteria();
         criteria.andProductIdEqualTo(productId);
         criteria.andIsDeletedEqualTo(false);
-        return  productImageMapper.selectByExample(productImageExample);
+        return productImageMapper.selectByExample(productImageExample);
     }
 
-    /**
-     * 修改产品图片
-     *
-     * @param productImage
-     * @return
-     */
     public int updateProductImage(ProductImage productImage) {
         return productImageMapper.updateByPrimaryKeySelective(productImage);
     }
@@ -189,8 +197,6 @@ public class ProductServiceImpl implements ProductService {
         return 0;
     }
 
-    //table: product_attribute
-
     /**
      * 查询产品的属性:根据product找category,根据category找category_attributes
      *
@@ -204,7 +210,7 @@ public class ProductServiceImpl implements ProductService {
         CategoryResponse categoryResponse= categoryService.getCategoryById(product.getCategoryId());
         Category category = categoryResponse.getCategory();
         if(category!=null)
-           return attributeService.getAttributesInCategory(category.getId());
+            return attributeService.getAttributesInCategory(category.getId());
 
         return null;
     }
@@ -245,18 +251,18 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Material> getMaterialInProduct(Integer productId) {
 
-            ProductMaterialExample productMaterialExample=new ProductMaterialExample();
-            productMaterialExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo(productId);
-           List<ProductMaterial> productMaterials=productMaterialMapper.selectByExample(productMaterialExample);
-         if(!productMaterials.isEmpty())
-         {
-             HashSet<Integer> materialIds=new HashSet<>();
-             for(ProductMaterial productMaterial:productMaterials)
-             {
-                 materialIds.add(productMaterial.getMaterialId());
-             }
-             return getMaterialById(new ArrayList<>(materialIds));
-         }
+        ProductMaterialExample productMaterialExample=new ProductMaterialExample();
+        productMaterialExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo(productId);
+        List<ProductMaterial> productMaterials=productMaterialMapper.selectByExample(productMaterialExample);
+        if(!productMaterials.isEmpty())
+        {
+            HashSet<Integer> materialIds=new HashSet<>();
+            for(ProductMaterial productMaterial:productMaterials)
+            {
+                materialIds.add(productMaterial.getMaterialId());
+            }
+            return getMaterialById(new ArrayList<>(materialIds));
+        }
 
         return null;
     }
@@ -287,6 +293,75 @@ public class ProductServiceImpl implements ProductService {
         return 0;
     }
 
+    /**
+     * 根据分类查询产品
+     *
+     * @param category
+     * @param sortBy   1:上架时间 2:销量 3:价格
+     * @param asc      是否升序
+     * @return
+     */
+    @Override
+    public List<Product> getProductByCategoryId(int category, int sortBy, boolean asc) {
+        //TODO:
+        //1. 根据category查询该类目下所有三级类目
+        //2. 查询属于该类目三级类目的所有产品,按排序规则排序
+        //3. 分页待定:插件、注解
+        return null;
+    }
 
+    /**
+     * 获取产品(包括单品和系列品)详情页信息
+     * @param productId
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public ProductResponse getItemDetailById(int productId) {
+        ProductResponse productResponse = new ProductResponse();
+        Product product = productService.getProductById(productId);
+        if (product != null) {
+            productResponse.setProductName(product.getProductName());
+            productResponse.setTips(product.getTips());
+            productResponse.setDetailDescription(product.getDetailDescription());
+            productResponse.setVerboseInfo(product.getVerboseInfo());
+            productResponse.setApplicableSceneText(product.getApplicableSceneText());
+            productResponse.setOrigin(product.getOriginCountry() + "," + product.getOriginCity());
+            productResponse.setWeight(product.getWeight());
+            productResponse.setMaterialText(product.getMaterialText());
+            productResponse.setSpec(product.getSpec());
+            productResponse.setNeedAssemble(product.getNeedAssemble());
+            productResponse.setStyle(product.getStyle());
+            productResponse.setSellingPoint(product.getSellingPoint());
+            Brand brand = brandService.getBrandById(product.getBrandId());
+            if (brand != null) {
+                productResponse.setBrandCname(brand.getBrandCname());
+                productResponse.setBrandLogoImg(brand.getBrandLogoImg());
+            }
+            Designer designer = designerService.getPrimaryDesignerByProduct(product);
+            if (designer != null) {
+                productResponse.setDesignerName(designer.getDesignerName());
+                productResponse.setDesignerPhoto(designer.getDesignerPhoto());
+            }
 
+            List<ProductImage> productImages = productService.getProductImages(productId);
+            if (CollectionUtil.isNotEmpty(productImages)) {
+                List<String> primaryImglist = new ArrayList<>();
+                Map<String, String> map = new HashMap<>();
+                for (ProductImage productImage : productImages) {
+                    if (productImage.getIsPrimary() && primaryImglist.size() < productPrimaryImgCountLimit)
+                        primaryImglist.add(productImage.getImgUrl());
+                    if (!productImage.getIsPrimary())
+                        map.put(productImage.getImgUrl(), productImage.getImgDesc());
+                }
+                productResponse.setPrimaryImgs(primaryImglist);
+            }
+            ProductPrice productPrice = priceService.queryProductPrice(productId).getProductPrice();
+            if (productPrice != null) {
+                productResponse.setSellPrice(productPrice.getSellPrice());
+                productResponse.setOriginalPrice(productPrice.getOriginalPrice());
+            }
+        }
+        return productResponse;
+    }
 }
