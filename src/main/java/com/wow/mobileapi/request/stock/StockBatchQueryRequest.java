@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class StockBatchQueryRequest extends ApiRequest {
 
+    private static final long serialVersionUID = 1L;
+
     List<Integer> productIdList;
 
     public List<Integer> getProductIdList() {

@@ -1,7 +1,24 @@
 package com.wow.mobileapi.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.wow.common.request.ApiRequest;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.*;
+import com.wow.mobileapi.constant.ErrorCodeConstant;
+import com.wow.mobileapi.request.user.*;
+import com.wow.mobileapi.response.user.BindWechatResponse;
+import com.wow.mobileapi.util.HttpRequestUtil;
+import com.wow.user.constant.SmsTemplate;
+import com.wow.user.constant.ThirdPartyPlatformType;
+import com.wow.user.model.EndUser;
+import com.wow.user.model.EndUserWechat;
+import com.wow.user.service.CaptchaService;
+import com.wow.user.service.SessionService;
+import com.wow.user.service.UserService;
+import com.wow.user.vo.LoginResponseVo;
+import com.wow.user.vo.LoginVo;
+import com.wow.user.vo.ThirdPartyLoginVo;
+import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,37 +27,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wow.common.request.ApiRequest;
-import com.wow.common.response.ApiResponse;
-import com.wow.common.response.CommonResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
-import com.wow.mobileapi.constant.ErrorCodeConstant;
-import com.wow.mobileapi.request.user.CaptchaRequest;
-import com.wow.mobileapi.request.user.RegisterAndBindWechatRequest;
-import com.wow.mobileapi.request.user.RegisterRequest;
-import com.wow.mobileapi.request.user.ResetPwdRequest;
-import com.wow.mobileapi.request.user.UserCheckRequest;
-import com.wow.mobileapi.request.user.UserUpdateRequest;
-import com.wow.mobileapi.util.HttpRequestUtil;
-import com.wow.user.constant.SmsTemplate;
-import com.wow.user.model.EndUser;
-import com.wow.user.model.EndUserWechat;
-import com.wow.user.service.CaptchaService;
-import com.wow.user.service.SessionService;
-import com.wow.user.service.UserService;
-import com.wow.user.vo.LoginVo;
-import com.wow.user.vo.response.LoginResponse;
-import com.wow.user.vo.response.RegisterBindStatusResponse;
-import com.wow.user.vo.response.RegisterResponse;
-import com.wow.user.vo.response.UserCheckResponse;
-import com.wow.user.vo.response.UserResponse;
-
+import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class UserController extends BaseController {
@@ -498,6 +489,7 @@ public class UserController extends BaseController {
         String mobile = registerAndBindWechatRequest.getMobile();
         String password = registerAndBindWechatRequest.getPassword();
         String captcha = registerAndBindWechatRequest.getCaptcha();
+        boolean isNewUser = false;
 
         String captchaOnServer = getCaptchaOnServer(mobile);
         if (StringUtil.isEmpty(captchaOnServer)) {
@@ -515,7 +507,7 @@ public class UserController extends BaseController {
         EndUserWechat endUserWechat = new EndUserWechat();
         BeanUtil.copyProperties(registerAndBindWechatRequest.getUserInfoFromWechat(),endUserWechat);
 
-        //判断是否已注册/已绑定
+        //判断手机号是否已注册/已绑定微信
         RegisterBindStatusResponse registerBindStatusResponse = userService.getRegisterBindStatus(mobile);
         boolean isRegistered = registerBindStatusResponse.isRegistered();
         boolean isBinded = registerBindStatusResponse.isBinded();
@@ -530,6 +522,7 @@ public class UserController extends BaseController {
 
         //未注册的情况下,先注册
         if(!isRegistered) {
+            isNewUser = true;
             try {
                 RegisterResponse registerResponse = userService.register(endUser);
                 if (registerResponse == null || !"0".equals(registerResponse.getResCode())) {
@@ -547,7 +540,7 @@ public class UserController extends BaseController {
             endUserId = userService.getUserByMobile(mobile).getEndUser().getId();
         }
 
-        //注册之后绑定微信
+        //注册之后绑定微信(要先检查该微信是否已绑定已有用户)
         endUserWechat.setMobile(endUser.getMobile());
         endUserWechat.setEndUserId(endUserId);
         String encodedNickName = "";
@@ -571,6 +564,29 @@ public class UserController extends BaseController {
             return apiResponse;
         }
 
+        //判断用户是否有昵称和头像,如果没有,用微信的覆盖
+        try {
+            UserResponse userResponse = userService.getUserById(endUserId);
+            if (userResponse != null && userResponse.getEndUser() != null) {
+                String nickName = userResponse.getEndUser().getNickName();
+                String avatar = userResponse.getEndUser().getAvatar();
+
+                EndUser endUserToBeUpdate = new EndUser();
+                endUserToBeUpdate.setId(endUserId);
+                if (StringUtil.isEmpty(nickName)) {
+                    endUserToBeUpdate.setNickName(encodedNickName);
+                }
+                if (StringUtil.isEmpty(avatar)) {
+                    endUserToBeUpdate.setAvatar(endUserWechat.getWechatAvatar());
+                }
+                if (StringUtil.isNotEmpty(endUserToBeUpdate.getAvatar()) || StringUtil.isNotEmpty(endUserToBeUpdate.getNickName())) {
+                    userService.updateUser(endUserToBeUpdate);
+                }
+            }
+        } catch (Exception ignore) {
+            logger.error("覆写昵称和头像错误--" + ignore);
+        }
+
         //进行一次自动登录
         LoginVo loginVo = new LoginVo();
         BeanUtil.copyProperties(registerAndBindWechatRequest, loginVo);
@@ -585,7 +601,14 @@ public class UserController extends BaseController {
                 setServiceErrorResponse(apiResponse, loginResponse);
                 return apiResponse;
             } else {
-                apiResponse.setData(loginResponse.getLoginResponseVo());
+                LoginResponseVo loginResponseVo = loginResponse.getLoginResponseVo();
+
+                BindWechatResponse bindWechatResponse = new BindWechatResponse();
+                bindWechatResponse.setNewUser(isNewUser);
+                bindWechatResponse.setSessionToken(loginResponseVo.getSessionToken());
+                bindWechatResponse.setNickName(URLDecoder.decode(loginResponseVo.getNickName(),"utf-8"));
+
+                apiResponse.setData(bindWechatResponse);
             }
         } catch (Exception e) {
             logger.error("login发生错误---" + e);
@@ -646,5 +669,68 @@ public class UserController extends BaseController {
         }
         return apiResponse;
 
+    }
+
+
+
+    /**
+     * 绑定微信
+     * 1. 先判断微信号是否已绑定账户
+     * 2. 如果已绑定,自动登录
+     * 3. 如果未绑定,返回未绑定的结果
+     *
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/user/wechat-bind-status-check", method = RequestMethod.POST)
+    public ApiResponse isOpenIdBinded(ApiRequest apiRequest, HttpServletRequest request) {
+
+        ApiResponse apiResponse = new ApiResponse();
+
+        CheckWcOpenIdBindedRequest checkWcOpenIdBindedRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), CheckWcOpenIdBindedRequest.class);
+        //判断json格式参数是否有误
+        if (checkWcOpenIdBindedRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(checkWcOpenIdBindedRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        String openId = checkWcOpenIdBindedRequest.getOpenId();
+
+        //判断手机号是否已注册/已绑定微信
+        try {
+            UserResponse userResponse = userService.getUserByOpenId(openId);
+            if (userResponse != null && userResponse.getEndUser() != null) {
+                //该微信已绑定,直接登录
+                ThirdPartyLoginVo thirdPartyLoginVo = new ThirdPartyLoginVo();
+                thirdPartyLoginVo.setThirdPartyPlatformType(ThirdPartyPlatformType.THIRD_PARTY_PLATFORM_WECHAT);
+                thirdPartyLoginVo.setThirdPartyPlatformUserId(openId);
+                thirdPartyLoginVo.setLoginChannel(apiRequest.getChannel());
+                thirdPartyLoginVo.setLoginIp(HttpRequestUtil.getIpAddr(request));
+                thirdPartyLoginVo.setUserAgent(HttpRequestUtil.getUserAgent(request));
+
+                LoginResponse loginResponse = sessionService.thirdPartyLogin(thirdPartyLoginVo);
+                //如果处理失败 则返回错误信息
+                if (ErrorCodeUtil.isFailedResponse(loginResponse.getResCode())) {
+                    setServiceErrorResponse(apiResponse, loginResponse);
+                } else {
+                    apiResponse.setData(loginResponse.getLoginResponseVo());
+                }
+            } else {
+                Map map = new HashMap<String, Boolean>();
+                map.put("isOpenIdBinded",false);
+                apiResponse.setData(map);
+            }
+        } catch (Exception e) {
+            logger.error("微信登录发生错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
     }
 }

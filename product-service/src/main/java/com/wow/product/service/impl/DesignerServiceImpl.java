@@ -145,7 +145,7 @@ public class DesignerServiceImpl implements DesignerService {
     }
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public Designer getPrimaryDesignerByProduct(Product product) throws Exception {
+    public Designer getPrimaryDesignerByProduct(Product product) {
               return getDesignersByProduct(product).get(0);
     }
 }

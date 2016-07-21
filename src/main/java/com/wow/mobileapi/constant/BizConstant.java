@@ -14,4 +14,7 @@ public class BizConstant {
     public static final byte PAGE_MODULE_TYPE_BANNER_LIST = 2;
     public static final byte PAGE_MODULE_TYPE_CATEGORY = 3;
     public static final byte PAGE_MODULE_TYPE_PRODUCT = 4;
+    
+    //产品分类级别
+    public static final byte PAGE_CATEGORY_LEVEL = 1;
 }

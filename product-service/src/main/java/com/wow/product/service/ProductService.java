@@ -2,6 +2,7 @@ package com.wow.product.service;
 
 import com.wow.attribute.model.Attribute;
 import com.wow.product.model.*;
+import com.wow.product.vo.response.ProductResponse;
 
 import java.util.List;
 
@@ -11,7 +12,6 @@ import java.util.List;
  */
 public interface ProductService {
 
-    //table: product
     /**
      * 创建产品
      *
@@ -26,8 +26,18 @@ public interface ProductService {
      */
     Product getProductById(int productId);
 
+    /**
+     * 批量查询产品
+     * @param productId
+     * @return
+     */
     List<Product> getProductById(List<Integer> productId);
 
+    /**
+     * 根据品牌查询产品
+     * @param brandId
+     * @return
+     */
     List<Product> getProductByBrandId(int brandId);
 
     /**
@@ -38,7 +48,6 @@ public interface ProductService {
      */
     int updateProduct(Product product);
 
-    //table: product_image
     /**
      * 添加产品图片
      *
@@ -78,7 +87,6 @@ public interface ProductService {
      */
     int deleteProductImages(List<ProductImage> productImages);
 
-    //table: product_attribute
     /**
      * 查询产品的属性:根据product找category,根据category找category_attributes
      *
@@ -102,7 +110,11 @@ public interface ProductService {
      */
     int updateProductAttribute(List<ProductAttribute> productAttributes);
 
-
+    /**
+     * 查询产品材质
+     * @param productId
+     * @return
+     */
     List<Material> getMaterialInProduct(Integer productId);
 
     /**
@@ -120,6 +132,20 @@ public interface ProductService {
      */
     int updateProductMaterial(List<ProductMaterial> productMaterials);
 
+    /**
+     * 根据分类查询产品
+     * @param category
+     * @param sortBy 1:上架时间 2:销量 3:价格
+     * @param asc 是否升序
+     * @return
+     */
+    List<Product> getProductByCategoryId(int category, int sortBy, boolean asc);
 
+    /**
+     * 获取产品(包括单品和系列品)详情页信息
+     * @param productId
+     * @return
+     */
+    public ProductResponse getItemDetailById(int productId);
 
 }
