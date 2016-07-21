@@ -42,7 +42,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         if (StringUtil.isEmpty(token) || StringUtil.isEmpty(channel)) {
             apiResponse.setResCode(ErrorCodeConstant.INVALID_PARAMETER);
-            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("请传入sessionToken和channel"));
+            apiResponse.setResMsg("请传入sessionToken和channel");
             response.setContentType("application/json");
             response.getWriter().write(JsonUtil.pojo2Json(apiResponse));
             return false;

@@ -7,10 +7,12 @@ import com.wow.common.util.*;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.mobileapi.request.user.LoginByWechatRequest;
 import com.wow.mobileapi.request.user.LoginRequest;
+import com.wow.mobileapi.util.EncodeDecodeUtil;
 import com.wow.mobileapi.util.HttpRequestUtil;
 import com.wow.user.constant.ThirdPartyPlatformType;
 import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
+import com.wow.user.vo.LoginResponseVo;
 import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
@@ -19,11 +21,14 @@ import com.wow.user.vo.response.UserResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.comparator.BooleanComparator;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 登录、登出
@@ -75,7 +80,9 @@ public class SessionController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(loginResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, loginResponse);
             } else {
-                apiResponse.setData(loginResponse.getLoginResponseVo());
+                LoginResponseVo loginResponseVo = loginResponse.getLoginResponseVo();
+                loginResponseVo.setNickName(EncodeDecodeUtil.decodeStr(loginResponseVo.getNickName()));
+                apiResponse.setData(loginResponseVo);
             }
         } catch (Exception e) {
             logger.error("login发生错误---" + e);
@@ -87,7 +94,7 @@ public class SessionController extends BaseController {
     }
 
     /**
-     * 微信登录:根据微信ID判断该微信是否已经绑定手机。如果没有,直接返回未绑定。如果已绑定,进行微信登录。
+     * 微信登录:根据微信ID判断该微信是否已经绑定手机。如果没有,返回未绑定。如果已绑定,进行微信登录。
      * @param apiRequest
      * @return
      */
@@ -110,11 +117,13 @@ public class SessionController extends BaseController {
         }
 
         String openId =loginByWechatRequest.getOpenId();
-        //检查微信是否已绑定手机,如果没有,则直接返回未绑定,如果已经绑定,进行微信登录
+        //根据微信ID判断该微信是否已经绑定手机。如果没有,返回未绑定。如果已绑定,进行微信登录。
         UserResponse userResponse = userService.getUserByOpenId(openId);
         logger.info("endUser:" + userResponse.getEndUser());
         if (userResponse ==null || userResponse.getEndUser() ==null) {
-            ErrorResponseUtil.setErrorResponse(apiResponse, "50110");
+            Map map = new HashMap<String, Boolean>();
+            map.put("isOpenIdBinded",false);
+            apiResponse.setData(map);
             return apiResponse;
         }
 
@@ -131,7 +140,9 @@ public class SessionController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(loginResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, loginResponse);
             } else {
-                apiResponse.setData(loginResponse.getLoginResponseVo());
+                LoginResponseVo loginResponseVo = loginResponse.getLoginResponseVo();
+                loginResponseVo.setNickName(EncodeDecodeUtil.decodeStr(loginResponseVo.getNickName()));
+                apiResponse.setData(loginResponseVo);
             }
         } catch (Exception e) {
             logger.error("微信登录发生错误---" + e);
