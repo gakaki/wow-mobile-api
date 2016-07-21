@@ -13,6 +13,7 @@ import com.wow.user.model.EndUserSession;
 import com.wow.user.model.EndUserSessionExample;
 import com.wow.user.service.LoginLogService;
 import com.wow.user.service.SessionService;
+import com.wow.user.service.ShoppingCartService;
 import com.wow.user.service.UserService;
 import com.wow.user.vo.LoginResponseVo;
 import com.wow.user.vo.LoginVo;
@@ -53,6 +54,9 @@ public class SessionServiceImpl implements SessionService {
     @Autowired
     private LoginLogService loginLogService;
 
+    @Autowired
+    private ShoppingCartService shoppingCartService;
+
     @Value("${session.expirationTime}")
     private long sessionExpirationTime;
 
@@ -71,6 +75,13 @@ public class SessionServiceImpl implements SessionService {
             EndUserSession endUserSession = saveOrUpdateSession(loginVo, endUser.getId(),null);
             loginResponseVo.setSessionToken(endUserSession.getSessionToken());
             loginResponseVo.setNickName(endUser.getNickName());
+            loginResponseVo.setAgeRange(endUser.getAgeRange());
+            loginResponseVo.setAvatar(endUser.getAvatar());
+            loginResponseVo.setConstellation(endUser.getConstellation());
+            loginResponseVo.setIndustry(endUser.getIndustry());
+            loginResponseVo.setSelfIntroduction(endUser.getSelfIntroduction());
+            loginResponseVo.setSex(endUser.getSex());
+            loginResponseVo.setProductQtyInCart(getProductQtyInCartByUserId(endUser.getId()));
             loginResponse.setLoginResponseVo(loginResponseVo);
         } else {
             ErrorResponseUtil.setErrorResponse(loginResponse,"40101");
@@ -99,25 +110,35 @@ public class SessionServiceImpl implements SessionService {
             UserResponse userResponse = userService.getUserByOpenId(thirdPartyPlatformUserId);
 
             if (userResponse != null && userResponse.getEndUser() != null) {
-
-                logger.info("enduser:" + userResponse.getEndUser());
-                logger.info("nickname:" + userResponse.getEndUser().getNickName());
+                EndUser endUser = userResponse.getEndUser();
                 //根据userId和channel查找EndUserSession,如果有则更新,没有则创建
                 LoginVo loginVo = new LoginVo();
                 loginVo.setLoginIp(thirdPartyLoginVo.getLoginIp());
                 loginVo.setLoginChannel(thirdPartyLoginVo.getLoginChannel());
-                loginVo.setMobile(userResponse.getEndUser().getMobile());
+                loginVo.setMobile(endUser.getMobile());
                 loginVo.setUserAgent(thirdPartyLoginVo.getUserAgent());
-                EndUserSession endUserSession = saveOrUpdateSession(loginVo,
-                        userResponse.getEndUser().getId(),thirdPartyPlatformType);
-                loginResponseVo.setNickName(userResponse.getEndUser().getNickName());
+                EndUserSession endUserSession = saveOrUpdateSession(loginVo, endUser.getId(),thirdPartyPlatformType);
+                loginResponseVo.setNickName(endUser.getNickName());
                 loginResponseVo.setSessionToken(endUserSession.getSessionToken());
+                loginResponseVo.setAgeRange(endUser.getAgeRange());
+                loginResponseVo.setAvatar(endUser.getAvatar());
+                loginResponseVo.setConstellation(endUser.getConstellation());
+                loginResponseVo.setIndustry(endUser.getIndustry());
+                loginResponseVo.setSelfIntroduction(endUser.getSelfIntroduction());
+                loginResponseVo.setSex(endUser.getSex());
+                loginResponseVo.setProductQtyInCart(getProductQtyInCartByUserId(endUser.getId()));
                 loginResponse.setLoginResponseVo(loginResponseVo);
             } else {
                 ErrorResponseUtil.setErrorResponse(loginResponse, "50106");
             }
         }
         return loginResponse;
+    }
+    /**
+     * 查询该用户购物车商品数量
+     */
+    private int getProductQtyInCartByUserId(int endUserId) {
+        return shoppingCartService.getProductQtyInCart(endUserId);
     }
 
     /**

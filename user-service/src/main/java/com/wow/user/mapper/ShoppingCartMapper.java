@@ -78,4 +78,11 @@ public interface ShoppingCartMapper {
      * @return
      */
     List<ShoppingCartResultVo> queryByShoppingCartIds(ShoppingCartQueryVo query);
+
+    /**
+     * 查询用户购物车产品数量
+     * @param endUserId
+     * @return
+     */
+    Integer getProductQtyInCart(@Param("endUserId") int endUserId);
 }

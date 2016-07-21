@@ -40,6 +40,13 @@ public interface ShoppingCartService {
     List<ShoppingCart> queryShoppingCart(int endUserId);
 
     /**
+     *
+     * @param endUserId
+     * @return
+     */
+    int getProductQtyInCart(int endUserId);
+
+    /**
      * 获取用户购物车信息列表明细
      * 
      * @param request

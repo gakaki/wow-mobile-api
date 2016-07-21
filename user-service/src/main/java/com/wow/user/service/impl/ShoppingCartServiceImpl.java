@@ -1,14 +1,5 @@
 package com.wow.user.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wow.common.constant.CommonConstant;
 import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.response.CommonResponse;
@@ -30,6 +21,14 @@ import com.wow.user.service.ShoppingCartService;
 import com.wow.user.vo.ShoppingCartQueryVo;
 import com.wow.user.vo.ShoppingCartResultVo;
 import com.wow.user.vo.response.ShoppingCartResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
@@ -362,6 +361,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public List<ShoppingCart> queryShoppingCart(int endUserId) {
         return shoppingCartMapper.selectByEndUser(endUserId);
+    }
+
+    /**
+     * @param endUserId
+     * @return
+     */
+    @Override
+    public int getProductQtyInCart(int endUserId) {
+        Integer cnt = shoppingCartMapper.getProductQtyInCart(endUserId);
+        if (cnt == null) {
+            cnt = 0;
+        }
+        return cnt;
     }
 
 }

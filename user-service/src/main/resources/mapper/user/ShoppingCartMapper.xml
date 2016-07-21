@@ -365,4 +365,11 @@
 	          </foreach>
 	</select>
 
+	<!-- 获取用户购物车产品总数 -->
+	<select id="getProductQtyInCart" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		SELECT sum(product_qty)
+		FROM shopping_cart
+		WHERE is_deleted =false
+		AND end_user_id = #{endUserId}
+	</select>
 </mapper>

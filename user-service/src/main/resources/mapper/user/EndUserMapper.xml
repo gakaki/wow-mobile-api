@@ -669,7 +669,9 @@
   </update>
   <select id="selectByOpenId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    end_user.id, end_user.mobile, end_user.nick_name, end_user.avatar
+    end_user.id, end_user.mobile, end_user.nick_name, end_user.avatar,
+    end_user.sex, end_user.age_range, end_user.industry, end_user.self_introduction,
+    end_user.constellation
     from end_user
     inner join end_user_wechat
     on end_user_wechat.end_user_id = end_user.id
