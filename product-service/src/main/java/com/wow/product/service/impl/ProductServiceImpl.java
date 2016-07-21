@@ -38,12 +38,6 @@ public class ProductServiceImpl implements ProductService {
     private ProductImageMapper productImageMapper;
 
     @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    AttributeService attributeService;
-
-    @Autowired
     private ProductAttributeMapper productAttributeMapper;
 
     @Autowired
@@ -53,7 +47,10 @@ public class ProductServiceImpl implements ProductService {
     private MaterialMapper materialMapper;
 
     @Autowired
-    ProductService productService;
+    private CategoryService categoryService;
+
+    @Autowired
+    AttributeService attributeService;
 
     @Autowired
     private PriceService priceService;
@@ -319,7 +316,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductResponse getItemDetailById(int productId) {
         ProductResponse productResponse = new ProductResponse();
-        Product product = productService.getProductById(productId);
+        Product product = getProductById(productId);
         if (product != null) {
             productResponse.setProductName(product.getProductName());
             productResponse.setTips(product.getTips());
@@ -344,7 +341,7 @@ public class ProductServiceImpl implements ProductService {
                 productResponse.setDesignerPhoto(designer.getDesignerPhoto());
             }
 
-            List<ProductImage> productImages = productService.getProductImages(productId);
+            List<ProductImage> productImages = getProductImages(productId);
             if (CollectionUtil.isNotEmpty(productImages)) {
                 List<String> primaryImglist = new ArrayList<>();
                 Map<String, String> map = new HashMap<>();
