@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
@@ -19,6 +20,7 @@ import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
 import com.wow.mobileapi.request.order.OrderSettleRequest;
 import com.wow.order.service.OrderService;
+import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
@@ -194,6 +196,40 @@ public class OrderController extends BaseController {
                 setServiceErrorResponse(apiResponse, orderDetailResponse);
             } else {
                 apiResponse.setData(orderDetailResponse);
+            }
+        } catch (Exception e) {
+            logger.error("查询订单明细错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 取消订单
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/cancel", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    public ApiResponse cancelOrder(ApiRequest request) {
+        OrderDetailRequest orderDetailRequest = JsonUtil.fromJSON(request.getParamJson(), OrderDetailRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+        //判断json格式参数是否有误
+        if (orderDetailRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        CommonResponse commonResponse = null;
+        try {
+            OrderDetailQuery query = new OrderDetailQuery();
+            query.setOrderCode(orderDetailRequest.getOrderCode());
+
+            commonResponse = orderService.cancelOrder(query);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
             logger.error("查询订单明细错误---" + e);

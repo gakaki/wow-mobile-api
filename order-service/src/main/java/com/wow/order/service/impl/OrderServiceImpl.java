@@ -33,6 +33,7 @@ import com.wow.order.model.SaleOrderItem;
 import com.wow.order.model.SaleOrderItemWarehouse;
 import com.wow.order.model.SaleOrderLog;
 import com.wow.order.service.OrderService;
+import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderItemImgVo;
 import com.wow.order.vo.OrderItemVo;
 import com.wow.order.vo.OrderListQuery;
@@ -167,12 +168,13 @@ public class OrderServiceImpl implements OrderService {
         query.setOrderId(saleOrder.getId());
 
         //包装订单项目
-        List<SaleOrderItem> wrapOrderItems = wrapOrderItem(query);
-
-        saleOrderItemMapper.batchInsertSelective(wrapOrderItems);
+        List<SaleOrderItem> saleOrderItems = wrapOrderItem(query);
+        for (SaleOrderItem saleOrderItem : saleOrderItems) {
+            saleOrderItemMapper.insertSelective(saleOrderItem);
+        }
 
         //保存订单项目仓库信息
-        List<SaleOrderItemWarehouse> orderItemWareHouses = wrapAllOrderItemWareHouse(wrapOrderItems, query);
+        List<SaleOrderItemWarehouse> orderItemWareHouses = wrapAllOrderItemWareHouse(saleOrderItems, query);
 
         saleOrderItemWarehouseMapper.batchInsertSelective(orderItemWareHouses);
 
@@ -552,8 +554,61 @@ public class OrderServiceImpl implements OrderService {
      * @param order
      */
     @Override
-    public CommonResponse cancelOrder(SaleOrder order) {
+    public CommonResponse cancelOrder(OrderDetailQuery query) {
         CommonResponse commonResponse = new CommonResponse();
+
+        // 业务校验开始
+        //校验订单号是否为空
+        if (StringUtil.isEmpty(query.getOrderCode())) {
+            commonResponse.setResCode("40358");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40358"));
+
+            return commonResponse;
+        }
+
+        //根据订单号获取订单
+        SaleOrder saleOrder = saleOrderMapper.selectByOrderCode(query.getOrderCode());
+        //判断订单号是否存在
+        if (saleOrder == null) {
+            commonResponse.setResCode("40359");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40359"));
+
+            return commonResponse;
+        }
+
+        //如果订单状态为非代付款 则无法取消订单
+        if (saleOrder.getOrderStatus().intValue() != SaleOrderStatusEnum.TO_BE_PAID.getKey().intValue()) {
+            commonResponse.setResCode("40309");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40309"));
+
+            return commonResponse;
+        }
+
+        //如果订单支付状态为已支付  则无法取消订单
+        if (saleOrder.getPaymentStatus().intValue() == CommonConstant.PAID) {
+            commonResponse.setResCode("40310");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40310"));
+
+            return commonResponse;
+        }
+        // 业务校验结束
+
+        //调用释放库存服务
+
+        //更新订单状态
+        SaleOrder targetSaleOrder = new SaleOrder();
+
+        targetSaleOrder.setId(saleOrder.getId());
+        targetSaleOrder.setOrderStatus(SaleOrderStatusEnum.CANCELLED.getKey().byteValue());
+
+        targetSaleOrder.setCancelRequestTime(DateUtil.currentDate());
+        targetSaleOrder.setUpdateTime(DateUtil.currentDate());
+
+        saleOrderMapper.updateByPrimaryKeySelective(targetSaleOrder);
+
+        //记录订单操作日志 用户主动取消订单
+        SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40358"));
+        saleOrderLogMapper.insertSelective(warpOrderLog);
 
         return commonResponse;
     }
@@ -601,10 +656,10 @@ public class OrderServiceImpl implements OrderService {
 
         //设置订单明细
         setOrderDetail(orderDetailResponse, saleOrder);
-        
+
         //获取订单对应的产品信息
-        List<OrderItemVo>  orderItemVos = saleOrderItemMapper.selectByOrderId(saleOrder.getId());
-        
+        List<OrderItemVo> orderItemVos = saleOrderItemMapper.selectByOrderId(saleOrder.getId());
+
         orderDetailResponse.setOrderItemVos(orderItemVos);
 
         return orderDetailResponse;

@@ -6,6 +6,7 @@ import com.wow.common.response.CommonResponse;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderLog;
+import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
@@ -63,7 +64,7 @@ public interface OrderService {
      *
      * @param order
      */
-    CommonResponse cancelOrder(SaleOrder order);
+    CommonResponse cancelOrder(OrderDetailQuery query);
 
     /**
      * @param orderId
