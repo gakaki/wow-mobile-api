@@ -55,9 +55,9 @@ public class Product implements Serializable {
 
     private String weightText;
 
-    private String spec;
+    private String specName;
 
-    private String colorId;
+    private Byte colorId;
 
     private String productColorImg;
 
@@ -80,8 +80,6 @@ public class Product implements Serializable {
     private Boolean canCustomized;
 
     private Boolean isFragile;
-
-    private Boolean isPresale;
 
     private Boolean isBundling;
 
@@ -301,20 +299,20 @@ public class Product implements Serializable {
         this.weightText = weightText == null ? null : weightText.trim();
     }
 
-    public String getSpec() {
-        return spec;
+    public String getSpecName() {
+        return specName;
     }
 
-    public void setSpec(String spec) {
-        this.spec = spec == null ? null : spec.trim();
+    public void setSpecName(String specName) {
+        this.specName = specName == null ? null : specName.trim();
     }
 
-    public String getColorId() {
+    public Byte getColorId() {
         return colorId;
     }
 
-    public void setColorId(String colorId) {
-        this.colorId = colorId == null ? null : colorId.trim();
+    public void setColorId(Byte colorId) {
+        this.colorId = colorId;
     }
 
     public String getProductColorImg() {
@@ -403,14 +401,6 @@ public class Product implements Serializable {
 
     public void setIsFragile(Boolean isFragile) {
         this.isFragile = isFragile;
-    }
-
-    public Boolean getIsPresale() {
-        return isPresale;
-    }
-
-    public void setIsPresale(Boolean isPresale) {
-        this.isPresale = isPresale;
     }
 
     public Boolean getIsBundling() {
@@ -508,7 +498,7 @@ public class Product implements Serializable {
         sb.append(", sizeText=").append(sizeText);
         sb.append(", weight=").append(weight);
         sb.append(", weightText=").append(weightText);
-        sb.append(", spec=").append(spec);
+        sb.append(", specName=").append(specName);
         sb.append(", colorId=").append(colorId);
         sb.append(", productColorImg=").append(productColorImg);
         sb.append(", colorDisplayName=").append(colorDisplayName);
@@ -521,7 +511,6 @@ public class Product implements Serializable {
         sb.append(", assembleTips=").append(assembleTips);
         sb.append(", canCustomized=").append(canCustomized);
         sb.append(", isFragile=").append(isFragile);
-        sb.append(", isPresale=").append(isPresale);
         sb.append(", isBundling=").append(isBundling);
         sb.append(", productStatus=").append(productStatus);
         sb.append(", rejectReason=").append(rejectReason);

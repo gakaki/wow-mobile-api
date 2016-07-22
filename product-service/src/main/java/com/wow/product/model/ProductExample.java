@@ -1726,73 +1726,73 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andSpecIsNull() {
-            addCriterion("spec is null");
+        public Criteria andSpecNameIsNull() {
+            addCriterion("spec_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andSpecIsNotNull() {
-            addCriterion("spec is not null");
+        public Criteria andSpecNameIsNotNull() {
+            addCriterion("spec_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSpecEqualTo(String value) {
-            addCriterion("spec =", value, "spec");
+        public Criteria andSpecNameEqualTo(String value) {
+            addCriterion("spec_name =", value, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecNotEqualTo(String value) {
-            addCriterion("spec <>", value, "spec");
+        public Criteria andSpecNameNotEqualTo(String value) {
+            addCriterion("spec_name <>", value, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecGreaterThan(String value) {
-            addCriterion("spec >", value, "spec");
+        public Criteria andSpecNameGreaterThan(String value) {
+            addCriterion("spec_name >", value, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecGreaterThanOrEqualTo(String value) {
-            addCriterion("spec >=", value, "spec");
+        public Criteria andSpecNameGreaterThanOrEqualTo(String value) {
+            addCriterion("spec_name >=", value, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecLessThan(String value) {
-            addCriterion("spec <", value, "spec");
+        public Criteria andSpecNameLessThan(String value) {
+            addCriterion("spec_name <", value, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecLessThanOrEqualTo(String value) {
-            addCriterion("spec <=", value, "spec");
+        public Criteria andSpecNameLessThanOrEqualTo(String value) {
+            addCriterion("spec_name <=", value, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecLike(String value) {
-            addCriterion("spec like", value, "spec");
+        public Criteria andSpecNameLike(String value) {
+            addCriterion("spec_name like", value, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecNotLike(String value) {
-            addCriterion("spec not like", value, "spec");
+        public Criteria andSpecNameNotLike(String value) {
+            addCriterion("spec_name not like", value, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecIn(List<String> values) {
-            addCriterion("spec in", values, "spec");
+        public Criteria andSpecNameIn(List<String> values) {
+            addCriterion("spec_name in", values, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecNotIn(List<String> values) {
-            addCriterion("spec not in", values, "spec");
+        public Criteria andSpecNameNotIn(List<String> values) {
+            addCriterion("spec_name not in", values, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecBetween(String value1, String value2) {
-            addCriterion("spec between", value1, value2, "spec");
+        public Criteria andSpecNameBetween(String value1, String value2) {
+            addCriterion("spec_name between", value1, value2, "specName");
             return (Criteria) this;
         }
 
-        public Criteria andSpecNotBetween(String value1, String value2) {
-            addCriterion("spec not between", value1, value2, "spec");
+        public Criteria andSpecNameNotBetween(String value1, String value2) {
+            addCriterion("spec_name not between", value1, value2, "specName");
             return (Criteria) this;
         }
 
@@ -1806,62 +1806,52 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andColorIdEqualTo(String value) {
+        public Criteria andColorIdEqualTo(Byte value) {
             addCriterion("color_id =", value, "colorId");
             return (Criteria) this;
         }
 
-        public Criteria andColorIdNotEqualTo(String value) {
+        public Criteria andColorIdNotEqualTo(Byte value) {
             addCriterion("color_id <>", value, "colorId");
             return (Criteria) this;
         }
 
-        public Criteria andColorIdGreaterThan(String value) {
+        public Criteria andColorIdGreaterThan(Byte value) {
             addCriterion("color_id >", value, "colorId");
             return (Criteria) this;
         }
 
-        public Criteria andColorIdGreaterThanOrEqualTo(String value) {
+        public Criteria andColorIdGreaterThanOrEqualTo(Byte value) {
             addCriterion("color_id >=", value, "colorId");
             return (Criteria) this;
         }
 
-        public Criteria andColorIdLessThan(String value) {
+        public Criteria andColorIdLessThan(Byte value) {
             addCriterion("color_id <", value, "colorId");
             return (Criteria) this;
         }
 
-        public Criteria andColorIdLessThanOrEqualTo(String value) {
+        public Criteria andColorIdLessThanOrEqualTo(Byte value) {
             addCriterion("color_id <=", value, "colorId");
             return (Criteria) this;
         }
 
-        public Criteria andColorIdLike(String value) {
-            addCriterion("color_id like", value, "colorId");
-            return (Criteria) this;
-        }
-
-        public Criteria andColorIdNotLike(String value) {
-            addCriterion("color_id not like", value, "colorId");
-            return (Criteria) this;
-        }
-
-        public Criteria andColorIdIn(List<String> values) {
+        public Criteria andColorIdIn(List<Byte> values) {
             addCriterion("color_id in", values, "colorId");
             return (Criteria) this;
         }
 
-        public Criteria andColorIdNotIn(List<String> values) {
+        public Criteria andColorIdNotIn(List<Byte> values) {
             addCriterion("color_id not in", values, "colorId");
             return (Criteria) this;
         }
 
-        public Criteria andColorIdBetween(String value1, String value2) {
+        public Criteria andColorIdBetween(Byte value1, Byte value2) {
             addCriterion("color_id between", value1, value2, "colorId");
             return (Criteria) this;
         }
 
-        public Criteria andColorIdNotBetween(String value1, String value2) {
+        public Criteria andColorIdNotBetween(Byte value1, Byte value2) {
             addCriterion("color_id not between", value1, value2, "colorId");
             return (Criteria) this;
         }
@@ -2586,66 +2576,6 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsPresaleIsNull() {
-            addCriterion("is_presale is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleIsNotNull() {
-            addCriterion("is_presale is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleEqualTo(Boolean value) {
-            addCriterion("is_presale =", value, "isPresale");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleNotEqualTo(Boolean value) {
-            addCriterion("is_presale <>", value, "isPresale");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleGreaterThan(Boolean value) {
-            addCriterion("is_presale >", value, "isPresale");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_presale >=", value, "isPresale");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleLessThan(Boolean value) {
-            addCriterion("is_presale <", value, "isPresale");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_presale <=", value, "isPresale");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleIn(List<Boolean> values) {
-            addCriterion("is_presale in", values, "isPresale");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleNotIn(List<Boolean> values) {
-            addCriterion("is_presale not in", values, "isPresale");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_presale between", value1, value2, "isPresale");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPresaleNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_presale not between", value1, value2, "isPresale");
-            return (Criteria) this;
-        }
-
         public Criteria andIsBundlingIsNull() {
             addCriterion("is_bundling is null");
             return (Criteria) this;
@@ -3196,13 +3126,8 @@ public class ProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andSpecLikeInsensitive(String value) {
-            addCriterion("upper(spec) like", value.toUpperCase(), "spec");
-            return (Criteria) this;
-        }
-
-        public Criteria andColorIdLikeInsensitive(String value) {
-            addCriterion("upper(color_id) like", value.toUpperCase(), "colorId");
+        public Criteria andSpecNameLikeInsensitive(String value) {
+            addCriterion("upper(spec_name) like", value.toUpperCase(), "specName");
             return (Criteria) this;
         }
 

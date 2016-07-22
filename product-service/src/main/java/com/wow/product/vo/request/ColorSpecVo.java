@@ -10,18 +10,26 @@ public class ColorSpecVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int colorId;
+    private Byte colorId;
+    private String productColorImg;
     private String colorDisplayName;
-    private String colorImgUrl;
 
     List<SpecVo> specVoList;
 
-    public int getColorId() {
+    public Byte getColorId() {
         return colorId;
     }
 
-    public void setColorId(int colorId) {
+    public void setColorId(Byte colorId) {
         this.colorId = colorId;
+    }
+
+    public String getProductColorImg() {
+        return productColorImg;
+    }
+
+    public void setProductColorImg(String productColorImg) {
+        this.productColorImg = productColorImg;
     }
 
     public String getColorDisplayName() {
@@ -30,14 +38,6 @@ public class ColorSpecVo implements Serializable {
 
     public void setColorDisplayName(String colorDisplayName) {
         this.colorDisplayName = colorDisplayName;
-    }
-
-    public String getColorImgUrl() {
-        return colorImgUrl;
-    }
-
-    public void setColorImgUrl(String colorImgUrl) {
-        this.colorImgUrl = colorImgUrl;
     }
 
     public List<SpecVo> getSpecVoList() {

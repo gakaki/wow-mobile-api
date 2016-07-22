@@ -27,8 +27,8 @@
     <result column="size_text" property="sizeText" jdbcType="VARCHAR" />
     <result column="weight" property="weight" jdbcType="DECIMAL" />
     <result column="weight_text" property="weightText" jdbcType="VARCHAR" />
-    <result column="spec" property="spec" jdbcType="VARCHAR" />
-    <result column="color_id" property="colorId" jdbcType="VARCHAR" />
+    <result column="spec_name" property="specName" jdbcType="VARCHAR" />
+    <result column="color_id" property="colorId" jdbcType="TINYINT" />
     <result column="product_color_img" property="productColorImg" jdbcType="VARCHAR" />
     <result column="color_display_name" property="colorDisplayName" jdbcType="VARCHAR" />
     <result column="style_id" property="styleId" jdbcType="TINYINT" />
@@ -40,7 +40,6 @@
     <result column="assemble_tips" property="assembleTips" jdbcType="VARCHAR" />
     <result column="can_customized" property="canCustomized" jdbcType="BIT" />
     <result column="is_fragile" property="isFragile" jdbcType="BIT" />
-    <result column="is_presale" property="isPresale" jdbcType="BIT" />
     <result column="is_bundling" property="isBundling" jdbcType="BIT" />
     <result column="product_status" property="productStatus" jdbcType="TINYINT" />
     <result column="reject_reason" property="rejectReason" jdbcType="VARCHAR" />
@@ -112,11 +111,10 @@
     id, product_name, product_code, product_type, category_id, brand_id, product_model, 
     material_text, selling_point, detail_description, can_sale, can_show, view_platform, 
     seo_title, seo_desc, seo_key, origin_country_id, origin_city, is_import, length, 
-    width, height, size_text, weight, weight_text, spec, color_id, product_color_img, 
+    width, height, size_text, weight, weight_text, spec_name, color_id, product_color_img, 
     color_display_name, style_id, verbose_info, tips, applicable_people, applicable_scene_text, 
-    need_assemble, assemble_tips, can_customized, is_fragile, is_presale, is_bundling, 
-    product_status, reject_reason, on_shelf_time, create_time, approval_time, update_time, 
-    is_deleted
+    need_assemble, assemble_tips, can_customized, is_fragile, is_bundling, product_status, 
+    reject_reason, on_shelf_time, create_time, approval_time, update_time, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.product.model.ProductExample" >
     select
@@ -160,14 +158,14 @@
       origin_country_id, origin_city, is_import, 
       length, width, height, 
       size_text, weight, weight_text, 
-      spec, color_id, product_color_img, 
+      spec_name, color_id, product_color_img, 
       color_display_name, style_id, verbose_info, 
       tips, applicable_people, applicable_scene_text, 
       need_assemble, assemble_tips, can_customized, 
-      is_fragile, is_presale, is_bundling, 
-      product_status, reject_reason, on_shelf_time, 
-      create_time, approval_time, update_time, 
-      is_deleted)
+      is_fragile, is_bundling, product_status, 
+      reject_reason, on_shelf_time, create_time, 
+      approval_time, update_time, is_deleted
+      )
     values (#{productName,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, #{productType,jdbcType=TINYINT}, 
       #{categoryId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, #{productModel,jdbcType=VARCHAR}, 
       #{materialText,jdbcType=VARCHAR}, #{sellingPoint,jdbcType=VARCHAR}, #{detailDescription,jdbcType=VARCHAR}, 
@@ -176,14 +174,14 @@
       #{originCountryId,jdbcType=INTEGER}, #{originCity,jdbcType=VARCHAR}, #{isImport,jdbcType=BIT}, 
       #{length,jdbcType=SMALLINT}, #{width,jdbcType=SMALLINT}, #{height,jdbcType=SMALLINT}, 
       #{sizeText,jdbcType=VARCHAR}, #{weight,jdbcType=DECIMAL}, #{weightText,jdbcType=VARCHAR}, 
-      #{spec,jdbcType=VARCHAR}, #{colorId,jdbcType=VARCHAR}, #{productColorImg,jdbcType=VARCHAR}, 
+      #{specName,jdbcType=VARCHAR}, #{colorId,jdbcType=TINYINT}, #{productColorImg,jdbcType=VARCHAR}, 
       #{colorDisplayName,jdbcType=VARCHAR}, #{styleId,jdbcType=TINYINT}, #{verboseInfo,jdbcType=VARCHAR}, 
       #{tips,jdbcType=VARCHAR}, #{applicablePeople,jdbcType=TINYINT}, #{applicableSceneText,jdbcType=VARCHAR}, 
       #{needAssemble,jdbcType=BIT}, #{assembleTips,jdbcType=VARCHAR}, #{canCustomized,jdbcType=BIT}, 
-      #{isFragile,jdbcType=BIT}, #{isPresale,jdbcType=BIT}, #{isBundling,jdbcType=BIT}, 
-      #{productStatus,jdbcType=TINYINT}, #{rejectReason,jdbcType=VARCHAR}, #{onShelfTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{approvalTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDeleted,jdbcType=BIT})
+      #{isFragile,jdbcType=BIT}, #{isBundling,jdbcType=BIT}, #{productStatus,jdbcType=TINYINT}, 
+      #{rejectReason,jdbcType=VARCHAR}, #{onShelfTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{approvalTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.Product" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -263,8 +261,8 @@
       <if test="weightText != null" >
         weight_text,
       </if>
-      <if test="spec != null" >
-        spec,
+      <if test="specName != null" >
+        spec_name,
       </if>
       <if test="colorId != null" >
         color_id,
@@ -301,9 +299,6 @@
       </if>
       <if test="isFragile != null" >
         is_fragile,
-      </if>
-      <if test="isPresale != null" >
-        is_presale,
       </if>
       <if test="isBundling != null" >
         is_bundling,
@@ -403,11 +398,11 @@
       <if test="weightText != null" >
         #{weightText,jdbcType=VARCHAR},
       </if>
-      <if test="spec != null" >
-        #{spec,jdbcType=VARCHAR},
+      <if test="specName != null" >
+        #{specName,jdbcType=VARCHAR},
       </if>
       <if test="colorId != null" >
-        #{colorId,jdbcType=VARCHAR},
+        #{colorId,jdbcType=TINYINT},
       </if>
       <if test="productColorImg != null" >
         #{productColorImg,jdbcType=VARCHAR},
@@ -441,9 +436,6 @@
       </if>
       <if test="isFragile != null" >
         #{isFragile,jdbcType=BIT},
-      </if>
-      <if test="isPresale != null" >
-        #{isPresale,jdbcType=BIT},
       </if>
       <if test="isBundling != null" >
         #{isBundling,jdbcType=BIT},
@@ -555,11 +547,11 @@
       <if test="record.weightText != null" >
         weight_text = #{record.weightText,jdbcType=VARCHAR},
       </if>
-      <if test="record.spec != null" >
-        spec = #{record.spec,jdbcType=VARCHAR},
+      <if test="record.specName != null" >
+        spec_name = #{record.specName,jdbcType=VARCHAR},
       </if>
       <if test="record.colorId != null" >
-        color_id = #{record.colorId,jdbcType=VARCHAR},
+        color_id = #{record.colorId,jdbcType=TINYINT},
       </if>
       <if test="record.productColorImg != null" >
         product_color_img = #{record.productColorImg,jdbcType=VARCHAR},
@@ -593,9 +585,6 @@
       </if>
       <if test="record.isFragile != null" >
         is_fragile = #{record.isFragile,jdbcType=BIT},
-      </if>
-      <if test="record.isPresale != null" >
-        is_presale = #{record.isPresale,jdbcType=BIT},
       </if>
       <if test="record.isBundling != null" >
         is_bundling = #{record.isBundling,jdbcType=BIT},
@@ -653,8 +642,8 @@
       size_text = #{record.sizeText,jdbcType=VARCHAR},
       weight = #{record.weight,jdbcType=DECIMAL},
       weight_text = #{record.weightText,jdbcType=VARCHAR},
-      spec = #{record.spec,jdbcType=VARCHAR},
-      color_id = #{record.colorId,jdbcType=VARCHAR},
+      spec_name = #{record.specName,jdbcType=VARCHAR},
+      color_id = #{record.colorId,jdbcType=TINYINT},
       product_color_img = #{record.productColorImg,jdbcType=VARCHAR},
       color_display_name = #{record.colorDisplayName,jdbcType=VARCHAR},
       style_id = #{record.styleId,jdbcType=TINYINT},
@@ -666,7 +655,6 @@
       assemble_tips = #{record.assembleTips,jdbcType=VARCHAR},
       can_customized = #{record.canCustomized,jdbcType=BIT},
       is_fragile = #{record.isFragile,jdbcType=BIT},
-      is_presale = #{record.isPresale,jdbcType=BIT},
       is_bundling = #{record.isBundling,jdbcType=BIT},
       product_status = #{record.productStatus,jdbcType=TINYINT},
       reject_reason = #{record.rejectReason,jdbcType=VARCHAR},
@@ -754,11 +742,11 @@
       <if test="weightText != null" >
         weight_text = #{weightText,jdbcType=VARCHAR},
       </if>
-      <if test="spec != null" >
-        spec = #{spec,jdbcType=VARCHAR},
+      <if test="specName != null" >
+        spec_name = #{specName,jdbcType=VARCHAR},
       </if>
       <if test="colorId != null" >
-        color_id = #{colorId,jdbcType=VARCHAR},
+        color_id = #{colorId,jdbcType=TINYINT},
       </if>
       <if test="productColorImg != null" >
         product_color_img = #{productColorImg,jdbcType=VARCHAR},
@@ -792,9 +780,6 @@
       </if>
       <if test="isFragile != null" >
         is_fragile = #{isFragile,jdbcType=BIT},
-      </if>
-      <if test="isPresale != null" >
-        is_presale = #{isPresale,jdbcType=BIT},
       </if>
       <if test="isBundling != null" >
         is_bundling = #{isBundling,jdbcType=BIT},
@@ -849,8 +834,8 @@
       size_text = #{sizeText,jdbcType=VARCHAR},
       weight = #{weight,jdbcType=DECIMAL},
       weight_text = #{weightText,jdbcType=VARCHAR},
-      spec = #{spec,jdbcType=VARCHAR},
-      color_id = #{colorId,jdbcType=VARCHAR},
+      spec_name = #{specName,jdbcType=VARCHAR},
+      color_id = #{colorId,jdbcType=TINYINT},
       product_color_img = #{productColorImg,jdbcType=VARCHAR},
       color_display_name = #{colorDisplayName,jdbcType=VARCHAR},
       style_id = #{styleId,jdbcType=TINYINT},
@@ -862,7 +847,6 @@
       assemble_tips = #{assembleTips,jdbcType=VARCHAR},
       can_customized = #{canCustomized,jdbcType=BIT},
       is_fragile = #{isFragile,jdbcType=BIT},
-      is_presale = #{isPresale,jdbcType=BIT},
       is_bundling = #{isBundling,jdbcType=BIT},
       product_status = #{productStatus,jdbcType=TINYINT},
       reject_reason = #{rejectReason,jdbcType=VARCHAR},

@@ -10,20 +10,19 @@ public class SpecVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String spec;
+    private String specName;
     private BigDecimal sellPrice;
-    private BigDecimal activityPrice;
     private BigDecimal costPrice;
     private BigDecimal weight;
     private byte arrivalLatency;
     private boolean enabled;
 
-    public String getSpec() {
-        return spec;
+    public String getSpecName() {
+        return specName;
     }
 
-    public void setSpec(String spec) {
-        this.spec = spec;
+    public void setSpecName(String specName) {
+        this.specName = specName;
     }
 
     public BigDecimal getSellPrice() {
@@ -32,14 +31,6 @@ public class SpecVo implements Serializable {
 
     public void setSellPrice(BigDecimal sellPrice) {
         this.sellPrice = sellPrice;
-    }
-
-    public BigDecimal getActivityPrice() {
-        return activityPrice;
-    }
-
-    public void setActivityPrice(BigDecimal activityPrice) {
-        this.activityPrice = activityPrice;
     }
 
     public BigDecimal getCostPrice() {
