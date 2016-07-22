@@ -335,4 +335,10 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectProductPrimaryOneImg" resultMap="BaseResultMap" parameterType="map">
+  	select 
+  		<include refid="Base_Column_List" /> 
+  	from product_image pi where pi.product_id=#{productId} and is_primary=1 and is_deleted=0 order by sort_order asc limit 1
+  </select>
 </mapper>
