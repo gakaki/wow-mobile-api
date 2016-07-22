@@ -3,10 +3,8 @@ package com.wow.product.vo.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by fangying@wowdsgn on 2016/7/14.
@@ -16,26 +14,14 @@ public class ProductResponse extends CommonResponse {
 
     private static final long serialVersionUID = 1L;
 
+    //主图轮播
+    private List<String> primaryImgs;
     //产品名
     private String productName;
-    //温馨提示
-    private String tips;
-    //详细信息
-    private String verboseInfo;
-    //使用场景,多个用文本表示,逗号分隔
-    private String applicableSceneText;
-    //产地
-    private String  origin;
-    //重量
-    private BigDecimal weight;
-    //材质,多个用文本表示,逗号分隔
-    private String materialText;
-    //规格
-    private String spec;
-    //是否需要安装
-    private Boolean needAssemble;
-    //风格
-    private String style;
+    //销售价
+    private BigDecimal sellPrice;
+    //原价
+    private BigDecimal originalPrice;
     //卖点(短描述)
     private String sellingPoint;
     //品牌中文名
@@ -46,18 +32,21 @@ public class ProductResponse extends CommonResponse {
     private String designerName;
     //设计师头像
     private String designerPhoto;
-    //销售价
-    private BigDecimal sellPrice;
-    //原价
-    private BigDecimal originalPrice;
-    //详细描述
-    private String detailDescription;
-    //主图轮播
-    private List<String> primaryImgs;
     //细节图
     private String firstNonPrimaryImgUrl;
     //细节图描述
     private String firstNonPrimaryImgDesc;
+    //产品参数
+    private ProductParameter productParameter;
+    //温馨提示
+    private String tips;
+
+    //详细信息
+    private String verboseInfo;
+    //重量
+    private BigDecimal weight;
+    //详细描述
+    private String detailDescription;
 
     public String getDetailDescription() {
         return detailDescription;
@@ -107,60 +96,12 @@ public class ProductResponse extends CommonResponse {
         this.verboseInfo = verboseInfo;
     }
 
-    public String getApplicableSceneText() {
-        return applicableSceneText;
-    }
-
-    public void setApplicableSceneText(String applicableSceneText) {
-        this.applicableSceneText = applicableSceneText;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
     public BigDecimal getWeight() {
         return weight;
     }
 
     public void setWeight(BigDecimal weight) {
         this.weight = weight;
-    }
-
-    public String getMaterialText() {
-        return materialText;
-    }
-
-    public void setMaterialText(String materialText) {
-        this.materialText = materialText;
-    }
-
-    public String getSpec() {
-        return spec;
-    }
-
-    public void setSpec(String spec) {
-        this.spec = spec;
-    }
-
-    public Boolean getNeedAssemble() {
-        return needAssemble;
-    }
-
-    public void setNeedAssemble(Boolean needAssemble) {
-        this.needAssemble = needAssemble;
-    }
-
-    public String getStyle() {
-        return style;
-    }
-
-    public void setStyle(String style) {
-        this.style = style;
     }
 
     public String getSellingPoint() {
@@ -225,5 +166,13 @@ public class ProductResponse extends CommonResponse {
 
     public void setPrimaryImgs(List<String> primaryImgs) {
         this.primaryImgs = primaryImgs;
+    }
+
+    public ProductParameter getProductParameter() {
+        return productParameter;
+    }
+
+    public void setProductParameter(ProductParameter productParameter) {
+        this.productParameter = productParameter;
     }
 }

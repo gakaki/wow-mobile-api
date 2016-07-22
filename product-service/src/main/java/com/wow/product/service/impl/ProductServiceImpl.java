@@ -12,6 +12,7 @@ import com.wow.product.model.*;
 import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.response.ProductParameter;
 import com.wow.product.vo.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -314,22 +315,28 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductResponse getItemDetailById(int productId) {
         ProductResponse productResponse = new ProductResponse();
+
         Product product = getProductById(productId);
         if (product != null) {
+
 
             //产品基本信息
             productResponse.setProductName(product.getProductName());
             productResponse.setTips(product.getTips());
             productResponse.setDetailDescription(product.getDetailDescription());
             productResponse.setVerboseInfo(product.getVerboseInfo());
-            productResponse.setApplicableSceneText(product.getApplicableSceneText());
-            productResponse.setOrigin(product.getOriginCountry() + "," + product.getOriginCity());
             productResponse.setWeight(product.getWeight());
-            productResponse.setMaterialText(product.getMaterialText());
-            productResponse.setSpec(product.getSpec());
-            productResponse.setNeedAssemble(product.getNeedAssemble());
-            productResponse.setStyle(product.getStyle());
             productResponse.setSellingPoint(product.getSellingPoint());
+
+            //产品参数
+            ProductParameter productParameter = new ProductParameter();
+            productParameter.setApplicableSceneText(product.getApplicableSceneText());
+            productParameter.setOrigin(product.getOriginCountry() + "," + product.getOriginCity());
+            productParameter.setMaterialText(product.getMaterialText());
+            productParameter.setNeedAssemble(product.getNeedAssemble());
+            productParameter.setStyle(product.getStyle());
+
+            productResponse.setProductParameter(productParameter);
 
             //品牌
             Brand brand = brandService.getBrandById(product.getBrandId());
