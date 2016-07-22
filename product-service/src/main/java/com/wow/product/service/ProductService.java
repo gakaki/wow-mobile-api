@@ -19,7 +19,14 @@ public interface ProductService {
      *
      * @param productCreateRequest
      */
-    CommonResponse createProduct(ProductCreateRequest productCreateRequest);
+    CommonResponse createProductInfo(ProductCreateRequest productCreateRequest);
+
+    /**
+     *
+     * @param product
+     * @return
+     */
+    int createProduct(Product product);
 
     /**
      * 根据ID查询产品

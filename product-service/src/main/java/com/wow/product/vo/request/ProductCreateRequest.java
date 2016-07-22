@@ -18,11 +18,11 @@ public class ProductCreateRequest implements Serializable {
     private List<DesignerVo> designerVoList;
     private int originCountryId;
     private String originCity;
-    private int styleId;
+    private byte styleId;
     private Short length;
     private Short width;
     private Short height;
-    private short applicablePeople;
+    private byte applicablePeople;
     private boolean canCustomized;
     private List<Integer> applicableSceneList;
     private List<Integer> materialList;
@@ -94,11 +94,11 @@ public class ProductCreateRequest implements Serializable {
         this.originCity = originCity;
     }
 
-    public int getStyleId() {
+    public byte getStyleId() {
         return styleId;
     }
 
-    public void setStyleId(int styleId) {
+    public void setStyleId(byte styleId) {
         this.styleId = styleId;
     }
 
@@ -126,11 +126,11 @@ public class ProductCreateRequest implements Serializable {
         this.height = height;
     }
 
-    public short getApplicablePeople() {
+    public byte getApplicablePeople() {
         return applicablePeople;
     }
 
-    public void setApplicablePeople(short applicablePeople) {
+    public void setApplicablePeople(byte applicablePeople) {
         this.applicablePeople = applicablePeople;
     }
 

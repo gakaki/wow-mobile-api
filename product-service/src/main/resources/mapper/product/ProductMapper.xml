@@ -183,7 +183,8 @@
       #{approvalTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.product.model.Product" >
+
+  <insert id="insertSelective" parameterType="com.wow.product.model.Product" useGeneratedKeys="true" keyProperty="id">
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>

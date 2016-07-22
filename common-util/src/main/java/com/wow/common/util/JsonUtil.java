@@ -13,6 +13,7 @@ public class JsonUtil {
         try {
             resultJsonStr = objectMapper.writeValueAsString(object);
         } catch (Exception e) {
+            e.printStackTrace();
             resultJsonStr="";
         }
         
@@ -27,6 +28,7 @@ public class JsonUtil {
         try {
             obj = objectMapper.readValue(json, type);
         } catch (Exception e) {
+            e.printStackTrace();
             obj=null;
         }
         
