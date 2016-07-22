@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private DesignerService designerService;
 
-    private static final Integer productPrimaryImgCountLimit = 5;
+
 
     /**
      * 创建产品(注意要调用生码接口)
@@ -338,44 +338,6 @@ public class ProductServiceImpl implements ProductService {
 
             productResponse.setProductParameter(productParameter);
 
-            //品牌
-            Brand brand = brandService.getBrandById(product.getBrandId());
-            if (brand != null) {
-                productResponse.setBrandCname(brand.getBrandCname());
-                productResponse.setBrandLogoImg(brand.getBrandLogoImg());
-            }
-
-            //主设计师
-            Designer designer = designerService.getPrimaryDesignerByProduct(productId);
-            if (designer != null) {
-                productResponse.setDesignerName(designer.getDesignerName());
-                productResponse.setDesignerPhoto(designer.getDesignerPhoto());
-            }
-
-            //产品图片(要求最多5张主图和一张细节图)
-            List<ProductImage> productImages = getProductImages(productId);
-            if (CollectionUtil.isNotEmpty(productImages)) {
-                List<String> primaryImgUrlList = new ArrayList<>();
-
-                int primaryImgCnt = 0;
-                int nonPrimaryImgCnt = 0;
-
-                for (ProductImage productImage : productImages) {
-                    if (primaryImgCnt == productPrimaryImgCountLimit && nonPrimaryImgCnt == 1) {
-                        break;
-                    }
-                    if (productImage.getIsPrimary() && primaryImgCnt < productPrimaryImgCountLimit) {
-                        primaryImgUrlList.add(productImage.getImgUrl());
-                        primaryImgCnt++;
-                    }
-                    if (!productImage.getIsPrimary() && nonPrimaryImgCnt < 1) {
-                        productResponse.setFirstNonPrimaryImgUrl(productImage.getImgUrl());
-                        productResponse.setFirstNonPrimaryImgDesc(productImage.getImgDesc());
-                        nonPrimaryImgCnt++;
-                    }
-                }
-                productResponse.setPrimaryImgs(primaryImgUrlList);
-            }
         }
         return productResponse;
     }

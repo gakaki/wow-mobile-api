@@ -3,10 +3,7 @@ package com.wow.product.service.impl;
 import com.wow.common.util.CollectionUtil;
 import com.wow.product.mapper.DesignerMapper;
 import com.wow.product.mapper.ProductDesignerMapper;
-import com.wow.product.model.Designer;
-import com.wow.product.model.DesignerExample;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductDesigner;
+import com.wow.product.model.*;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,8 +124,18 @@ public class DesignerServiceImpl implements DesignerService {
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Designer getPrimaryDesignerByProduct(int productId) {
-        //TODO
-        return null;
+        Designer designer = new Designer();
+        ProductDesignerExample productDesignerExample = new ProductDesignerExample();
+        ProductDesignerExample.Criteria criteria = productDesignerExample.createCriteria();
+        criteria.andProductIdEqualTo(productId);
+        criteria.andIsPrimaryEqualTo(true);
+        List<ProductDesigner> productDesignerList = productDesignerMapper.selectByExample(productDesignerExample);
+
+        if (CollectionUtil.isNotEmpty(productDesignerList)) {
+            ProductDesigner productDesigner = productDesignerList.get(0);
+            designer = getDesignerById(productDesigner.getDesignerId());
+        }
+        return designer;
     }
 
     /**
