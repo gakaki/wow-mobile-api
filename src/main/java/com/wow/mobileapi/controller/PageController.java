@@ -46,7 +46,7 @@ public class PageController extends BaseController {
         return apiResponse;
     }
     
-    @RequestMapping(value = "/v1/page/findproduct", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/page/find/product", method = RequestMethod.GET)
     public ApiResponse getProductOnFindPage(ApiRequest apiRequest) {
         logger.info("start to get product_find on page");
         ApiResponse apiResponse = new ApiResponse();
@@ -66,7 +66,7 @@ public class PageController extends BaseController {
         return apiResponse;
     }
     
-    @RequestMapping(value = "/v1/page/category", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/page/find/category", method = RequestMethod.GET)
     public ApiResponse getCategoryOnFindPage(ApiRequest apiRequest) {
         logger.info("start to get category_find on page");
         ApiResponse apiResponse = new ApiResponse();

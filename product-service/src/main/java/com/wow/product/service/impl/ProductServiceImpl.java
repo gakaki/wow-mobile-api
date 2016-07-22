@@ -299,6 +299,7 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProductByCategoryId(int category, int sortBy, boolean asc) {
         //TODO:
         //1. 根据category查询该类目下所有三级类目
+        categoryService.getLastLevelCategoryByCategory(category);
         //2. 查询属于该类目三级类目的所有产品,按排序规则排序
         //3. 分页待定:插件、注解
         return null;
