@@ -1,16 +1,15 @@
 package com.wow.stock.vo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 /**
  * Created by zhengzhiqing on 16/6/30.
  */
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class ProductWarehouseQtyVo extends ProductQtyVo {
+public class ProductWarehouseQtyVo {
 
     private static final long serialVersionUID = 1L;
 
     private int warehouseId;
+
+    private int productQty;
 
     public int getWarehouseId() {
         return warehouseId;
@@ -18,5 +17,13 @@ public class ProductWarehouseQtyVo extends ProductQtyVo {
 
     public void setWarehouseId(int warehouseId) {
         this.warehouseId = warehouseId;
+    }
+
+    public int getProductQty() {
+        return productQty;
+    }
+
+    public void setProductQty(int productQty) {
+        this.productQty = productQty;
     }
 }

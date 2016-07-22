@@ -12,16 +12,28 @@ public class UnfreezeStockVo {
 
     private static final long serialVersionUID = 1L;
 
-    List<ProductQtyVo> productQtyVoList;
+    private int productId;
 
+    //虚拟库存
+    private int virtualProductQty;
+
+    //仓库库存仓库库存
     List<ProductWarehouseQtyVo> productWarehouseQtyVoList;
 
-    public List<ProductQtyVo> getProductQtyVoList() {
-        return productQtyVoList;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setProductQtyVoList(List<ProductQtyVo> productQtyVoList) {
-        this.productQtyVoList = productQtyVoList;
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public int getVirtualProductQty() {
+        return virtualProductQty;
+    }
+
+    public void setVirtualProductQty(int virtualProductQty) {
+        this.virtualProductQty = virtualProductQty;
     }
 
     public List<ProductWarehouseQtyVo> getProductWarehouseQtyVoList() {

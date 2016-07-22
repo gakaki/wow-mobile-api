@@ -105,6 +105,13 @@ public interface StockService {
      */
     CommonResponse unfreezeStock(UnfreezeStockVo unfreezeStockVo);
 
+    /**
+     * 批量解冻库存(通用,一般是取消订单)
+     *
+     * @param unfreezeStockVoList
+     */
+    CommonResponse batchUnfreezeStock(List<UnfreezeStockVo> unfreezeStockVoList);
+
 
     /**
      * 计算可用库存=仓库可用库存+虚拟可用库存

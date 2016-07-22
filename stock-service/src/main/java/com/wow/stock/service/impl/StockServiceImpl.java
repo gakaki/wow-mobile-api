@@ -1,20 +1,5 @@
 package com.wow.stock.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
@@ -25,18 +10,19 @@ import com.wow.stock.mapper.ProductWarehouseStockMapper;
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.model.ProductWarehouseStock;
 import com.wow.stock.service.StockService;
-import com.wow.stock.vo.AvailableStockVo;
-import com.wow.stock.vo.FreezeStockVo;
-import com.wow.stock.vo.ProductQtyVo;
-import com.wow.stock.vo.ProductWarehouseQtyVo;
-import com.wow.stock.vo.UnfreezeStockVo;
-import com.wow.stock.vo.VirtualStockVo;
-import com.wow.stock.vo.WarehouseStockFrozenResultVo;
-import com.wow.stock.vo.WarehouseStockVo;
+import com.wow.stock.vo.*;
 import com.wow.stock.vo.response.AvailableStockResponse;
 import com.wow.stock.vo.response.AvailableStocksResponse;
 import com.wow.stock.vo.response.BatchFreezeStockResponse;
 import com.wow.stock.vo.response.FreezeStockResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 /**
  * Created by zhengzhiqing on 16/6/17.
@@ -390,20 +376,39 @@ public class StockServiceImpl implements StockService {
      */
     @Override
     public CommonResponse unfreezeStock(UnfreezeStockVo unfreezeStockVo) {
+
         CommonResponse commonResponse = new CommonResponse();
-        List<ProductQtyVo> productQtyVoList = unfreezeStockVo.getProductQtyVoList();
+
+        int productId = unfreezeStockVo.getProductId();
+        int virtualProductQty = unfreezeStockVo.getVirtualProductQty();
         List<ProductWarehouseQtyVo> productWarehouseQtyVoList = unfreezeStockVo.getProductWarehouseQtyVoList();
+
         //解冻仓库库存
         if (CollectionUtil.isNotEmpty(productWarehouseQtyVoList)) {
             for (ProductWarehouseQtyVo productWarehouseQtyVo : productWarehouseQtyVoList) {
-                unfreezeWarehouseStock(productWarehouseQtyVo.getProductId(), productWarehouseQtyVo
-                    .getWarehouseId(), productWarehouseQtyVo.getProductQty());
+                unfreezeWarehouseStock(productId, productWarehouseQtyVo.getWarehouseId(), productWarehouseQtyVo.getProductQty());
             }
         }
         //解冻虚拟库存
-        if (CollectionUtil.isNotEmpty(productQtyVoList)) {
-            for (ProductQtyVo productQtyVo : productQtyVoList) {
-                unfreezeVirtualStock(productQtyVo.getProductId(), productQtyVo.getProductQty());
+        if (virtualProductQty > 0) {
+            unfreezeVirtualStock(productId, virtualProductQty);
+        }
+        return commonResponse;
+    }
+
+    /**
+     * 批量解冻库存(通用,一般是取消订单)
+     *
+     * @param unfreezeStockVoList
+     */
+    @Override
+    public CommonResponse batchUnfreezeStock(List<UnfreezeStockVo> unfreezeStockVoList) {
+        CommonResponse commonResponse = new CommonResponse();
+        for (UnfreezeStockVo unfreezeStockVo : unfreezeStockVoList) {
+            CommonResponse unfreezeStockResponse = unfreezeStock(unfreezeStockVo);
+            if (unfreezeStockResponse == null || ErrorCodeUtil.isFailedResponse(unfreezeStockResponse.getResCode())) {
+                ErrorResponseUtil.setErrorResponse(commonResponse, "50604");
+                return commonResponse;
             }
         }
         return commonResponse;
