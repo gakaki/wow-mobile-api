@@ -1,9 +1,12 @@
 package com.wow.product.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
+import com.wow.product.vo.ProductVo;
 
 public interface ProductMapper {
     int countByExample(ProductExample example);
@@ -33,4 +36,10 @@ public interface ProductMapper {
     int updateByPrimaryKeyWithBLOBs(Product record);
 
     int updateByPrimaryKey(Product record);
+    
+    List<ProductVo> selectPageByCategoryIdOrderbyShelfTime(@Param("categoryIds") String categoryIds,@Param("asc") String asc);
+    
+    List<ProductVo> selectPageByCategoryIdOrderbyTotalSold(@Param("categoryIds") String categoryIds,@Param("asc") String asc);
+    
+    List<ProductVo> selectPageByCategoryIdOrderbySellPrice(@Param("categoryIds") String categoryIds,@Param("asc") String asc);
 }

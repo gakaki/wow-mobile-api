@@ -1,27 +1,41 @@
 package com.wow.product.service.impl;
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.attribute.model.Attribute;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.util.CollectionUtil;
-import com.wow.product.mapper.*;
-import com.wow.product.model.*;
+import com.wow.product.mapper.MaterialMapper;
+import com.wow.product.mapper.ProductAttributeMapper;
+import com.wow.product.mapper.ProductImageMapper;
+import com.wow.product.mapper.ProductMapper;
+import com.wow.product.mapper.ProductMaterialMapper;
+import com.wow.product.model.Material;
+import com.wow.product.model.MaterialExample;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductAttribute;
+import com.wow.product.model.ProductExample;
+import com.wow.product.model.ProductImage;
+import com.wow.product.model.ProductImageExample;
+import com.wow.product.model.ProductMaterial;
+import com.wow.product.model.ProductMaterialExample;
 import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.response.ProductParameter;
 import com.wow.product.vo.response.ProductResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 
 /**
@@ -297,13 +311,31 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     @Override
-    public List<Product> getProductByCategoryId(int category, int sortBy, boolean asc) {
+    public List<ProductVo> getProductByCategoryId(int categoryId, int sortBy, boolean asc) {
         //TODO:
         //1. 根据category查询该类目下所有三级类目
-        categoryService.getLastLevelCategoryByCategory(category);
         //2. 查询属于该类目三级类目的所有产品,按排序规则排序
         //3. 分页待定:插件、注解
-        return null;
+    	String categoryids = categoryService.getLastLevelCategoryByCategory(categoryId);
+    	
+    	String px = asc==true?"asc":"desc";
+    	System.out.println(px);
+    	List<ProductVo> productList = new ArrayList<ProductVo>();
+    	if(sortBy == 1)
+    		productList = productMapper.selectPageByCategoryIdOrderbyShelfTime(categoryids,px);
+    	if(sortBy == 2)
+    		productList = productMapper.selectPageByCategoryIdOrderbyTotalSold(categoryids,px);
+    	if(sortBy == 3)
+    		productList = productMapper.selectPageByCategoryIdOrderbySellPrice(categoryids,px);
+    	List<ProductVo> list = new ArrayList<ProductVo>();
+    	for(ProductVo product : productList){
+    		ProductImage pi = productImageMapper.selectProductPrimaryOneImg(product.getProductId());
+    		if(pi!=null){
+    			product.setProductImg(pi.getImgUrl());
+        		list.add(product);
+    		}
+    	}
+        return list;
     }
 
     /**
