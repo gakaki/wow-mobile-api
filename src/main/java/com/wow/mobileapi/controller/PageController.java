@@ -1,13 +1,6 @@
 package com.wow.mobileapi.controller;
 
-import com.wow.common.request.ApiRequest;
-import com.wow.common.response.ApiResponse;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.mobileapi.constant.BizConstant;
-import com.wow.page.service.PageConfigService;
-import com.wow.page.vo.response.PageBannerResponse;
-import com.wow.page.vo.response.PageCategoryResponse;
-import com.wow.page.vo.response.PageProductResponse;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.wow.common.request.ApiRequest;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.constant.BizConstant;
+import com.wow.mobileapi.request.product.ProductInfoRequest;
+import com.wow.page.service.PageConfigService;
+import com.wow.page.vo.response.PageBannerResponse;
+import com.wow.page.vo.response.PageCategoryResponse;
+import com.wow.page.vo.response.PageProductResponse;
+import com.wow.product.service.ProductService;
+import com.wow.product.vo.ProductVo;
 
 /**
  * Created by zhengzhiqing on 16/6/23.
@@ -25,6 +33,8 @@ public class PageController extends BaseController {
 
     @Autowired
     private PageConfigService pageConfigService;
+    @Autowired
+    private ProductService productService;
 
     @RequestMapping(value = "/v1/page/banners", method = RequestMethod.GET)
     public ApiResponse getBannersOnHomePage(ApiRequest apiRequest) {
@@ -82,6 +92,36 @@ public class PageController extends BaseController {
         } catch (Exception e) {
             logger.error("查找category_find错误---" + e);
             setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+
+    @RequestMapping(value = "/v1/page/find/categroyProductList", method = RequestMethod.GET)
+    public ApiResponse categroyProductList(ApiRequest apiRequest) {
+        ApiResponse apiResponse = new ApiResponse();
+        ProductInfoRequest productInfoRequest = JsonUtil
+                .fromJSON(apiRequest.getParamJson(), ProductInfoRequest.class);
+            //判断json格式参数是否有误
+            if (productInfoRequest == null) {
+                setParamJsonParseErrorResponse(apiResponse);
+                return apiResponse;
+            }
+
+            String errorMsg = ValidatorUtil.getError(productInfoRequest);
+            //如果校验错误 则返回
+            if (StringUtil.isNotEmpty(errorMsg)) {
+                setInvalidParameterResponse(apiResponse, errorMsg);
+                return apiResponse;
+            }
+        
+        List<ProductVo> productList = productService.getProductByCategoryId(productInfoRequest.getCategoryId(), productInfoRequest.getSortBy(), productInfoRequest.getAsc());
+        if (productList != null) {
+            apiResponse.setResCode("0");
+            apiResponse.setResMsg("Success");
+            apiResponse.setData(productList);
+        } else {
+            apiResponse.setResCode("40201");
+            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40201"));
         }
         return apiResponse;
     }
