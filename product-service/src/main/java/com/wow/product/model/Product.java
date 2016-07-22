@@ -7,8 +7,6 @@ import java.util.Date;
 public class Product implements Serializable {
     private Integer id;
 
-    private String code;
-
     private String productName;
 
     private String productCode;
@@ -33,7 +31,13 @@ public class Product implements Serializable {
 
     private Byte viewPlatform;
 
-    private String originCountry;
+    private String seoTitle;
+
+    private String seoDesc;
+
+    private String seoKey;
+
+    private Integer originCountryId;
 
     private String originCity;
 
@@ -53,25 +57,27 @@ public class Product implements Serializable {
 
     private String spec;
 
-    private String specImg;
+    private String colorId;
 
-    private String color;
+    private String productColorImg;
 
-    private String style;
+    private String colorDisplayName;
+
+    private Byte styleId;
 
     private String verboseInfo;
 
     private String tips;
 
+    private Byte applicablePeople;
+
     private String applicableSceneText;
-
-    private String postSaleServiceDesc;
-
-    private Byte deliveryFeeType;
 
     private Boolean needAssemble;
 
     private String assembleTips;
+
+    private Boolean canCustomized;
 
     private Boolean isFragile;
 
@@ -93,12 +99,6 @@ public class Product implements Serializable {
 
     private Boolean isDeleted;
 
-    private String seoTitle;
-
-    private String seoDesc;
-
-    private String seoKey;
-
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -107,14 +107,6 @@ public class Product implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code == null ? null : code.trim();
     }
 
     public String getProductName() {
@@ -213,12 +205,36 @@ public class Product implements Serializable {
         this.viewPlatform = viewPlatform;
     }
 
-    public String getOriginCountry() {
-        return originCountry;
+    public String getSeoTitle() {
+        return seoTitle;
     }
 
-    public void setOriginCountry(String originCountry) {
-        this.originCountry = originCountry == null ? null : originCountry.trim();
+    public void setSeoTitle(String seoTitle) {
+        this.seoTitle = seoTitle == null ? null : seoTitle.trim();
+    }
+
+    public String getSeoDesc() {
+        return seoDesc;
+    }
+
+    public void setSeoDesc(String seoDesc) {
+        this.seoDesc = seoDesc == null ? null : seoDesc.trim();
+    }
+
+    public String getSeoKey() {
+        return seoKey;
+    }
+
+    public void setSeoKey(String seoKey) {
+        this.seoKey = seoKey == null ? null : seoKey.trim();
+    }
+
+    public Integer getOriginCountryId() {
+        return originCountryId;
+    }
+
+    public void setOriginCountryId(Integer originCountryId) {
+        this.originCountryId = originCountryId;
     }
 
     public String getOriginCity() {
@@ -293,28 +309,36 @@ public class Product implements Serializable {
         this.spec = spec == null ? null : spec.trim();
     }
 
-    public String getSpecImg() {
-        return specImg;
+    public String getColorId() {
+        return colorId;
     }
 
-    public void setSpecImg(String specImg) {
-        this.specImg = specImg == null ? null : specImg.trim();
+    public void setColorId(String colorId) {
+        this.colorId = colorId == null ? null : colorId.trim();
     }
 
-    public String getColor() {
-        return color;
+    public String getProductColorImg() {
+        return productColorImg;
     }
 
-    public void setColor(String color) {
-        this.color = color == null ? null : color.trim();
+    public void setProductColorImg(String productColorImg) {
+        this.productColorImg = productColorImg == null ? null : productColorImg.trim();
     }
 
-    public String getStyle() {
-        return style;
+    public String getColorDisplayName() {
+        return colorDisplayName;
     }
 
-    public void setStyle(String style) {
-        this.style = style == null ? null : style.trim();
+    public void setColorDisplayName(String colorDisplayName) {
+        this.colorDisplayName = colorDisplayName == null ? null : colorDisplayName.trim();
+    }
+
+    public Byte getStyleId() {
+        return styleId;
+    }
+
+    public void setStyleId(Byte styleId) {
+        this.styleId = styleId;
     }
 
     public String getVerboseInfo() {
@@ -333,28 +357,20 @@ public class Product implements Serializable {
         this.tips = tips == null ? null : tips.trim();
     }
 
+    public Byte getApplicablePeople() {
+        return applicablePeople;
+    }
+
+    public void setApplicablePeople(Byte applicablePeople) {
+        this.applicablePeople = applicablePeople;
+    }
+
     public String getApplicableSceneText() {
         return applicableSceneText;
     }
 
     public void setApplicableSceneText(String applicableSceneText) {
         this.applicableSceneText = applicableSceneText == null ? null : applicableSceneText.trim();
-    }
-
-    public String getPostSaleServiceDesc() {
-        return postSaleServiceDesc;
-    }
-
-    public void setPostSaleServiceDesc(String postSaleServiceDesc) {
-        this.postSaleServiceDesc = postSaleServiceDesc == null ? null : postSaleServiceDesc.trim();
-    }
-
-    public Byte getDeliveryFeeType() {
-        return deliveryFeeType;
-    }
-
-    public void setDeliveryFeeType(Byte deliveryFeeType) {
-        this.deliveryFeeType = deliveryFeeType;
     }
 
     public Boolean getNeedAssemble() {
@@ -371,6 +387,14 @@ public class Product implements Serializable {
 
     public void setAssembleTips(String assembleTips) {
         this.assembleTips = assembleTips == null ? null : assembleTips.trim();
+    }
+
+    public Boolean getCanCustomized() {
+        return canCustomized;
+    }
+
+    public void setCanCustomized(Boolean canCustomized) {
+        this.canCustomized = canCustomized;
     }
 
     public Boolean getIsFragile() {
@@ -453,30 +477,6 @@ public class Product implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public String getSeoTitle() {
-        return seoTitle;
-    }
-
-    public void setSeoTitle(String seoTitle) {
-        this.seoTitle = seoTitle == null ? null : seoTitle.trim();
-    }
-
-    public String getSeoDesc() {
-        return seoDesc;
-    }
-
-    public void setSeoDesc(String seoDesc) {
-        this.seoDesc = seoDesc == null ? null : seoDesc.trim();
-    }
-
-    public String getSeoKey() {
-        return seoKey;
-    }
-
-    public void setSeoKey(String seoKey) {
-        this.seoKey = seoKey == null ? null : seoKey.trim();
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -484,7 +484,6 @@ public class Product implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", code=").append(code);
         sb.append(", productName=").append(productName);
         sb.append(", productCode=").append(productCode);
         sb.append(", productType=").append(productType);
@@ -497,7 +496,10 @@ public class Product implements Serializable {
         sb.append(", canSale=").append(canSale);
         sb.append(", canShow=").append(canShow);
         sb.append(", viewPlatform=").append(viewPlatform);
-        sb.append(", originCountry=").append(originCountry);
+        sb.append(", seoTitle=").append(seoTitle);
+        sb.append(", seoDesc=").append(seoDesc);
+        sb.append(", seoKey=").append(seoKey);
+        sb.append(", originCountryId=").append(originCountryId);
         sb.append(", originCity=").append(originCity);
         sb.append(", isImport=").append(isImport);
         sb.append(", length=").append(length);
@@ -507,16 +509,17 @@ public class Product implements Serializable {
         sb.append(", weight=").append(weight);
         sb.append(", weightText=").append(weightText);
         sb.append(", spec=").append(spec);
-        sb.append(", specImg=").append(specImg);
-        sb.append(", color=").append(color);
-        sb.append(", style=").append(style);
+        sb.append(", colorId=").append(colorId);
+        sb.append(", productColorImg=").append(productColorImg);
+        sb.append(", colorDisplayName=").append(colorDisplayName);
+        sb.append(", styleId=").append(styleId);
         sb.append(", verboseInfo=").append(verboseInfo);
         sb.append(", tips=").append(tips);
+        sb.append(", applicablePeople=").append(applicablePeople);
         sb.append(", applicableSceneText=").append(applicableSceneText);
-        sb.append(", postSaleServiceDesc=").append(postSaleServiceDesc);
-        sb.append(", deliveryFeeType=").append(deliveryFeeType);
         sb.append(", needAssemble=").append(needAssemble);
         sb.append(", assembleTips=").append(assembleTips);
+        sb.append(", canCustomized=").append(canCustomized);
         sb.append(", isFragile=").append(isFragile);
         sb.append(", isPresale=").append(isPresale);
         sb.append(", isBundling=").append(isBundling);
@@ -527,9 +530,6 @@ public class Product implements Serializable {
         sb.append(", approvalTime=").append(approvalTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", isDeleted=").append(isDeleted);
-        sb.append(", seoTitle=").append(seoTitle);
-        sb.append(", seoDesc=").append(seoDesc);
-        sb.append(", seoKey=").append(seoKey);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

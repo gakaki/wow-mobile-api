@@ -7,7 +7,6 @@ import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
-import com.wow.product.vo.response.SpecResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

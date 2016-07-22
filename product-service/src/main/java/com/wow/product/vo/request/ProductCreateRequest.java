@@ -1,13 +1,12 @@
 package com.wow.product.vo.request;
 
-import com.wow.common.request.ApiRequest;
-
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/7/21.
  */
-public class ProductCreateRequest extends ApiRequest {
+public class ProductCreateRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,7 +1,9 @@
 package com.wow.product.service;
 
 import com.wow.attribute.model.Attribute;
+import com.wow.common.response.CommonResponse;
 import com.wow.product.model.*;
+import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.response.ProductResponse;
 
 import java.util.List;
@@ -15,9 +17,9 @@ public interface ProductService {
     /**
      * 创建产品
      *
-     * @param product
+     * @param productCreateRequest
      */
-    int createProduct(Product product);
+    CommonResponse createProduct(ProductCreateRequest productCreateRequest);
 
     /**
      * 根据ID查询产品

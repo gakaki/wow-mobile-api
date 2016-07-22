@@ -6,12 +6,15 @@ import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.RandomGenerator;
 import com.wow.product.mapper.*;
 import com.wow.product.model.*;
 import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.response.ProductParameter;
 import com.wow.product.vo.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,14 +67,29 @@ public class ProductServiceImpl implements ProductService {
     /**
      * 创建产品(注意要调用生码接口)
      *
-     * @param product
+     * @param productCreateRequest
      */
-    public int createProduct(Product product) {
-        if(product==null)
-            return -1;
-        String productCode = generateProductCode();
+    public CommonResponse createProduct(ProductCreateRequest productCreateRequest) {
+        String  productCode= generateProductCode();
+        Product product = new Product();
+
+        productCreateRequest.getApplicablePeople();
+        productCreateRequest.getBrandId();
+        productCreateRequest.getCategoryId();
+        productCreateRequest.getDetailDescription();
+        productCreateRequest.getHeight();
+        productCreateRequest.getLength();
+        productCreateRequest.getOriginCity();
+        productCreateRequest.getOriginCountry();
+        productCreateRequest.getProductModel();
+        productCreateRequest.getProductName();
+        productCreateRequest.getSellingPoint();
+        productCreateRequest.getStyleId();
+        productCreateRequest.getWidth();
+
         product.setProductCode(productCode.substring(0,7));
-        return productMapper.insertSelective(product);
+        productMapper.insertSelective(product);
+        return null;
     }
 
     /**
@@ -80,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
      */
     private String generateProductCode() {
         //TODO: 要求是数字,且不重复
-        return java.util.UUID.randomUUID().toString();
+        return RandomGenerator.createRandom(true, 8);
     }
 
 
