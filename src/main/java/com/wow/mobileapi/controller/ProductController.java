@@ -86,10 +86,10 @@ public class ProductController extends BaseController {
             }
 
             //品牌
-            Brand brand = brandService.getBrandById(productId);
+            Brand brand = brandService.getBrandById(productResponse.getBrandId());
             if (brand != null) {
                 itemDetailResponse.setBrandCname(brand.getBrandCname());
-                itemDetailResponse.setBrandLogoImg(brand.getBrandLogoImg());
+                itemDetailResponse.setBrandLogoImg(ImgPrefixUtil.addPrefixForImgUrl(brand.getBrandLogoImg()));
             }
 
             //主设计师

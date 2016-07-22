@@ -327,6 +327,7 @@ public class ProductServiceImpl implements ProductService {
             productResponse.setVerboseInfo(product.getVerboseInfo());
             productResponse.setWeight(product.getWeight());
             productResponse.setSellingPoint(product.getSellingPoint());
+            productResponse.setBrandId(product.getBrandId());
 
             //产品参数
             ProductParameter productParameter = new ProductParameter();

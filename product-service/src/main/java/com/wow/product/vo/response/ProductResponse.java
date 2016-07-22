@@ -31,6 +31,16 @@ public class ProductResponse extends CommonResponse {
     private BigDecimal weight;
     //详细描述
     private String detailDescription;
+    //品牌ID
+    private int brandId;
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
 
     public String getDetailDescription() {
         return detailDescription;
