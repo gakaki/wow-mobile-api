@@ -506,6 +506,8 @@ public class ProductServiceImpl implements ProductService {
             productParameter.setApplicablePeople(ApplicablePeopleEnum.get((int)product.getApplicablePeople()));
 
             productResponse.setProductParameter(productParameter);
+        } else {
+            ErrorResponseUtil.setErrorResponse(productResponse,"40202");
         }
         return productResponse;
     }
