@@ -336,4 +336,10 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   
+  <select id="selectAllCategory" resultMap="BaseResultMap">
+  	select
+    <include refid="Base_Column_List" />
+    from category where is_deleted=1
+  </select>
+  
 </mapper>

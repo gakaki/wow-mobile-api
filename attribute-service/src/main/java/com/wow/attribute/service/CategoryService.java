@@ -68,5 +68,5 @@ public interface CategoryService {
      *
      * @return
      */
-    CategoryListResponse getLastLevelCategoryByCategory(int categoryId);
+    String getLastLevelCategoryByCategory(int categoryId);
 }
