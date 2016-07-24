@@ -208,6 +208,10 @@ public class ProductController extends BaseController {
 
             //获取系列品所有子品
             List<Product> subProductList = productSerialService.getProductSerialsDetail(productId);
+            if (CollectionUtil.isEmpty(subProductList)) {
+                ErrorResponseUtil.setErrorResponse(apiResponse,"40203");
+                return apiResponse;
+            }
             List<Integer> subProductIds = new ArrayList<>();
 
             for (Product subProduct : subProductList) {
