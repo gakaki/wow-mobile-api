@@ -96,8 +96,13 @@ public class PageController extends BaseController {
         return apiResponse;
     }
 
+    /**
+     * 按分类查询产品列表
+     * @param apiRequest
+     * @return
+     */
     @RequestMapping(value = "/v1/page/find/categroyProductList", method = RequestMethod.GET)
-    public ApiResponse categroyProductList(ApiRequest apiRequest) {
+    public ApiResponse getProductListByCategory(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ProductInfoRequest productInfoRequest = JsonUtil
                 .fromJSON(apiRequest.getParamJson(), ProductInfoRequest.class);

@@ -5,6 +5,8 @@ import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.response.CommonResponse;
 
+import java.util.List;
+
 /**
  * 类目服务
  * Created by zhengzhiqing on 16/6/17.
@@ -68,5 +70,5 @@ public interface CategoryService {
      *
      * @return
      */
-    String getLastLevelCategoryByCategory(int categoryId);
+    List<Integer> getLastLevelCategoryByCategory(int categoryId);
 }

@@ -1,18 +1,14 @@
 package com.wow.product.service;
 
-import java.util.List;
-
 import com.wow.attribute.model.Attribute;
 import com.wow.common.response.CommonResponse;
-import com.wow.product.model.Material;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductAttribute;
-import com.wow.product.model.ProductImage;
-import com.wow.product.model.ProductMaterial;
+import com.wow.product.model.*;
 import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductResponse;
+
+import java.util.List;
 
 /**
  * 产品服务
@@ -154,7 +150,7 @@ public interface ProductService {
      * @param asc 是否升序
      * @return
      */
-    List<ProductVo> getProductByCategoryId(int category, int sortBy, boolean asc);
+    List<ProductVo> getProductByCategoryId(Integer category, Integer sortBy, Boolean asc);
 
     /**
      * 获取产品(包括单品和系列品)详情页信息

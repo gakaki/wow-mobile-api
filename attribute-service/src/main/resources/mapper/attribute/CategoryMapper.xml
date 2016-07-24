@@ -339,7 +339,7 @@
   <select id="selectAllCategory" resultMap="BaseResultMap">
   	select
     <include refid="Base_Column_List" />
-    from category where is_deleted=1
+    from category where is_deleted=0
   </select>
   
 </mapper>
