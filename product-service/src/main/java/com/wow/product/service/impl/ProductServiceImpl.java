@@ -491,37 +491,46 @@ public class ProductServiceImpl implements ProductService {
     /**
      * 根据分类查询产品
      *
-     * @param category
+     * @param categoryId
      * @param sortBy   1:上架时间 2:销量 3:价格
      * @param asc      是否升序
      * @return
      */
     @Override
-    public List<ProductVo> getProductByCategoryId(int categoryId, int sortBy, boolean asc) {
+    public List<ProductVo> getProductByCategoryId(Integer categoryId, Integer sortBy, Boolean asc) {
         //TODO:
         //1. 根据category查询该类目下所有三级类目
         //2. 查询属于该类目三级类目的所有产品,按排序规则排序
         //3. 分页待定:插件、注解
-    	String categoryids = categoryService.getLastLevelCategoryByCategory(categoryId);
-    	
-    	String px = asc==true?"asc":"desc";
-    	System.out.println(categoryids+"=="+px);
+    	List<Integer> categoryIdList = categoryService.getLastLevelCategoryByCategory(categoryId);
+
+        System.out.println("size=" + categoryIdList.size());
+
     	List<ProductVo> productList = new ArrayList<ProductVo>();
+
+        String sortDesc = "";
+        if (asc) {
+            sortDesc = "asc";
+        } else {
+            sortDesc = "desc";
+        }
+
     	if(sortBy == 1)
-    		productList = productMapper.selectPageByCategoryIdOrderbyShelfTime(categoryids,px);
-    	if(sortBy == 2)
-    		productList = productMapper.selectPageByCategoryIdOrderbyTotalSold(categoryids,px);
-    	if(sortBy == 3)
-    		productList = productMapper.selectPageByCategoryIdOrderbySellPrice(categoryids,px);
-    	List<ProductVo> list = new ArrayList<ProductVo>();
-    	for(ProductVo product : productList){
-    		ProductImage pi = productImageMapper.selectProductPrimaryOneImg(product.getProductId());
-    		if(pi!=null){
-    			product.setProductImg(pi.getImgUrl());
-        		list.add(product);
-    		}
-    	}
-        return list;
+    		productList = productMapper.selectPageByCategoryIdOrderbyShelfTime(categoryIdList, sortDesc);
+//    	if(sortBy == 2)
+//    		productList = productMapper.selectPageByCategoryIdOrderbyTotalSold(categoryIdList, sortDesc);
+//    	if(sortBy == 3)
+//    		productList = productMapper.selectPageByCategoryIdOrderbySellPrice(categoryIdList, sortDesc);
+
+//    	List<ProductVo> list = new ArrayList<ProductVo>();
+//    	for(ProductVo product : productList){
+//    		ProductImage pi = productImageMapper.selectProductPrimaryOneImg(product.getProductId());
+//    		if(pi!=null){
+//    			product.setProductImg(pi.getImgUrl());
+//        		list.add(product);
+//    		}
+//    	}
+        return productList;
     }
 
     /**

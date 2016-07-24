@@ -3,6 +3,7 @@ package com.wow.mobileapi.controller;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.*;
+import com.wow.mobileapi.request.product.ProductInfoRequest;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
 import com.wow.mobileapi.response.product.ItemDetailResponse;
 import com.wow.mobileapi.response.product.ItemSpecResponse;
@@ -21,6 +22,7 @@ import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ProductImgVo;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductResponse;
@@ -330,6 +332,41 @@ public class ProductController extends BaseController {
             logger.error("查找产品详情发生错误---" + e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+
+    /**
+     * 按分类查询产品列表
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/products/list-by-category", method = RequestMethod.GET)
+    public ApiResponse getProductListByCategory(ApiRequest apiRequest) {
+        ApiResponse apiResponse = new ApiResponse();
+        ProductInfoRequest productInfoRequest = JsonUtil
+                .fromJSON(apiRequest.getParamJson(), ProductInfoRequest.class);
+        //判断json格式参数是否有误
+        if (productInfoRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(productInfoRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        List<ProductVo> productList = productService.getProductByCategoryId(productInfoRequest.getCategoryId(), productInfoRequest.getSortBy(), productInfoRequest.getAsc());
+        if (productList != null) {
+            apiResponse.setResCode("0");
+            apiResponse.setResMsg("Success");
+            apiResponse.setData(productList);
+        } else {
+            apiResponse.setResCode("40201");
+            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40201"));
         }
         return apiResponse;
     }

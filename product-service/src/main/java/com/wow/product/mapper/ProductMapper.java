@@ -37,7 +37,7 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
     
-    List<ProductVo> selectPageByCategoryIdOrderbyShelfTime(@Param("categoryIds") String categoryIds,@Param("asc") String asc);
+    List<ProductVo> selectPageByCategoryIdOrderbyShelfTime(@Param("categoryIds") List<Integer> categoryIds,@Param("asc") String asc);
     
     List<ProductVo> selectPageByCategoryIdOrderbyTotalSold(@Param("categoryIds") String categoryIds,@Param("asc") String asc);
     

@@ -2,6 +2,8 @@ package com.wow.mobileapi.request.product;
 
 import com.wow.common.request.ApiRequest;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 产品查询
  * @author mh
@@ -9,23 +11,12 @@ import com.wow.common.request.ApiRequest;
  */
 public class ProductInfoRequest extends ApiRequest {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
-	private Integer productId;
+
+	@NotNull
 	private Integer categoryId;
 	private Integer sortBy;
 	private Boolean asc;
-
-	public Integer getProductId() {
-		return productId;
-	}
-
-	public void setProductId(Integer productId) {
-		this.productId = productId;
-	}
 
 	public Integer getCategoryId() {
 		return categoryId;
