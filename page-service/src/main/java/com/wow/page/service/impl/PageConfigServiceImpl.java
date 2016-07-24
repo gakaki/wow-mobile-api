@@ -1,23 +1,10 @@
 package com.wow.page.service.impl;
 
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.page.mapper.*;
-import com.wow.page.model.*;
-import com.wow.page.model.PageSceneConfig;
-import com.wow.page.service.PageConfigService;
-import com.wow.page.vo.PageCategoryVo;
-import com.wow.page.vo.PageProductVo;
-import com.wow.page.vo.PageTopicVo;
-import com.wow.page.vo.ProductImageVo;
-import com.wow.page.vo.response.*;
-import com.wow.price.model.ProductPrice;
-import com.wow.price.service.PriceService;
-import com.wow.price.vo.ProductPriceResponse;
-import com.wow.product.model.*;
-import com.wow.product.service.ProductService;
-import com.wow.product.service.SceneService;
-import com.wow.product.service.TopicService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +13,39 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Consumer;
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.page.mapper.PageBannerConfigMapper;
+import com.wow.page.mapper.PageCategoryConfigMapper;
+import com.wow.page.mapper.PageProductConfigMapper;
+import com.wow.page.mapper.PageSceneConfigMapper;
+import com.wow.page.mapper.PageTopicConfigMapper;
+import com.wow.page.model.PageBannerConfig;
+import com.wow.page.model.PageBannerConfigExample;
+import com.wow.page.model.PageProductConfig;
+import com.wow.page.model.PageSceneConfig;
+import com.wow.page.model.PageTopicConfig;
+import com.wow.page.service.PageConfigService;
+import com.wow.page.vo.PageCategoryVo;
+import com.wow.page.vo.PageProductVo;
+import com.wow.page.vo.PageTopicVo;
+import com.wow.page.vo.ProductImageVo;
+import com.wow.page.vo.response.PageBannerResponse;
+import com.wow.page.vo.response.PageCategoryResponse;
+import com.wow.page.vo.response.PageProductResponse;
+import com.wow.page.vo.response.PageSceneResponse;
+import com.wow.page.vo.response.PageTopicResponse;
+import com.wow.price.model.ProductPrice;
+import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductPriceResponse;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductImage;
+import com.wow.product.model.ProductShortListInTopic;
+import com.wow.product.model.Scene;
+import com.wow.product.model.Topic;
+import com.wow.product.service.ProductService;
+import com.wow.product.service.SceneService;
+import com.wow.product.service.TopicService;
 
 
 /**
@@ -204,13 +220,16 @@ public class PageConfigServiceImpl implements PageConfigService {
     		PageProductVo productVo = new PageProductVo();
             ProductPriceResponse priceResponse = priceService.getProductPrice(productConfig.getProductId());
             ProductPrice productPrice = priceResponse.getProductPrice();
+            System.out.println("productPrice:"+productPrice);
     		Product product = productService.getProductById(productConfig.getProductId());
     		productVo.setProductId(productConfig.getProductId());
     		productVo.setProductName(product.getProductName());
     		productVo.setProductImg(productConfig.getProductImg());
     		productVo.setDetailDescription(product.getDetailDescription());
-    		productVo.setSellPrice(productPrice.getSellPrice());
-    		productVo.setCostPrice(productPrice.getCostPrice());
+    		if(productPrice!=null){
+    			productVo.setSellPrice(productPrice.getSellPrice());
+        		productVo.setCostPrice(productPrice.getCostPrice());
+    		}    		
     		productVo.setModuleType(productConfig.getPageModuleType());
     		
     		pageProductVoList.add(productVo);

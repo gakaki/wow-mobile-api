@@ -15,7 +15,10 @@ import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.RandomGenerator;
 import com.wow.product.mapper.MaterialMapper;
 import com.wow.product.mapper.ProductAttributeMapper;
 import com.wow.product.mapper.ProductImageMapper;
@@ -24,16 +27,22 @@ import com.wow.product.mapper.ProductMaterialMapper;
 import com.wow.product.model.Material;
 import com.wow.product.model.MaterialExample;
 import com.wow.product.model.Product;
+import com.wow.product.model.ProductApplicableScene;
 import com.wow.product.model.ProductAttribute;
+import com.wow.product.model.ProductDesigner;
 import com.wow.product.model.ProductExample;
 import com.wow.product.model.ProductImage;
 import com.wow.product.model.ProductImageExample;
 import com.wow.product.model.ProductMaterial;
 import com.wow.product.model.ProductMaterialExample;
-import com.wow.product.service.BrandService;
+import com.wow.product.service.ApplicableSceneService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductService;
 import com.wow.product.vo.ProductVo;
+import com.wow.product.vo.request.ColorSpecVo;
+import com.wow.product.vo.request.DesignerVo;
+import com.wow.product.vo.request.ProductCreateRequest;
+import com.wow.product.vo.request.ProductImgVo;
 import com.wow.product.vo.response.ProductParameter;
 import com.wow.product.vo.response.ProductResponse;
 
@@ -68,24 +77,129 @@ public class ProductServiceImpl implements ProductService {
     AttributeService attributeService;
 
     @Autowired
-    private BrandService brandService;
-
-    @Autowired
     private DesignerService designerService;
 
+    @Autowired
+    private ApplicableSceneService applicableSceneService;
 
+    /**
+     * @param product
+     * @return
+     */
+    @Override
+    public int createProduct(Product product) {
+        int productId = productMapper.insertSelective(product);
+        return productId;
+    }
 
     /**
      * 创建产品(注意要调用生码接口)
      *
-     * @param product
+     * @param productCreateRequest
      */
-    public int createProduct(Product product) {
-        if(product==null)
-            return -1;
-        String productCode = generateProductCode();
-        product.setProductCode(productCode.substring(0,7));
-        return productMapper.insertSelective(product);
+    public CommonResponse createProductInfo(ProductCreateRequest productCreateRequest) {
+
+        CommonResponse commonResponse = new CommonResponse();
+
+        Product product = new Product();
+
+        byte applicablePeople = productCreateRequest.getApplicablePeople();
+        int brandId = productCreateRequest.getBrandId();
+        int categoryId = productCreateRequest.getCategoryId();
+        String detailDescription = productCreateRequest.getDetailDescription();
+        short length = productCreateRequest.getLength();
+        short width = productCreateRequest.getWidth();
+        short height = productCreateRequest.getHeight();
+        String originCity = productCreateRequest.getOriginCity();
+        int originCountryId = productCreateRequest.getOriginCountryId();
+        String productModel = productCreateRequest.getProductModel();
+        String productName = productCreateRequest.getProductName();
+        String sellingPoint = productCreateRequest.getSellingPoint();
+        byte styleId = productCreateRequest.getStyleId();
+
+        product.setApplicablePeople(applicablePeople);
+        product.setBrandId(brandId);
+        product.setCategoryId(categoryId);
+        product.setDetailDescription(detailDescription);
+        product.setLength(length);
+        product.setWidth(width);
+        product.setHeight(height);
+        product.setOriginCity(originCity);
+        product.setOriginCountryId(originCountryId);
+        product.setProductModel(productModel);
+        product.setProductName(productName);
+        product.setSellingPoint(sellingPoint);
+        product.setStyleId(styleId);
+
+        List<Integer> applicableSceneIds = productCreateRequest.getApplicableSceneList();
+        List<ColorSpecVo> colorSpecVoList = productCreateRequest.getColorSpecVoList();
+        List<ProductImgVo> productImgVoList = productCreateRequest.getProductImgVoList();
+        List<DesignerVo> designerVoList = productCreateRequest.getDesignerVoList();
+        List<Integer> materialIds = productCreateRequest.getMaterialList();
+
+        //统统存成系列品
+        if(CollectionUtil.isEmpty(colorSpecVoList)) {
+            ErrorResponseUtil.setErrorResponse(commonResponse, "40201");
+            return commonResponse;
+        }
+
+        //新建一个系列品主品
+        product.setProductType((byte)2);
+        product.setProductCode(generateProductCode());
+        createProduct(product);
+        int productId = product.getId();
+        //创建产品设计师绑定
+        for (DesignerVo designerVo : designerVoList) {
+            ProductDesigner productDesigner = new ProductDesigner();
+            int designerId = designerVo.getDesignerId();
+            boolean isPrimary = designerVo.isPrimary();
+            productDesigner.setDesignerId(designerId);
+            productDesigner.setIsPrimary(isPrimary);
+            productDesigner.setProductId(productId);
+            designerService.createProductDesigner(productDesigner);
+        }
+
+        //创建产品材质绑定
+        List<ProductMaterial> productMaterialList = new ArrayList<ProductMaterial>();
+        for (Integer materialId : materialIds) {
+            ProductMaterial productMaterial = new ProductMaterial();
+            productMaterial.setProductId(productId);
+            productMaterial.setMaterialId(materialId);
+            productMaterialList.add(productMaterial);
+        }
+        createProductMaterial(productMaterialList);
+
+        //创建产品适用场景绑定
+        List<ProductApplicableScene> productApplicableSceneList = new ArrayList<>();
+        for (Integer applicableSceneId : applicableSceneIds) {
+            ProductApplicableScene productApplicableScene = new ProductApplicableScene();
+
+            productApplicableScene.setProductId(productId);
+            productApplicableScene.setApplicableSceneId(applicableSceneId);
+            productApplicableSceneList.add(productApplicableScene);
+        }
+        applicableSceneService.createProductApplicableScene(productApplicableSceneList);
+
+        //TODO: 将适用场景和材质进行逗号分隔,插入
+        product.setApplicableSceneText("");
+        product.setMaterialText("");
+
+        //创建产品图片
+        List<ProductImage> productImageList = new ArrayList<>();
+        if(CollectionUtil.isNotEmpty(productImgVoList)) {
+            for(ProductImgVo productImgVo : productImgVoList) {
+                ProductImage productImage = new ProductImage();
+                productImage.setIsPrimary(productImgVo.isPrimary());
+                productImage.setProductId(productId);
+                productImage.setImgDesc(productImgVo.getImgDesc());
+                productImage.setImgUrl(productImgVo.getImgUrl());
+                productImage.setSortOrder(productImgVo.getSortOrder());
+                productImageList.add(productImage);
+            }
+        }
+        addProductImages(productImageList);
+
+        return commonResponse;
     }
 
     /**
@@ -94,7 +208,7 @@ public class ProductServiceImpl implements ProductService {
      */
     private String generateProductCode() {
         //TODO: 要求是数字,且不重复
-        return java.util.UUID.randomUUID().toString();
+        return RandomGenerator.createRandom(true, 8);
     }
 
 
@@ -319,7 +433,7 @@ public class ProductServiceImpl implements ProductService {
     	String categoryids = categoryService.getLastLevelCategoryByCategory(categoryId);
     	
     	String px = asc==true?"asc":"desc";
-    	System.out.println(px);
+    	System.out.println(categoryids+"=="+px);
     	List<ProductVo> productList = new ArrayList<ProductVo>();
     	if(sortBy == 1)
     		productList = productMapper.selectPageByCategoryIdOrderbyShelfTime(categoryids,px);
@@ -351,7 +465,6 @@ public class ProductServiceImpl implements ProductService {
         Product product = getProductById(productId);
         if (product != null) {
 
-
             //产品基本信息
             productResponse.setProductName(product.getProductName());
             productResponse.setTips(product.getTips());
@@ -364,10 +477,12 @@ public class ProductServiceImpl implements ProductService {
             //产品参数
             ProductParameter productParameter = new ProductParameter();
             productParameter.setApplicableSceneText(product.getApplicableSceneText());
-            productParameter.setOrigin(product.getOriginCountry() + "," + product.getOriginCity());
+            //TODO:
+            productParameter.setOrigin(product.getOriginCountryId() + "," + product.getOriginCity());
             productParameter.setMaterialText(product.getMaterialText());
             productParameter.setNeedAssemble(product.getNeedAssemble());
-            productParameter.setStyle(product.getStyle());
+            //TODO:
+            productParameter.setStyle(String.valueOf(product.getStyleId()));
 
             productResponse.setProductParameter(productParameter);
 

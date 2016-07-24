@@ -3,12 +3,14 @@ package com.wow.product.service;
 import java.util.List;
 
 import com.wow.attribute.model.Attribute;
+import com.wow.common.response.CommonResponse;
 import com.wow.product.model.Material;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductAttribute;
 import com.wow.product.model.ProductImage;
 import com.wow.product.model.ProductMaterial;
 import com.wow.product.vo.ProductVo;
+import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.response.ProductResponse;
 
 /**
@@ -20,7 +22,14 @@ public interface ProductService {
     /**
      * 创建产品
      *
+     * @param productCreateRequest
+     */
+    CommonResponse createProductInfo(ProductCreateRequest productCreateRequest);
+
+    /**
+     *
      * @param product
+     * @return
      */
     int createProduct(Product product);
 
