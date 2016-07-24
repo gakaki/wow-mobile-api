@@ -2,6 +2,7 @@ package com.wow.order.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.IpConvertUtil;
+import com.wow.common.util.JsonUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.StringUtil;
@@ -30,17 +32,20 @@ import com.wow.order.mapper.SaleOrderMapper;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderItem;
+import com.wow.order.model.SaleOrderItemExample;
 import com.wow.order.model.SaleOrderItemWarehouse;
 import com.wow.order.model.SaleOrderLog;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderItemImgVo;
+import com.wow.order.vo.OrderItemStockVo;
 import com.wow.order.vo.OrderItemVo;
 import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderListVo;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.OrderSettleVo;
+import com.wow.order.vo.OrderSplitQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
@@ -51,6 +56,8 @@ import com.wow.product.model.ProductSupplierExample;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.FreezeStockVo;
 import com.wow.stock.vo.ProductQtyVo;
+import com.wow.stock.vo.ProductWarehouseQtyVo;
+import com.wow.stock.vo.UnfreezeStockVo;
 import com.wow.stock.vo.WarehouseStockFrozenResultVo;
 import com.wow.stock.vo.response.BatchFreezeStockResponse;
 import com.wow.user.mapper.ShippingInfoMapper;
@@ -95,15 +102,15 @@ public class OrderServiceImpl implements OrderService {
      * 下单
      *   1. 保存订单相关信息 扣减库存
           2. 每一个包裹里的每种产品做成一个订单项order_item
-          3. 订单价格校验 客户端传递订单总价，服务器再次计算价格
+          3. 订单价格校验 客户端传递订单总价，服务器再次计算价格 比较价格是否一致
      * @param orderVo
      */
     @Override
     public OrderResponse createOrder(OrderQuery query) {
         OrderResponse orderResponse = new OrderResponse();
 
-        // 业务校验开始
-        //判断用户购物车id列表是否为空
+        /*** 业务校验开始*/
+        //如果用户购物车id列表为空  则返回错误提示
         if (CollectionUtil.isEmpty(query.getShoppingCartIds())) {
             orderResponse.setResCode("40304");
             orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40304"));
@@ -111,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
             return orderResponse;
         }
 
-        //判断收货地址是否存在
+        //如果收货地址不存在 则返回错误提示
         ShippingInfo shippingInfo = shippingInfoMapper.selectByPrimaryKey(query.getShippingInfoId());
         if (shippingInfo == null) {
             orderResponse.setResCode("40305");
@@ -120,19 +127,47 @@ public class OrderServiceImpl implements OrderService {
             return orderResponse;
         }
 
-        query.setShippingInfo(shippingInfo);
-
         ShoppingCartQueryVo shoppingCartQuery = new ShoppingCartQueryVo();
         shoppingCartQuery.setShoppingCartIds(query.getShoppingCartIds());
 
         //根据用户购物车id列表 获取用户购物车信息列表
         List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByShoppingCartIds(shoppingCartQuery);
 
+        //如果用户购物车状态不同步 则返回错误提示
+        if (CollectionUtil.isEmpty(shoppingCartResult)) {
+            orderResponse.setResCode("40311");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40311"));
+
+            return orderResponse;
+        }
+
+        //如果用户购物车状态不同步 则返回错误提示
+        if (query.getShoppingCartIds().size() != shoppingCartResult.size()) {
+            orderResponse.setResCode("40311");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40311"));
+
+            return orderResponse;
+        }
+
+        //设置用户购买的产品信息列表
+        query.setShoppingCartResult(shoppingCartResult);
+
+        //计算订单总金额
+        BigDecimal orderAmount = calculateOrderPrice(query);
+
+        //校验客户端提交订单金额是否正确
+        if (NumberUtil.isNotEquals(query.getOrderAmount(), orderAmount)) {
+            orderResponse.setResCode("40306");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40306"));
+
+            return orderResponse;
+        }
+
         // 调用库存服务
         List<ProductQtyVo> productQtyVoList = wrapProductQty(shoppingCartResult);
         //调用批量锁定库存服务
         BatchFreezeStockResponse batchFreezeResponse = stockService.batchFreezeStock(productQtyVoList);
-        //判断库存是否足够
+        //如果调用库存服务失败 则返回错误提示
         if (ErrorCodeUtil.isFailedResponse(batchFreezeResponse.getResCode())) {
             orderResponse.setResCode(batchFreezeResponse.getResCode());
             orderResponse.setResMsg(batchFreezeResponse.getResMsg());
@@ -142,25 +177,13 @@ public class OrderServiceImpl implements OrderService {
 
         //设置产品库存使用情况
         query.setFreezeStockVoList(batchFreezeResponse.getFreezeStockVoList());
-        //设置用户购买的产品信息列表
-        query.setShoppingCartResult(shoppingCartResult);
-
-        //计算订单总金额
-        BigDecimal orderAmount = calculateOrderPrice(query);
-
-        //校验订单金额是否正确
-        if (NumberUtil.isNotEquals(query.getOrderAmount(), orderAmount)) {
-            orderResponse.setResCode("40306");
-            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40306"));
-
-            return orderResponse;
-        }
-
+        //设置订单总金额
         query.setOrderAmount(orderAmount);
-        //业务校验结束
+        //设置订单收件人信息
+        query.setShippingInfo(shippingInfo);
+        /*** 业务校验结束*/
 
         /*** 保存订单开始*/
-
         //包装订单对象
         SaleOrder saleOrder = wrapOrder(query);
         saleOrderMapper.insertSelective(saleOrder);
@@ -190,7 +213,6 @@ public class OrderServiceImpl implements OrderService {
         shoppingCartQueryVo.setShoppingCartIds(query.getShoppingCartIds());
 
         shoppingCartMapper.updateByPrimaryKeys(shoppingCartQueryVo);
-
         /*** 保存订单结束*/
 
         //设置返回信息
@@ -326,6 +348,7 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setCouponAmount(query.getCouponFee());
 
         saleOrder.setEndUserRemarks(query.getRemark());
+        saleOrder.setTotalPackages(query.getTotalPackages());
 
         //设置收货人地址信息
         ShippingInfo shippingInfo = query.getShippingInfo();
@@ -502,14 +525,18 @@ public class OrderServiceImpl implements OrderService {
         }
 
         long totalPrice = 0L;
+        int totalPackages = 0;
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
             //计算产品总价 产品单价乘以数量
             long productTotalPrice = calculateProductTotalPrice(shoppingCart.getSellPrice(), shoppingCart
                 .getProductQty());
 
+            totalPackages += shoppingCart.getProductQty();
             totalPrice += productTotalPrice;
         }
 
+        //设置产品总件数
+        query.setTotalPackages(totalPackages);
         //设置订单产品总价
         query.setProductAmount(NumberUtil.convertToYuan(totalPrice));
 
@@ -538,7 +565,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 计算优惠金额
+     * 计算优惠金额 暂未实行
      * 判断优惠券的使用限制和订单总金额
      * @param shoppingCartResult
      * @param couponId
@@ -557,8 +584,9 @@ public class OrderServiceImpl implements OrderService {
     public CommonResponse cancelOrder(OrderDetailQuery query) {
         CommonResponse commonResponse = new CommonResponse();
 
-        // 业务校验开始
-        //校验订单号是否为空
+        /*** 业务校验开始*/
+
+        //如果订单号为空 则直接返回错误提示
         if (StringUtil.isEmpty(query.getOrderCode())) {
             commonResponse.setResCode("40358");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40358"));
@@ -568,7 +596,7 @@ public class OrderServiceImpl implements OrderService {
 
         //根据订单号获取订单
         SaleOrder saleOrder = saleOrderMapper.selectByOrderCode(query.getOrderCode());
-        //判断订单号是否存在
+        //如果订单号不存在  则直接返回错误提示
         if (saleOrder == null) {
             commonResponse.setResCode("40359");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40359"));
@@ -576,8 +604,8 @@ public class OrderServiceImpl implements OrderService {
             return commonResponse;
         }
 
-        //如果订单状态为非代付款 则无法取消订单
-        if (saleOrder.getOrderStatus().intValue() != SaleOrderStatusEnum.TO_BE_PAID.getKey().intValue()) {
+        //如果订单状态为已取消 则无法重复取消订单
+        if (saleOrder.getOrderStatus().intValue() == SaleOrderStatusEnum.CANCELLED.getKey().intValue()) {
             commonResponse.setResCode("40309");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40309"));
 
@@ -591,9 +619,17 @@ public class OrderServiceImpl implements OrderService {
 
             return commonResponse;
         }
-        // 业务校验结束
 
+        //获取需要释放库存的产品
+        List<UnfreezeStockVo> unfreezeStocks = getUnfreezeStocks(saleOrder.getId());
         //调用释放库存服务
+        CommonResponse unfreezeStockResponse = stockService.batchUnfreezeStock(unfreezeStocks);
+        //如果调用释放库存服务失败 则返回错误提示
+        if (ErrorCodeUtil.isFailedResponse(unfreezeStockResponse.getResCode())) {
+            return unfreezeStockResponse;
+        }
+
+        /*** 业务校验结束*/
 
         //更新订单状态
         SaleOrder targetSaleOrder = new SaleOrder();
@@ -614,18 +650,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 根据订单id获取要解冻的产品
+     * 
      * @param orderId
      * @return
      */
-    @Override
-    public OrderSettleResponse queryOrderById(int orderId) {
-        OrderSettleResponse orderResponse = new OrderSettleResponse();
+    private List<UnfreezeStockVo> getUnfreezeStocks(Integer orderId) {
+        //根据订单id获取产品使用的库存情况
+        List<OrderItemStockVo> orderItemStocks = saleOrderItemMapper.selectWareHouseStockByOrderId(orderId);
 
-        //设置错误码和错误信息
-        orderResponse.setResCode("40001");
-        orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40001"));
+        List<UnfreezeStockVo> stockVos = new ArrayList<UnfreezeStockVo>(orderItemStocks.size());
+        UnfreezeStockVo stockVo = null;
 
-        return orderResponse;
+        for (OrderItemStockVo orderItemStock : orderItemStocks) {
+            stockVo = new UnfreezeStockVo();
+
+            stockVo.setProductId(orderItemStock.getProductId());
+            stockVo.setVirtualProductQty(orderItemStock.getVirtualProductQty());
+            String json = JsonUtil.pojo2Json(orderItemStock.getOrderItemProductStockVos());
+            stockVo.setProductWarehouseQtyVoList(Arrays.asList(JsonUtil.fromJSON(json, ProductWarehouseQtyVo[].class)));
+
+            stockVos.add(stockVo);
+        }
+
+        return stockVos;
     }
 
     /**根据订单号获取订单明细
@@ -636,7 +684,8 @@ public class OrderServiceImpl implements OrderService {
     public OrderDetailResponse queryOrderByOrderCode(String orderCode) {
         OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
 
-        //校验订单号是否为空
+        /*** 业务校验开始*/
+        //如果订单号是否为空  则直接返回错误提示
         if (StringUtil.isEmpty(orderCode)) {
             orderDetailResponse.setResCode("40358");
             orderDetailResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40358"));
@@ -646,13 +695,14 @@ public class OrderServiceImpl implements OrderService {
 
         //根据订单号获取订单
         SaleOrder saleOrder = saleOrderMapper.selectByOrderCode(orderCode);
-        //判断订单号是否存在
+        //如果订单号不存在  则直接返回错误提示
         if (saleOrder == null) {
             orderDetailResponse.setResCode("40359");
             orderDetailResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40359"));
 
             return orderDetailResponse;
         }
+        /*** 业务校验结束*/
 
         //设置订单明细
         setOrderDetail(orderDetailResponse, saleOrder);
@@ -695,22 +745,6 @@ public class OrderServiceImpl implements OrderService {
         orderDetailResponse.setOrderCreateTimeFormat(DateUtil.formatDatetime(saleOrder.getOrderCreateTime()));
     }
 
-    /**
-     * @param endUserId
-     * @return
-     */
-    @Override
-    public List<SaleOrder> queryOrdersByUserId(int endUserId) {
-        return null;
-    }
-
-    /**
-     * @param orderLog
-     */
-    @Override
-    public void createOrderLog(SaleOrderLog orderLog) {
-
-    }
 
     /**
      * @param orderId
@@ -740,17 +774,6 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public int approveReturnOrder(ReturnOrder returnOrder) {
-        return 0;
-    }
-
-    /**
-     * 拒绝退货单?
-     *
-     * @param returnOrder
-     * @return
-     */
-    @Override
-    public int rejectReturnOrder(ReturnOrder returnOrder) {
         return 0;
     }
 
@@ -866,7 +889,6 @@ public class OrderServiceImpl implements OrderService {
         if (CollectionUtil.isEmpty(orderLists)) {
             return response;
         }
-
         //业务校验结束
 
         //获取订单id集合
@@ -936,6 +958,48 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public CommonResponse payOrderCallBack(String orderCode) {
         return null;
+    }
+
+    @Override
+    public CommonResponse splitOrder(OrderSplitQuery query) {
+        CommonResponse commonResponse=new CommonResponse();
+        
+        /*** 业务校验开始*/
+        //如果用户购物车id列表为空  则返回错误提示
+        if (CollectionUtil.isEmpty(query.getSaleOrderItemIds())) {
+            commonResponse.setResCode("40311");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40311"));
+
+            return commonResponse;
+        }
+        
+        //如果订单号为空 则直接返回错误提示
+        if (StringUtil.isEmpty(query.getOrderCode())) {
+            commonResponse.setResCode("40307");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40307"));
+
+            return commonResponse;
+        }
+
+        //根据订单号获取订单
+        SaleOrder saleOrder = saleOrderMapper.selectByOrderCode(query.getOrderCode());
+        //如果订单号不存在  则直接返回错误提示
+        if (saleOrder == null) {
+            commonResponse.setResCode("40308");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40308"));
+
+            return commonResponse;
+        }
+        
+       SaleOrderItemExample   saleOrderItemExample=new SaleOrderItemExample();
+       SaleOrderItemExample.Criteria criteria=saleOrderItemExample.createCriteria();
+       
+       criteria.andSaleOrderIdEqualTo(saleOrder.getId());
+       criteria.andIsSplitedEqualTo(Boolean.FALSE);
+        
+        /*** 业务校验结束*/
+        
+        return commonResponse;
     }
 
 }

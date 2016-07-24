@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.wow.order.model.SaleOrderItem;
 import com.wow.order.model.SaleOrderItemExample;
 import com.wow.order.vo.OrderItemImgVo;
+import com.wow.order.vo.OrderItemStockVo;
 import com.wow.order.vo.OrderItemVo;
 
 public interface SaleOrderItemMapper {
@@ -39,4 +40,8 @@ public interface SaleOrderItemMapper {
 
     //根据订单id获取产品明细
     List<OrderItemVo> selectByOrderId(Integer orderId);
+
+    //根据订单id获取订单项目使用库存明细
+    List<OrderItemStockVo> selectWareHouseStockByOrderId(Integer orderId);
+
 }
