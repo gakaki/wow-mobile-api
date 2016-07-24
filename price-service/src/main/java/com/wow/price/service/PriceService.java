@@ -42,6 +42,14 @@ public interface PriceService {
     ProductPriceResponse getProductPrice(int productId);
 
     /**
+     * 查询系列产品价格(取子品中售价最低的)
+     *
+     * @param productId
+     * @return
+     */
+    ProductPriceResponse getProductSerialPrice(int productId);
+
+    /**
      * 批量查询产品价格
      *
      * @param productIds
