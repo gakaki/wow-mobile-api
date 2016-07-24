@@ -11,6 +11,7 @@ import com.wow.product.model.ProductImage;
 import com.wow.product.model.ProductMaterial;
 import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ProductCreateRequest;
+import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductResponse;
 
 /**
@@ -161,5 +162,12 @@ public interface ProductService {
      * @return
      */
     public ProductResponse getItemDetailById(int productId);
+
+    /**
+     * 查询产品非主图
+     * @param productId
+     * @return
+     */
+    public ProductImgResponse getProductNonPrimaryImages(int productId);
 
 }
