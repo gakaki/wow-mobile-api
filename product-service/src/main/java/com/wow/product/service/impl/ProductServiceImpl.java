@@ -6,20 +6,16 @@ import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.common.enums.*;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.RandomGenerator;
+import com.wow.common.util.*;
+import com.wow.price.model.ProductPrice;
+import com.wow.price.service.PriceService;
 import com.wow.product.mapper.*;
 import com.wow.product.model.*;
-import com.wow.product.service.ApplicableSceneService;
-import com.wow.product.service.BrandService;
-import com.wow.product.service.DesignerService;
-import com.wow.product.service.ProductService;
-import com.wow.product.vo.request.ColorSpecVo;
-import com.wow.product.vo.request.DesignerVo;
-import com.wow.product.vo.request.ProductCreateRequest;
-import com.wow.product.vo.request.ProductImgVo;
+import com.wow.product.service.*;
+import com.wow.product.vo.request.*;
+import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductParameter;
 import com.wow.product.vo.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +66,12 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ApplicableSceneService applicableSceneService;
 
+    @Autowired
+    private ProductSerialService productSerialService;
+
+    @Autowired
+    private PriceService priceService;
+
     /**
      * @param product
      * @return
@@ -112,6 +114,7 @@ public class ProductServiceImpl implements ProductService {
         product.setLength(length);
         product.setWidth(width);
         product.setHeight(height);
+        product.setSizeText("L"+length + "xW" + width + "xH" + height + "cm");
         product.setOriginCity(originCity);
         product.setOriginCountryId(originCountryId);
         product.setProductModel(productModel);
@@ -133,9 +136,11 @@ public class ProductServiceImpl implements ProductService {
 
         //新建一个系列品主品
         product.setProductType((byte)2);
-        product.setProductCode(generateProductCode());
+
         createProduct(product);
         int productId = product.getId();
+        Product parentProduct = new Product();
+        parentProduct.setId(productId);
         //创建产品设计师绑定
         for (DesignerVo designerVo : designerVoList) {
             ProductDesigner productDesigner = new ProductDesigner();
@@ -148,16 +153,22 @@ public class ProductServiceImpl implements ProductService {
         }
 
         //创建产品材质绑定
+        String materialText = "";
         List<ProductMaterial> productMaterialList = new ArrayList<ProductMaterial>();
         for (Integer materialId : materialIds) {
             ProductMaterial productMaterial = new ProductMaterial();
             productMaterial.setProductId(productId);
             productMaterial.setMaterialId(materialId);
             productMaterialList.add(productMaterial);
+            materialText += MaterialEnum.get(materialId) + ",";
         }
         createProductMaterial(productMaterialList);
+        if (StringUtil.isNotEmpty(materialText)) {
+            parentProduct.setMaterialText(materialText.substring(0,materialText.length()-1));
+        }
 
         //创建产品适用场景绑定
+        String applicableSceneText = "";
         List<ProductApplicableScene> productApplicableSceneList = new ArrayList<>();
         for (Integer applicableSceneId : applicableSceneIds) {
             ProductApplicableScene productApplicableScene = new ProductApplicableScene();
@@ -165,12 +176,17 @@ public class ProductServiceImpl implements ProductService {
             productApplicableScene.setProductId(productId);
             productApplicableScene.setApplicableSceneId(applicableSceneId);
             productApplicableSceneList.add(productApplicableScene);
+
+            applicableSceneText += ApplicableSceneEnum.get(applicableSceneId) + ",";
         }
         applicableSceneService.createProductApplicableScene(productApplicableSceneList);
 
-        //TODO: 将适用场景和材质进行逗号分隔,插入
-        product.setApplicableSceneText("");
-        product.setMaterialText("");
+        if (StringUtil.isNotEmpty(applicableSceneText)) {
+            //TODO: 将适用场景和材质进行逗号分隔,插入
+            parentProduct.setApplicableSceneText(applicableSceneText.substring(0,applicableSceneText.length()-1));
+        }
+
+        updateProduct(parentProduct);
 
         //创建产品图片
         List<ProductImage> productImageList = new ArrayList<>();
@@ -186,6 +202,40 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         addProductImages(productImageList);
+
+        //创建系列品子品
+        for(ColorSpecVo colorSpecVo:colorSpecVoList) {
+            List<SpecVo> specVoList = colorSpecVo.getSpecVoList();
+            if (CollectionUtil.isNotEmpty(specVoList)) {
+                for (SpecVo specVo:specVoList) {
+                    Product subProduct = new Product();
+                    BeanUtil.copyProperties(product,subProduct,"id");
+                    subProduct.setProductType((byte)1);//系列品子品
+                    subProduct.setWeight(specVo.getWeight());
+                    subProduct.setSpecName(specVo.getSpecName());
+                    subProduct.setColorId(colorSpecVo.getColorId());
+                    subProduct.setColorDisplayName(colorSpecVo.getColorDisplayName());
+                    subProduct.setProductColorImg(colorSpecVo.getProductColorImg());
+                    subProduct.setProductCode(generateProductCode());
+                    createProduct(subProduct);
+                    int subProductId = subProduct.getId();
+
+                    ProductSerial productSerial = new ProductSerial();
+                    productSerial.setProductId(productId);
+                    productSerial.setSubProductId(subProductId);
+                    List<ProductSerial> list = new ArrayList<>();
+                    list.add(productSerial);
+                    productSerialService.createProductSerial(list);
+
+                    //创建子品价格
+                    ProductPrice productPrice = new ProductPrice();
+                    productPrice.setProductId(subProductId);
+                    productPrice.setSellPrice(specVo.getSellPrice());
+                    productPrice.setCostPrice(specVo.getCostPrice());
+                    priceService.createProductPrice(productPrice);
+                }
+            }
+        }
 
         return commonResponse;
     }
@@ -280,6 +330,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductImage> getProductImages(int productId) {
         ProductImageExample productImageExample = new ProductImageExample();
+        productImageExample.setOrderByClause("is_primary desc, sort_order asc");
         ProductImageExample.Criteria criteria = productImageExample.createCriteria();
         criteria.andProductIdEqualTo(productId);
         criteria.andIsDeletedEqualTo(false);
@@ -447,16 +498,39 @@ public class ProductServiceImpl implements ProductService {
             //产品参数
             ProductParameter productParameter = new ProductParameter();
             productParameter.setApplicableSceneText(product.getApplicableSceneText());
-            //TODO:
-            productParameter.setOrigin(product.getOriginCountryId() + "," + product.getOriginCity());
+            productParameter.setOrigin(CountryEnum.get((int)product.getOriginCountryId()) + "," + product.getOriginCity());
             productParameter.setMaterialText(product.getMaterialText());
             productParameter.setNeedAssemble(product.getNeedAssemble());
-            //TODO:
-            productParameter.setStyle(String.valueOf(product.getStyleId()));
+
+            productParameter.setStyle(StyleEnum.get((int)product.getStyleId()));
+            productParameter.setApplicablePeople(ApplicablePeopleEnum.get((int)product.getApplicablePeople()));
 
             productResponse.setProductParameter(productParameter);
-
         }
         return productResponse;
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public ProductImgResponse getProductNonPrimaryImages(int productId) {
+        ProductImgResponse productImgResponse = new ProductImgResponse();
+        List<ProductImgVo> productImgVoList = new ArrayList<>();
+        ProductImageExample productImageExample = new ProductImageExample();
+        productImageExample.setOrderByClause("sort_order asc");
+        ProductImageExample.Criteria criteria = productImageExample.createCriteria();
+        criteria.andProductIdEqualTo(productId);
+        criteria.andIsPrimaryEqualTo(false);
+        criteria.andIsDeletedEqualTo(false);
+        List<ProductImage> productImageList = productImageMapper.selectByExample(productImageExample);
+        for (ProductImage productImage : productImageList) {
+            ProductImgVo productImgVo = new ProductImgVo();
+            productImgVo.setImgDesc(productImage.getImgDesc());
+            productImgVo.setImgUrl(productImage.getImgUrl());
+            productImgVo.setSortOrder(productImage.getSortOrder());
+            productImgVo.setPrimary(false);
+            productImgVoList.add(productImgVo);
+        }
+        productImgResponse.setProductImgVoList(productImgVoList);
+        return productImgResponse;
     }
 }

@@ -10,7 +10,7 @@ import java.util.Map;
  * @author chenkaiwei
  * @version $Id: V1.0 2016年7月17日 下午12:00:40 Exp $
  */
-public class CommonConstant {
+public class  CommonConstant {
     //运费阀值
     public static final BigDecimal THRESHOLD = new BigDecimal("199.00");
 

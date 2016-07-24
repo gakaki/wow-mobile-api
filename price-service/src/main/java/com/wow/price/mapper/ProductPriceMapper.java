@@ -31,4 +31,11 @@ public interface ProductPriceMapper {
     ProductPrice selectByProductId(@Param("productId") int productId);
 
     List<ProductPrice> selectByProductIds(@Param("productIds") List<Integer> productIds);
+
+    /**
+     * 查找系列品的价格(取售价最低的子品)
+     * @param productId
+     * @return
+     */
+    ProductPrice selectMinSalePriceByProductId(@Param("productId") int productId);
 }

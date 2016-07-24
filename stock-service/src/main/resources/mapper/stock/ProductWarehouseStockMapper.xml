@@ -334,13 +334,13 @@
     and is_deleted = false
   </select>
 
-  <select id="getWarehouseAvailableStocks" parameterType="java.util.List" resultType="com.wow.stock.vo.WarehouseStockVo" >
+  <select id="getWarehouseAvailableStocks" resultType="com.wow.stock.vo.WarehouseStockVo" >
     select product_id productId, warehouse_id warehouseId, (real_stock_qty - lock_stock_qty - frozen_stock_qty) availableStock
     from product_warehouse_stock
-    <where>
-      product_id in
-      <foreach collection="productIds" item="productId" index="index" open="(" separator="," close=")">#{productId}</foreach>
-    </where>
+    where product_id in
+    <foreach item="productId" index="index" collection="productIds" open="(" separator="," close=")">
+      #{productId}
+    </foreach>
     and is_active = true
     and is_deleted = false
   </select>

@@ -4,7 +4,6 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
-import com.wow.product.service.WarehouseService;
 import com.wow.stock.mapper.ProductVirtualStockMapper;
 import com.wow.stock.mapper.ProductWarehouseStockMapper;
 import com.wow.stock.model.ProductVirtualStock;
@@ -39,15 +38,13 @@ public class StockServiceImpl implements StockService {
     @Autowired
     ProductVirtualStockMapper productVirtualStockMapper;
 
-    @Autowired
-    WarehouseService warehouseService;
-
     /**
      * 第一次商品进入仓库时创建库存记录
      *
      * @param productWarehouseStock
      * @return
      */
+    @Override
     public CommonResponse createProductWarehouseStock(ProductWarehouseStock productWarehouseStock) {
         CommonResponse commonResponse = new CommonResponse();
         productWarehouseStockMapper.insertSelective(productWarehouseStock);
@@ -60,6 +57,7 @@ public class StockServiceImpl implements StockService {
      * @param productVirtualStock
      * @return
      */
+    @Override
     public CommonResponse createProductVirtualStock(ProductVirtualStock productVirtualStock) {
         CommonResponse commonResponse = new CommonResponse();
         productVirtualStockMapper.insertSelective(productVirtualStock);
