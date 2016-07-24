@@ -261,11 +261,11 @@ public class ProductController extends BaseController {
                 }
 
                 //设置价格
-//                if(priceMap.containsKey(subProductId) && priceMap.get(subProductId) != null) {
-//                    subProductInfo.setSellPrice(priceMap.get(subProductId).getSellPrice());
-//                } else {
-//                    setInternalErrorResponse(apiResponse);
-//                }
+                if(priceMap.containsKey(subProductId) && priceMap.get(subProductId) != null) {
+                    subProductInfo.setSellPrice(priceMap.get(subProductId).getSellPrice());
+                } else {
+                    setInternalErrorResponse(apiResponse);
+                }
 
                 subProductInfoList.add(subProductInfo);
             }
