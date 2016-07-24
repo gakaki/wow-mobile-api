@@ -455,7 +455,7 @@
     <select id="selectSpecImgByOrderIds"  parameterType="List"  resultType="com.wow.order.vo.OrderItemImgVo" >
          SELECT 
 			  o.sale_order_id saleOrderId,
-			  p.spec_img specImg
+			  p.product_color_img specImg
 			FROM
 			  sale_order_item o 
 			  INNER JOIN product p 
@@ -471,12 +471,12 @@
 	       SELECT 
 				  so.product_id productId,
 				  so.product_name productName,
-				  p.spec_img specImg,
+				  p.product_color_img specImg,
 				  so.order_item_price sellPrice,
 				  so.order_item_qty productQty,
 				  so.order_item_amount sellTotalAmount,
-				  p.color color,
-				  p.spec spec
+				  p.color_display_name color,
+				  p.spec_name specName
 			FROM
 			  sale_order_item so 
 			  INNER JOIN product p 

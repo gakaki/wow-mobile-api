@@ -35,7 +35,7 @@ public class OrderItemVo implements Serializable {
     private String color;
 
     //产品规格值
-    private String spec;
+    private String specName;
     
     //产品规格图片
     private String specImg;
@@ -88,12 +88,12 @@ public class OrderItemVo implements Serializable {
         this.color = color;
     }
 
-    public String getSpec() {
-        return spec;
+    public String getSpecName() {
+        return specName;
     }
 
-    public void setSpec(String spec) {
-        this.spec = spec;
+    public void setSpecName(String specName) {
+        this.specName = specName;
     }
 
     public BigDecimal getSellPrice() {
