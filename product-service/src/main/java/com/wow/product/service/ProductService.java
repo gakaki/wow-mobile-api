@@ -4,6 +4,7 @@ import com.wow.attribute.model.Attribute;
 import com.wow.common.response.CommonResponse;
 import com.wow.product.model.*;
 import com.wow.product.vo.request.ProductCreateRequest;
+import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductResponse;
 
 import java.util.List;
@@ -156,5 +157,12 @@ public interface ProductService {
      * @return
      */
     public ProductResponse getItemDetailById(int productId);
+
+    /**
+     * 查询产品非主图
+     * @param productId
+     * @return
+     */
+    public ProductImgResponse getProductNonPrimaryImages(int productId);
 
 }

@@ -1,8 +1,10 @@
 package com.wow.product.mapper;
 
+import com.wow.product.model.Product;
 import com.wow.product.model.ProductSerial;
 import com.wow.product.model.ProductSerialExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface ProductSerialMapper {
@@ -27,4 +29,6 @@ public interface ProductSerialMapper {
     int updateByPrimaryKeySelective(ProductSerial record);
 
     int updateByPrimaryKey(ProductSerial record);
+
+    List<Product> selectProductSerials(@Param("productId") Integer productId);
 }

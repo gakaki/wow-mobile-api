@@ -3,7 +3,6 @@ package com.wow.price.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
 import com.wow.price.model.ProductPrice;
-import com.wow.product.model.Product;
 
 import java.util.Map;
 

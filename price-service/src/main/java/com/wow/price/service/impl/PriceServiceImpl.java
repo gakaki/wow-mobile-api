@@ -3,6 +3,7 @@ package com.wow.price.service.impl;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
 import com.wow.price.mapper.ProductPriceChangeLogMapper;
 import com.wow.price.mapper.ProductPriceMapper;
 import com.wow.price.model.ProductPrice;
@@ -12,6 +13,8 @@ import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.price.vo.ProductPriceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -22,6 +25,7 @@ import java.util.Map;
  * Created by zhengzhiqing on 16/6/17.
  */
 @Service
+@Transactional(value = "priceTransactionManager")
 public class PriceServiceImpl implements PriceService {
 
     @Autowired
@@ -36,6 +40,7 @@ public class PriceServiceImpl implements PriceService {
      * @param productPrice
      * @return
      */
+    @Override
     public CommonResponse createProductPrice(ProductPrice productPrice) {
         CommonResponse commonResponse = new CommonResponse();
         int i =  productPriceMapper.insertSelective(productPrice);
@@ -52,6 +57,7 @@ public class PriceServiceImpl implements PriceService {
      * @param productPrice
      * @return
      */
+    @Override
     public CommonResponse updateProductPrice(ProductPrice productPrice) {
         CommonResponse commonResponse = new CommonResponse();
         //可以考虑做一下价格预警校验,满足阈值的不允许修改并报出警告
@@ -69,6 +75,8 @@ public class PriceServiceImpl implements PriceService {
      * @param productId
      * @return
      */
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductPriceResponse getProductPrice(int productId) {
         ProductPriceResponse productPriceResponse = new ProductPriceResponse();
         ProductPrice productPrice = productPriceMapper.selectByProductId(productId);
@@ -84,11 +92,33 @@ public class PriceServiceImpl implements PriceService {
     }
 
     /**
+     * 查询系列产品价格(取子品中售价最低的)
+     *
+     * @param productId
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public ProductPriceResponse getProductSerialPrice(int productId) {
+        ProductPriceResponse productPriceResponse = new ProductPriceResponse();
+        ProductPrice productPrice = productPriceMapper.selectMinSalePriceByProductId(productId);
+        if (productPrice == null) {
+            ErrorResponseUtil.setErrorResponse(productPriceResponse,"50504");
+        } else if (productPrice.getSellPrice()==BigDecimal.ZERO) {
+            ErrorResponseUtil.setErrorResponse(productPriceResponse,"50505");
+        }
+        productPriceResponse.setProductPrice(productPrice);
+        return productPriceResponse;
+    }
+
+    /**
      * 批量查询产品价格
      *
      * @param productIds
      * @return
      */
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductListPriceResponse getProductPriceList(List<Integer> productIds) {
         ProductListPriceResponse productListPriceResponse = new ProductListPriceResponse();
         List<ProductPrice> productPriceList = productPriceMapper.selectByProductIds(productIds);
@@ -112,6 +142,7 @@ public class PriceServiceImpl implements PriceService {
      * @param productPriceChangeLog
      * @return
      */
+    @Override
     public CommonResponse createPriceChangeLog(ProductPriceChangeLog productPriceChangeLog) {
         CommonResponse commonResponse = new CommonResponse();
         int i = productPriceChangeLogMapper.insertSelective(productPriceChangeLog);
@@ -128,6 +159,8 @@ public class PriceServiceImpl implements PriceService {
      * @param productId
      * @return
      */
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ProductPriceChangeLog> getPriceChangeLog(int productId) {
         return productPriceChangeLogMapper.selectPriceChangeLogsByProductId(productId);
     }
