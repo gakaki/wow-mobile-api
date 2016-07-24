@@ -23,12 +23,12 @@ public class OrderApplication {
         SpringApplication.run(OrderApplication.class, args);
     }
 
-    @Autowired
-    private OrderService orderService;
-
-    @RequestMapping(value = "/orders/{orderId}", method = RequestMethod.GET)
-    public OrderSettleResponse getOrderById(@PathVariable Integer orderId) {
-        return orderService.queryOrderById(orderId);
-    }
+//    @Autowired
+//    private OrderService orderService;
+//
+//    @RequestMapping(value = "/orders/{orderId}", method = RequestMethod.GET)
+//    public OrderSettleResponse getOrderById(@PathVariable Integer orderId) {
+//        return orderService.queryOrderById(orderId);
+//    }
 
 }
