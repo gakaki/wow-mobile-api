@@ -1,5 +1,6 @@
 package com.wow.product.service;
 
+import com.wow.product.model.Product;
 import com.wow.product.model.ProductSerial;
 
 import java.util.List;
@@ -31,6 +32,13 @@ public interface ProductSerialService {
      * @return
      */
     List<ProductSerial> getProductSerials(int productId);
+
+    /**
+     *
+     * @param productId
+     * @return
+     */
+    List<Product> getProductSerialsDetail(int productId);
 
     /**
      * 删除系列产品

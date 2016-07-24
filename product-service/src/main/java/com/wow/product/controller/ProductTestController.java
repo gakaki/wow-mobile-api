@@ -1,18 +1,19 @@
 package com.wow.product.controller;
 
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductSerial;
-import com.wow.product.service.ProductSerialService;
-import com.wow.product.service.ProductService;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductSerial;
+import com.wow.product.service.ProductSerialService;
+import com.wow.product.service.ProductService;
 
 /**
  * Created by fangying@wowdsgn on 2016/7/1.
@@ -38,35 +39,35 @@ public class ProductTestController {
         product.setCanSale(false);
         product.setCanShow(false);
         product.setCategoryId(389);
-        product.setColor("黑色");
-        product.setDeliveryFeeType(new Byte((byte) 0));
+//        product.setColor("黑色");
+//        product.setDeliveryFeeType(new Byte((byte) 0));
         product.setHeight((short)1);
         product.setIsBundling(false);
         product.setIsFragile(false);
         product.setIsImport(false);
-        product.setIsPresale(false);
+//        product.setIsPresale(false);
         product.setLength((short)0);
        product.setMaterialText("");
         product.setNeedAssemble(false);
         product.setOnShelfTime(new java.util.Date());
         product.setDetailDescription("");
         product.setOriginCity("");
-        product.setPostSaleServiceDesc("");
+//        product.setPostSaleServiceDesc("");
         product.setProductModel("");
         product.setProductName("");
         product.setProductStatus((byte)0);
         product.setProductType(new Byte((byte) 0));
         product.setOnShelfTime(new java.util.Date());
-        product.setOriginCountry("");
+//        product.setOriginCountry("");
         product.setRejectReason("");
         product.setSellingPoint("");
         product.setSeoDesc("");
         product.setSeoKey("");
         product.setSizeText("");
-        product.setSpec("");
+//        product.setSpec("");
         product.setSeoTitle("");
-        product.setSpecImg("");
-        product.setStyle("");
+//        product.setSpecImg("");
+//        product.setStyle("");
         product.setTips("");
         product.setVerboseInfo("");
         product.setViewPlatform(new Byte((byte) 0));

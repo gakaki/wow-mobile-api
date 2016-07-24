@@ -1,6 +1,7 @@
 package com.wow.product.service.impl;
 
 import com.wow.product.mapper.ProductSerialMapper;
+import com.wow.product.model.Product;
 import com.wow.product.model.ProductSerial;
 import com.wow.product.model.ProductSerialExample;
 import com.wow.product.service.BrandService;
@@ -74,6 +75,17 @@ public class ProductSerialServiceImpl implements ProductSerialService {
         criteria.andIsDeletedEqualTo(false);
         return productSerialMapper.selectByExample(productSerialExample);
 
+    }
+
+    /**
+     * @param productId
+     * @return
+     */
+    @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public List<Product> getProductSerialsDetail(int productId) {
+        List<Product> subProductList = productSerialMapper.selectProductSerials(productId);
+        return subProductList;
     }
 
     /**

@@ -232,7 +232,7 @@ public class OrderController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("查询订单明细错误---" + e);
+            logger.error("取消订单错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
 

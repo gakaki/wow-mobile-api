@@ -5,17 +5,28 @@ import com.wow.common.response.ApiResponse;
 import com.wow.common.util.*;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
 import com.wow.mobileapi.response.product.ItemDetailResponse;
+import com.wow.mobileapi.response.product.ItemSpecResponse;
+import com.wow.mobileapi.response.product.ProductImageResponse;
+import com.wow.mobileapi.response.product.SubProductInfo;
 import com.wow.mobileapi.util.ImgPrefixUtil;
+import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.price.vo.ProductPriceResponse;
 import com.wow.product.model.Brand;
 import com.wow.product.model.Designer;
+import com.wow.product.model.Product;
 import com.wow.product.model.ProductImage;
 import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.request.ProductImgVo;
+import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductResponse;
+import com.wow.stock.service.StockService;
+import com.wow.stock.vo.AvailableStockVo;
+import com.wow.stock.vo.response.AvailableStocksResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +35,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ProductController extends BaseController {
@@ -41,6 +54,9 @@ public class ProductController extends BaseController {
     private PriceService priceService;
 
     @Autowired
+    private StockService stockService;
+
+    @Autowired
     private BrandService brandService;
 
     @Autowired
@@ -49,7 +65,7 @@ public class ProductController extends BaseController {
     private static final Integer productPrimaryImgCountLimit = 5;
 
     /**
-     * 产品详情页
+     * 产品详情页(系列主品和独立主品)
      * @param apiRequest
      * @return
      */
@@ -125,11 +141,11 @@ public class ProductController extends BaseController {
             }
 
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, productResponse);
+            if (ErrorCodeUtil.isFailedResponse(itemDetailResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, itemDetailResponse);
             } else {
                 //产品价格(售价和原价)
-                ProductPriceResponse productPriceResponse = priceService.getProductPrice(productId);
+                ProductPriceResponse productPriceResponse = priceService.getProductSerialPrice(productId);
                 if (productPriceResponse != null && productPriceResponse.getProductPrice() != null) {
                     itemDetailResponse.setSellPrice(productPriceResponse.getProductPrice().getSellPrice());
                     itemDetailResponse.setOriginalPrice(productPriceResponse.getProductPrice().getOriginalPrice());
@@ -155,6 +171,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "/v1/product/spec", method = RequestMethod.GET)
     public ApiResponse getItemSpecInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
+        ItemSpecResponse itemSpecResponse = new ItemSpecResponse();
         ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
         //判断json格式参数是否有误
         if (productQueryRequest == null) {
@@ -172,12 +189,145 @@ public class ProductController extends BaseController {
         int productId = productQueryRequest.getProductId();
 
         try {
-            //TODO
+            //获取系列品基本信息
+            Product product = productService.getProductById(productId);
+            if (product == null) {
+                ErrorResponseUtil.setErrorResponse(apiResponse,"40202");
+                return apiResponse;
+            }
+            itemSpecResponse.setProductId(productId);
+            itemSpecResponse.setSizeText(product.getSizeText());
+            itemSpecResponse.setProductName(product.getProductName());
+
+            //颜色集合
+            List<String> colorDisplayNameList = new ArrayList<>();
+            //规格集合
+            List<String> specNameList = new ArrayList<>();
+
+            List<SubProductInfo> subProductInfoList = new ArrayList<>();
+
             //获取系列品所有子品
-            //获取各子品的基本信息(颜色,规格,名称,尺寸,重量),价格(销售价),库存,图片等
-            //做成适合前端展示的数据结构
+            List<Product> subProductList = productSerialService.getProductSerialsDetail(productId);
+            if (CollectionUtil.isEmpty(subProductList)) {
+                ErrorResponseUtil.setErrorResponse(apiResponse,"40203");
+                return apiResponse;
+            }
+            List<Integer> subProductIds = new ArrayList<>();
+
+            for (Product subProduct : subProductList) {
+                subProductIds.add(subProduct.getId());
+            }
+
+            Map<Integer, Integer> availableStockMap = new HashMap<Integer, Integer>();
+            //批量查库存
+            AvailableStocksResponse availableStocksResponse = stockService.batchGetAvailableStock(subProductIds);
+            if (availableStocksResponse != null && CollectionUtil.isNotEmpty(availableStocksResponse.getAvailableStockVoList())) {
+                List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
+                for (AvailableStockVo availableStockVo : availableStockVoList) {
+                    availableStockMap.put(availableStockVo.getProductId(), availableStockVo.getTotalAvailableStockQty());
+                }
+            }
+            Map<Integer, ProductPrice> priceMap = new HashMap();
+            //批量查询价格
+            ProductListPriceResponse productPriceListResponse = priceService.getProductPriceList(subProductIds);
+            if (productPriceListResponse != null && MapUtil.isNotEmpty(productPriceListResponse.getMap())) {
+                priceMap = productPriceListResponse.getMap();
+            }
+
+            for (Product subProduct : subProductList) {
+                int subProductId = subProduct.getId();
+                subProductIds.add(subProductId);
+                String colorDisplayName = subProduct.getColorDisplayName();
+                if (!colorDisplayNameList.contains(colorDisplayName)) {
+                    colorDisplayNameList.add(colorDisplayName);
+                }
+                String specName = subProduct.getSpecName();
+                if (!specNameList.contains(specName)) {
+                    specNameList.add(specName);
+                }
+
+                SubProductInfo subProductInfo = new SubProductInfo();
+                subProductInfo.setSizeText(subProduct.getSizeText());
+                subProductInfo.setColorDisplayName(subProduct.getColorDisplayName());
+                subProductInfo.setProductColorImg(subProduct.getProductColorImg());
+                subProductInfo.setSpecName(subProduct.getSpecName());
+                subProductInfo.setSubProductId(subProductId);
+                subProductInfo.setWeight(subProduct.getWeight());
+                subProductInfoList.add(subProductInfo);
+
+                //设置库存
+                if(availableStockMap.containsKey(subProductId) && availableStockMap.get(subProductId) > 0) {
+                    subProductInfo.setHasStock(true);
+                    subProductInfo.setAvailableStock(availableStockMap.get(subProductId));
+                } else {
+                    subProductInfo.setHasStock(false);
+                    subProductInfo.setAvailableStock(0);
+                }
+
+                //设置价格
+                if(priceMap.containsKey(subProductId) && priceMap.get(subProductId) != null) {
+                    subProductInfo.setSellPrice(priceMap.get(subProductId).getSellPrice());
+                } else {
+                    setInternalErrorResponse(apiResponse);
+                }
+
+                subProductInfoList.add(subProductInfo);
+            }
+
+            itemSpecResponse.setColorDisplayNameList(colorDisplayNameList);
+            itemSpecResponse.setSpecNameList(specNameList);
+            itemSpecResponse.setSubProductInfoList(subProductInfoList);
+
+            apiResponse.setData(itemSpecResponse);
         } catch (Exception e) {
             logger.error("查找产品规格发生错误---" + e);
+            e.printStackTrace();
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+
+    /**
+     * 产品图文详情页(细节图)
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/product/images/detail", method = RequestMethod.GET)
+    public ApiResponse getProductNonPrimaryImgs(ApiRequest apiRequest) {
+        ApiResponse apiResponse = new ApiResponse();
+        ProductImageResponse productImageResponse = new ProductImageResponse();
+        ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        //判断json格式参数是否有误
+        if (productQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(productQueryRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+        int productId = productQueryRequest.getProductId();
+        try {
+            //获取非主图信息
+            ProductImgResponse productImgResponse = productService.getProductNonPrimaryImages(productId);
+
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(productImgResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productImgResponse);
+                return apiResponse;
+            } else {
+                List<ProductImgVo> productImgVos = productImgResponse.getProductImgVoList();
+                for (ProductImgVo productImgVo : productImgVos) {
+                    productImgVo.setImgUrl(ImgPrefixUtil.addPrefixForImgUrl(productImgVo.getImgUrl()));
+                }
+                productImageResponse.setProductImgVoLit(productImgResponse.getProductImgVoList());
+                apiResponse.setData(productImageResponse);
+            }
+        } catch (Exception e) {
+            logger.error("查找产品详情发生错误---" + e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
