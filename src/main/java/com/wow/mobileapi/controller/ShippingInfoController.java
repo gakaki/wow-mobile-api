@@ -162,23 +162,7 @@ public class ShippingInfoController extends BaseController {
     @RequestMapping(value = "/v1/user/shippinginfo/list", method = RequestMethod.GET)
     public ApiResponse getShippingInfoByUserId(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        ShippingInfoRequest shippingInfoRequest = JsonUtil
-            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
-        //判断json格式参数是否有误
-        if (shippingInfoRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(shippingInfoRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
-
-        Integer endUserId = 35;
-
+        Integer endUserId = getUserIdByTokenChannel(apiRequest);
         try {
             ShippingInfoListResponse shippingInfoListResponse = shippingInfoService.getShippingInfoByUserId(endUserId);
             //如果处理失败 则返回错误信息
