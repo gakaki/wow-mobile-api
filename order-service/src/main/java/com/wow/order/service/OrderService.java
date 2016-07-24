@@ -10,6 +10,7 @@ import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
+import com.wow.order.vo.OrderSplitQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
@@ -66,28 +67,12 @@ public interface OrderService {
      */
     CommonResponse cancelOrder(OrderDetailQuery query);
 
-    /**
-     * @param orderId
-     * @return
-     */
-    OrderSettleResponse queryOrderById(int orderId);
-
     /**根据订单号查询订单明细
      * @param orderCode
      * @return
      */
     OrderDetailResponse queryOrderByOrderCode(String orderCode);
 
-    /**
-     * @param endUserId
-     * @return
-     */
-    List<SaleOrder> queryOrdersByUserId(int endUserId);
-
-    /**
-     * @param orderLog
-     */
-    void createOrderLog(SaleOrderLog orderLog);
 
     /**
      * @param orderId
@@ -111,13 +96,6 @@ public interface OrderService {
      */
     int approveReturnOrder(ReturnOrder returnOrder);
 
-    /**
-     * 拒绝退货单?
-     *
-     * @param returnOrder
-     * @return
-     */
-    int rejectReturnOrder(ReturnOrder returnOrder);
 
     /**
      * 发货
@@ -132,5 +110,13 @@ public interface OrderService {
      * @param order
      */
     boolean deliverDelayedGoods(SaleOrder order);
+    
+    /**
+     * 拆分订单
+     * 
+     * @param query
+     * @return
+     */
+    CommonResponse splitOrder(OrderSplitQuery query);
 
 }

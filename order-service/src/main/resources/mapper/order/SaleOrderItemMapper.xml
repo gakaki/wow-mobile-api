@@ -21,6 +21,17 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
   </resultMap>
+  
+  <resultMap id="WareHouseResultMap"   type="com.wow.order.vo.OrderItemStockVo" >
+	    <id column="saleOrderItemId"   property="saleOrderItemId"/>
+	     <result column="productId"  property="productId" />
+	     <result column="virtualProductQty"  property="virtualProductQty" />
+	    <collection property="orderItemProductStockVos"  ofType="com.wow.order.vo.OrderItemProductStockVo">
+	        <result column="warehouseId"  property="warehouseId"/>
+	        <result column="productQty"  property="productQty"/>
+    </collection>
+  </resultMap>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -444,7 +455,7 @@
     <select id="selectSpecImgByOrderIds"  parameterType="List"  resultType="com.wow.order.vo.OrderItemImgVo" >
          SELECT 
 			  o.sale_order_id saleOrderId,
-			  p.spec_img specImg
+			  p.product_color_img specImg
 			FROM
 			  sale_order_item o 
 			  INNER JOIN product p 
@@ -460,12 +471,12 @@
 	       SELECT 
 				  so.product_id productId,
 				  so.product_name productName,
-				  p.spec_img specImg,
+				  p.product_color_img specImg,
 				  so.order_item_price sellPrice,
 				  so.order_item_qty productQty,
 				  so.order_item_amount sellTotalAmount,
-				  p.color color,
-				  p.spec spec
+				  p.color_display_name color,
+				  p.product_color_img spec
 			FROM
 			  sale_order_item so 
 			  INNER JOIN product p 
@@ -474,5 +485,20 @@
 			    ON so.product_id = pp.product_id 
 			WHERE so.is_deleted = FALSE 
 			  AND so.sale_order_id =#{orderId}
+  </select>
+  
+   <!-- 根据订单id获取订单项目使用库存明细 -->
+  <select id="selectWareHouseStockByOrderId"   resultMap="WareHouseResultMap"  parameterType="Integer" >
+	     SELECT 
+			  so.id saleOrderItemId,
+			  so.product_id productId,
+			  so.frozen_virtual_stock_qty virtualProductQty ,
+			  sow.warehouse_id warehouseId,
+			  sow.frozen_real_stock_qty productQty
+		  FROM
+			  sale_order_item so 
+			  INNER JOIN sale_order_item_warehouse sow 
+			  ON so.id = sow.sale_order_item_id 
+			WHERE so.sale_order_id =#{orderId} 
   </select>
 </mapper>
