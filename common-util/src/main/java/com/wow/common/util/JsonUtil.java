@@ -1,6 +1,9 @@
 package com.wow.common.util;
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wow.common.page.PageData;
 
 /**
  * Created by zhengzhiqing on 16/7/5.
@@ -14,9 +17,9 @@ public class JsonUtil {
             resultJsonStr = objectMapper.writeValueAsString(object);
         } catch (Exception e) {
             e.printStackTrace();
-            resultJsonStr="";
+            resultJsonStr = "";
         }
-        
+
         return resultJsonStr;
     }
 
@@ -29,9 +32,16 @@ public class JsonUtil {
             obj = objectMapper.readValue(json, type);
         } catch (Exception e) {
             e.printStackTrace();
-            obj=null;
+            obj = null;
         }
-        
+
         return obj;
+    }
+
+    /**
+     * 将 map转为 Java 对象
+     */
+    public static <T> T fromJSON(List<PageData> pageData, Class<T> type) {
+        return fromJSON(pojo2Json(pageData), type);
     }
 }

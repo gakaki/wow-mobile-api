@@ -2,6 +2,7 @@ package com.wow.user.config;
 
 import javax.sql.DataSource;
 
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -17,10 +18,12 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.wow.common.page.PagePlugin;
+
 @Configuration
 @PropertySource("classpath:ds_user.properties")
 @EnableTransactionManagement
-@MapperScan(basePackages ="com.wow.user.mapper",sqlSessionFactoryRef="userSqlSessionFactory")
+@MapperScan(basePackages = "com.wow.user.mapper", sqlSessionFactoryRef = "userSqlSessionFactory")
 public class UserDSConfig {
 
     @Bean(name = "userDataSource")
@@ -31,25 +34,30 @@ public class UserDSConfig {
     }
 
     @Bean(name = "userSqlSessionFactory")
-    public SqlSessionFactory userSqlSessionFactory(
-            @Qualifier("userDataSource") DataSource dataSource) throws Exception {
+    public SqlSessionFactory userSqlSessionFactory(@Qualifier("userDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver()
-                .getResources("classpath:/mapper/user/*Mapper.xml"));
+            .getResources("classpath:/mapper/user/*Mapper.xml"));
+
+        //加入分页插件
+        PagePlugin pagePlugin = new PagePlugin();
+        pagePlugin.setDialect("mysql");
+        pagePlugin.setPageSqlId(".*ListPage.*"); //以listPage结尾
+
+        bean.setPlugins(new Interceptor[] { pagePlugin });
+
         return bean.getObject();
     }
 
     @Bean(name = "userTransactionManager")
     @Primary
-    public DataSourceTransactionManager userTransactionManager(
-            @Qualifier("userDataSource") DataSource dataSource) {
+    public DataSourceTransactionManager userTransactionManager(@Qualifier("userDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "userSqlSessionTemplate")
-    public SqlSessionTemplate userSqlSessionTemplate(
-            @Qualifier("userSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+    public SqlSessionTemplate userSqlSessionTemplate(@Qualifier("userSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }

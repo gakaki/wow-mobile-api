@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.wow.common.page.PageData;
+import com.wow.common.page.PageModel;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderExample;
 import com.wow.order.vo.OrderListQuery;
@@ -22,10 +24,12 @@ public interface SaleOrderMapper {
 
     List<SaleOrder> selectByExample(SaleOrderExample example);
 
+    List<PageData> selectListPage(PageModel page);
+
     SaleOrder selectByPrimaryKey(Integer id);
-    
+
     SaleOrder selectByOrderCode(String orderCode);
-    
+
     int updateByExampleSelective(@Param("record") SaleOrder record, @Param("example") SaleOrderExample example);
 
     int updateByExample(@Param("record") SaleOrder record, @Param("example") SaleOrderExample example);

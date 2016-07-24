@@ -2,6 +2,8 @@ package com.wow.order.service;
 
 import java.util.List;
 
+import com.wow.common.page.PageData;
+import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
@@ -73,7 +75,6 @@ public interface OrderService {
      */
     OrderDetailResponse queryOrderByOrderCode(String orderCode);
 
-
     /**
      * @param orderId
      * @return
@@ -96,7 +97,6 @@ public interface OrderService {
      */
     int approveReturnOrder(ReturnOrder returnOrder);
 
-
     /**
      * 发货
      *
@@ -110,7 +110,7 @@ public interface OrderService {
      * @param order
      */
     boolean deliverDelayedGoods(SaleOrder order);
-    
+
     /**
      * 拆分订单
      * 
@@ -118,5 +118,7 @@ public interface OrderService {
      * @return
      */
     CommonResponse splitOrder(OrderSplitQuery query);
+
+    List<PageData> selectListPage(PageModel page);
 
 }

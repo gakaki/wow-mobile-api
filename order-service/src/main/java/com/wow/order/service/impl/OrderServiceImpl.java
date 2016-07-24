@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wow.common.constant.CommonConstant;
 import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.enums.SaleOrderStatusEnum;
+import com.wow.common.page.PageData;
+import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
@@ -1000,6 +1002,11 @@ public class OrderServiceImpl implements OrderService {
         /*** 业务校验结束*/
         
         return commonResponse;
+    }
+
+    @Override
+    public List<PageData> selectListPage(PageModel page) {
+        return saleOrderMapper.selectListPage(page);
     }
 
 }

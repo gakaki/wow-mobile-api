@@ -1,10 +1,12 @@
 package com.wow.stock.config;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,7 +17,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.sql.DataSource;
+import com.wow.common.page.PagePlugin;
 
 @Configuration
 @PropertySource("classpath:ds_stock.properties")
@@ -36,6 +38,14 @@ public class StockDSConfig {
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources("classpath:/mapper/stock/*Mapper.xml"));
+        
+        //加入分页插件
+        PagePlugin pagePlugin=new PagePlugin();
+        pagePlugin.setDialect("mysql");
+        pagePlugin.setPageSqlId(".*ListPage.*"); //以listPage结尾
+        
+        bean.setPlugins(new Interceptor[] {pagePlugin});
+        
         return bean.getObject();
     }
 

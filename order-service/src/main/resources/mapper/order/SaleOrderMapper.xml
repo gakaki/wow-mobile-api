@@ -841,4 +841,13 @@
 	    where end_user_id=#{endUserId}
 	    order by order_create_time desc
   </select>
+  
+    <select id="selectListPage"  resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel" >
+	    select 
+	              id , order_code orderCode, order_amount orderAmount, total_Packages totalPackages
+	    from sale_order	  
+	    where id=#{model.id}
+	    
+  </select>
+  
 </mapper>
