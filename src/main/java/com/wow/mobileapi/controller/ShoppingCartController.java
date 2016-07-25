@@ -174,21 +174,8 @@ public class ShoppingCartController extends BaseController {
      */
     @RequestMapping(value = "/get", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
     public ApiResponse queryShoppingCartByUserId(ApiRequest request) {
-        ShoppingCartRequest shoppingCartRequest = JsonUtil.fromJSON(request.getParamJson(), ShoppingCartRequest.class);
         ApiResponse apiResponse = new ApiResponse();
 
-        //判断json格式参数是否有误
-        if (shoppingCartRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(shoppingCartRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
         try {
             //包装购物车查询对象
             ShoppingCartQueryVo query = new ShoppingCartQueryVo();
