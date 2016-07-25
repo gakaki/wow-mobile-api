@@ -10,7 +10,7 @@ dependencies {
     mybatisGenerator 'mysql:mysql-connector-java:5.1.35'
     compile 'org.mybatis.generator:mybatis-generator:1.3.2'
     compile 'com.github.pagehelper:pagehelper:4.1.1'
-    compile 'mysql:mysql-connector-java:6.0.2'
+    compile 'mysql:mysql-connector-java:5.1.35'
 
     //业务依赖
     compile 'com.wow:product-service:1.0-SNAPSHOT'
