@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wow.common.constant.CommonConstant;
 import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.enums.SaleOrderStatusEnum;
-import com.wow.common.page.PageData;
-import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
@@ -38,6 +36,7 @@ import com.wow.order.model.SaleOrderItemExample;
 import com.wow.order.model.SaleOrderItemWarehouse;
 import com.wow.order.model.SaleOrderLog;
 import com.wow.order.service.OrderService;
+import com.wow.order.vo.OrderDeliverQuery;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderItemImgVo;
 import com.wow.order.vo.OrderItemStockVo;
@@ -47,7 +46,6 @@ import com.wow.order.vo.OrderListVo;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.OrderSettleVo;
-import com.wow.order.vo.OrderSplitQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
@@ -747,7 +745,6 @@ public class OrderServiceImpl implements OrderService {
         orderDetailResponse.setOrderCreateTimeFormat(DateUtil.formatDatetime(saleOrder.getOrderCreateTime()));
     }
 
-
     /**
      * @param orderId
      * @return
@@ -777,16 +774,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int approveReturnOrder(ReturnOrder returnOrder) {
         return 0;
-    }
-
-    /**
-     * 发货
-     *
-     * @param order
-     */
-    @Override
-    public boolean deliverGoods(SaleOrder order) {
-        return false;
     }
 
     /**
@@ -962,10 +949,14 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
+    /**
+     * 订单发货
+     * @see com.wow.order.service.OrderService#deliverGoods(com.wow.order.vo.OrderDeliverQuery)
+     */
     @Override
-    public CommonResponse splitOrder(OrderSplitQuery query) {
-        CommonResponse commonResponse=new CommonResponse();
-        
+    public CommonResponse deliverGoods(OrderDeliverQuery query) {
+        CommonResponse commonResponse = new CommonResponse();
+
         /*** 业务校验开始*/
         //如果用户购物车id列表为空  则返回错误提示
         if (CollectionUtil.isEmpty(query.getSaleOrderItemIds())) {
@@ -974,7 +965,7 @@ public class OrderServiceImpl implements OrderService {
 
             return commonResponse;
         }
-        
+
         //如果订单号为空 则直接返回错误提示
         if (StringUtil.isEmpty(query.getOrderCode())) {
             commonResponse.setResCode("40307");
@@ -992,21 +983,38 @@ public class OrderServiceImpl implements OrderService {
 
             return commonResponse;
         }
+
+        //获取指定的订单项
+        SaleOrderItemExample saleOrderItemExample = new SaleOrderItemExample();
+        SaleOrderItemExample.Criteria criteria = saleOrderItemExample.createCriteria();
+
+        criteria.andSaleOrderIdEqualTo(saleOrder.getId());
+        criteria.andIsSplitedEqualTo(Boolean.FALSE);
+        criteria.andIdIn(query.getSaleOrderItemIds());
+
+        List<SaleOrderItem> saleOrderItem = saleOrderItemMapper.selectByExample(saleOrderItemExample);
         
-       SaleOrderItemExample   saleOrderItemExample=new SaleOrderItemExample();
-       SaleOrderItemExample.Criteria criteria=saleOrderItemExample.createCriteria();
-       
-       criteria.andSaleOrderIdEqualTo(saleOrder.getId());
-       criteria.andIsSplitedEqualTo(Boolean.FALSE);
+        //如果发货的商品清单个数与订单中未发货的个数不一致  则直接返回错误提示
+        if (saleOrderItem.size() != query.getSaleOrderItemIds().size()) {
+            commonResponse.setResCode("40312");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40312"));
+
+            return commonResponse;
+        }
         
         /*** 业务校验结束*/
         
-        return commonResponse;
-    }
+        /*** 拆分包裹开始
+         *     1.  生成发货单
+         *     2.  更新订单项是否发货状态
+         *     3.  
+         * */
+        
+        
+        /*** 拆分包裹结束*/
+        
 
-    @Override
-    public List<PageData> selectListPage(PageModel page) {
-        return saleOrderMapper.selectListPage(page);
+        return commonResponse;
     }
 
 }

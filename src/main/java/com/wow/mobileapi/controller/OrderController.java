@@ -168,7 +168,7 @@ public class OrderController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(orderListResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderListResponse);
             } else {
-                apiResponse.setData(orderListResponse.getOrderLists());
+                apiResponse.setData(orderListResponse);
             }
         } catch (Exception e) {
             logger.error("查询订单列表错误---" + e);
@@ -264,7 +264,7 @@ public class OrderController extends BaseController {
             List<PageData> selectListPage = orderService.selectListPage(page);
 
             List<SaleOrder> orders = Arrays.asList(JsonUtil.fromJSON(selectListPage, SaleOrder[].class));
-
+            
             apiResponse.setData(orders);
         } catch (Exception e) {
             e.printStackTrace();

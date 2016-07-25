@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 拆分订单查询类
+ * 订单发货查询类
  * @author chenkaiwei
  * @version $Id: V1.0 2016年7月17日 上午11:42:47 Exp $
  */
-public class OrderSplitQuery implements Serializable {
+public class OrderDeliverQuery implements Serializable {
     /**  */
     private static final long serialVersionUID = 1L;
 
