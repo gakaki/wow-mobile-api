@@ -1,5 +1,9 @@
 package com.wow.common.util;
 
+import com.wow.common.constant.CommonConstant;
+
+import java.util.Random;
+
 /**
  * Created by zhengzhiqing on 16/7/7.
  */
@@ -32,5 +36,11 @@ public class RandomGenerator {
                 }
             } while (bDone);
         return retStr;
+    }
+
+    public static int createRandomNumBasedOnTimestamp() {
+        long t = System.currentTimeMillis();//获得当前时间的毫秒数
+        Random rd = new Random(t);//作为种子数传入到Random的构造器中
+        return rd.nextInt(CommonConstant.PRODUCT_CODE_MAX);
     }
 }

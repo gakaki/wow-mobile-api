@@ -58,6 +58,8 @@ public class CommonConstant {
 
     //数字6
     public static final Byte SIX = 6;
+
+    public static final int PRODUCT_CODE_MAX = 100000000;
     
     //订单支付状态
     //支付情况note:  1: paid     2: unpay
