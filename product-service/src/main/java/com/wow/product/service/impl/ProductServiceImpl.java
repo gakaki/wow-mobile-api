@@ -508,15 +508,15 @@ public class ProductServiceImpl implements ProductService {
         //2. 查询属于该类目三级类目的所有产品,按排序规则排序
         //3. 分页待定:插件、注解
     	ProductQueryVo pqv = (ProductQueryVo)page.getModel();
-    	List<Integer> categoryIdList = categoryService.getLastLevelCategoryByCategory(pqv.getCategoryId());
+    	List<Integer> categoryIdList = categoryService.getLastLevelCategoryByCategory(pqv.getCategoryId(),pqv.getCategoryLevel());
     	pqv.setCategoryIdList(categoryIdList);
     	page.setModel(pqv);
-        System.out.println("categoryIdList=" + categoryIdList);
-        System.out.println(((ProductQueryVo)page.getModel()).getCategoryIdList());
+//        System.out.println("categoryIdList=" + categoryIdList);
+//        System.out.println(((ProductQueryVo)page.getModel()).getCategoryIdList());
 
         List<PageData> dataList = null;
         
-    	if(pqv.getSortBy() == 1)
+    	if(pqv.getSortBy() == 1 || pqv.getSortBy() == null)
     		dataList = productMapper.selectOrderByShelfTimeListPage(page);
     	if(pqv.getSortBy() == 2)
     		dataList = productMapper.selectOrderbyTotalSoldListPage(page);
@@ -533,7 +533,7 @@ public class ProductServiceImpl implements ProductService {
         		list.add(product);
     		}
     	}
-        return productList;
+        return list;
     }
 
     /**

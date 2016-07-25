@@ -1,7 +1,11 @@
 package com.wow.mobileapi.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.wow.mobileapi.response.page.PageBannerVo;
+import com.wow.mobileapi.response.page.PageBannerVoResponse;
+import com.wow.page.model.PageBannerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +45,35 @@ public class PageController extends BaseController {
         logger.info("start to get banners on page");
         ApiResponse apiResponse = new ApiResponse();
 
+        PageBannerVoResponse pageBannerVoResponse = new PageBannerVoResponse();
+        List<PageBannerVo> carouselBanners = new ArrayList<>();
+        List<PageBannerVo> bannerList = new ArrayList<>();
+
         try {
             PageBannerResponse pageBannerResponse = pageConfigService.getBannersByPageType(BizConstant.PAGE_TYPE_HOME);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(pageBannerResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageBannerResponse);
             } else {
-                apiResponse.setData(pageBannerResponse.getPageBannerConfigList());
+                List<PageBannerConfig> pageBannerConfigList = pageBannerResponse.getPageBannerConfigList();
+
+                for (PageBannerConfig pageBannerConfig : pageBannerConfigList) {
+                    PageBannerVo pageBannerVo = new PageBannerVo();
+                    pageBannerVo.setBannerImgSrc(pageBannerConfig.getBannerImgSrc());
+                    pageBannerVo.setBannerLinkType(pageBannerConfig.getBannerLinkType());
+                    pageBannerVo.setBannerLinkTargetId(pageBannerConfig.getBannerLinkTargetId());
+                    pageBannerVo.setBannerLinkUrl(pageBannerConfig.getBannerLinkUrl());
+                    if (pageBannerConfig.getPageModuleType() == BizConstant.PAGE_MODULE_TYPE_BANNER_CAROUSEL) {
+                        carouselBanners.add(pageBannerVo);
+                    } else if (pageBannerConfig.getPageModuleType() == BizConstant.PAGE_MODULE_TYPE_BANNER_LIST) {
+                        bannerList.add(pageBannerVo);
+                    }
+                }
+
+                pageBannerVoResponse.setBannerList(bannerList);
+                pageBannerVoResponse.setCarouselBanners(carouselBanners);
+
+                apiResponse.setData(pageBannerVoResponse);
             }
         } catch (Exception e) {
             logger.error("查找Banner错误---" + e);
