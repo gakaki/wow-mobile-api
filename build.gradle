@@ -27,7 +27,6 @@ allprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-//    let spring boot can be as init.d and systemd to background run
     springBoot {
         executable = true
     }
@@ -35,6 +34,9 @@ allprojects {
         mavenLocal()
         maven {
             url "${nexusUrl}/content/groups/public/"
+        }
+        maven {
+            url  "http://jcenter.bintray.com"
         }
     }
 
@@ -101,7 +103,6 @@ remotes {
         host = '10.0.60.121'
         user = 'root'
         password = " "
-//        identity = file('/Users/gakaki/.ssh/id_rsa.pub')
     }
 }
 
