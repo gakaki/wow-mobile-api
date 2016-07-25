@@ -32,6 +32,10 @@ Gradle__org_springframework_spring_aop_4_2_6_RELEASE.xml
 Gradle__org_springframework_spring_beans_4_2_6_RELEASE.xml
 Gradle__org_springframework_spring_context_4_2_6_RELEASE.xml
 Gradle__org_springframework_spring_expression_4_2_6_RELEASE.xml
+attribute-service_main.iml
+attribute-service_test.iml
+common-util_main.iml
+common-util_test.iml
 marketing-service_main.iml
 marketing-service_test.iml
 mobile-api_main.iml
@@ -42,8 +46,11 @@ page-service_main.iml
 page-service_test.iml
 price-service_main.iml
 price-service_test.iml
+product-service_main.iml
+product-service_test.iml
 stock-service_main.iml
 stock-service_test.iml
 user-service_main.iml
 user-service_test.iml
+
 .idea/libraries/Gradle__com_fasterxml_jackson_core_jackson_annotations_2_6_6.xml
