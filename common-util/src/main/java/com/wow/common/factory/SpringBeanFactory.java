@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.ErrorCodeUtil;
 
 /**
@@ -28,6 +29,9 @@ public class SpringBeanFactory implements ApplicationContextAware {
         
         //加载错误码属性文件
         ErrorCodeUtil.loadProps();
+        
+        //初始化数据字典
+        DictionaryUtil.init();
         
         //初始化结束...
     }

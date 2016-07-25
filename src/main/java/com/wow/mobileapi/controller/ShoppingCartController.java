@@ -62,7 +62,9 @@ public class ShoppingCartController extends BaseController {
             //包装购物车对象
             ShoppingCart shoppingCart = new ShoppingCart();
 
-            shoppingCart.setEndUserId(shoppingCartRequest.getEndUserId());
+            //设置用户id
+            Integer endUserId = getUserIdByTokenChannel(request);
+            shoppingCart.setEndUserId(endUserId);
             shoppingCart.setProductId(shoppingCartRequest.getProductId());
             shoppingCart.setProductQty(shoppingCartRequest.getProductQty());
 
@@ -172,26 +174,14 @@ public class ShoppingCartController extends BaseController {
      */
     @RequestMapping(value = "/get", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
     public ApiResponse queryShoppingCartByUserId(ApiRequest request) {
-        ShoppingCartRequest shoppingCartRequest = JsonUtil.fromJSON(request.getParamJson(), ShoppingCartRequest.class);
         ApiResponse apiResponse = new ApiResponse();
 
-        //判断json格式参数是否有误
-        if (shoppingCartRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(shoppingCartRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
         try {
             //包装购物车查询对象
             ShoppingCartQueryVo query = new ShoppingCartQueryVo();
-
-            query.setEndUserId(shoppingCartRequest.getEndUserId());
+            
+            Integer endUserId = getUserIdByTokenChannel(request);
+            query.setEndUserId(endUserId);
 
             ShoppingCartResponse shoppingCartResponse = shoppingCartService.queryShoppingCartByUserId(query);
             //如果处理失败 则返回错误信息

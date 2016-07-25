@@ -326,8 +326,8 @@
 				  sc.product_qty productQty,
 				  p.id productId,
 				  p.product_name productName,
-				  p.color color,
-				  p.spec spec,
+				  p.color_display_name color,
+				  p.product_color_img specImg,
 				  p.product_status productStatus,
 				  pp.sell_price sellPrice
 			FROM
@@ -349,7 +349,7 @@
 				  p.id productId,
 				  p.product_name productName,
 				  p.color_display_name color,
-				  p.product_color_img spec,
+				  p.product_color_img specImg,
 				  p.product_status productStatus,
 				  pp.sell_price sellPrice
 			FROM
