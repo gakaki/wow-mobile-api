@@ -1,12 +1,12 @@
 package com.wow.user.mapper;
 
-import com.wow.product.model.Brand;
-import com.wow.user.model.EndUserLikeBrand;
-import com.wow.user.model.EndUserLikeBrandExample;
 import java.util.List;
 
-import com.wow.user.vo.LikedBrandVo;
 import org.apache.ibatis.annotations.Param;
+
+import com.wow.user.model.EndUserLikeBrand;
+import com.wow.user.model.EndUserLikeBrandExample;
+import com.wow.user.vo.LikedBrandVo;
 
 public interface EndUserLikeBrandMapper {
     int countByExample(EndUserLikeBrandExample example);

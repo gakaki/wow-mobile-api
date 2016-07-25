@@ -1,12 +1,12 @@
 package com.wow.user.mapper;
 
-import com.wow.user.model.EndUserLikeDesigner;
-import com.wow.user.model.EndUserLikeDesignerExample;
 import java.util.List;
 
-import com.wow.user.vo.LikedBrandVo;
-import com.wow.user.vo.LikedDesignerVo;
 import org.apache.ibatis.annotations.Param;
+
+import com.wow.user.model.EndUserLikeDesigner;
+import com.wow.user.model.EndUserLikeDesignerExample;
+import com.wow.user.vo.LikedDesignerVo;
 
 public interface EndUserLikeDesignerMapper {
     int countByExample(EndUserLikeDesignerExample example);
