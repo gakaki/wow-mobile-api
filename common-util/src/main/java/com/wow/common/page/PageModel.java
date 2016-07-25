@@ -51,7 +51,7 @@ public class PageModel {
     }
 
     public int getShowCount() {
-        return showCount;
+        return showCount==0?10:showCount;
     }
 
     public void setShowCount(int showCount) {
