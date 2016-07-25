@@ -28,5 +28,5 @@ public interface CategoryMapper{
 
     int updateByPrimaryKey(Category record);
     
-    List<Category> selectAllCategory();
+    List<Category> selectAllCategory(@Param("categoryLevel") Integer categoryLevel);
 }

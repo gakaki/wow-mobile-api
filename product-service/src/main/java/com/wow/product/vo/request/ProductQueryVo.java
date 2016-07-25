@@ -7,8 +7,9 @@ public class ProductQueryVo {
 	private Integer categoryId;
 	private Integer sortBy;
 	private Boolean asc;
+	private Integer categoryLevel;
 	private List<Integer> categoryIdList;
-
+	
 	public Integer getCategoryId() {
 		return categoryId;
 	}
@@ -30,7 +31,6 @@ public class ProductQueryVo {
 	}
 	
 	public String getAscText(){
-		
 		if(asc){
 			return "asc";
 		}else{
@@ -40,6 +40,14 @@ public class ProductQueryVo {
 
 	public void setAsc(Boolean asc) {
 		this.asc = asc;
+	}
+
+	public Integer getCategoryLevel() {
+		return categoryLevel;
+	}
+
+	public void setCategoryLevel(Integer categoryLevel) {
+		this.categoryLevel = categoryLevel;
 	}
 
 	public List<Integer> getCategoryIdList() {

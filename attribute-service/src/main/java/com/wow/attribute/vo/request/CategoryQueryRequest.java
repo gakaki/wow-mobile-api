@@ -7,15 +7,15 @@ import com.wow.common.request.ApiRequest;
  */
 public class CategoryQueryRequest extends ApiRequest {
 
-    private int categoryLevel;
+    private Integer categoryLevel;
 
     private int categoryId;
 
-    public int getCategoryLevel() {
+    public Integer getCategoryLevel() {
         return categoryLevel;
     }
 
-    public void setCategoryLevel(int categoryLevel) {
+    public void setCategoryLevel(Integer categoryLevel) {
         this.categoryLevel = categoryLevel;
     }
 

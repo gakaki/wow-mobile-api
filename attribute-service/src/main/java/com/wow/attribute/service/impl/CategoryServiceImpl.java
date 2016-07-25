@@ -1,5 +1,13 @@
 package com.wow.attribute.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.attribute.mapper.CategoryMapper;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.model.CategoryExample;
@@ -9,13 +17,6 @@ import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 类目服务
@@ -152,7 +153,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<Integer> getLastLevelCategoryByCategory(int categoryId) {
+    public List<Integer> getLastLevelCategoryByCategory(int categoryId,Integer categoryLevel) {
 
         List<Integer> categoryIdList = new ArrayList<>();
 
@@ -161,7 +162,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         //否则,递归查询该分类的子分类,直到最后一级
         //TODO: 要从缓存(redis)读取
-    	List<Category> categoryListAll = categoryMapper.selectAllCategory();
+    	List<Category> categoryListAll = categoryMapper.selectAllCategory(categoryLevel);
     	categoryIdList = getChildCategories(categoryListAll,categoryId);
     	List<Integer> categoryIds = new ArrayList<>();
     	// 去重
@@ -179,7 +180,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param parentCategoryId 传入的父节点ID
      * @return String
      */
-    public static List<Integer> getChildCategories(List<Category> categoryList, Integer parentCategoryId) {
+    private static List<Integer> getChildCategories(List<Category> categoryList, Integer parentCategoryId) {
         if(CollectionUtil.isEmpty(categoryList)) return null;
         List<Integer> subCategoryList = new ArrayList<Integer>();
 
@@ -192,5 +193,19 @@ public class CategoryServiceImpl implements CategoryService {
             }
         }
         return subCategoryList;
+    }
+    
+    /**
+     * 查询指定级别的分类
+     *
+     * @param categoryLevel
+     * @return
+     */
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public CategoryListResponse getCategoryByLevel(Integer categoryLevel){
+    	CategoryListResponse categoryListResponse = new CategoryListResponse();
+    	List<Category> categoryList = categoryMapper.selectAllCategory(categoryLevel);
+    	categoryListResponse.setCategoryList(categoryList);
+    	return categoryListResponse;
     }
 }

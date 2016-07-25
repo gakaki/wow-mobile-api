@@ -1,25 +1,37 @@
 package com.wow.mobileapi.controller;
 
 
-import com.wow.attribute.model.Attribute;
-import com.wow.attribute.service.AttributeService;
-import com.wow.common.response.ApiResponse;
-import com.wow.common.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.wow.attribute.model.Attribute;
+import com.wow.attribute.service.AttributeService;
+import com.wow.attribute.service.CategoryService;
+import com.wow.attribute.vo.request.CategoryQueryRequest;
+import com.wow.attribute.vo.response.CategoryListResponse;
+import com.wow.common.request.ApiRequest;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.ValidatorUtil;
 
 @RestController
-public class
-AttributeController {
+public class AttributeController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(AttributeController.class);
 
     @Autowired
     private AttributeService attributeService;
+    @Autowired
+    private CategoryService categoryService;
 
     @RequestMapping(value = "/v1/attributes", method = RequestMethod.POST)
     public ApiResponse createAttribute(@Validated @RequestBody Attribute newAttribute, BindingResult result) {
@@ -125,6 +137,27 @@ AttributeController {
         apiResponse.setResCode("0");
         apiResponse.setResMsg("success");
         apiResponse.setData(count);
+        return apiResponse;
+    }
+    
+    @RequestMapping(value = "/v1/attributes/getCategoryByLevel", method = RequestMethod.GET)
+    public ApiResponse getCategoryByLevel(ApiRequest apiRequest) {
+        logger.info("start to get category by level");
+        ApiResponse apiResponse = new ApiResponse();
+        CategoryQueryRequest categoryQueryRequest = JsonUtil
+                .fromJSON(apiRequest.getParamJson(), CategoryQueryRequest.class);
+        try {
+        	CategoryListResponse categoryListResponse = categoryService.getCategoryByLevel(categoryQueryRequest.getCategoryLevel());
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(categoryListResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, categoryListResponse);
+            } else {
+                apiResponse.setData(categoryListResponse.getCategoryList());
+            }
+        } catch (Exception e) {
+            logger.error("查找category_by_level错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
         return apiResponse;
     }
 }

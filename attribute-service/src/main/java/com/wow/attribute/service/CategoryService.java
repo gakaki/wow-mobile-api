@@ -70,5 +70,13 @@ public interface CategoryService {
      *
      * @return
      */
-    List<Integer> getLastLevelCategoryByCategory(int categoryId);
+    List<Integer> getLastLevelCategoryByCategory(int categoryId,Integer categoryLevel);
+
+    /**
+     * 查询指定级别的分类
+     *
+     * @param categoryLevel
+     * @return
+     */
+    CategoryListResponse getCategoryByLevel(Integer categoryLevel);
 }

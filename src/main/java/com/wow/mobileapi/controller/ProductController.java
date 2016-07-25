@@ -370,6 +370,8 @@ public class ProductController extends BaseController {
         }
 
         PageModel page = new PageModel();
+        page.setShowCount(productInfoRequest.getShowCount());
+        page.setCurrentPage(productInfoRequest.getCurrentPage());
         ProductQueryVo pqv = new ProductQueryVo();
         BeanUtil.copyProperties(productInfoRequest, pqv);
         page.setModel(pqv);
