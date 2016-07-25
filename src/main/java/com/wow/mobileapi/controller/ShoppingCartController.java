@@ -1,5 +1,7 @@
 package com.wow.mobileapi.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wow.common.model.Dictionary;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
+import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
@@ -105,6 +109,10 @@ public class ShoppingCartController extends BaseController {
             return apiResponse;
         }
         try {
+            
+            List<Dictionary> keyGroup = DictionaryUtil.getKeyGroup("1");
+            Dictionary dictionary = DictionaryUtil.getDictionary("1", "12");
+            
             //包装购物车查询对象
             ShoppingCartQueryVo query = new ShoppingCartQueryVo();
 
