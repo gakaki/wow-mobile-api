@@ -2,6 +2,7 @@ package com.wow.product.service.impl;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,10 +21,13 @@ import com.wow.common.enums.ApplicableSceneEnum;
 import com.wow.common.enums.CountryEnum;
 import com.wow.common.enums.MaterialEnum;
 import com.wow.common.enums.StyleEnum;
+import com.wow.common.page.PageData;
+import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.JsonUtil;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.StringUtil;
 import com.wow.price.model.ProductPrice;
@@ -55,6 +59,7 @@ import com.wow.product.vo.request.ColorSpecVo;
 import com.wow.product.vo.request.DesignerVo;
 import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.request.ProductImgVo;
+import com.wow.product.vo.request.ProductQueryVo;
 import com.wow.product.vo.request.SpecVo;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductParameter;
@@ -497,39 +502,37 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     @Override
-    public List<ProductVo> getProductByCategoryId(Integer categoryId, Integer sortBy, Boolean asc) {
+    public List<ProductVo> getProductByCategoryIdListPage(PageModel page) {
         //TODO:
         //1. 根据category查询该类目下所有三级类目
         //2. 查询属于该类目三级类目的所有产品,按排序规则排序
         //3. 分页待定:插件、注解
-    	List<Integer> categoryIdList = categoryService.getLastLevelCategoryByCategory(categoryId);
+    	ProductQueryVo pqv = (ProductQueryVo)page.getModel();
+    	List<Integer> categoryIdList = categoryService.getLastLevelCategoryByCategory(pqv.getCategoryId());
+    	pqv.setCategoryIdList(categoryIdList);
+    	page.setModel(pqv);
+        System.out.println("categoryIdList=" + categoryIdList);
+        System.out.println(((ProductQueryVo)page.getModel()).getCategoryIdList());
 
-        System.out.println("size=" + categoryIdList.size());
-
-    	List<ProductVo> productList = new ArrayList<ProductVo>();
-
-        String sortDesc = "";
-        if (asc) {
-            sortDesc = "asc";
-        } else {
-            sortDesc = "desc";
-        }
-
-    	if(sortBy == 1)
-    		productList = productMapper.selectPageByCategoryIdOrderbyShelfTime(categoryIdList, sortDesc);
-//    	if(sortBy == 2)
-//    		productList = productMapper.selectPageByCategoryIdOrderbyTotalSold(categoryIdList, sortDesc);
-//    	if(sortBy == 3)
-//    		productList = productMapper.selectPageByCategoryIdOrderbySellPrice(categoryIdList, sortDesc);
-
-//    	List<ProductVo> list = new ArrayList<ProductVo>();
-//    	for(ProductVo product : productList){
-//    		ProductImage pi = productImageMapper.selectProductPrimaryOneImg(product.getProductId());
-//    		if(pi!=null){
-//    			product.setProductImg(pi.getImgUrl());
-//        		list.add(product);
-//    		}
-//    	}
+        List<PageData> dataList = null;
+        
+    	if(pqv.getSortBy() == 1)
+    		dataList = productMapper.selectOrderByShelfTimeListPage(page);
+    	if(pqv.getSortBy() == 2)
+    		dataList = productMapper.selectOrderbyTotalSoldListPage(page);
+    	if(pqv.getSortBy() == 3)
+    		dataList = productMapper.selectOrderbySellPriceListPage(page);
+    	
+    	List<ProductVo> productList = Arrays.asList(JsonUtil.fromJSON(dataList, ProductVo[].class));
+    	
+    	List<ProductVo> list = new ArrayList<ProductVo>();
+    	for(ProductVo product : productList){
+    		ProductImage pi = productImageMapper.selectProductPrimaryOneImg(product.getProductId());
+    		if(pi!=null){
+    			product.setProductImg(pi.getImgUrl());
+        		list.add(product);
+    		}
+    	}
         return productList;
     }
 

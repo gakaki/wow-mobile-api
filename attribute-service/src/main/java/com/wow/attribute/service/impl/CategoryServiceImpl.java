@@ -163,8 +163,14 @@ public class CategoryServiceImpl implements CategoryService {
         //TODO: 要从缓存(redis)读取
     	List<Category> categoryListAll = categoryMapper.selectAllCategory();
     	categoryIdList = getChildCategories(categoryListAll,categoryId);
-
-        return categoryIdList;
+    	List<Integer> categoryIds = new ArrayList<>();
+    	// 去重
+    	for(Integer i : categoryIdList){
+    		if(!categoryIds.contains(i)){
+    			categoryIds.add(i);
+    		}
+    	}
+        return categoryIds;
     }
     
     /**
@@ -175,15 +181,14 @@ public class CategoryServiceImpl implements CategoryService {
      */
     public static List<Integer> getChildCategories(List<Category> categoryList, Integer parentCategoryId) {
         if(CollectionUtil.isEmpty(categoryList)) return null;
-        List<Integer> subCategoryList = new ArrayList<>();
+        List<Integer> subCategoryList = new ArrayList<Integer>();
 
         for (Category category : categoryList) {
             if (category.getParentCategoryId()==parentCategoryId) {
-                if (category.getCategoryLevel()==3) {
-                    subCategoryList.add(category.getId());
-                } else {
-                    subCategoryList.addAll(getChildCategories(categoryList, category.getId()));
-                }
+            	subCategoryList.add(category.getId());
+            	subCategoryList.addAll(getChildCategories(categoryList,category.getId()));
+            }else if(category.getCategoryLevel() == 3){
+            	subCategoryList.add(category.getId());
             }
         }
         return subCategoryList;
