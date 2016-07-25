@@ -42,7 +42,7 @@ public class ShoppingCartResultVo implements Serializable{
     private String color;
     
     //产品规格值
-    private String spec;
+    private String specImg;
     
     //产品状态
     private Byte productStatus;
@@ -122,12 +122,12 @@ public class ShoppingCartResultVo implements Serializable{
         this.color = color;
     }
 
-    public String getSpec() {
-        return spec;
+    public String getSpecImg() {
+        return specImg;
     }
 
-    public void setSpec(String spec) {
-        this.spec = spec;
+    public void setSpecImg(String specImg) {
+        this.specImg = specImg;
     }
 
     public BigDecimal getSellPrice() {

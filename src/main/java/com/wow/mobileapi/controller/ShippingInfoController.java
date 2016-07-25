@@ -87,7 +87,7 @@ public class ShippingInfoController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         } else {
-            if (shippingInfoRequest.getId()==null) {
+            if (shippingInfoRequest.getId() == null) {
                 setInvalidParameterResponse(apiResponse, "id不能为空");
                 return apiResponse;
             }
@@ -102,6 +102,10 @@ public class ShippingInfoController extends BaseController {
 
         ShippingInfo shippingInfo = new ShippingInfo();
         BeanUtil.copyProperties(shippingInfoRequest, shippingInfo);
+
+        //设置用户id
+        Integer endUserId = getUserIdByTokenChannel(apiRequest);
+        shippingInfo.setEndUserId(endUserId);
 
         try {
             CommonResponse commonResponse = shippingInfoService.updateShippingInfo(shippingInfo);
@@ -126,16 +130,16 @@ public class ShippingInfoController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
 
         ShippingInfoRequest shippingInfoRequest = JsonUtil
-                .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
+            .fromJSON(apiRequest.getParamJson(), ShippingInfoRequest.class);
         //判断json格式参数是否有误
         if (shippingInfoRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
-        } else {
-            if (shippingInfoRequest.getId()==null) {
-                setInvalidParameterResponse(apiResponse, "id不能为空");
-                return apiResponse;
-            }
+        }
+
+        if (shippingInfoRequest.getId() == null) {
+            setInvalidParameterResponse(apiResponse, "id不能为空");
+            return apiResponse;
         }
 
         try {
@@ -222,7 +226,7 @@ public class ShippingInfoController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         } else {
-            if (shippingInfoRequest.getId()==null) {
+            if (shippingInfoRequest.getId() == null) {
                 setInvalidParameterResponse(apiResponse, "id不能为空");
                 return apiResponse;
             }
@@ -242,7 +246,7 @@ public class ShippingInfoController extends BaseController {
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
-        
+
         return apiResponse;
     }
 
