@@ -1,6 +1,8 @@
 package com.wow.product.service;
 
 import com.wow.attribute.model.Attribute;
+import com.wow.common.page.PageData;
+import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.product.model.*;
 import com.wow.product.vo.ProductVo;
@@ -150,7 +152,7 @@ public interface ProductService {
      * @param asc 是否升序
      * @return
      */
-    List<ProductVo> getProductByCategoryId(Integer category, Integer sortBy, Boolean asc);
+    List<ProductVo> getProductByCategoryIdListPage(PageModel page);
 
     /**
      * 获取产品(包括单品和系列品)详情页信息

@@ -96,41 +96,6 @@ public class PageController extends BaseController {
         return apiResponse;
     }
 
-    /**
-     * 按分类查询产品列表
-     * @param apiRequest
-     * @return
-     */
-    @RequestMapping(value = "/v1/page/find/categroyProductList", method = RequestMethod.GET)
-    public ApiResponse getProductListByCategory(ApiRequest apiRequest) {
-        ApiResponse apiResponse = new ApiResponse();
-        ProductInfoRequest productInfoRequest = JsonUtil
-                .fromJSON(apiRequest.getParamJson(), ProductInfoRequest.class);
-            //判断json格式参数是否有误
-            if (productInfoRequest == null) {
-                setParamJsonParseErrorResponse(apiResponse);
-                return apiResponse;
-            }
-
-            String errorMsg = ValidatorUtil.getError(productInfoRequest);
-            //如果校验错误 则返回
-            if (StringUtil.isNotEmpty(errorMsg)) {
-                setInvalidParameterResponse(apiResponse, errorMsg);
-                return apiResponse;
-            }
-        
-        List<ProductVo> productList = productService.getProductByCategoryId(productInfoRequest.getCategoryId(), productInfoRequest.getSortBy(), productInfoRequest.getAsc());
-        if (productList != null) {
-            apiResponse.setResCode("0");
-            apiResponse.setResMsg("Success");
-            apiResponse.setData(productList);
-        } else {
-            apiResponse.setResCode("40201");
-            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40201"));
-        }
-        return apiResponse;
-    }
-
 //    @RequestMapping(value = "/v1/page/scenes", method = RequestMethod.GET)
 //    public ApiResponse getScenesOnHomePage(ApiRequest apiRequest) {
 //        logger.info("start to get scenes on page");

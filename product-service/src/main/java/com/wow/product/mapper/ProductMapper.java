@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.wow.common.page.PageData;
+import com.wow.common.page.PageModel;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductExample;
-import com.wow.product.vo.ProductVo;
 
 public interface ProductMapper {
     int countByExample(ProductExample example);
@@ -37,9 +38,9 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
     
-    List<ProductVo> selectPageByCategoryIdOrderbyShelfTime(@Param("categoryIds") List<Integer> categoryIds,@Param("asc") String asc);
+    List<PageData> selectOrderByShelfTimeListPage(PageModel page);
     
-    List<ProductVo> selectPageByCategoryIdOrderbyTotalSold(@Param("categoryIds") String categoryIds,@Param("asc") String asc);
+    List<PageData> selectOrderbyTotalSoldListPage(PageModel page);
     
-    List<ProductVo> selectPageByCategoryIdOrderbySellPrice(@Param("categoryIds") String categoryIds,@Param("asc") String asc);
+    List<PageData> selectOrderbySellPriceListPage(PageModel page);
 }

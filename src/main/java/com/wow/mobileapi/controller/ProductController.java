@@ -1,8 +1,28 @@
 package com.wow.mobileapi.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.wow.common.page.PageModel;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
-import com.wow.common.util.*;
+import com.wow.common.util.BeanUtil;
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.MapUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.product.ProductInfoRequest;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
 import com.wow.mobileapi.response.product.ItemDetailResponse;
@@ -24,22 +44,12 @@ import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
 import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ProductImgVo;
+import com.wow.product.vo.request.ProductQueryVo;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductResponse;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
 import com.wow.stock.vo.response.AvailableStocksResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class ProductController extends BaseController {
@@ -359,7 +369,12 @@ public class ProductController extends BaseController {
             return apiResponse;
         }
 
-        List<ProductVo> productList = productService.getProductByCategoryId(productInfoRequest.getCategoryId(), productInfoRequest.getSortBy(), productInfoRequest.getAsc());
+        PageModel page = new PageModel();
+        ProductQueryVo pqv = new ProductQueryVo();
+        BeanUtil.copyProperties(productInfoRequest, pqv);
+        page.setModel(pqv);
+        
+        List<ProductVo> productList = productService.getProductByCategoryIdListPage(page);
         if (productList != null) {
             apiResponse.setResCode("0");
             apiResponse.setResMsg("Success");
