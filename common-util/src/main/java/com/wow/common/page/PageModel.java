@@ -1,9 +1,11 @@
 package com.wow.common.page;
 
+import com.wow.common.constant.CommonConstant;
+
 public class PageModel {
     private int showCount; //每页显示记录数
     private int totalPage; //总页数
-    private int totalResult; //总记录数
+    private int totalResult = 0; //总记录数
     private int currentPage; //当前页
     private int currentResult; //当前记录起始索引
     private boolean entityOrField; //true:需要分页的地方，传入的参数就是Page实体；false:需要分页的地方，传入的参数所代表的实体拥有Page属性
@@ -12,6 +14,7 @@ public class PageModel {
 
     public PageModel() {
         this.showCount = 10;
+        this.currentPage = 1;
     }
 
     public int getTotalPage() {
@@ -37,8 +40,9 @@ public class PageModel {
     public int getCurrentPage() {
         if (currentPage <= 0)
             currentPage = 1;
-        if (currentPage > getTotalPage())
-            currentPage = getTotalPage();
+        if (currentPage > CommonConstant.MAX_PAGE)
+            currentPage = CommonConstant.MAX_PAGE;
+
         return currentPage;
     }
 
@@ -51,7 +55,6 @@ public class PageModel {
     }
 
     public void setShowCount(int showCount) {
-
         this.showCount = showCount;
     }
 
