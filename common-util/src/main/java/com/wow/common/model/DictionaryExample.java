@@ -164,143 +164,143 @@ public class DictionaryExample {
             return (Criteria) this;
         }
 
-        public Criteria andKeyIsNull() {
-            addCriterion("key is null");
+        public Criteria andKeyNameIsNull() {
+            addCriterion("key_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andKeyIsNotNull() {
-            addCriterion("key is not null");
+        public Criteria andKeyNameIsNotNull() {
+            addCriterion("key_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andKeyEqualTo(String value) {
-            addCriterion("key =", value, "key");
+        public Criteria andKeyNameEqualTo(String value) {
+            addCriterion("key_name =", value, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyNotEqualTo(String value) {
-            addCriterion("key <>", value, "key");
+        public Criteria andKeyNameNotEqualTo(String value) {
+            addCriterion("key_name <>", value, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyGreaterThan(String value) {
-            addCriterion("key >", value, "key");
+        public Criteria andKeyNameGreaterThan(String value) {
+            addCriterion("key_name >", value, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyGreaterThanOrEqualTo(String value) {
-            addCriterion("key >=", value, "key");
+        public Criteria andKeyNameGreaterThanOrEqualTo(String value) {
+            addCriterion("key_name >=", value, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyLessThan(String value) {
-            addCriterion("key <", value, "key");
+        public Criteria andKeyNameLessThan(String value) {
+            addCriterion("key_name <", value, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyLessThanOrEqualTo(String value) {
-            addCriterion("key <=", value, "key");
+        public Criteria andKeyNameLessThanOrEqualTo(String value) {
+            addCriterion("key_name <=", value, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyLike(String value) {
-            addCriterion("key like", value, "key");
+        public Criteria andKeyNameLike(String value) {
+            addCriterion("key_name like", value, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyNotLike(String value) {
-            addCriterion("key not like", value, "key");
+        public Criteria andKeyNameNotLike(String value) {
+            addCriterion("key_name not like", value, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyIn(List<String> values) {
-            addCriterion("key in", values, "key");
+        public Criteria andKeyNameIn(List<String> values) {
+            addCriterion("key_name in", values, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyNotIn(List<String> values) {
-            addCriterion("key not in", values, "key");
+        public Criteria andKeyNameNotIn(List<String> values) {
+            addCriterion("key_name not in", values, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyBetween(String value1, String value2) {
-            addCriterion("key between", value1, value2, "key");
+        public Criteria andKeyNameBetween(String value1, String value2) {
+            addCriterion("key_name between", value1, value2, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andKeyNotBetween(String value1, String value2) {
-            addCriterion("key not between", value1, value2, "key");
+        public Criteria andKeyNameNotBetween(String value1, String value2) {
+            addCriterion("key_name not between", value1, value2, "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andValueIsNull() {
-            addCriterion("value is null");
+        public Criteria andKeyValueIsNull() {
+            addCriterion("key_value is null");
             return (Criteria) this;
         }
 
-        public Criteria andValueIsNotNull() {
-            addCriterion("value is not null");
+        public Criteria andKeyValueIsNotNull() {
+            addCriterion("key_value is not null");
             return (Criteria) this;
         }
 
-        public Criteria andValueEqualTo(String value) {
-            addCriterion("value =", value, "value");
+        public Criteria andKeyValueEqualTo(String value) {
+            addCriterion("key_value =", value, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotEqualTo(String value) {
-            addCriterion("value <>", value, "value");
+        public Criteria andKeyValueNotEqualTo(String value) {
+            addCriterion("key_value <>", value, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueGreaterThan(String value) {
-            addCriterion("value >", value, "value");
+        public Criteria andKeyValueGreaterThan(String value) {
+            addCriterion("key_value >", value, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueGreaterThanOrEqualTo(String value) {
-            addCriterion("value >=", value, "value");
+        public Criteria andKeyValueGreaterThanOrEqualTo(String value) {
+            addCriterion("key_value >=", value, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueLessThan(String value) {
-            addCriterion("value <", value, "value");
+        public Criteria andKeyValueLessThan(String value) {
+            addCriterion("key_value <", value, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueLessThanOrEqualTo(String value) {
-            addCriterion("value <=", value, "value");
+        public Criteria andKeyValueLessThanOrEqualTo(String value) {
+            addCriterion("key_value <=", value, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueLike(String value) {
-            addCriterion("value like", value, "value");
+        public Criteria andKeyValueLike(String value) {
+            addCriterion("key_value like", value, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotLike(String value) {
-            addCriterion("value not like", value, "value");
+        public Criteria andKeyValueNotLike(String value) {
+            addCriterion("key_value not like", value, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueIn(List<String> values) {
-            addCriterion("value in", values, "value");
+        public Criteria andKeyValueIn(List<String> values) {
+            addCriterion("key_value in", values, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotIn(List<String> values) {
-            addCriterion("value not in", values, "value");
+        public Criteria andKeyValueNotIn(List<String> values) {
+            addCriterion("key_value not in", values, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueBetween(String value1, String value2) {
-            addCriterion("value between", value1, value2, "value");
+        public Criteria andKeyValueBetween(String value1, String value2) {
+            addCriterion("key_value between", value1, value2, "keyValue");
             return (Criteria) this;
         }
 
-        public Criteria andValueNotBetween(String value1, String value2) {
-            addCriterion("value not between", value1, value2, "value");
+        public Criteria andKeyValueNotBetween(String value1, String value2) {
+            addCriterion("key_value not between", value1, value2, "keyValue");
             return (Criteria) this;
         }
 
@@ -564,13 +564,13 @@ public class DictionaryExample {
             return (Criteria) this;
         }
 
-        public Criteria andKeyLikeInsensitive(String value) {
-            addCriterion("upper(key) like", value.toUpperCase(), "key");
+        public Criteria andKeyNameLikeInsensitive(String value) {
+            addCriterion("upper(key_name) like", value.toUpperCase(), "keyName");
             return (Criteria) this;
         }
 
-        public Criteria andValueLikeInsensitive(String value) {
-            addCriterion("upper(value) like", value.toUpperCase(), "value");
+        public Criteria andKeyValueLikeInsensitive(String value) {
+            addCriterion("upper(key_value) like", value.toUpperCase(), "keyValue");
             return (Criteria) this;
         }
 

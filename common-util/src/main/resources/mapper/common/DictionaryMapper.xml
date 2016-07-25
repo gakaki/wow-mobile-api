@@ -3,8 +3,8 @@
 <mapper namespace="com.wow.common.mapper.DictionaryMapper" >
   <resultMap id="BaseResultMap" type="com.wow.common.model.Dictionary" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="key" property="key" jdbcType="VARCHAR" />
-    <result column="value" property="value" jdbcType="VARCHAR" />
+    <result column="key_name" property="keyName" jdbcType="VARCHAR" />
+    <result column="key_value" property="keyValue" jdbcType="VARCHAR" />
     <result column="key_group" property="keyGroup" jdbcType="VARCHAR" />
     <result column="key_desc" property="keyDesc" jdbcType="VARCHAR" />
     <result column="key_order" property="keyOrder" jdbcType="TINYINT" />
@@ -69,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, key, value, key_group, key_desc, key_order, is_valid
+    id, key_name, key_value, key_group, key_desc, key_order, is_valid
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.common.model.DictionaryExample" >
     select
@@ -105,10 +105,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into dictionary (key, value, key_group, 
+    insert into dictionary (key_name, key_value, key_group, 
       key_desc, key_order, is_valid
       )
-    values (#{key,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{keyGroup,jdbcType=VARCHAR}, 
+    values (#{keyName,jdbcType=VARCHAR}, #{keyValue,jdbcType=VARCHAR}, #{keyGroup,jdbcType=VARCHAR}, 
       #{keyDesc,jdbcType=VARCHAR}, #{keyOrder,jdbcType=TINYINT}, #{isValid,jdbcType=BIT}
       )
   </insert>
@@ -118,11 +118,11 @@
     </selectKey>
     insert into dictionary
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="key != null" >
-        key,
+      <if test="keyName != null" >
+        key_name,
       </if>
-      <if test="value != null" >
-        value,
+      <if test="keyValue != null" >
+        key_value,
       </if>
       <if test="keyGroup != null" >
         key_group,
@@ -138,11 +138,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="key != null" >
-        #{key,jdbcType=VARCHAR},
+      <if test="keyName != null" >
+        #{keyName,jdbcType=VARCHAR},
       </if>
-      <if test="value != null" >
-        #{value,jdbcType=VARCHAR},
+      <if test="keyValue != null" >
+        #{keyValue,jdbcType=VARCHAR},
       </if>
       <if test="keyGroup != null" >
         #{keyGroup,jdbcType=VARCHAR},
@@ -170,11 +170,11 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.key != null" >
-        key = #{record.key,jdbcType=VARCHAR},
+      <if test="record.keyName != null" >
+        key_name = #{record.keyName,jdbcType=VARCHAR},
       </if>
-      <if test="record.value != null" >
-        value = #{record.value,jdbcType=VARCHAR},
+      <if test="record.keyValue != null" >
+        key_value = #{record.keyValue,jdbcType=VARCHAR},
       </if>
       <if test="record.keyGroup != null" >
         key_group = #{record.keyGroup,jdbcType=VARCHAR},
@@ -196,8 +196,8 @@
   <update id="updateByExample" parameterType="map" >
     update dictionary
     set id = #{record.id,jdbcType=INTEGER},
-      key = #{record.key,jdbcType=VARCHAR},
-      value = #{record.value,jdbcType=VARCHAR},
+      key_name = #{record.keyName,jdbcType=VARCHAR},
+      key_value = #{record.keyValue,jdbcType=VARCHAR},
       key_group = #{record.keyGroup,jdbcType=VARCHAR},
       key_desc = #{record.keyDesc,jdbcType=VARCHAR},
       key_order = #{record.keyOrder,jdbcType=TINYINT},
@@ -209,11 +209,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wow.common.model.Dictionary" >
     update dictionary
     <set >
-      <if test="key != null" >
-        key = #{key,jdbcType=VARCHAR},
+      <if test="keyName != null" >
+        key_name = #{keyName,jdbcType=VARCHAR},
       </if>
-      <if test="value != null" >
-        value = #{value,jdbcType=VARCHAR},
+      <if test="keyValue != null" >
+        key_value = #{keyValue,jdbcType=VARCHAR},
       </if>
       <if test="keyGroup != null" >
         key_group = #{keyGroup,jdbcType=VARCHAR},
@@ -232,8 +232,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wow.common.model.Dictionary" >
     update dictionary
-    set key = #{key,jdbcType=VARCHAR},
-      value = #{value,jdbcType=VARCHAR},
+    set key_name = #{keyName,jdbcType=VARCHAR},
+      key_value = #{keyValue,jdbcType=VARCHAR},
       key_group = #{keyGroup,jdbcType=VARCHAR},
       key_desc = #{keyDesc,jdbcType=VARCHAR},
       key_order = #{keyOrder,jdbcType=TINYINT},
