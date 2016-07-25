@@ -223,4 +223,12 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectLikedDesigner" resultType="com.wow.user.vo.LikedDesignerVo" parameterType="java.lang.Integer" >
+    select designer.id designerId, designer.designer_name designerName,designer.designer_photo designerPhoto
+    from designer inner join end_user_like_designer
+    on end_user_like_designer.designer_id = designer.id
+    where end_user_like_designer.end_user_id = #{endUserId,jdbcType=INTEGER}
+    and end_user_like_designer.is_deleted = false
+  </select>
 </mapper>
