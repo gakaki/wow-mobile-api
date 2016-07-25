@@ -6,7 +6,7 @@ import java.util.Date;
 public class SaleOrderLog implements Serializable {
     private Integer id;
 
-    private Integer orderId;
+    private Integer saleOrderId;
 
     private String eventLog;
 
@@ -22,12 +22,12 @@ public class SaleOrderLog implements Serializable {
         this.id = id;
     }
 
-    public Integer getOrderId() {
-        return orderId;
+    public Integer getSaleOrderId() {
+        return saleOrderId;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setSaleOrderId(Integer saleOrderId) {
+        this.saleOrderId = saleOrderId;
     }
 
     public String getEventLog() {
@@ -53,7 +53,7 @@ public class SaleOrderLog implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", orderId=").append(orderId);
+        sb.append(", saleOrderId=").append(saleOrderId);
         sb.append(", eventLog=").append(eventLog);
         sb.append(", eventTime=").append(eventTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

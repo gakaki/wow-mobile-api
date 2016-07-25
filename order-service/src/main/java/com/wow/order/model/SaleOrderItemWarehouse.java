@@ -8,17 +8,11 @@ public class SaleOrderItemWarehouse implements Serializable {
 
     private Integer saleOrderItemId;
 
-    private Integer productId;
-
     private Integer warehouseId;
 
-    private Integer frozenRealStockQty;
+    private Integer frozenWarehouseStockQty;
 
     private Date createTime;
-
-    private Date updateTime;
-
-    private Boolean isDeleted;
 
     private static final long serialVersionUID = 1L;
 
@@ -38,14 +32,6 @@ public class SaleOrderItemWarehouse implements Serializable {
         this.saleOrderItemId = saleOrderItemId;
     }
 
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
-
     public Integer getWarehouseId() {
         return warehouseId;
     }
@@ -54,12 +40,12 @@ public class SaleOrderItemWarehouse implements Serializable {
         this.warehouseId = warehouseId;
     }
 
-    public Integer getFrozenRealStockQty() {
-        return frozenRealStockQty;
+    public Integer getFrozenWarehouseStockQty() {
+        return frozenWarehouseStockQty;
     }
 
-    public void setFrozenRealStockQty(Integer frozenRealStockQty) {
-        this.frozenRealStockQty = frozenRealStockQty;
+    public void setFrozenWarehouseStockQty(Integer frozenWarehouseStockQty) {
+        this.frozenWarehouseStockQty = frozenWarehouseStockQty;
     }
 
     public Date getCreateTime() {
@@ -70,22 +56,6 @@ public class SaleOrderItemWarehouse implements Serializable {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Boolean getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -94,12 +64,9 @@ public class SaleOrderItemWarehouse implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", saleOrderItemId=").append(saleOrderItemId);
-        sb.append(", productId=").append(productId);
         sb.append(", warehouseId=").append(warehouseId);
-        sb.append(", frozenRealStockQty=").append(frozenRealStockQty);
+        sb.append(", frozenWarehouseStockQty=").append(frozenWarehouseStockQty);
         sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

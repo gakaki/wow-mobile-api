@@ -4,34 +4,21 @@
   <resultMap id="BaseResultMap" type="com.wow.order.model.SaleOrderItem" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="sale_order_id" property="saleOrderId" jdbcType="INTEGER" />
+    <result column="delivery_order_id" property="deliveryOrderId" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="order_item_amount" property="orderItemAmount" jdbcType="DECIMAL" />
     <result column="order_item_price" property="orderItemPrice" jdbcType="DECIMAL" />
     <result column="order_item_qty" property="orderItemQty" jdbcType="TINYINT" />
     <result column="product_name" property="productName" jdbcType="VARCHAR" />
     <result column="need_assemble" property="needAssemble" jdbcType="BIT" />
-    <result column="product_sale_type" property="productSaleType" jdbcType="TINYINT" />
-    <result column="parent_order_item_id" property="parentOrderItemId" jdbcType="INTEGER" />
-    <result column="is_item_leaf" property="isItemLeaf" jdbcType="BIT" />
-    <result column="product_supplier_id" property="productSupplierId" jdbcType="INTEGER" />
-    <result column="frozen_real_stock_qty" property="frozenRealStockQty" jdbcType="INTEGER" />
+    <result column="frozen_warehouse_stock_total_qty" property="frozenWarehouseStockTotalQty" jdbcType="INTEGER" />
     <result column="frozen_virtual_stock_qty" property="frozenVirtualStockQty" jdbcType="INTEGER" />
     <result column="is_virtual_stock_ready" property="isVirtualStockReady" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_shipped_out" property="isShippedOut" jdbcType="BIT" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
   </resultMap>
-  
-  <resultMap id="WareHouseResultMap"   type="com.wow.order.vo.OrderItemStockVo" >
-	    <id column="saleOrderItemId"   property="saleOrderItemId"/>
-	     <result column="productId"  property="productId" />
-	     <result column="virtualProductQty"  property="virtualProductQty" />
-	    <collection property="orderItemProductStockVos"  ofType="com.wow.order.vo.OrderItemProductStockVo">
-	        <result column="warehouseId"  property="warehouseId"/>
-	        <result column="productQty"  property="productQty"/>
-    </collection>
-  </resultMap>
-  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -91,10 +78,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, sale_order_id, product_id, order_item_amount, order_item_price, order_item_qty, 
-    product_name, need_assemble, product_sale_type, parent_order_item_id, is_item_leaf, 
-    product_supplier_id, frozen_real_stock_qty, frozen_virtual_stock_qty, 
-    is_virtual_stock_ready, create_time, update_time, is_deleted
+    id, sale_order_id, delivery_order_id, product_id, order_item_amount, order_item_price, 
+    order_item_qty, product_name, need_assemble, frozen_warehouse_stock_total_qty, frozen_virtual_stock_qty, 
+    is_virtual_stock_ready, create_time, update_time, is_shipped_out, is_deleted
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.order.model.SaleOrderItemExample" >
     select
@@ -130,19 +116,17 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into sale_order_item (sale_order_id, product_id, order_item_amount, 
-      order_item_price, order_item_qty, product_name, 
-      need_assemble, product_sale_type, parent_order_item_id, 
-      is_item_leaf, product_supplier_id, 
-      frozen_real_stock_qty, frozen_virtual_stock_qty, 
-      is_virtual_stock_ready, create_time, update_time, 
+    insert into sale_order_item (sale_order_id, delivery_order_id, product_id, 
+      order_item_amount, order_item_price, order_item_qty, 
+      product_name, need_assemble, frozen_warehouse_stock_total_qty, 
+      frozen_virtual_stock_qty, is_virtual_stock_ready, 
+      create_time, update_time, is_shipped_out, 
       is_deleted)
-    values (#{saleOrderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{orderItemAmount,jdbcType=DECIMAL}, 
-      #{orderItemPrice,jdbcType=DECIMAL}, #{orderItemQty,jdbcType=TINYINT}, #{productName,jdbcType=VARCHAR}, 
-      #{needAssemble,jdbcType=BIT}, #{productSaleType,jdbcType=TINYINT}, #{parentOrderItemId,jdbcType=INTEGER}, 
-      #{isItemLeaf,jdbcType=BIT}, #{productSupplierId,jdbcType=INTEGER},
-      #{frozenRealStockQty,jdbcType=INTEGER}, #{frozenVirtualStockQty,jdbcType=INTEGER}, 
-      #{isVirtualStockReady,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+    values (#{saleOrderId,jdbcType=INTEGER}, #{deliveryOrderId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+      #{orderItemAmount,jdbcType=DECIMAL}, #{orderItemPrice,jdbcType=DECIMAL}, #{orderItemQty,jdbcType=TINYINT}, 
+      #{productName,jdbcType=VARCHAR}, #{needAssemble,jdbcType=BIT}, #{frozenWarehouseStockTotalQty,jdbcType=INTEGER}, 
+      #{frozenVirtualStockQty,jdbcType=INTEGER}, #{isVirtualStockReady,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isShippedOut,jdbcType=BIT}, 
       #{isDeleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.order.model.SaleOrderItem" >
@@ -153,6 +137,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="saleOrderId != null" >
         sale_order_id,
+      </if>
+      <if test="deliveryOrderId != null" >
+        delivery_order_id,
       </if>
       <if test="productId != null" >
         product_id,
@@ -172,20 +159,8 @@
       <if test="needAssemble != null" >
         need_assemble,
       </if>
-      <if test="productSaleType != null" >
-        product_sale_type,
-      </if>
-      <if test="parentOrderItemId != null" >
-        parent_order_item_id,
-      </if>
-      <if test="isItemLeaf != null" >
-        is_item_leaf,
-      </if>
-      <if test="productSupplierId != null" >
-        product_supplier_id,
-      </if>
-      <if test="frozenRealStockQty != null" >
-        frozen_real_stock_qty,
+      <if test="frozenWarehouseStockTotalQty != null" >
+        frozen_warehouse_stock_total_qty,
       </if>
       <if test="frozenVirtualStockQty != null" >
         frozen_virtual_stock_qty,
@@ -199,6 +174,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="isShippedOut != null" >
+        is_shipped_out,
+      </if>
       <if test="isDeleted != null" >
         is_deleted,
       </if>
@@ -206,6 +184,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="saleOrderId != null" >
         #{saleOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryOrderId != null" >
+        #{deliveryOrderId,jdbcType=INTEGER},
       </if>
       <if test="productId != null" >
         #{productId,jdbcType=INTEGER},
@@ -225,20 +206,8 @@
       <if test="needAssemble != null" >
         #{needAssemble,jdbcType=BIT},
       </if>
-      <if test="productSaleType != null" >
-        #{productSaleType,jdbcType=TINYINT},
-      </if>
-      <if test="parentOrderItemId != null" >
-        #{parentOrderItemId,jdbcType=INTEGER},
-      </if>
-      <if test="isItemLeaf != null" >
-        #{isItemLeaf,jdbcType=BIT},
-      </if>
-      <if test="productSupplierId != null" >
-        #{productSupplierId,jdbcType=INTEGER},
-      </if>
-      <if test="frozenRealStockQty != null" >
-        #{frozenRealStockQty,jdbcType=INTEGER},
+      <if test="frozenWarehouseStockTotalQty != null" >
+        #{frozenWarehouseStockTotalQty,jdbcType=INTEGER},
       </if>
       <if test="frozenVirtualStockQty != null" >
         #{frozenVirtualStockQty,jdbcType=INTEGER},
@@ -251,6 +220,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isShippedOut != null" >
+        #{isShippedOut,jdbcType=BIT},
       </if>
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=BIT},
@@ -272,6 +244,9 @@
       <if test="record.saleOrderId != null" >
         sale_order_id = #{record.saleOrderId,jdbcType=INTEGER},
       </if>
+      <if test="record.deliveryOrderId != null" >
+        delivery_order_id = #{record.deliveryOrderId,jdbcType=INTEGER},
+      </if>
       <if test="record.productId != null" >
         product_id = #{record.productId,jdbcType=INTEGER},
       </if>
@@ -290,20 +265,8 @@
       <if test="record.needAssemble != null" >
         need_assemble = #{record.needAssemble,jdbcType=BIT},
       </if>
-      <if test="record.productSaleType != null" >
-        product_sale_type = #{record.productSaleType,jdbcType=TINYINT},
-      </if>
-      <if test="record.parentOrderItemId != null" >
-        parent_order_item_id = #{record.parentOrderItemId,jdbcType=INTEGER},
-      </if>
-      <if test="record.isItemLeaf != null" >
-        is_item_leaf = #{record.isItemLeaf,jdbcType=BIT},
-      </if>
-      <if test="record.productSupplierId != null" >
-        product_supplier_id = #{record.productSupplierId,jdbcType=INTEGER},
-      </if>
-      <if test="record.frozenRealStockQty != null" >
-        frozen_real_stock_qty = #{record.frozenRealStockQty,jdbcType=INTEGER},
+      <if test="record.frozenWarehouseStockTotalQty != null" >
+        frozen_warehouse_stock_total_qty = #{record.frozenWarehouseStockTotalQty,jdbcType=INTEGER},
       </if>
       <if test="record.frozenVirtualStockQty != null" >
         frozen_virtual_stock_qty = #{record.frozenVirtualStockQty,jdbcType=INTEGER},
@@ -317,6 +280,9 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.isShippedOut != null" >
+        is_shipped_out = #{record.isShippedOut,jdbcType=BIT},
+      </if>
       <if test="record.isDeleted != null" >
         is_deleted = #{record.isDeleted,jdbcType=BIT},
       </if>
@@ -329,21 +295,19 @@
     update sale_order_item
     set id = #{record.id,jdbcType=INTEGER},
       sale_order_id = #{record.saleOrderId,jdbcType=INTEGER},
+      delivery_order_id = #{record.deliveryOrderId,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
       order_item_amount = #{record.orderItemAmount,jdbcType=DECIMAL},
       order_item_price = #{record.orderItemPrice,jdbcType=DECIMAL},
       order_item_qty = #{record.orderItemQty,jdbcType=TINYINT},
       product_name = #{record.productName,jdbcType=VARCHAR},
       need_assemble = #{record.needAssemble,jdbcType=BIT},
-      product_sale_type = #{record.productSaleType,jdbcType=TINYINT},
-      parent_order_item_id = #{record.parentOrderItemId,jdbcType=INTEGER},
-      is_item_leaf = #{record.isItemLeaf,jdbcType=BIT},
-      product_supplier_id = #{record.productSupplierId,jdbcType=INTEGER},
-      frozen_real_stock_qty = #{record.frozenRealStockQty,jdbcType=INTEGER},
+      frozen_warehouse_stock_total_qty = #{record.frozenWarehouseStockTotalQty,jdbcType=INTEGER},
       frozen_virtual_stock_qty = #{record.frozenVirtualStockQty,jdbcType=INTEGER},
       is_virtual_stock_ready = #{record.isVirtualStockReady,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_shipped_out = #{record.isShippedOut,jdbcType=BIT},
       is_deleted = #{record.isDeleted,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -354,6 +318,9 @@
     <set >
       <if test="saleOrderId != null" >
         sale_order_id = #{saleOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryOrderId != null" >
+        delivery_order_id = #{deliveryOrderId,jdbcType=INTEGER},
       </if>
       <if test="productId != null" >
         product_id = #{productId,jdbcType=INTEGER},
@@ -373,20 +340,8 @@
       <if test="needAssemble != null" >
         need_assemble = #{needAssemble,jdbcType=BIT},
       </if>
-      <if test="productSaleType != null" >
-        product_sale_type = #{productSaleType,jdbcType=TINYINT},
-      </if>
-      <if test="parentOrderItemId != null" >
-        parent_order_item_id = #{parentOrderItemId,jdbcType=INTEGER},
-      </if>
-      <if test="isItemLeaf != null" >
-        is_item_leaf = #{isItemLeaf,jdbcType=BIT},
-      </if>
-      <if test="productSupplierId != null" >
-        product_supplier_id = #{productSupplierId,jdbcType=INTEGER},
-      </if>
-      <if test="frozenRealStockQty != null" >
-        frozen_real_stock_qty = #{frozenRealStockQty,jdbcType=INTEGER},
+      <if test="frozenWarehouseStockTotalQty != null" >
+        frozen_warehouse_stock_total_qty = #{frozenWarehouseStockTotalQty,jdbcType=INTEGER},
       </if>
       <if test="frozenVirtualStockQty != null" >
         frozen_virtual_stock_qty = #{frozenVirtualStockQty,jdbcType=INTEGER},
@@ -400,6 +355,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="isShippedOut != null" >
+        is_shipped_out = #{isShippedOut,jdbcType=BIT},
+      </if>
       <if test="isDeleted != null" >
         is_deleted = #{isDeleted,jdbcType=BIT},
       </if>
@@ -409,96 +367,20 @@
   <update id="updateByPrimaryKey" parameterType="com.wow.order.model.SaleOrderItem" >
     update sale_order_item
     set sale_order_id = #{saleOrderId,jdbcType=INTEGER},
+      delivery_order_id = #{deliveryOrderId,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
       order_item_amount = #{orderItemAmount,jdbcType=DECIMAL},
       order_item_price = #{orderItemPrice,jdbcType=DECIMAL},
       order_item_qty = #{orderItemQty,jdbcType=TINYINT},
       product_name = #{productName,jdbcType=VARCHAR},
       need_assemble = #{needAssemble,jdbcType=BIT},
-      product_sale_type = #{productSaleType,jdbcType=TINYINT},
-      parent_order_item_id = #{parentOrderItemId,jdbcType=INTEGER},
-      is_item_leaf = #{isItemLeaf,jdbcType=BIT},
-      product_supplier_id = #{productSupplierId,jdbcType=INTEGER},
-      frozen_real_stock_qty = #{frozenRealStockQty,jdbcType=INTEGER},
+      frozen_warehouse_stock_total_qty = #{frozenWarehouseStockTotalQty,jdbcType=INTEGER},
       frozen_virtual_stock_qty = #{frozenVirtualStockQty,jdbcType=INTEGER},
       is_virtual_stock_ready = #{isVirtualStockReady,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_shipped_out = #{isShippedOut,jdbcType=BIT},
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  
-  <insert id="batchInsertSelective"  parameterType="List" >
-		    <selectKey resultType="java.lang.Integer"  keyProperty="id"  order="AFTER" >
-		      SELECT LAST_INSERT_ID()
-		    </selectKey>
-		    insert into sale_order_item (sale_order_id, product_id, order_item_amount, 
-		      order_item_price, order_item_qty, product_name, 
-		      need_assemble, product_sale_type, parent_order_item_id, 
-		      is_item_leaf, product_supplier_id,
-		      frozen_real_stock_qty, frozen_virtual_stock_qty, 
-		      is_virtual_stock_ready, create_time, update_time, 
-		      is_deleted)
-		    values 
-		    <foreach collection="collection"  item="item"  separator=",">
-				  (#{item.saleOrderId,jdbcType=INTEGER}, #{item.productId,jdbcType=INTEGER}, #{item.orderItemAmount,jdbcType=DECIMAL}, 
-			      #{item.orderItemPrice,jdbcType=DECIMAL}, #{item.orderItemQty,jdbcType=TINYINT}, #{item.productName,jdbcType=VARCHAR}, 
-			      #{item.needAssemble,jdbcType=BIT}, #{item.productSaleType,jdbcType=TINYINT}, #{item.parentOrderItemId,jdbcType=INTEGER}, 
-			      #{item.isItemLeaf,jdbcType=BIT}, #{item.productSupplierId,jdbcType=INTEGER},
-			      #{item.frozenRealStockQty,jdbcType=INTEGER}, #{item.frozenVirtualStockQty,jdbcType=INTEGER}, 
-			      #{item.isVirtualStockReady,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, 
-			      #{item.isDeleted,jdbcType=BIT})
-		   </foreach>
-  </insert>
-  
-   <!-- 根据订单id获取订单项目中产品规格图片 -->
-    <select id="selectSpecImgByOrderIds"  parameterType="List"  resultType="com.wow.order.vo.OrderItemImgVo" >
-         SELECT 
-			  o.sale_order_id saleOrderId,
-			  p.product_color_img specImg
-			FROM
-			  sale_order_item o 
-			  INNER JOIN product p 
-			    ON o.product_id = p.id 
-			WHERE o.sale_order_id in
-		  <foreach collection="collection"   item="item"  open="(" close=")"  separator="," >
-                   #{item}
-         </foreach>
-  </select>
-  
-    <!-- 查询订单id查询产品明细 -->
-  <select id="selectByOrderId"   resultType="com.wow.order.vo.OrderItemVo"  parameterType="Integer" >
-	       SELECT 
-				  so.product_id productId,
-				  so.product_name productName,
-				  p.product_color_img specImg,
-				  so.order_item_price sellPrice,
-				  so.order_item_qty productQty,
-				  so.order_item_amount sellTotalAmount,
-				  p.color_display_name color,
-				  p.product_color_img spec
-			FROM
-			  sale_order_item so 
-			  INNER JOIN product p 
-			    ON so.product_id = p.id 
-			  INNER JOIN product_price pp 
-			    ON so.product_id = pp.product_id 
-			WHERE so.is_deleted = FALSE 
-			  AND so.sale_order_id =#{orderId}
-  </select>
-  
-   <!-- 根据订单id获取订单项目使用库存明细 -->
-  <select id="selectWareHouseStockByOrderId"   resultMap="WareHouseResultMap"  parameterType="Integer" >
-	     SELECT 
-			  so.id saleOrderItemId,
-			  so.product_id productId,
-			  so.frozen_virtual_stock_qty virtualProductQty ,
-			  sow.warehouse_id warehouseId,
-			  sow.frozen_real_stock_qty productQty
-		  FROM
-			  sale_order_item so 
-			  INNER JOIN sale_order_item_warehouse sow 
-			  ON so.id = sow.sale_order_item_id 
-			WHERE so.sale_order_id =#{orderId} 
-  </select>
 </mapper>
