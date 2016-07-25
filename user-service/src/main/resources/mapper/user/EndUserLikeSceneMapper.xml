@@ -223,4 +223,12 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectLikedScene" resultType="com.wow.user.vo.LikedSceneVo" parameterType="java.lang.Integer" >
+    select scene.id sceneId, scene.scene_name sceneName,scene.scene_img sceneImg
+    from scene inner join end_user_like_scene
+    on end_user_like_scene.scene_id = scene.id
+    where end_user_like_scene.end_user_id = #{endUserId,jdbcType=INTEGER}
+    and end_user_like_scene.is_deleted = false
+  </select>
 </mapper>

@@ -41,6 +41,7 @@ public class DictionaryUtil {
         //对数据字典进行分组
         groupBy(dictionaryList);
 
+        //对分组中的数据字典信息进行排序
         sortBy();
     }
 
@@ -60,7 +61,7 @@ public class DictionaryUtil {
     private static void groupBy(List<Dictionary> dictionaryList) {
         //对数据字典进行分组
         for (Dictionary dictionary : dictionaryList) {
-            keyMap.put(generateKey(dictionary.getKeyGroup(), dictionary.getKey()), dictionary);
+            keyMap.put(generateKey(dictionary.getKeyGroup(), dictionary.getKeyName()), dictionary);
 
             if (groupMap.containsKey(dictionary.getKeyGroup())) {
                 groupMap.get(dictionary.getKeyGroup()).add(dictionary);
@@ -118,7 +119,7 @@ public class DictionaryUtil {
     public static String getValue(final String keyGroup, final String key) {
         Dictionary dictionary = getDictionary(keyGroup, key);
 
-        return dictionary == null ? "" : dictionary.getValue();
+        return dictionary == null ? "" : dictionary.getKeyValue();
     }
 
 }

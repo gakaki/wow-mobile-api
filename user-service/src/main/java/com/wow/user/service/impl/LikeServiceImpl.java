@@ -1,5 +1,14 @@
 package com.wow.user.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.common.response.CommonResponse;
 import com.wow.user.mapper.EndUserLikeBrandMapper;
 import com.wow.user.mapper.EndUserLikeDesignerMapper;
@@ -12,18 +21,12 @@ import com.wow.user.model.EndUserLikeScene;
 import com.wow.user.service.LikeService;
 import com.wow.user.vo.LikedBrandVo;
 import com.wow.user.vo.LikedDesignerVo;
+import com.wow.user.vo.LikedProductVo;
+import com.wow.user.vo.LikedSceneVo;
 import com.wow.user.vo.response.LikedBrandResponse;
 import com.wow.user.vo.response.LikedDesignerResponse;
 import com.wow.user.vo.response.LikedProductResponse;
 import com.wow.user.vo.response.LikedSceneResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/7/24.
@@ -180,8 +183,12 @@ public class LikeServiceImpl implements LikeService {
      */
     @Override
     public LikedProductResponse getLikedProduct(int endUserId) {
+
+        LikedProductResponse likedProductResponse = new LikedProductResponse();
         //TODO
-        return null;
+        List<LikedProductVo> likedProductVoList = endUserLikeProductMapper.selectLikedProduct(endUserId);
+        likedProductResponse.setLikedProductVoList(likedProductVoList);
+        return likedProductResponse;
     }
 
     /**
@@ -224,7 +231,11 @@ public class LikeServiceImpl implements LikeService {
      */
     @Override
     public LikedSceneResponse getLikedScene(int endUserId) {
+
+        LikedSceneResponse likedSceneResponse = new LikedSceneResponse();
         //TODO
-        return null;
+        List<LikedSceneVo> likedSceneVoList = endUserLikeSceneMapper.selectLikedScene(endUserId);
+        likedSceneResponse.setLikedSceneVoList(likedSceneVoList);
+        return likedSceneResponse;
     }
 }
