@@ -22,6 +22,9 @@ public class CommonConstant {
     
     //除数常量 100
     public static final BigDecimal HUNDRED_IGDECIMAL = new BigDecimal("100");
+    
+    //是
+    public static final int MAX_PAGE = 100;
 
     //是
     public static final Byte YES = 1;
