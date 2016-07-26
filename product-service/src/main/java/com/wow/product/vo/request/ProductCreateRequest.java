@@ -19,9 +19,9 @@ public class ProductCreateRequest implements Serializable {
     private int originCountryId;
     private String originCity;
     private byte styleId;
-    private Short length;
-    private Short width;
-    private Short height;
+    private short length;
+    private short width;
+    private short height;
     private byte applicablePeople;
     private boolean canCustomized;
     private List<Integer> applicableSceneList;
