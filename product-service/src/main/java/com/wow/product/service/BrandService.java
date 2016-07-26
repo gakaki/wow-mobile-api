@@ -55,7 +55,7 @@ public interface BrandService {
      *
      * @return
      */
-    List<Brand> getAllBrands();
+    ProductBrandResponse getAllBrands();
     
     /**
      * 查询所有品牌首字母

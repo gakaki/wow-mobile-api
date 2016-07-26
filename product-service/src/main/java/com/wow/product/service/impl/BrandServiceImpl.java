@@ -84,8 +84,10 @@ public class BrandServiceImpl implements BrandService {
      * @return
      */
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<Brand> getAllBrands() {
-        return brandMapper.selectAll();
+    public ProductBrandResponse getAllBrands() {
+    	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
+    	productBrandResponse.setBrandList(brandMapper.selectAll());
+    	return productBrandResponse;
     }
 
     /**
