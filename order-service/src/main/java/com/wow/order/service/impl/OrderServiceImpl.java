@@ -19,17 +19,22 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
+import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.IpConvertUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.StringUtil;
+import com.wow.order.mapper.DeliveryOrderMapper;
 import com.wow.order.mapper.SaleOrderItemMapper;
 import com.wow.order.mapper.SaleOrderItemWarehouseMapper;
 import com.wow.order.mapper.SaleOrderLogMapper;
 import com.wow.order.mapper.SaleOrderMapper;
+import com.wow.order.model.DeliveryOrder;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
+import com.wow.order.model.SaleOrderExample;
 import com.wow.order.model.SaleOrderItem;
 import com.wow.order.model.SaleOrderItemExample;
 import com.wow.order.model.SaleOrderItemWarehouse;
@@ -38,6 +43,7 @@ import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderDeliverQuery;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderItemImgVo;
+import com.wow.order.vo.OrderItemQuery;
 import com.wow.order.vo.OrderItemStockVo;
 import com.wow.order.vo.OrderItemVo;
 import com.wow.order.vo.OrderListQuery;
@@ -87,12 +93,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private SaleOrderItemWarehouseMapper saleOrderItemWarehouseMapper;
-//
-//    @Autowired
-//    private ProductSupplierMapper productSupplierMapper;
 
     @Autowired
     private StockService stockService;
+
+    @Autowired
+    private DeliveryOrderMapper deliveryOrderMapper;
 
     /**
      * 下单
@@ -341,7 +347,8 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setPreferentialAmount(query.getCouponFee());
 
         saleOrder.setEndUserRemark(query.getRemark());
-        saleOrder.setTotalProductQty(query.getTotalPackages());
+        saleOrder.setTotalProductQty(query.getTotalProductQty());//设置总的商品件数
+        saleOrder.setUnShipOutQty(query.getShoppingCartIds().size()); //设置未发货的商品数 默认为用户订购的产品数
 
         //设置收货人地址信息
         ShippingInfo shippingInfo = query.getShippingInfo();
@@ -364,7 +371,7 @@ public class OrderServiceImpl implements OrderService {
 
         //目前都不是父订单
         saleOrder.setOrderSource(query.getOrderSource());
-        // saleOrder.setOrderIp(IpConvertUtil.ipToLong(query.getOrderIp()));
+        saleOrder.setOrderIp(IpConvertUtil.ipToLong(query.getOrderIp()));
 
         saleOrder.setOrderCreateTime(DateUtil.currentDate());
         saleOrder.setUpdateTime(DateUtil.currentDate());
@@ -383,11 +390,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<ShoppingCartResultVo> shoppingCartResult = query.getShoppingCartResult();
 
-        //根据产品id列表获取供应商信息
-        //List<ProductSupplier> productSuppliers = getSupplierByProductIds(shoppingCartResult);
-
         SaleOrderItem saleOrderItem = null;
-        //ProductSupplier productSupplier = null;
         FreezeStockVo freezeStockVo = null;
 
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
@@ -404,11 +407,6 @@ public class OrderServiceImpl implements OrderService {
             long productTotalPrice = calculateProductTotalPrice(shoppingCart.getSellPrice(), shoppingCart
                 .getProductQty());
             saleOrderItem.setOrderItemAmount(NumberUtil.convertToYuan(productTotalPrice));
-
-            //获取产品对应的供应商id
-            //            productSupplier = getSupplierByProductId(productSuppliers, shoppingCart.getProductId());
-            //            if (productSupplier != null) {
-            //            }
 
             //获取产品使用的具体库存
             freezeStockVo = getFreezeStock(query.getFreezeStockVoList(), shoppingCart.getProductId());
@@ -432,59 +430,6 @@ public class OrderServiceImpl implements OrderService {
 
         return saleOrderItems;
     }
-
-    /**
-     * 
-     * 根据产品id列表获取供应商信息
-     * @param shoppingCartResult
-     */
-    //    private List<ProductSupplier> getSupplierByProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
-    //        List<Integer> productIds = getProductIds(shoppingCartResult);
-    //
-    //        ProductSupplierExample productSupplierExample = new ProductSupplierExample();
-    //        ProductSupplierExample.Criteria criteria = productSupplierExample.createCriteria();
-    //
-    //        criteria.andProductIdIn(productIds);
-    //        criteria.andIsDeletedEqualTo(Boolean.FALSE);
-    //
-    //        return productSupplierMapper.selectByExample(productSupplierExample);
-    //    }
-
-    /**
-     * 根据产品id查询相关供应商信息
-     * 
-     * @param areas
-     * @param integer
-     */
-    //    private ProductSupplier getSupplierByProductId(List<ProductSupplier> productSuppliers, Integer productId) {
-    //        if (CollectionUtil.isEmpty(productSuppliers)) {
-    //            return null;
-    //        }
-    //
-    //        for (ProductSupplier productSupplier : productSuppliers) {
-    //            if (productId.intValue() == productSupplier.getProductId().intValue()) {
-    //                return productSupplier;
-    //            }
-    //        }
-    //
-    //        return null;
-    //    }
-
-    /**
-     * 获取产品id列表
-     * 
-     * @param shoppingCartResult
-     * @return
-     */
-    //    private List<Integer> getProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
-    //        List<Integer> productIds = new ArrayList<>(shoppingCartResult.size());
-    //
-    //        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
-    //            productIds.add(shoppingCart.getProductId());
-    //        }
-    //
-    //        return productIds;
-    //    }
 
     /**
      * 计算订单运费
@@ -514,18 +459,18 @@ public class OrderServiceImpl implements OrderService {
         }
 
         long totalPrice = 0L;
-        int totalPackages = 0;
+        int totalProductQty = 0;
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
             //计算产品总价 产品单价乘以数量
             long productTotalPrice = calculateProductTotalPrice(shoppingCart.getSellPrice(), shoppingCart
                 .getProductQty());
 
-            totalPackages += shoppingCart.getProductQty();
+            totalProductQty += shoppingCart.getProductQty();
             totalPrice += productTotalPrice;
         }
 
         //设置产品总件数
-        query.setTotalPackages(totalPackages);
+        query.setTotalProductQty(totalProductQty);
         //设置订单产品总价
         query.setProductAmount(NumberUtil.convertToYuan(totalPrice));
 
@@ -584,7 +529,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //根据订单号获取订单
-        SaleOrder saleOrder = saleOrderMapper.selectByOrderCode(query.getOrderCode());
+        SaleOrder saleOrder = selectByOrderCode(query.getOrderCode());
         //如果订单号不存在  则直接返回错误提示
         if (saleOrder == null) {
             commonResponse.setResCode("40359");
@@ -639,7 +584,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 根据订单id获取要解冻的产品
+     * 根据订单id获取要解冻的产品库存信息
      * 
      * @param orderId
      * @return
@@ -683,7 +628,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //根据订单号获取订单
-        SaleOrder saleOrder = saleOrderMapper.selectByOrderCode(orderCode);
+        SaleOrder saleOrder =selectByOrderCode(orderCode);
         //如果订单号不存在  则直接返回错误提示
         if (saleOrder == null) {
             orderDetailResponse.setResCode("40359");
@@ -851,6 +796,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
     public OrderListResponse queryOrderList(OrderListQuery query) {
         OrderListResponse response = new OrderListResponse();
 
@@ -939,9 +885,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 订单发货
-     * @see com.wow.order.service.OrderService#deliverGoods(com.wow.order.vo.OrderDeliverQuery)
-     */
+    * 订单发货
+    * @see com.wow.order.service.OrderService#deliverGoods(com.wow.order.vo.OrderDeliverQuery)
+    */
     @Override
     public CommonResponse deliverGoods(OrderDeliverQuery query) {
         CommonResponse commonResponse = new CommonResponse();
@@ -963,8 +909,8 @@ public class OrderServiceImpl implements OrderService {
             return commonResponse;
         }
 
-        //根据订单号获取订单
-        SaleOrder saleOrder = saleOrderMapper.selectByOrderCode(query.getOrderCode());
+        SaleOrder saleOrder = selectByOrderCode(query.getOrderCode());
+
         //如果订单号不存在  则直接返回错误提示
         if (saleOrder == null) {
             commonResponse.setResCode("40308");
@@ -973,18 +919,27 @@ public class OrderServiceImpl implements OrderService {
             return commonResponse;
         }
 
-        //获取指定的订单项
+        //如果未发货的数量为0 则直接返回错误提示
+        if (saleOrder.getUnShipOutQty() == 0) {
+            commonResponse.setResCode("40313");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40313"));
+
+            return commonResponse;
+        }
+
+        query.setOrderId(saleOrder.getId());
+        
+        //获取未发货的订单项
         SaleOrderItemExample saleOrderItemExample = new SaleOrderItemExample();
         SaleOrderItemExample.Criteria criteria = saleOrderItemExample.createCriteria();
 
-        criteria.andSaleOrderIdEqualTo(saleOrder.getId());
-        criteria.andIsShippedOutEqualTo(Boolean.FALSE);//是否已经发货
         criteria.andIdIn(query.getSaleOrderItemIds());
+        criteria.andIsShippedOutEqualTo(Boolean.FALSE);
 
-        List<SaleOrderItem> saleOrderItem = saleOrderItemMapper.selectByExample(saleOrderItemExample);
+        int saleOrderItems = saleOrderItemMapper.countByExample(saleOrderItemExample);
 
-        //如果发货的商品清单个数与订单中未发货的个数不一致  则直接返回错误提示
-        if (saleOrderItem.size() != query.getSaleOrderItemIds().size()) {
+        //如果发货的商品清单id不正确  则直接返回错误提示
+        if (saleOrderItems != query.getSaleOrderItemIds().size()) {
             commonResponse.setResCode("40312");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40312"));
 
@@ -995,13 +950,82 @@ public class OrderServiceImpl implements OrderService {
 
         /*** 拆分包裹开始
          *     1.  生成发货单
-         *     2.  更新订单项是否发货状态
-         *     3.  
+         *     2.  更新订单项发货状态
+         *     3.  绑定订单项目到发货单
+         *     4 . 修改订单状态 部分发货或者已发货
          * */
 
+        //生成发货单
+        DeliveryOrder deliveryOrder = wrapDeliveryOrder(query);
+        deliveryOrderMapper.insertSelective(deliveryOrder);
+
+        //更新订单项发货状态
+        OrderItemQuery orderItemQuery = new OrderItemQuery();
+
+        orderItemQuery.setDeliveryOrderId(deliveryOrder.getId());
+        orderItemQuery.setOrderItemIds(query.getSaleOrderItemIds());
+
+        saleOrderItemMapper.updateDeliveryByIds(orderItemQuery);
+
+        //修改订单状态 判断是部分发货还是全部发货
+        SaleOrder targetOrder = new SaleOrder();
+        targetOrder.setId(saleOrder.getId());
+        //重新设置未发货的商品个数
+        int unShipOutQty = saleOrder.getUnShipOutQty() - query.getSaleOrderItemIds().size();
+        targetOrder.setUnShipOutQty(unShipOutQty);
+        //如果未发货商品数量为0 则设置订单状态为待收货
+        if (unShipOutQty == 0) {
+            targetOrder.setOrderStatus(SaleOrderStatusEnum.TO_BE_RECEIVED.getKey().byteValue());
+        } else {
+            //如果还有部分商品未发货 则设置订单状态为部分发货
+            targetOrder.setOrderStatus(SaleOrderStatusEnum.PARTIAL_SHIPPED.getKey().byteValue());
+        }
+        targetOrder.setUpdateTime(DateUtil.currentDate());
+
+        saleOrderMapper.updateByPrimaryKeySelective(targetOrder);
         /*** 拆分包裹结束*/
 
+        //记录操作日志
+        SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40314"));
+        saleOrderLogMapper.insertSelective(warpOrderLog);
+
         return commonResponse;
+    }
+
+    /**
+     * 根据订单号获取订单信息
+     * 
+     * @param orderCode
+     * @return
+     */
+    private SaleOrder selectByOrderCode(String orderCode) {
+        //根据订单号获取订单
+        SaleOrderExample saleOrderExample = new SaleOrderExample();
+        SaleOrderExample.Criteria criteria = saleOrderExample.createCriteria();
+        criteria.andOrderCodeEqualTo(orderCode);
+
+        return saleOrderMapper.selectOnlyByExample(saleOrderExample);
+    }
+
+    /**
+     * 包装发货单信息
+     * 
+     * @param query
+     * @return
+     */
+    private DeliveryOrder wrapDeliveryOrder(OrderDeliverQuery query) {
+        DeliveryOrder deliveryOrder = new DeliveryOrder();
+
+        deliveryOrder.setSaleOrderId(query.getOrderId());
+        deliveryOrder.setDeliveryMothod(query.getDeliveryMothod());
+        //从数据字典中获取配送公司名称
+        String companyName = DictionaryUtil.getValue("deliveryCompany", query.getDeliveryCompanyCode());
+        deliveryOrder.setDeliveryCompanyName(companyName);
+        deliveryOrder.setDeliveryOrderNo(query.getDeliveryOrderNo()); //设置配送单号
+        deliveryOrder.setShipOutDate(DateUtil.currentDate()); //设置配送日期
+        deliveryOrder.setCreateTime(DateUtil.currentDate());
+
+        return deliveryOrder;
     }
 
 }

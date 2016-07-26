@@ -42,7 +42,7 @@ public class OrderListVo implements Serializable {
     private String orderCreateTimeFormat;
 
     //订单中产品的总件数
-    private Integer totalPackages;
+    private Integer totalProductQty;
     
     //产品规格图片
     private List<String> productSpecImgs;
@@ -111,12 +111,12 @@ public class OrderListVo implements Serializable {
         this.orderCreateTimeFormat = orderCreateTimeFormat;
     }
 
-    public Integer getTotalPackages() {
-        return totalPackages;
+    public Integer getTotalProductQty() {
+        return totalProductQty;
     }
 
-    public void setTotalPackages(Integer totalPackages) {
-        this.totalPackages = totalPackages;
+    public void setTotalProductQty(Integer totalProductQty) {
+        this.totalProductQty = totalProductQty;
     }
 
 }

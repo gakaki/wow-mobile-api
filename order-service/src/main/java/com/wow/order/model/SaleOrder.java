@@ -18,7 +18,9 @@ public class SaleOrder implements Serializable {
     private BigDecimal orderAmount;
 
     private Integer totalProductQty;
-
+    
+    private Integer unShipOutQty;
+    
     private String receiverName;
 
     private String receiverProvince;
@@ -65,7 +67,7 @@ public class SaleOrder implements Serializable {
 
     private Byte orderSource;
 
-    private Integer orderIp;
+    private Long orderIp;
 
     private String sellerRemark;
 
@@ -74,6 +76,14 @@ public class SaleOrder implements Serializable {
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;
+    
+    public Integer getUnShipOutQty() {
+        return unShipOutQty;
+    }
+
+    public void setUnShipOutQty(Integer unShipOutQty) {
+        this.unShipOutQty = unShipOutQty;
+    }
 
     public Integer getId() {
         return id;
@@ -315,11 +325,11 @@ public class SaleOrder implements Serializable {
         this.orderSource = orderSource;
     }
 
-    public Integer getOrderIp() {
+    public Long getOrderIp() {
         return orderIp;
     }
 
-    public void setOrderIp(Integer orderIp) {
+    public void setOrderIp(Long orderIp) {
         this.orderIp = orderIp;
     }
 

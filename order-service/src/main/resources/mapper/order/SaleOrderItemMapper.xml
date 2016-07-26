@@ -19,6 +19,17 @@
     <result column="is_shipped_out" property="isShippedOut" jdbcType="BIT" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
   </resultMap>
+  
+    <resultMap id="WareHouseResultMap"   type="com.wow.order.vo.OrderItemStockVo" >
+	    <id column="saleOrderItemId"   property="saleOrderItemId"/>
+	     <result column="productId"  property="productId" />
+	     <result column="virtualProductQty"  property="virtualProductQty" />
+	    <collection property="orderItemProductStockVos"  ofType="com.wow.order.vo.OrderItemProductStockVo">
+	        <result column="warehouseId"  property="warehouseId"/>
+	        <result column="productQty"  property="productQty"/>
+    </collection>
+  </resultMap>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -383,4 +394,67 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+   <!-- 根据订单id获取订单项目中产品规格图片 -->
+    <select id="selectSpecImgByOrderIds"  parameterType="List"  resultType="com.wow.order.vo.OrderItemImgVo" >
+         SELECT 
+			  o.sale_order_id saleOrderId,
+			  p.product_color_img specImg
+			FROM
+			  sale_order_item o 
+			  INNER JOIN product p 
+			    ON o.product_id = p.id 
+			WHERE o.sale_order_id in
+		  <foreach collection="collection"   item="item"  open="(" close=")"  separator="," >
+                   #{item}
+         </foreach>
+  </select>
+  
+    <!-- 查询订单id查询产品明细 -->
+  <select id="selectByOrderId"   resultType="com.wow.order.vo.OrderItemVo"  parameterType="Integer" >
+	       SELECT 
+				  so.product_id productId,
+				  so.product_name productName,
+				  p.product_color_img specImg,
+				  so.order_item_price sellPrice,
+				  so.order_item_qty productQty,
+				  so.order_item_amount sellTotalAmount,
+				  p.color_display_name color,
+				  p.product_color_img spec
+			FROM
+			  sale_order_item so 
+			  INNER JOIN product p 
+			    ON so.product_id = p.id 
+			  INNER JOIN product_price pp 
+			    ON so.product_id = pp.product_id 
+			WHERE so.is_deleted = FALSE 
+			  AND so.sale_order_id =#{orderId}
+  </select>
+  
+   <!-- 根据订单id获取订单项目使用库存明细 -->
+  <select id="selectWareHouseStockByOrderId"   resultMap="WareHouseResultMap"  parameterType="Integer" >
+	     SELECT 
+			  so.id saleOrderItemId,
+			  so.product_id productId,
+			  so.frozen_virtual_stock_qty virtualProductQty ,
+			  sow.warehouse_id warehouseId,
+			  sow.frozen_warehouse_stock_qty productQty
+		  FROM
+			  sale_order_item so 
+			  INNER JOIN sale_order_item_warehouse sow 
+			  ON so.id = sow.sale_order_item_id 
+			WHERE so.sale_order_id =#{orderId} 
+  </select>
+  
+  <!-- 根据订单项id列表更新订单项发货状态 -->
+  <update id="updateDeliveryByIds"   parameterType="com.wow.order.vo.OrderItemQuery" >
+          update sale_order_item 
+          set  is_shipped_out =true,
+          delivery_order_id=#{deliveryOrderId}
+    where id in
+       <foreach collection="orderItemIds"   item="item"  open="(" close=")"  separator="," >
+                   #{item}
+         </foreach>
+  </update>
+  
 </mapper>

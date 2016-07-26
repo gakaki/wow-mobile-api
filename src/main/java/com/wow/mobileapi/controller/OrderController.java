@@ -238,35 +238,4 @@ public class OrderController extends BaseController {
 
         return apiResponse;
     }
-
-//    /**
-//     * 获取用户购买的产品结算信息
-//     * 
-//     * @param request
-//     * @return
-//     */
-//    @RequestMapping(value = "/getAll", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
-//    public ApiResponse getAll(ApiRequest request) {
-//        ApiResponse apiResponse = new ApiResponse();
-//        try {
-//            PageModel page = new PageModel();
-//            page.setShowCount(2);
-//            page.setCurrentPage(2);
-//            SaleOrder order=new SaleOrder();
-//            page.setModel(order);
-//
-//            List<PageData> selectListPage = orderService.selectListPage(page);
-//
-//            List<SaleOrder> orders = Arrays.asList(JsonUtil.fromJSON(selectListPage, SaleOrder[].class));
-//            
-//            apiResponse.setData(orders);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            logger.error("获取订单列表错误---" + e);
-//            setInternalErrorResponse(apiResponse);
-//        }
-//
-//        return apiResponse;
-//    }
-
 }

@@ -1,15 +1,16 @@
-package com.wow.order.vo;
+package com.wow.mobileapi.request.order;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * 订单发货查询类
+ * 创建发货操作请求类
+ * 
  * @author chenkaiwei
- * @version $Id: V1.0 2016年7月17日 上午11:42:47 Exp $
+ * @version $Id: V1.0 2016年7月12日 下午4:50:51 Exp $
  */
-public class OrderDeliverQuery implements Serializable {
-    /**  */
+public class OrderDeliverRequest implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     //订单项目id列表
@@ -17,13 +18,13 @@ public class OrderDeliverQuery implements Serializable {
 
     //用户id
     private Integer endUserId;
-    
+
     //订单号
     private String orderCode;
 
     //订单id
     private Integer orderId;
-    
+
     //配送方式1. 尖叫合作物流，2. 供应商合作物流 3.京东 4.日日顺
     private Byte deliveryMothod;
 
@@ -32,7 +33,7 @@ public class OrderDeliverQuery implements Serializable {
 
     //运单号
     private String deliveryOrderNo;
-    
+
     public Byte getDeliveryMothod() {
         return deliveryMothod;
     }

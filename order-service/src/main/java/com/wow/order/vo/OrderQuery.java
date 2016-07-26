@@ -63,14 +63,14 @@ public class OrderQuery implements Serializable {
     private Integer orderId;
     
     //总件数
-    private Integer totalPackages;
+    private Integer totalProductQty;
     
-    public Integer getTotalPackages() {
-        return totalPackages;
+    public Integer getTotalProductQty() {
+        return totalProductQty;
     }
 
-    public void setTotalPackages(Integer totalPackages) {
-        this.totalPackages = totalPackages;
+    public void setTotalProductQty(Integer totalProductQty) {
+        this.totalProductQty = totalProductQty;
     }
 
     public List<FreezeStockVo> getFreezeStockVoList() {

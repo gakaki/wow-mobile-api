@@ -9,6 +9,7 @@
     <result column="delivery_fee" property="deliveryFee" jdbcType="DECIMAL" />
     <result column="order_amount" property="orderAmount" jdbcType="DECIMAL" />
     <result column="total_product_qty" property="totalProductQty" jdbcType="INTEGER" />
+    <result column="un_ship_out_qty"  property="unShipOutQty" jdbcType="INTEGER" />
     <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
     <result column="receiver_province" property="receiverProvince" jdbcType="VARCHAR" />
     <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
@@ -96,7 +97,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, order_code, end_user_id, product_amount, delivery_fee, order_amount, total_product_qty, 
+    id, order_code, end_user_id, product_amount, delivery_fee, order_amount, total_product_qty, un_ship_out_qty,
     receiver_name, receiver_province, receiver_city, receiver_county, receiver_town, 
     receiver_address, receiver_postcode, receiver_mobile, end_user_remark, order_status, 
     payment_status, payment_method, paid_time, is_use_coupon, preferential_amount, end_user_coupon_id, 
@@ -117,6 +118,14 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+  </select>
+    <select id="selectOnlyByExample"  resultMap="BaseResultMap"  parameterType="com.wow.order.model.SaleOrderExample" >
+	    select
+	    <include refid="Base_Column_List" />
+	    from sale_order
+	    <if test="_parameter != null" >
+	      <include refid="Example_Where_Clause" />
+	    </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -139,7 +148,7 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into sale_order (order_code, end_user_id, product_amount, 
-      delivery_fee, order_amount, total_product_qty, 
+      delivery_fee, order_amount, total_product_qty, un_ship_out_qty,
       receiver_name, receiver_province, receiver_city, 
       receiver_county, receiver_town, receiver_address, 
       receiver_postcode, receiver_mobile, end_user_remark, 
@@ -186,6 +195,9 @@
       </if>
       <if test="totalProductQty != null" >
         total_product_qty,
+      </if>
+      <if test="unShipOutQty != null" >
+        un_ship_out_qty,
       </if>
       <if test="receiverName != null" >
         receiver_name,
@@ -401,6 +413,9 @@
       <if test="record.totalProductQty != null" >
         total_product_qty = #{record.totalProductQty,jdbcType=INTEGER},
       </if>
+            <if test="record.tunShipOutQty != null" >
+        un_ship_out_qty = #{record.unShipOutQty,jdbcType=INTEGER},
+      </if>
       <if test="record.receiverName != null" >
         receiver_name = #{record.receiverName,jdbcType=VARCHAR},
       </if>
@@ -496,6 +511,7 @@
       delivery_fee = #{record.deliveryFee,jdbcType=DECIMAL},
       order_amount = #{record.orderAmount,jdbcType=DECIMAL},
       total_product_qty = #{record.totalProductQty,jdbcType=INTEGER},
+      un_ship_out_qty = #{record.unShipOutQty,jdbcType=INTEGER},
       receiver_name = #{record.receiverName,jdbcType=VARCHAR},
       receiver_province = #{record.receiverProvince,jdbcType=VARCHAR},
       receiver_city = #{record.receiverCity,jdbcType=VARCHAR},
@@ -547,6 +563,9 @@
       </if>
       <if test="totalProductQty != null" >
         total_product_qty = #{totalProductQty,jdbcType=INTEGER},
+      </if>
+        <if test="unShipOutQty != null" >
+        un_ship_out_qty = #{unShipOutQty,jdbcType=INTEGER},
       </if>
       <if test="receiverName != null" >
         receiver_name = #{receiverName,jdbcType=VARCHAR},
@@ -640,6 +659,7 @@
       delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
       order_amount = #{orderAmount,jdbcType=DECIMAL},
       total_product_qty = #{totalProductQty,jdbcType=INTEGER},
+      un_ship_out_qty = #{unShipOutQty,jdbcType=INTEGER},
       receiver_name = #{receiverName,jdbcType=VARCHAR},
       receiver_province = #{receiverProvince,jdbcType=VARCHAR},
       receiver_city = #{receiverCity,jdbcType=VARCHAR},
@@ -669,4 +689,14 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+     <!-- 查询用户订单列表 -->
+  <select id="selectByEndUserId"   resultType="com.wow.order.vo.OrderListVo"  parameterType="com.wow.order.vo.OrderListQuery" >
+	    select 
+	          id orderId, order_code orderCode, order_amount orderAmount, total_product_qty totalProductQty, 
+	          order_status orderStatus,order_create_time orderCreateTime
+	    from sale_order
+	    where end_user_id=#{endUserId}
+	    order by order_create_time desc
+  </select>
 </mapper>

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.wow.order.model.SaleOrderItem;
 import com.wow.order.model.SaleOrderItemExample;
 import com.wow.order.vo.OrderItemImgVo;
+import com.wow.order.vo.OrderItemQuery;
 import com.wow.order.vo.OrderItemStockVo;
 import com.wow.order.vo.OrderItemVo;
 
@@ -18,8 +19,6 @@ public interface SaleOrderItemMapper {
     int deleteByPrimaryKey(Integer id);
 
     int insert(SaleOrderItem record);
-
-    int batchInsertSelective(List<SaleOrderItem> records);
 
     int insertSelective(SaleOrderItem record);
 
@@ -43,5 +42,8 @@ public interface SaleOrderItemMapper {
 
     //根据订单id获取订单项目使用库存明细
     List<OrderItemStockVo> selectWareHouseStockByOrderId(Integer orderId);
+
+    //根据订单项id列表更新订单发货状态
+    int updateDeliveryByIds(OrderItemQuery query);
 
 }

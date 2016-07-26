@@ -23,12 +23,12 @@ public interface SaleOrderMapper {
     int insertSelective(SaleOrder record);
 
     List<SaleOrder> selectByExample(SaleOrderExample example);
+    
+    SaleOrder selectOnlyByExample(SaleOrderExample example);
 
     List<PageData> selectListPage(PageModel page);
 
     SaleOrder selectByPrimaryKey(Integer id);
-
-    SaleOrder selectByOrderCode(String orderCode);
 
     int updateByExampleSelective(@Param("record") SaleOrder record, @Param("example") SaleOrderExample example);
 
