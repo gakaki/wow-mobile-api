@@ -225,7 +225,7 @@
   </update>
 
   <select id="selectLikedBrand" resultType="com.wow.user.vo.LikedBrandVo" parameterType="java.lang.Integer" >
-    select brand.id brandId, brand.brand_cname brandCName,brand.brand_logo_img brandLogoImg
+    select brand.id brandId, brand.brand_cname brandCName,brand.brand_desc brandDesc,brand.brand_logo_img brandLogoImg
     from brand inner join end_user_like_brand
     on end_user_like_brand.brand_id = brand.id
     where end_user_like_brand.end_user_id = #{endUserId,jdbcType=INTEGER}

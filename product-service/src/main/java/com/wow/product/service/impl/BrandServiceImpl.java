@@ -1,9 +1,7 @@
 package com.wow.product.service.impl;
 
-import com.wow.product.mapper.BrandMapper;
-import com.wow.product.model.Brand;
-import com.wow.product.model.BrandExample;
-import com.wow.product.service.BrandService;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.wow.product.mapper.BrandMapper;
+import com.wow.product.model.Brand;
+import com.wow.product.model.BrandExample;
+import com.wow.product.service.BrandService;
+import com.wow.product.vo.response.ProductBrandResponse;
 
 /**
  * Created by zhengzhiqing on 16/6/18.
@@ -84,6 +86,18 @@ public class BrandServiceImpl implements BrandService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Brand> getAllBrands() {
         return brandMapper.selectAll();
+    }
+
+    /**
+     * 查询所有品牌首字母
+     *
+     * @return
+     */
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public ProductBrandResponse selectBrandFirstLetter(){
+    	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
+    	productBrandResponse.setBrandFirstLetterList(brandMapper.selectBrandFirstLetter());
+    	return productBrandResponse;
     }
 
 }

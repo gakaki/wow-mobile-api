@@ -1,8 +1,9 @@
 package com.wow.product.service;
 
-import com.wow.product.model.Brand;
-
 import java.util.List;
+
+import com.wow.product.model.Brand;
+import com.wow.product.vo.response.ProductBrandResponse;
 
 /**
  * 品牌服务
@@ -55,5 +56,12 @@ public interface BrandService {
      * @return
      */
     List<Brand> getAllBrands();
+    
+    /**
+     * 查询所有品牌首字母
+    *
+    * @return
+    */
+    ProductBrandResponse selectBrandFirstLetter();
 
 }

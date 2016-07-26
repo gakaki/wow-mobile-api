@@ -174,5 +174,19 @@ public interface ProductService {
      * @return
      */
     public ProductImage selectProductPrimaryOneImg(Integer productId);
+    
+    /**
+     * 查询品牌的产品信息
+     * @param brandId
+     * @return
+     */
+    public ProductResponse selectProductByBrandId(Integer brandId);
+    
+    /**
+     * 查询设计师的产品信息
+     * @param brandId
+     * @return
+     */
+    public ProductResponse selectProductByDesignerId(Integer brandId);
 
 }

@@ -293,4 +293,10 @@
       brand_desc = #{brandDesc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectBrandFirstLetter" resultMap="BaseResultMap" >
+    select
+    	brand_name_first_letter
+    from brand group by brand_name_first_letter order by brand_name_first_letter asc
+  </select>
 </mapper>

@@ -8,6 +8,7 @@ import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductExample;
+import com.wow.product.vo.ProductVo;
 
 public interface ProductMapper {
     int countByExample(ProductExample example);
@@ -43,4 +44,8 @@ public interface ProductMapper {
     List<PageData> selectOrderbyTotalSoldListPage(PageModel page);
     
     List<PageData> selectOrderbySellPriceListPage(PageModel page);
+    
+    List<ProductVo> selectProductByBrandId(@Param("bradnId") Integer bradnId);
+
+    List<ProductVo> selectProductByDesignerId(@Param("designerId") Integer designerId);
 }

@@ -403,4 +403,76 @@ public class ProductController extends BaseController {
         }
         return apiResponse;
     }
+    
+    /**
+     * 根据品牌查询产品列表
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/product/brand", method = RequestMethod.GET)
+    public ApiResponse getProductByBrandId(ApiRequest apiRequest) {
+        logger.info("start to get product_brand on page");
+        ApiResponse apiResponse = new ApiResponse();
+        ProductQueryRequest productQueryRequest = JsonUtil
+                .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        try {
+        	ProductResponse productResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productResponse);
+            } else {
+            	List<ProductVo> productList = new ArrayList<ProductVo>();
+                
+                for (ProductVo productVo : productResponse.getProductList()) {
+                	ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
+                	if(pi!=null){
+                		productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
+                		productList.add(productVo);
+                	}
+                }
+                productResponse.setProductList(productList);
+                apiResponse.setData(productResponse);
+            }
+        } catch (Exception e) {
+            logger.error("查找product_brand错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+
+    /**
+     * 根据设计师查询产品列表
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/product/designer", method = RequestMethod.GET)
+    public ApiResponse getProductByDesignerId(ApiRequest apiRequest) {
+    	logger.info("start to get product_designer on page");
+        ApiResponse apiResponse = new ApiResponse();
+        ProductQueryRequest productQueryRequest = JsonUtil
+                .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        try {
+        	ProductResponse productResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productResponse);
+            } else {
+            	List<ProductVo> productList = new ArrayList<ProductVo>();
+                
+                for (ProductVo productVo : productResponse.getProductList()) {
+                	ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
+                	if(pi!=null){
+                		productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
+                		productList.add(productVo);
+                	}
+                }
+                productResponse.setProductList(productList);
+                apiResponse.setData(productResponse);
+            }
+        } catch (Exception e) {
+            logger.error("查找product_designer错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
 }

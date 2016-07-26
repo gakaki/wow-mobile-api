@@ -22,7 +22,6 @@ import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.mobileapi.util.ImgPrefixUtil;
 import com.wow.product.model.ProductImage;
 import com.wow.product.service.ProductService;
-import com.wow.product.vo.ProductVo;
 import com.wow.user.service.LikeService;
 import com.wow.user.vo.LikedBrandVo;
 import com.wow.user.vo.LikedDesignerVo;

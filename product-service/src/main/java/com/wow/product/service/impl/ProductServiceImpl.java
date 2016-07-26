@@ -607,4 +607,26 @@ public class ProductServiceImpl implements ProductService {
     public ProductImage selectProductPrimaryOneImg(Integer productId){
     	return productImageMapper.selectProductPrimaryOneImg(productId);
     }
+    
+    /**
+     * 查询品牌的产品信息
+     * @param brandId
+     * @return
+     */
+    public ProductResponse selectProductByBrandId(Integer brandId){
+    	ProductResponse productResponse = new ProductResponse();
+    	productResponse.setProductList(productMapper.selectProductByBrandId(brandId));
+    	return productResponse;
+    }
+    
+    /**
+     * 查询设计师的产品信息
+     * @param brandId
+     * @return
+     */
+    public ProductResponse selectProductByDesignerId(Integer brandId){
+    	ProductResponse productResponse = new ProductResponse();
+    	productResponse.setProductList(productMapper.selectProductByDesignerId(brandId));
+    	return productResponse;
+    }
 }

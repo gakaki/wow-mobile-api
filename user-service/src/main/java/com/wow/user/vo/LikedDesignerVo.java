@@ -17,6 +17,8 @@ public class LikedDesignerVo implements Serializable{
     private String designerName;
 
     private String designerPhoto;
+    
+    private String designerDesc;
 
     public int getDesignerId() {
         return designerId;
@@ -41,4 +43,12 @@ public class LikedDesignerVo implements Serializable{
     public void setDesignerPhoto(String designerPhoto) {
         this.designerPhoto = designerPhoto;
     }
+
+	public String getDesignerDesc() {
+		return designerDesc;
+	}
+
+	public void setDesignerDesc(String designerDesc) {
+		this.designerDesc = designerDesc;
+	}
 }
