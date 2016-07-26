@@ -63,6 +63,7 @@ public class OrderController extends BaseController {
             setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
+        
         OrderSettleResponse orderSettleResponse = null;
         try {
             OrderSettleQuery query = new OrderSettleQuery();
@@ -122,6 +123,7 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderResponse);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("创建订单错误---" + e);
             setInternalErrorResponse(apiResponse);
         }

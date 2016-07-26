@@ -536,6 +536,66 @@ public class SaleOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andUnShipOutQtyIsNull() {
+            addCriterion("un_ship_out_qty is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyIsNotNull() {
+            addCriterion("un_ship_out_qty is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyEqualTo(Integer value) {
+            addCriterion("un_ship_out_qty =", value, "unShipOutQty");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyNotEqualTo(Integer value) {
+            addCriterion("un_ship_out_qty <>", value, "unShipOutQty");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyGreaterThan(Integer value) {
+            addCriterion("un_ship_out_qty >", value, "unShipOutQty");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("un_ship_out_qty >=", value, "unShipOutQty");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyLessThan(Integer value) {
+            addCriterion("un_ship_out_qty <", value, "unShipOutQty");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyLessThanOrEqualTo(Integer value) {
+            addCriterion("un_ship_out_qty <=", value, "unShipOutQty");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyIn(List<Integer> values) {
+            addCriterion("un_ship_out_qty in", values, "unShipOutQty");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyNotIn(List<Integer> values) {
+            addCriterion("un_ship_out_qty not in", values, "unShipOutQty");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyBetween(Integer value1, Integer value2) {
+            addCriterion("un_ship_out_qty between", value1, value2, "unShipOutQty");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnShipOutQtyNotBetween(Integer value1, Integer value2) {
+            addCriterion("un_ship_out_qty not between", value1, value2, "unShipOutQty");
+            return (Criteria) this;
+        }
+
         public Criteria andReceiverNameIsNull() {
             addCriterion("receiver_name is null");
             return (Criteria) this;
@@ -2036,52 +2096,52 @@ public class SaleOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpEqualTo(Integer value) {
+        public Criteria andOrderIpEqualTo(Long value) {
             addCriterion("order_ip =", value, "orderIp");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpNotEqualTo(Integer value) {
+        public Criteria andOrderIpNotEqualTo(Long value) {
             addCriterion("order_ip <>", value, "orderIp");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpGreaterThan(Integer value) {
+        public Criteria andOrderIpGreaterThan(Long value) {
             addCriterion("order_ip >", value, "orderIp");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpGreaterThanOrEqualTo(Integer value) {
+        public Criteria andOrderIpGreaterThanOrEqualTo(Long value) {
             addCriterion("order_ip >=", value, "orderIp");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpLessThan(Integer value) {
+        public Criteria andOrderIpLessThan(Long value) {
             addCriterion("order_ip <", value, "orderIp");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpLessThanOrEqualTo(Integer value) {
+        public Criteria andOrderIpLessThanOrEqualTo(Long value) {
             addCriterion("order_ip <=", value, "orderIp");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpIn(List<Integer> values) {
+        public Criteria andOrderIpIn(List<Long> values) {
             addCriterion("order_ip in", values, "orderIp");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpNotIn(List<Integer> values) {
+        public Criteria andOrderIpNotIn(List<Long> values) {
             addCriterion("order_ip not in", values, "orderIp");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpBetween(Integer value1, Integer value2) {
+        public Criteria andOrderIpBetween(Long value1, Long value2) {
             addCriterion("order_ip between", value1, value2, "orderIp");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIpNotBetween(Integer value1, Integer value2) {
+        public Criteria andOrderIpNotBetween(Long value1, Long value2) {
             addCriterion("order_ip not between", value1, value2, "orderIp");
             return (Criteria) this;
         }
