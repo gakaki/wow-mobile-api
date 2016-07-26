@@ -35,9 +35,11 @@ public interface PageConfigService {
     /**
      * 根据页面类型查询页面上的商品配置
      * @param pageType
+     * @param moduleType
+     * @param moduleNewType
      * @return
      */
-    PageProductResponse getProductsOnPage(int pageType);
+    PageProductResponse getProductsOnPage(int pageType,int moduleType,int moduleNewType);
 
     /**
      * 根据页面类型查询页面上的分类配置
