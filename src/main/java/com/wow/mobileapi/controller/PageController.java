@@ -88,7 +88,7 @@ public class PageController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-        	PageProductResponse pageProductsResponse = pageConfigService.getProductsOnPage(BizConstant.PAGE_TYPE_FIND);
+        	PageProductResponse pageProductsResponse = pageConfigService.getProductsOnPage(BizConstant.PAGE_TYPE_FIND,BizConstant.PAGE_MODULE_TYPE_PRODUCT,BizConstant.PAGE_MODULE_TYPE_PRODUCT_NEWARRIVAL);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(pageProductsResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageProductsResponse);

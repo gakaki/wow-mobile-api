@@ -15,6 +15,7 @@ public class PageProductResponse extends CommonResponse {
     private static final long serialVersionUID = 1L;
 
     private List<PageProductVo> pageProductVoList;
+    private List<PageProductVo> pageNewProductVoList;
 
     public List<PageProductVo> getPageProductVoList() {
         return pageProductVoList;
@@ -23,4 +24,13 @@ public class PageProductResponse extends CommonResponse {
     public void setPageProductVoList(List<PageProductVo> pageProductVoList) {
         this.pageProductVoList = pageProductVoList;
     }
+
+	public List<PageProductVo> getPageNewProductVoList() {
+		return pageNewProductVoList;
+	}
+
+	public void setPageNewProductVoList(List<PageProductVo> pageNewProductVoList) {
+		this.pageNewProductVoList = pageNewProductVoList;
+	}
+    
 }

@@ -209,15 +209,18 @@ public class PageConfigServiceImpl implements PageConfigService {
      * 单品推荐的也一并返回
      *
      * @param pageType
+     * @param moduleType
+     * @param moduleNewType
      * @return
      */
     @Override
-    public PageProductResponse getProductsOnPage(int pageType) {
+    public PageProductResponse getProductsOnPage(int pageType,int moduleType,int moduleNewType) {
     	PageProductResponse pageProductResponse = new PageProductResponse();
     	List<PageProductConfig> productList = pageProductConfigMapper.selectByPageType(pageType);
     	List<PageProductVo> pageProductVoList = new ArrayList<PageProductVo>();
+    	List<PageProductVo> pageProductNewVoList = new ArrayList<PageProductVo>();
     	for(PageProductConfig productConfig:productList){
-    		PageProductVo productVo = new PageProductVo();
+			PageProductVo productVo = new PageProductVo();
             ProductPriceResponse priceResponse = priceService.getProductPrice(productConfig.getProductId());
             ProductPrice productPrice = priceResponse.getProductPrice();
             System.out.println("productPrice:"+productPrice);
@@ -231,8 +234,12 @@ public class PageConfigServiceImpl implements PageConfigService {
         		productVo.setCostPrice(productPrice.getCostPrice());
     		}    		
     		productVo.setModuleType(productConfig.getPageModuleType());
-    		
-    		pageProductVoList.add(productVo);
+
+    		if(productConfig.getPageModuleType() == moduleType){
+        		pageProductVoList.add(productVo);
+    		}else if(productConfig.getPageModuleType() == moduleNewType){
+    			pageProductNewVoList.add(productVo);
+    		}
     	}
     	pageProductResponse.setPageProductVoList(pageProductVoList);
     	
