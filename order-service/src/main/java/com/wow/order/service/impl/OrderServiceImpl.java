@@ -20,7 +20,6 @@ import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
 import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.IpConvertUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.common.util.RandomGenerator;
@@ -50,9 +49,6 @@ import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
-import com.wow.product.mapper.ProductSupplierMapper;
-import com.wow.product.model.ProductSupplier;
-import com.wow.product.model.ProductSupplierExample;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.FreezeStockVo;
 import com.wow.stock.vo.ProductQtyVo;
@@ -91,9 +87,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private SaleOrderItemWarehouseMapper saleOrderItemWarehouseMapper;
-
-    @Autowired
-    private ProductSupplierMapper productSupplierMapper;
+//
+//    @Autowired
+//    private ProductSupplierMapper productSupplierMapper;
 
     @Autowired
     private StockService stockService;
@@ -259,14 +255,11 @@ public class OrderServiceImpl implements OrderService {
             saleOrderItemWarehouse = new SaleOrderItemWarehouse();
 
             saleOrderItemWarehouse.setSaleOrderItemId(saleOrderItem.getId());
-            saleOrderItemWarehouse.setProductId(saleOrderItem.getProductId());
 
             saleOrderItemWarehouse.setWarehouseId(warehouseStock.getWarehouseId());
-            saleOrderItemWarehouse.setFrozenRealStockQty(warehouseStock.getFrozenStock());
+            saleOrderItemWarehouse.setFrozenWarehouseStockQty(warehouseStock.getFrozenStock());
 
             saleOrderItemWarehouse.setCreateTime(DateUtil.currentDate());
-            saleOrderItemWarehouse.setUpdateTime(DateUtil.currentDate());
-            saleOrderItemWarehouse.setIsDeleted(Boolean.FALSE);
 
             orderItemWareHouses.add(saleOrderItemWarehouse);
         }
@@ -320,7 +313,7 @@ public class OrderServiceImpl implements OrderService {
     private SaleOrderLog warpOrderLog(Integer orderId, String eventLog) {
         SaleOrderLog saleOrderLog = new SaleOrderLog();
 
-        saleOrderLog.setOrderId(orderId);
+        saleOrderLog.setSaleOrderId(orderId);
         saleOrderLog.setEventLog(eventLog);
         saleOrderLog.setEventTime(DateUtil.currentDate());
 
@@ -345,10 +338,10 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setOrderAmount(query.getOrderAmount());
         saleOrder.setProductAmount(query.getProductAmount());
         saleOrder.setDeliveryFee(query.getDeliveryfee());
-        saleOrder.setCouponAmount(query.getCouponFee());
+        saleOrder.setPreferentialAmount(query.getCouponFee());
 
-        saleOrder.setEndUserRemarks(query.getRemark());
-        saleOrder.setTotalPackages(query.getTotalPackages());
+        saleOrder.setEndUserRemark(query.getRemark());
+        saleOrder.setTotalProductQty(query.getTotalPackages());
 
         //设置收货人地址信息
         ShippingInfo shippingInfo = query.getShippingInfo();
@@ -361,7 +354,7 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setReceiverMobile(shippingInfo.getReceiverMobile());
         saleOrder.setReceiverPostcode(shippingInfo.getReceiverPostcode());
 
-        saleOrder.setEndUserRemarks(query.getRemark());
+        saleOrder.setEndUserRemark(query.getRemark());
 
         //设置订单状态为待付款
         saleOrder.setOrderStatus(SaleOrderStatusEnum.TO_BE_PAID.getKey().byteValue());
@@ -370,9 +363,8 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setEndUserCouponId(query.getCouponId());
 
         //目前都不是父订单
-        saleOrder.setIsLeaf(Boolean.FALSE);
         saleOrder.setOrderSource(query.getOrderSource());
-        saleOrder.setOrderIp(IpConvertUtil.ipToLong(query.getOrderIp()));
+        // saleOrder.setOrderIp(IpConvertUtil.ipToLong(query.getOrderIp()));
 
         saleOrder.setOrderCreateTime(DateUtil.currentDate());
         saleOrder.setUpdateTime(DateUtil.currentDate());
@@ -392,10 +384,10 @@ public class OrderServiceImpl implements OrderService {
         List<ShoppingCartResultVo> shoppingCartResult = query.getShoppingCartResult();
 
         //根据产品id列表获取供应商信息
-        List<ProductSupplier> productSuppliers = getSupplierByProductIds(shoppingCartResult);
+        //List<ProductSupplier> productSuppliers = getSupplierByProductIds(shoppingCartResult);
 
         SaleOrderItem saleOrderItem = null;
-        ProductSupplier productSupplier = null;
+        //ProductSupplier productSupplier = null;
         FreezeStockVo freezeStockVo = null;
 
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
@@ -414,16 +406,14 @@ public class OrderServiceImpl implements OrderService {
             saleOrderItem.setOrderItemAmount(NumberUtil.convertToYuan(productTotalPrice));
 
             //获取产品对应的供应商id
-            productSupplier = getSupplierByProductId(productSuppliers, shoppingCart.getProductId());
-            if (productSupplier != null) {
-                saleOrderItem.setProductSupplierId(productSupplier.getSupplierId());
-                saleOrderItem.setProductSaleType(productSupplier.getProductSaleType());
-            }
+            //            productSupplier = getSupplierByProductId(productSuppliers, shoppingCart.getProductId());
+            //            if (productSupplier != null) {
+            //            }
 
             //获取产品使用的具体库存
             freezeStockVo = getFreezeStock(query.getFreezeStockVoList(), shoppingCart.getProductId());
             if (freezeStockVo != null) {
-                saleOrderItem.setFrozenRealStockQty(freezeStockVo.getFrozenWarehouseStockTotalQty());
+                saleOrderItem.setFrozenWarehouseStockTotalQty(freezeStockVo.getFrozenWarehouseStockTotalQty());
                 saleOrderItem.setFrozenVirtualStockQty(freezeStockVo.getFrozenVirtualStockQty());
                 //如果使用虚拟库存的话 则设置虚拟库存是否准备 默认为null
                 if (freezeStockVo.getFrozenVirtualStockQty() > 0) {
@@ -432,7 +422,6 @@ public class OrderServiceImpl implements OrderService {
             }
 
             saleOrderItem.setNeedAssemble(Boolean.FALSE);
-            saleOrderItem.setIsItemLeaf(Boolean.FALSE);
 
             saleOrderItem.setCreateTime(DateUtil.currentDate());
             saleOrderItem.setUpdateTime(DateUtil.currentDate());
@@ -449,17 +438,17 @@ public class OrderServiceImpl implements OrderService {
      * 根据产品id列表获取供应商信息
      * @param shoppingCartResult
      */
-    private List<ProductSupplier> getSupplierByProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
-        List<Integer> productIds = getProductIds(shoppingCartResult);
-
-        ProductSupplierExample productSupplierExample = new ProductSupplierExample();
-        ProductSupplierExample.Criteria criteria = productSupplierExample.createCriteria();
-
-        criteria.andProductIdIn(productIds);
-        criteria.andIsDeletedEqualTo(Boolean.FALSE);
-
-        return productSupplierMapper.selectByExample(productSupplierExample);
-    }
+    //    private List<ProductSupplier> getSupplierByProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
+    //        List<Integer> productIds = getProductIds(shoppingCartResult);
+    //
+    //        ProductSupplierExample productSupplierExample = new ProductSupplierExample();
+    //        ProductSupplierExample.Criteria criteria = productSupplierExample.createCriteria();
+    //
+    //        criteria.andProductIdIn(productIds);
+    //        criteria.andIsDeletedEqualTo(Boolean.FALSE);
+    //
+    //        return productSupplierMapper.selectByExample(productSupplierExample);
+    //    }
 
     /**
      * 根据产品id查询相关供应商信息
@@ -467,19 +456,19 @@ public class OrderServiceImpl implements OrderService {
      * @param areas
      * @param integer
      */
-    private ProductSupplier getSupplierByProductId(List<ProductSupplier> productSuppliers, Integer productId) {
-        if (CollectionUtil.isEmpty(productSuppliers)) {
-            return null;
-        }
-
-        for (ProductSupplier productSupplier : productSuppliers) {
-            if (productId.intValue() == productSupplier.getProductId().intValue()) {
-                return productSupplier;
-            }
-        }
-
-        return null;
-    }
+    //    private ProductSupplier getSupplierByProductId(List<ProductSupplier> productSuppliers, Integer productId) {
+    //        if (CollectionUtil.isEmpty(productSuppliers)) {
+    //            return null;
+    //        }
+    //
+    //        for (ProductSupplier productSupplier : productSuppliers) {
+    //            if (productId.intValue() == productSupplier.getProductId().intValue()) {
+    //                return productSupplier;
+    //            }
+    //        }
+    //
+    //        return null;
+    //    }
 
     /**
      * 获取产品id列表
@@ -487,15 +476,15 @@ public class OrderServiceImpl implements OrderService {
      * @param shoppingCartResult
      * @return
      */
-    private List<Integer> getProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
-        List<Integer> productIds = new ArrayList<>(shoppingCartResult.size());
-
-        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
-            productIds.add(shoppingCart.getProductId());
-        }
-
-        return productIds;
-    }
+    //    private List<Integer> getProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
+    //        List<Integer> productIds = new ArrayList<>(shoppingCartResult.size());
+    //
+    //        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+    //            productIds.add(shoppingCart.getProductId());
+    //        }
+    //
+    //        return productIds;
+    //    }
 
     /**
      * 计算订单运费
@@ -731,8 +720,8 @@ public class OrderServiceImpl implements OrderService {
 
         orderDetailResponse.setOrderAmount(saleOrder.getOrderAmount());
         orderDetailResponse.setDeliveryFee(saleOrder.getDeliveryFee());
-        orderDetailResponse.setCouponAmount(saleOrder.getCouponAmount());
-        orderDetailResponse.setTotalPackages(saleOrder.getTotalPackages());
+        orderDetailResponse.setCouponAmount(saleOrder.getPreferentialAmount());
+        orderDetailResponse.setTotalPackages(saleOrder.getTotalProductQty());
 
         orderDetailResponse.setOrderStatus(saleOrder.getOrderStatus());
         orderDetailResponse.setOrderStatusName(SaleOrderStatusEnum.get(saleOrder.getOrderStatus().intValue()));
@@ -989,11 +978,11 @@ public class OrderServiceImpl implements OrderService {
         SaleOrderItemExample.Criteria criteria = saleOrderItemExample.createCriteria();
 
         criteria.andSaleOrderIdEqualTo(saleOrder.getId());
-        criteria.andIsSplitedEqualTo(Boolean.FALSE);
+        criteria.andIsShippedOutEqualTo(Boolean.FALSE);//是否已经发货
         criteria.andIdIn(query.getSaleOrderItemIds());
 
         List<SaleOrderItem> saleOrderItem = saleOrderItemMapper.selectByExample(saleOrderItemExample);
-        
+
         //如果发货的商品清单个数与订单中未发货的个数不一致  则直接返回错误提示
         if (saleOrderItem.size() != query.getSaleOrderItemIds().size()) {
             commonResponse.setResCode("40312");
@@ -1001,18 +990,16 @@ public class OrderServiceImpl implements OrderService {
 
             return commonResponse;
         }
-        
+
         /*** 业务校验结束*/
-        
+
         /*** 拆分包裹开始
          *     1.  生成发货单
          *     2.  更新订单项是否发货状态
          *     3.  
          * */
-        
-        
+
         /*** 拆分包裹结束*/
-        
 
         return commonResponse;
     }

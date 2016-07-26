@@ -1,9 +1,11 @@
 package com.wow.order.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.order.model.SaleOrderItemWarehouse;
 import com.wow.order.model.SaleOrderItemWarehouseExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface SaleOrderItemWarehouseMapper {
     int countByExample(SaleOrderItemWarehouseExample example);
@@ -13,6 +15,8 @@ public interface SaleOrderItemWarehouseMapper {
     int deleteByPrimaryKey(Integer id);
 
     int insert(SaleOrderItemWarehouse record);
+    
+    int batchInsertSelective(List<SaleOrderItemWarehouse> records);
 
     int insertSelective(SaleOrderItemWarehouse record);
 

@@ -1,8 +1,5 @@
 package com.wow.mobileapi.controller;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wow.common.page.PageData;
-import com.wow.common.page.PageModel;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
@@ -24,7 +19,6 @@ import com.wow.mobileapi.request.order.OrderDetailRequest;
 import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
 import com.wow.mobileapi.request.order.OrderSettleRequest;
-import com.wow.order.model.SaleOrder;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
@@ -245,34 +239,34 @@ public class OrderController extends BaseController {
         return apiResponse;
     }
 
-    /**
-     * 获取用户购买的产品结算信息
-     * 
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/getAll", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
-    public ApiResponse getAll(ApiRequest request) {
-        ApiResponse apiResponse = new ApiResponse();
-        try {
-            PageModel page = new PageModel();
-            page.setShowCount(2);
-            page.setCurrentPage(2);
-            SaleOrder order=new SaleOrder();
-            page.setModel(order);
-
-            List<PageData> selectListPage = orderService.selectListPage(page);
-
-            List<SaleOrder> orders = Arrays.asList(JsonUtil.fromJSON(selectListPage, SaleOrder[].class));
-            
-            apiResponse.setData(orders);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("获取订单列表错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-
-        return apiResponse;
-    }
+//    /**
+//     * 获取用户购买的产品结算信息
+//     * 
+//     * @param request
+//     * @return
+//     */
+//    @RequestMapping(value = "/getAll", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+//    public ApiResponse getAll(ApiRequest request) {
+//        ApiResponse apiResponse = new ApiResponse();
+//        try {
+//            PageModel page = new PageModel();
+//            page.setShowCount(2);
+//            page.setCurrentPage(2);
+//            SaleOrder order=new SaleOrder();
+//            page.setModel(order);
+//
+//            List<PageData> selectListPage = orderService.selectListPage(page);
+//
+//            List<SaleOrder> orders = Arrays.asList(JsonUtil.fromJSON(selectListPage, SaleOrder[].class));
+//            
+//            apiResponse.setData(orders);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            logger.error("获取订单列表错误---" + e);
+//            setInternalErrorResponse(apiResponse);
+//        }
+//
+//        return apiResponse;
+//    }
 
 }
