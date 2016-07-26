@@ -3,7 +3,7 @@
 <mapper namespace="com.wow.order.mapper.SaleOrderLogMapper" >
   <resultMap id="BaseResultMap" type="com.wow.order.model.SaleOrderLog" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="sale_order_id" property="saleOrderId" jdbcType="INTEGER" />
     <result column="event_log" property="eventLog" jdbcType="VARCHAR" />
     <result column="event_time" property="eventTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, order_id, event_log, event_time
+    id, sale_order_id, event_log, event_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.order.model.SaleOrderLogExample" >
     select
@@ -102,9 +102,9 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into sale_order_log (order_id, event_log, event_time
+    insert into sale_order_log (sale_order_id, event_log, event_time
       )
-    values (#{orderId,jdbcType=INTEGER}, #{eventLog,jdbcType=VARCHAR}, #{eventTime,jdbcType=TIMESTAMP}
+    values (#{saleOrderId,jdbcType=INTEGER}, #{eventLog,jdbcType=VARCHAR}, #{eventTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wow.order.model.SaleOrderLog" >
@@ -113,8 +113,8 @@
     </selectKey>
     insert into sale_order_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
-        order_id,
+      <if test="saleOrderId != null" >
+        sale_order_id,
       </if>
       <if test="eventLog != null" >
         event_log,
@@ -124,8 +124,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
-        #{orderId,jdbcType=INTEGER},
+      <if test="saleOrderId != null" >
+        #{saleOrderId,jdbcType=INTEGER},
       </if>
       <if test="eventLog != null" >
         #{eventLog,jdbcType=VARCHAR},
@@ -147,8 +147,8 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.orderId != null" >
-        order_id = #{record.orderId,jdbcType=INTEGER},
+      <if test="record.saleOrderId != null" >
+        sale_order_id = #{record.saleOrderId,jdbcType=INTEGER},
       </if>
       <if test="record.eventLog != null" >
         event_log = #{record.eventLog,jdbcType=VARCHAR},
@@ -164,7 +164,7 @@
   <update id="updateByExample" parameterType="map" >
     update sale_order_log
     set id = #{record.id,jdbcType=INTEGER},
-      order_id = #{record.orderId,jdbcType=INTEGER},
+      sale_order_id = #{record.saleOrderId,jdbcType=INTEGER},
       event_log = #{record.eventLog,jdbcType=VARCHAR},
       event_time = #{record.eventTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -174,8 +174,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.wow.order.model.SaleOrderLog" >
     update sale_order_log
     <set >
-      <if test="orderId != null" >
-        order_id = #{orderId,jdbcType=INTEGER},
+      <if test="saleOrderId != null" >
+        sale_order_id = #{saleOrderId,jdbcType=INTEGER},
       </if>
       <if test="eventLog != null" >
         event_log = #{eventLog,jdbcType=VARCHAR},
@@ -188,7 +188,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wow.order.model.SaleOrderLog" >
     update sale_order_log
-    set order_id = #{orderId,jdbcType=INTEGER},
+    set sale_order_id = #{saleOrderId,jdbcType=INTEGER},
       event_log = #{eventLog,jdbcType=VARCHAR},
       event_time = #{eventTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

@@ -225,66 +225,6 @@ public class SaleOrderItemWarehouseExample {
             return (Criteria) this;
         }
 
-        public Criteria andProductIdIsNull() {
-            addCriterion("product_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdIsNotNull() {
-            addCriterion("product_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdEqualTo(Integer value) {
-            addCriterion("product_id =", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdNotEqualTo(Integer value) {
-            addCriterion("product_id <>", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdGreaterThan(Integer value) {
-            addCriterion("product_id >", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("product_id >=", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdLessThan(Integer value) {
-            addCriterion("product_id <", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdLessThanOrEqualTo(Integer value) {
-            addCriterion("product_id <=", value, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdIn(List<Integer> values) {
-            addCriterion("product_id in", values, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdNotIn(List<Integer> values) {
-            addCriterion("product_id not in", values, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdBetween(Integer value1, Integer value2) {
-            addCriterion("product_id between", value1, value2, "productId");
-            return (Criteria) this;
-        }
-
-        public Criteria andProductIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("product_id not between", value1, value2, "productId");
-            return (Criteria) this;
-        }
-
         public Criteria andWarehouseIdIsNull() {
             addCriterion("warehouse_id is null");
             return (Criteria) this;
@@ -345,63 +285,63 @@ public class SaleOrderItemWarehouseExample {
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyIsNull() {
-            addCriterion("frozen_real_stock_qty is null");
+        public Criteria andFrozenWarehouseStockQtyIsNull() {
+            addCriterion("frozen_warehouse_stock_qty is null");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyIsNotNull() {
-            addCriterion("frozen_real_stock_qty is not null");
+        public Criteria andFrozenWarehouseStockQtyIsNotNull() {
+            addCriterion("frozen_warehouse_stock_qty is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyEqualTo(Integer value) {
-            addCriterion("frozen_real_stock_qty =", value, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyEqualTo(Integer value) {
+            addCriterion("frozen_warehouse_stock_qty =", value, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyNotEqualTo(Integer value) {
-            addCriterion("frozen_real_stock_qty <>", value, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyNotEqualTo(Integer value) {
+            addCriterion("frozen_warehouse_stock_qty <>", value, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyGreaterThan(Integer value) {
-            addCriterion("frozen_real_stock_qty >", value, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyGreaterThan(Integer value) {
+            addCriterion("frozen_warehouse_stock_qty >", value, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyGreaterThanOrEqualTo(Integer value) {
-            addCriterion("frozen_real_stock_qty >=", value, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("frozen_warehouse_stock_qty >=", value, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyLessThan(Integer value) {
-            addCriterion("frozen_real_stock_qty <", value, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyLessThan(Integer value) {
+            addCriterion("frozen_warehouse_stock_qty <", value, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyLessThanOrEqualTo(Integer value) {
-            addCriterion("frozen_real_stock_qty <=", value, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyLessThanOrEqualTo(Integer value) {
+            addCriterion("frozen_warehouse_stock_qty <=", value, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyIn(List<Integer> values) {
-            addCriterion("frozen_real_stock_qty in", values, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyIn(List<Integer> values) {
+            addCriterion("frozen_warehouse_stock_qty in", values, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyNotIn(List<Integer> values) {
-            addCriterion("frozen_real_stock_qty not in", values, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyNotIn(List<Integer> values) {
+            addCriterion("frozen_warehouse_stock_qty not in", values, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyBetween(Integer value1, Integer value2) {
-            addCriterion("frozen_real_stock_qty between", value1, value2, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyBetween(Integer value1, Integer value2) {
+            addCriterion("frozen_warehouse_stock_qty between", value1, value2, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
-        public Criteria andFrozenRealStockQtyNotBetween(Integer value1, Integer value2) {
-            addCriterion("frozen_real_stock_qty not between", value1, value2, "frozenRealStockQty");
+        public Criteria andFrozenWarehouseStockQtyNotBetween(Integer value1, Integer value2) {
+            addCriterion("frozen_warehouse_stock_qty not between", value1, value2, "frozenWarehouseStockQty");
             return (Criteria) this;
         }
 
@@ -462,126 +402,6 @@ public class SaleOrderItemWarehouseExample {
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeIsNull() {
-            addCriterion("update_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeIsNotNull() {
-            addCriterion("update_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeEqualTo(Date value) {
-            addCriterion("update_time =", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeNotEqualTo(Date value) {
-            addCriterion("update_time <>", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeGreaterThan(Date value) {
-            addCriterion("update_time >", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("update_time >=", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeLessThan(Date value) {
-            addCriterion("update_time <", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("update_time <=", value, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeIn(List<Date> values) {
-            addCriterion("update_time in", values, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeNotIn(List<Date> values) {
-            addCriterion("update_time not in", values, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
-            addCriterion("update_time between", value1, value2, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("update_time not between", value1, value2, "updateTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedIsNull() {
-            addCriterion("is_deleted is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedIsNotNull() {
-            addCriterion("is_deleted is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedEqualTo(Boolean value) {
-            addCriterion("is_deleted =", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedNotEqualTo(Boolean value) {
-            addCriterion("is_deleted <>", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedGreaterThan(Boolean value) {
-            addCriterion("is_deleted >", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_deleted >=", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedLessThan(Boolean value) {
-            addCriterion("is_deleted <", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_deleted <=", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedIn(List<Boolean> values) {
-            addCriterion("is_deleted in", values, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedNotIn(List<Boolean> values) {
-            addCriterion("is_deleted not in", values, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_deleted between", value1, value2, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_deleted not between", value1, value2, "isDeleted");
             return (Criteria) this;
         }
     }

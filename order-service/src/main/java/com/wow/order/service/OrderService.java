@@ -2,17 +2,15 @@ package com.wow.order.service;
 
 import java.util.List;
 
-import com.wow.common.page.PageData;
-import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderLog;
+import com.wow.order.vo.OrderDeliverQuery;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
-import com.wow.order.vo.OrderSplitQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
@@ -102,7 +100,7 @@ public interface OrderService {
      *
      * @param order
      */
-    boolean deliverGoods(SaleOrder order);
+    CommonResponse deliverGoods(OrderDeliverQuery query);
 
     /**
      * 虚拟库存到货之后发货
@@ -110,15 +108,4 @@ public interface OrderService {
      * @param order
      */
     boolean deliverDelayedGoods(SaleOrder order);
-
-    /**
-     * 拆分订单
-     * 
-     * @param query
-     * @return
-     */
-    CommonResponse splitOrder(OrderSplitQuery query);
-
-    List<PageData> selectListPage(PageModel page);
-
 }

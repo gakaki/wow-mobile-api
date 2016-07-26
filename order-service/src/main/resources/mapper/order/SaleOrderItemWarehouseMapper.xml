@@ -4,12 +4,9 @@
   <resultMap id="BaseResultMap" type="com.wow.order.model.SaleOrderItemWarehouse" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="sale_order_item_id" property="saleOrderItemId" jdbcType="INTEGER" />
-    <result column="product_id" property="productId" jdbcType="INTEGER" />
     <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
-    <result column="frozen_real_stock_qty" property="frozenRealStockQty" jdbcType="INTEGER" />
+    <result column="frozen_warehouse_stock_qty" property="frozenWarehouseStockQty" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,8 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, sale_order_item_id, product_id, warehouse_id, frozen_real_stock_qty, create_time, 
-    update_time, is_deleted
+    id, sale_order_item_id, warehouse_id, frozen_warehouse_stock_qty, create_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.order.model.SaleOrderItemWarehouseExample" >
     select
@@ -107,12 +103,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into sale_order_item_warehouse (sale_order_item_id, product_id, warehouse_id, 
-      frozen_real_stock_qty, create_time, update_time, 
-      is_deleted)
-    values (#{saleOrderItemId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, 
-      #{frozenRealStockQty,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDeleted,jdbcType=BIT})
+    insert into sale_order_item_warehouse (sale_order_item_id, warehouse_id, frozen_warehouse_stock_qty, 
+      create_time)
+    values (#{saleOrderItemId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, #{frozenWarehouseStockQty,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.order.model.SaleOrderItemWarehouse" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -123,46 +117,28 @@
       <if test="saleOrderItemId != null" >
         sale_order_item_id,
       </if>
-      <if test="productId != null" >
-        product_id,
-      </if>
       <if test="warehouseId != null" >
         warehouse_id,
       </if>
-      <if test="frozenRealStockQty != null" >
-        frozen_real_stock_qty,
+      <if test="frozenWarehouseStockQty != null" >
+        frozen_warehouse_stock_qty,
       </if>
       <if test="createTime != null" >
         create_time,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="saleOrderItemId != null" >
         #{saleOrderItemId,jdbcType=INTEGER},
       </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=INTEGER},
-      </if>
       <if test="warehouseId != null" >
         #{warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="frozenRealStockQty != null" >
-        #{frozenRealStockQty,jdbcType=INTEGER},
+      <if test="frozenWarehouseStockQty != null" >
+        #{frozenWarehouseStockQty,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null" >
-        #{isDeleted,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -181,23 +157,14 @@
       <if test="record.saleOrderItemId != null" >
         sale_order_item_id = #{record.saleOrderItemId,jdbcType=INTEGER},
       </if>
-      <if test="record.productId != null" >
-        product_id = #{record.productId,jdbcType=INTEGER},
-      </if>
       <if test="record.warehouseId != null" >
         warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="record.frozenRealStockQty != null" >
-        frozen_real_stock_qty = #{record.frozenRealStockQty,jdbcType=INTEGER},
+      <if test="record.frozenWarehouseStockQty != null" >
+        frozen_warehouse_stock_qty = #{record.frozenWarehouseStockQty,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.isDeleted != null" >
-        is_deleted = #{record.isDeleted,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -208,12 +175,9 @@
     update sale_order_item_warehouse
     set id = #{record.id,jdbcType=INTEGER},
       sale_order_item_id = #{record.saleOrderItemId,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=INTEGER},
       warehouse_id = #{record.warehouseId,jdbcType=INTEGER},
-      frozen_real_stock_qty = #{record.frozenRealStockQty,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      is_deleted = #{record.isDeleted,jdbcType=BIT}
+      frozen_warehouse_stock_qty = #{record.frozenWarehouseStockQty,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -224,23 +188,14 @@
       <if test="saleOrderItemId != null" >
         sale_order_item_id = #{saleOrderItemId,jdbcType=INTEGER},
       </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=INTEGER},
-      </if>
       <if test="warehouseId != null" >
         warehouse_id = #{warehouseId,jdbcType=INTEGER},
       </if>
-      <if test="frozenRealStockQty != null" >
-        frozen_real_stock_qty = #{frozenRealStockQty,jdbcType=INTEGER},
+      <if test="frozenWarehouseStockQty != null" >
+        frozen_warehouse_stock_qty = #{frozenWarehouseStockQty,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted = #{isDeleted,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -248,27 +203,9 @@
   <update id="updateByPrimaryKey" parameterType="com.wow.order.model.SaleOrderItemWarehouse" >
     update sale_order_item_warehouse
     set sale_order_item_id = #{saleOrderItemId,jdbcType=INTEGER},
-      product_id = #{productId,jdbcType=INTEGER},
       warehouse_id = #{warehouseId,jdbcType=INTEGER},
-      frozen_real_stock_qty = #{frozenRealStockQty,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=BIT}
+      frozen_warehouse_stock_qty = #{frozenWarehouseStockQty,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  
-    <insert id="batchInsertSelective"  parameterType="List" >
-		    <selectKey resultType="java.lang.Integer"  keyProperty="id"  order="AFTER" >
-		      SELECT LAST_INSERT_ID()
-		    </selectKey>
-		    insert into sale_order_item_warehouse (sale_order_item_id, product_id, warehouse_id, 
-		      frozen_real_stock_qty, create_time, update_time, 
-		      is_deleted)
-		    values 
-		     <foreach collection="collection"  item="item"  separator=",">
-			    (#{item.saleOrderItemId,jdbcType=INTEGER}, #{item.productId,jdbcType=INTEGER}, #{item.warehouseId,jdbcType=INTEGER}, 
-			      #{item.frozenRealStockQty,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP},
-			       #{item.updateTime,jdbcType=TIMESTAMP},#{item.isDeleted,jdbcType=BIT})
-		     </foreach>
-		  </insert>
 </mapper>

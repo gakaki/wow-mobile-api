@@ -9,6 +9,8 @@ public class SaleOrderItem implements Serializable {
 
     private Integer saleOrderId;
 
+    private Integer deliveryOrderId;
+
     private Integer productId;
 
     private BigDecimal orderItemAmount;
@@ -21,15 +23,7 @@ public class SaleOrderItem implements Serializable {
 
     private Boolean needAssemble;
 
-    private Byte productSaleType;
-
-    private Integer parentOrderItemId;
-
-    private Boolean isItemLeaf;
-
-    private Integer productSupplierId;
-
-    private Integer frozenRealStockQty;
+    private Integer frozenWarehouseStockTotalQty;
 
     private Integer frozenVirtualStockQty;
 
@@ -38,6 +32,8 @@ public class SaleOrderItem implements Serializable {
     private Date createTime;
 
     private Date updateTime;
+
+    private Boolean isShippedOut;
 
     private Boolean isDeleted;
 
@@ -57,6 +53,14 @@ public class SaleOrderItem implements Serializable {
 
     public void setSaleOrderId(Integer saleOrderId) {
         this.saleOrderId = saleOrderId;
+    }
+
+    public Integer getDeliveryOrderId() {
+        return deliveryOrderId;
+    }
+
+    public void setDeliveryOrderId(Integer deliveryOrderId) {
+        this.deliveryOrderId = deliveryOrderId;
     }
 
     public Integer getProductId() {
@@ -107,44 +111,12 @@ public class SaleOrderItem implements Serializable {
         this.needAssemble = needAssemble;
     }
 
-    public Byte getProductSaleType() {
-        return productSaleType;
+    public Integer getFrozenWarehouseStockTotalQty() {
+        return frozenWarehouseStockTotalQty;
     }
 
-    public void setProductSaleType(Byte productSaleType) {
-        this.productSaleType = productSaleType;
-    }
-
-    public Integer getParentOrderItemId() {
-        return parentOrderItemId;
-    }
-
-    public void setParentOrderItemId(Integer parentOrderItemId) {
-        this.parentOrderItemId = parentOrderItemId;
-    }
-
-    public Boolean getIsItemLeaf() {
-        return isItemLeaf;
-    }
-
-    public void setIsItemLeaf(Boolean isItemLeaf) {
-        this.isItemLeaf = isItemLeaf;
-    }
-
-    public Integer getProductSupplierId() {
-        return productSupplierId;
-    }
-
-    public void setProductSupplierId(Integer productSupplierId) {
-        this.productSupplierId = productSupplierId;
-    }
-
-    public Integer getFrozenRealStockQty() {
-        return frozenRealStockQty;
-    }
-
-    public void setFrozenRealStockQty(Integer frozenRealStockQty) {
-        this.frozenRealStockQty = frozenRealStockQty;
+    public void setFrozenWarehouseStockTotalQty(Integer frozenWarehouseStockTotalQty) {
+        this.frozenWarehouseStockTotalQty = frozenWarehouseStockTotalQty;
     }
 
     public Integer getFrozenVirtualStockQty() {
@@ -179,6 +151,14 @@ public class SaleOrderItem implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public Boolean getIsShippedOut() {
+        return isShippedOut;
+    }
+
+    public void setIsShippedOut(Boolean isShippedOut) {
+        this.isShippedOut = isShippedOut;
+    }
+
     public Boolean getIsDeleted() {
         return isDeleted;
     }
@@ -195,21 +175,19 @@ public class SaleOrderItem implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", saleOrderId=").append(saleOrderId);
+        sb.append(", deliveryOrderId=").append(deliveryOrderId);
         sb.append(", productId=").append(productId);
         sb.append(", orderItemAmount=").append(orderItemAmount);
         sb.append(", orderItemPrice=").append(orderItemPrice);
         sb.append(", orderItemQty=").append(orderItemQty);
         sb.append(", productName=").append(productName);
         sb.append(", needAssemble=").append(needAssemble);
-        sb.append(", productSaleType=").append(productSaleType);
-        sb.append(", parentOrderItemId=").append(parentOrderItemId);
-        sb.append(", isItemLeaf=").append(isItemLeaf);
-        sb.append(", productSupplierId=").append(productSupplierId);
-        sb.append(", frozenRealStockQty=").append(frozenRealStockQty);
+        sb.append(", frozenWarehouseStockTotalQty=").append(frozenWarehouseStockTotalQty);
         sb.append(", frozenVirtualStockQty=").append(frozenVirtualStockQty);
         sb.append(", isVirtualStockReady=").append(isVirtualStockReady);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
+        sb.append(", isShippedOut=").append(isShippedOut);
         sb.append(", isDeleted=").append(isDeleted);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
