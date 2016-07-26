@@ -1,9 +1,12 @@
 package com.wow.product.vo.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.wow.common.response.CommonResponse;
-
 import java.math.BigDecimal;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.wow.attribute.model.Category;
+import com.wow.common.response.CommonResponse;
+import com.wow.product.vo.ProductVo;
 
 /**
  * Created by fangying@wowdsgn on 2016/7/14.
@@ -33,6 +36,10 @@ public class ProductResponse extends CommonResponse {
     private String detailDescription;
     //品牌ID
     private int brandId;
+    
+    private List<ProductVo> productList;
+    private String categorySmallImg;
+    private List<Category> categoryList;
 
     public int getBrandId() {
         return brandId;
@@ -113,4 +120,29 @@ public class ProductResponse extends CommonResponse {
     public void setProductParameter(ProductParameter productParameter) {
         this.productParameter = productParameter;
     }
+
+	public List<ProductVo> getProductList() {
+		return productList;
+	}
+
+	public void setProductList(List<ProductVo> productList) {
+		this.productList = productList;
+	}
+
+	public String getCategorySmallImg() {
+		return categorySmallImg;
+	}
+
+	public void setCategorySmallImg(String categorySmallImg) {
+		this.categorySmallImg = categorySmallImg;
+	}
+
+	public List<Category> getCategoryList() {
+		return categoryList;
+	}
+
+	public void setCategoryList(List<Category> categoryList) {
+		this.categoryList = categoryList;
+	}
+    
 }

@@ -1,5 +1,6 @@
 package com.wow.mobileapi.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,6 +20,9 @@ import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.mobileapi.util.ImgPrefixUtil;
+import com.wow.product.model.ProductImage;
+import com.wow.product.service.ProductService;
+import com.wow.product.vo.ProductVo;
 import com.wow.user.service.LikeService;
 import com.wow.user.vo.LikedBrandVo;
 import com.wow.user.vo.LikedDesignerVo;
@@ -40,6 +44,8 @@ public class UserActionController extends BaseController {
 
     @Autowired
     private LikeService likeService;
+    @Autowired
+    private ProductService productService;
 
     /**
      * 新增用户喜欢的品牌
@@ -359,10 +365,16 @@ public class UserActionController extends BaseController {
                 setServiceErrorResponse(apiResponse, likedProductResponse);
             } else {
                 List<LikedProductVo> likedProductVoList = likedProductResponse.getLikedProductVoList();
+                List<LikedProductVo> list = new ArrayList<LikedProductVo>();
+                
                 for (LikedProductVo likedProductVo : likedProductVoList) {
-                	likedProductVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(likedProductVo.getProductImg()));
+                	ProductImage pi = productService.selectProductPrimaryOneImg(likedProductVo.getProductId());
+                	if(pi!=null){
+                		likedProductVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
+                		list.add(likedProductVo);
+                	}
                 }
-                likedProductResponse.setLikedProductVoList(likedProductVoList);
+                likedProductResponse.setLikedProductVoList(list);
                 apiResponse.setData(likedProductResponse);
             }
         } catch (Exception e) {

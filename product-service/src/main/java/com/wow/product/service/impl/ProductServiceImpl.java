@@ -598,4 +598,13 @@ public class ProductServiceImpl implements ProductService {
         productImgResponse.setProductImgVoList(productImgVoList);
         return productImgResponse;
     }
+    
+    /**
+     * 查询产品主图
+     * @param productId
+     * @return
+     */
+    public ProductImage selectProductPrimaryOneImg(Integer productId){
+    	return productImageMapper.selectProductPrimaryOneImg(productId);
+    }
 }

@@ -167,5 +167,12 @@ public interface ProductService {
      * @return
      */
     public ProductImgResponse getProductNonPrimaryImages(int productId);
+    
+    /**
+     * 查询产品主图
+     * @param productId
+     * @return
+     */
+    public ProductImage selectProductPrimaryOneImg(Integer productId);
 
 }
