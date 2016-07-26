@@ -31,8 +31,6 @@ public class PageController extends BaseController {
 
     @Autowired
     private PageConfigService pageConfigService;
-    //    @Autowired
-    //    private ProductService productService;
 
     @RequestMapping(value = "/v1/page/banners", method = RequestMethod.GET)
     public ApiResponse getBannersOnHomePage(ApiRequest apiRequest) {
@@ -82,6 +80,7 @@ public class PageController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
+        	// 根据分类，将产品的上新和单品分别放入两个list中返回给前台调用
         	PageProductResponse pageProductsResponse = pageConfigService.getProductsOnPage(BizConstant.PAGE_TYPE_FIND,BizConstant.PAGE_MODULE_TYPE_PRODUCT,BizConstant.PAGE_MODULE_TYPE_PRODUCT_NEWARRIVAL);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(pageProductsResponse.getResCode())) {
