@@ -3,6 +3,7 @@ package com.wow.order.vo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -18,6 +19,9 @@ public class OrderItemVo implements Serializable {
 
     //用户购买的产品id
     private Integer productId;
+    
+    //发货单产品id
+    private Integer deliveryOrderId;
 
     //产品名称
     private String productName;
@@ -40,6 +44,26 @@ public class OrderItemVo implements Serializable {
     //产品规格图片
     private String specImg;
     
+    //是否需要发货
+    @JsonIgnore
+    private Boolean isShippedOut;
+    
+    public Boolean getIsShippedOut() {
+        return isShippedOut;
+    }
+
+    public void setIsShippedOut(Boolean isShippedOut) {
+        this.isShippedOut = isShippedOut;
+    }
+
+    public Integer getDeliveryOrderId() {
+        return deliveryOrderId;
+    }
+
+    public void setDeliveryOrderId(Integer deliveryOrderId) {
+        this.deliveryOrderId = deliveryOrderId;
+    }
+
     public String getSpecImg() {
         return specImg;
     }

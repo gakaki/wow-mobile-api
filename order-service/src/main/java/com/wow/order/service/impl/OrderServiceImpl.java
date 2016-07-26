@@ -32,6 +32,7 @@ import com.wow.order.mapper.SaleOrderItemWarehouseMapper;
 import com.wow.order.mapper.SaleOrderLogMapper;
 import com.wow.order.mapper.SaleOrderMapper;
 import com.wow.order.model.DeliveryOrder;
+import com.wow.order.model.DeliveryOrderExample;
 import com.wow.order.model.ReturnOrder;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderExample;
@@ -40,6 +41,7 @@ import com.wow.order.model.SaleOrderItemExample;
 import com.wow.order.model.SaleOrderItemWarehouse;
 import com.wow.order.model.SaleOrderLog;
 import com.wow.order.service.OrderService;
+import com.wow.order.vo.DeliveryOrderVo;
 import com.wow.order.vo.OrderDeliverQuery;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderItemImgVo;
@@ -335,7 +337,6 @@ public class OrderServiceImpl implements OrderService {
     private SaleOrder wrapOrder(OrderQuery query) {
         SaleOrder saleOrder = new SaleOrder();
 
-        //设置订单号
         saleOrder.setEndUserId(query.getEndUserId());
         saleOrder.setOrderCode(RandomGenerator.createRandom(true, 10));
         saleOrder.setEndUserCouponId(query.getEndUserId());
@@ -369,7 +370,6 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setIsUseCoupon(query.getCouponId() == null ? Boolean.FALSE : Boolean.TRUE);
         saleOrder.setEndUserCouponId(query.getCouponId());
 
-        //目前都不是父订单
         saleOrder.setOrderSource(query.getOrderSource());
         saleOrder.setOrderIp(IpConvertUtil.ipToLong(query.getOrderIp()));
 
@@ -469,9 +469,9 @@ public class OrderServiceImpl implements OrderService {
             totalPrice += productTotalPrice;
         }
 
-        //设置产品总件数
+        //设置商品总件数
         query.setTotalProductQty(totalProductQty);
-        //设置订单产品总价
+        //设置订单商品总价
         query.setProductAmount(NumberUtil.convertToYuan(totalPrice));
 
         //计算订单优惠金额
@@ -628,7 +628,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //根据订单号获取订单
-        SaleOrder saleOrder =selectByOrderCode(orderCode);
+        SaleOrder saleOrder = selectByOrderCode(orderCode);
         //如果订单号不存在  则直接返回错误提示
         if (saleOrder == null) {
             orderDetailResponse.setResCode("40359");
@@ -641,12 +641,97 @@ public class OrderServiceImpl implements OrderService {
         //设置订单明细
         setOrderDetail(orderDetailResponse, saleOrder);
 
-        //获取订单对应的产品信息
-        List<OrderItemVo> orderItemVos = saleOrderItemMapper.selectByOrderId(saleOrder.getId());
+        //获取订单对应的商品信息
+        List<OrderItemVo> orderItems = saleOrderItemMapper.selectByOrderId(saleOrder.getId());
 
-        orderDetailResponse.setOrderItemVos(orderItemVos);
+        //如果订单状态为代收货之前的 则显示未发货的商品清单
+        if (saleOrder.getOrderStatus().byteValue() < SaleOrderStatusEnum.TO_BE_RECEIVED.getKey().byteValue()) {
+            List<OrderItemVo> unShipOutOrderItems = getUnShipOutOrderItems(orderItems);
+
+            orderDetailResponse.setUnShipOutOrderItems(unShipOutOrderItems);
+        }
+
+        //如果订单状态为部分发货以后状态是 才显示发货单信息
+        if (saleOrder.getOrderStatus().byteValue() >= SaleOrderStatusEnum.PARTIAL_SHIPPED.getKey().byteValue()) {
+            //获取发货单信息
+            List<DeliveryOrderVo> deliveryOrderVos = getDeliveryOrderInfo(saleOrder.getId(), orderItems);
+
+            orderDetailResponse.setDeliveryOrders(deliveryOrderVos);
+        }
 
         return orderDetailResponse;
+    }
+
+    /**
+     * 获取未发货清单列表
+     * 
+     * @param orderItems
+     * @return
+     */
+    private List<OrderItemVo> getUnShipOutOrderItems(List<OrderItemVo> orderItems) {
+        List<OrderItemVo> unShipOutOrderItems = new ArrayList<OrderItemVo>(orderItems.size());
+
+        for (OrderItemVo orderItemVo : unShipOutOrderItems) {
+            if (!orderItemVo.getIsShippedOut()) {
+                unShipOutOrderItems.add(orderItemVo);
+            }
+        }
+
+        return unShipOutOrderItems;
+    }
+
+    /**
+     * 获取发货单信息
+     * 
+     * @param orderId
+     * @param orderItems
+     * @return
+     */
+    private List<DeliveryOrderVo> getDeliveryOrderInfo(Integer orderId, List<OrderItemVo> orderItems) {
+        DeliveryOrderExample deliveryOrderExample = new DeliveryOrderExample();
+        DeliveryOrderExample.Criteria criteria = deliveryOrderExample.createCriteria();
+        criteria.andSaleOrderIdEqualTo(orderId);
+
+        List<DeliveryOrder> deliveryOrders = deliveryOrderMapper.selectByExample(deliveryOrderExample);
+
+        //获取发货单对应的商品信息
+        Map<Integer, List<OrderItemVo>> map = getDeliveryOrderMap(orderItems);
+
+        List<DeliveryOrderVo> deliveryOrderVos = new ArrayList<DeliveryOrderVo>(deliveryOrders.size());
+        DeliveryOrderVo deliveryOrderVo = null;
+        for (DeliveryOrder deliveryOrder : deliveryOrders) {
+            deliveryOrderVo = new DeliveryOrderVo();
+            deliveryOrderVo.setDeliveryCompanyName(deliveryOrder.getDeliveryCompanyName());
+            deliveryOrderVo.setDeliveryOrderNo(deliveryOrder.getDeliveryOrderNo());
+
+            deliveryOrderVo.setOrderItems(map.get(deliveryOrder.getId()));
+
+            deliveryOrderVos.add(deliveryOrderVo);
+        }
+
+        return deliveryOrderVos;
+    }
+
+    /**
+     * 获取发货单对应的商品信息
+     * 
+     * @param orderItems
+     * @return
+     */
+    private Map<Integer, List<OrderItemVo>> getDeliveryOrderMap(List<OrderItemVo> orderItems) {
+        Map<Integer, List<OrderItemVo>> map = new HashMap<Integer, List<OrderItemVo>>();
+
+        for (OrderItemVo orderItemVo : orderItems) {
+            if (map.containsKey(orderItemVo.getDeliveryOrderId())) {
+                map.get(orderItemVo.getDeliveryOrderId()).add(orderItemVo);
+            } else {
+                List<OrderItemVo> orderItemList = new ArrayList<OrderItemVo>();
+                orderItemList.add(orderItemVo);
+                map.put(orderItemVo.getDeliveryOrderId(), orderItemList);
+            }
+        }
+
+        return map;
     }
 
     /**
@@ -666,7 +751,7 @@ public class OrderServiceImpl implements OrderService {
         orderDetailResponse.setOrderAmount(saleOrder.getOrderAmount());
         orderDetailResponse.setDeliveryFee(saleOrder.getDeliveryFee());
         orderDetailResponse.setCouponAmount(saleOrder.getPreferentialAmount());
-        orderDetailResponse.setTotalPackages(saleOrder.getTotalProductQty());
+        orderDetailResponse.setTotalProductQty(saleOrder.getTotalProductQty());
 
         orderDetailResponse.setOrderStatus(saleOrder.getOrderStatus());
         orderDetailResponse.setOrderStatusName(SaleOrderStatusEnum.get(saleOrder.getOrderStatus().intValue()));
@@ -928,7 +1013,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         query.setOrderId(saleOrder.getId());
-        
+
         //获取未发货的订单项
         SaleOrderItemExample saleOrderItemExample = new SaleOrderItemExample();
         SaleOrderItemExample.Criteria criteria = saleOrderItemExample.createCriteria();

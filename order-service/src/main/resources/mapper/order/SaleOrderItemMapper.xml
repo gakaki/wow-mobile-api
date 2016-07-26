@@ -415,10 +415,12 @@
 	       SELECT 
 				  so.product_id productId,
 				  so.product_name productName,
-				  p.product_color_img specImg,
+				  so.delivery_order_id deliveryOrderId,
 				  so.order_item_price sellPrice,
 				  so.order_item_qty productQty,
 				  so.order_item_amount sellTotalAmount,
+				  so.is_shipped_out isShippedOut,
+				  p.product_color_img specImg,
 				  p.color_display_name color,
 				  p.product_color_img spec
 			FROM

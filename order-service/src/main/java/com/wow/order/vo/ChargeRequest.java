@@ -8,6 +8,8 @@ import java.util.Map;
  */
 public class ChargeRequest implements Serializable {
 
+    /**  */
+    private static final long serialVersionUID = 1L;
     private String orderNo;
     private String channel;
     private Integer amount;

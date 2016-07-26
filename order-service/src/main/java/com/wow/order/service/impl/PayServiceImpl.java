@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.pingplusplus.Pingpp;
 import com.pingplusplus.exception.PingppException;
@@ -20,9 +17,9 @@ import com.wow.order.vo.response.ChargeResponse;
 /**
  * Created by zhengzhiqing on 16/7/25.
  */
-@Service
-@PropertySource(value = "classpath:/pingplusplus.properties")
-@Transactional("orderTransactionManager")
+//@Service
+//@PropertySource(value = "classpath:/pingplusplus.properties")
+//@Transactional("orderTransactionManager")
 public class PayServiceImpl implements PayService {
 
     @Value("${ppp.appId}")
@@ -49,7 +46,6 @@ public class PayServiceImpl implements PayService {
 
         ChargeResponse chargeResponse = new ChargeResponse();
 
-
         Map<String, Object> chargeMap = new HashMap<String, Object>();
         chargeMap.put("amount", chargeRequest.getAmount());//订单总金额, 人民币单位：分（如订单总金额为 1 元，此处请填 100）
         chargeMap.put("currency", "cny");
@@ -74,7 +70,7 @@ public class PayServiceImpl implements PayService {
             chargeResponse.setCharge(charge);
         } catch (PingppException e) {
             e.printStackTrace();
-            ErrorResponseUtil.setErrorResponse(chargeResponse,"40380");
+            ErrorResponseUtil.setErrorResponse(chargeResponse, "40380");
         }
         return chargeResponse;
     }

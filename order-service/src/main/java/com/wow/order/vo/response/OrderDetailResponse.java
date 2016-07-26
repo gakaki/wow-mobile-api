@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
+import com.wow.order.vo.DeliveryOrderVo;
 import com.wow.order.vo.OrderItemVo;
 
 /**
@@ -32,7 +33,7 @@ public class OrderDetailResponse extends CommonResponse {
 
     //收款人详细地址 省市区加详细地址
     private String receiverAddress;
-    
+
     //订单总价
     private BigDecimal orderAmount;
 
@@ -41,34 +42,45 @@ public class OrderDetailResponse extends CommonResponse {
 
     //订单状态名称
     private String orderStatusName;
-    
+
     //支付状态
     private Byte paymentStatus;
-    
+
     //支付状态名称
     private String paymentStatusName;
 
     //支付方式
     private Byte paymentMethod;
-    
+
     //支付方式名称
     private String paymentMethodName;
-
-    //订单中产品的总件数
-    private Integer totalPackages;
     
+    //订单中商品的总件数
+    private Integer totalProductQty;
+
     //订单运费
     private BigDecimal deliveryFee;
-    
+
     //订单优惠金额
     private BigDecimal couponAmount;
-    
+
     //订单创建时间
     private String orderCreateTimeFormat;
+
+    //发货单列表
+    private List<DeliveryOrderVo> deliveryOrders;
+
+    //未发货清单列表
+    private List<OrderItemVo> unShipOutOrderItems;
     
-    //订单项目
-    private List<OrderItemVo> orderItemVos;
-    
+    public List<OrderItemVo> getUnShipOutOrderItems() {
+        return unShipOutOrderItems;
+    }
+
+    public void setUnShipOutOrderItems(List<OrderItemVo> unShipOutOrderItems) {
+        this.unShipOutOrderItems = unShipOutOrderItems;
+    }
+
     public String getPaymentMethodName() {
         return paymentMethodName;
     }
@@ -85,12 +97,12 @@ public class OrderDetailResponse extends CommonResponse {
         this.paymentStatusName = paymentStatusName;
     }
 
-    public List<OrderItemVo> getOrderItemVos() {
-        return orderItemVos;
+    public List<DeliveryOrderVo> getDeliveryOrders() {
+        return deliveryOrders;
     }
 
-    public void setOrderItemVos(List<OrderItemVo> orderItemVos) {
-        this.orderItemVos = orderItemVos;
+    public void setDeliveryOrders(List<DeliveryOrderVo> deliveryOrders) {
+        this.deliveryOrders = deliveryOrders;
     }
 
     public String getReceiverName() {
@@ -165,12 +177,12 @@ public class OrderDetailResponse extends CommonResponse {
         this.orderCreateTimeFormat = orderCreateTimeFormat;
     }
 
-    public Integer getTotalPackages() {
-        return totalPackages;
+    public Integer getTotalProductQty() {
+        return totalProductQty;
     }
 
-    public void setTotalPackages(Integer totalPackages) {
-        this.totalPackages = totalPackages;
+    public void setTotalProductQty(Integer totalProductQty) {
+        this.totalProductQty = totalProductQty;
     }
 
     public BigDecimal getDeliveryFee() {
