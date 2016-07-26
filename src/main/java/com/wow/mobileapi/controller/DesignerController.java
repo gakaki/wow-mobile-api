@@ -1,5 +1,7 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +37,20 @@ public class DesignerController extends BaseController {
         logger.info("start to get productDesigner_detail on page");
         ApiResponse apiResponse = new ApiResponse();
         ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
-        
+
+        //判断json格式参数是否有误
+        if (productQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(productQueryRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
         try {
         	Designer designer = designerService.getDesignerById(productQueryRequest.getDesignerId());
             
