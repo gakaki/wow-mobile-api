@@ -12,7 +12,6 @@ import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
-import com.wow.product.model.Brand;
 import com.wow.product.service.BrandService;
 import com.wow.product.vo.response.ProductBrandResponse;
 
@@ -27,29 +26,51 @@ public class BrandController extends BaseController {
     private BrandService brandService;
 
     /**
-     * 查询品牌列表和品牌首字母列表
+     * 查询品牌列表
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/product/brand/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/brand/list", method = RequestMethod.GET)
     public ApiResponse getProductBrandList(ApiRequest apiRequest) {
         logger.info("start to get productBrand_find on page");
         ApiResponse apiResponse = new ApiResponse();
 
         try {
         	ProductBrandResponse productBrandResponse = brandService.getAllBrands();
-        	ProductBrandResponse productBrandFirstLetterResponse = brandService.selectBrandFirstLetter();
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productBrandResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productBrandResponse);
-            }else if(ErrorCodeUtil.isFailedResponse(productBrandFirstLetterResponse.getResCode())){
-            	setServiceErrorResponse(apiResponse, productBrandFirstLetterResponse);
             }else {
-            	productBrandResponse.setBrandFirstLetterList(productBrandFirstLetterResponse.getBrandFirstLetterList());
-                apiResponse.setData(productBrandResponse);
+                apiResponse.setData(productBrandResponse.getBrandList());
             }
         } catch (Exception e) {
             logger.error("查找productBrand_find错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+
+    /**
+     * 查询品牌首字母列表
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/brand/firstLetterList", method = RequestMethod.GET)
+    public ApiResponse getProductBrandFirstLetterList(ApiRequest apiRequest) {
+        logger.info("start to get productFirstLetter_find on page");
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+        	ProductBrandResponse productBrandFirstLetterResponse = brandService.selectBrandFirstLetter();
+            //如果处理失败 则返回错误信息
+            if(ErrorCodeUtil.isFailedResponse(productBrandFirstLetterResponse.getResCode())){
+            	setServiceErrorResponse(apiResponse, productBrandFirstLetterResponse);
+            }else {
+            	productBrandFirstLetterResponse.setBrandFirstLetterList(productBrandFirstLetterResponse.getBrandFirstLetterList());
+                apiResponse.setData(productBrandFirstLetterResponse.getBrandFirstLetterList());
+            }
+        } catch (Exception e) {
+            logger.error("查找productFirstLetter_find错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -60,19 +81,21 @@ public class BrandController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/product/brand/detail", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/brand/detail", method = RequestMethod.GET)
     public ApiResponse getProductBrandDetail(ApiRequest apiRequest) {
         logger.info("start to get productBrand_detail on page");
         ApiResponse apiResponse = new ApiResponse();
         ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
         
+        //判断json格式参数是否有误
+        if (productQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+        
         try {
-        	Brand brand = brandService.getBrandById(productQueryRequest.getBrandId());
-            
-        	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
-        	productBrandResponse.setBrand(brand);
-            apiResponse.setData(productBrandResponse);
-            
+        	ProductBrandResponse productBrandResponse = brandService.getBrandById(productQueryRequest.getBrandId());
+            apiResponse.setData(productBrandResponse.getBrand());            
         } catch (Exception e) {
             logger.error("查找productBrand_detail错误---" + e);
             setInternalErrorResponse(apiResponse);

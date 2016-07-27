@@ -120,7 +120,7 @@ public class ProductController extends BaseController {
             }
 
             //品牌
-            Brand brand = brandService.getBrandById(productResponse.getBrandId());
+            Brand brand = brandService.getBrandById(productResponse.getBrandId()).getBrand();
             if (brand != null) {
                 itemDetailResponse.setBrandCname(brand.getBrandCname());
                 itemDetailResponse.setBrandLogoImg(ImgPrefixUtil.addPrefixForImgUrl(brand.getBrandLogoImg()));
@@ -251,6 +251,10 @@ public class ProductController extends BaseController {
             if (productPriceListResponse != null && MapUtil.isNotEmpty(productPriceListResponse.getMap())) {
                 priceMap = productPriceListResponse.getMap();
             }
+            //颜色Map
+            Map<String,Map<String, Object>> colorMap = new HashMap<>();
+            //规格Map
+            Map<String,Map<String, Object>> specMap = new HashMap<>();
 
             for (Product subProduct : subProductList) {
                 int subProductId = subProduct.getId();
@@ -258,11 +262,15 @@ public class ProductController extends BaseController {
                 String colorDisplayName = subProduct.getColorDisplayName();
                 if (!colorDisplayNameList.contains(colorDisplayName)) {
                     colorDisplayNameList.add(colorDisplayName);
+                    colorMap.put(colorDisplayName,new HashMap<String,Object>());
                 }
                 String specName = subProduct.getSpecName();
                 if (!specNameList.contains(specName)) {
                     specNameList.add(specName);
+                    specMap.put(specName,new HashMap<String,Object>());
                 }
+
+
 
                 SubProductInfo subProductInfo = new SubProductInfo();
                 subProductInfo.setSizeText(subProduct.getSizeText());
@@ -271,7 +279,6 @@ public class ProductController extends BaseController {
                 subProductInfo.setSpecName(subProduct.getSpecName());
                 subProductInfo.setSubProductId(subProductId);
                 subProductInfo.setWeight(subProduct.getWeight());
-                subProductInfoList.add(subProductInfo);
 
                 //设置库存
                 if(availableStockMap.containsKey(subProductId) && availableStockMap.get(subProductId) > 0) {
@@ -288,6 +295,9 @@ public class ProductController extends BaseController {
                 } else {
                     setInternalErrorResponse(apiResponse);
                 }
+
+                colorMap.get(colorDisplayName).put(specName, subProductInfo);
+                specMap.get(specName).put(colorDisplayName,subProductInfo);
 
                 subProductInfoList.add(subProductInfo);
             }
@@ -374,7 +384,7 @@ public class ProductController extends BaseController {
             setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
-        
+
         ProductResponse productResponse = new ProductResponse();
         PageModel page = new PageModel();
         page.setShowCount(productInfoRequest.getShowCount());
@@ -382,20 +392,20 @@ public class ProductController extends BaseController {
         ProductQueryVo pqv = new ProductQueryVo();
         BeanUtil.copyProperties(productInfoRequest, pqv);
         page.setModel(pqv);
-        
+
         List<ProductVo> productList = productService.getProductByCategoryIdListPage(page);
         Category category = categoryService.getCategoryById(productInfoRequest.getCategoryId()).getCategory();
         if(productInfoRequest.getCategoryLevel() == null){//当传入分类级别时，查询二级分类
-        	CategoryListResponse categoryListResponse = categoryService.getCategoryByLevel(productInfoRequest.getCategoryLevel());
-        	productResponse.setCategoryList(categoryListResponse.getCategoryList());
+            CategoryListResponse categoryListResponse = categoryService.getCategoryByLevel(productInfoRequest.getCategoryLevel());
+            productResponse.setCategoryList(categoryListResponse.getCategoryList());
         }
-        
+
         if (productList != null && category != null) {
             apiResponse.setResCode("0");
             apiResponse.setResMsg("Success");
             productResponse.setProductList(productList);
             productResponse.setCategorySmallImg(category.getCategoryIconSmall());
-            
+
             apiResponse.setData(productResponse);
         } else {
             apiResponse.setResCode("40201");
@@ -403,7 +413,7 @@ public class ProductController extends BaseController {
         }
         return apiResponse;
     }
-    
+
     /**
      * 根据品牌查询产品列表
      * @param apiRequest
@@ -415,20 +425,27 @@ public class ProductController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
         ProductQueryRequest productQueryRequest = JsonUtil
                 .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        
+        //判断json格式参数是否有误
+        if (productQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+        
         try {
-        	ProductResponse productResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
+            ProductResponse productResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productResponse);
             } else {
-            	List<ProductVo> productList = new ArrayList<ProductVo>();
-                
+                List<ProductVo> productList = new ArrayList<ProductVo>();
+
                 for (ProductVo productVo : productResponse.getProductList()) {
-                	ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
-                	if(pi!=null){
-                		productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
-                		productList.add(productVo);
-                	}
+                    ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
+                    if(pi!=null){
+                        productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
+                        productList.add(productVo);
+                    }
                 }
                 productResponse.setProductList(productList);
                 apiResponse.setData(productResponse);
@@ -447,24 +464,31 @@ public class ProductController extends BaseController {
      */
     @RequestMapping(value = "/v1/product/designer", method = RequestMethod.GET)
     public ApiResponse getProductByDesignerId(ApiRequest apiRequest) {
-    	logger.info("start to get product_designer on page");
+        logger.info("start to get product_designer on page");
         ApiResponse apiResponse = new ApiResponse();
         ProductQueryRequest productQueryRequest = JsonUtil
                 .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        
+        //判断json格式参数是否有误
+        if (productQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+        
         try {
-        	ProductResponse productResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
+            ProductResponse productResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productResponse);
             } else {
-            	List<ProductVo> productList = new ArrayList<ProductVo>();
-                
+                List<ProductVo> productList = new ArrayList<ProductVo>();
+
                 for (ProductVo productVo : productResponse.getProductList()) {
-                	ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
-                	if(pi!=null){
-                		productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
-                		productList.add(productVo);
-                	}
+                    ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
+                    if(pi!=null){
+                        productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
+                        productList.add(productVo);
+                    }
                 }
                 productResponse.setProductList(productList);
                 apiResponse.setData(productResponse);

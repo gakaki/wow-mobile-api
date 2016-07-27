@@ -1,9 +1,12 @@
 package com.wow.product.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.product.model.Brand;
 import com.wow.product.model.BrandExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
+import com.wow.product.vo.BrandVo;
 
 public interface BrandMapper {
     int countByExample(BrandExample example);
@@ -30,5 +33,5 @@ public interface BrandMapper {
 
     int updateByPrimaryKey(Brand record);
     
-    List<Brand> selectBrandFirstLetter();
+    List<BrandVo> selectBrandFirstLetter();
 }

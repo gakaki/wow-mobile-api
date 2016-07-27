@@ -1,9 +1,11 @@
 package com.wow.product.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.product.model.Designer;
 import com.wow.product.model.DesignerExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface DesignerMapper {
     int countByExample(DesignerExample example);
@@ -27,4 +29,6 @@ public interface DesignerMapper {
     int updateByPrimaryKeySelective(Designer record);
 
     int updateByPrimaryKey(Designer record);
+
+    List<Designer> selectAll();
 }
