@@ -20,13 +20,10 @@ import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
 import com.wow.mobileapi.request.order.OrderSettleRequest;
 import com.wow.order.service.OrderService;
-import com.wow.order.service.PayService;
-import com.wow.order.vo.ChargeRequest;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
-import com.wow.order.vo.response.ChargeResponse;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
@@ -43,9 +40,6 @@ public class OrderController extends BaseController {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private PayService payService;
 
     /**
      * 获取用户购买的产品结算信息
@@ -69,7 +63,7 @@ public class OrderController extends BaseController {
             setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
-        
+
         OrderSettleResponse orderSettleResponse = null;
         try {
             OrderSettleQuery query = new OrderSettleQuery();
@@ -250,36 +244,6 @@ public class OrderController extends BaseController {
             setInternalErrorResponse(apiResponse);
         }
 
-        return apiResponse;
-    }
-
-    /**
-     * 获取支付凭证
-     *
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/charge", method = RequestMethod.POST)
-    public ApiResponse requestCharge(ApiRequest request) {
-        ChargeRequest chargeRequest = JsonUtil.fromJSON(request.getParamJson(), ChargeRequest.class);
-        ApiResponse apiResponse = new ApiResponse();
-        //判断json格式参数是否有误
-        if (chargeRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        try {
-            ChargeResponse chargeResponse = payService.getCharge(chargeRequest);
-            //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(chargeResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, chargeResponse);
-            }
-            apiResponse.setData(chargeResponse);
-        } catch (Exception e) {
-            logger.error("请求支付凭证错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
         return apiResponse;
     }
 }

@@ -13,7 +13,9 @@ public class SaleOrderPay implements Serializable {
 
     private String transactionNo;
 
-    private Boolean channel;
+    private String chargeId;
+
+    private String channel;
 
     private BigDecimal amount;
 
@@ -57,12 +59,20 @@ public class SaleOrderPay implements Serializable {
         this.transactionNo = transactionNo == null ? null : transactionNo.trim();
     }
 
-    public Boolean getChannel() {
+    public String getChargeId() {
+        return chargeId;
+    }
+
+    public void setChargeId(String chargeId) {
+        this.chargeId = chargeId == null ? null : chargeId.trim();
+    }
+
+    public String getChannel() {
         return channel;
     }
 
-    public void setChannel(Boolean channel) {
-        this.channel = channel;
+    public void setChannel(String channel) {
+        this.channel = channel == null ? null : channel.trim();
     }
 
     public BigDecimal getAmount() {
@@ -107,6 +117,7 @@ public class SaleOrderPay implements Serializable {
         sb.append(", saleOrderId=").append(saleOrderId);
         sb.append(", orderCode=").append(orderCode);
         sb.append(", transactionNo=").append(transactionNo);
+        sb.append(", chargeId=").append(chargeId);
         sb.append(", channel=").append(channel);
         sb.append(", amount=").append(amount);
         sb.append(", timePaid=").append(timePaid);

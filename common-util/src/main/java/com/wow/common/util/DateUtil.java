@@ -22,6 +22,13 @@ public class DateUtil {
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
     /**
+     * 将unix时间戳转换为日期
+     */
+    public static Date convertToDate(long timestamp) {
+        return new Date(timestamp);
+    }
+
+    /**
      * 格式化日期与时间
      */
     public static String formatDatetime(long timestamp) {
@@ -41,7 +48,7 @@ public class DateUtil {
     public static String formatTime(long timestamp) {
         return timeFormat.format(new Date(timestamp));
     }
-    
+
     /**
      * 格式化日期与时间
      */
@@ -122,8 +129,7 @@ public class DateUtil {
         }
         return date;
     }
-    
-    
+
     /**
      * 获取当前日期
      * 
