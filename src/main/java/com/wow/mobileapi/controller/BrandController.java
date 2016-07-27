@@ -12,7 +12,6 @@ import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
-import com.wow.product.model.Brand;
 import com.wow.product.service.BrandService;
 import com.wow.product.vo.response.ProductBrandResponse;
 
@@ -66,13 +65,15 @@ public class BrandController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
         ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
         
+        //判断json格式参数是否有误
+        if (productQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+        
         try {
-        	Brand brand = brandService.getBrandById(productQueryRequest.getBrandId());
-            
-        	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
-        	productBrandResponse.setBrand(brand);
-            apiResponse.setData(productBrandResponse);
-            
+        	ProductBrandResponse productBrandResponse = brandService.getBrandById(productQueryRequest.getBrandId());
+            apiResponse.setData(productBrandResponse.getBrand());            
         } catch (Exception e) {
             logger.error("查找productBrand_detail错误---" + e);
             setInternalErrorResponse(apiResponse);

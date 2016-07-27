@@ -54,8 +54,10 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public Brand getBrandById(int brandId) {
-        return brandMapper.selectByPrimaryKey(brandId);
+    public ProductBrandResponse getBrandById(int brandId) {
+    	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
+    	productBrandResponse.setBrand(brandMapper.selectByPrimaryKey(brandId));
+        return productBrandResponse;
     }
 
     @Transactional(propagation= Propagation.NOT_SUPPORTED)

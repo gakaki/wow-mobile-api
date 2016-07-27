@@ -146,6 +146,13 @@ public class AttributeController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
         CategoryQueryRequest categoryQueryRequest = JsonUtil
                 .fromJSON(apiRequest.getParamJson(), CategoryQueryRequest.class);
+        
+        //判断json格式参数是否有误
+        if (categoryQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+        
         try {
         	CategoryListResponse categoryListResponse = categoryService.getCategoryByLevel(categoryQueryRequest.getCategoryLevel());
             //如果处理失败 则返回错误信息

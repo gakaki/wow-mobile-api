@@ -1,10 +1,11 @@
 package com.wow.product.service;
 
+import java.util.List;
+
 import com.wow.product.model.Designer;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductDesigner;
-
-import java.util.List;
+import com.wow.product.vo.response.ProductDesignerResponse;
 
 /**
  * 设计师服务
@@ -26,7 +27,7 @@ public interface DesignerService {
      * @param designerId
      * @return
      */
-    Designer getDesignerById(int designerId);
+    ProductDesignerResponse getDesignerById(int designerId);
 
     /**
      * 批量查询设计师
