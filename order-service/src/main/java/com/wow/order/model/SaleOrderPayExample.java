@@ -366,6 +366,76 @@ public class SaleOrderPayExample {
             return (Criteria) this;
         }
 
+        public Criteria andChargeIdIsNull() {
+            addCriterion("charge_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdIsNotNull() {
+            addCriterion("charge_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdEqualTo(String value) {
+            addCriterion("charge_id =", value, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdNotEqualTo(String value) {
+            addCriterion("charge_id <>", value, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdGreaterThan(String value) {
+            addCriterion("charge_id >", value, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdGreaterThanOrEqualTo(String value) {
+            addCriterion("charge_id >=", value, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdLessThan(String value) {
+            addCriterion("charge_id <", value, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdLessThanOrEqualTo(String value) {
+            addCriterion("charge_id <=", value, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdLike(String value) {
+            addCriterion("charge_id like", value, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdNotLike(String value) {
+            addCriterion("charge_id not like", value, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdIn(List<String> values) {
+            addCriterion("charge_id in", values, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdNotIn(List<String> values) {
+            addCriterion("charge_id not in", values, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdBetween(String value1, String value2) {
+            addCriterion("charge_id between", value1, value2, "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdNotBetween(String value1, String value2) {
+            addCriterion("charge_id not between", value1, value2, "chargeId");
+            return (Criteria) this;
+        }
+
         public Criteria andChannelIsNull() {
             addCriterion("channel is null");
             return (Criteria) this;
@@ -376,52 +446,62 @@ public class SaleOrderPayExample {
             return (Criteria) this;
         }
 
-        public Criteria andChannelEqualTo(Boolean value) {
+        public Criteria andChannelEqualTo(String value) {
             addCriterion("channel =", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andChannelNotEqualTo(Boolean value) {
+        public Criteria andChannelNotEqualTo(String value) {
             addCriterion("channel <>", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andChannelGreaterThan(Boolean value) {
+        public Criteria andChannelGreaterThan(String value) {
             addCriterion("channel >", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andChannelGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andChannelGreaterThanOrEqualTo(String value) {
             addCriterion("channel >=", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andChannelLessThan(Boolean value) {
+        public Criteria andChannelLessThan(String value) {
             addCriterion("channel <", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andChannelLessThanOrEqualTo(Boolean value) {
+        public Criteria andChannelLessThanOrEqualTo(String value) {
             addCriterion("channel <=", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andChannelIn(List<Boolean> values) {
+        public Criteria andChannelLike(String value) {
+            addCriterion("channel like", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNotLike(String value) {
+            addCriterion("channel not like", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIn(List<String> values) {
             addCriterion("channel in", values, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andChannelNotIn(List<Boolean> values) {
+        public Criteria andChannelNotIn(List<String> values) {
             addCriterion("channel not in", values, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andChannelBetween(Boolean value1, Boolean value2) {
+        public Criteria andChannelBetween(String value1, String value2) {
             addCriterion("channel between", value1, value2, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andChannelNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andChannelNotBetween(String value1, String value2) {
             addCriterion("channel not between", value1, value2, "channel");
             return (Criteria) this;
         }
@@ -683,6 +763,16 @@ public class SaleOrderPayExample {
 
         public Criteria andTransactionNoLikeInsensitive(String value) {
             addCriterion("upper(transaction_no) like", value.toUpperCase(), "transactionNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andChargeIdLikeInsensitive(String value) {
+            addCriterion("upper(charge_id) like", value.toUpperCase(), "chargeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelLikeInsensitive(String value) {
+            addCriterion("upper(channel) like", value.toUpperCase(), "channel");
             return (Criteria) this;
         }
 

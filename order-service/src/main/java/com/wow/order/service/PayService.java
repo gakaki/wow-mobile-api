@@ -1,5 +1,6 @@
 package com.wow.order.service;
 
+import com.wow.common.response.CommonResponse;
 import com.wow.order.vo.ChargeRequest;
 import com.wow.order.vo.response.ChargeResponse;
 
@@ -13,4 +14,13 @@ public interface PayService {
      * @return
      */
     ChargeResponse getCharge(ChargeRequest chargeRequest);
+
+    /**
+    * 处理支付通知
+    * 
+    * @param signature
+    * @param content
+    * @return
+    */
+    CommonResponse webhooks(String signature, String content);
 }
