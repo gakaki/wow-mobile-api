@@ -1,23 +1,36 @@
 package com.wow.mobileapi.controller;
 
-import com.wow.common.request.ApiRequest;
-import com.wow.common.response.ApiResponse;
-import com.wow.common.response.CommonResponse;
-import com.wow.common.util.*;
-import com.wow.mobileapi.request.order.OrderDetailRequest;
-import com.wow.mobileapi.request.order.OrderListRequest;
-import com.wow.mobileapi.request.order.OrderRequest;
-import com.wow.mobileapi.request.order.OrderSettleRequest;
-import com.wow.order.service.OrderService;
-import com.wow.order.service.PayService;
-import com.wow.order.vo.*;
-import com.wow.order.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.wow.common.request.ApiRequest;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.BeanUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.request.order.OrderDetailRequest;
+import com.wow.mobileapi.request.order.OrderListRequest;
+import com.wow.mobileapi.request.order.OrderRequest;
+import com.wow.mobileapi.request.order.OrderSettleRequest;
+import com.wow.order.service.OrderService;
+import com.wow.order.service.PayService;
+import com.wow.order.vo.ChargeRequest;
+import com.wow.order.vo.OrderDetailQuery;
+import com.wow.order.vo.OrderListQuery;
+import com.wow.order.vo.OrderQuery;
+import com.wow.order.vo.OrderSettleQuery;
+import com.wow.order.vo.response.ChargeResponse;
+import com.wow.order.vo.response.OrderDetailResponse;
+import com.wow.order.vo.response.OrderListResponse;
+import com.wow.order.vo.response.OrderResponse;
+import com.wow.order.vo.response.OrderSettleResponse;
 
 /**
  * Created by zhengzhiqing on 16/7/2.
@@ -61,7 +74,9 @@ public class OrderController extends BaseController {
         try {
             OrderSettleQuery query = new OrderSettleQuery();
 
-            query.setEndUserId(orderSettleRequest.getEndUserId());
+            //设置用户id
+            Integer endUserId = getUserIdByTokenChannel(request);
+            query.setEndUserId(endUserId);
             query.setShoppingCartIds(orderSettleRequest.getShoppingCartIds());
 
             orderSettleResponse = orderService.settleOrder(query);
@@ -106,7 +121,9 @@ public class OrderController extends BaseController {
         try {
             OrderQuery query = new OrderQuery();
             BeanUtil.copyProperties(orderRequest, query);
-            query.setEndUserId(35);
+            //设置用户id
+            Integer endUserId = getUserIdByTokenChannel(request);
+            query.setEndUserId(endUserId);
 
             orderResponse = orderService.createOrder(query);
             //如果处理失败 则返回错误信息
@@ -150,7 +167,9 @@ public class OrderController extends BaseController {
         OrderListResponse orderListResponse = null;
         try {
             OrderListQuery query = new OrderListQuery();
-            query.setEndUserId(35);
+            //设置用户id
+            Integer endUserId = getUserIdByTokenChannel(request);
+            query.setEndUserId(endUserId);
 
             orderListResponse = orderService.queryOrderList(query);
             //如果处理失败 则返回错误信息
@@ -256,7 +275,7 @@ public class OrderController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(chargeResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, chargeResponse);
             }
-            apiResponse.setData(chargeResponse.getCharge());
+            apiResponse.setData(chargeResponse);
         } catch (Exception e) {
             logger.error("请求支付凭证错误---" + e);
             setInternalErrorResponse(apiResponse);
