@@ -190,6 +190,7 @@ public class CategoryServiceImpl implements CategoryService {
             	subCategoryList.addAll(getChildCategories(categoryList,category.getId()));
             }else if(category.getCategoryLevel() == 3){
             	subCategoryList.add(category.getId());
+            	
             }
         }
         return subCategoryList;
