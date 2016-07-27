@@ -14,8 +14,6 @@ public class SpecVo implements Serializable {
     private BigDecimal sellPrice;
     private BigDecimal costPrice;
     private BigDecimal weight;
-    private byte arrivalLatency;
-    private boolean enabled;
 
     public String getSpecName() {
         return specName;
@@ -49,19 +47,4 @@ public class SpecVo implements Serializable {
         this.weight = weight;
     }
 
-    public byte getArrivalLatency() {
-        return arrivalLatency;
-    }
-
-    public void setArrivalLatency(byte arrivalLatency) {
-        this.arrivalLatency = arrivalLatency;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 }
