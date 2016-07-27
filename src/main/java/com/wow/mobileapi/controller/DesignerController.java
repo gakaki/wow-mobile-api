@@ -32,7 +32,7 @@ public class DesignerController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/product/designer/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/designer/list", method = RequestMethod.GET)
     public ApiResponse getProductDesignerList(ApiRequest apiRequest) {
         logger.info("start to get productDesigner_find on page");
         ApiResponse apiResponse = new ApiResponse();
@@ -57,7 +57,7 @@ public class DesignerController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/product/designer/detail", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/designer/detail", method = RequestMethod.GET)
     public ApiResponse getProductDesignerDetail(ApiRequest apiRequest) {
         logger.info("start to get productDesigner_detail on page");
         ApiResponse apiResponse = new ApiResponse();

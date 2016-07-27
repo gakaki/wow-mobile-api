@@ -30,7 +30,7 @@ public class BrandController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/product/brand/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/brand/list", method = RequestMethod.GET)
     public ApiResponse getProductBrandList(ApiRequest apiRequest) {
         logger.info("start to get productBrand_find on page");
         ApiResponse apiResponse = new ApiResponse();
@@ -55,7 +55,7 @@ public class BrandController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/product/brand/firstLetterList", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/brand/firstLetterList", method = RequestMethod.GET)
     public ApiResponse getProductBrandFirstLetterList(ApiRequest apiRequest) {
         logger.info("start to get productFirstLetter_find on page");
         ApiResponse apiResponse = new ApiResponse();
@@ -81,7 +81,7 @@ public class BrandController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/product/brand/detail", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/brand/detail", method = RequestMethod.GET)
     public ApiResponse getProductBrandDetail(ApiRequest apiRequest) {
         logger.info("start to get productBrand_detail on page");
         ApiResponse apiResponse = new ApiResponse();
