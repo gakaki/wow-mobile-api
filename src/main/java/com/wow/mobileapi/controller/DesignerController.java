@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
@@ -26,6 +27,31 @@ public class DesignerController extends BaseController {
     @Autowired
     private DesignerService designerService;
 
+    /**
+     * 查询设计师列表
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/product/designer/list", method = RequestMethod.GET)
+    public ApiResponse getProductDesignerList(ApiRequest apiRequest) {
+        logger.info("start to get productDesigner_find on page");
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+        	ProductDesignerResponse productDesignerResponse = designerService.getAllDesigners();
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(productDesignerResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productDesignerResponse);
+            }else {
+                apiResponse.setData(productDesignerResponse.getDesignerList());
+            }
+        } catch (Exception e) {
+            logger.error("查找productDesigner_find错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+    
     /**
      * 查询设计师详情
      * @param apiRequest

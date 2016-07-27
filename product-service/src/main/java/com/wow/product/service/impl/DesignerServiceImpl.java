@@ -168,4 +168,16 @@ public class DesignerServiceImpl implements DesignerService {
 //        return  designers;
         return null;
     }
+    
+    /**
+     * 查询所有设计师
+     *
+     * @return
+     */
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public ProductDesignerResponse getAllDesigners() {
+    	ProductDesignerResponse productDesignerResponse = new ProductDesignerResponse();
+    	productDesignerResponse.setDesignerList(designerMapper.selectAll());
+    	return productDesignerResponse;
+    }
 }

@@ -26,7 +26,7 @@ public class BrandController extends BaseController {
     private BrandService brandService;
 
     /**
-     * 查询品牌列表和品牌首字母列表
+     * 查询品牌列表
      * @param apiRequest
      * @return
      */
@@ -37,18 +37,40 @@ public class BrandController extends BaseController {
 
         try {
         	ProductBrandResponse productBrandResponse = brandService.getAllBrands();
-        	ProductBrandResponse productBrandFirstLetterResponse = brandService.selectBrandFirstLetter();
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productBrandResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productBrandResponse);
-            }else if(ErrorCodeUtil.isFailedResponse(productBrandFirstLetterResponse.getResCode())){
-            	setServiceErrorResponse(apiResponse, productBrandFirstLetterResponse);
             }else {
-            	productBrandResponse.setBrandFirstLetterList(productBrandFirstLetterResponse.getBrandFirstLetterList());
-                apiResponse.setData(productBrandResponse);
+                apiResponse.setData(productBrandResponse.getBrandList());
             }
         } catch (Exception e) {
             logger.error("查找productBrand_find错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+    }
+
+    /**
+     * 查询品牌首字母列表
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/product/brand/firstLetterList", method = RequestMethod.GET)
+    public ApiResponse getProductBrandFirstLetterList(ApiRequest apiRequest) {
+        logger.info("start to get productFirstLetter_find on page");
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+        	ProductBrandResponse productBrandFirstLetterResponse = brandService.selectBrandFirstLetter();
+            //如果处理失败 则返回错误信息
+            if(ErrorCodeUtil.isFailedResponse(productBrandFirstLetterResponse.getResCode())){
+            	setServiceErrorResponse(apiResponse, productBrandFirstLetterResponse);
+            }else {
+            	productBrandFirstLetterResponse.setBrandFirstLetterList(productBrandFirstLetterResponse.getBrandFirstLetterList());
+                apiResponse.setData(productBrandFirstLetterResponse.getBrandFirstLetterList());
+            }
+        } catch (Exception e) {
+            logger.error("查找productFirstLetter_find错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;

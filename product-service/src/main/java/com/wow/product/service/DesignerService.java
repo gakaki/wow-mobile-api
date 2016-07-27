@@ -106,4 +106,11 @@ public interface DesignerService {
      * @return
      */
     List<Designer> getDesignersByBrand(int brandId) throws Exception;
+    
+    /**
+     * 查询所有设计师
+     *
+     * @return
+     */
+    public ProductDesignerResponse getAllDesigners();
 }
