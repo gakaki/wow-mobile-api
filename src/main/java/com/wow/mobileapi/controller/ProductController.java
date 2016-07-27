@@ -120,7 +120,7 @@ public class ProductController extends BaseController {
             }
 
             //品牌
-            Brand brand = brandService.getBrandById(productResponse.getBrandId());
+            Brand brand = brandService.getBrandById(productResponse.getBrandId()).getBrand();
             if (brand != null) {
                 itemDetailResponse.setBrandCname(brand.getBrandCname());
                 itemDetailResponse.setBrandLogoImg(ImgPrefixUtil.addPrefixForImgUrl(brand.getBrandLogoImg()));
@@ -425,6 +425,13 @@ public class ProductController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
         ProductQueryRequest productQueryRequest = JsonUtil
                 .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        
+        //判断json格式参数是否有误
+        if (productQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+        
         try {
             ProductResponse productResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
             //如果处理失败 则返回错误信息
@@ -461,6 +468,13 @@ public class ProductController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
         ProductQueryRequest productQueryRequest = JsonUtil
                 .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        
+        //判断json格式参数是否有误
+        if (productQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+        
         try {
             ProductResponse productResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
             //如果处理失败 则返回错误信息

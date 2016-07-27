@@ -39,6 +39,7 @@ public class AreaController extends BaseController {
     public ApiResponse findNextLevelArea(ApiRequest apiRequest) {
     	ApiResponse apiResponse = new ApiResponse();
         AreaRequest areaRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), AreaRequest.class);
+        
     	//判断json格式参数是否有误
         if (areaRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);

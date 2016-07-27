@@ -33,7 +33,7 @@ public interface BrandService {
      * @param brandId
      * @return
      */
-    Brand getBrandById(int brandId);
+    ProductBrandResponse getBrandById(int brandId);
 
     /**
      * 批量查询品牌
