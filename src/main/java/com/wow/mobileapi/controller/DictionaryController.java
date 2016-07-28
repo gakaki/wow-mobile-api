@@ -13,10 +13,7 @@ import com.wow.common.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +21,7 @@ import java.util.List;
  * Created by win7 on 2016/7/27.
  */
 @RestController
+@CrossOrigin(maxAge = 3600)
 public class DictionaryController extends BaseController{
 
     private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
@@ -31,7 +29,7 @@ public class DictionaryController extends BaseController{
     @Autowired
     private DictionaryService dictionaryService;
 
-    @RequestMapping(value="/v1/dictionary/add",method = RequestMethod.GET)
+    @RequestMapping(value="/v1/dictionary/add",method = RequestMethod.POST)
     public ApiResponse addDictionary(ApiRequest apiRequest){
         ApiResponse apiResponse = new ApiResponse();
         DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);
@@ -52,30 +50,15 @@ public class DictionaryController extends BaseController{
         return apiResponse;
     }
 
-    @RequestMapping(value="/v1/dictionary/del",method = RequestMethod.GET)
+    @RequestMapping(value="/v1/dictionary/del",method = RequestMethod.POST)
     public ApiResponse delDictionary(ApiRequest apiRequest){
         ApiResponse apiResponse = new ApiResponse();
         DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);
         try {
-            DictionaryExample example=new DictionaryExample();
-            DictionaryExample.Criteria criteria=example.createCriteria();
-            if(null!=dictionaryRequest.getIdCon())
-                criteria.andIdEqualTo(dictionaryRequest.getIdCon());
-            if(null!=dictionaryRequest.getKeyNameCon())
-                criteria.andKeyNameEqualTo(dictionaryRequest.getKeyNameCon());
-            if(null!=dictionaryRequest.getKeyValueCon())
-                criteria.andKeyValueEqualTo(dictionaryRequest.getKeyValueCon());
-            if(null!=dictionaryRequest.getKeyGroupCon())
-                criteria.andKeyGroupEqualTo(dictionaryRequest.getKeyGroupCon());
-            if(null!=dictionaryRequest.getKeyOrderCon())
-                criteria.andKeyOrderEqualTo(dictionaryRequest.getKeyOrderCon());
-            if(dictionaryRequest.getValidCon()!=null)
-                criteria.andIsValidEqualTo(dictionaryRequest.getValidCon());
-
             Dictionary dictionary=new Dictionary();
             BeanUtil.copyProperties(dictionaryRequest,dictionary);
             dictionary.setIsValid(false);
-            int count=dictionaryService.updateDictionary(dictionary,example);
+            int count=dictionaryService.updateDictionary(dictionary,dictionaryRequest);
             CommonResponse commonResponse = new CommonResponse();
             if(count==0) {
                 commonResponse.setResCode("4000");
@@ -89,29 +72,14 @@ public class DictionaryController extends BaseController{
         return apiResponse;
     }
 
-    @RequestMapping(value="/v1/dictionary/update",method = RequestMethod.GET)
+    @RequestMapping(value="/v1/dictionary/update",method = RequestMethod.POST)
     public ApiResponse updateDictionary(ApiRequest apiRequest){
         ApiResponse apiResponse = new ApiResponse();
         DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);
         try {
-            DictionaryExample example=new DictionaryExample();
-            DictionaryExample.Criteria criteria=example.createCriteria();
-            if(null!=dictionaryRequest.getIdCon())
-                criteria.andIdEqualTo(dictionaryRequest.getIdCon());
-            if(null!=dictionaryRequest.getKeyNameCon())
-                criteria.andKeyNameEqualTo(dictionaryRequest.getKeyNameCon());
-            if(null!=dictionaryRequest.getKeyValueCon())
-                criteria.andKeyValueEqualTo(dictionaryRequest.getKeyValueCon());
-            if(null!=dictionaryRequest.getKeyGroupCon())
-                criteria.andKeyGroupEqualTo(dictionaryRequest.getKeyGroupCon());
-            if(null!=dictionaryRequest.getKeyOrderCon())
-                criteria.andKeyOrderEqualTo(dictionaryRequest.getKeyOrderCon());
-            if(dictionaryRequest.getValidCon()!=null)
-                criteria.andIsValidEqualTo(dictionaryRequest.getValidCon());
-
             Dictionary dictionary=new Dictionary();
             BeanUtil.copyProperties(dictionaryRequest,dictionary);
-            int count=dictionaryService.updateDictionary(dictionary,example);
+            int count=dictionaryService.updateDictionary(dictionary,dictionaryRequest);
             CommonResponse commonResponse = new CommonResponse();
             if(count==0) {
                 commonResponse.setResCode("4000");
@@ -135,20 +103,7 @@ public class DictionaryController extends BaseController{
             return apiResponse;
         }
         try {
-            DictionaryExample example=new DictionaryExample();
-            DictionaryExample.Criteria criteria=example.createCriteria();
-            if(null!=dictionaryRequest.getIdCon())
-                criteria.andIdEqualTo(dictionaryRequest.getIdCon());
-            if(null!=dictionaryRequest.getKeyNameCon())
-                criteria.andKeyNameEqualTo(dictionaryRequest.getKeyNameCon());
-            if(null!=dictionaryRequest.getKeyValueCon())
-                criteria.andKeyValueEqualTo(dictionaryRequest.getKeyValueCon());
-            if(null!=dictionaryRequest.getKeyGroupCon())
-                criteria.andKeyGroupEqualTo(dictionaryRequest.getKeyGroupCon());
-            if(null!=dictionaryRequest.getKeyOrderCon())
-                criteria.andKeyOrderEqualTo(dictionaryRequest.getKeyOrderCon());
-            criteria.andIsValidEqualTo(true);
-            List<Dictionary> dictionaryList = dictionaryService.queryDictionary(example);
+            List<Dictionary> dictionaryList = dictionaryService.queryDictionary(dictionaryRequest);
             DictionaryResponse dictionaryResponse = new DictionaryResponse();
             dictionaryResponse.setDictionaryList(dictionaryList);
             apiResponse.setData(dictionaryResponse);

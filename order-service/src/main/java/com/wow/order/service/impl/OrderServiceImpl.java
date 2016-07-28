@@ -616,6 +616,7 @@ public class OrderServiceImpl implements OrderService {
         for (OrderItemStockVo orderItemStock : orderItemStocks) {
             stockVo = new UnfreezeStockVo();
 
+            stockVo.setOrderId(orderId);
             stockVo.setProductId(orderItemStock.getProductId());
             stockVo.setVirtualProductQty(orderItemStock.getVirtualProductQty());
             String json = JsonUtil.pojo2Json(orderItemStock.getOrderItemProductStockVos());
