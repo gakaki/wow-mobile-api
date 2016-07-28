@@ -241,7 +241,9 @@ public class PageConfigServiceImpl implements PageConfigService {
     			pageProductNewVoList.add(productVo);
     		}
     	}
+
     	pageProductResponse.setPageProductVoList(pageProductVoList);
+        pageProductResponse.setPageNewProductVoList(pageProductNewVoList);
     	
         return pageProductResponse;
     }
