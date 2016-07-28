@@ -75,7 +75,7 @@ public class PayController extends BaseController {
     public ApiResponse webhooks(HttpServletRequest request, HttpServletResponse response) {
         ApiResponse apiResponse = new ApiResponse();
         try {
-            request.setCharacterEncoding("UTF8");
+            request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
             logger.error("设置请求编码错误---" + e);
         }

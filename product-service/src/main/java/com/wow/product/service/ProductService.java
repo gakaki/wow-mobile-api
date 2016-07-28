@@ -1,16 +1,20 @@
 package com.wow.product.service;
 
+import java.util.List;
+
 import com.wow.attribute.model.Attribute;
-import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
-import com.wow.product.model.*;
+import com.wow.product.model.Material;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductAttribute;
+import com.wow.product.model.ProductImage;
+import com.wow.product.model.ProductMaterial;
 import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductResponse;
-
-import java.util.List;
+import com.wow.product.vo.response.ProductVoResponse;
 
 /**
  * 产品服务
@@ -180,13 +184,13 @@ public interface ProductService {
      * @param brandId
      * @return
      */
-    public ProductResponse selectProductByBrandId(Integer brandId);
+    public ProductVoResponse selectProductByBrandId(Integer brandId);
     
     /**
      * 查询设计师的产品信息
      * @param brandId
      * @return
      */
-    public ProductResponse selectProductByDesignerId(Integer brandId);
+    public ProductVoResponse selectProductByDesignerId(Integer designerId);
 
 }

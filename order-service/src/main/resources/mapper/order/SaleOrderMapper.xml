@@ -702,4 +702,14 @@
 	    where end_user_id=#{endUserId}
 	    order by order_create_time desc
   </select>
+  
+        <!-- 查询超过20分钟仍然没有支付的订单列表 -->
+  <select id="selectTimeOutUnpayOrder"   resultType="com.wow.order.model.SaleOrder"  parameterType="Integer" >
+	      SELECT 
+			  t.id id ,t.order_code orderCode,t.order_create_time orderCreateTime
+			FROM
+			  sale_order t 
+			WHERE TIMESTAMPDIFF(MINUTE, t.order_create_time, NOW()) >=#{timeout}
+			  AND t.order_status = 0
+  </select>
 </mapper>
