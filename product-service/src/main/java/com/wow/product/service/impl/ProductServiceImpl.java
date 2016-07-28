@@ -64,6 +64,7 @@ import com.wow.product.vo.request.SpecVo;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductParameter;
 import com.wow.product.vo.response.ProductResponse;
+import com.wow.product.vo.response.ProductVoResponse;
 
 
 /**
@@ -613,10 +614,10 @@ public class ProductServiceImpl implements ProductService {
      * @param brandId
      * @return
      */
-    public ProductResponse selectProductByBrandId(Integer brandId){
-    	ProductResponse productResponse = new ProductResponse();
-    	productResponse.setProductList(productMapper.selectProductByBrandId(brandId));
-    	return productResponse;
+    public ProductVoResponse selectProductByBrandId(Integer brandId){
+    	ProductVoResponse productVoResponse = new ProductVoResponse();
+    	productVoResponse.setProductVoList(productMapper.selectProductByBrandId(brandId));
+    	return productVoResponse;
     }
     
     /**
@@ -624,9 +625,9 @@ public class ProductServiceImpl implements ProductService {
      * @param brandId
      * @return
      */
-    public ProductResponse selectProductByDesignerId(Integer brandId){
-    	ProductResponse productResponse = new ProductResponse();
-    	productResponse.setProductList(productMapper.selectProductByDesignerId(brandId));
-    	return productResponse;
+    public ProductVoResponse selectProductByDesignerId(Integer designerId){
+    	ProductVoResponse productVoResponse = new ProductVoResponse();
+    	productVoResponse.setProductVoList(productMapper.selectProductByDesignerId(designerId));
+    	return productVoResponse;
     }
 }

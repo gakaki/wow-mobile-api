@@ -35,4 +35,12 @@ public interface SaleOrderMapper {
     int updateByPrimaryKey(SaleOrder record);
     
     List<OrderListVo> selectByEndUserId(OrderListQuery query);
+    
+    /**
+     * 获取超时未支付的订单列表
+     * 
+     * @param timeoutMinute
+     * @return
+     */
+    List<SaleOrder> selectTimeOutUnpayOrder(int timeoutMinute);
 }

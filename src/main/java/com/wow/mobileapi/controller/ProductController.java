@@ -54,6 +54,7 @@ import com.wow.product.vo.request.ProductImgVo;
 import com.wow.product.vo.request.ProductQueryVo;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductResponse;
+import com.wow.product.vo.response.ProductVoResponse;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
 import com.wow.stock.vo.response.AvailableStocksResponse;
@@ -458,22 +459,22 @@ public class ProductController extends BaseController {
         }
         
         try {
-            ProductResponse productResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
+        	ProductVoResponse productVoResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, productResponse);
+            if (ErrorCodeUtil.isFailedResponse(productVoResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productVoResponse);
             } else {
                 List<ProductVo> productList = new ArrayList<ProductVo>();
 
-                for (ProductVo productVo : productResponse.getProductList()) {
+                for (ProductVo productVo : productVoResponse.getProductVoList()) {
                     ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
                     if(pi!=null){
                         productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
                         productList.add(productVo);
                     }
                 }
-                productResponse.setProductList(productList);
-                apiResponse.setData(productResponse);
+                productVoResponse.setProductVoList(productList);
+                apiResponse.setData(productVoResponse);
             }
         } catch (Exception e) {
             logger.error("查找product_brand错误---" + e);
@@ -501,22 +502,22 @@ public class ProductController extends BaseController {
         }
         
         try {
-            ProductResponse productResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
+        	ProductVoResponse productVoResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, productResponse);
+            if (ErrorCodeUtil.isFailedResponse(productVoResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productVoResponse);
             } else {
                 List<ProductVo> productList = new ArrayList<ProductVo>();
 
-                for (ProductVo productVo : productResponse.getProductList()) {
+                for (ProductVo productVo : productVoResponse.getProductVoList()) {
                     ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
                     if(pi!=null){
                         productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
                         productList.add(productVo);
                     }
                 }
-                productResponse.setProductList(productList);
-                apiResponse.setData(productResponse);
+                productVoResponse.setProductVoList(productList);
+                apiResponse.setData(productVoResponse);
             }
         } catch (Exception e) {
             logger.error("查找product_designer错误---" + e);

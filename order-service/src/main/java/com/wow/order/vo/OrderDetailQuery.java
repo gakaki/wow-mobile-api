@@ -20,6 +20,17 @@ public class OrderDetailQuery implements Serializable {
     //取消原因
     private String cancelReason;
     
+    //是否自动取消订单
+    private boolean isAutoCancel;
+    
+    public boolean isAutoCancel() {
+        return isAutoCancel;
+    }
+
+    public void setAutoCancel(boolean isAutoCancel) {
+        this.isAutoCancel = isAutoCancel;
+    }
+
     public String getCancelReason() {
         return cancelReason;
     }
