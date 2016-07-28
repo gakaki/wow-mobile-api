@@ -162,7 +162,7 @@ public class ProductController extends BaseController {
                 setServiceErrorResponse(apiResponse, itemDetailResponse);
             } else {
                 //产品价格(售价和原价)
-                ProductPriceResponse productPriceResponse = priceService.getProductSerialPrice(productId);
+                ProductPriceResponse productPriceResponse = priceService.getProductPrice(productId);
                 if (productPriceResponse != null && productPriceResponse.getProductPrice() != null) {
                     itemDetailResponse.setSellPrice(productPriceResponse.getProductPrice().getSellPrice());
                     itemDetailResponse.setOriginalPrice(productPriceResponse.getProductPrice().getOriginalPrice());
@@ -227,11 +227,14 @@ public class ProductController extends BaseController {
                 ErrorResponseUtil.setErrorResponse(apiResponse,"40203");
                 return apiResponse;
             }
+            List<Integer> allProductIds = new ArrayList<>();//主品+子品的ID
             List<Integer> subProductIds = new ArrayList<>();
 
             for (Product subProduct : subProductList) {
                 subProductIds.add(subProduct.getId());
             }
+            allProductIds.add(productId);
+            allProductIds.addAll(subProductIds);
 
             Map<Integer, Integer> availableStockMap = new HashMap<Integer, Integer>();
             //批量查库存
@@ -244,9 +247,13 @@ public class ProductController extends BaseController {
             }
             Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
             //批量查询价格
-            ProductListPriceResponse productPriceListResponse = priceService.getProductPriceList(subProductIds);
+            ProductListPriceResponse productPriceListResponse = priceService.batchGetProductPrice(allProductIds);
             if (productPriceListResponse != null && MapUtil.isNotEmpty(productPriceListResponse.getMap())) {
                 priceMap = productPriceListResponse.getMap();
+            }
+
+            if(priceMap.get(productId)!=null) {
+                itemSpecResponse.setProductPrice(priceMap.get(productId).getSellPrice());
             }
 
             //颜色list
