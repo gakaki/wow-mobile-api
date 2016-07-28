@@ -1,5 +1,16 @@
 package com.wow.order.job;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Scheduled;
+
+import com.wow.order.service.OrderService;
+
 /**
  * Created by zhengzhiqing on 16/7/2.
  */
@@ -7,14 +18,6 @@ package com.wow.order.job;
 import com.wow.order.vo.OrderWithVirtualStockProcessResult;
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.service.StockService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Scheduled;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 public class PendingOrderProcessor {
@@ -22,24 +25,25 @@ public class PendingOrderProcessor {
     private static final Logger logger = LoggerFactory.getLogger(PendingOrderProcessor.class);
 
     @Autowired
-    StockService stockService;
+    private StockService stockService;
+
+    @Autowired
+    private OrderService orderService;
+
     /**
      * 处理因为虚拟库存而pending的订单
      */
-//    @Scheduled(fixedRate = 10000) //only for testing
+    //    @Scheduled(fixedRate = 10000) //only for testing
     @Scheduled(cron = "0 0 0 * * ?") //每天0点跑一次
     public void processOrderPendingOnVirtualStock() {
-        List<OrderWithVirtualStockProcessResult> orderWithVirtualStockProcessResults =
-                new ArrayList<OrderWithVirtualStockProcessResult>();
+        List<OrderWithVirtualStockProcessResult> orderWithVirtualStockProcessResults = new ArrayList<OrderWithVirtualStockProcessResult>();
         //要注意防并发,如果有两个实例,需要一种锁算法
         logger.info("开始处理因为虚拟库存而等待的订单");
 
-        List<ProductVirtualStock> productVirtualStockList
-                = stockService.selectAllProductsWithFrozenVirtualStock();
+        List<ProductVirtualStock> productVirtualStockList = stockService.selectAllProductsWithFrozenVirtualStock();
         logger.info("有虚拟冻结的产品个数:" + productVirtualStockList.size());
-        for (ProductVirtualStock productVirtualStock: productVirtualStockList) {
-            orderWithVirtualStockProcessResults.add(
-                    processProductWithFrozenVirtualStock(productVirtualStock));
+        for (ProductVirtualStock productVirtualStock : productVirtualStockList) {
+            orderWithVirtualStockProcessResults.add(processProductWithFrozenVirtualStock(productVirtualStock));
         }
 
         logger.info("处理结束,本次处理结果明细" + orderWithVirtualStockProcessResults);
@@ -52,10 +56,8 @@ public class PendingOrderProcessor {
      * @param productVirtualStock
      * @return
      */
-    private OrderWithVirtualStockProcessResult processProductWithFrozenVirtualStock(
-            ProductVirtualStock productVirtualStock) {
-        OrderWithVirtualStockProcessResult orderWithVirtualStockProcessResult
-                = new OrderWithVirtualStockProcessResult();
+    private OrderWithVirtualStockProcessResult processProductWithFrozenVirtualStock(ProductVirtualStock productVirtualStock) {
+        OrderWithVirtualStockProcessResult orderWithVirtualStockProcessResult = new OrderWithVirtualStockProcessResult();
         //TODO:
         //查找产品在各仓库的可用库存数量,如果有一个仓库有足够库存 > 虚拟冻结
         //则将虚拟冻结的数量冻结到该仓库,同时,将虚拟冻结调减相应个数(同时也调减虚拟库存数量)
@@ -66,4 +68,14 @@ public class PendingOrderProcessor {
         //TODO: 如果一个产品有部分是实际库存有部分是虚拟库存,则订单项里记录的仓库信息可能会发生变化
         return orderWithVirtualStockProcessResult;
     }
+
+    /**
+     * 自动取消订单
+     */
+    @Scheduled(cron = "0 0/1 0 * * ?") //每隔20分钟跑一次自动取消订单
+    public void autoCancelOrder() {
+        //查询20分钟以内没有支付的订单
+        orderService.autoCancelOrder(20);
+    }
+
 }

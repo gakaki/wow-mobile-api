@@ -454,52 +454,52 @@ public class DictionaryExample {
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderEqualTo(Byte value) {
+        public Criteria andKeyOrderEqualTo(Short value) {
             addCriterion("key_order =", value, "keyOrder");
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderNotEqualTo(Byte value) {
+        public Criteria andKeyOrderNotEqualTo(Short value) {
             addCriterion("key_order <>", value, "keyOrder");
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderGreaterThan(Byte value) {
+        public Criteria andKeyOrderGreaterThan(Short value) {
             addCriterion("key_order >", value, "keyOrder");
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderGreaterThanOrEqualTo(Byte value) {
+        public Criteria andKeyOrderGreaterThanOrEqualTo(Short value) {
             addCriterion("key_order >=", value, "keyOrder");
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderLessThan(Byte value) {
+        public Criteria andKeyOrderLessThan(Short value) {
             addCriterion("key_order <", value, "keyOrder");
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderLessThanOrEqualTo(Byte value) {
+        public Criteria andKeyOrderLessThanOrEqualTo(Short value) {
             addCriterion("key_order <=", value, "keyOrder");
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderIn(List<Byte> values) {
+        public Criteria andKeyOrderIn(List<Short> values) {
             addCriterion("key_order in", values, "keyOrder");
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderNotIn(List<Byte> values) {
+        public Criteria andKeyOrderNotIn(List<Short> values) {
             addCriterion("key_order not in", values, "keyOrder");
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderBetween(Byte value1, Byte value2) {
+        public Criteria andKeyOrderBetween(Short value1, Short value2) {
             addCriterion("key_order between", value1, value2, "keyOrder");
             return (Criteria) this;
         }
 
-        public Criteria andKeyOrderNotBetween(Byte value1, Byte value2) {
+        public Criteria andKeyOrderNotBetween(Short value1, Short value2) {
             addCriterion("key_order not between", value1, value2, "keyOrder");
             return (Criteria) this;
         }

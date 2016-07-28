@@ -7,7 +7,7 @@
     <result column="key_value" property="keyValue" jdbcType="VARCHAR" />
     <result column="key_group" property="keyGroup" jdbcType="VARCHAR" />
     <result column="key_desc" property="keyDesc" jdbcType="VARCHAR" />
-    <result column="key_order" property="keyOrder" jdbcType="TINYINT" />
+    <result column="key_order" property="keyOrder" jdbcType="SMALLINT" />
     <result column="is_valid" property="isValid" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -109,7 +109,7 @@
       key_desc, key_order, is_valid
       )
     values (#{keyName,jdbcType=VARCHAR}, #{keyValue,jdbcType=VARCHAR}, #{keyGroup,jdbcType=VARCHAR}, 
-      #{keyDesc,jdbcType=VARCHAR}, #{keyOrder,jdbcType=TINYINT}, #{isValid,jdbcType=BIT}
+      #{keyDesc,jdbcType=VARCHAR}, #{keyOrder,jdbcType=SMALLINT}, #{isValid,jdbcType=BIT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.wow.common.model.Dictionary" >
@@ -151,7 +151,7 @@
         #{keyDesc,jdbcType=VARCHAR},
       </if>
       <if test="keyOrder != null" >
-        #{keyOrder,jdbcType=TINYINT},
+        #{keyOrder,jdbcType=SMALLINT},
       </if>
       <if test="isValid != null" >
         #{isValid,jdbcType=BIT},
@@ -183,7 +183,7 @@
         key_desc = #{record.keyDesc,jdbcType=VARCHAR},
       </if>
       <if test="record.keyOrder != null" >
-        key_order = #{record.keyOrder,jdbcType=TINYINT},
+        key_order = #{record.keyOrder,jdbcType=SMALLINT},
       </if>
       <if test="record.isValid != null" >
         is_valid = #{record.isValid,jdbcType=BIT},
@@ -200,7 +200,7 @@
       key_value = #{record.keyValue,jdbcType=VARCHAR},
       key_group = #{record.keyGroup,jdbcType=VARCHAR},
       key_desc = #{record.keyDesc,jdbcType=VARCHAR},
-      key_order = #{record.keyOrder,jdbcType=TINYINT},
+      key_order = #{record.keyOrder,jdbcType=SMALLINT},
       is_valid = #{record.isValid,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -222,7 +222,7 @@
         key_desc = #{keyDesc,jdbcType=VARCHAR},
       </if>
       <if test="keyOrder != null" >
-        key_order = #{keyOrder,jdbcType=TINYINT},
+        key_order = #{keyOrder,jdbcType=SMALLINT},
       </if>
       <if test="isValid != null" >
         is_valid = #{isValid,jdbcType=BIT},
@@ -236,7 +236,7 @@
       key_value = #{keyValue,jdbcType=VARCHAR},
       key_group = #{keyGroup,jdbcType=VARCHAR},
       key_desc = #{keyDesc,jdbcType=VARCHAR},
-      key_order = #{keyOrder,jdbcType=TINYINT},
+      key_order = #{keyOrder,jdbcType=SMALLINT},
       is_valid = #{isValid,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>

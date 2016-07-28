@@ -13,7 +13,7 @@ public class Dictionary implements Serializable {
 
     private String keyDesc;
 
-    private Byte keyOrder;
+    private Short keyOrder;
 
     private Boolean isValid;
 
@@ -59,11 +59,11 @@ public class Dictionary implements Serializable {
         this.keyDesc = keyDesc == null ? null : keyDesc.trim();
     }
 
-    public Byte getKeyOrder() {
+    public Short getKeyOrder() {
         return keyOrder;
     }
 
-    public void setKeyOrder(Byte keyOrder) {
+    public void setKeyOrder(Short keyOrder) {
         this.keyOrder = keyOrder;
     }
 
