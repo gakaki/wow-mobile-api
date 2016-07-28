@@ -1,13 +1,33 @@
 package com.wow.mobileapi.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.*;
+import com.wow.common.util.BeanUtil;
+import com.wow.common.util.EncodeDecodeUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
-import com.wow.mobileapi.request.user.*;
+import com.wow.mobileapi.request.user.CaptchaRequest;
+import com.wow.mobileapi.request.user.RegisterAndBindWechatRequest;
+import com.wow.mobileapi.request.user.RegisterRequest;
+import com.wow.mobileapi.request.user.ResetPwdRequest;
+import com.wow.mobileapi.request.user.UserCheckRequest;
+import com.wow.mobileapi.request.user.UserUpdateRequest;
 import com.wow.mobileapi.response.user.BindWechatResponse;
-import com.wow.mobileapi.util.EncodeDecodeUtil;
 import com.wow.mobileapi.util.HttpRequestUtil;
 import com.wow.user.constant.SmsTemplate;
 import com.wow.user.model.EndUser;
@@ -17,16 +37,11 @@ import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.vo.LoginResponseVo;
 import com.wow.user.vo.LoginVo;
-import com.wow.user.vo.response.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
+import com.wow.user.vo.response.LoginResponse;
+import com.wow.user.vo.response.RegisterBindStatusResponse;
+import com.wow.user.vo.response.RegisterResponse;
+import com.wow.user.vo.response.UserCheckResponse;
+import com.wow.user.vo.response.UserResponse;
 
 @RestController
 public class UserController extends BaseController {
