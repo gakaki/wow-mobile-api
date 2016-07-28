@@ -72,10 +72,17 @@ public class PendingOrderProcessor {
     /**
      * 自动取消订单
      */
-    @Scheduled(cron = "0 0/1 0 * * ?") //每隔20分钟跑一次自动取消订单
+    @Scheduled(cron = "0 */20 * * * ?") //每隔20分钟跑一次自动取消订单
     public void autoCancelOrder() {
+        logger.info("自动取消订单开始");
         //查询20分钟以内没有支付的订单
-        orderService.autoCancelOrder(20);
+        try {
+            orderService.autoCancelOrder(20);
+        } catch (Exception e) {
+            logger.error("自动取消订单错误-----"+e);
+        }
+
+        logger.info("自动取消订单结束");
     }
 
 }
