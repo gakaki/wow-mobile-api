@@ -21,34 +21,25 @@ public class OrderSettleVo implements Serializable {
 
     //用户购买的产品id
     private Integer productId;
+    
+    //产品名称
+    private String productName;
 
     //用户购买的产品数量 范围为1-127
     private Byte productQty;
 
-    //产品名称
-    private String productName;
-    
     //产品销售价格 单价
     private BigDecimal sellPrice;
     
     //产品总价 产品销售价乘以数量
     private BigDecimal sellTotalAmount;
     
-    //产品库存数目
-    private Short productStock;
-
     //产品颜色
     private String color;
 
     //产品规格值
-    private String spec;
+    private String specImg;
 
-    //产品状态
-    private Byte productStatus;
-
-    //产品状态名称
-    private String productStatusName;
-    
     public BigDecimal getSellTotalAmount() {
         return sellTotalAmount;
     }
@@ -57,36 +48,12 @@ public class OrderSettleVo implements Serializable {
         this.sellTotalAmount = sellTotalAmount;
     }
 
-    public Short getProductStock() {
-        return productStock;
-    }
-
-    public void setProductStock(Short productStock) {
-        this.productStock = productStock;
-    }
-
     public Integer getProductId() {
         return productId;
     }
 
     public void setProductId(Integer productId) {
         this.productId = productId;
-    }
-
-    public String getProductStatusName() {
-        return productStatusName;
-    }
-
-    public void setProductStatusName(String productStatusName) {
-        this.productStatusName = productStatusName;
-    }
-
-    public Byte getProductStatus() {
-        return productStatus;
-    }
-
-    public void setProductStatus(Byte productStatus) {
-        this.productStatus = productStatus;
     }
 
     public Integer getShoppingCartId() {
@@ -121,12 +88,12 @@ public class OrderSettleVo implements Serializable {
         this.color = color;
     }
 
-    public String getSpec() {
-        return spec;
+    public String getSpecImg() {
+        return specImg;
     }
 
-    public void setSpec(String spec) {
-        this.spec = spec;
+    public void setSpecImg(String specImg) {
+        this.specImg = specImg;
     }
 
     public BigDecimal getSellPrice() {

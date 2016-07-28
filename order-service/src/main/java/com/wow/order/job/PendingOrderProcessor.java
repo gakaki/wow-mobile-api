@@ -34,7 +34,7 @@ public class PendingOrderProcessor {
      * 处理因为虚拟库存而pending的订单
      */
     //    @Scheduled(fixedRate = 10000) //only for testing
-    @Scheduled(cron = "0 0 0 * * ?") //每天0点跑一次
+    //@Scheduled(cron = "0 0 0 * * ?") //每天0点跑一次
     public void processOrderPendingOnVirtualStock() {
         List<OrderWithVirtualStockProcessResult> orderWithVirtualStockProcessResults = new ArrayList<OrderWithVirtualStockProcessResult>();
         //要注意防并发,如果有两个实例,需要一种锁算法
@@ -79,7 +79,7 @@ public class PendingOrderProcessor {
         try {
             orderService.autoCancelOrder(20);
         } catch (Exception e) {
-            logger.error("自动取消订单错误-----"+e);
+            logger.error("自动取消订单错误-----" + e);
         }
 
         logger.info("自动取消订单结束");
