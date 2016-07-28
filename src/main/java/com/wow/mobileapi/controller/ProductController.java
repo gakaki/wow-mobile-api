@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wow.attribute.model.Category;
-import com.wow.attribute.service.CategoryService;
-import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.common.page.PageModel;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
@@ -81,9 +78,6 @@ public class ProductController extends BaseController {
 
     @Autowired
     private DesignerService designerService;
-
-    @Autowired
-    private CategoryService categoryService;
 
     private static final Integer productPrimaryImgCountLimit = 5;
 
@@ -411,31 +405,24 @@ public class ProductController extends BaseController {
             return apiResponse;
         }
 
-        ProductResponse productResponse = new ProductResponse();
         PageModel page = new PageModel();
         page.setShowCount(productInfoRequest.getShowCount());
         page.setCurrentPage(productInfoRequest.getCurrentPage());
         ProductQueryVo pqv = new ProductQueryVo();
         BeanUtil.copyProperties(productInfoRequest, pqv);
         page.setModel(pqv);
-
-        List<ProductVo> productList = productService.getProductByCategoryIdListPage(page);
-        Category category = categoryService.getCategoryById(productInfoRequest.getCategoryId()).getCategory();
-        if(productInfoRequest.getCategoryLevel() == null){//当传入分类级别时，查询二级分类
-            CategoryListResponse categoryListResponse = categoryService.getCategoryByLevel(productInfoRequest.getCategoryLevel());
-            productResponse.setCategoryList(categoryListResponse.getCategoryList());
-        }
-
-        if (productList != null && category != null) {
-            apiResponse.setResCode("0");
-            apiResponse.setResMsg("Success");
-            productResponse.setProductList(productList);
-            productResponse.setCategorySmallImg(category.getCategoryIconSmall());
-
-            apiResponse.setData(productResponse);
-        } else {
-            apiResponse.setResCode("40201");
-            apiResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40201"));
+        
+        try {
+        	ProductVoResponse productVoResponse = productService.getProductByCategoryIdListPage(page);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(productVoResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productVoResponse);
+            } 
+            apiResponse.setData(productVoResponse);
+        } catch (Exception e) {
+            logger.error("按分类查询产品列表---" + e);
+            e.printStackTrace();
+            setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
     }

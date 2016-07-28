@@ -119,7 +119,7 @@ public class PriceServiceImpl implements PriceService {
      */
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public ProductListPriceResponse getProductPriceList(List<Integer> productIds) {
+    public ProductListPriceResponse batchGetProductPrice(List<Integer> productIds) {
         ProductListPriceResponse productListPriceResponse = new ProductListPriceResponse();
         List<ProductPrice> productPriceList = productPriceMapper.selectByProductIds(productIds);
         if (CollectionUtil.isEmpty(productPriceList)) {

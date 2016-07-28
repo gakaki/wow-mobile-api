@@ -503,11 +503,14 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     @Override
-    public List<ProductVo> getProductByCategoryIdListPage(PageModel page) {
+    public ProductVoResponse getProductByCategoryIdListPage(PageModel page) {
         //TODO:
         //1. 根据category查询该类目下所有三级类目
         //2. 查询属于该类目三级类目的所有产品,按排序规则排序
         //3. 分页待定:插件、注解
+    	
+    	ProductVoResponse productVoResponse = new ProductVoResponse();
+    	
     	ProductQueryVo pqv = (ProductQueryVo)page.getModel();
     	List<Integer> categoryIdList = categoryService.getLastLevelCategoryByCategory(pqv.getCategoryId(),pqv.getCategoryLevel());
     	pqv.setCategoryIdList(categoryIdList);
@@ -534,7 +537,9 @@ public class ProductServiceImpl implements ProductService {
         		list.add(product);
     		}
     	}
-        return list;
+    	productVoResponse.setProductVoList(list);
+    	
+        return productVoResponse;
     }
 
     /**
