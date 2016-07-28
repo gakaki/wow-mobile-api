@@ -14,7 +14,7 @@ public class ProductBrandResponse extends CommonResponse {
 	
 	private Brand brand;
 	private List<Brand> brandList;
-	private List<BrandVo> brandFirstLetterList;
+	private List<String> brandFirstLetterList;
 	
 	public List<Brand> getBrandList() {
 		return brandList;
@@ -22,10 +22,10 @@ public class ProductBrandResponse extends CommonResponse {
 	public void setBrandList(List<Brand> brandList) {
 		this.brandList = brandList;
 	}
-	public List<BrandVo> getBrandFirstLetterList() {
+	public List<String> getBrandFirstLetterList() {
 		return brandFirstLetterList;
 	}
-	public void setBrandFirstLetterList(List<BrandVo> brandFirstLetterList) {
+	public void setBrandFirstLetterList(List<String> brandFirstLetterList) {
 		this.brandFirstLetterList = brandFirstLetterList;
 	}
 	public Brand getBrand() {

@@ -1,11 +1,10 @@
-package com.wow.mobileapi.util;
-
-import com.wow.mobileapi.controller.SessionController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.wow.common.util;
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by zhengzhiqing on 16/7/21.
