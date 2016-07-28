@@ -1,15 +1,13 @@
 package com.wow.page.service.impl;
 
+import com.wow.common.constant.BizConstant;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.page.mapper.*;
 import com.wow.page.model.*;
 import com.wow.page.model.PageSceneConfig;
 import com.wow.page.service.PageConfigService;
-import com.wow.page.vo.PageCategoryVo;
-import com.wow.page.vo.PageProductVo;
-import com.wow.page.vo.PageTopicVo;
-import com.wow.page.vo.ProductImageVo;
+import com.wow.page.vo.*;
 import com.wow.page.vo.response.*;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
@@ -198,35 +196,40 @@ public class PageConfigServiceImpl implements PageConfigService {
      */
     @Override
     public PageProductResponse getProductsOnPage(int pageType,List<Byte> moduleType) {
-    	PageProductResponse pageProductResponse = new PageProductResponse();
-    	List<PageProductConfig> productList = pageProductConfigMapper.selectByPageType(pageType);
-    	PageProductVo recommendProduct = new PageProductVo();
-    	List<PageProductVo> pageProductNewVoList = new ArrayList<PageProductVo>();
-    	for(PageProductConfig productConfig:productList){
-			PageProductVo productVo = new PageProductVo();
+        PageProductResponse pageProductResponse = new PageProductResponse();
+        List<PageProductConfig> productList = pageProductConfigMapper.selectByPageType(pageType);
+        PageProductVo recommendProduct = new PageProductVo();
+        List<PageProductNewVo> pageProductNewVoList = new ArrayList<PageProductNewVo>();
+        for(PageProductConfig productConfig:productList){
+            PageProductNewVo productNewVo = new PageProductNewVo();
             ProductPriceResponse priceResponse = priceService.getProductPrice(productConfig.getProductId());
             ProductPrice productPrice = priceResponse.getProductPrice();
-            System.out.println("productPrice:"+productPrice);
-    		Product product = productService.getProductById(productConfig.getProductId());
-    		productVo.setProductId(productConfig.getProductId());
-    		productVo.setProductName(product.getProductName());
-    		productVo.setProductImg(productConfig.getProductImg());
-    		productVo.setDetailDescription(product.getDetailDescription());
-    		if(productPrice!=null){
-    			productVo.setSellPrice(productPrice.getSellPrice());
-        		productVo.setOriginalPrice(productPrice.getOriginalPrice());
-    		}    		
-    		productVo.setModuleType(productConfig.getPageModuleType());
-    		if(productConfig.getPageModuleType() == moduleType.get(0)){
-                recommendProduct = productVo;
-    		}else if(productConfig.getPageModuleType() == moduleType.get(1)){
-    			pageProductNewVoList.add(productVo);
-    		}
-    	}
 
-    	pageProductResponse.setRecommendProduct(recommendProduct);
+            Product product = productService.getProductById(productConfig.getProductId());
+
+            if(productConfig.getPageModuleType() == BizConstant.PAGE_MODULE_TYPE_PRODUCT){
+                recommendProduct.setProductId(productConfig.getProductId());
+                recommendProduct.setProductName(product.getProductName());
+                recommendProduct.setProductImg(productConfig.getProductImg());
+                recommendProduct.setDetailDescription(product.getDetailDescription());
+                if(productPrice!=null){
+                    recommendProduct.setSellPrice(productPrice.getSellPrice());
+                    recommendProduct.setOriginalPrice(productPrice.getOriginalPrice());
+                }
+            }else if(productConfig.getPageModuleType() == BizConstant.PAGE_MODULE_TYPE_PRODUCT_NEWARRIVAL){
+                productNewVo.setProductId(productConfig.getProductId());
+                productNewVo.setProductName(product.getProductName());
+                productNewVo.setProductImg(productConfig.getProductImg());
+                if(productPrice!=null){
+                    productNewVo.setSellPrice(productPrice.getSellPrice());
+                }
+                pageProductNewVoList.add(productNewVo);
+            }
+        }
+
+        pageProductResponse.setRecommendProduct(recommendProduct);
         pageProductResponse.setPageNewProductVoList(pageProductNewVoList);
-    	
+
         return pageProductResponse;
     }
 
