@@ -1,27 +1,42 @@
 package com.wow.stock.service.impl;
 
-import com.wow.common.response.CommonResponse;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.stock.mapper.ProductVirtualStockMapper;
-import com.wow.stock.mapper.ProductWarehouseStockMapper;
-import com.wow.stock.model.ProductVirtualStock;
-import com.wow.stock.model.ProductWarehouseStock;
-import com.wow.stock.service.StockService;
-import com.wow.stock.vo.*;
-import com.wow.stock.vo.response.AvailableStockResponse;
-import com.wow.stock.vo.response.AvailableStocksResponse;
-import com.wow.stock.vo.response.BatchFreezeStockResponse;
-import com.wow.stock.vo.response.FreezeStockResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.DateUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.stock.mapper.ProductStockChangeLogMapper;
+import com.wow.stock.mapper.ProductVirtualStockMapper;
+import com.wow.stock.mapper.ProductWarehouseStockMapper;
+import com.wow.stock.model.ProductStockChangeLog;
+import com.wow.stock.model.ProductVirtualStock;
+import com.wow.stock.model.ProductWarehouseStock;
+import com.wow.stock.service.StockService;
+import com.wow.stock.vo.AvailableStockVo;
+import com.wow.stock.vo.FreezeStockVo;
+import com.wow.stock.vo.ProductQtyVo;
+import com.wow.stock.vo.ProductWarehouseQtyVo;
+import com.wow.stock.vo.UnfreezeStockVo;
+import com.wow.stock.vo.VirtualStockVo;
+import com.wow.stock.vo.WarehouseStockFrozenResultVo;
+import com.wow.stock.vo.WarehouseStockVo;
+import com.wow.stock.vo.response.AvailableStockResponse;
+import com.wow.stock.vo.response.AvailableStocksResponse;
+import com.wow.stock.vo.response.BatchFreezeStockResponse;
+import com.wow.stock.vo.response.FreezeStockResponse;
 
 /**
  * Created by zhengzhiqing on 16/6/17.
@@ -30,10 +45,13 @@ import java.util.*;
 @Transactional("stockTransactionManager")
 public class StockServiceImpl implements StockService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StockServiceImpl.class);
+    //private static final Logger logger = LoggerFactory.getLogger(StockServiceImpl.class);
 
     @Autowired
     ProductWarehouseStockMapper productWarehouseStockMapper;
+
+    @Autowired
+    ProductStockChangeLogMapper productStockChangeLogMapper;
 
     @Autowired
     ProductVirtualStockMapper productVirtualStockMapper;
@@ -340,14 +358,47 @@ public class StockServiceImpl implements StockService {
      * @param productQty 产品数量-正整数
      */
     @Override
-    public CommonResponse unfreezeWarehouseStock(int productId, int warehouseId, int productQty) {
+    public CommonResponse unfreezeWarehouseStock(int orderId, int productId, int warehouseId, int productQty) {
         CommonResponse commonResponse = new CommonResponse();
         int i = productWarehouseStockMapper.unfreezeWarehouseStock(productId, warehouseId, productQty);
         if (i == 0) {
             commonResponse.setResCode("50604");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50604"));
+
+            return commonResponse;
         }
+
+        //记录库存变动日志
+        ProductStockChangeLog stockChangeLog = wrapStockChangeLog(orderId, productId, warehouseId, productQty);
+        productStockChangeLogMapper.insertSelective(stockChangeLog);
+
         return commonResponse;
+    }
+
+    /**
+     * 包装库存更改日志
+     * 
+     * @param orderId
+     * @param productId
+     * @param warehouseId
+     * @param productQty
+     * @return
+     */
+    private ProductStockChangeLog wrapStockChangeLog(int orderId, int productId, int warehouseId, int productQty) {
+        ProductStockChangeLog stockChangeLog = new ProductStockChangeLog();
+
+        stockChangeLog.setOrderId(orderId);
+        stockChangeLog.setBizType((byte) 3); //设置业务类型 未发货之前取消订单(减冻结)
+        stockChangeLog.setProductId(productId);
+        //虚拟库存没有仓库概念
+        if (warehouseId > 0) {
+            stockChangeLog.setWarehouseId(warehouseId);
+        }
+        stockChangeLog.setStockQty((short) productQty);
+        stockChangeLog.setCreateTime(DateUtil.currentDate());
+        stockChangeLog.setIsDeleted(Boolean.FALSE);
+
+        return stockChangeLog;
     }
 
     /**
@@ -357,13 +408,20 @@ public class StockServiceImpl implements StockService {
      * @param productQty 产品数量-正整数
      */
     @Override
-    public CommonResponse unfreezeVirtualStock(int productId, int productQty) {
+    public CommonResponse unfreezeVirtualStock(int orderId, int productId, int productQty) {
         CommonResponse commonResponse = new CommonResponse();
         int i = productVirtualStockMapper.unfreezeVirtualStock(productId, productQty);
         if (i == 0) {
             commonResponse.setResCode("50605");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50605"));
+
+            return commonResponse;
         }
+
+        //记录库存变动日志
+        ProductStockChangeLog stockChangeLog = wrapStockChangeLog(orderId, productId, 0, productQty);
+        productStockChangeLogMapper.insertSelective(stockChangeLog);
+
         return commonResponse;
     }
 
@@ -379,17 +437,19 @@ public class StockServiceImpl implements StockService {
 
         int productId = unfreezeStockVo.getProductId();
         int virtualProductQty = unfreezeStockVo.getVirtualProductQty();
+        int orderId = unfreezeStockVo.getOrderId();
         List<ProductWarehouseQtyVo> productWarehouseQtyVoList = unfreezeStockVo.getProductWarehouseQtyVoList();
 
         //解冻仓库库存
         if (CollectionUtil.isNotEmpty(productWarehouseQtyVoList)) {
             for (ProductWarehouseQtyVo productWarehouseQtyVo : productWarehouseQtyVoList) {
-                unfreezeWarehouseStock(productId, productWarehouseQtyVo.getWarehouseId(), productWarehouseQtyVo.getProductQty());
+                unfreezeWarehouseStock(orderId, productId, productWarehouseQtyVo.getWarehouseId(), productWarehouseQtyVo
+                    .getProductQty());
             }
         }
         //解冻虚拟库存
         if (virtualProductQty > 0) {
-            unfreezeVirtualStock(productId, virtualProductQty);
+            unfreezeVirtualStock(orderId, productId, virtualProductQty);
         }
         return commonResponse;
     }
@@ -464,7 +524,7 @@ public class StockServiceImpl implements StockService {
 
         //        Map<Integer, AvailableStockVo> map = new HashMap<Integer, AvailableStockVo>();
 
-        List<AvailableStockVo> availableStockVoList = new ArrayList<>();
+        //List<AvailableStockVo> availableStockVoList = new ArrayList<AvailableStockVo>();
 
         //首先遍历所有仓库,查找仓库可用库存
         List<WarehouseStockVo> warehouseStockVoList = productWarehouseStockMapper
@@ -482,7 +542,7 @@ public class StockServiceImpl implements StockService {
 
         for (WarehouseStockVo warehouseStockVo : warehouseStockVoList) {
             int productId = warehouseStockVo.getProductId();
-            int warehouseId = warehouseStockVo.getWarehouseId();
+            //int warehouseId = warehouseStockVo.getWarehouseId();
             int availableStock = warehouseStockVo.getAvailableStock();
 
             if (map.get(productId) == null) {

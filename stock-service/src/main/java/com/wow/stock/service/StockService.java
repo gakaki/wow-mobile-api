@@ -1,5 +1,7 @@
 package com.wow.stock.service;
 
+import java.util.List;
+
 import com.wow.common.response.CommonResponse;
 import com.wow.stock.model.ProductVirtualStock;
 import com.wow.stock.model.ProductWarehouseStock;
@@ -9,8 +11,6 @@ import com.wow.stock.vo.response.AvailableStockResponse;
 import com.wow.stock.vo.response.AvailableStocksResponse;
 import com.wow.stock.vo.response.BatchFreezeStockResponse;
 import com.wow.stock.vo.response.FreezeStockResponse;
-
-import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/17.
@@ -83,20 +83,20 @@ public interface StockService {
 
     /**
      * 解冻仓库库存(一般是取消订单)
-     *
+     * @param orderId
      * @param productId
      * @param warehouseId
      * @param productQty 产品数量-正整数
      */
-    CommonResponse unfreezeWarehouseStock(int productId, int warehouseId, int productQty);
+    CommonResponse unfreezeWarehouseStock(int orderId, int productId, int warehouseId, int productQty);
 
     /**
      * 解冻虚拟库存(一般是取消订单)
-     *
+     * @param orderId
      * @param productId
      * @param productQty 产品数量-正整数
      */
-    CommonResponse unfreezeVirtualStock(int productId, int productQty);
+    CommonResponse unfreezeVirtualStock(int orderId,int productId, int productQty);
 
     /**
      * 解冻库存(通用,一般是取消订单)
@@ -111,7 +111,6 @@ public interface StockService {
      * @param unfreezeStockVoList
      */
     CommonResponse batchUnfreezeStock(List<UnfreezeStockVo> unfreezeStockVoList);
-
 
     /**
      * 计算可用库存=仓库可用库存+虚拟可用库存
@@ -138,30 +137,29 @@ public interface StockService {
      */
     CommonResponse shipOutGoods(int productId, int warehouseId, int productQty);
 
+    //    /**
+    //     * 创建仓库(自营的创建自营仓库,供应商的创建供应商虚拟仓库)
+    //     *
+    //     * @param warehouse
+    //     * @return
+    //     */
+    //    CommonResponse createWarehouse(Warehouse warehouse);
+    //
+    //    /**
+    //     * 变更仓库信息
+    //     *
+    //     * @param warehouse
+    //     * @return
+    //     */
+    //    CommonResponse updateWarehouse(Warehouse warehouse);
 
-//    /**
-//     * 创建仓库(自营的创建自营仓库,供应商的创建供应商虚拟仓库)
-//     *
-//     * @param warehouse
-//     * @return
-//     */
-//    CommonResponse createWarehouse(Warehouse warehouse);
-//
-//    /**
-//     * 变更仓库信息
-//     *
-//     * @param warehouse
-//     * @return
-//     */
-//    CommonResponse updateWarehouse(Warehouse warehouse);
-
-//    /**
-//     * 查询产品所在仓库列表
-//     *
-//     * @param productId
-//     * @return
-//     */
-//    List<Integer> selectWarehouseByProductId(int productId);
+    //    /**
+    //     * 查询产品所在仓库列表
+    //     *
+    //     * @param productId
+    //     * @return
+    //     */
+    //    List<Integer> selectWarehouseByProductId(int productId);
 
     /**
      * 查找所有有虚拟冻结的产品库存信息
