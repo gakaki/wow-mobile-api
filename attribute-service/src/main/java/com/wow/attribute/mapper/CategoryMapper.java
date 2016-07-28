@@ -30,5 +30,5 @@ public interface CategoryMapper{
     
     List<Category> selectAllCategory(@Param("categoryLevel") Integer categoryLevel);
     
-    List<Category> selectCategoryByParendId(@Param("categoryParendId") Integer categoryParendId);
+    List<Category> selectCategoryByParentId(@Param("categoryParentId") Integer categoryParentId);
 }
