@@ -914,7 +914,7 @@
     from product p
     inner join product_designer pd on pd.product_id=p.id
     inner join product_price pp on pp.product_id=p.id
-    where pd.id=#{designerId} order by p.id desc
+    where pd.designer_id=#{designerId} order by p.id desc
   </select>
   
 </mapper>

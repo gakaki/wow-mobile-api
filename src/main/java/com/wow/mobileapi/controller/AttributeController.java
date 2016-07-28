@@ -161,8 +161,9 @@ public class AttributeController extends BaseController {
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productResponse);
-            } 
-            apiResponse.setData(productResponse);
+            }else{
+            	apiResponse.setData(productResponse);
+            }            
         } catch (Exception e) {
             logger.error("获取二级子分类---" + e);
             e.printStackTrace();
