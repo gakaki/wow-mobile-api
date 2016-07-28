@@ -2,6 +2,7 @@ package com.wow.common.service;
 
 import com.wow.common.model.Dictionary;
 import com.wow.common.model.DictionaryExample;
+import com.wow.common.request.DictionaryRequest;
 
 
 import java.util.List;
@@ -29,13 +30,13 @@ public interface DictionaryService {
      *
      * @return
      */
-    List<Dictionary> queryDictionary(DictionaryExample example);
+    List<Dictionary> queryDictionary(DictionaryRequest dictionaryRequest);
 
     /**
      *
      * @param dictionary
-     * @param example
+     * @param dictionaryRequest
      * @return
      */
-     int updateDictionary(Dictionary dictionary,DictionaryExample example);
+     int updateDictionary(Dictionary dictionary,DictionaryRequest dictionaryRequest);
 }
