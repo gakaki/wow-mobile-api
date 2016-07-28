@@ -1,10 +1,23 @@
 package com.wow.page.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Consumer;
-
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.page.mapper.*;
+import com.wow.page.model.*;
+import com.wow.page.model.PageSceneConfig;
+import com.wow.page.service.PageConfigService;
+import com.wow.page.vo.PageCategoryVo;
+import com.wow.page.vo.PageProductVo;
+import com.wow.page.vo.PageTopicVo;
+import com.wow.page.vo.ProductImageVo;
+import com.wow.page.vo.response.*;
+import com.wow.price.model.ProductPrice;
+import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductPriceResponse;
+import com.wow.product.model.*;
+import com.wow.product.service.ProductService;
+import com.wow.product.service.SceneService;
+import com.wow.product.service.TopicService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,39 +26,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.page.mapper.PageBannerConfigMapper;
-import com.wow.page.mapper.PageCategoryConfigMapper;
-import com.wow.page.mapper.PageProductConfigMapper;
-import com.wow.page.mapper.PageSceneConfigMapper;
-import com.wow.page.mapper.PageTopicConfigMapper;
-import com.wow.page.model.PageBannerConfig;
-import com.wow.page.model.PageBannerConfigExample;
-import com.wow.page.model.PageProductConfig;
-import com.wow.page.model.PageSceneConfig;
-import com.wow.page.model.PageTopicConfig;
-import com.wow.page.service.PageConfigService;
-import com.wow.page.vo.PageCategoryVo;
-import com.wow.page.vo.PageProductVo;
-import com.wow.page.vo.PageTopicVo;
-import com.wow.page.vo.ProductImageVo;
-import com.wow.page.vo.response.PageBannerResponse;
-import com.wow.page.vo.response.PageCategoryResponse;
-import com.wow.page.vo.response.PageProductResponse;
-import com.wow.page.vo.response.PageSceneResponse;
-import com.wow.page.vo.response.PageTopicResponse;
-import com.wow.price.model.ProductPrice;
-import com.wow.price.service.PriceService;
-import com.wow.price.vo.ProductPriceResponse;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductImage;
-import com.wow.product.model.ProductShortListInTopic;
-import com.wow.product.model.Scene;
-import com.wow.product.model.Topic;
-import com.wow.product.service.ProductService;
-import com.wow.product.service.SceneService;
-import com.wow.product.service.TopicService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Consumer;
 
 
 /**
@@ -210,14 +194,13 @@ public class PageConfigServiceImpl implements PageConfigService {
      *
      * @param pageType
      * @param moduleType
-     * @param moduleNewType
      * @return
      */
     @Override
     public PageProductResponse getProductsOnPage(int pageType,List<Byte> moduleType) {
     	PageProductResponse pageProductResponse = new PageProductResponse();
     	List<PageProductConfig> productList = pageProductConfigMapper.selectByPageType(pageType);
-    	List<PageProductVo> pageProductVoList = new ArrayList<PageProductVo>();
+    	PageProductVo recommendProduct = new PageProductVo();
     	List<PageProductVo> pageProductNewVoList = new ArrayList<PageProductVo>();
     	for(PageProductConfig productConfig:productList){
 			PageProductVo productVo = new PageProductVo();
@@ -231,18 +214,17 @@ public class PageConfigServiceImpl implements PageConfigService {
     		productVo.setDetailDescription(product.getDetailDescription());
     		if(productPrice!=null){
     			productVo.setSellPrice(productPrice.getSellPrice());
-//        		productVo.setCostPrice(productPrice.getCostPrice());
         		productVo.setOriginalPrice(productPrice.getOriginalPrice());
     		}    		
     		productVo.setModuleType(productConfig.getPageModuleType());
     		if(productConfig.getPageModuleType() == moduleType.get(0)){
-        		pageProductVoList.add(productVo);
+                recommendProduct = productVo;
     		}else if(productConfig.getPageModuleType() == moduleType.get(1)){
     			pageProductNewVoList.add(productVo);
     		}
     	}
 
-    	pageProductResponse.setPageProductVoList(pageProductVoList);
+    	pageProductResponse.setRecommendProduct(recommendProduct);
         pageProductResponse.setPageNewProductVoList(pageProductNewVoList);
     	
         return pageProductResponse;
