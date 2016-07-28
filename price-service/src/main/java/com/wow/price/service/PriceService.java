@@ -55,7 +55,7 @@ public interface PriceService {
      * @param productIds
      * @return
      */
-    ProductListPriceResponse getProductPriceList(List<Integer> productIds);
+    ProductListPriceResponse batchGetProductPrice(List<Integer> productIds);
 
     /**
      * 添加价格变更日志
