@@ -109,7 +109,7 @@ public class PageController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(pageCategoryResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageCategoryResponse);
             } else {
-                apiResponse.setData(pageCategoryResponse.getPageCategoryVoList());
+                apiResponse.setData(pageCategoryResponse);
             }
         } catch (Exception e) {
             logger.error("查找category_find错误---" + e);
