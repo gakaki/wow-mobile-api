@@ -294,7 +294,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   
-  <select id="selectBrandFirstLetter" resultType="com.wow.product.vo.BrandVo" >
+  <select id="selectBrandFirstLetter" resultType="java.lang.String" >
     select
     	brand_name_first_letter as brandFirstLetter
     from brand group by brand_name_first_letter order by brand_name_first_letter asc
