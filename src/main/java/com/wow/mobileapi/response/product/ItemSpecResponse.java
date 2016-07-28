@@ -28,7 +28,7 @@ public class ItemSpecResponse extends CommonResponse {
     private List<String> specNameList;
 
     //子品特有的信息,如颜色,规格,重量,尺寸,价格,库存等
-    List<SubProductInfo> subProductInfoList;
+//    List<SubProductInfo> subProductInfoList;
 
     //按颜色做成Map
     List<ColorSpecVo> colorSpecVoList;
@@ -91,12 +91,12 @@ public class ItemSpecResponse extends CommonResponse {
         this.sizeText = sizeText;
     }
 
-    public List<SubProductInfo> getSubProductInfoList() {
-        return subProductInfoList;
-    }
-
-    public void setSubProductInfoList(List<SubProductInfo> subProductInfoList) {
-        this.subProductInfoList = subProductInfoList;
-    }
+//    public List<SubProductInfo> getSubProductInfoList() {
+//        return subProductInfoList;
+//    }
+//
+//    public void setSubProductInfoList(List<SubProductInfo> subProductInfoList) {
+//        this.subProductInfoList = subProductInfoList;
+//    }
 
 }

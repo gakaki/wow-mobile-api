@@ -1,37 +1,15 @@
 package com.wow.mobileapi.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.attribute.model.Category;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.common.page.PageModel;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.MapUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
+import com.wow.common.util.*;
 import com.wow.mobileapi.request.product.ProductInfoRequest;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
-import com.wow.mobileapi.response.product.ItemDetailResponse;
-import com.wow.mobileapi.response.product.ItemSpecResponse;
-import com.wow.mobileapi.response.product.ProductImageResponse;
-import com.wow.mobileapi.response.product.SubProductInfo;
+import com.wow.mobileapi.response.product.*;
 import com.wow.mobileapi.util.ImgPrefixUtil;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
@@ -53,6 +31,17 @@ import com.wow.product.vo.response.ProductResponse;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
 import com.wow.stock.vo.response.AvailableStocksResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ProductController extends BaseController {
@@ -222,8 +211,6 @@ public class ProductController extends BaseController {
             //规格集合
             List<String> specNameList = new ArrayList<>();
 
-            List<SubProductInfo> subProductInfoList = new ArrayList<>();
-
             //获取系列品所有子品
             List<Product> subProductList = productSerialService.getProductSerialsDetail(productId);
             if (CollectionUtil.isEmpty(subProductList)) {
@@ -251,32 +238,47 @@ public class ProductController extends BaseController {
             if (productPriceListResponse != null && MapUtil.isNotEmpty(productPriceListResponse.getMap())) {
                 priceMap = productPriceListResponse.getMap();
             }
-            //颜色Map
-            Map<String,Map<String, Object>> colorMap = new HashMap<>();
-            //规格Map
-            Map<String,Map<String, Object>> specMap = new HashMap<>();
+
+            //颜色list
+            List<ColorSpecVo> colorSpecVoList = new ArrayList<>();
+            Map<String, ColorSpecVo> colorSepcVoMap = new HashMap<>();
+            //规格list
+            List<SpecColorVo> specColorVoList = new ArrayList<>();
+            Map<String, SpecColorVo> specColorVoMap = new HashMap<>();
 
             for (Product subProduct : subProductList) {
                 int subProductId = subProduct.getId();
+
                 subProductIds.add(subProductId);
                 String colorDisplayName = subProduct.getColorDisplayName();
                 if (!colorDisplayNameList.contains(colorDisplayName)) {
                     colorDisplayNameList.add(colorDisplayName);
-                    colorMap.put(colorDisplayName,new HashMap<String,Object>());
                 }
+
+                if (!colorSepcVoMap.containsKey(colorDisplayName)) {
+                    ColorSpecVo colorSpecVo = new ColorSpecVo();
+                    colorSpecVo.setColorDisplayName(colorDisplayName);
+                    colorSpecVo.setSpecMapVoList(new ArrayList<>());
+                    colorSpecVoList.add(colorSpecVo);
+                    colorSepcVoMap.put(colorDisplayName,colorSpecVo);
+                }
+
                 String specName = subProduct.getSpecName();
                 if (!specNameList.contains(specName)) {
                     specNameList.add(specName);
-                    specMap.put(specName,new HashMap<String,Object>());
                 }
 
-
+                if (!specColorVoMap.containsKey(specName)) {
+                    SpecColorVo specColorVo = new SpecColorVo();
+                    specColorVo.setSpecName(specName);
+                    specColorVo.setColorMapVoList(new ArrayList<>());
+                    specColorVoList.add(specColorVo);
+                    specColorVoMap.put(specName,specColorVo);
+                }
 
                 SubProductInfo subProductInfo = new SubProductInfo();
                 subProductInfo.setSizeText(subProduct.getSizeText());
-                subProductInfo.setColorDisplayName(subProduct.getColorDisplayName());
                 subProductInfo.setProductColorImg(subProduct.getProductColorImg());
-                subProductInfo.setSpecName(subProduct.getSpecName());
                 subProductInfo.setSubProductId(subProductId);
                 subProductInfo.setWeight(subProduct.getWeight());
 
@@ -295,16 +297,24 @@ public class ProductController extends BaseController {
                 } else {
                     setInternalErrorResponse(apiResponse);
                 }
+                SpecMapVo specMapVo = new SpecMapVo();
+                specMapVo.setSpecName(specName);
+                specMapVo.setSubProductInfo(subProductInfo);
+                ColorSpecVo colorSpecVo1 = colorSepcVoMap.get(colorDisplayName);
+                colorSpecVo1.getSpecMapVoList().add(specMapVo);
 
-                colorMap.get(colorDisplayName).put(specName, subProductInfo);
-                specMap.get(specName).put(colorDisplayName,subProductInfo);
+                ColorMapVo colorMapVo = new ColorMapVo();
+                colorMapVo.setColorDisplayName(colorDisplayName);
+                colorMapVo.setSubProductInfo(subProductInfo);
+                SpecColorVo specColorVo1 = specColorVoMap.get(specName);
+                specColorVo1.getColorMapVoList().add(colorMapVo);
 
-                subProductInfoList.add(subProductInfo);
             }
 
             itemSpecResponse.setColorDisplayNameList(colorDisplayNameList);
             itemSpecResponse.setSpecNameList(specNameList);
-            itemSpecResponse.setSubProductInfoList(subProductInfoList);
+            itemSpecResponse.setColorSpecVoList(colorSpecVoList);
+            itemSpecResponse.setSpecColorVoList(specColorVoList);
 
             apiResponse.setData(itemSpecResponse);
         } catch (Exception e) {
