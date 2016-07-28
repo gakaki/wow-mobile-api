@@ -30,5 +30,5 @@ public interface PageCategoryConfigMapper {
 
     int updateByPrimaryKey(PageCategoryConfig record);
     
-    List<PageCategoryVo> selectByParentCategoryId(@Param("pageType") int pageType,@Param("categoryPid") Integer categoryPid);
+    List<PageCategoryVo> selectByParentCategoryId(@Param("pageType") int pageType,@Param("categoryLevel") Integer categoryLevel);
 }

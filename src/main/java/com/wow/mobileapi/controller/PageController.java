@@ -81,12 +81,15 @@ public class PageController extends BaseController {
 
         try {
         	// 根据分类，将产品的上新和单品分别放入两个list中返回给前台调用
-        	PageProductResponse pageProductsResponse = pageConfigService.getProductsOnPage(BizConstant.PAGE_TYPE_FIND,BizConstant.PAGE_MODULE_TYPE_PRODUCT,BizConstant.PAGE_MODULE_TYPE_PRODUCT_NEWARRIVAL);
+        	List<Byte> moduleType = new ArrayList<Byte>();
+        	moduleType.add(BizConstant.PAGE_MODULE_TYPE_PRODUCT);
+        	moduleType.add(BizConstant.PAGE_MODULE_TYPE_PRODUCT_NEWARRIVAL);
+        	PageProductResponse pageProductsResponse = pageConfigService.getProductsOnPage(BizConstant.PAGE_TYPE_FIND,moduleType);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(pageProductsResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageProductsResponse);
             } else {
-                apiResponse.setData(pageProductsResponse.getPageProductVoList());
+                apiResponse.setData(pageProductsResponse);
             }
         } catch (Exception e) {
             logger.error("查找product_find错误---" + e);
@@ -106,7 +109,7 @@ public class PageController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(pageCategoryResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageCategoryResponse);
             } else {
-                apiResponse.setData(pageCategoryResponse.getPageCategoryVoList());
+                apiResponse.setData(pageCategoryResponse);
             }
         } catch (Exception e) {
             logger.error("查找category_find错误---" + e);

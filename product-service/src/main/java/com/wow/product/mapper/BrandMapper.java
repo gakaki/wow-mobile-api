@@ -33,5 +33,5 @@ public interface BrandMapper {
 
     int updateByPrimaryKey(Brand record);
     
-    List<BrandVo> selectBrandFirstLetter();
+    List<String> selectBrandFirstLetter();
 }

@@ -214,7 +214,7 @@ public class PageConfigServiceImpl implements PageConfigService {
      * @return
      */
     @Override
-    public PageProductResponse getProductsOnPage(int pageType,int moduleType,int moduleNewType) {
+    public PageProductResponse getProductsOnPage(int pageType,List<Byte> moduleType) {
     	PageProductResponse pageProductResponse = new PageProductResponse();
     	List<PageProductConfig> productList = pageProductConfigMapper.selectByPageType(pageType);
     	List<PageProductVo> pageProductVoList = new ArrayList<PageProductVo>();
@@ -231,13 +231,13 @@ public class PageConfigServiceImpl implements PageConfigService {
     		productVo.setDetailDescription(product.getDetailDescription());
     		if(productPrice!=null){
     			productVo.setSellPrice(productPrice.getSellPrice());
-        		productVo.setCostPrice(productPrice.getCostPrice());
+//        		productVo.setCostPrice(productPrice.getCostPrice());
+        		productVo.setOriginalPrice(productPrice.getOriginalPrice());
     		}    		
     		productVo.setModuleType(productConfig.getPageModuleType());
-
-    		if(productConfig.getPageModuleType() == moduleType){
+    		if(productConfig.getPageModuleType() == moduleType.get(0)){
         		pageProductVoList.add(productVo);
-    		}else if(productConfig.getPageModuleType() == moduleNewType){
+    		}else if(productConfig.getPageModuleType() == moduleType.get(1)){
     			pageProductNewVoList.add(productVo);
     		}
     	}
