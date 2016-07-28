@@ -1,5 +1,7 @@
 package com.wow.common.config;
 
+import com.wow.common.page.PagePlugin;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -35,6 +37,14 @@ public class CommonDSConfig {
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources("classpath:/mapper/common/*Mapper.xml"));
+
+        //加入分页插件
+        PagePlugin pagePlugin=new PagePlugin();
+        pagePlugin.setDialect("mysql");
+        pagePlugin.setPageSqlId(".*ListPage.*"); //以listPage结尾
+
+        bean.setPlugins(new Interceptor[] {pagePlugin});
+
         return bean.getObject();
     }
 

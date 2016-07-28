@@ -13,10 +13,7 @@ import com.wow.common.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +21,7 @@ import java.util.List;
  * Created by win7 on 2016/7/27.
  */
 @RestController
+@CrossOrigin(maxAge = 3600)
 public class DictionaryController extends BaseController{
 
     private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
@@ -31,7 +29,7 @@ public class DictionaryController extends BaseController{
     @Autowired
     private DictionaryService dictionaryService;
 
-    @RequestMapping(value="/v1/dictionary/add",method = RequestMethod.GET)
+    @RequestMapping(value="/v1/dictionary/add",method = RequestMethod.POST)
     public ApiResponse addDictionary(ApiRequest apiRequest){
         ApiResponse apiResponse = new ApiResponse();
         DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);
@@ -52,7 +50,7 @@ public class DictionaryController extends BaseController{
         return apiResponse;
     }
 
-    @RequestMapping(value="/v1/dictionary/del",method = RequestMethod.GET)
+    @RequestMapping(value="/v1/dictionary/del",method = RequestMethod.POST)
     public ApiResponse delDictionary(ApiRequest apiRequest){
         ApiResponse apiResponse = new ApiResponse();
         DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);
@@ -89,7 +87,7 @@ public class DictionaryController extends BaseController{
         return apiResponse;
     }
 
-    @RequestMapping(value="/v1/dictionary/update",method = RequestMethod.GET)
+    @RequestMapping(value="/v1/dictionary/update",method = RequestMethod.POST)
     public ApiResponse updateDictionary(ApiRequest apiRequest){
         ApiResponse apiResponse = new ApiResponse();
         DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);

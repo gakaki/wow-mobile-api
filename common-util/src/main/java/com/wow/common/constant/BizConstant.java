@@ -1,4 +1,4 @@
-package com.wow.mobileapi.constant;
+package com.wow.common.constant;
 
 /**
  * Created by zhengzhiqing on 16/7/20.

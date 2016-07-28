@@ -1,19 +1,9 @@
 package com.wow.mobileapi.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.wow.common.constant.BizConstant;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
-import com.wow.mobileapi.constant.BizConstant;
 import com.wow.mobileapi.response.page.PageBannerVo;
 import com.wow.mobileapi.response.page.PageBannerVoResponse;
 import com.wow.page.model.PageBannerConfig;
@@ -21,6 +11,15 @@ import com.wow.page.service.PageConfigService;
 import com.wow.page.vo.response.PageBannerResponse;
 import com.wow.page.vo.response.PageCategoryResponse;
 import com.wow.page.vo.response.PageProductResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/23.
