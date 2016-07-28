@@ -1,13 +1,6 @@
 package com.wow.attribute.vo;
 
-import com.wow.common.response.CommonResponse;
-
-public class CategoryFirstVo extends CommonResponse {
-
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class CategoryFirstVo {
 
 	private Integer id;
     

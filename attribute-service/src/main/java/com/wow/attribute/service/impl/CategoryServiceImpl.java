@@ -202,14 +202,14 @@ public class CategoryServiceImpl implements CategoryService {
     /**
      * 查询二级分类
      *
-     * @param categoryParendId
+     * @param categoryParentId
      * @return
      */
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public CategorySecondResponse getCategoryByParentId(Integer categoryParendId){
+    public CategorySecondResponse getCategoryByParentId(Integer categoryParentId){
     	CategorySecondResponse categorySecondResponse = new CategorySecondResponse();
     	
-    	Category firstCategory = categoryMapper.selectByPrimaryKey(categoryParendId);
+    	Category firstCategory = categoryMapper.selectByPrimaryKey(categoryParentId);
     	CategoryFirstVo categoryFirstVo = new CategoryFirstVo();
     	if(firstCategory!=null){
     		categoryFirstVo.setId(firstCategory.getId());
@@ -219,7 +219,7 @@ public class CategoryServiceImpl implements CategoryService {
     	}
     	categorySecondResponse.setCategoryFirstVo(categoryFirstVo);
     	
-    	List<Category> categoryList = categoryMapper.selectCategoryByParendId(categoryParendId);
+    	List<Category> categoryList = categoryMapper.selectCategoryByParentId(categoryParentId);
     	List<CategorySecondListVo> categorySecondList = new ArrayList<CategorySecondListVo>();
     	for(Category category : categoryList){
     		CategorySecondListVo vo = new CategorySecondListVo();

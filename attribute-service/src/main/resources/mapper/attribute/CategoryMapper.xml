@@ -345,12 +345,12 @@
     </if>
   </select>
   
-  <select id="selectCategoryByParendId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  <select id="selectCategoryByParentId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
   	select
     <include refid="Base_Column_List" />
     from category where is_deleted=0
-    <if test="categoryLevel != null" >
-        and parent_category_id = #{categoryParendId,jdbcType=INTEGER}
+    <if test="categoryParentId != null" >
+        and parent_category_id = #{categoryParentId,jdbcType=INTEGER}
     </if>
   </select>
   
