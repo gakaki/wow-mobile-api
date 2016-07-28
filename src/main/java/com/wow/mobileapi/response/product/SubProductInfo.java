@@ -14,11 +14,11 @@ public class SubProductInfo implements Serializable {
     //颜色ID
 //    private Byte colorId;
     //颜色显示名
-    private String colorDisplayName;
+//    private String colorDisplayName;
     //颜色规格图片
     private String productColorImg;
     //规格名称
-    private String specName;
+//    private String specName;
 
     //尺寸文本
     private String sizeText;
@@ -40,13 +40,13 @@ public class SubProductInfo implements Serializable {
         this.subProductId = subProductId;
     }
 
-    public String getColorDisplayName() {
-        return colorDisplayName;
-    }
-
-    public void setColorDisplayName(String colorDisplayName) {
-        this.colorDisplayName = colorDisplayName;
-    }
+//    public String getColorDisplayName() {
+//        return colorDisplayName;
+//    }
+//
+//    public void setColorDisplayName(String colorDisplayName) {
+//        this.colorDisplayName = colorDisplayName;
+//    }
 
     public String getProductColorImg() {
         return productColorImg;
@@ -56,13 +56,13 @@ public class SubProductInfo implements Serializable {
         this.productColorImg = productColorImg;
     }
 
-    public String getSpecName() {
-        return specName;
-    }
-
-    public void setSpecName(String specName) {
-        this.specName = specName;
-    }
+//    public String getSpecName() {
+//        return specName;
+//    }
+//
+//    public void setSpecName(String specName) {
+//        this.specName = specName;
+//    }
 
     public String getSizeText() {
         return sizeText;

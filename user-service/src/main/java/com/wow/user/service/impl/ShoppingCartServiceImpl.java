@@ -60,11 +60,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         CommonResponse response = new CommonResponse();
 
         // 业务校验开始
+        //如果产品id为空 则直接返回
+        if(shoppingCart.getProductId()==null){
+            response.setResCode("40316");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40316"));
+            
+            return response;
+        }
+        
         //判断相关的产品id是否存在
         Product product = productService.getProductById(shoppingCart.getProductId());
         if (product == null) {
-            response.setResCode("41004");
-            response.setResMsg(ErrorCodeUtil.getErrorMsg("41004"));
+            response.setResCode("40301");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40301"));
 
             return response;
         }

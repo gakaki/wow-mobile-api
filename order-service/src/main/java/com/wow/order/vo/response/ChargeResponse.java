@@ -1,7 +1,6 @@
 package com.wow.order.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.pingplusplus.model.Charge;
 import com.wow.common.response.CommonResponse;
 
 /**
@@ -12,13 +11,15 @@ public class ChargeResponse extends CommonResponse {
 
     private static final long serialVersionUID = 1L;
 
-    private Charge charge;
+    //返回的支付凭证信息
+    private String charge;
 
-    public Charge getCharge() {
+    public String getCharge() {
         return charge;
     }
 
-    public void setCharge(Charge charge) {
+    public void setCharge(String charge) {
         this.charge = charge;
     }
+
 }

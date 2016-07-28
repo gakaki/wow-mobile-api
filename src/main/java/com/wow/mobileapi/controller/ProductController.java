@@ -22,17 +22,21 @@ import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.ImgPrefixUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.MapUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.product.ProductInfoRequest;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
+import com.wow.mobileapi.response.product.ColorMapVo;
+import com.wow.mobileapi.response.product.ColorSpecVo;
 import com.wow.mobileapi.response.product.ItemDetailResponse;
 import com.wow.mobileapi.response.product.ItemSpecResponse;
 import com.wow.mobileapi.response.product.ProductImageResponse;
+import com.wow.mobileapi.response.product.SpecColorVo;
+import com.wow.mobileapi.response.product.SpecMapVo;
 import com.wow.mobileapi.response.product.SubProductInfo;
-import com.wow.mobileapi.util.ImgPrefixUtil;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
@@ -222,8 +226,6 @@ public class ProductController extends BaseController {
             //规格集合
             List<String> specNameList = new ArrayList<>();
 
-            List<SubProductInfo> subProductInfoList = new ArrayList<>();
-
             //获取系列品所有子品
             List<Product> subProductList = productSerialService.getProductSerialsDetail(productId);
             if (CollectionUtil.isEmpty(subProductList)) {
@@ -245,33 +247,55 @@ public class ProductController extends BaseController {
                     availableStockMap.put(availableStockVo.getProductId(), availableStockVo.getTotalAvailableStockQty());
                 }
             }
-            Map<Integer, ProductPrice> priceMap = new HashMap();
+            Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
             //批量查询价格
             ProductListPriceResponse productPriceListResponse = priceService.getProductPriceList(subProductIds);
             if (productPriceListResponse != null && MapUtil.isNotEmpty(productPriceListResponse.getMap())) {
                 priceMap = productPriceListResponse.getMap();
             }
 
+            //颜色list
+            List<ColorSpecVo> colorSpecVoList = new ArrayList<>();
+            Map<String, ColorSpecVo> colorSepcVoMap = new HashMap<>();
+            //规格list
+            List<SpecColorVo> specColorVoList = new ArrayList<>();
+            Map<String, SpecColorVo> specColorVoMap = new HashMap<>();
+
             for (Product subProduct : subProductList) {
                 int subProductId = subProduct.getId();
+
                 subProductIds.add(subProductId);
                 String colorDisplayName = subProduct.getColorDisplayName();
                 if (!colorDisplayNameList.contains(colorDisplayName)) {
                     colorDisplayNameList.add(colorDisplayName);
                 }
+
+                if (!colorSepcVoMap.containsKey(colorDisplayName)) {
+                    ColorSpecVo colorSpecVo = new ColorSpecVo();
+                    colorSpecVo.setColorDisplayName(colorDisplayName);
+                    colorSpecVo.setSpecMapVoList(new ArrayList<>());
+                    colorSpecVoList.add(colorSpecVo);
+                    colorSepcVoMap.put(colorDisplayName,colorSpecVo);
+                }
+
                 String specName = subProduct.getSpecName();
                 if (!specNameList.contains(specName)) {
                     specNameList.add(specName);
                 }
 
+                if (!specColorVoMap.containsKey(specName)) {
+                    SpecColorVo specColorVo = new SpecColorVo();
+                    specColorVo.setSpecName(specName);
+                    specColorVo.setColorMapVoList(new ArrayList<>());
+                    specColorVoList.add(specColorVo);
+                    specColorVoMap.put(specName,specColorVo);
+                }
+
                 SubProductInfo subProductInfo = new SubProductInfo();
                 subProductInfo.setSizeText(subProduct.getSizeText());
-                subProductInfo.setColorDisplayName(subProduct.getColorDisplayName());
                 subProductInfo.setProductColorImg(subProduct.getProductColorImg());
-                subProductInfo.setSpecName(subProduct.getSpecName());
                 subProductInfo.setSubProductId(subProductId);
                 subProductInfo.setWeight(subProduct.getWeight());
-                subProductInfoList.add(subProductInfo);
 
                 //设置库存
                 if(availableStockMap.containsKey(subProductId) && availableStockMap.get(subProductId) > 0) {
@@ -288,13 +312,24 @@ public class ProductController extends BaseController {
                 } else {
                     setInternalErrorResponse(apiResponse);
                 }
+                SpecMapVo specMapVo = new SpecMapVo();
+                specMapVo.setSpecName(specName);
+                specMapVo.setSubProductInfo(subProductInfo);
+                ColorSpecVo colorSpecVo1 = colorSepcVoMap.get(colorDisplayName);
+                colorSpecVo1.getSpecMapVoList().add(specMapVo);
 
-                subProductInfoList.add(subProductInfo);
+                ColorMapVo colorMapVo = new ColorMapVo();
+                colorMapVo.setColorDisplayName(colorDisplayName);
+                colorMapVo.setSubProductInfo(subProductInfo);
+                SpecColorVo specColorVo1 = specColorVoMap.get(specName);
+                specColorVo1.getColorMapVoList().add(colorMapVo);
+
             }
 
             itemSpecResponse.setColorDisplayNameList(colorDisplayNameList);
             itemSpecResponse.setSpecNameList(specNameList);
-            itemSpecResponse.setSubProductInfoList(subProductInfoList);
+            itemSpecResponse.setColorSpecVoList(colorSpecVoList);
+            itemSpecResponse.setSpecColorVoList(specColorVoList);
 
             apiResponse.setData(itemSpecResponse);
         } catch (Exception e) {
@@ -374,7 +409,7 @@ public class ProductController extends BaseController {
             setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
-        
+
         ProductResponse productResponse = new ProductResponse();
         PageModel page = new PageModel();
         page.setShowCount(productInfoRequest.getShowCount());
@@ -382,20 +417,20 @@ public class ProductController extends BaseController {
         ProductQueryVo pqv = new ProductQueryVo();
         BeanUtil.copyProperties(productInfoRequest, pqv);
         page.setModel(pqv);
-        
+
         List<ProductVo> productList = productService.getProductByCategoryIdListPage(page);
         Category category = categoryService.getCategoryById(productInfoRequest.getCategoryId()).getCategory();
         if(productInfoRequest.getCategoryLevel() == null){//当传入分类级别时，查询二级分类
-        	CategoryListResponse categoryListResponse = categoryService.getCategoryByLevel(productInfoRequest.getCategoryLevel());
-        	productResponse.setCategoryList(categoryListResponse.getCategoryList());
+            CategoryListResponse categoryListResponse = categoryService.getCategoryByLevel(productInfoRequest.getCategoryLevel());
+            productResponse.setCategoryList(categoryListResponse.getCategoryList());
         }
-        
+
         if (productList != null && category != null) {
             apiResponse.setResCode("0");
             apiResponse.setResMsg("Success");
             productResponse.setProductList(productList);
             productResponse.setCategorySmallImg(category.getCategoryIconSmall());
-            
+
             apiResponse.setData(productResponse);
         } else {
             apiResponse.setResCode("40201");
@@ -403,7 +438,7 @@ public class ProductController extends BaseController {
         }
         return apiResponse;
     }
-    
+
     /**
      * 根据品牌查询产品列表
      * @param apiRequest
@@ -423,19 +458,19 @@ public class ProductController extends BaseController {
         }
         
         try {
-        	ProductResponse productResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
+            ProductResponse productResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productResponse);
             } else {
-            	List<ProductVo> productList = new ArrayList<ProductVo>();
-                
+                List<ProductVo> productList = new ArrayList<ProductVo>();
+
                 for (ProductVo productVo : productResponse.getProductList()) {
-                	ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
-                	if(pi!=null){
-                		productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
-                		productList.add(productVo);
-                	}
+                    ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
+                    if(pi!=null){
+                        productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
+                        productList.add(productVo);
+                    }
                 }
                 productResponse.setProductList(productList);
                 apiResponse.setData(productResponse);
@@ -454,7 +489,7 @@ public class ProductController extends BaseController {
      */
     @RequestMapping(value = "/v1/product/designer", method = RequestMethod.GET)
     public ApiResponse getProductByDesignerId(ApiRequest apiRequest) {
-    	logger.info("start to get product_designer on page");
+        logger.info("start to get product_designer on page");
         ApiResponse apiResponse = new ApiResponse();
         ProductQueryRequest productQueryRequest = JsonUtil
                 .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
@@ -466,19 +501,19 @@ public class ProductController extends BaseController {
         }
         
         try {
-        	ProductResponse productResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
+            ProductResponse productResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productResponse);
             } else {
-            	List<ProductVo> productList = new ArrayList<ProductVo>();
-                
+                List<ProductVo> productList = new ArrayList<ProductVo>();
+
                 for (ProductVo productVo : productResponse.getProductList()) {
-                	ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
-                	if(pi!=null){
-                		productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
-                		productList.add(productVo);
-                	}
+                    ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
+                    if(pi!=null){
+                        productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
+                        productList.add(productVo);
+                    }
                 }
                 productResponse.setProductList(productList);
                 apiResponse.setData(productResponse);
