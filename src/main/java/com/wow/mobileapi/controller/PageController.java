@@ -86,7 +86,7 @@ public class PageController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(pageProductsResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, pageProductsResponse);
             } else {
-                apiResponse.setData(pageProductsResponse.getPageProductVoList());
+                apiResponse.setData(pageProductsResponse);
             }
         } catch (Exception e) {
             logger.error("查找product_find错误---" + e);
