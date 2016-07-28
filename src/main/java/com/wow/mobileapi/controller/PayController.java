@@ -92,12 +92,10 @@ public class PayController extends BaseController {
             CommonResponse commonResponse = payService.webhooks(content, signature);
             if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
-                response.setStatus(500);
-            } else {
-                response.setStatus(200);
             }
+            response.setStatus(200);
         } catch (Exception e) {
-            e.printStackTrace();
+            response.setStatus(500);
             logger.error("获取通知内容错误", e);
         }
 
