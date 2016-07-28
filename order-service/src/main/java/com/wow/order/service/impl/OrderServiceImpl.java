@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wow.common.constant.CommonConstant;
-import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.enums.SaleOrderStatusEnum;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
@@ -868,11 +867,10 @@ public class OrderServiceImpl implements OrderService {
             orderSettle = new OrderSettleVo();
             BeanUtil.copyProperties(shoppingCartResultVo, orderSettle);
 
-            if (orderSettle.getProductStatus() != null) {
-                //转化产品状态名称
-                orderSettle.setProductStatusName(ProductStatusEnum.get((int) orderSettle.getProductStatus()));
-            }
-
+            //            if (orderSettle.getProductStatus() != null) {
+            //                //转化产品状态名称
+            //                orderSettle.setProductStatusName(ProductStatusEnum.get((int) orderSettle.getProductStatus()));
+            //            }
             //产品单价
             long productPrice = NumberUtil.convertToFen(orderSettle.getSellPrice());
             //计算该产品销售总价( 产品单价乘以数量)
