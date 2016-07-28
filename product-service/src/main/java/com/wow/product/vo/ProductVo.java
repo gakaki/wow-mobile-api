@@ -1,6 +1,7 @@
 package com.wow.product.vo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class ProductVo implements Serializable {
 
@@ -11,9 +12,7 @@ public class ProductVo implements Serializable {
 	
 	private Integer productId;
 	private String productName;
-	private Integer brandId;
-	private String brandCname;
-	private Double sellPrice;
+	private BigDecimal sellPrice;
 	private String productImg;
 	
 	public Integer getProductId() {
@@ -28,22 +27,10 @@ public class ProductVo implements Serializable {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public Integer getBrandId() {
-		return brandId;
-	}
-	public void setBrandId(Integer brandId) {
-		this.brandId = brandId;
-	}
-	public String getBrandCname() {
-		return brandCname;
-	}
-	public void setBrandCname(String brandCname) {
-		this.brandCname = brandCname;
-	}
-	public Double getSellPrice() {
+	public BigDecimal getSellPrice() {
 		return sellPrice;
 	}
-	public void setSellPrice(Double sellPrice) {
+	public void setSellPrice(BigDecimal sellPrice) {
 		this.sellPrice = sellPrice;
 	}
 	public String getProductImg() {

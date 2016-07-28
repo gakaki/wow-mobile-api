@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
+import com.wow.page.vo.PageProductNewVo;
 import com.wow.page.vo.PageProductVo;
 
 /**
@@ -15,7 +16,7 @@ public class PageProductResponse extends CommonResponse {
     private static final long serialVersionUID = 1L;
 
     private List<PageProductVo> pageProductVoList;
-    private List<PageProductVo> pageNewProductVoList;
+    private List<PageProductNewVo> pageNewProductVoList;
 
     public List<PageProductVo> getPageProductVoList() {
         return pageProductVoList;
@@ -25,11 +26,11 @@ public class PageProductResponse extends CommonResponse {
         this.pageProductVoList = pageProductVoList;
     }
 
-	public List<PageProductVo> getPageNewProductVoList() {
+	public List<PageProductNewVo> getPageNewProductVoList() {
 		return pageNewProductVoList;
 	}
 
-	public void setPageNewProductVoList(List<PageProductVo> pageNewProductVoList) {
+	public void setPageNewProductVoList(List<PageProductNewVo> pageNewProductVoList) {
 		this.pageNewProductVoList = pageNewProductVoList;
 	}
     

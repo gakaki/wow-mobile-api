@@ -15,10 +15,8 @@ public class PageProductVo implements Serializable {
 	private String productName;
 	private String productImg;
 	private BigDecimal sellPrice;
-	private BigDecimal costPrice;
 	private BigDecimal originalPrice;
 	private String detailDescription;
-	private Byte moduleType;
 	
 	public Integer getProductId() {
 		return productId;
@@ -44,12 +42,6 @@ public class PageProductVo implements Serializable {
 	public void setSellPrice(BigDecimal sellPrice) {
 		this.sellPrice = sellPrice;
 	}
-	public BigDecimal getCostPrice() {
-		return costPrice;
-	}
-	public void setCostPrice(BigDecimal costPrice) {
-		this.costPrice = costPrice;
-	}
 	public BigDecimal getOriginalPrice() {
 		return originalPrice;
 	}
@@ -64,14 +56,6 @@ public class PageProductVo implements Serializable {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-	public Byte getModuleType() {
-		return moduleType;
-	}
-	public void setModuleType(Byte moduleType) {
-		this.moduleType = moduleType;
-	}
-	
-	
+	}	
 	
 }

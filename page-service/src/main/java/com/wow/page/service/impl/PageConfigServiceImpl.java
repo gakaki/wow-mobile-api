@@ -27,6 +27,7 @@ import com.wow.page.model.PageSceneConfig;
 import com.wow.page.model.PageTopicConfig;
 import com.wow.page.service.PageConfigService;
 import com.wow.page.vo.PageCategoryVo;
+import com.wow.page.vo.PageProductNewVo;
 import com.wow.page.vo.PageProductVo;
 import com.wow.page.vo.PageTopicVo;
 import com.wow.page.vo.ProductImageVo;
@@ -218,27 +219,33 @@ public class PageConfigServiceImpl implements PageConfigService {
     	PageProductResponse pageProductResponse = new PageProductResponse();
     	List<PageProductConfig> productList = pageProductConfigMapper.selectByPageType(pageType);
     	List<PageProductVo> pageProductVoList = new ArrayList<PageProductVo>();
-    	List<PageProductVo> pageProductNewVoList = new ArrayList<PageProductVo>();
+    	List<PageProductNewVo> pageProductNewVoList = new ArrayList<PageProductNewVo>();
     	for(PageProductConfig productConfig:productList){
 			PageProductVo productVo = new PageProductVo();
+			PageProductNewVo productNewVo = new PageProductNewVo();
             ProductPriceResponse priceResponse = priceService.getProductPrice(productConfig.getProductId());
             ProductPrice productPrice = priceResponse.getProductPrice();
-            System.out.println("productPrice:"+productPrice);
+            
     		Product product = productService.getProductById(productConfig.getProductId());
-    		productVo.setProductId(productConfig.getProductId());
-    		productVo.setProductName(product.getProductName());
-    		productVo.setProductImg(productConfig.getProductImg());
-    		productVo.setDetailDescription(product.getDetailDescription());
-    		if(productPrice!=null){
-    			productVo.setSellPrice(productPrice.getSellPrice());
-//        		productVo.setCostPrice(productPrice.getCostPrice());
-        		productVo.setOriginalPrice(productPrice.getOriginalPrice());
-    		}    		
-    		productVo.setModuleType(productConfig.getPageModuleType());
+
     		if(productConfig.getPageModuleType() == moduleType.get(0)){
+	    		productVo.setProductId(productConfig.getProductId());
+	    		productVo.setProductName(product.getProductName());
+	    		productVo.setProductImg(productConfig.getProductImg());
+	    		productVo.setDetailDescription(product.getDetailDescription());
+	    		if(productPrice!=null){
+	    			productVo.setSellPrice(productPrice.getSellPrice());
+	        		productVo.setOriginalPrice(productPrice.getOriginalPrice());
+	    		}    		
         		pageProductVoList.add(productVo);
     		}else if(productConfig.getPageModuleType() == moduleType.get(1)){
-    			pageProductNewVoList.add(productVo);
+    			productNewVo.setProductId(productConfig.getProductId());
+    			productNewVo.setProductName(product.getProductName());
+    			productNewVo.setProductImg(productConfig.getProductImg());
+	    		if(productPrice!=null){
+	    			productNewVo.setSellPrice(productPrice.getSellPrice());
+	    		}
+    			pageProductNewVoList.add(productNewVo);
     		}
     	}
 
