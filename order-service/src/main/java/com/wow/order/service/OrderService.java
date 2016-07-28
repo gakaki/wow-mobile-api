@@ -108,4 +108,12 @@ public interface OrderService {
      * @param order
      */
     boolean deliverDelayedGoods(SaleOrder order);
+    
+    /**
+     * 自动取消订单
+     * 
+     * @param timeoutMinute
+     * @return
+     */
+    CommonResponse autoCancelOrder(int  timeoutMinute);
 }

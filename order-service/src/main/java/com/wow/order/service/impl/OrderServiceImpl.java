@@ -538,6 +538,14 @@ public class OrderServiceImpl implements OrderService {
             return commonResponse;
         }
 
+        //如果订单状态为交易关闭 则无法取消订单
+        if (saleOrder.getOrderStatus().intValue() == SaleOrderStatusEnum.CLOSED.getKey().intValue()) {
+            commonResponse.setResCode("40321");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40321"));
+
+            return commonResponse;
+        }
+
         //如果订单状态为已取消 则无法重复取消订单
         if (saleOrder.getOrderStatus().intValue() == SaleOrderStatusEnum.CANCELLED.getKey().intValue()) {
             commonResponse.setResCode("40309");
@@ -569,15 +577,24 @@ public class OrderServiceImpl implements OrderService {
         SaleOrder targetSaleOrder = new SaleOrder();
 
         targetSaleOrder.setId(saleOrder.getId());
-        targetSaleOrder.setOrderStatus(SaleOrderStatusEnum.CANCELLED.getKey().byteValue());
+        //如果是自动取消订单 则订单状态为交易关闭
+        if (query.isAutoCancel()) {
+            targetSaleOrder.setOrderStatus(SaleOrderStatusEnum.CLOSED.getKey().byteValue());
+        } else {
+            //否则订单状态为订单已取消
+            targetSaleOrder.setOrderStatus(SaleOrderStatusEnum.CANCELLED.getKey().byteValue());
+        }
 
         targetSaleOrder.setCancelRequestTime(DateUtil.currentDate());
         targetSaleOrder.setUpdateTime(DateUtil.currentDate());
 
         saleOrderMapper.updateByPrimaryKeySelective(targetSaleOrder);
 
-        //记录订单操作日志 用户主动取消订单
-        SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40358"));
+        //记录订单操作日志 
+        //如果是自动取消订单 则订单日志为系统取消订单 否则为用户主动取消订单
+        String errorCode = query.isAutoCancel() ? "40360" : "40358";
+
+        SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg(errorCode));
         saleOrderLogMapper.insertSelective(warpOrderLog);
 
         return commonResponse;
@@ -1111,6 +1128,29 @@ public class OrderServiceImpl implements OrderService {
         deliveryOrder.setCreateTime(DateUtil.currentDate());
 
         return deliveryOrder;
+    }
+
+    @Override
+    public CommonResponse autoCancelOrder(int timeoutMinute) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        //查询超过20分钟仍然没有支付的订单列表
+        List<SaleOrder> saleOrders = saleOrderMapper.selectTimeOutUnpayOrder(timeoutMinute);
+        if (CollectionUtil.isEmpty(saleOrders)) {
+            return commonResponse;
+        }
+
+        OrderDetailQuery query = new OrderDetailQuery();
+        query.setAutoCancel(true);
+
+        for (SaleOrder saleOrder : saleOrders) {
+            query.setOrderCode(saleOrder.getOrderCode());
+
+            //调用取消订单服务
+            cancelOrder(query);
+        }
+
+        return commonResponse;
     }
 
 }
