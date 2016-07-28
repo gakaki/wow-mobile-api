@@ -10,7 +10,6 @@ import com.wow.product.model.Product;
 import com.wow.product.model.ProductAttribute;
 import com.wow.product.model.ProductImage;
 import com.wow.product.model.ProductMaterial;
-import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductResponse;
@@ -156,7 +155,7 @@ public interface ProductService {
      * @param asc 是否升序
      * @return
      */
-    List<ProductVo> getProductByCategoryIdListPage(PageModel page);
+    ProductVoResponse getProductByCategoryIdListPage(PageModel page);
 
     /**
      * 获取产品(包括单品和系列品)详情页信息

@@ -12,8 +12,11 @@ import com.wow.attribute.mapper.CategoryMapper;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.model.CategoryExample;
 import com.wow.attribute.service.CategoryService;
+import com.wow.attribute.vo.CategoryFirstVo;
+import com.wow.attribute.vo.CategorySecondListVo;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.attribute.vo.response.CategorySecondResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
@@ -197,16 +200,35 @@ public class CategoryServiceImpl implements CategoryService {
     }
     
     /**
-     * 查询指定级别的分类
+     * 查询二级分类
      *
-     * @param categoryLevel
+     * @param categoryParendId
      * @return
      */
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public CategoryListResponse getCategoryByLevel(Integer categoryLevel){
-    	CategoryListResponse categoryListResponse = new CategoryListResponse();
-    	List<Category> categoryList = categoryMapper.selectAllCategory(categoryLevel);
-    	categoryListResponse.setCategoryList(categoryList);
-    	return categoryListResponse;
+    public CategorySecondResponse getCategoryByParentId(Integer categoryParendId){
+    	CategorySecondResponse categorySecondResponse = new CategorySecondResponse();
+    	
+    	Category firstCategory = categoryMapper.selectByPrimaryKey(categoryParendId);
+    	CategoryFirstVo categoryFirstVo = new CategoryFirstVo();
+    	if(firstCategory!=null){
+    		categoryFirstVo.setId(firstCategory.getId());
+    		categoryFirstVo.setCategoryIconSmall(firstCategory.getCategoryIconSmall());
+    		categoryFirstVo.setCategoryIconBig(firstCategory.getCategoryIconBig());   
+    		categoryFirstVo.setCategoryLevel(firstCategory.getCategoryLevel());
+    	}
+    	categorySecondResponse.setCategoryFirstVo(categoryFirstVo);
+    	
+    	List<Category> categoryList = categoryMapper.selectCategoryByParendId(categoryParendId);
+    	List<CategorySecondListVo> categorySecondList = new ArrayList<CategorySecondListVo>();
+    	for(Category category : categoryList){
+    		CategorySecondListVo vo = new CategorySecondListVo();
+    		vo.setId(category.getId());
+    		vo.setCategoryName(category.getCategoryName());  
+    		vo.setCategoryLevel(category.getCategoryLevel());
+    		categorySecondList.add(vo);
+    	}
+    	categorySecondResponse.setCategorySecondListVo(categorySecondList);
+    	return categorySecondResponse;
     }
 }

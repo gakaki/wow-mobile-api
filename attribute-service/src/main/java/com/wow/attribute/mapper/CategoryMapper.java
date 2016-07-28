@@ -29,4 +29,6 @@ public interface CategoryMapper{
     int updateByPrimaryKey(Category record);
     
     List<Category> selectAllCategory(@Param("categoryLevel") Integer categoryLevel);
+    
+    List<Category> selectCategoryByParendId(@Param("categoryParendId") Integer categoryParendId);
 }
