@@ -1,5 +1,7 @@
 package com.wow.page.service;
 
+import java.util.List;
+
 import com.wow.page.vo.response.PageBannerResponse;
 import com.wow.page.vo.response.PageCategoryResponse;
 import com.wow.page.vo.response.PageProductResponse;
@@ -39,7 +41,7 @@ public interface PageConfigService {
      * @param moduleNewType
      * @return
      */
-    PageProductResponse getProductsOnPage(int pageType,int moduleType,int moduleNewType);
+    PageProductResponse getProductsOnPage(int pageType,List<Byte> moduleType);
 
     /**
      * 根据页面类型查询页面上的分类配置
