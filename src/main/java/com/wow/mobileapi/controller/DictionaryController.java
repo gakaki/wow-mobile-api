@@ -147,8 +147,7 @@ public class DictionaryController extends BaseController{
                 criteria.andKeyGroupEqualTo(dictionaryRequest.getKeyGroupCon());
             if(null!=dictionaryRequest.getKeyOrderCon())
                 criteria.andKeyOrderEqualTo(dictionaryRequest.getKeyOrderCon());
-            if(dictionaryRequest.getValidCon()!=null)
-                criteria.andIsValidEqualTo(dictionaryRequest.getValidCon());
+            criteria.andIsValidEqualTo(true);
             List<Dictionary> dictionaryList = dictionaryService.queryDictionary(example);
             DictionaryResponse dictionaryResponse = new DictionaryResponse();
             dictionaryResponse.setDictionaryList(dictionaryList);
