@@ -229,6 +229,6 @@
     from product inner join end_user_like_product
     on end_user_like_product.product_id = product.id
     where end_user_like_product.end_user_id = #{endUserId,jdbcType=INTEGER}
-    and end_user_like_product.is_deleted = false
+    and product.is_deleted = false and end_user_like_product.is_deleted = false
   </select>
 </mapper>

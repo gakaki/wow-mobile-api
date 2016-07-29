@@ -278,4 +278,12 @@
     from page_product_config
     where page_type = #{pageType,jdbcType=TINYINT}
   </select>
+
+  <select id="selectFindPageProduct" resultType="com.wow.page.vo.PageProductVo" parameterType="java.lang.Integer" >
+    select
+    	ppc.product_id as productId,p.product_name as productName,ppc.product_img as productImg,p.detail_description as detailDescription,ppc.page_module_type as pageModuleType
+    from page_product_config ppc
+    inner join product p on p.id=ppc.product_id
+    where ppc.page_type = #{pageType,jdbcType=TINYINT}
+  </select>
 </mapper>

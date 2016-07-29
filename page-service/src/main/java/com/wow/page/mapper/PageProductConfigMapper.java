@@ -1,9 +1,12 @@
 package com.wow.page.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.page.model.PageProductConfig;
 import com.wow.page.model.PageProductConfigExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
+import com.wow.page.vo.PageProductVo;
 
 public interface PageProductConfigMapper {
     int countByExample(PageProductConfigExample example);
@@ -29,4 +32,6 @@ public interface PageProductConfigMapper {
     int updateByPrimaryKey(PageProductConfig record);
 
     List<PageProductConfig> selectByPageType(@Param("pageType") int pageType);
+    
+    List<PageProductVo> selectFindPageProduct(@Param("pageType") int pageType);
 }

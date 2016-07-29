@@ -1,10 +1,12 @@
 package com.wow.product.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.wow.attribute.model.Attribute;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
+import com.wow.price.model.ProductPrice;
 import com.wow.product.model.Material;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductAttribute;
@@ -177,6 +179,13 @@ public interface ProductService {
      * @return
      */
     public ProductImage selectProductPrimaryOneImg(Integer productId);
+    
+    /**
+     * 查询产品主图
+     * @param productIds
+     * @return
+     */
+    public Map<Integer, ProductImage> selectProductListPrimaryOneImg(List<Integer> productIds);
     
     /**
      * 查询品牌的产品信息

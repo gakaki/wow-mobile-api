@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ImgPrefixUtil;
 import com.wow.product.mapper.DesignerMapper;
 import com.wow.product.mapper.ProductDesignerMapper;
 import com.wow.product.model.Designer;
@@ -49,8 +48,6 @@ public class DesignerServiceImpl implements DesignerService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductDesignerResponse getDesignerById(int designerId) {
     	Designer designer = designerMapper.selectByPrimaryKey(designerId);
-    	//增加前缀
-        designer.setDesignerPhoto(ImgPrefixUtil.addPrefixForImgUrl(designer.getDesignerPhoto()));
     	ProductDesignerResponse productDesignerResponse = new ProductDesignerResponse();
     	productDesignerResponse.setDesigner(designer);
         return productDesignerResponse;
@@ -73,8 +70,6 @@ public class DesignerServiceImpl implements DesignerService {
     		designerVo.setDesignerName(designer.getDesignerName());
     		designerVo.setDesignerPhoto(designer.getDesignerPhoto());
     		designerVo.setDesignerDesc(designer.getDesignerDesc());
-        	//增加前缀
-            designer.setDesignerPhoto(ImgPrefixUtil.addPrefixForImgUrl(designer.getDesignerPhoto()));
     	}
     	
     	productDesignerVoResponse.setDesignerVo(designerVo);

@@ -1,21 +1,12 @@
 package com.wow.page.service.impl;
 
-import com.wow.common.constant.BizConstant;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.page.mapper.*;
-import com.wow.page.model.*;
-import com.wow.page.model.PageSceneConfig;
-import com.wow.page.service.PageConfigService;
-import com.wow.page.vo.*;
-import com.wow.page.vo.response.*;
-import com.wow.price.model.ProductPrice;
-import com.wow.price.service.PriceService;
-import com.wow.price.vo.ProductPriceResponse;
-import com.wow.product.model.*;
-import com.wow.product.service.ProductService;
-import com.wow.product.service.SceneService;
-import com.wow.product.service.TopicService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +15,40 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Consumer;
+import com.wow.common.constant.BizConstant;
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.MapUtil;
+import com.wow.page.mapper.PageBannerConfigMapper;
+import com.wow.page.mapper.PageCategoryConfigMapper;
+import com.wow.page.mapper.PageProductConfigMapper;
+import com.wow.page.mapper.PageSceneConfigMapper;
+import com.wow.page.mapper.PageTopicConfigMapper;
+import com.wow.page.model.PageBannerConfig;
+import com.wow.page.model.PageBannerConfigExample;
+import com.wow.page.model.PageSceneConfig;
+import com.wow.page.model.PageTopicConfig;
+import com.wow.page.service.PageConfigService;
+import com.wow.page.vo.PageCategoryVo;
+import com.wow.page.vo.PageProductNewVo;
+import com.wow.page.vo.PageProductVo;
+import com.wow.page.vo.PageTopicVo;
+import com.wow.page.vo.ProductImageVo;
+import com.wow.page.vo.response.PageBannerResponse;
+import com.wow.page.vo.response.PageCategoryResponse;
+import com.wow.page.vo.response.PageProductResponse;
+import com.wow.page.vo.response.PageSceneResponse;
+import com.wow.page.vo.response.PageTopicResponse;
+import com.wow.price.model.ProductPrice;
+import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductListPriceResponse;
+import com.wow.product.model.ProductImage;
+import com.wow.product.model.ProductShortListInTopic;
+import com.wow.product.model.Scene;
+import com.wow.product.model.Topic;
+import com.wow.product.service.ProductService;
+import com.wow.product.service.SceneService;
+import com.wow.product.service.TopicService;
 
 
 /**
@@ -195,41 +216,60 @@ public class PageConfigServiceImpl implements PageConfigService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public PageProductResponse getProductsOnPage(int pageType,List<Byte> moduleType) {
         PageProductResponse pageProductResponse = new PageProductResponse();
-        List<PageProductConfig> productList = pageProductConfigMapper.selectByPageType(pageType);
-        PageProductVo recommendProduct = new PageProductVo();
-        List<PageProductNewVo> pageProductNewVoList = new ArrayList<PageProductNewVo>();
-        for(PageProductConfig productConfig:productList){
-            PageProductNewVo productNewVo = new PageProductNewVo();
-            ProductPriceResponse priceResponse = priceService.getProductPrice(productConfig.getProductId());
-            ProductPrice productPrice = priceResponse.getProductPrice();
-
-            Product product = productService.getProductById(productConfig.getProductId());
-
-            if(productConfig.getPageModuleType() == BizConstant.PAGE_MODULE_TYPE_PRODUCT){
-                recommendProduct.setProductId(productConfig.getProductId());
-                recommendProduct.setProductName(product.getProductName());
-                recommendProduct.setProductImg(productConfig.getProductImg());
-                recommendProduct.setDetailDescription(product.getDetailDescription());
-                if(productPrice!=null){
-                    recommendProduct.setSellPrice(productPrice.getSellPrice());
-                    recommendProduct.setOriginalPrice(productPrice.getOriginalPrice());
-                }
-            }else if(productConfig.getPageModuleType() == BizConstant.PAGE_MODULE_TYPE_PRODUCT_NEWARRIVAL){
-                productNewVo.setProductId(productConfig.getProductId());
-                productNewVo.setProductName(product.getProductName());
-                productNewVo.setProductImg(productConfig.getProductImg());
-                if(productPrice!=null){
-                    productNewVo.setSellPrice(productPrice.getSellPrice());
-                }
-                pageProductNewVoList.add(productNewVo);
+        List<PageProductVo> pageProductList = pageProductConfigMapper.selectFindPageProduct(pageType);
+        if(pageProductList.size()>0){
+        	PageProductVo recommendProduct = new PageProductVo();
+            List<PageProductNewVo> pageProductNewVoList = new ArrayList<PageProductNewVo>();
+            List<Integer> productIds = new ArrayList<Integer>();
+            for(PageProductVo pageProductVo:pageProductList){
+            	productIds.add(pageProductVo.getProductId());
             }
+            
+            //批量查询价格
+            ProductListPriceResponse batchGetProductPrice = priceService.batchGetProductPrice(productIds);
+            Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
+            if (batchGetProductPrice != null && MapUtil.isNotEmpty(batchGetProductPrice.getMap())) {
+                priceMap = batchGetProductPrice.getMap();
+            }
+            
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = productService.selectProductListPrimaryOneImg(productIds);
+
+            for(PageProductVo pageProductVo:pageProductList){
+                PageProductNewVo productNewVo = new PageProductNewVo();
+                if(pageProductVo.getPageModuleType() == BizConstant.PAGE_MODULE_TYPE_PRODUCT){
+                    if(priceMap.get(pageProductVo.getProductId())!=null) {
+                    	recommendProduct = pageProductVo;
+                    	if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(pageProductVo.getProductId()) != null){
+                    		recommendProduct.setProductImg(productImageMap.get(pageProductVo.getProductId()).getImgUrl());
+                    	}
+                    	if(MapUtil.isNotEmpty(priceMap) && priceMap.get(pageProductVo.getProductId()) != null){
+    	                	recommendProduct.setSellPrice(priceMap.get(pageProductVo.getProductId()).getSellPrice());
+    	                	recommendProduct.setOriginalPrice(priceMap.get(pageProductVo.getProductId()).getOriginalPrice());
+                    	}
+                    }
+                }else if(pageProductVo.getPageModuleType() == BizConstant.PAGE_MODULE_TYPE_PRODUCT_NEWARRIVAL){
+                    if(priceMap.get(pageProductVo.getProductId())!=null) {
+                        productNewVo.setProductId(pageProductVo.getProductId());
+                        productNewVo.setProductName(pageProductVo.getProductName());
+                    	if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(pageProductVo.getProductId()) != null){
+                    		productNewVo.setProductImg(productImageMap.get(pageProductVo.getProductId()).getImgUrl());
+                    	}
+                    	if(MapUtil.isNotEmpty(priceMap) && priceMap.get(pageProductVo.getProductId()) != null){
+                    		productNewVo.setSellPrice(priceMap.get(pageProductVo.getProductId()).getSellPrice());
+                    	}
+                    }
+                    pageProductNewVoList.add(productNewVo);
+                }
+            }
+            
+            pageProductResponse.setRecommendProduct(recommendProduct);
+            pageProductResponse.setPageNewProductVoList(pageProductNewVoList);
         }
-
-        pageProductResponse.setRecommendProduct(recommendProduct);
-        pageProductResponse.setPageNewProductVoList(pageProductNewVoList);
-
+        
         return pageProductResponse;
     }
 

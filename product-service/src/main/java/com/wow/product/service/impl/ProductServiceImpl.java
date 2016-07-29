@@ -4,8 +4,10 @@ package com.wow.product.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +34,12 @@ import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.JsonUtil;
+import com.wow.common.util.MapUtil;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.StringUtil;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.product.mapper.MaterialMapper;
 import com.wow.product.mapper.ProductAttributeMapper;
 import com.wow.product.mapper.ProductImageMapper;
@@ -551,15 +555,32 @@ public class ProductServiceImpl implements ProductService {
     	
     	List<ProductVo> productList = Arrays.asList(JsonUtil.fromJSON(dataList, ProductVo[].class));
     	
-    	List<ProductVo> list = new ArrayList<ProductVo>();
-    	for(ProductVo product : productList){
-    		ProductImage pi = productImageMapper.selectProductPrimaryOneImg(product.getProductId());
-    		if(pi!=null){
-    			product.setProductImg(pi.getImgUrl());
-        		list.add(product);
-    		}
-    	}
-    	productVoResponse.setProductVoList(list);
+    	if(productList.size()>0){
+    		List<Integer> productIds = new ArrayList<Integer>();
+            for(ProductVo productVo:productList){
+            	productIds.add(productVo.getProductId());
+            }
+            
+            //批量查询价格
+            ProductListPriceResponse batchGetProductPrice = priceService.batchGetProductPrice(productIds);
+            Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
+            if (batchGetProductPrice != null && MapUtil.isNotEmpty(batchGetProductPrice.getMap())) {
+                priceMap = batchGetProductPrice.getMap();
+            }
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = this.selectProductListPrimaryOneImg(productIds);
+
+        	List<ProductVo> list = new ArrayList<ProductVo>();
+        	for(ProductVo productVo : productList){
+            	if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productVo.getProductId()) != null){
+            		productVo.setProductImg(productImageMap.get(productVo.getProductId()).getImgUrl());
+            	}
+            	if(MapUtil.isNotEmpty(priceMap) && priceMap.get(productVo.getProductId()) != null){
+            		productVo.setSellPrice(priceMap.get(productVo.getProductId()).getSellPrice());
+            	}
+        	}
+        	productVoResponse.setProductVoList(list);
+    	}  	
     	
         return productVoResponse;
     }
@@ -637,10 +658,27 @@ public class ProductServiceImpl implements ProductService {
     }
     
     /**
+     * 查询产品主图
+     * @param productIds
+     * @return
+     */
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public Map<Integer, ProductImage> selectProductListPrimaryOneImg(List<Integer> productIds){
+    	List<ProductImage> productImageList = productImageMapper.selectProductListPrimaryOneImg(productIds);
+    	Map<Integer, ProductImage> map = new HashMap<Integer, ProductImage>();
+        for (ProductImage productImage:productImageList) {
+            int productId = productImage.getProductId();
+            map.put(productId, productImage);
+        }
+    	return map;
+    }
+    
+    /**
      * 查询品牌的产品信息
      * @param brandId
      * @return
      */
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductVoResponse selectProductByBrandId(Integer brandId){
     	ProductVoResponse productVoResponse = new ProductVoResponse();
     	
@@ -650,7 +688,37 @@ public class ProductServiceImpl implements ProductService {
             return productVoResponse;
         }
     	
-    	productVoResponse.setProductVoList(productMapper.selectProductByBrandId(brandId));
+    	List<ProductVo> productVoList = productMapper.selectProductByBrandId(brandId);
+        
+    	if(productVoList.size()>0){
+    		List<Integer> productIds = new ArrayList<Integer>();
+            for(ProductVo productVo:productVoList){
+            	productIds.add(productVo.getProductId());
+            }
+            
+            //批量查询价格
+            ProductListPriceResponse batchGetProductPrice = priceService.batchGetProductPrice(productIds);
+            Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
+            if (batchGetProductPrice != null && MapUtil.isNotEmpty(batchGetProductPrice.getMap())) {
+                priceMap = batchGetProductPrice.getMap();
+            }
+            
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = this.selectProductListPrimaryOneImg(productIds);
+            
+            List<ProductVo> returnProductVoList = new ArrayList<ProductVo>();
+            for(ProductVo productVo:productVoList){
+            	if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productVo.getProductId()) != null){
+            		productVo.setProductImg(productImageMap.get(productVo.getProductId()).getImgUrl());
+            	}
+            	if(MapUtil.isNotEmpty(priceMap) && priceMap.get(productVo.getProductId()) != null){
+            		productVo.setSellPrice(priceMap.get(productVo.getProductId()).getSellPrice());
+            	}
+            	returnProductVoList.add(productVo);
+            }
+        	
+        	productVoResponse.setProductVoList(returnProductVoList);
+    	}        
     	return productVoResponse;
     }
     
@@ -671,7 +739,38 @@ public class ProductServiceImpl implements ProductService {
             return productVoResponse;
         }
     	
-    	productVoResponse.setProductVoList(productMapper.selectProductByDesignerId(designerId));
+    	List<ProductVo> productVoList = productMapper.selectProductByDesignerId(designerId);
+    	if(productVoList.size()>0){
+    		List<Integer> productIds = new ArrayList<Integer>();
+            for(ProductVo productVo:productVoList){
+            	productIds.add(productVo.getProductId());
+            }
+            
+          //批量查询价格
+            ProductListPriceResponse batchGetProductPrice = priceService.batchGetProductPrice(productIds);
+            Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
+            if (batchGetProductPrice != null && MapUtil.isNotEmpty(batchGetProductPrice.getMap())) {
+                priceMap = batchGetProductPrice.getMap();
+            }
+            
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = this.selectProductListPrimaryOneImg(productIds);
+            
+            List<ProductVo> returnProductVoList = new ArrayList<ProductVo>();
+            for(ProductVo productVo:productVoList){
+            	if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productVo.getProductId()) != null){
+            		productVo.setProductImg(productImageMap.get(productVo.getProductId()).getImgUrl());
+            	}
+            	if(MapUtil.isNotEmpty(priceMap) && priceMap.get(productVo.getProductId()) != null){
+            		productVo.setSellPrice(priceMap.get(productVo.getProductId()).getSellPrice());
+            	}
+            	returnProductVoList.add(productVo);
+            }
+        	
+        	productVoResponse.setProductVoList(returnProductVoList);
+    	}
+    	
+        
     	return productVoResponse;
     }
 }

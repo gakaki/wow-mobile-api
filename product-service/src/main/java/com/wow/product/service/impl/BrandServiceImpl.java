@@ -87,7 +87,7 @@ public class BrandServiceImpl implements BrandService {
     		brandVo.setId(brand.getId());
     		brandVo.setBrandCname(brand.getBrandCname());
     		brandVo.setBrandEname(brand.getBrandEname());
-    		brandVo.setBrandLogoImg(ImgPrefixUtil.addPrefixForImgUrl(brand.getBrandLogoImg()));
+    		brandVo.setBrandLogoImg(brand.getBrandLogoImg());
     		brandVo.setBrandDesc(brand.getBrandDesc());
     	}
     	

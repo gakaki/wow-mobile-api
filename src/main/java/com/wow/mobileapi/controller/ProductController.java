@@ -458,16 +458,6 @@ public class ProductController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(productVoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productVoResponse);
             } else {
-                List<ProductVo> productList = new ArrayList<ProductVo>();
-
-                for (ProductVo productVo : productVoResponse.getProductVoList()) {
-                    ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
-                    if(pi!=null){
-                        productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
-                        productList.add(productVo);
-                    }
-                }
-                productVoResponse.setProductVoList(productList);
                 apiResponse.setData(productVoResponse);
             }
         } catch (Exception e) {
