@@ -19,6 +19,7 @@ public class ProductCreateRequest implements Serializable {
     //    private int originCountryId;
     private String originCountryId;
     private String originCity;
+    private int originProvinceId;
     private byte styleId;
     private short length;
     private short width;
@@ -93,6 +94,14 @@ public class ProductCreateRequest implements Serializable {
 
     public void setOriginCountryId(String originCountryId) {
         this.originCountryId = originCountryId;
+    }
+
+    public int getOriginProvinceId() {
+        return originProvinceId;
+    }
+
+    public void setOriginProvinceId(int originProvinceId) {
+        this.originProvinceId = originProvinceId;
     }
 
     public String getOriginCity() {
