@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import com.wow.price.vo.ProductPriceResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.RandomGenerator;
@@ -643,6 +643,13 @@ public class ProductServiceImpl implements ProductService {
      */
     public ProductVoResponse selectProductByBrandId(Integer brandId){
     	ProductVoResponse productVoResponse = new ProductVoResponse();
+    	
+    	if (brandId == null) {
+    		productVoResponse.setResCode("40204");
+    		productVoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40204"));
+            return productVoResponse;
+        }
+    	
     	productVoResponse.setProductVoList(productMapper.selectProductByBrandId(brandId));
     	return productVoResponse;
     }
@@ -657,6 +664,13 @@ public class ProductServiceImpl implements ProductService {
         //先根据designerId拿到productId(注意是系列品)列表
         //在根据上一步列表取查询价格
     	ProductVoResponse productVoResponse = new ProductVoResponse();
+    	
+    	if (designerId == null) {
+    		productVoResponse.setResCode("40205");
+    		productVoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40205"));
+            return productVoResponse;
+        }
+    	
     	productVoResponse.setProductVoList(productMapper.selectProductByDesignerId(designerId));
     	return productVoResponse;
     }

@@ -11,8 +11,6 @@ import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
 import com.wow.product.service.DesignerService;
 import com.wow.product.vo.response.ProductDesignerResponse;
@@ -76,7 +74,7 @@ public class DesignerController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(productDesignerVoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productDesignerVoResponse);
             } else {
-            	apiResponse.setData(productDesignerVoResponse);     
+            	apiResponse.setData(productDesignerVoResponse.getDesignerVo());     
             }
         } catch (Exception e) {
             logger.error("查找productDesigner_detail错误---" + e);

@@ -101,7 +101,7 @@ public class BrandController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(productBrandVoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productBrandVoResponse);
             } else {
-            	apiResponse.setData(productBrandVoResponse);     
+            	apiResponse.setData(productBrandVoResponse.getBrandVo());     
             }        	
                    
         } catch (Exception e) {
