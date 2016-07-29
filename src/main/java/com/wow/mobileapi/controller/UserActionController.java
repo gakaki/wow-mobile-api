@@ -1,5 +1,12 @@
 package com.wow.mobileapi.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
@@ -7,13 +14,7 @@ import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
-import com.wow.product.model.ProductImage;
-import com.wow.product.service.ProductService;
 import com.wow.user.service.LikeService;
-import com.wow.user.vo.LikedBrandVo;
-import com.wow.user.vo.LikedDesignerVo;
-import com.wow.user.vo.LikedProductVo;
-import com.wow.user.vo.LikedSceneVo;
 import com.wow.user.vo.request.LikedBrandRequest;
 import com.wow.user.vo.request.LikedDesignerRequest;
 import com.wow.user.vo.request.LikedProductRequest;
@@ -22,15 +23,6 @@ import com.wow.user.vo.response.LikedBrandResponse;
 import com.wow.user.vo.response.LikedDesignerResponse;
 import com.wow.user.vo.response.LikedProductResponse;
 import com.wow.user.vo.response.LikedSceneResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class UserActionController extends BaseController {
@@ -39,8 +31,6 @@ public class UserActionController extends BaseController {
 
     @Autowired
     private LikeService likeService;
-    @Autowired
-    private ProductService productService;
 
     /**
      * 新增用户喜欢的品牌
@@ -125,8 +115,6 @@ public class UserActionController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(likedBrandResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, likedBrandResponse);
             } else {
-                List<LikedBrandVo> likedBrandVoList = likedBrandResponse.getLikedBrandVoList();
-                likedBrandResponse.setLikedBrandVoList(likedBrandVoList);
                 apiResponse.setData(likedBrandResponse);
             }
         } catch (Exception e) {
@@ -221,8 +209,6 @@ public class UserActionController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(likedDesignerResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, likedDesignerResponse);
             } else {
-                List<LikedDesignerVo> likedDesignerVoList = likedDesignerResponse.getLikedDesignerVoList();
-                likedDesignerResponse.setLikedDesignerVoList(likedDesignerVoList);
                 apiResponse.setData(likedDesignerResponse);
             }
         } catch (Exception e) {
@@ -317,17 +303,6 @@ public class UserActionController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(likedProductResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, likedProductResponse);
             } else {
-                List<LikedProductVo> likedProductVoList = likedProductResponse.getLikedProductVoList();
-                List<LikedProductVo> list = new ArrayList<LikedProductVo>();
-                
-                for (LikedProductVo likedProductVo : likedProductVoList) {
-                	ProductImage pi = productService.selectProductPrimaryOneImg(likedProductVo.getProductId());
-                	if(pi!=null){
-                		likedProductVo.setProductImg(pi.getImgUrl());
-                		list.add(likedProductVo);
-                	}
-                }
-                likedProductResponse.setLikedProductVoList(list);
                 apiResponse.setData(likedProductResponse);
             }
         } catch (Exception e) {
@@ -418,12 +393,10 @@ public class UserActionController extends BaseController {
 
         try {
         	LikedSceneResponse likedSceneResponse = likeService.getLikedScene(endUserId);
-            //如果处理失败 则返回错误信息
+            //如果处理失败 则返回错误信息 
             if (ErrorCodeUtil.isFailedResponse(likedSceneResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, likedSceneResponse);
             } else {
-                List<LikedSceneVo> likedSceneVoList = likedSceneResponse.getLikedSceneVoList();
-                likedSceneResponse.setLikedSceneVoList(likedSceneVoList);
                 apiResponse.setData(likedSceneResponse);
             }
         } catch (Exception e) {

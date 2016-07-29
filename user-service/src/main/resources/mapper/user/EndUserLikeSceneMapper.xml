@@ -229,6 +229,6 @@
     from scene inner join end_user_like_scene
     on end_user_like_scene.scene_id = scene.id
     where end_user_like_scene.end_user_id = #{endUserId,jdbcType=INTEGER}
-    and end_user_like_scene.is_deleted = false
+    and scene.is_deleted=false and end_user_like_scene.is_deleted = false
   </select>
 </mapper>

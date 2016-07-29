@@ -42,9 +42,8 @@ public class DesignerServiceImpl implements DesignerService {
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductDesignerResponse getDesignerById(int designerId) {
-    	Designer designer = designerMapper.selectByPrimaryKey(designerId);
-        designer.setDesignerPhoto(designer.getDesignerPhoto());
     	ProductDesignerResponse productDesignerResponse = new ProductDesignerResponse();
+    	Designer designer = designerMapper.selectByPrimaryKey(designerId);
     	productDesignerResponse.setDesigner(designer);
         return productDesignerResponse;
     }

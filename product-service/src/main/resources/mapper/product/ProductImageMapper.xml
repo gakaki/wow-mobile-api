@@ -341,4 +341,16 @@
   		<include refid="Base_Column_List" /> 
   	from product_image pi where pi.product_id=#{productId} and is_primary=1 and is_deleted=0 order by sort_order asc limit 1
   </select>
+  
+
+  <select id="selectProductListPrimaryOneImg" resultMap="BaseResultMap" parameterType="map">
+    select
+    	<include refid="Base_Column_List" />
+    from product_image pi 
+    where pi.product_id in
+    <foreach collection="productIds" index="index" item="productId" open="(" separator="," close=")">
+      #{productId,jdbcType=INTEGER}
+    </foreach>
+    and is_primary=1 and is_deleted=false order by sort_order asc limit 1
+  </select>
 </mapper>

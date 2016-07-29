@@ -229,6 +229,6 @@
     from designer inner join end_user_like_designer
     on end_user_like_designer.designer_id = designer.id
     where end_user_like_designer.end_user_id = #{endUserId,jdbcType=INTEGER}
-    and end_user_like_designer.is_deleted = false
+    and designer.is_deleted = false and end_user_like_designer.is_deleted = false
   </select>
 </mapper>

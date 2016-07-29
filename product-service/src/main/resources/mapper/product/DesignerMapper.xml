@@ -306,6 +306,6 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from designer
+    from designer where is_deleted = false
   </select>
 </mapper>

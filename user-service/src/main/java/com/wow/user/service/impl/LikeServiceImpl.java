@@ -1,16 +1,22 @@
 package com.wow.user.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.MapUtil;
+import com.wow.product.model.ProductImage;
+import com.wow.product.service.ProductService;
 import com.wow.user.mapper.EndUserLikeBrandMapper;
 import com.wow.user.mapper.EndUserLikeDesignerMapper;
 import com.wow.user.mapper.EndUserLikeProductMapper;
@@ -49,6 +55,10 @@ public class LikeServiceImpl implements LikeService {
 
     @Autowired
     private EndUserLikeSceneMapper endUserLikeSceneMapper;
+
+    @Autowired
+    private ProductService productService;
+
 
 
     /**
@@ -97,6 +107,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public LikedBrandResponse getLikedBrand(Integer endUserId) {
         LikedBrandResponse likedBrandResponse = new LikedBrandResponse();
         List<LikedBrandVo> likedBrandVoList = endUserLikeBrandMapper.selectLikedBrand(endUserId);
@@ -149,6 +160,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public LikedDesignerResponse getLikedDesigner(Integer endUserId) {
         LikedDesignerResponse likedDesignerResponse = new LikedDesignerResponse();
         //TODO
@@ -202,12 +214,30 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public LikedProductResponse getLikedProduct(Integer endUserId) {
 
         LikedProductResponse likedProductResponse = new LikedProductResponse();
-        //TODO
         List<LikedProductVo> likedProductVoList = endUserLikeProductMapper.selectLikedProduct(endUserId);
-        likedProductResponse.setLikedProductVoList(likedProductVoList);
+        if(likedProductVoList.size()>0){
+        	List<Integer> productIds = new ArrayList<Integer>();
+            for(LikedProductVo likedProductVo:likedProductVoList){
+            	productIds.add(likedProductVo.getProductId());
+            }
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = productService.selectProductListPrimaryOneImg(productIds);
+            
+            List<LikedProductVo> returnLikedProductVoList = new ArrayList<LikedProductVo>();
+            for(LikedProductVo likedProductVo:likedProductVoList){
+            	if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(likedProductVo.getProductId()) != null){
+            		likedProductVo.setProductImg(productImageMap.get(likedProductVo.getProductId()).getImgUrl());
+            	}
+            	returnLikedProductVoList.add(likedProductVo);
+            }
+            
+            likedProductResponse.setLikedProductVoList(returnLikedProductVoList);
+        }
+        
         return likedProductResponse;
     }
 
@@ -250,6 +280,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public LikedSceneResponse getLikedScene(Integer endUserId) {
 
         LikedSceneResponse likedSceneResponse = new LikedSceneResponse();
