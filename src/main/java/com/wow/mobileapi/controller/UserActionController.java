@@ -1,5 +1,23 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.common.request.ApiRequest;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.mobileapi.constant.ErrorCodeConstant;
+import com.wow.mobileapi.request.user.FavoriteBrandRequest;
+import com.wow.mobileapi.request.user.FavoriteDesignerRequest;
+import com.wow.mobileapi.request.user.FavoriteProductRequest;
+import com.wow.mobileapi.request.user.FavoriteSceneRequest;
+import com.wow.product.model.ProductImage;
+import com.wow.product.service.ProductService;
+import com.wow.user.service.FavoriteService;
+import com.wow.user.vo.FavoriteBrandVo;
+import com.wow.user.vo.FavoriteDesignerVo;
+import com.wow.user.vo.FavoriteProductVo;
+import com.wow.user.vo.FavoriteSceneVo;
+import com.wow.user.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,22 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wow.common.request.ApiRequest;
-import com.wow.common.response.ApiResponse;
-import com.wow.common.response.CommonResponse;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.mobileapi.constant.ErrorCodeConstant;
-import com.wow.user.service.LikeService;
-import com.wow.user.vo.request.LikedBrandRequest;
-import com.wow.user.vo.request.LikedDesignerRequest;
-import com.wow.user.vo.request.LikedProductRequest;
-import com.wow.user.vo.request.LikedSceneRequest;
-import com.wow.user.vo.response.LikedBrandResponse;
-import com.wow.user.vo.response.LikedDesignerResponse;
-import com.wow.user.vo.response.LikedProductResponse;
-import com.wow.user.vo.response.LikedSceneResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class UserActionController extends BaseController {
@@ -30,32 +34,36 @@ public class UserActionController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(UserActionController.class);
 
     @Autowired
-    private LikeService likeService;
+    private FavoriteService favoriteService;
+    @Autowired
+    private ProductService productService;
 
     /**
-     * 新增用户喜欢的品牌
+     * 设置喜欢或取消喜欢一个品牌
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/like/brand/add", method = RequestMethod.POST)
-    public ApiResponse addUserLikeBrand(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/brand/favorite", method = RequestMethod.POST)
+    public ApiResponse favoriteUpdate(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        LikedBrandRequest likedBrandRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LikedBrandRequest.class);
+        FavoriteBrandRequest favoriteBrandRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteBrandRequest.class);
         
         //判断json格式参数是否有误
-        if (likedBrandRequest == null) {
+        if (favoriteBrandRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
         
         try {
-            CommonResponse commonResponse = likeService.likeBrand(endUserId, likedBrandRequest.getBrandId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService.updateFavoriteBrand(endUserId, favoriteBrandRequest.getBrandId());
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
+            if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, favoriteCommonResponse);
                 return apiResponse;
+            } else {
+                apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
             logger.error("新增用户喜欢的品牌发生错误---" + e);
@@ -65,43 +73,12 @@ public class UserActionController extends BaseController {
     }
 
     /**
-     * 删除用户喜欢的品牌
-     * @param apiRequest
-     * @return
-     */
-    @RequestMapping(value = "/v1/user/like/brand/delete", method = RequestMethod.POST)
-    public ApiResponse deleteUserLikeBrand(ApiRequest apiRequest) {
-
-        ApiResponse apiResponse = new ApiResponse();
-        LikedBrandRequest likedBrandRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LikedBrandRequest.class);
-        
-        //判断json格式参数是否有误
-        if (likedBrandRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        
-        try {
-            CommonResponse commonResponse = likeService.deleteLikedBrand(likedBrandRequest.getId());
-            //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
-                return apiResponse;
-            }
-        } catch (Exception e) {
-            logger.error("删除用户喜欢的品牌发生错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-        return apiResponse;
-    }
-    
-    /**
      * 查询用户喜欢的品牌列表
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/like/brand", method = RequestMethod.GET)
-    public ApiResponse getUserLikedBrand(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/brand/favorite-list", method = RequestMethod.GET)
+    public ApiResponse getFavoriteBrand(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
         if (endUserId == null) {
@@ -110,12 +87,14 @@ public class UserActionController extends BaseController {
         }
 
         try {
-            LikedBrandResponse likedBrandResponse = likeService.getLikedBrand(endUserId);
+            FavoriteBrandResponse favoriteBrandResponse = favoriteService.getFavoriteBrand(endUserId);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(likedBrandResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, likedBrandResponse);
+            if (ErrorCodeUtil.isFailedResponse(favoriteBrandResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, favoriteBrandResponse);
             } else {
-                apiResponse.setData(likedBrandResponse);
+                List<FavoriteBrandVo> favoriteBrandVoList = favoriteBrandResponse.getFavoriteBrandVoList();
+                favoriteBrandResponse.setFavoriteBrandVoList(favoriteBrandVoList);
+                apiResponse.setData(favoriteBrandResponse);
             }
         } catch (Exception e) {
             logger.error("查找用户喜欢的品牌错误---" + e);
@@ -131,25 +110,27 @@ public class UserActionController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/like/designer/add", method = RequestMethod.POST)
-    public ApiResponse addUserLikeDesigner(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/designer/favorite", method = RequestMethod.POST)
+    public ApiResponse favoriteDesigner(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        LikedDesignerRequest likedDesignerRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LikedDesignerRequest.class);
+        FavoriteDesignerRequest favoriteDesignerRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteDesignerRequest.class);
         
         //判断json格式参数是否有误
-        if (likedDesignerRequest == null) {
+        if (favoriteDesignerRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
         
         try {
-            CommonResponse commonResponse = likeService.likeDesigner(endUserId, likedDesignerRequest.getDesignerId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService.updateFavoriteDesigner(endUserId, favoriteDesignerRequest.getDesignerId());
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
+            if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, favoriteCommonResponse);
                 return apiResponse;
+            } else {
+                apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
             logger.error("新增用户喜欢的设计师发生错误---" + e);
@@ -159,43 +140,12 @@ public class UserActionController extends BaseController {
     }
 
     /**
-     * 删除用户喜欢的设计师
-     * @param apiRequest
-     * @return
-     */
-    @RequestMapping(value = "/v1/user/like/designer/delete", method = RequestMethod.POST)
-    public ApiResponse deleteUserLikeDesigner(ApiRequest apiRequest) {
-
-        ApiResponse apiResponse = new ApiResponse();
-        LikedDesignerRequest likedDesignerRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LikedDesignerRequest.class);
-        
-        //判断json格式参数是否有误
-        if (likedDesignerRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        
-        try {
-            CommonResponse commonResponse = likeService.deleteLikedBrand(likedDesignerRequest.getId());
-            //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
-                return apiResponse;
-            }
-        } catch (Exception e) {
-            logger.error("删除用户喜欢的设计师发生错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-        return apiResponse;
-    }
-    
-    /**
      * 查询用户喜欢的设计师列表
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/like/designer", method = RequestMethod.GET)
-    public ApiResponse getUserLikedDesigner(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/designer/favorite-list", method = RequestMethod.GET)
+    public ApiResponse getFavoriteDesigner(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
         if (endUserId == null) {
@@ -204,12 +154,14 @@ public class UserActionController extends BaseController {
         }
 
         try {
-        	LikedDesignerResponse likedDesignerResponse = likeService.getLikedDesigner(endUserId);
+        	FavoriteDesignerResponse favoriteDesignerResponse = favoriteService.getFavoriteDesigner(endUserId);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(likedDesignerResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, likedDesignerResponse);
+            if (ErrorCodeUtil.isFailedResponse(favoriteDesignerResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, favoriteDesignerResponse);
             } else {
-                apiResponse.setData(likedDesignerResponse);
+                List<FavoriteDesignerVo> favoriteDesignerVoList = favoriteDesignerResponse.getFavoriteDesignerVoList();
+                favoriteDesignerResponse.setFavoriteDesignerVoList(favoriteDesignerVoList);
+                apiResponse.setData(favoriteDesignerResponse);
             }
         } catch (Exception e) {
             logger.error("查找用户喜欢的设计师错误---" + e);
@@ -225,25 +177,27 @@ public class UserActionController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/like/product/add", method = RequestMethod.POST)
-    public ApiResponse addUserLikeProduct(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/product/favorite", method = RequestMethod.POST)
+    public ApiResponse favoriteProduct(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        LikedProductRequest likedProductRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LikedProductRequest.class);
+        FavoriteProductRequest favoriteProductRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteProductRequest.class);
         
         //判断json格式参数是否有误
-        if (likedProductRequest == null) {
+        if (favoriteProductRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
         
         try {
-            CommonResponse commonResponse = likeService.likeBrand(endUserId, likedProductRequest.getProductId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService.updateFavoriteProduct(endUserId, favoriteProductRequest.getProductId());
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
+            if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, favoriteCommonResponse);
                 return apiResponse;
+            } else {
+                apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
             logger.error("新增用户喜欢的产品发生错误---" + e);
@@ -253,43 +207,12 @@ public class UserActionController extends BaseController {
     }
 
     /**
-     * 删除用户喜欢的产品
-     * @param apiRequest
-     * @return
-     */
-    @RequestMapping(value = "/v1/user/like/product/delete", method = RequestMethod.POST)
-    public ApiResponse deleteUserLikeProduct(ApiRequest apiRequest) {
-
-        ApiResponse apiResponse = new ApiResponse();
-        LikedProductRequest likedProductRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LikedProductRequest.class);
-        
-        //判断json格式参数是否有误
-        if (likedProductRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        
-        try {
-            CommonResponse commonResponse = likeService.deleteLikedBrand(likedProductRequest.getId());
-            //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
-                return apiResponse;
-            }
-        } catch (Exception e) {
-            logger.error("删除用户喜欢的产品发生错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-        return apiResponse;
-    }
-    
-    /**
      * 查询用户喜欢的产品列表
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/like/product", method = RequestMethod.GET)
-    public ApiResponse getUserLikedProduct(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/product/favorite-list", method = RequestMethod.GET)
+    public ApiResponse getFavoriteProduct(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
         if (endUserId == null) {
@@ -298,12 +221,23 @@ public class UserActionController extends BaseController {
         }
 
         try {
-        	LikedProductResponse likedProductResponse = likeService.getLikedProduct(endUserId);
+        	FavoriteProductResponse favoriteProductResponse = favoriteService.getFavoriteProduct(endUserId);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(likedProductResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, likedProductResponse);
+            if (ErrorCodeUtil.isFailedResponse(favoriteProductResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, favoriteProductResponse);
             } else {
-                apiResponse.setData(likedProductResponse);
+                List<FavoriteProductVo> favoriteProductVoList = favoriteProductResponse.getFavoriteProductVoList();
+                List<FavoriteProductVo> list = new ArrayList<FavoriteProductVo>();
+                
+                for (FavoriteProductVo favoriteProductVo : favoriteProductVoList) {
+                	ProductImage pi = productService.selectProductPrimaryOneImg(favoriteProductVo.getProductId());
+                	if(pi!=null){
+                		favoriteProductVo.setProductImg(pi.getImgUrl());
+                		list.add(favoriteProductVo);
+                	}
+                }
+                favoriteProductResponse.setFavoriteProductVoList(favoriteProductVoList);
+                apiResponse.setData(favoriteProductResponse);
             }
         } catch (Exception e) {
             logger.error("查找用户喜欢的产品错误---" + e);
@@ -319,25 +253,27 @@ public class UserActionController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/like/scene/add", method = RequestMethod.POST)
-    public ApiResponse addUserLikeScene(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/scene/favorite", method = RequestMethod.POST)
+    public ApiResponse favoriteScene(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        LikedSceneRequest likedSceneRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LikedSceneRequest.class);
+        FavoriteSceneRequest favoriteSceneRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteSceneRequest.class);
         
         //判断json格式参数是否有误
-        if (likedSceneRequest == null) {
+        if (favoriteSceneRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
         
         try {
-            CommonResponse commonResponse = likeService.likeBrand(endUserId, likedSceneRequest.getSceneId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService.updateFavoriteScene(endUserId, favoriteSceneRequest.getSceneId());
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
+            if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, favoriteCommonResponse);
                 return apiResponse;
+            } else {
+                apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
             logger.error("新增用户喜欢的场景发生错误---" + e);
@@ -347,43 +283,12 @@ public class UserActionController extends BaseController {
     }
 
     /**
-     * 删除用户喜欢的场景
-     * @param apiRequest
-     * @return
-     */
-    @RequestMapping(value = "/v1/user/like/scene/delete", method = RequestMethod.POST)
-    public ApiResponse deleteUserLikeScene(ApiRequest apiRequest) {
-
-        ApiResponse apiResponse = new ApiResponse();
-        LikedSceneRequest likedSceneRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LikedSceneRequest.class);
-        
-        //判断json格式参数是否有误
-        if (likedSceneRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        
-        try {
-            CommonResponse commonResponse = likeService.deleteLikedBrand(likedSceneRequest.getId());
-            //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
-                return apiResponse;
-            }
-        } catch (Exception e) {
-            logger.error("删除用户喜欢的场景发生错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-        return apiResponse;
-    }
-    
-    /**
      * 查询用户喜欢的场景列表
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/user/like/scene", method = RequestMethod.GET)
-    public ApiResponse getUserLikedScene(ApiRequest apiRequest) {
+    @RequestMapping(value = "/v1/user/scene/favorite-list", method = RequestMethod.GET)
+    public ApiResponse getFavoriteScene(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
         if (endUserId == null) {
@@ -392,12 +297,14 @@ public class UserActionController extends BaseController {
         }
 
         try {
-        	LikedSceneResponse likedSceneResponse = likeService.getLikedScene(endUserId);
-            //如果处理失败 则返回错误信息 
-            if (ErrorCodeUtil.isFailedResponse(likedSceneResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, likedSceneResponse);
+        	FavoriteSceneResponse favoriteSceneResponse = favoriteService.getFavoriteScene(endUserId);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(favoriteSceneResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, favoriteSceneResponse);
             } else {
-                apiResponse.setData(likedSceneResponse);
+                List<FavoriteSceneVo> favoriteSceneVoList = favoriteSceneResponse.getFavoriteSceneVoList();
+                favoriteSceneResponse.setFavoriteSceneVoList(favoriteSceneVoList);
+                apiResponse.setData(favoriteSceneResponse);
             }
         } catch (Exception e) {
             logger.error("查找用户喜欢的场景错误---" + e);
@@ -406,7 +313,4 @@ public class UserActionController extends BaseController {
         }
         return apiResponse;
     }
-    
-    
-
 }
