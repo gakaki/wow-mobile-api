@@ -18,4 +18,8 @@ public class BizConstant {
     
     //产品分类级别
     public static final byte PAGE_CATEGORY_LEVEL = 1;
+
+    public static final String DICTIONARY_GROUP_PAY="pay_channel";
+
+    public static final String DICTIONARY_GROUP_COUNTRY="country";
 }
