@@ -19,7 +19,6 @@ import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.ImgPrefixUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.MapUtil;
 import com.wow.common.util.StringUtil;
@@ -46,7 +45,6 @@ import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
-import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ProductImgVo;
 import com.wow.product.vo.request.ProductQueryVo;
 import com.wow.product.vo.response.ProductImgResponse;
@@ -121,15 +119,17 @@ public class ProductController extends BaseController {
             //品牌
             Brand brand = brandService.getBrandById(productResponse.getBrandId()).getBrand();
             if (brand != null) {
+                itemDetailResponse.setBrandId(brand.getId());
                 itemDetailResponse.setBrandCname(brand.getBrandCname());
-                itemDetailResponse.setBrandLogoImg(ImgPrefixUtil.addPrefixForImgUrl(brand.getBrandLogoImg()));
+                itemDetailResponse.setBrandLogoImg(brand.getBrandLogoImg());
             }
 
             //主设计师
             Designer designer = designerService.getPrimaryDesignerByProduct(productId);
             if (designer != null) {
+                itemDetailResponse.setDesignerId(designer.getId());
                 itemDetailResponse.setDesignerName(designer.getDesignerName());
-                itemDetailResponse.setDesignerPhoto(ImgPrefixUtil.addPrefixForImgUrl(designer.getDesignerPhoto()));
+                itemDetailResponse.setDesignerPhoto(designer.getDesignerPhoto());
             }
 
             //产品图片(要求最多5张主图和一张细节图)
@@ -145,11 +145,11 @@ public class ProductController extends BaseController {
                         break;
                     }
                     if (productImage.getIsPrimary() && primaryImgCnt < productPrimaryImgCountLimit) {
-                        primaryImgUrlList.add(ImgPrefixUtil.addPrefixForImgUrl(productImage.getImgUrl()));
+                        primaryImgUrlList.add(productImage.getImgUrl());
                         primaryImgCnt++;
                     }
                     if (!productImage.getIsPrimary() && nonPrimaryImgCnt < 1) {
-                        itemDetailResponse.setFirstNonPrimaryImgUrl(ImgPrefixUtil.addPrefixForImgUrl(productImage.getImgUrl()));
+                        itemDetailResponse.setFirstNonPrimaryImgUrl(productImage.getImgUrl());
                         itemDetailResponse.setFirstNonPrimaryImgDesc(productImage.getImgDesc());
                         nonPrimaryImgCnt++;
                     }
@@ -375,9 +375,6 @@ public class ProductController extends BaseController {
                 return apiResponse;
             } else {
                 List<ProductImgVo> productImgVos = productImgResponse.getProductImgVoList();
-                for (ProductImgVo productImgVo : productImgVos) {
-                    productImgVo.setImgUrl(ImgPrefixUtil.addPrefixForImgUrl(productImgVo.getImgUrl()));
-                }
                 productImageResponse.setProductImgVoLit(productImgResponse.getProductImgVoList());
                 apiResponse.setData(productImageResponse);
             }
@@ -491,16 +488,6 @@ public class ProductController extends BaseController {
             if (ErrorCodeUtil.isFailedResponse(productVoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productVoResponse);
             } else {
-                List<ProductVo> productList = new ArrayList<ProductVo>();
-
-                for (ProductVo productVo : productVoResponse.getProductVoList()) {
-                    ProductImage pi = productService.selectProductPrimaryOneImg(productVo.getProductId());
-                    if(pi!=null){
-                        productVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
-                        productList.add(productVo);
-                    }
-                }
-                productVoResponse.setProductVoList(productList);
                 apiResponse.setData(productVoResponse);
             }
         } catch (Exception e) {

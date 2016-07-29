@@ -393,7 +393,7 @@ public class UserActionController extends BaseController {
 
         try {
         	LikedSceneResponse likedSceneResponse = likeService.getLikedScene(endUserId);
-            //如果处理失败 则返回错误信息
+            //如果处理失败 则返回错误信息 
             if (ErrorCodeUtil.isFailedResponse(likedSceneResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, likedSceneResponse);
             } else {

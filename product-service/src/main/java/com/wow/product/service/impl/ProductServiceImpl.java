@@ -21,9 +21,9 @@ import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.common.constant.BizConstant;
 import com.wow.common.enums.ApplicablePeopleEnum;
 import com.wow.common.enums.ApplicableSceneEnum;
-import com.wow.common.enums.CountryEnum;
 import com.wow.common.enums.MaterialEnum;
 import com.wow.common.enums.StyleEnum;
 import com.wow.common.page.PageData;
@@ -31,6 +31,7 @@ import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.JsonUtil;
@@ -154,7 +155,8 @@ public class ProductServiceImpl implements ProductService {
         short width = productCreateRequest.getWidth();
         short height = productCreateRequest.getHeight();
         String originCity = productCreateRequest.getOriginCity();
-        int originCountryId = productCreateRequest.getOriginCountryId();
+//        int originCountryId = productCreateRequest.getOriginCountryId();
+        String originCountryId = productCreateRequest.getOriginCountryId();
         String productModel = productCreateRequest.getProductModel();
         String productName = productCreateRequest.getProductName();
         String sellingPoint = productCreateRequest.getSellingPoint();
@@ -610,7 +612,8 @@ public class ProductServiceImpl implements ProductService {
             //产品参数
             ProductParameter productParameter = new ProductParameter();
             productParameter.setApplicableSceneText(product.getApplicableSceneText());
-            productParameter.setOrigin(CountryEnum.get((int)product.getOriginCountryId()) + "," + product.getOriginCity());
+//            productParameter.setOrigin(CountryEnum.get((int)product.getOriginCountryId()) + "," + product.getOriginCity());
+            productParameter.setOrigin(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_COUNTRY,product.getOriginCountryId()).getKeyValue()+ "," + product.getOriginCity());
             productParameter.setMaterialText(product.getMaterialText());
             productParameter.setNeedAssemble(product.getNeedAssemble());
 
