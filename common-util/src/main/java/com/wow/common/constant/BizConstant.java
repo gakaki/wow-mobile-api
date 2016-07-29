@@ -15,7 +15,16 @@ public class BizConstant {
     public static final byte PAGE_MODULE_TYPE_CATEGORY = 3;
     public static final byte PAGE_MODULE_TYPE_PRODUCT = 4;
     public static final byte PAGE_MODULE_TYPE_PRODUCT_NEWARRIVAL = 5;
-    
+
+    //banner跳转目标类型
+    public static final byte LINK_TYPE_WEB = 1;
+    public static final byte LINK_TYPE_TOPIC_LIST = 2;
+    public static final byte LINK_TYPE_TOPIC_MIX = 3;
+    public static final byte LINK_TYPE_BRAND = 4;
+    public static final byte LINK_TYPE_DESIGNER = 5;
+    public static final byte LINK_TYPE_PRODUCT = 6;
+    public static final byte LINK_TYPE_CATEGORY = 7;
+
     //产品分类级别
     public static final byte PAGE_CATEGORY_LEVEL = 1;
 
