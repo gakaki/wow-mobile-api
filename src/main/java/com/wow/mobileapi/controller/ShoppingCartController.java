@@ -191,7 +191,6 @@ public class ShoppingCartController extends BaseController {
                 apiResponse.setData(shoppingCartResponse);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("获取用户购物车产品错误---" + e);
             setInternalErrorResponse(apiResponse);
         }

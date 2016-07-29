@@ -30,7 +30,7 @@ public class OrderRequest extends ApiRequest {
     //订单总价 客户端传递 用以校验价格是否发生变化
     private BigDecimal orderAmount;
     
-    //订单来源
+    //订单来源  1:Androi 2：iOS 3：PC 11: 天猫订单 10:有赞 12: 苏宁
     private Byte orderSource;
     
     //订单备注

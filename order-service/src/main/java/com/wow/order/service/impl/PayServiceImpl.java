@@ -108,6 +108,30 @@ public class PayServiceImpl implements PayService {
             return chargeResponse;
         }
 
+        //如果订单状态为已取消 则无法支付
+        if (saleOrder.getOrderStatus().intValue() == SaleOrderStatusEnum.CANCELLED.getKey().intValue()) {
+            chargeResponse.setResCode("40309");
+            chargeResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40309"));
+
+            return chargeResponse;
+        }
+
+        //如果订单状态为交易已关闭  则无法支付
+        if (saleOrder.getOrderStatus().intValue() == SaleOrderStatusEnum.CLOSED.getKey().intValue()) {
+            chargeResponse.setResCode("40321");
+            chargeResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40321"));
+
+            return chargeResponse;
+        }
+
+        //如果订单支付状态为已支付  则无法支付
+        if (saleOrder.getPaymentStatus().byteValue() == CommonConstant.PAID.byteValue()) {
+            chargeResponse.setResCode("40320");
+            chargeResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40320"));
+
+            return chargeResponse;
+        }
+
         Map<String, Object> chargeMap = new HashMap<String, Object>();
 
         //订单总金额, 人民币单位：分（如订单总金额为 1 元，此处请填 100）
@@ -129,11 +153,9 @@ public class PayServiceImpl implements PayService {
             //发起交易请求
             Charge charge = Charge.create(chargeMap);
             // 传到客户端请先转成字符串 .toString(), 调该方法，会自动转成正确的 JSON 字符串
-            System.out.println(charge.toString());
             chargeResponse.setCharge(charge.toString());
         } catch (PingppException e) {
-            e.printStackTrace();
-            ErrorResponseUtil.setErrorResponse(chargeResponse, "40380");
+            ErrorResponseUtil.setErrorResponse(chargeResponse, "40361");
         }
 
         return chargeResponse;

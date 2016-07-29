@@ -55,8 +55,9 @@ public class PayController extends BaseController {
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(chargeResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, chargeResponse);
+            }else{
+                apiResponse.setData(chargeResponse);
             }
-            apiResponse.setData(chargeResponse);
         } catch (Exception e) {
             logger.error("请求支付凭证错误---" + e);
             setInternalErrorResponse(apiResponse);

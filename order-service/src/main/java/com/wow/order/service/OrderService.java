@@ -71,7 +71,7 @@ public interface OrderService {
      * @param orderCode
      * @return
      */
-    OrderDetailResponse queryOrderByOrderCode(String orderCode);
+    OrderDetailResponse queryOrderDetailByOrderCode(String orderCode);
 
     /**
      * @param orderId

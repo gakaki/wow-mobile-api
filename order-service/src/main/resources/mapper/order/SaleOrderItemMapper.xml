@@ -427,8 +427,6 @@
 			  sale_order_item so 
 			  INNER JOIN product p 
 			    ON so.product_id = p.id 
-			  INNER JOIN product_price pp 
-			    ON so.product_id = pp.product_id 
 			WHERE so.is_deleted = FALSE 
 			  AND so.sale_order_id =#{orderId}
   </select>

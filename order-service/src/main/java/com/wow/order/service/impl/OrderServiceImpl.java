@@ -3,6 +3,7 @@ package com.wow.order.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -255,6 +256,11 @@ public class OrderServiceImpl implements OrderService {
      * @param warehouseStockFrozenResultVoList
      */
     private List<SaleOrderItemWarehouse> wrapOrderItemWareHouse(SaleOrderItem saleOrderItem, List<WarehouseStockFrozenResultVo> warehouseStocks) {
+        //如果没有实际库存 则直接返回
+        if (CollectionUtil.isEmpty(warehouseStocks)) {
+            return Collections.emptyList();
+        }
+
         List<SaleOrderItemWarehouse> orderItemWareHouses = new ArrayList<SaleOrderItemWarehouse>();
 
         SaleOrderItemWarehouse saleOrderItemWarehouse = null;
@@ -410,6 +416,7 @@ public class OrderServiceImpl implements OrderService {
             //获取产品使用的具体库存
             freezeStockVo = getFreezeStock(query.getFreezeStockVoList(), shoppingCart.getProductId());
             if (freezeStockVo != null) {
+                //设置该产品使用的库存总数和虚拟库存总数
                 saleOrderItem.setFrozenWarehouseStockTotalQty(freezeStockVo.getFrozenWarehouseStockTotalQty());
                 saleOrderItem.setFrozenVirtualStockQty(freezeStockVo.getFrozenVirtualStockQty());
                 //如果使用虚拟库存的话 则设置虚拟库存是否准备 默认为null
@@ -632,7 +639,7 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public OrderDetailResponse queryOrderByOrderCode(String orderCode) {
+    public OrderDetailResponse queryOrderDetailByOrderCode(String orderCode) {
         OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
 
         /*** 业务校验开始*/
@@ -661,12 +668,10 @@ public class OrderServiceImpl implements OrderService {
         //获取订单对应的商品信息
         List<OrderItemVo> orderItems = saleOrderItemMapper.selectByOrderId(saleOrder.getId());
 
-        //如果订单状态为代收货之前的 则显示未发货的商品清单
-        if (saleOrder.getOrderStatus().byteValue() < SaleOrderStatusEnum.TO_BE_RECEIVED.getKey().byteValue()) {
-            List<OrderItemVo> unShipOutOrderItems = getUnShipOutOrderItems(orderItems);
+        //处理未发货的商品清单
+        List<OrderItemVo> unShipOutOrderItems = getUnShipOutOrderItems(orderItems);
 
-            orderDetailResponse.setUnShipOutOrderItems(unShipOutOrderItems);
-        }
+        orderDetailResponse.setUnShipOutOrderItems(unShipOutOrderItems);
 
         //如果订单状态为部分发货以后状态是 才显示发货单信息
         if (saleOrder.getOrderStatus().byteValue() >= SaleOrderStatusEnum.PARTIAL_SHIPPED.getKey().byteValue()) {
@@ -688,7 +693,7 @@ public class OrderServiceImpl implements OrderService {
     private List<OrderItemVo> getUnShipOutOrderItems(List<OrderItemVo> orderItems) {
         List<OrderItemVo> unShipOutOrderItems = new ArrayList<OrderItemVo>(orderItems.size());
 
-        for (OrderItemVo orderItemVo : unShipOutOrderItems) {
+        for (OrderItemVo orderItemVo : orderItems) {
             if (!orderItemVo.getIsShippedOut()) {
                 unShipOutOrderItems.add(orderItemVo);
             }
@@ -867,10 +872,6 @@ public class OrderServiceImpl implements OrderService {
             orderSettle = new OrderSettleVo();
             BeanUtil.copyProperties(shoppingCartResultVo, orderSettle);
 
-            //            if (orderSettle.getProductStatus() != null) {
-            //                //转化产品状态名称
-            //                orderSettle.setProductStatusName(ProductStatusEnum.get((int) orderSettle.getProductStatus()));
-            //            }
             //产品单价
             long productPrice = NumberUtil.convertToFen(orderSettle.getSellPrice());
             //计算该产品销售总价( 产品单价乘以数量)
@@ -890,7 +891,9 @@ public class OrderServiceImpl implements OrderService {
         long deliveryfee = calculateDeliveryFee(totalPrice);
         totalPrice += deliveryfee;
 
-        //计算订单总价
+        //设置订单运费
+        response.setDeliveryFee(NumberUtil.convertToYuan(deliveryfee));
+        //设置订单总价
         response.setTotalAmount(NumberUtil.convertToYuan(totalPrice));
 
         return response;
@@ -1020,7 +1023,31 @@ public class OrderServiceImpl implements OrderService {
             return commonResponse;
         }
 
-        //如果未发货的数量为0 则直接返回错误提示
+        //如果订单状态为已取消 则无法重复取消订单
+        if (saleOrder.getOrderStatus().intValue() == SaleOrderStatusEnum.CANCELLED.getKey().intValue()) {
+            commonResponse.setResCode("40309");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40309"));
+
+            return commonResponse;
+        }
+
+        //如果订单状态为交易已关闭  则无法发货
+        if (saleOrder.getOrderStatus().intValue() == SaleOrderStatusEnum.CLOSED.getKey().intValue()) {
+            commonResponse.setResCode("40321");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40321"));
+
+            return commonResponse;
+        }
+        
+        //如果订单支付状态为未支付  则无法发货
+        if (saleOrder.getPaymentStatus().byteValue() == CommonConstant.UNPAY.byteValue()) {
+            commonResponse.setResCode("40323");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40323"));
+
+            return commonResponse;
+        }
+
+        //如果未发货的数量为0 则直接返回错误提示 不可重复发货
         if (saleOrder.getUnShipOutQty() == 0) {
             commonResponse.setResCode("40313");
             commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40313"));
