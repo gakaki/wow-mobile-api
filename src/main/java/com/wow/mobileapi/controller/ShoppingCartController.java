@@ -179,7 +179,7 @@ public class ShoppingCartController extends BaseController {
         try {
             //包装购物车查询对象
             ShoppingCartQueryVo query = new ShoppingCartQueryVo();
-            
+
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);
 
@@ -187,7 +187,7 @@ public class ShoppingCartController extends BaseController {
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(shoppingCartResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, shoppingCartResponse);
-            } else{
+            } else {
                 apiResponse.setData(shoppingCartResponse);
             }
         } catch (Exception e) {
