@@ -110,7 +110,7 @@
   </delete>
   <insert id="insert" parameterType="com.wow.product.model.ProductImage" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
+      select LAST_INSERT_ID()
     </selectKey>
     insert into product_image (product_id, img_name, img_url, 
       img_desc, view_platform, is_primary, 
@@ -125,7 +125,7 @@
   </insert>
   <insert id="insertSelective" parameterType="com.wow.product.model.ProductImage" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
+      select LAST_INSERT_ID()
     </selectKey>
     insert into product_image
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -344,13 +344,16 @@
   
 
   <select id="selectProductListPrimaryOneImg" resultMap="BaseResultMap" parameterType="map">
-    select
-    	<include refid="Base_Column_List" />
-    from product_image pi 
-    where pi.product_id in
+    select pi.product_id, pi.img_url from product_image pi
+    inner join
+    (select product_id, min(sort_order) sort_order from product_image
+    where product_id in
     <foreach collection="productIds" index="index" item="productId" open="(" separator="," close=")">
       #{productId,jdbcType=INTEGER}
     </foreach>
-    and is_primary=1 and is_deleted=false order by sort_order asc limit 1
+    and is_primary = 1 group by product_id) temp
+    on pi.product_id = temp.product_id
+    and pi.sort_order = temp.sort_order
+    where pi.is_primary = 1;
   </select>
 </mapper>
