@@ -53,6 +53,9 @@ public class DateUtil {
      * 格式化日期与时间
      */
     public static String formatDatetime(Date timestamp) {
+        if(timestamp==null){
+            return "";
+        }
         return datetimeFormat.format(timestamp);
     }
 

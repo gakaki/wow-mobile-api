@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wow.common.constant.CommonConstant;
 import com.wow.common.enums.SaleOrderStatusEnum;
+import com.wow.common.page.PageData;
+import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CollectionUtil;
@@ -901,7 +903,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
-    public OrderListResponse queryOrderList(OrderListQuery query) {
+    public OrderListResponse queryOrderListPage(OrderListQuery query) {
         OrderListResponse response = new OrderListResponse();
 
         // 业务校验开始
@@ -913,15 +915,30 @@ public class OrderServiceImpl implements OrderService {
             return response;
         }
 
-        List<OrderListVo> orderLists = saleOrderMapper.selectByEndUserId(query);
-        if (CollectionUtil.isEmpty(orderLists)) {
+        //设置分页查询对象
+        PageModel model = new PageModel();
+        if (query.getPageSize() != null) {
+            model.setShowCount(query.getPageSize());
+        }
+        if (query.getCurrentPage() != null) {
+            model.setCurrentPage(query.getCurrentPage());
+        }
+        model.setModel(query);
+
+        List<PageData> pageDataList = saleOrderMapper.selectByEndUserIdListPage(model);
+        if (CollectionUtil.isEmpty(pageDataList)) {
             return response;
         }
         //业务校验结束
 
+        List<OrderListVo> orderLists = Arrays.asList(JsonUtil.fromJSON(pageDataList, OrderListVo[].class));
+
         //获取订单id集合
         List<Integer> orderIds = new ArrayList<Integer>(orderLists.size());
         for (OrderListVo orderVo : orderLists) {
+            //设置订单创建时间格式
+            orderVo.setOrderCreateTimeFormat(DateUtil.formatDatetime(orderVo.getOrderCreateTime()));
+            orderVo.setOrderCreateTime(null); //不序列化输出
             orderIds.add(orderVo.getOrderId());
         }
 
@@ -950,6 +967,10 @@ public class OrderServiceImpl implements OrderService {
         Map<Integer, List<String>> map = new HashMap<Integer, List<String>>();
 
         for (OrderItemImgVo orderItemIm : orderItemImgs) {
+            if (StringUtil.isEmpty(orderItemIm.getSpecImg())) {
+                continue;
+            }
+
             if (map.containsKey(orderItemIm.getSaleOrderId())) {
                 map.get(orderItemIm.getSaleOrderId()).add(orderItemIm.getSpecImg());
             } else {
@@ -1038,7 +1059,7 @@ public class OrderServiceImpl implements OrderService {
 
             return commonResponse;
         }
-        
+
         //如果订单支付状态为未支付  则无法发货
         if (saleOrder.getPaymentStatus().byteValue() == CommonConstant.UNPAY.byteValue()) {
             commonResponse.setResCode("40323");

@@ -145,18 +145,13 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/get", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
     public ApiResponse selectOrderList(ApiRequest request) {
-        OrderListRequest orderListRequest = JsonUtil.fromJSON(request.getParamJson(), OrderListRequest.class);
         ApiResponse apiResponse = new ApiResponse();
+
+        //如果有查询条件 则解析相应的paramJson
+        OrderListRequest orderListRequest = JsonUtil.fromJSON(request.getParamJson(), OrderListRequest.class);
         //判断json格式参数是否有误
         if (orderListRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(orderListRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
 
@@ -166,8 +161,11 @@ public class OrderController extends BaseController {
             //设置用户id
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);
+            query.setOrderStatus(orderListRequest.getOrderStatus());
+            query.setPageSize(orderListRequest.getPageSize());
+            query.setCurrentPage(orderListRequest.getCurrentPage());
 
-            orderListResponse = orderService.queryOrderList(query);
+            orderListResponse = orderService.queryOrderListPage(query);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(orderListResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderListResponse);
@@ -175,6 +173,7 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderListResponse);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("查询订单列表错误---" + e);
             setInternalErrorResponse(apiResponse);
         }

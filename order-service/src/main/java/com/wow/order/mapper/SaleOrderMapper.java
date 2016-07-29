@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.wow.common.page.PageData;
+import com.wow.common.page.PageModel;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderExample;
-import com.wow.order.vo.OrderListQuery;
-import com.wow.order.vo.OrderListVo;
 
 public interface SaleOrderMapper {
     int countByExample(SaleOrderExample example);
@@ -21,7 +21,7 @@ public interface SaleOrderMapper {
     int insertSelective(SaleOrder record);
 
     List<SaleOrder> selectByExample(SaleOrderExample example);
-    
+
     SaleOrder selectOnlyByExample(SaleOrderExample example);
 
     SaleOrder selectByPrimaryKey(Integer id);
@@ -33,9 +33,9 @@ public interface SaleOrderMapper {
     int updateByPrimaryKeySelective(SaleOrder record);
 
     int updateByPrimaryKey(SaleOrder record);
-    
-    List<OrderListVo> selectByEndUserId(OrderListQuery query);
-    
+
+    List<PageData> selectByEndUserIdListPage(PageModel query);
+
     /**
      * 获取超时未支付的订单列表
      * 

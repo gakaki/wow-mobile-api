@@ -44,7 +44,7 @@ public interface OrderService {
      * @param query
      * @return
      */
-    OrderListResponse queryOrderList(OrderListQuery query);
+    OrderListResponse queryOrderListPage(OrderListQuery query);
 
     /**
      * 订单支付

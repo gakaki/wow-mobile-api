@@ -694,12 +694,17 @@
   </update>
   
       <!-- 查询用户订单列表 -->
-  <select id="selectByEndUserId"   resultType="com.wow.order.vo.OrderListVo"  parameterType="com.wow.order.vo.OrderListQuery" >
+  <select id="selectByEndUserIdListPage"   resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel" >
 	    select 
 	          id orderId, order_code orderCode, order_amount orderAmount, total_product_qty totalProductQty, 
 	          order_status orderStatus,order_create_time orderCreateTime
 	    from sale_order
-	    where end_user_id=#{endUserId}
+	    <where>
+	       end_user_id=#{model.endUserId}
+	       <if test="model.orderStatus != null">
+            and order_status = #{model.orderStatus}
+      </if>
+	    </where>
 	    order by order_create_time desc
   </select>
   

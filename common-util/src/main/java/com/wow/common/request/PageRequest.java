@@ -11,17 +11,17 @@ public class PageRequest extends ApiRequest {
     private static final long serialVersionUID = 1L;
 
     //查询的页数
-    private Integer pageIndex;
+    private Integer currentPage;
 
     //每页的条数 （最大50条)
     private Integer pageSize;
 
-    public Integer getPageIndex() {
-        return pageIndex;
+    public Integer getCurrentPage() {
+        return currentPage;
     }
 
-    public void setPageIndex(Integer pageIndex) {
-        this.pageIndex = pageIndex;
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
     }
 
     public Integer getPageSize() {
