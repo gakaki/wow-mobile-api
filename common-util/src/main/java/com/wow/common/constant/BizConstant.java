@@ -16,6 +16,11 @@ public class BizConstant {
     public static final byte PAGE_MODULE_TYPE_PRODUCT = 4;
     public static final byte PAGE_MODULE_TYPE_PRODUCT_NEWARRIVAL = 5;
 
+    //产品类型
+    public static final byte PRODUCT_TYPE_SERIAL_SUB = 1;//系列品子品
+    public static final byte PRODUCT_TYPE_SERIAL = 2;//系列品
+    public static final byte PRODUCT_TYPE_BUNDLE = 3;//组合产品
+
     //banner跳转目标类型
     public static final byte LINK_TYPE_WEB = 1;
     public static final byte LINK_TYPE_TOPIC_LIST = 2;
