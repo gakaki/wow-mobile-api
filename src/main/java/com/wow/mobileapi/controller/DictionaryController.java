@@ -1,5 +1,6 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.common.constant.BizConstant;
 import com.wow.common.model.Dictionary;
 import com.wow.common.model.DictionaryExample;
 import com.wow.common.request.ApiRequest;
@@ -107,7 +108,7 @@ public class DictionaryController extends BaseController{
             List<Dictionary> dictionaryList=DictionaryUtil.getKeyGroup("country_channel");
             if(dictionaryList==null) {
                 DictionaryRequest dictionaryRequest=new DictionaryRequest();
-                dictionaryRequest.setKeyGroupCon("country_channel");
+                dictionaryRequest.setKeyGroupCon(BizConstant.DICTIONARY_GROUP_COUNTRY);
                 dictionaryList = dictionaryService.queryDictionary(dictionaryRequest);
             }
             DictionaryResponse dictionaryResponse = new DictionaryResponse();

@@ -1,16 +1,6 @@
 package com.wow.product.service.impl;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ImgPrefixUtil;
 import com.wow.product.mapper.BrandMapper;
 import com.wow.product.model.Brand;
 import com.wow.product.model.BrandExample;
@@ -18,6 +8,14 @@ import com.wow.product.service.BrandService;
 import com.wow.product.vo.BrandVo;
 import com.wow.product.vo.response.ProductBrandResponse;
 import com.wow.product.vo.response.ProductBrandVoResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/18.
@@ -60,7 +58,9 @@ public class BrandServiceImpl implements BrandService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductBrandResponse getBrandById(int brandId) {
     	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
-    	productBrandResponse.setBrand(brandMapper.selectByPrimaryKey(brandId));
+        Brand brand = brandMapper.selectByPrimaryKey(brandId);
+        brand.setBrandLogoImg(brand.getBrandLogoImg());
+    	productBrandResponse.setBrand(brand);
         return productBrandResponse;
     }
 
@@ -87,7 +87,7 @@ public class BrandServiceImpl implements BrandService {
     		brandVo.setId(brand.getId());
     		brandVo.setBrandCname(brand.getBrandCname());
     		brandVo.setBrandEname(brand.getBrandEname());
-    		brandVo.setBrandLogoImg(ImgPrefixUtil.addPrefixForImgUrl(brand.getBrandLogoImg()));
+    		brandVo.setBrandLogoImg(brand.getBrandLogoImg());
     		brandVo.setBrandDesc(brand.getBrandDesc());
     	}
     	

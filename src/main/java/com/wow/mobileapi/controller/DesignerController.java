@@ -1,12 +1,5 @@
 package com.wow.mobileapi.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
@@ -15,6 +8,12 @@ import com.wow.mobileapi.request.product.ProductQueryRequest;
 import com.wow.product.service.DesignerService;
 import com.wow.product.vo.response.ProductDesignerResponse;
 import com.wow.product.vo.response.ProductDesignerVoResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by zhengzhiqing on 16/6/23.
@@ -32,8 +31,7 @@ public class DesignerController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/v1/designer/list", method = RequestMethod.GET)
-    public ApiResponse getProductDesignerList(ApiRequest apiRequest) {
-        logger.info("start to get productDesigner_find on page");
+    public ApiResponse getDesignerList(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
@@ -45,7 +43,7 @@ public class DesignerController extends BaseController {
                 apiResponse.setData(productDesignerResponse.getDesignerList());
             }
         } catch (Exception e) {
-            logger.error("查找productDesigner_find错误---" + e);
+            logger.error("查找设计师列表错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -57,8 +55,7 @@ public class DesignerController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/v1/designer/detail", method = RequestMethod.GET)
-    public ApiResponse getProductDesignerDetail(ApiRequest apiRequest) {
-        logger.info("start to get productDesigner_detail on page");
+    public ApiResponse getDesigner(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
 
@@ -77,7 +74,7 @@ public class DesignerController extends BaseController {
             	apiResponse.setData(productDesignerVoResponse.getDesignerVo());     
             }
         } catch (Exception e) {
-            logger.error("查找productDesigner_detail错误---" + e);
+            logger.error("查找设计师详情错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;

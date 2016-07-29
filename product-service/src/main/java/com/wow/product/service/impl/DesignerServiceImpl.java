@@ -1,29 +1,23 @@
 package com.wow.product.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ImgPrefixUtil;
 import com.wow.product.mapper.DesignerMapper;
 import com.wow.product.mapper.ProductDesignerMapper;
-import com.wow.product.model.Designer;
-import com.wow.product.model.DesignerExample;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductDesigner;
-import com.wow.product.model.ProductDesignerExample;
+import com.wow.product.model.*;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductService;
 import com.wow.product.vo.DesignerVo;
 import com.wow.product.vo.response.ProductDesignerResponse;
 import com.wow.product.vo.response.ProductDesignerVoResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 
 /**
@@ -49,8 +43,7 @@ public class DesignerServiceImpl implements DesignerService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductDesignerResponse getDesignerById(int designerId) {
     	Designer designer = designerMapper.selectByPrimaryKey(designerId);
-    	//增加前缀
-        designer.setDesignerPhoto(ImgPrefixUtil.addPrefixForImgUrl(designer.getDesignerPhoto()));
+        designer.setDesignerPhoto(designer.getDesignerPhoto());
     	ProductDesignerResponse productDesignerResponse = new ProductDesignerResponse();
     	productDesignerResponse.setDesigner(designer);
         return productDesignerResponse;
@@ -71,10 +64,8 @@ public class DesignerServiceImpl implements DesignerService {
     	if(designer!=null){
     		designerVo.setId(designer.getId());
     		designerVo.setDesignerName(designer.getDesignerName());
-    		designerVo.setDesignerPhoto(designer.getDesignerPhoto());
     		designerVo.setDesignerDesc(designer.getDesignerDesc());
-        	//增加前缀
-            designer.setDesignerPhoto(ImgPrefixUtil.addPrefixForImgUrl(designer.getDesignerPhoto()));
+            designerVo.setDesignerPhoto(designer.getDesignerPhoto());
     	}
     	
     	productDesignerVoResponse.setDesignerVo(designerVo);

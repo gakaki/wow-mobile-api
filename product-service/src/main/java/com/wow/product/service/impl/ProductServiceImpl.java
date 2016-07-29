@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import com.wow.common.constant.BizConstant;
 import com.wow.common.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -585,7 +586,7 @@ public class ProductServiceImpl implements ProductService {
             ProductParameter productParameter = new ProductParameter();
             productParameter.setApplicableSceneText(product.getApplicableSceneText());
 //            productParameter.setOrigin(CountryEnum.get((int)product.getOriginCountryId()) + "," + product.getOriginCity());
-            productParameter.setOrigin(DictionaryUtil.getDictionary("country_channel",product.getOriginCountryId()).getKeyValue()+ "," + product.getOriginCity());
+            productParameter.setOrigin(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_COUNTRY,product.getOriginCountryId()).getKeyValue()+ "," + product.getOriginCity());
             productParameter.setMaterialText(product.getMaterialText());
             productParameter.setNeedAssemble(product.getNeedAssemble());
 
