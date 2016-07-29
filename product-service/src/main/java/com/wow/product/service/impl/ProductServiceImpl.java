@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import com.wow.common.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,6 @@ import com.wow.common.enums.StyleEnum;
 import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.RandomGenerator;
-import com.wow.common.util.StringUtil;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.product.mapper.MaterialMapper;
@@ -150,7 +144,8 @@ public class ProductServiceImpl implements ProductService {
         short width = productCreateRequest.getWidth();
         short height = productCreateRequest.getHeight();
         String originCity = productCreateRequest.getOriginCity();
-        int originCountryId = productCreateRequest.getOriginCountryId();
+//        int originCountryId = productCreateRequest.getOriginCountryId();
+        String originCountryId = productCreateRequest.getOriginCountryId();
         String productModel = productCreateRequest.getProductModel();
         String productName = productCreateRequest.getProductName();
         String sellingPoint = productCreateRequest.getSellingPoint();
@@ -589,7 +584,8 @@ public class ProductServiceImpl implements ProductService {
             //产品参数
             ProductParameter productParameter = new ProductParameter();
             productParameter.setApplicableSceneText(product.getApplicableSceneText());
-            productParameter.setOrigin(CountryEnum.get((int)product.getOriginCountryId()) + "," + product.getOriginCity());
+//            productParameter.setOrigin(CountryEnum.get((int)product.getOriginCountryId()) + "," + product.getOriginCity());
+            productParameter.setOrigin(DictionaryUtil.getDictionary("country_channel",product.getOriginCountryId()).getKeyValue()+ "," + product.getOriginCity());
             productParameter.setMaterialText(product.getMaterialText());
             productParameter.setNeedAssemble(product.getNeedAssemble());
 
