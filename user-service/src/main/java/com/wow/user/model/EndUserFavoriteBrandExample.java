@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EndUserLikeDesignerExample {
+public class EndUserFavoriteBrandExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public EndUserLikeDesignerExample() {
+    public EndUserFavoriteBrandExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -225,243 +225,183 @@ public class EndUserLikeDesignerExample {
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdIsNull() {
-            addCriterion("designer_id is null");
+        public Criteria andBrandIdIsNull() {
+            addCriterion("brand_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdIsNotNull() {
-            addCriterion("designer_id is not null");
+        public Criteria andBrandIdIsNotNull() {
+            addCriterion("brand_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdEqualTo(Integer value) {
-            addCriterion("designer_id =", value, "designerId");
+        public Criteria andBrandIdEqualTo(Integer value) {
+            addCriterion("brand_id =", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdNotEqualTo(Integer value) {
-            addCriterion("designer_id <>", value, "designerId");
+        public Criteria andBrandIdNotEqualTo(Integer value) {
+            addCriterion("brand_id <>", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdGreaterThan(Integer value) {
-            addCriterion("designer_id >", value, "designerId");
+        public Criteria andBrandIdGreaterThan(Integer value) {
+            addCriterion("brand_id >", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("designer_id >=", value, "designerId");
+        public Criteria andBrandIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("brand_id >=", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdLessThan(Integer value) {
-            addCriterion("designer_id <", value, "designerId");
+        public Criteria andBrandIdLessThan(Integer value) {
+            addCriterion("brand_id <", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdLessThanOrEqualTo(Integer value) {
-            addCriterion("designer_id <=", value, "designerId");
+        public Criteria andBrandIdLessThanOrEqualTo(Integer value) {
+            addCriterion("brand_id <=", value, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdIn(List<Integer> values) {
-            addCriterion("designer_id in", values, "designerId");
+        public Criteria andBrandIdIn(List<Integer> values) {
+            addCriterion("brand_id in", values, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdNotIn(List<Integer> values) {
-            addCriterion("designer_id not in", values, "designerId");
+        public Criteria andBrandIdNotIn(List<Integer> values) {
+            addCriterion("brand_id not in", values, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdBetween(Integer value1, Integer value2) {
-            addCriterion("designer_id between", value1, value2, "designerId");
+        public Criteria andBrandIdBetween(Integer value1, Integer value2) {
+            addCriterion("brand_id between", value1, value2, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andDesignerIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("designer_id not between", value1, value2, "designerId");
+        public Criteria andBrandIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("brand_id not between", value1, value2, "brandId");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeIsNull() {
-            addCriterion("like_time is null");
+        public Criteria andUpdateTimeIsNull() {
+            addCriterion("update_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeIsNotNull() {
-            addCriterion("like_time is not null");
+        public Criteria andUpdateTimeIsNotNull() {
+            addCriterion("update_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeEqualTo(Date value) {
-            addCriterion("like_time =", value, "likeTime");
+        public Criteria andUpdateTimeEqualTo(Date value) {
+            addCriterion("update_time =", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeNotEqualTo(Date value) {
-            addCriterion("like_time <>", value, "likeTime");
+        public Criteria andUpdateTimeNotEqualTo(Date value) {
+            addCriterion("update_time <>", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeGreaterThan(Date value) {
-            addCriterion("like_time >", value, "likeTime");
+        public Criteria andUpdateTimeGreaterThan(Date value) {
+            addCriterion("update_time >", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("like_time >=", value, "likeTime");
+        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("update_time >=", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeLessThan(Date value) {
-            addCriterion("like_time <", value, "likeTime");
+        public Criteria andUpdateTimeLessThan(Date value) {
+            addCriterion("update_time <", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeLessThanOrEqualTo(Date value) {
-            addCriterion("like_time <=", value, "likeTime");
+        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("update_time <=", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeIn(List<Date> values) {
-            addCriterion("like_time in", values, "likeTime");
+        public Criteria andUpdateTimeIn(List<Date> values) {
+            addCriterion("update_time in", values, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeNotIn(List<Date> values) {
-            addCriterion("like_time not in", values, "likeTime");
+        public Criteria andUpdateTimeNotIn(List<Date> values) {
+            addCriterion("update_time not in", values, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeBetween(Date value1, Date value2) {
-            addCriterion("like_time between", value1, value2, "likeTime");
+        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("update_time between", value1, value2, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andLikeTimeNotBetween(Date value1, Date value2) {
-            addCriterion("like_time not between", value1, value2, "likeTime");
+        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeIsNull() {
-            addCriterion("delete_time is null");
+        public Criteria andIsFavoriteIsNull() {
+            addCriterion("is_favorite is null");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeIsNotNull() {
-            addCriterion("delete_time is not null");
+        public Criteria andIsFavoriteIsNotNull() {
+            addCriterion("is_favorite is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeEqualTo(Date value) {
-            addCriterion("delete_time =", value, "deleteTime");
+        public Criteria andIsFavoriteEqualTo(Boolean value) {
+            addCriterion("is_favorite =", value, "isFavorite");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeNotEqualTo(Date value) {
-            addCriterion("delete_time <>", value, "deleteTime");
+        public Criteria andIsFavoriteNotEqualTo(Boolean value) {
+            addCriterion("is_favorite <>", value, "isFavorite");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeGreaterThan(Date value) {
-            addCriterion("delete_time >", value, "deleteTime");
+        public Criteria andIsFavoriteGreaterThan(Boolean value) {
+            addCriterion("is_favorite >", value, "isFavorite");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("delete_time >=", value, "deleteTime");
+        public Criteria andIsFavoriteGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_favorite >=", value, "isFavorite");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeLessThan(Date value) {
-            addCriterion("delete_time <", value, "deleteTime");
+        public Criteria andIsFavoriteLessThan(Boolean value) {
+            addCriterion("is_favorite <", value, "isFavorite");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeLessThanOrEqualTo(Date value) {
-            addCriterion("delete_time <=", value, "deleteTime");
+        public Criteria andIsFavoriteLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_favorite <=", value, "isFavorite");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeIn(List<Date> values) {
-            addCriterion("delete_time in", values, "deleteTime");
+        public Criteria andIsFavoriteIn(List<Boolean> values) {
+            addCriterion("is_favorite in", values, "isFavorite");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeNotIn(List<Date> values) {
-            addCriterion("delete_time not in", values, "deleteTime");
+        public Criteria andIsFavoriteNotIn(List<Boolean> values) {
+            addCriterion("is_favorite not in", values, "isFavorite");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeBetween(Date value1, Date value2) {
-            addCriterion("delete_time between", value1, value2, "deleteTime");
+        public Criteria andIsFavoriteBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_favorite between", value1, value2, "isFavorite");
             return (Criteria) this;
         }
 
-        public Criteria andDeleteTimeNotBetween(Date value1, Date value2) {
-            addCriterion("delete_time not between", value1, value2, "deleteTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedIsNull() {
-            addCriterion("is_deleted is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedIsNotNull() {
-            addCriterion("is_deleted is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedEqualTo(Boolean value) {
-            addCriterion("is_deleted =", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedNotEqualTo(Boolean value) {
-            addCriterion("is_deleted <>", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedGreaterThan(Boolean value) {
-            addCriterion("is_deleted >", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_deleted >=", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedLessThan(Boolean value) {
-            addCriterion("is_deleted <", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_deleted <=", value, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedIn(List<Boolean> values) {
-            addCriterion("is_deleted in", values, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedNotIn(List<Boolean> values) {
-            addCriterion("is_deleted not in", values, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_deleted between", value1, value2, "isDeleted");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsDeletedNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_deleted not between", value1, value2, "isDeleted");
+        public Criteria andIsFavoriteNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_favorite not between", value1, value2, "isFavorite");
             return (Criteria) this;
         }
     }

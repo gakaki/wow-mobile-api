@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.user.mapper.EndUserLikeProductMapper" >
-  <resultMap id="BaseResultMap" type="com.wow.user.model.EndUserLikeProduct" >
+<mapper namespace="com.wow.user.mapper.EndUserFavoriteSceneMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.user.model.EndUserFavoriteScene" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="end_user_id" property="endUserId" jdbcType="INTEGER" />
-    <result column="product_id" property="productId" jdbcType="INTEGER" />
-    <result column="like_time" property="likeTime" jdbcType="TIMESTAMP" />
-    <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP" />
-    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="scene_id" property="sceneId" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_favorite" property="isFavorite" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, end_user_id, product_id, like_time, delete_time, is_deleted
+    id, end_user_id, scene_id, update_time, is_favorite
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.EndUserLikeProductExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.EndUserFavoriteSceneExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from end_user_like_product
+    from end_user_favorite_scene
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,76 +86,70 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from end_user_like_product
+    from end_user_favorite_scene
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from end_user_like_product
+    delete from end_user_favorite_scene
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wow.user.model.EndUserLikeProductExample" >
-    delete from end_user_like_product
+  <delete id="deleteByExample" parameterType="com.wow.user.model.EndUserFavoriteSceneExample" >
+    delete from end_user_favorite_scene
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wow.user.model.EndUserLikeProduct" >
+  <insert id="insert" parameterType="com.wow.user.model.EndUserFavoriteScene" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into end_user_like_product (end_user_id, product_id, like_time, 
-      delete_time, is_deleted)
-    values (#{endUserId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{likeTime,jdbcType=TIMESTAMP}, 
-      #{deleteTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
+    insert into end_user_favorite_scene (end_user_id, scene_id, update_time, 
+      is_favorite)
+    values (#{endUserId,jdbcType=INTEGER}, #{sceneId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{isFavorite,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.user.model.EndUserLikeProduct" >
+  <insert id="insertSelective" parameterType="com.wow.user.model.EndUserFavoriteScene" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into end_user_like_product
+    insert into end_user_favorite_scene
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="endUserId != null" >
         end_user_id,
       </if>
-      <if test="productId != null" >
-        product_id,
+      <if test="sceneId != null" >
+        scene_id,
       </if>
-      <if test="likeTime != null" >
-        like_time,
+      <if test="updateTime != null" >
+        update_time,
       </if>
-      <if test="deleteTime != null" >
-        delete_time,
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted,
+      <if test="isFavorite != null" >
+        is_favorite,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="endUserId != null" >
         #{endUserId,jdbcType=INTEGER},
       </if>
-      <if test="productId != null" >
-        #{productId,jdbcType=INTEGER},
+      <if test="sceneId != null" >
+        #{sceneId,jdbcType=INTEGER},
       </if>
-      <if test="likeTime != null" >
-        #{likeTime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="deleteTime != null" >
-        #{deleteTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null" >
-        #{isDeleted,jdbcType=BIT},
+      <if test="isFavorite != null" >
+        #{isFavorite,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wow.user.model.EndUserLikeProductExample" resultType="java.lang.Integer" >
-    select count(*) from end_user_like_product
+  <select id="countByExample" parameterType="com.wow.user.model.EndUserFavoriteSceneExample" resultType="java.lang.Integer" >
+    select count(*) from end_user_favorite_scene
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update end_user_like_product
+    update end_user_favorite_scene
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
@@ -164,17 +157,14 @@
       <if test="record.endUserId != null" >
         end_user_id = #{record.endUserId,jdbcType=INTEGER},
       </if>
-      <if test="record.productId != null" >
-        product_id = #{record.productId,jdbcType=INTEGER},
+      <if test="record.sceneId != null" >
+        scene_id = #{record.sceneId,jdbcType=INTEGER},
       </if>
-      <if test="record.likeTime != null" >
-        like_time = #{record.likeTime,jdbcType=TIMESTAMP},
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.deleteTime != null" >
-        delete_time = #{record.deleteTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.isDeleted != null" >
-        is_deleted = #{record.isDeleted,jdbcType=BIT},
+      <if test="record.isFavorite != null" >
+        is_favorite = #{record.isFavorite,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -182,53 +172,48 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update end_user_like_product
+    update end_user_favorite_scene
     set id = #{record.id,jdbcType=INTEGER},
       end_user_id = #{record.endUserId,jdbcType=INTEGER},
-      product_id = #{record.productId,jdbcType=INTEGER},
-      like_time = #{record.likeTime,jdbcType=TIMESTAMP},
-      delete_time = #{record.deleteTime,jdbcType=TIMESTAMP},
-      is_deleted = #{record.isDeleted,jdbcType=BIT}
+      scene_id = #{record.sceneId,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_favorite = #{record.isFavorite,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wow.user.model.EndUserLikeProduct" >
-    update end_user_like_product
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.user.model.EndUserFavoriteScene" >
+    update end_user_favorite_scene
     <set >
       <if test="endUserId != null" >
         end_user_id = #{endUserId,jdbcType=INTEGER},
       </if>
-      <if test="productId != null" >
-        product_id = #{productId,jdbcType=INTEGER},
+      <if test="sceneId != null" >
+        scene_id = #{sceneId,jdbcType=INTEGER},
       </if>
-      <if test="likeTime != null" >
-        like_time = #{likeTime,jdbcType=TIMESTAMP},
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="deleteTime != null" >
-        delete_time = #{deleteTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null" >
-        is_deleted = #{isDeleted,jdbcType=BIT},
+      <if test="isFavorite != null" >
+        is_favorite = #{isFavorite,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.user.model.EndUserLikeProduct" >
-    update end_user_like_product
+  <update id="updateByPrimaryKey" parameterType="com.wow.user.model.EndUserFavoriteScene" >
+    update end_user_favorite_scene
     set end_user_id = #{endUserId,jdbcType=INTEGER},
-      product_id = #{productId,jdbcType=INTEGER},
-      like_time = #{likeTime,jdbcType=TIMESTAMP},
-      delete_time = #{deleteTime,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=BIT}
+      scene_id = #{sceneId,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_favorite = #{isFavorite,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectLikedProduct" resultType="com.wow.user.vo.LikedProductVo" parameterType="java.lang.Integer" >
-    select product.id productId, product.product_name productName,product.product_color_img productImg
-    from product inner join end_user_like_product
-    on end_user_like_product.product_id = product.id
-    where end_user_like_product.end_user_id = #{endUserId,jdbcType=INTEGER}
-    and end_user_like_product.is_deleted = false
+  <select id="selectFavoriteScene" resultType="com.wow.user.vo.FavoriteSceneVo" parameterType="java.lang.Integer" >
+    select scene.id sceneId, scene.scene_name sceneName,scene.scene_img sceneImg
+    from scene inner join end_user_favorite_scene
+    on end_user_favorite_scene.scene_id = scene.id
+    where end_user_favorite_scene.end_user_id = #{endUserId,jdbcType=INTEGER}
+    and end_user_favorite_scene.is_favorite = true
   </select>
 </mapper>

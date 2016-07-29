@@ -3,18 +3,16 @@ package com.wow.user.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class EndUserLikeDesigner implements Serializable {
+public class EndUserFavoriteDesigner implements Serializable {
     private Integer id;
 
     private Integer endUserId;
 
     private Integer designerId;
 
-    private Date likeTime;
+    private Date updateTime;
 
-    private Date deleteTime;
-
-    private Boolean isDeleted;
+    private Boolean isFavorite;
 
     private static final long serialVersionUID = 1L;
 
@@ -42,28 +40,20 @@ public class EndUserLikeDesigner implements Serializable {
         this.designerId = designerId;
     }
 
-    public Date getLikeTime() {
-        return likeTime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setLikeTime(Date likeTime) {
-        this.likeTime = likeTime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public Date getDeleteTime() {
-        return deleteTime;
+    public Boolean getIsFavorite() {
+        return isFavorite;
     }
 
-    public void setDeleteTime(Date deleteTime) {
-        this.deleteTime = deleteTime;
-    }
-
-    public Boolean getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setIsFavorite(Boolean isFavorite) {
+        this.isFavorite = isFavorite;
     }
 
     @Override
@@ -75,9 +65,8 @@ public class EndUserLikeDesigner implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", endUserId=").append(endUserId);
         sb.append(", designerId=").append(designerId);
-        sb.append(", likeTime=").append(likeTime);
-        sb.append(", deleteTime=").append(deleteTime);
-        sb.append(", isDeleted=").append(isDeleted);
+        sb.append(", updateTime=").append(updateTime);
+        sb.append(", isFavorite=").append(isFavorite);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

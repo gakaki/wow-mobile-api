@@ -1,10 +1,10 @@
 package com.wow.user.service;
 
 import com.wow.common.response.CommonResponse;
-import com.wow.user.vo.response.LikedBrandResponse;
-import com.wow.user.vo.response.LikedDesignerResponse;
-import com.wow.user.vo.response.LikedProductResponse;
-import com.wow.user.vo.response.LikedSceneResponse;
+import com.wow.user.vo.response.FavoriteBrandResponse;
+import com.wow.user.vo.response.FavoriteDesignerResponse;
+import com.wow.user.vo.response.FavoriteProductResponse;
+import com.wow.user.vo.response.FavoriteSceneResponse;
 
 /**
  * 用户喜欢服务
@@ -31,7 +31,7 @@ public interface LikeService {
      * @param endUserId
      * @return
      */
-    LikedBrandResponse getLikedBrand(Integer endUserId);
+    FavoriteBrandResponse getLikedBrand(Integer endUserId);
 
     /**
      * 用户喜欢设计师
@@ -53,7 +53,7 @@ public interface LikeService {
      * @param endUserId
      * @return
      */
-    LikedDesignerResponse getLikedDesigner(Integer endUserId);
+    FavoriteDesignerResponse getLikedDesigner(Integer endUserId);
 
     /**
      * 用户喜欢产品
@@ -75,7 +75,7 @@ public interface LikeService {
      * @param endUserId
      * @return
      */
-    LikedProductResponse getLikedProduct(Integer endUserId);
+    FavoriteProductResponse getLikedProduct(Integer endUserId);
 
     /**
      * 用户喜欢场景
@@ -97,6 +97,6 @@ public interface LikeService {
      * @param endUserId
      * @return
      */
-    LikedSceneResponse getLikedScene(Integer endUserId);
+    FavoriteSceneResponse getLikedScene(Integer endUserId);
 
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by zhengzhiqing on 16/7/13.
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class LikedBrandVo implements Serializable{
+public class FavoriteBrandVo implements Serializable{
 
     private static final long serialVersionUID = 1L;
 

@@ -1,8 +1,8 @@
-package com.wow.user.vo.request;
+package com.wow.mobileapi.request.user;
 
 import com.wow.common.request.ApiRequest;
 
-public class LikedBrandRequest extends ApiRequest {
+public class FavoriteBrandRequest extends ApiRequest {
 	private static final long serialVersionUID = 1L;
 
     private Integer brandId;
