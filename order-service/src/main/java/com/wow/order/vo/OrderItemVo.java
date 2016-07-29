@@ -21,6 +21,7 @@ public class OrderItemVo implements Serializable {
     private Integer productId;
     
     //发货单产品id
+    @JsonIgnore
     private Integer deliveryOrderId;
 
     //产品名称

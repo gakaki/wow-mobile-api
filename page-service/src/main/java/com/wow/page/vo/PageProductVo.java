@@ -18,6 +18,8 @@ public class PageProductVo implements Serializable {
 	private BigDecimal originalPrice;
 	private String detailDescription;
 	
+	private Byte pageModuleType;
+	
 	public Integer getProductId() {
 		return productId;
 	}
@@ -56,6 +58,12 @@ public class PageProductVo implements Serializable {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public Byte getPageModuleType() {
+		return pageModuleType;
+	}
+	public void setPageModuleType(Byte pageModuleType) {
+		this.pageModuleType = pageModuleType;
 	}	
 	
 }

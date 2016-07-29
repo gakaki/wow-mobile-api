@@ -1,6 +1,6 @@
 package com.wow.mobileapi.request.order;
 
-import com.wow.common.request.ApiRequest;
+import com.wow.common.request.PageRequest;
 
 /**
  * 创建订单列表请求类
@@ -8,12 +8,23 @@ import com.wow.common.request.ApiRequest;
  * @author chenkaiwei
  * @version $Id: V1.0 2016年7月12日 下午4:50:51 Exp $
  */
-public class OrderListRequest extends ApiRequest {
+public class OrderListRequest extends PageRequest {
 
     private static final long serialVersionUID = 1L;
 
     //用户id
     private Integer endUserId;
+
+    //订单状态
+    private Byte orderStatus;
+
+    public Byte getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Byte orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 
     public Integer getEndUserId() {
         return endUserId;

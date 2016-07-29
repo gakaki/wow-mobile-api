@@ -339,7 +339,7 @@
   <select id="selectAllCategory" resultMap="BaseResultMap" parameterType="java.lang.Integer">
   	select
     <include refid="Base_Column_List" />
-    from category where is_deleted=0
+    from category where is_deleted=false
     <if test="categoryLevel != null" >
         and category_level = #{categoryLevel,jdbcType=INTEGER}
     </if>
@@ -348,7 +348,7 @@
   <select id="selectCategoryByParentId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
   	select
     <include refid="Base_Column_List" />
-    from category where is_deleted=0
+    from category where is_deleted=false
     <if test="categoryParentId != null" >
         and parent_category_id = #{categoryParentId,jdbcType=INTEGER}
     </if>

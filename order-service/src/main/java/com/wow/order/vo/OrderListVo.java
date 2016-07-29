@@ -35,7 +35,6 @@ public class OrderListVo implements Serializable {
     private String orderStatusName;
 
     //订单创建时间
-    @JsonIgnore
     private Date orderCreateTime;
 
     //订单创建时间

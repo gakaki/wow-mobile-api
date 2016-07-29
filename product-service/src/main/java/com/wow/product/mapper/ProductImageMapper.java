@@ -1,9 +1,11 @@
 package com.wow.product.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.product.model.ProductImage;
 import com.wow.product.model.ProductImageExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface ProductImageMapper {
     int countByExample(ProductImageExample example);
@@ -30,4 +32,6 @@ public interface ProductImageMapper {
     int updateByPrimaryKey(ProductImage record);
     
     ProductImage selectProductPrimaryOneImg(Integer productId);
+
+    List<ProductImage> selectProductListPrimaryOneImg(@Param("productIds") List<Integer> productIds);
 }

@@ -865,7 +865,7 @@
     p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
     inner join product_price pp on pp.product_id=p.id
-    where p.category_id in
+    where p.is_deleted = false and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
     </foreach>
@@ -878,7 +878,7 @@
     from product p
     inner join product_price pp on pp.product_id=p.id
     left join product_summary ps on ps.product_id=p.id
-    where p.category_id in
+    where p.is_deleted = false and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
     </foreach>
@@ -890,7 +890,7 @@
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
     inner join product_price pp on pp.product_id=p.id
-    where p.category_id in
+    where p.is_deleted = false and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
     </foreach>
@@ -902,7 +902,7 @@
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
     inner join product_price pp on pp.product_id=p.id
-    where p.brand_id = #{bradnId} order by p.id desc
+    where p.is_deleted = false and p.brand_id = #{bradnId} order by p.id desc
   </select>
   
   <select id="selectProductByDesignerId" resultType="com.wow.product.vo.ProductVo" parameterType="map">
@@ -911,7 +911,7 @@
     from product p
     inner join product_designer pd on pd.product_id=p.id
     inner join product_price pp on pp.product_id=p.id
-    where pd.designer_id=#{designerId} order by p.id desc
+    where p.is_deleted = false and pd.designer_id=#{designerId} order by p.id desc
   </select>
   
 </mapper>

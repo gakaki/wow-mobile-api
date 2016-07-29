@@ -3,6 +3,7 @@ package com.wow.user.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,16 +16,18 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
 import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.MapUtil;
 import com.wow.common.util.NumberUtil;
+import com.wow.price.model.ProductPrice;
+import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.product.model.Product;
 import com.wow.product.service.ProductService;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
 import com.wow.stock.vo.response.AvailableStockResponse;
 import com.wow.stock.vo.response.AvailableStocksResponse;
-import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.ShoppingCartMapper;
-import com.wow.user.model.EndUser;
 import com.wow.user.model.ShoppingCart;
 import com.wow.user.model.ShoppingCartExample;
 import com.wow.user.service.ShoppingCartService;
@@ -43,13 +46,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private ShoppingCartMapper shoppingCartMapper;
 
     @Autowired
-    private EndUserMapper endUserMapper;
-
-    @Autowired
     private ProductService productService;
 
     @Autowired
     private StockService stockService;
+
+    @Autowired
+    private PriceService priceService;
 
     /**
      * 添加商品到购物车 暂不考虑组合产品 仅在用户登录的情况下调用
@@ -79,6 +82,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             return response;
         }
 
+        //如果产品已下架 则直接返回错误提示
+        if (product.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_OFF_SHELVE.getKey()) {
+            response.setResCode("40322");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40322"));
+
+            return response;
+        }
+
         //判断加入的产品是否有库存 如果库存不足 则直接返回
         AvailableStockResponse availableStockResponse = stockService.getAvailableStock(shoppingCart.getProductId());
         if (ErrorCodeUtil.isFailedResponse(availableStockResponse.getResCode())) {
@@ -88,12 +99,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             return response;
         }
 
-        //业务校验结束
-
         //如果购物车数量为空 则默认为1
         if (shoppingCart.getProductQty() == null) {
             shoppingCart.setProductQty((byte) 1);
         }
+
+        //判断库存是否可用 如果当前可用库存小于要加入购物车的数量 则直接返回
+        AvailableStockVo availableStockVo = availableStockResponse.getAvailableStockVo();
+        if (availableStockVo == null || availableStockVo.getTotalAvailableStockQty() < shoppingCart.getProductQty()) {
+            response.setResCode("50608");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("50608"));
+
+            return response;
+        }
+        //业务校验结束
+
         ShoppingCart newShoppingCart = getShoppingCartByExample(shoppingCart);
         //如果该产品已经加入到购物车 则对该产品数量进行增加操作
         if (newShoppingCart != null) {
@@ -140,6 +160,24 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (shoppingCart == null) {
             response.setResCode("40302");
             response.setResMsg(ErrorCodeUtil.getErrorMsg("40302"));
+
+            return response;
+        }
+
+        //判断加入的产品是否有库存 如果库存不足 则直接返回
+        AvailableStockResponse availableStockResponse = stockService.getAvailableStock(shoppingCart.getProductId());
+        if (ErrorCodeUtil.isFailedResponse(availableStockResponse.getResCode())) {
+            response.setResCode(availableStockResponse.getResCode());
+            response.setResMsg(ErrorCodeUtil.getErrorMsg(availableStockResponse.getResCode()));
+
+            return response;
+        }
+
+        //判断库存是否可用 如果当前可用库存小于要加入购物车的数量 则直接返回
+        AvailableStockVo availableStockVo = availableStockResponse.getAvailableStockVo();
+        if (availableStockVo == null || availableStockVo.getTotalAvailableStockQty() < query.getProductQty()) {
+            response.setResCode("50608");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("50608"));
 
             return response;
         }
@@ -194,15 +232,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         // 业务校验开始
         //判断用户id是否为空
         if (query.getEndUserId() == null) {
-            response.setResCode("40303");
-            response.setResMsg(ErrorCodeUtil.getErrorMsg("40303"));
-
-            return response;
-        }
-
-        EndUser endUser = endUserMapper.selectByPrimaryKey(query.getEndUserId());
-
-        if (endUser == null) {
             response.setResCode("40304");
             response.setResMsg(ErrorCodeUtil.getErrorMsg("40304"));
 
@@ -217,6 +246,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         //购物车产品id列表
         List<Integer> productIds = getProductIds(shoppingCartResult);
+
+        //调用获取产品价格服务
+        ProductListPriceResponse priceResponse = priceService.batchGetProductPrice(productIds);
+
+        //判断服务是否调用成功 如果处理失败 则返回错误信息
+        if (ErrorCodeUtil.isFailedResponse(priceResponse.getResCode())) {
+            response.setResCode(priceResponse.getResCode());
+            response.setResMsg(priceResponse.getResMsg());
+
+            return response;
+        }
+
+        //设置产品服务
+        setProductPrie(shoppingCartResult, priceResponse.getMap());
 
         //调用获取产品库存服务
         AvailableStocksResponse stocksResponse = stockService.batchGetAvailableStock(productIds);
@@ -239,6 +282,30 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         response.setTotalPrice(totalPrice);
 
         return response;
+    }
+
+    /**
+     * 设置产品价格
+     * 
+     * @param shoppingCartResult
+     * @param map
+     */
+    private void setProductPrie(List<ShoppingCartResultVo> shoppingCartResult, Map<Integer, ProductPrice> map) {
+        if (MapUtil.isEmpty(map)) {
+            return;
+        }
+
+        ProductPrice productPrice = null;
+
+        //设置产品可用库存信息
+        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            productPrice = map.get(shoppingCart.getProductId());
+
+            //设置产品库存
+            if (productPrice != null) {
+                shoppingCart.setSellPrice(productPrice.getSellPrice());
+            }
+        }
     }
 
     /**

@@ -44,7 +44,7 @@ public interface OrderService {
      * @param query
      * @return
      */
-    OrderListResponse queryOrderList(OrderListQuery query);
+    OrderListResponse queryOrderListPage(OrderListQuery query);
 
     /**
      * 订单支付
@@ -71,7 +71,7 @@ public interface OrderService {
      * @param orderCode
      * @return
      */
-    OrderDetailResponse queryOrderByOrderCode(String orderCode);
+    OrderDetailResponse queryOrderDetailByOrderCode(String orderCode);
 
     /**
      * @param orderId

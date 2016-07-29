@@ -37,7 +37,7 @@ public class OrderSettleVo implements Serializable {
     //产品颜色
     private String color;
 
-    //产品规格值
+    //产品规格图片
     private String specImg;
 
     public BigDecimal getSellTotalAmount() {
