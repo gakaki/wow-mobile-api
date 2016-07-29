@@ -41,6 +41,8 @@ public class Product implements Serializable {
 
     private String originCountryId;
 
+    private Integer originProvinceId;
+
     private String originCity;
 
     private Boolean isImport;
@@ -243,6 +245,14 @@ public class Product implements Serializable {
 
     public void setOriginCountryId(String originCountryId) {
         this.originCountryId = originCountryId;
+    }
+
+    public Integer getOriginProvinceId() {
+        return originProvinceId;
+    }
+
+    public void setOriginProvinceId(Integer originProvinceId) {
+        this.originProvinceId = originProvinceId;
     }
 
     public String getOriginCity() {

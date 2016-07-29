@@ -18,7 +18,8 @@
     <result column="seo_title" property="seoTitle" jdbcType="VARCHAR" />
     <result column="seo_desc" property="seoDesc" jdbcType="VARCHAR" />
     <result column="seo_key" property="seoKey" jdbcType="VARCHAR" />
-    <result column="origin_country_id" property="originCountryId" jdbcType="INTEGER" />
+    <result column="origin_country_id" property="originCountryId" jdbcType="VARCHAR" />
+    <result column="origin_province_id" property="originProvinceId" jdbcType="VARCHAR" />
     <result column="origin_city" property="originCity" jdbcType="VARCHAR" />
     <result column="is_import" property="isImport" jdbcType="BIT" />
     <result column="length" property="length" jdbcType="SMALLINT" />
@@ -110,7 +111,7 @@
   <sql id="Base_Column_List" >
     id, product_name, product_code, product_type, category_id, brand_id, product_model, 
     material_text, selling_point, detail_description, can_sale, can_show, view_platform, 
-    seo_title, seo_desc, seo_key, origin_country_id, origin_city, is_import, length, 
+    seo_title, seo_desc, seo_key, origin_country_id,origin_province_id, origin_city, is_import, length,
     width, height, size_text, weight, weight_text, spec_name, color_id, product_color_img, 
     color_display_name, style_id, verbose_info, tips, applicable_people, applicable_scene_text, 
     need_assemble, assemble_tips, can_customized, is_fragile, is_bundling, product_status, 
@@ -155,7 +156,7 @@
       material_text, selling_point, detail_description, 
       can_sale, can_show, view_platform, 
       seo_title, seo_desc, seo_key, 
-      origin_country_id, origin_city, is_import, 
+      origin_country_id,origin_province_id, origin_city, is_import,
       length, width, height, 
       size_text, weight, weight_text, 
       spec_name, color_id, product_color_img, 
@@ -171,7 +172,7 @@
       #{materialText,jdbcType=VARCHAR}, #{sellingPoint,jdbcType=VARCHAR}, #{detailDescription,jdbcType=VARCHAR}, 
       #{canSale,jdbcType=BIT}, #{canShow,jdbcType=BIT}, #{viewPlatform,jdbcType=TINYINT}, 
       #{seoTitle,jdbcType=VARCHAR}, #{seoDesc,jdbcType=VARCHAR}, #{seoKey,jdbcType=VARCHAR}, 
-      #{originCountryId,jdbcType=INTEGER}, #{originCity,jdbcType=VARCHAR}, #{isImport,jdbcType=BIT}, 
+      #{originCountryId,jdbcType=VARCHAR},#{originProvinceId,jdbcType=INTEGER}, #{originCity,jdbcType=VARCHAR}, #{isImport,jdbcType=BIT},
       #{length,jdbcType=SMALLINT}, #{width,jdbcType=SMALLINT}, #{height,jdbcType=SMALLINT}, 
       #{sizeText,jdbcType=VARCHAR}, #{weight,jdbcType=DECIMAL}, #{weightText,jdbcType=VARCHAR}, 
       #{specName,jdbcType=VARCHAR}, #{colorId,jdbcType=TINYINT}, #{productColorImg,jdbcType=VARCHAR}, 
@@ -373,7 +374,10 @@
         #{seoKey,jdbcType=VARCHAR},
       </if>
       <if test="originCountryId != null" >
-        #{originCountryId,jdbcType=INTEGER},
+        #{originCountryId,jdbcType=VARCHAR},
+      </if>
+      <if test="originProvinceId != null" >
+        #{originProvinceId,jdbcType=INTEGER}
       </if>
       <if test="originCity != null" >
         #{originCity,jdbcType=VARCHAR},
@@ -522,7 +526,7 @@
         seo_key = #{record.seoKey,jdbcType=VARCHAR},
       </if>
       <if test="record.originCountryId != null" >
-        origin_country_id = #{record.originCountryId,jdbcType=INTEGER},
+        origin_country_id = #{record.originCountryId,jdbcType=VARCHAR},
       </if>
       <if test="record.originCity != null" >
         origin_city = #{record.originCity,jdbcType=VARCHAR},
@@ -634,7 +638,7 @@
       seo_title = #{record.seoTitle,jdbcType=VARCHAR},
       seo_desc = #{record.seoDesc,jdbcType=VARCHAR},
       seo_key = #{record.seoKey,jdbcType=VARCHAR},
-      origin_country_id = #{record.originCountryId,jdbcType=INTEGER},
+      origin_country_id = #{record.originCountryId,jdbcType=VARCHAR},
       origin_city = #{record.originCity,jdbcType=VARCHAR},
       is_import = #{record.isImport,jdbcType=BIT},
       length = #{record.length,jdbcType=SMALLINT},
@@ -717,7 +721,10 @@
         seo_key = #{seoKey,jdbcType=VARCHAR},
       </if>
       <if test="originCountryId != null" >
-        origin_country_id = #{originCountryId,jdbcType=INTEGER},
+        origin_country_id = #{originCountryId,jdbcType=VARCHAR},
+      </if>
+      <if test="originProvinceId != null" >
+        origin_province_id=#{originProvinceId,jdbcType=INTEGER}
       </if>
       <if test="originCity != null" >
         origin_city = #{originCity,jdbcType=VARCHAR},
@@ -826,7 +833,8 @@
       seo_title = #{seoTitle,jdbcType=VARCHAR},
       seo_desc = #{seoDesc,jdbcType=VARCHAR},
       seo_key = #{seoKey,jdbcType=VARCHAR},
-      origin_country_id = #{originCountryId,jdbcType=INTEGER},
+      origin_country_id = #{originCountryId,jdbcType=VARCHAR},
+      origin_province_id=#{originProvinceId,jdbcType=INTEGER},
       origin_city = #{originCity,jdbcType=VARCHAR},
       is_import = #{isImport,jdbcType=BIT},
       length = #{length,jdbcType=SMALLINT},
