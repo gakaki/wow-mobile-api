@@ -17,8 +17,6 @@ import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.ImgPrefixUtil;
 import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.product.model.ProductImage;
 import com.wow.product.service.ProductService;
@@ -63,12 +61,6 @@ public class UserActionController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        String errorMsg = ValidatorUtil.getError(likedBrandRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
         
         try {
             CommonResponse commonResponse = likeService.likeBrand(endUserId, likedBrandRequest.getBrandId());
@@ -98,12 +90,6 @@ public class UserActionController extends BaseController {
         //判断json格式参数是否有误
         if (likedBrandRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        String errorMsg = ValidatorUtil.getError(likedBrandRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
         
@@ -174,12 +160,6 @@ public class UserActionController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        String errorMsg = ValidatorUtil.getError(likedDesignerRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
         
         try {
             CommonResponse commonResponse = likeService.likeDesigner(endUserId, likedDesignerRequest.getDesignerId());
@@ -209,12 +189,6 @@ public class UserActionController extends BaseController {
         //判断json格式参数是否有误
         if (likedDesignerRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        String errorMsg = ValidatorUtil.getError(likedDesignerRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
         
@@ -285,12 +259,6 @@ public class UserActionController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        String errorMsg = ValidatorUtil.getError(likedProductRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
         
         try {
             CommonResponse commonResponse = likeService.likeBrand(endUserId, likedProductRequest.getProductId());
@@ -320,12 +288,6 @@ public class UserActionController extends BaseController {
         //判断json格式参数是否有误
         if (likedProductRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        String errorMsg = ValidatorUtil.getError(likedProductRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
         
@@ -402,12 +364,6 @@ public class UserActionController extends BaseController {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        String errorMsg = ValidatorUtil.getError(likedSceneRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
         
         try {
             CommonResponse commonResponse = likeService.likeBrand(endUserId, likedSceneRequest.getSceneId());
@@ -437,12 +393,6 @@ public class UserActionController extends BaseController {
         //判断json格式参数是否有误
         if (likedSceneRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-        String errorMsg = ValidatorUtil.getError(likedSceneRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
         

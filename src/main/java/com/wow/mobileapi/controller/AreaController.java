@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.request.area.AreaRequest;
 import com.wow.mobileapi.response.area.AreaResponse;
-import com.wow.product.model.Designer;
-import com.wow.product.vo.response.ProductDesignerResponse;
 import com.wow.user.model.Area;
 import com.wow.user.service.AreaService;
 
@@ -47,11 +46,20 @@ public class AreaController extends BaseController {
         }
         
         try {
-        	List<Area> areaList = areaService.getNextLevelArea(areaRequest.getAreaId());
-            
         	AreaResponse areaResponse = new AreaResponse();
-        	areaResponse.setAreaList(areaList);
-            apiResponse.setData(areaResponse);
+        	if(areaRequest.getAreaId() == null){
+        		areaResponse.setResCode("50112");
+        		areaResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50112"));
+        	}
+        	//如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(areaResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, areaResponse);
+            }else{
+            	List<Area> areaList = areaService.getNextLevelArea(areaRequest.getAreaId());
+                
+            	areaResponse.setAreaList(areaList);
+                apiResponse.setData(areaResponse);
+            }
             
         } catch (Exception e) {
             logger.error("查找findNextLevelArea错误---" + e);

@@ -1,16 +1,10 @@
 package com.wow.user.service;
 
 import com.wow.common.response.CommonResponse;
-import com.wow.product.model.Brand;
-import com.wow.product.model.Designer;
-import com.wow.product.model.Product;
-import com.wow.product.model.Scene;
 import com.wow.user.vo.response.LikedBrandResponse;
 import com.wow.user.vo.response.LikedDesignerResponse;
 import com.wow.user.vo.response.LikedProductResponse;
 import com.wow.user.vo.response.LikedSceneResponse;
-
-import java.util.List;
 
 /**
  * 用户喜欢服务
@@ -23,21 +17,21 @@ public interface LikeService {
      * @param brandId
      * @return
      */
-    CommonResponse likeBrand(int endUserId, int brandId);
+    CommonResponse likeBrand(Integer endUserId, Integer brandId);
 
     /**
      * 删除喜欢的品牌
      * @param id
      * @return
      */
-    CommonResponse deleteLikedBrand(int id);
+    CommonResponse deleteLikedBrand(Integer id);
 
     /**
      * 查询用户喜欢的品牌
      * @param endUserId
      * @return
      */
-    LikedBrandResponse getLikedBrand(int endUserId);
+    LikedBrandResponse getLikedBrand(Integer endUserId);
 
     /**
      * 用户喜欢设计师
@@ -45,21 +39,21 @@ public interface LikeService {
      * @param designerId
      * @return
      */
-    CommonResponse likeDesigner(int endUserId, int designerId);
+    CommonResponse likeDesigner(Integer endUserId, Integer designerId);
 
     /**
      * 删除喜欢的设计师
      * @param id
      * @return
      */
-    CommonResponse deleteLikedDesigner(int id);
+    CommonResponse deleteLikedDesigner(Integer id);
 
     /**
      * 查询用户喜欢的设计师
      * @param endUserId
      * @return
      */
-    LikedDesignerResponse getLikedDesigner(int endUserId);
+    LikedDesignerResponse getLikedDesigner(Integer endUserId);
 
     /**
      * 用户喜欢产品
@@ -67,21 +61,21 @@ public interface LikeService {
      * @param productId
      * @return
      */
-    CommonResponse likeProduct(int endUserId, int productId);
+    CommonResponse likeProduct(Integer endUserId, Integer productId);
 
     /**
      * 删除喜欢的产品
      * @param id
      * @return
      */
-    CommonResponse deleteLikedProduct(int id);
+    CommonResponse deleteLikedProduct(Integer id);
 
     /**
      * 查询用户喜欢的产品
      * @param endUserId
      * @return
      */
-    LikedProductResponse getLikedProduct(int endUserId);
+    LikedProductResponse getLikedProduct(Integer endUserId);
 
     /**
      * 用户喜欢场景
@@ -89,20 +83,20 @@ public interface LikeService {
      * @param sceneId
      * @return
      */
-    CommonResponse likeScene(int endUserId, int sceneId);
+    CommonResponse likeScene(Integer endUserId, Integer sceneId);
 
     /**
      * 删除喜欢的场景
      * @param id
      * @return
      */
-    CommonResponse deleteLikedScene(int id);
+    CommonResponse deleteLikedScene(Integer id);
 
     /**
      * 查询用户喜欢的场景
      * @param endUserId
      * @return
      */
-    LikedSceneResponse getLikedScene(int endUserId);
+    LikedSceneResponse getLikedScene(Integer endUserId);
 
 }

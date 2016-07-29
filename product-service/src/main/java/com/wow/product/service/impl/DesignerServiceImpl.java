@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ImgPrefixUtil;
 import com.wow.product.mapper.DesignerMapper;
 import com.wow.product.mapper.ProductDesignerMapper;
@@ -20,7 +21,9 @@ import com.wow.product.model.ProductDesigner;
 import com.wow.product.model.ProductDesignerExample;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.DesignerVo;
 import com.wow.product.vo.response.ProductDesignerResponse;
+import com.wow.product.vo.response.ProductDesignerVoResponse;
 
 
 /**
@@ -51,6 +54,31 @@ public class DesignerServiceImpl implements DesignerService {
     	ProductDesignerResponse productDesignerResponse = new ProductDesignerResponse();
     	productDesignerResponse.setDesigner(designer);
         return productDesignerResponse;
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public ProductDesignerVoResponse getDesignerVoById(Integer designerId) {
+    	ProductDesignerVoResponse productDesignerVoResponse = new ProductDesignerVoResponse();
+    	if (designerId == null) {
+    		productDesignerVoResponse.setResCode("40205");
+    		productDesignerVoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40205"));
+            return productDesignerVoResponse;
+        }
+    	
+    	Designer designer = designerMapper.selectByPrimaryKey(designerId);
+    	DesignerVo designerVo = new DesignerVo();
+    	if(designer!=null){
+    		designerVo.setId(designer.getId());
+    		designerVo.setDesignerName(designer.getDesignerName());
+    		designerVo.setDesignerPhoto(designer.getDesignerPhoto());
+    		designerVo.setDesignerDesc(designer.getDesignerDesc());
+        	//增加前缀
+            designer.setDesignerPhoto(ImgPrefixUtil.addPrefixForImgUrl(designer.getDesignerPhoto()));
+    	}
+    	
+    	productDesignerVoResponse.setDesignerVo(designerVo);
+        return productDesignerVoResponse;
     }
 
     @Override

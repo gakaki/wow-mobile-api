@@ -209,6 +209,12 @@ public class CategoryServiceImpl implements CategoryService {
     public CategorySecondResponse getCategoryByParentId(Integer categoryParentId){
     	CategorySecondResponse categorySecondResponse = new CategorySecondResponse();
     	
+    	if (categoryParentId == null) {
+    		categorySecondResponse.setResCode("40404");
+    		categorySecondResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40404"));
+            return categorySecondResponse;
+        }
+    	
     	Category firstCategory = categoryMapper.selectByPrimaryKey(categoryParentId);
     	CategoryFirstVo categoryFirstVo = new CategoryFirstVo();
     	if(firstCategory!=null){

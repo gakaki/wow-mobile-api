@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wow.common.response.CommonResponse;
+import com.wow.common.util.ErrorCodeUtil;
 import com.wow.user.mapper.EndUserLikeBrandMapper;
 import com.wow.user.mapper.EndUserLikeDesignerMapper;
 import com.wow.user.mapper.EndUserLikeProductMapper;
@@ -58,8 +59,15 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public CommonResponse likeBrand(int endUserId, int brandId) {
+    public CommonResponse likeBrand(Integer endUserId, Integer brandId) {
         EndUserLikeBrand endUserLikeBrand = new EndUserLikeBrand();
+        CommonResponse commonResponse = new CommonResponse();
+        if (brandId == null) {
+        	commonResponse.setResCode("40204");
+        	commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40204"));
+            return commonResponse;
+        }
+        
         endUserLikeBrand.setEndUserId(endUserId);
         endUserLikeBrand.setBrandId(brandId);
         endUserLikeBrandMapper.insertSelective(endUserLikeBrand);
@@ -73,7 +81,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public CommonResponse deleteLikedBrand(int id) {
+    public CommonResponse deleteLikedBrand(Integer id) {
         EndUserLikeBrand endUserLikeBrand = new EndUserLikeBrand();
         endUserLikeBrand.setId(id);
         endUserLikeBrand.setIsDeleted(true);
@@ -89,7 +97,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public LikedBrandResponse getLikedBrand(int endUserId) {
+    public LikedBrandResponse getLikedBrand(Integer endUserId) {
         LikedBrandResponse likedBrandResponse = new LikedBrandResponse();
         List<LikedBrandVo> likedBrandVoList = endUserLikeBrandMapper.selectLikedBrand(endUserId);
         likedBrandResponse.setLikedBrandVoList(likedBrandVoList);
@@ -104,8 +112,14 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public CommonResponse likeDesigner(int endUserId, int designerId) {
+    public CommonResponse likeDesigner(Integer endUserId, Integer designerId) {
         EndUserLikeDesigner endUserLikeDesigner = new EndUserLikeDesigner();
+        CommonResponse commonResponse = new CommonResponse();
+        if (designerId == null) {
+        	commonResponse.setResCode("40205");
+        	commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40205"));
+            return commonResponse;
+        }
         endUserLikeDesigner.setEndUserId(endUserId);
         endUserLikeDesigner.setDesignerId(designerId);
         endUserLikeDesignerMapper.insertSelective(endUserLikeDesigner);
@@ -119,7 +133,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public CommonResponse deleteLikedDesigner(int id) {
+    public CommonResponse deleteLikedDesigner(Integer id) {
         EndUserLikeDesigner endUserLikeDesigner = new EndUserLikeDesigner();
         endUserLikeDesigner.setId(id);
         endUserLikeDesigner.setIsDeleted(true);
@@ -135,7 +149,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public LikedDesignerResponse getLikedDesigner(int endUserId) {
+    public LikedDesignerResponse getLikedDesigner(Integer endUserId) {
         LikedDesignerResponse likedDesignerResponse = new LikedDesignerResponse();
         //TODO
         List<LikedDesignerVo> likedDesignerVoList = endUserLikeDesignerMapper.selectLikedDesigner(endUserId);
@@ -151,8 +165,14 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public CommonResponse likeProduct(int endUserId, int productId) {
+    public CommonResponse likeProduct(Integer endUserId, Integer productId) {
         EndUserLikeProduct endUserLikeProduct = new EndUserLikeProduct();
+        CommonResponse commonResponse = new CommonResponse();
+        if (productId == null) {
+        	commonResponse.setResCode("40202");
+        	commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40202"));
+            return commonResponse;
+        }
         endUserLikeProduct.setEndUserId(endUserId);
         endUserLikeProduct.setProductId(productId);
         endUserLikeProductMapper.insertSelective(endUserLikeProduct);
@@ -166,7 +186,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public CommonResponse deleteLikedProduct(int id) {
+    public CommonResponse deleteLikedProduct(Integer id) {
         EndUserLikeProduct endUserLikeProduct = new EndUserLikeProduct();
         endUserLikeProduct.setId(id);
         endUserLikeProduct.setIsDeleted(true);
@@ -182,7 +202,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public LikedProductResponse getLikedProduct(int endUserId) {
+    public LikedProductResponse getLikedProduct(Integer endUserId) {
 
         LikedProductResponse likedProductResponse = new LikedProductResponse();
         //TODO
@@ -199,7 +219,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public CommonResponse likeScene(int endUserId, int sceneId) {
+    public CommonResponse likeScene(Integer endUserId, Integer sceneId) {
         EndUserLikeScene endUserLikeScene = new EndUserLikeScene();
         endUserLikeScene.setEndUserId(endUserId);
         endUserLikeScene.setSceneId(sceneId);
@@ -214,7 +234,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public CommonResponse deleteLikedScene(int id) {
+    public CommonResponse deleteLikedScene(Integer id) {
         EndUserLikeScene endUserLikeScene = new EndUserLikeScene();
         endUserLikeScene.setId(id);
         endUserLikeScene.setIsDeleted(true);
@@ -230,7 +250,7 @@ public class LikeServiceImpl implements LikeService {
      * @return
      */
     @Override
-    public LikedSceneResponse getLikedScene(int endUserId) {
+    public LikedSceneResponse getLikedScene(Integer endUserId) {
 
         LikedSceneResponse likedSceneResponse = new LikedSceneResponse();
         //TODO

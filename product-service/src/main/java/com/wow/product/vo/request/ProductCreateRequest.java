@@ -16,7 +16,8 @@ public class ProductCreateRequest implements Serializable {
     private String productModel;
     private int brandId;
     private List<DesignerVo> designerVoList;
-    private int originCountryId;
+    //    private int originCountryId;
+    private String originCountryId;
     private String originCity;
     private byte styleId;
     private short length;
@@ -78,11 +79,19 @@ public class ProductCreateRequest implements Serializable {
         this.designerVoList = designerVoList;
     }
 
-    public int getOriginCountryId() {
+    /*public int getOriginCountryId() {
         return originCountryId;
     }
 
     public void setOriginCountryId(int originCountryId) {
+        this.originCountryId = originCountryId;
+    }*/
+
+    public String getOriginCountryId() {
+        return originCountryId;
+    }
+
+    public void setOriginCountryId(String originCountryId) {
         this.originCountryId = originCountryId;
     }
 
