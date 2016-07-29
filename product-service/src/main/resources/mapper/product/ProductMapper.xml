@@ -18,7 +18,7 @@
     <result column="seo_title" property="seoTitle" jdbcType="VARCHAR" />
     <result column="seo_desc" property="seoDesc" jdbcType="VARCHAR" />
     <result column="seo_key" property="seoKey" jdbcType="VARCHAR" />
-    <result column="origin_country_id" property="originCountryId" jdbcType="INTEGER" />
+    <result column="origin_country_id" property="originCountryId" jdbcType="VARCHAR" />
     <result column="origin_city" property="originCity" jdbcType="VARCHAR" />
     <result column="is_import" property="isImport" jdbcType="BIT" />
     <result column="length" property="length" jdbcType="SMALLINT" />
