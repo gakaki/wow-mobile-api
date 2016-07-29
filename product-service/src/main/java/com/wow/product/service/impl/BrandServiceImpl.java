@@ -59,7 +59,6 @@ public class BrandServiceImpl implements BrandService {
     public ProductBrandResponse getBrandById(int brandId) {
     	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
         Brand brand = brandMapper.selectByPrimaryKey(brandId);
-        brand.setBrandLogoImg(brand.getBrandLogoImg());
     	productBrandResponse.setBrand(brand);
         return productBrandResponse;
     }
