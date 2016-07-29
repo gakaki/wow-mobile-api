@@ -1,5 +1,6 @@
 package com.wow.mobileapi.controller;
 
+import com.wow.common.constant.BizConstant;
 import com.wow.common.model.Dictionary;
 import com.wow.common.model.DictionaryExample;
 import com.wow.common.request.ApiRequest;
@@ -9,6 +10,7 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.response.DictionaryResponse;
 import com.wow.common.service.DictionaryService;
 import com.wow.common.util.BeanUtil;
+import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,17 +95,22 @@ public class DictionaryController extends BaseController{
         return apiResponse;
     }
 
+    /**
+     *
+     * @param apiRequest
+     * @return 返回国家信息
+     */
     @RequestMapping(value="/v1/dictionary/query",method = RequestMethod.GET)
     public ApiResponse queryDictionary(ApiRequest apiRequest){
         ApiResponse apiResponse = new ApiResponse();
-        DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);
-        //判断json格式参数是否有误
-        if (dictionaryRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
+
         try {
-            List<Dictionary> dictionaryList = dictionaryService.queryDictionary(dictionaryRequest);
+            List<Dictionary> dictionaryList=DictionaryUtil.getKeyGroup("country_channel");
+            if(dictionaryList==null) {
+                DictionaryRequest dictionaryRequest=new DictionaryRequest();
+                dictionaryRequest.setKeyGroupCon(BizConstant.DICTIONARY_GROUP_COUNTRY);
+                dictionaryList = dictionaryService.queryDictionary(dictionaryRequest);
+            }
             DictionaryResponse dictionaryResponse = new DictionaryResponse();
             dictionaryResponse.setDictionaryList(dictionaryList);
             apiResponse.setData(dictionaryResponse);
@@ -111,6 +118,8 @@ public class DictionaryController extends BaseController{
             logger.error("字典信息查找findNextLevelArea错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
+
+
         return apiResponse;
     }
 }

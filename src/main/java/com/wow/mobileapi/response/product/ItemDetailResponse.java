@@ -26,10 +26,14 @@ public class ItemDetailResponse extends CommonResponse {
     private BigDecimal originalPrice;
     //卖点(短描述)
     private String sellingPoint;
+    //品牌ID
+    private int brandId;
     //品牌中文名
     private String brandCname;
     //品牌LOGO图片
     private String brandLogoImg;
+    //设计师ID
+    private int designerId;
     //设计师姓名
     private String designerName;
     //设计师头像
@@ -49,6 +53,22 @@ public class ItemDetailResponse extends CommonResponse {
     private BigDecimal weight;
     //详细描述
     private String detailDescription;
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+
+    public int getDesignerId() {
+        return designerId;
+    }
+
+    public void setDesignerId(int designerId) {
+        this.designerId = designerId;
+    }
 
     public String getDetailDescription() {
         return detailDescription;
