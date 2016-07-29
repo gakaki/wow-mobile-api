@@ -1,21 +1,10 @@
 package com.wow.mobileapi.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.ImgPrefixUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.product.model.ProductImage;
@@ -33,6 +22,15 @@ import com.wow.user.vo.response.LikedBrandResponse;
 import com.wow.user.vo.response.LikedDesignerResponse;
 import com.wow.user.vo.response.LikedProductResponse;
 import com.wow.user.vo.response.LikedSceneResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class UserActionController extends BaseController {
@@ -128,9 +126,6 @@ public class UserActionController extends BaseController {
                 setServiceErrorResponse(apiResponse, likedBrandResponse);
             } else {
                 List<LikedBrandVo> likedBrandVoList = likedBrandResponse.getLikedBrandVoList();
-                for (LikedBrandVo likedBrandVo : likedBrandVoList) {
-                    likedBrandVo.setBrandLogoImg(ImgPrefixUtil.addPrefixForImgUrl(likedBrandVo.getBrandLogoImg()));
-                }
                 likedBrandResponse.setLikedBrandVoList(likedBrandVoList);
                 apiResponse.setData(likedBrandResponse);
             }
@@ -227,9 +222,6 @@ public class UserActionController extends BaseController {
                 setServiceErrorResponse(apiResponse, likedDesignerResponse);
             } else {
                 List<LikedDesignerVo> likedDesignerVoList = likedDesignerResponse.getLikedDesignerVoList();
-                for (LikedDesignerVo likedDesignerVo : likedDesignerVoList) {
-                	likedDesignerVo.setDesignerPhoto(ImgPrefixUtil.addPrefixForImgUrl(likedDesignerVo.getDesignerPhoto()));
-                }
                 likedDesignerResponse.setLikedDesignerVoList(likedDesignerVoList);
                 apiResponse.setData(likedDesignerResponse);
             }
@@ -331,7 +323,7 @@ public class UserActionController extends BaseController {
                 for (LikedProductVo likedProductVo : likedProductVoList) {
                 	ProductImage pi = productService.selectProductPrimaryOneImg(likedProductVo.getProductId());
                 	if(pi!=null){
-                		likedProductVo.setProductImg(ImgPrefixUtil.addPrefixForImgUrl(pi.getImgUrl()));
+                		likedProductVo.setProductImg(pi.getImgUrl());
                 		list.add(likedProductVo);
                 	}
                 }
@@ -431,9 +423,6 @@ public class UserActionController extends BaseController {
                 setServiceErrorResponse(apiResponse, likedSceneResponse);
             } else {
                 List<LikedSceneVo> likedSceneVoList = likedSceneResponse.getLikedSceneVoList();
-                for (LikedSceneVo likedSceneVo : likedSceneVoList) {
-                	likedSceneVo.setSceneImg(ImgPrefixUtil.addPrefixForImgUrl(likedSceneVo.getSceneImg()));
-                }
                 likedSceneResponse.setLikedSceneVoList(likedSceneVoList);
                 apiResponse.setData(likedSceneResponse);
             }
