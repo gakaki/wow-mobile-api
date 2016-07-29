@@ -145,6 +145,7 @@ public class ProductServiceImpl implements ProductService {
 
         //售价最小的子品,用于设置系列品价格
         ProductPrice subProductMinPrice = new ProductPrice();
+        subProductMinPrice.setCostPrice(BigDecimal.ZERO);
         BigDecimal minPrice = null;
 
         byte applicablePeople = productCreateRequest.getApplicablePeople();
@@ -176,6 +177,7 @@ public class ProductServiceImpl implements ProductService {
         product.setProductName(productName);
         product.setSellingPoint(sellingPoint);
         product.setStyleId(styleId);
+        product.setProductStatus((byte)0);
 
         List<Integer> applicableSceneIds = productCreateRequest.getApplicableSceneList();
         List<ColorSpecVo> colorSpecVoList = productCreateRequest.getColorSpecVoList();
@@ -286,14 +288,16 @@ public class ProductServiceImpl implements ProductService {
                     ProductPrice productPrice = new ProductPrice();
                     productPrice.setProductId(subProductId);
                     productPrice.setSellPrice(specVo.getSellPrice());
-                    productPrice.setCostPrice(specVo.getCostPrice());
+//                    productPrice.setCostPrice(specVo.getCostPrice());
+                    productPrice.setCostPrice(BigDecimal.ZERO);
                     priceService.createProductPrice(productPrice);
 
                     //计算最小价格
                     if (minPrice == null || minPrice.compareTo(specVo.getSellPrice()) > 0) {
                         minPrice = specVo.getSellPrice();
                         subProductMinPrice.setSellPrice(specVo.getSellPrice());
-                        subProductMinPrice.setCostPrice(specVo.getCostPrice());
+//                        subProductMinPrice.setCostPrice(specVo.getCostPrice());
+                        subProductMinPrice.setCostPrice(BigDecimal.ZERO);
                         subProductMinPrice.setProductId(productId);
                     }
                 }
