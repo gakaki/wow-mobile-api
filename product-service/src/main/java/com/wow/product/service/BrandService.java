@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.wow.product.model.Brand;
 import com.wow.product.vo.response.ProductBrandResponse;
+import com.wow.product.vo.response.ProductBrandVoResponse;
 
 /**
  * 品牌服务
@@ -34,6 +35,13 @@ public interface BrandService {
      * @return
      */
     ProductBrandResponse getBrandById(int brandId);
+    
+    /**
+     * 查询品牌
+     * @param brandId
+     * @return
+     */
+    ProductBrandVoResponse getBrandVoById(Integer brandId);
 
     /**
      * 批量查询品牌

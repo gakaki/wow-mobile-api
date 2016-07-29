@@ -6,6 +6,7 @@ import com.wow.product.model.Designer;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductDesigner;
 import com.wow.product.vo.response.ProductDesignerResponse;
+import com.wow.product.vo.response.ProductDesignerVoResponse;
 
 /**
  * 设计师服务
@@ -28,6 +29,14 @@ public interface DesignerService {
      * @return
      */
     ProductDesignerResponse getDesignerById(int designerId);
+    
+    /**
+     * 根据Id查询设计师
+     *
+     * @param designerId
+     * @return
+     */
+    ProductDesignerVoResponse getDesignerVoById(Integer designerId);
 
     /**
      * 批量查询设计师

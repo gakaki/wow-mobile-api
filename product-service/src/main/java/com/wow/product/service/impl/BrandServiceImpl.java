@@ -9,11 +9,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ImgPrefixUtil;
 import com.wow.product.mapper.BrandMapper;
 import com.wow.product.model.Brand;
 import com.wow.product.model.BrandExample;
 import com.wow.product.service.BrandService;
+import com.wow.product.vo.BrandVo;
 import com.wow.product.vo.response.ProductBrandResponse;
+import com.wow.product.vo.response.ProductBrandVoResponse;
 
 /**
  * Created by zhengzhiqing on 16/6/18.
@@ -58,6 +62,37 @@ public class BrandServiceImpl implements BrandService {
     	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
     	productBrandResponse.setBrand(brandMapper.selectByPrimaryKey(brandId));
         return productBrandResponse;
+    }
+
+    /**
+     *
+     * @param brandId
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public ProductBrandVoResponse getBrandVoById(Integer brandId) {
+    	ProductBrandVoResponse productBrandVoResponse = new ProductBrandVoResponse();
+    	
+        if (brandId == null) {
+        	productBrandVoResponse.setResCode("40204");
+        	productBrandVoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40204"));
+            return productBrandVoResponse;
+        }
+    	
+    	Brand brand = brandMapper.selectByPrimaryKey(brandId);
+    	BrandVo brandVo = new BrandVo();
+    	
+    	if(brand!=null){
+    		brandVo.setId(brand.getId());
+    		brandVo.setBrandCname(brand.getBrandCname());
+    		brandVo.setBrandEname(brand.getBrandEname());
+    		brandVo.setBrandLogoImg(ImgPrefixUtil.addPrefixForImgUrl(brand.getBrandLogoImg()));
+    		brandVo.setBrandDesc(brand.getBrandDesc());
+    	}
+    	
+    	productBrandVoResponse.setBrandVo(brandVo);
+        return productBrandVoResponse;
     }
 
     @Transactional(propagation= Propagation.NOT_SUPPORTED)

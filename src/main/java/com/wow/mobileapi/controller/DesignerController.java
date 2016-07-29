@@ -16,6 +16,7 @@ import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
 import com.wow.product.service.DesignerService;
 import com.wow.product.vo.response.ProductDesignerResponse;
+import com.wow.product.vo.response.ProductDesignerVoResponse;
 
 /**
  * Created by zhengzhiqing on 16/6/23.
@@ -69,17 +70,14 @@ public class DesignerController extends BaseController {
             return apiResponse;
         }
 
-        String errorMsg = ValidatorUtil.getError(productQueryRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
-
         try {
-        	ProductDesignerResponse productDesignerResponse = designerService.getDesignerById(productQueryRequest.getDesignerId());
-            
-            apiResponse.setData(productDesignerResponse.getDesigner());
+        	ProductDesignerVoResponse productDesignerVoResponse = designerService.getDesignerVoById(productQueryRequest.getDesignerId());
+        	//如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(productDesignerVoResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productDesignerVoResponse);
+            } else {
+            	apiResponse.setData(productDesignerVoResponse);     
+            }
         } catch (Exception e) {
             logger.error("查找productDesigner_detail错误---" + e);
             setInternalErrorResponse(apiResponse);

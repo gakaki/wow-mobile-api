@@ -14,6 +14,7 @@ import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
 import com.wow.product.service.BrandService;
 import com.wow.product.vo.response.ProductBrandResponse;
+import com.wow.product.vo.response.ProductBrandVoResponse;
 
 /**
  * Created by zhengzhiqing on 16/6/23.
@@ -94,8 +95,15 @@ public class BrandController extends BaseController {
         }
         
         try {
-        	ProductBrandResponse productBrandResponse = brandService.getBrandById(productQueryRequest.getBrandId());
-            apiResponse.setData(productBrandResponse.getBrand());            
+        	ProductBrandVoResponse productBrandVoResponse = brandService.getBrandVoById(productQueryRequest.getBrandId());
+        	
+        	//如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(productBrandVoResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productBrandVoResponse);
+            } else {
+            	apiResponse.setData(productBrandVoResponse);     
+            }        	
+                   
         } catch (Exception e) {
             logger.error("查找productBrand_detail错误---" + e);
             setInternalErrorResponse(apiResponse);
