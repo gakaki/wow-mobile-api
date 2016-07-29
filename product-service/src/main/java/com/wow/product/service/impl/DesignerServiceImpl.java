@@ -71,10 +71,8 @@ public class DesignerServiceImpl implements DesignerService {
     	if(designer!=null){
     		designerVo.setId(designer.getId());
     		designerVo.setDesignerName(designer.getDesignerName());
-    		designerVo.setDesignerPhoto(designer.getDesignerPhoto());
     		designerVo.setDesignerDesc(designer.getDesignerDesc());
-        	//增加前缀
-            designer.setDesignerPhoto(ImgPrefixUtil.addPrefixForImgUrl(designer.getDesignerPhoto()));
+            designerVo.setDesignerPhoto(ImgPrefixUtil.addPrefixForImgUrl(designer.getDesignerPhoto()));
     	}
     	
     	productDesignerVoResponse.setDesignerVo(designerVo);
