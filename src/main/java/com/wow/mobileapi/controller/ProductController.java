@@ -105,6 +105,7 @@ public class ProductController extends BaseController {
             //品牌
             Brand brand = brandService.getBrandById(productResponse.getBrandId()).getBrand();
             if (brand != null) {
+                itemDetailResponse.setBrandId(brand.getId());
                 itemDetailResponse.setBrandCname(brand.getBrandCname());
                 itemDetailResponse.setBrandLogoImg(brand.getBrandLogoImg());
             }
@@ -112,6 +113,7 @@ public class ProductController extends BaseController {
             //主设计师
             Designer designer = designerService.getPrimaryDesignerByProduct(productId);
             if (designer != null) {
+                itemDetailResponse.setDesignerId(designer.getId());
                 itemDetailResponse.setDesignerName(designer.getDesignerName());
                 itemDetailResponse.setDesignerPhoto(designer.getDesignerPhoto());
             }
