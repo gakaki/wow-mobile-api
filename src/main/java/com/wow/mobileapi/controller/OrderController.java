@@ -15,11 +15,13 @@ import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
+import com.wow.mobileapi.request.order.OrderDeliverRequest;
 import com.wow.mobileapi.request.order.OrderDetailRequest;
 import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
 import com.wow.mobileapi.request.order.OrderSettleRequest;
 import com.wow.order.service.OrderService;
+import com.wow.order.vo.OrderDeliverQuery;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
@@ -198,7 +200,7 @@ public class OrderController extends BaseController {
 
         OrderDetailResponse orderDetailResponse = null;
         try {
-            orderDetailResponse = orderService.queryOrderByOrderCode(orderDetailRequest.getOrderCode());
+            orderDetailResponse = orderService.queryOrderDetailByOrderCode(orderDetailRequest.getOrderCode());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(orderDetailResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderDetailResponse);
@@ -219,7 +221,7 @@ public class OrderController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/cancel", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    @RequestMapping(value = "/cancel", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     public ApiResponse cancelOrder(ApiRequest request) {
         OrderDetailRequest orderDetailRequest = JsonUtil.fromJSON(request.getParamJson(), OrderDetailRequest.class);
         ApiResponse apiResponse = new ApiResponse();
@@ -241,6 +243,40 @@ public class OrderController extends BaseController {
             }
         } catch (Exception e) {
             logger.error("取消订单错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 订单发货
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/deliver", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    public ApiResponse deliverGoods(ApiRequest request) {
+        OrderDeliverRequest orderDeliverRequest = JsonUtil.fromJSON(request.getParamJson(), OrderDeliverRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+        //判断json格式参数是否有误
+        if (orderDeliverRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        CommonResponse commonResponse = null;
+        try {
+            OrderDeliverQuery query = new OrderDeliverQuery();
+            BeanUtil.copyProperties(orderDeliverRequest, query);
+
+            commonResponse = orderService.deliverGoods(query);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
+            }
+        } catch (Exception e) {
+            logger.error("订单发货错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
 
