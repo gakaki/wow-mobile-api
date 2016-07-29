@@ -4,6 +4,7 @@ package com.wow.mobileapi.response.product;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ public class ItemSpecResponse extends CommonResponse {
     private static final long serialVersionUID = 1L;
     //主品ID
     private int productId;
+    //主品价格(取子品中最小价格)
+    private BigDecimal productPrice;
     //产品名
     private String productName;
     //尺寸
@@ -91,7 +94,14 @@ public class ItemSpecResponse extends CommonResponse {
         this.sizeText = sizeText;
     }
 
-//    public List<SubProductInfo> getSubProductInfoList() {
+    public BigDecimal getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(BigDecimal productPrice) {
+        this.productPrice = productPrice;
+    }
+    //    public List<SubProductInfo> getSubProductInfoList() {
 //        return subProductInfoList;
 //    }
 //

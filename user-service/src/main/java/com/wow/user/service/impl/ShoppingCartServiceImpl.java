@@ -1,5 +1,14 @@
 package com.wow.user.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.common.constant.CommonConstant;
 import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.response.CommonResponse;
@@ -11,6 +20,7 @@ import com.wow.product.model.Product;
 import com.wow.product.service.ProductService;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
+import com.wow.stock.vo.response.AvailableStockResponse;
 import com.wow.stock.vo.response.AvailableStocksResponse;
 import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.ShoppingCartMapper;
@@ -21,14 +31,6 @@ import com.wow.user.service.ShoppingCartService;
 import com.wow.user.vo.ShoppingCartQueryVo;
 import com.wow.user.vo.ShoppingCartResultVo;
 import com.wow.user.vo.response.ShoppingCartResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
@@ -61,13 +63,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         // 业务校验开始
         //如果产品id为空 则直接返回
-        if(shoppingCart.getProductId()==null){
+        if (shoppingCart.getProductId() == null) {
             response.setResCode("40316");
             response.setResMsg(ErrorCodeUtil.getErrorMsg("40316"));
-            
+
             return response;
         }
-        
+
         //判断相关的产品id是否存在
         Product product = productService.getProductById(shoppingCart.getProductId());
         if (product == null) {
@@ -76,8 +78,22 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             return response;
         }
+
+        //判断加入的产品是否有库存 如果库存不足 则直接返回
+        AvailableStockResponse availableStockResponse = stockService.getAvailableStock(shoppingCart.getProductId());
+        if (ErrorCodeUtil.isFailedResponse(availableStockResponse.getResCode())) {
+            response.setResCode(availableStockResponse.getResCode());
+            response.setResMsg(ErrorCodeUtil.getErrorMsg(availableStockResponse.getResCode()));
+
+            return response;
+        }
+
         //业务校验结束
 
+        //如果购物车数量为空 则默认为1
+        if (shoppingCart.getProductQty() == null) {
+            shoppingCart.setProductQty((byte) 1);
+        }
         ShoppingCart newShoppingCart = getShoppingCartByExample(shoppingCart);
         //如果该产品已经加入到购物车 则对该产品数量进行增加操作
         if (newShoppingCart != null) {
@@ -257,7 +273,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         //设置产品可用库存信息
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
-            stockVo=getStockByProductId(stockList,shoppingCart.getProductId());
+            stockVo = getStockByProductId(stockList, shoppingCart.getProductId());
 
             //设置产品库存
             if (stockVo != null) {
@@ -265,9 +281,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             }
         }
     }
-    
-    
-    
+
     /**
      * 根据产品id获取产品库存
      * @param stockList 
@@ -276,16 +290,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      * @return
      */
     private AvailableStockVo getStockByProductId(List<AvailableStockVo> stockList, Integer productId) {
-        if(CollectionUtil.isEmpty(stockList)){
-            return  null;
+        if (CollectionUtil.isEmpty(stockList)) {
+            return null;
         }
-        
+
         for (AvailableStockVo stock : stockList) {
-            if(productId.intValue()==stock.getProductId()){
+            if (productId.intValue() == stock.getProductId()) {
                 return stock;
             }
         }
-        
+
         return null;
     }
 

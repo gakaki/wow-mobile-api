@@ -1,11 +1,15 @@
 package com.wow.product.service.impl;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import com.wow.price.vo.ProductPriceResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -75,6 +79,8 @@ import com.wow.product.vo.response.ProductVoResponse;
 @Transactional(value = "productTransactionManager")
 public class ProductServiceImpl implements ProductService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     @Autowired
     private ProductMapper productMapper;
 
@@ -131,6 +137,10 @@ public class ProductServiceImpl implements ProductService {
         CommonResponse commonResponse = new CommonResponse();
 
         Product product = new Product();
+
+        //售价最小的子品,用于设置系列品价格
+        ProductPrice subProductMinPrice = new ProductPrice();
+        BigDecimal minPrice = null;
 
         byte applicablePeople = productCreateRequest.getApplicablePeople();
         int brandId = productCreateRequest.getBrandId();
@@ -272,8 +282,22 @@ public class ProductServiceImpl implements ProductService {
                     productPrice.setSellPrice(specVo.getSellPrice());
                     productPrice.setCostPrice(specVo.getCostPrice());
                     priceService.createProductPrice(productPrice);
+
+                    //计算最小价格
+                    if (minPrice == null || minPrice.compareTo(specVo.getSellPrice()) > 0) {
+                        minPrice = specVo.getSellPrice();
+                        subProductMinPrice.setSellPrice(specVo.getSellPrice());
+                        subProductMinPrice.setCostPrice(specVo.getCostPrice());
+                        subProductMinPrice.setProductId(productId);
+                    }
                 }
             }
+        }
+
+        //创建系列品的价格
+        logger.info("start to create product serial price:" + minPrice);
+        if (subProductMinPrice != null && subProductMinPrice.getSellPrice().compareTo(BigDecimal.ZERO) > 0) {
+            priceService.createProductPrice(subProductMinPrice);
         }
 
         return commonResponse;
@@ -497,9 +521,7 @@ public class ProductServiceImpl implements ProductService {
     /**
      * 根据分类查询产品
      *
-     * @param categoryId
-     * @param sortBy   1:上架时间 2:销量 3:价格
-     * @param asc      是否升序
+     * @param page   1:上架时间 2:销量 3:价格
      * @return
      */
     @Override
@@ -627,10 +649,13 @@ public class ProductServiceImpl implements ProductService {
     
     /**
      * 查询设计师的产品信息
-     * @param brandId
+     * @param designerId
      * @return
      */
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public ProductVoResponse selectProductByDesignerId(Integer designerId){
+        //先根据designerId拿到productId(注意是系列品)列表
+        //在根据上一步列表取查询价格
     	ProductVoResponse productVoResponse = new ProductVoResponse();
     	productVoResponse.setProductVoList(productMapper.selectProductByDesignerId(designerId));
     	return productVoResponse;

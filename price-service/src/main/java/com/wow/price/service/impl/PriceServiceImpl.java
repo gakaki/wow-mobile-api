@@ -91,25 +91,25 @@ public class PriceServiceImpl implements PriceService {
         return productPriceResponse;
     }
 
-    /**
-     * 查询系列产品价格(取子品中售价最低的)
-     *
-     * @param productId
-     * @return
-     */
-    @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public ProductPriceResponse getProductSerialPrice(int productId) {
-        ProductPriceResponse productPriceResponse = new ProductPriceResponse();
-        ProductPrice productPrice = productPriceMapper.selectMinSalePriceByProductId(productId);
-        if (productPrice == null) {
-            ErrorResponseUtil.setErrorResponse(productPriceResponse,"50504");
-        } else if (productPrice.getSellPrice()==BigDecimal.ZERO) {
-            ErrorResponseUtil.setErrorResponse(productPriceResponse,"50505");
-        }
-        productPriceResponse.setProductPrice(productPrice);
-        return productPriceResponse;
-    }
+//    /**
+//     * 查询系列产品价格(取子品中售价最低的)
+//     *
+//     * @param productId
+//     * @return
+//     */
+//    @Override
+//    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+//    public ProductPriceResponse getProductSerialPrice(int productId) {
+//        ProductPriceResponse productPriceResponse = new ProductPriceResponse();
+//        ProductPrice productPrice = productPriceMapper.selectMinSalePriceByProductId(productId);
+//        if (productPrice == null) {
+//            ErrorResponseUtil.setErrorResponse(productPriceResponse,"50504");
+//        } else if (productPrice.getSellPrice()==BigDecimal.ZERO) {
+//            ErrorResponseUtil.setErrorResponse(productPriceResponse,"50505");
+//        }
+//        productPriceResponse.setProductPrice(productPrice);
+//        return productPriceResponse;
+//    }
 
     /**
      * 批量查询产品价格
@@ -119,7 +119,7 @@ public class PriceServiceImpl implements PriceService {
      */
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public ProductListPriceResponse getProductPriceList(List<Integer> productIds) {
+    public ProductListPriceResponse batchGetProductPrice(List<Integer> productIds) {
         ProductListPriceResponse productListPriceResponse = new ProductListPriceResponse();
         List<ProductPrice> productPriceList = productPriceMapper.selectByProductIds(productIds);
         if (CollectionUtil.isEmpty(productPriceList)) {

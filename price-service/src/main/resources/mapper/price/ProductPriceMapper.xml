@@ -355,18 +355,18 @@
     and is_deleted = false
   </select>
 
-  <select id="selectMinSalePriceByProductId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    pp.id, pp.product_id, pp.sell_price, pp.original_price, pp.cost_price,
-    pp.min_sell_price, pp.benchmark_price, pp.is_promote_price
-    from product_price pp
-    inner join product_serial ps
-    on pp.product_id = ps.sub_product_id
-    where ps.product_id = #{productId,jdbcType=INTEGER}
-    and pp.is_deleted = false
-    and ps.is_deleted = false
-    order by pp.sell_price asc
-    limit 1
-  </select>
+  <!--<select id="selectMinSalePriceByProductId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->
+    <!--select-->
+    <!--pp.id, pp.product_id, pp.sell_price, pp.original_price, pp.cost_price,-->
+    <!--pp.min_sell_price, pp.benchmark_price, pp.is_promote_price-->
+    <!--from product_price pp-->
+    <!--inner join product_serial ps-->
+    <!--on pp.product_id = ps.sub_product_id-->
+    <!--where ps.product_id = #{productId,jdbcType=INTEGER}-->
+    <!--and pp.is_deleted = false-->
+    <!--and ps.is_deleted = false-->
+    <!--order by pp.sell_price asc-->
+    <!--limit 1-->
+  <!--</select>-->
 
 </mapper>

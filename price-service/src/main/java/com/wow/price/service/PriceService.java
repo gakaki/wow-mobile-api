@@ -12,10 +12,6 @@ import java.util.List;
  * Created by zhengzhiqing on 16/6/17.
  */
 public interface PriceService {
-    /**
-     * @param productPrice
-     * @return
-     */
 
     /**
      * 创建产品价格(一般在首次产品上架的时候)
@@ -41,13 +37,14 @@ public interface PriceService {
      */
     ProductPriceResponse getProductPrice(int productId);
 
-    /**
-     * 查询系列产品价格(取子品中售价最低的)
-     *
-     * @param productId
-     * @return
-     */
-    ProductPriceResponse getProductSerialPrice(int productId);
+//    /**
+//     * 查询系列产品价格(取子品中售价最低的)
+//     *
+//     * @param productId
+//     * @return
+//     */
+//    ProductPriceResponse getProductSerialPrice(int productId);
+
 
     /**
      * 批量查询产品价格
@@ -55,7 +52,7 @@ public interface PriceService {
      * @param productIds
      * @return
      */
-    ProductListPriceResponse getProductPriceList(List<Integer> productIds);
+    ProductListPriceResponse batchGetProductPrice(List<Integer> productIds);
 
     /**
      * 添加价格变更日志
