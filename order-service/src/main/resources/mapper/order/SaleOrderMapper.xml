@@ -725,7 +725,6 @@
 					  so.order_code orderCode,
 					  so.order_amount orderAmount,
 					  so.delivery_fee deliveryFee,	
-					  so.total_product_qty totalProductQty,
 					  so.receiver_name receiverName,
 					  so.receiver_mobile receiverMobile,
 					  so.order_status orderStatus,
@@ -733,8 +732,11 @@
 				FROM
 	            sale_order so
         <where>
+             <if test="model.orderCode!= null  and model.orderCode!=''">
+                    so.order_code=#{model.orderCode}
+              </if>
               <if test="model.receiverName!= null  and model.receiverName!=''">
-                    so.receiver_name like concat('%',#{model.receiverName},'%')
+                    AND so.receiver_name like concat('%',#{model.receiverName},'%')
               </if>
                <if test="model.receiverMobile!= null  and model.receiverMobile!=''">
                      AND so.receiver_mobile =#{model.receiverMobile}

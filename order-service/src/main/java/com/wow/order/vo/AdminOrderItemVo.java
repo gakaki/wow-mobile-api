@@ -3,6 +3,7 @@ package com.wow.order.vo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -15,6 +16,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class AdminOrderItemVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    //订单id
+    @JsonIgnore
+    private Integer saleOrderId;
 
     //用户购买的产品id
     private Integer productId;
@@ -39,6 +44,14 @@ public class AdminOrderItemVo implements Serializable {
 
     //产品规格图片
     private String specImg;
+    
+    public Integer getSaleOrderId() {
+        return saleOrderId;
+    }
+
+    public void setSaleOrderId(Integer saleOrderId) {
+        this.saleOrderId = saleOrderId;
+    }
 
     public String getSpecImg() {
         return specImg;
