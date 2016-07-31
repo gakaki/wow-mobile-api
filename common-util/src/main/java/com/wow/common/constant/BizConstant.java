@@ -37,5 +37,7 @@ public interface BizConstant {
     public static final String DICTIONARY_GROUP_PAY="pay_channel";
     public static final String DICTIONARY_GROUP_COUNTRY="country";
     public static final String DICTIONARY_GROUP_APPLICABLE_PEOPLE="applicable_people";
+    public static final String DICTIONARY_GROUP_APPLICABLE_SCENE="applicable_scene";
+    public static final String DICTIONARY_GROUP_STYLE="style";
 
 }
