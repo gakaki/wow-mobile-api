@@ -19,9 +19,6 @@ public class QiniuController {
     //要上传的空间
     String bucketname = "usericon";
 
-    //密钥配置
-    Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
-
     @RequestMapping("/v1/qiniutoken")
     public String qiniutoken(@RequestParam("file_path") String file_path) {
         //上传到七牛后保存的文件名
@@ -31,6 +28,8 @@ public class QiniuController {
 
     // 覆盖上传
     public String getUpToken(String key) {
+        //密钥配置
+        Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
         //<bucket>:<key>，表示只允许用户上传指定key的文件。在这种格式下文件默认允许“修改”，已存在同名资源则会被本次覆盖。
         //如果希望只能上传指定key的文件，并且不允许修改，那么可以将下面的 insertOnly 属性值设为 1。
         //第三个参数是token的过期时间
