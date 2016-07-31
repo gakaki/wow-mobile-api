@@ -64,6 +64,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         if (query.getCurrentPage() != null) {
             model.setCurrentPage(query.getCurrentPage());
         }
+        model.setIsPage(true);
         model.setModel(query);
 
         List<PageData> pageDataList = saleOrderMapper.selectForAdminListPage(model);

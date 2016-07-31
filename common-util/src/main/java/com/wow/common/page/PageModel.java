@@ -11,6 +11,7 @@ public class PageModel {
     private boolean entityOrField; //true:需要分页的地方，传入的参数就是Page实体；false:需要分页的地方，传入的参数所代表的实体拥有Page属性
     private PageData pd = new PageData();
     private Object model;//保存相关的查询条件
+    private boolean isPage; //是否需要分页
 
     public PageModel() {
         this.showCount = 10;
@@ -23,6 +24,14 @@ public class PageModel {
         else
             totalPage = totalResult / showCount + 1;
         return totalPage;
+    }
+
+    public boolean getIsPage() {
+        return isPage;
+    }
+
+    public void setIsPage(boolean isPage) {
+        this.isPage = isPage;
     }
 
     public void setTotalPage(int totalPage) {
