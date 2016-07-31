@@ -2,7 +2,7 @@ package com.wow.attribute.vo;
 
 import java.io.Serializable;
 
-public class CategorySecondListVo implements Serializable{
+public class SubCategoryVoList implements Serializable{
 
     /**
 	 * 

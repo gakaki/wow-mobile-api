@@ -391,7 +391,7 @@ public class ProductController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/products/list-by-category", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/category/product", method = RequestMethod.GET)
     public ApiResponse getProductListByCategory(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ProductInfoRequest productInfoRequest = JsonUtil
