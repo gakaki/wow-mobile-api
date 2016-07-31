@@ -431,6 +431,30 @@
 			  AND so.sale_order_id =#{orderId}
   </select>
   
+    <!-- 查询订单id列表查询订单产品明细 -->
+  <select id="selectByOrderIds"   resultType="com.wow.order.vo.AdminOrderItemVo"  parameterType="List" >
+	       SELECT 
+	              so.sale_order_id saleOrderId,
+				  so.product_id productId,
+				  so.product_name productName,
+				  so.order_item_price sellPrice,
+				  so.order_item_qty productQty,
+				  so.order_item_amount sellTotalAmount,
+				  p.product_color_img specImg,
+				  p.color_display_name color,
+				  p.product_color_img spec
+			FROM
+			  sale_order_item so 
+			  INNER JOIN product p 
+			    ON so.product_id = p.id 
+			WHERE so.is_deleted = FALSE
+			  AND so.sale_order_id in
+			   <foreach collection="list"   item="item"  open="(" close=")"  separator="," >
+                   #{item}
+         </foreach>
+  </select>
+  
+  
    <!-- 根据订单id获取订单项目使用库存明细 -->
   <select id="selectWareHouseStockByOrderId"   resultMap="WareHouseResultMap"  parameterType="Integer" >
 	     SELECT 

@@ -2,6 +2,7 @@ package com.wow.common.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ public class DateUtil {
      * 格式化日期与时间
      */
     public static String formatDatetime(Date timestamp) {
-        if(timestamp==null){
+        if (timestamp == null) {
             return "";
         }
         return datetimeFormat.format(timestamp);
@@ -140,5 +141,60 @@ public class DateUtil {
      */
     public static Date currentDate() {
         return new Date();
+    }
+
+    /**
+     * 设置日期查找范围段内的开始日期
+     * 
+     * @return
+     */
+    public static Date setBeginDate(String beginDate) {
+        if (StringUtil.isEmpty(beginDate)) {
+            return null;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(parseDate(beginDate));
+
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        return calendar.getTime();
+    }
+
+    /**
+     * 设置日期查找范围段内的开始日期
+     * 
+     * @return
+     */
+    public static Date setEndDate(String endDate) {
+        if (StringUtil.isEmpty(endDate)) {
+            return null;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(parseDate(endDate));
+
+        calendar.set(Calendar.HOUR, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+
+        return calendar.getTime();
+    }
+
+    /**
+    * 判断开始日期是否大于结束日期
+    * 
+    * @param startDate 开始日期
+    * @param endDate  结束日期
+    * @return
+    */
+    public static boolean isLessThanOrEquals(Date startDate, Date endDate) {
+        int compareValue = startDate.compareTo(endDate);
+
+        return compareValue <= 0 ? true : false;
     }
 }
