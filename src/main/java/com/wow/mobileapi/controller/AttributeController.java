@@ -145,7 +145,7 @@ public class AttributeController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/attributes/getSecondCategoryList", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/category/sub-category", method = RequestMethod.GET)
     public ApiResponse getSecondCategoryList(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         CategoryQueryRequest categoryQueryRequest = JsonUtil
