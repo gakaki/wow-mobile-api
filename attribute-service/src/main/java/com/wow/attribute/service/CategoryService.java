@@ -71,12 +71,4 @@ public interface CategoryService {
      */
     CategoryListResponse getLastLevelCategoryByCategory(int categoryId);
     
-    /**
-     * 查询二级分类
-     *
-     * @param categoryParendId
-     * @return
-     */
-    public CategorySecondResponse getCategoryByParentId(Integer categoryParendId);
-    
 }
