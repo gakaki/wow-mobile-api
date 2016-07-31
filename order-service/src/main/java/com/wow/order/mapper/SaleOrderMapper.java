@@ -34,7 +34,10 @@ public interface SaleOrderMapper {
 
     int updateByPrimaryKey(SaleOrder record);
 
-    List<PageData> selectByEndUserIdListPage(PageModel query);
+    List<PageData> selectListPage(PageModel query);
+
+    //后台查询订单列表
+    List<PageData> selectForAdminListPage(PageModel query);
 
     /**
      * 获取超时未支付的订单列表

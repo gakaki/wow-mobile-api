@@ -393,9 +393,9 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     private List<SaleOrderItem> wrapOrderItem(OrderQuery query) {
-        List<SaleOrderItem> saleOrderItems = new ArrayList<SaleOrderItem>();
-
         List<ShoppingCartResultVo> shoppingCartResult = query.getShoppingCartResult();
+
+        List<SaleOrderItem> saleOrderItems = new ArrayList<SaleOrderItem>(shoppingCartResult.size());
 
         SaleOrderItem saleOrderItem = null;
         FreezeStockVo freezeStockVo = null;
@@ -925,7 +925,7 @@ public class OrderServiceImpl implements OrderService {
         }
         model.setModel(query);
 
-        List<PageData> pageDataList = saleOrderMapper.selectByEndUserIdListPage(model);
+        List<PageData> pageDataList = saleOrderMapper.selectListPage(model);
         if (CollectionUtil.isEmpty(pageDataList)) {
             return response;
         }
@@ -936,9 +936,6 @@ public class OrderServiceImpl implements OrderService {
         //获取订单id集合
         List<Integer> orderIds = new ArrayList<Integer>(orderLists.size());
         for (OrderListVo orderVo : orderLists) {
-            //设置订单创建时间格式
-            orderVo.setOrderCreateTimeFormat(DateUtil.formatDatetime(orderVo.getOrderCreateTime()));
-            orderVo.setOrderCreateTime(null); //不序列化输出
             orderIds.add(orderVo.getOrderId());
         }
 
@@ -948,8 +945,12 @@ public class OrderServiceImpl implements OrderService {
         Map<Integer, List<String>> map = getSpecImgMap(orderItemImgs);
 
         for (OrderListVo orderVo : orderLists) {
+            //设置订单创建时间格式
+            orderVo.setOrderCreateTimeFormat(DateUtil.formatDatetime(orderVo.getOrderCreateTime()));
+            orderVo.setOrderCreateTime(null); //不序列化输出
             //设置订单状态名称
             orderVo.setOrderStatusName(SaleOrderStatusEnum.get(orderVo.getOrderStatus().intValue()));
+
             orderVo.setProductSpecImgs(map.get(orderVo.getOrderId()));
         }
 
