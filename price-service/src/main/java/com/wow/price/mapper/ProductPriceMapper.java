@@ -32,7 +32,8 @@ public interface ProductPriceMapper {
 
     List<ProductPrice> selectByProductIds(@Param("productIds") List<Integer> productIds);
     
-    List<ProductPrice> selectPriceChangedProduct(@Param("updateTime") String updateTime);
+//    List<ProductPrice> selectPriceChangedProduct(@Param("updateTime") String updateTime);
+    
 
 //    /**
 //     * 查找系列品的价格(取售价最低的子品)
