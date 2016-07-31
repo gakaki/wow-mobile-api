@@ -694,7 +694,7 @@
   </update>
   
       <!-- 查询用户订单列表 -->
-  <select id="selectByEndUserIdListPage"   resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel" >
+  <select id="selectListPage"   resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel" >
 	    select 
 	          id orderId, order_code orderCode, order_amount orderAmount, total_product_qty totalProductQty, 
 	          order_status orderStatus,order_create_time orderCreateTime
@@ -715,6 +715,50 @@
 			FROM
 			  sale_order t 
 			WHERE TIMESTAMPDIFF(MINUTE, t.order_create_time, NOW()) >=#{timeout}
-			  AND t.order_status = 0
+			  AND t.order_status = 0 AND t.payment_status=2
   </select>
+  
+        <!-- 后台 用户订单列表查询 -->
+  <select id="selectForAdminListPage"   resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel" >
+				SELECT 
+					  so.id orderId,
+					  so.order_code orderCode,
+					  so.order_amount orderAmount,
+					  so.delivery_fee deliveryFee,	
+					  so.total_product_qty totalProductQty,
+					  so.receiver_name receiverName,
+					  so.receiver_mobile receiverMobile,
+					  so.order_status orderStatus,
+					  so.order_create_time orderCreateTime 
+				FROM
+	            sale_order so
+        <where>
+              <if test="model.receiverName!= null  and model.receiverName!=''">
+                    so.receiver_name like concat('%',#{model.receiverName},'%')
+              </if>
+               <if test="model.receiverMobile!= null  and model.receiverMobile!=''">
+                     AND so.receiver_mobile =#{model.receiverMobile}
+              </if>
+                <if test="model.paymentMethod!= null">
+                     AND so.payment_method =#{model.paymentMethod}
+              </if>
+               <if test="model.beginDateFormat!= null  and model.endDateFormat!=null">
+                     AND so.order_create_time BETWEEN #{model.beginDateFormat} AND #{model.endDateFormat}
+              </if>
+                <if test="model.orderStatus != null">
+                     AND so.order_status = #{model.orderStatus}
+                </if>
+                <if test="model.productName!= null  and model.productName!=''">
+	                   AND EXISTS 
+						  (SELECT 
+						    1 
+						  FROM
+						    sale_order_item soi
+						  WHERE soi.product_name like  concat('%',#{model.productName},'%')
+						    AND soi.sale_order_id = so.id)
+              </if>
+	    </where>
+	         order by so.order_create_time desc
+  </select>
+  
 </mapper>

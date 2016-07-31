@@ -173,7 +173,6 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderListResponse);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("查询订单列表错误---" + e);
             setInternalErrorResponse(apiResponse);
         }

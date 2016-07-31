@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @version $Id: V1.0 2016年7月15日 下午6:21:56 Exp $
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class OrderListVo implements Serializable {
+public class AdminOrderListVo implements Serializable {
     /**  */
     private static final long serialVersionUID = 1L;
 
@@ -26,31 +26,37 @@ public class OrderListVo implements Serializable {
 
     //订单总价
     private BigDecimal orderAmount;
+    
+    //订单运费
+    private BigDecimal deliveryFee;
 
     //订单状态
     private Byte orderStatus;
 
     //订单状态名称
     private String orderStatusName;
+    
+    //收货人姓名
+    private String receiverName;
+    
+    //收货人手机号码
+    private String receiverMobile;
 
-    //订单中产品的总件数
-    private Integer totalProductQty;
-    
-    //产品规格图片
-    private List<String> productSpecImgs;
-    
     //订单创建时间
     private Date orderCreateTime;
-    
+
     //订单创建时间
     private String orderCreateTimeFormat;
-
-    public List<String> getProductSpecImgs() {
-        return productSpecImgs;
+    
+    //订单产品list
+    private List<AdminOrderItemVo> orderItemVos;
+    
+    public List<AdminOrderItemVo> getOrderItemVos() {
+        return orderItemVos;
     }
 
-    public void setProductSpecImgs(List<String> productSpecImgs) {
-        this.productSpecImgs = productSpecImgs;
+    public void setOrderItemVos(List<AdminOrderItemVo> orderItemVos) {
+        this.orderItemVos = orderItemVos;
     }
 
     public Integer getOrderId() {
@@ -109,12 +115,28 @@ public class OrderListVo implements Serializable {
         this.orderCreateTimeFormat = orderCreateTimeFormat;
     }
 
-    public Integer getTotalProductQty() {
-        return totalProductQty;
+    public BigDecimal getDeliveryFee() {
+        return deliveryFee;
     }
 
-    public void setTotalProductQty(Integer totalProductQty) {
-        this.totalProductQty = totalProductQty;
+    public void setDeliveryFee(BigDecimal deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
+
+    public String getReceiverMobile() {
+        return receiverMobile;
+    }
+
+    public void setReceiverMobile(String receiverMobile) {
+        this.receiverMobile = receiverMobile;
     }
 
 }
