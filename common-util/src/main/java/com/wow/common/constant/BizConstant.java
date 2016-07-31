@@ -3,7 +3,7 @@ package com.wow.common.constant;
 /**
  * Created by zhengzhiqing on 16/7/20.
  */
-public class BizConstant {
+public interface BizConstant {
 
     //页面类型 1. 移动端首页 2. 移动端发现页
     public static final byte PAGE_TYPE_HOME = 1;
@@ -33,7 +33,11 @@ public class BizConstant {
     //产品分类级别
     public static final byte PAGE_CATEGORY_LEVEL = 1;
 
+    //字典分组类型
     public static final String DICTIONARY_GROUP_PAY="pay_channel";
-
     public static final String DICTIONARY_GROUP_COUNTRY="country";
+    public static final String DICTIONARY_GROUP_APPLICABLE_PEOPLE="applicable_people";
+    public static final String DICTIONARY_GROUP_APPLICABLE_SCENE="applicable_scene";
+    public static final String DICTIONARY_GROUP_STYLE="style";
+
 }
