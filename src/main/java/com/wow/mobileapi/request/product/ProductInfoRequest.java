@@ -15,10 +15,13 @@ public class ProductInfoRequest extends ApiRequest {
 
 	@NotNull
 	private Integer categoryId;
+	@NotNull
 	private Integer sortBy;
+	@NotNull
 	private Boolean asc;
-	private Integer categoryLevel;//分类级别
+	@NotNull
 	private Integer showCount; //每页显示记录数
+	@NotNull
     private Integer currentPage; //当前页
     
 	public Integer getCategoryId() {
@@ -45,14 +48,6 @@ public class ProductInfoRequest extends ApiRequest {
 		this.asc = asc;
 	}
 
-	public Integer getCategoryLevel() {
-		return categoryLevel;
-	}
-
-	public void setCategoryLevel(Integer categoryLevel) {
-		this.categoryLevel = categoryLevel;
-	}
-
 	public Integer getShowCount() {
 		return showCount;
 	}
@@ -68,8 +63,5 @@ public class ProductInfoRequest extends ApiRequest {
 	public void setCurrentPage(Integer currentPage) {
 		this.currentPage = currentPage;
 	}
-	
-	
 
-	
 }

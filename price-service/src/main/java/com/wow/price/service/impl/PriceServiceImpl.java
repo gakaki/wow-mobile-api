@@ -45,8 +45,7 @@ public class PriceServiceImpl implements PriceService {
         CommonResponse commonResponse = new CommonResponse();
         int i =  productPriceMapper.insertSelective(productPrice);
         if (i < 1) {
-            commonResponse.setResCode("50501");
-            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50501"));
+            ErrorResponseUtil.setErrorResponse(commonResponse,"50501");
         }
         return commonResponse;
     }

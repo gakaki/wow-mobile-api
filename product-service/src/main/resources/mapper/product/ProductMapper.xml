@@ -873,7 +873,9 @@
     p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
     inner join product_price pp on pp.product_id=p.id
-    where p.is_deleted = false and p.category_id in
+    where p.is_deleted = false
+    and p.product_type = 2
+    and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
     </foreach>
@@ -886,7 +888,9 @@
     from product p
     inner join product_price pp on pp.product_id=p.id
     left join product_summary ps on ps.product_id=p.id
-    where p.is_deleted = false and p.category_id in
+    where p.is_deleted = false
+    and p.product_type = 2
+    and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
     </foreach>
@@ -898,7 +902,9 @@
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
     inner join product_price pp on pp.product_id=p.id
-    where p.is_deleted = false and p.category_id in
+    where p.is_deleted = false
+    and p.product_type = 2
+    and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
     </foreach>

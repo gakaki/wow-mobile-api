@@ -6,11 +6,6 @@ import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.attribute.vo.response.CategorySecondResponse;
 import com.wow.common.response.CommonResponse;
 
-import java.util.List;
-
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 /**
  * 类目服务
  * Created by zhengzhiqing on 16/6/17.
@@ -74,7 +69,7 @@ public interface CategoryService {
      *
      * @return
      */
-    List<Integer> getLastLevelCategoryByCategory(int categoryId,Integer categoryLevel);
+    CategoryListResponse getLastLevelCategoryByCategory(int categoryId);
     
     /**
      * 查询二级分类
