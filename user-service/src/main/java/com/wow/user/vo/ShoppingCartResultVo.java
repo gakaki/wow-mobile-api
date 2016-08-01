@@ -33,7 +33,7 @@ public class ShoppingCartResultVo implements Serializable{
     private Byte productQty;
     
     //产品总价 产品销售价乘以数量
-    private BigDecimal sellTotalAmount;
+    private BigDecimal productTotalAmount;
     
     //产品当前可用库存数目 默认为0(即没有库存)
     private Short productStock=0;
@@ -44,18 +44,29 @@ public class ShoppingCartResultVo implements Serializable{
     //产品规格值
     private String specImg;
     
+    //规格名
+    private String specName;
+    
     //产品状态
     private Byte productStatus;
     
     //产品状态名称
     private String productStatusName;
     
-    public BigDecimal getSellTotalAmount() {
-        return sellTotalAmount;
+    public String getSpecName() {
+        return specName;
     }
 
-    public void setSellTotalAmount(BigDecimal sellTotalAmount) {
-        this.sellTotalAmount = sellTotalAmount;
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public BigDecimal getProductTotalAmount() {
+        return productTotalAmount;
+    }
+
+    public void setProductTotalAmount(BigDecimal productTotalAmount) {
+        this.productTotalAmount = productTotalAmount;
     }
 
     public Short getProductStock() {

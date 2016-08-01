@@ -22,14 +22,14 @@ public class ShoppingCartResponse extends CommonResponse {
     private List<ShoppingCartResultVo> shoppingCartResult;
     
     //购物车总价
-    private BigDecimal totalPrice;
+    private BigDecimal totalAmount;
     
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public List<ShoppingCartResultVo> getShoppingCartResult() {
