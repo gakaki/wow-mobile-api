@@ -1,22 +1,24 @@
 package com.wow.attribute.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.attribute.mapper.CategoryMapper;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.model.CategoryExample;
 import com.wow.attribute.service.CategoryService;
+import com.wow.attribute.vo.CategoryFirstVo;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 类目服务
@@ -96,6 +98,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public CategoryListResponse getSubCategory(int categoryId) {
         CategoryListResponse categoryListResponse = new CategoryListResponse();
+    	Category category = this.getCategoryById(categoryId).getCategory();
+    	CategoryFirstVo categoryVo = new CategoryFirstVo();
+    	if(category!=null){
+    		categoryVo.setId(category.getId());
+    		categoryVo.setCategoryIconSmall(category.getCategoryIconSmall());
+    		categoryVo.setCategoryIconBg(category.getCategoryIconBg());
+    	}
+    	categoryListResponse.setCategoryFirstVo(categoryVo);
+    	
         CategoryExample categoryExample = new CategoryExample();
         CategoryExample.Criteria criteria=categoryExample.createCriteria();
         criteria.andParentCategoryIdEqualTo(categoryId);

@@ -17,6 +17,8 @@ public class Category implements Serializable {
     private String categoryIconSmall;
 
     private String categoryIconBig;
+    
+    private String categoryIconBg;
 
     private Date createTime;
 
@@ -88,7 +90,15 @@ public class Category implements Serializable {
         this.categoryIconBig = categoryIconBig;
     }
 
-    public Date getCreateTime() {
+    public String getCategoryIconBg() {
+		return categoryIconBg;
+	}
+
+	public void setCategoryIconBg(String categoryIconBg) {
+		this.categoryIconBg = categoryIconBg;
+	}
+
+	public Date getCreateTime() {
         return createTime;
     }
 
@@ -149,6 +159,7 @@ public class Category implements Serializable {
         sb.append(", categoryDesc=").append(categoryDesc);
         sb.append(", categoryIconSmall=").append(categoryIconSmall);
         sb.append(", categoryIconBig=").append(categoryIconBig);
+        sb.append(", categoryIconBg=").append(categoryIconBg);
         sb.append(", createTime=").append(createTime);
         sb.append(", createBy=").append(createBy);
         sb.append(", updateTime=").append(updateTime);

@@ -6,7 +6,7 @@ public class CategoryFirstVo {
     
     private String categoryIconSmall;
 
-    private String categoryIconBig;
+    private String categoryIconBg;
 
     private Byte categoryLevel;
 
@@ -26,12 +26,12 @@ public class CategoryFirstVo {
 		this.categoryIconSmall = categoryIconSmall;
 	}
 
-	public String getCategoryIconBig() {
-		return categoryIconBig;
+	public String getCategoryIconBg() {
+		return categoryIconBg;
 	}
 
-	public void setCategoryIconBig(String categoryIconBig) {
-		this.categoryIconBig = categoryIconBig;
+	public void setCategoryIconBg(String categoryIconBg) {
+		this.categoryIconBg = categoryIconBg;
 	}
 
 	public Byte getCategoryLevel() {
