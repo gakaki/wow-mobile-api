@@ -418,11 +418,11 @@
 				  so.delivery_order_id deliveryOrderId,
 				  so.order_item_price sellPrice,
 				  so.order_item_qty productQty,
-				  so.order_item_amount sellTotalAmount,
+				  so.order_item_amount productTotalAmount,
 				  so.is_shipped_out isShippedOut,
 				  p.product_color_img specImg,
 				  p.color_display_name color,
-				  p.product_color_img spec
+				  p.spec_name specName
 			FROM
 			  sale_order_item so 
 			  INNER JOIN product p 
@@ -439,10 +439,10 @@
 				  so.product_name productName,
 				  so.order_item_price sellPrice,
 				  so.order_item_qty productQty,
-				  so.order_item_amount sellTotalAmount,
+				  so.order_item_amount productTotalAmount,
 				  p.product_color_img specImg,
 				  p.color_display_name color,
-				  p.product_color_img spec
+				  p.spec_name specName
 			FROM
 			  sale_order_item so 
 			  INNER JOIN product p 
