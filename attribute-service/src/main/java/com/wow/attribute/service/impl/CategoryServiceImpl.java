@@ -1,24 +1,22 @@
 package com.wow.attribute.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.wow.attribute.mapper.CategoryMapper;
+import com.wow.attribute.model.Category;
+import com.wow.attribute.model.CategoryExample;
+import com.wow.attribute.service.CategoryService;
+import com.wow.attribute.vo.response.CategoryListResponse;
+import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wow.attribute.mapper.CategoryMapper;
-import com.wow.attribute.model.Category;
-import com.wow.attribute.model.CategoryExample;
-import com.wow.attribute.service.CategoryService;
-import com.wow.attribute.vo.SubCategoryVoList;
-import com.wow.attribute.vo.response.CategoryListResponse;
-import com.wow.attribute.vo.response.CategoryResponse;
-import com.wow.attribute.vo.response.CategorySecondResponse;
-import com.wow.common.response.CommonResponse;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorCodeUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 类目服务
@@ -148,92 +146,51 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /**
-     * 查询指定分类所有三级分类(递归查询)
+     * 查询指定分类所有三级分类
      *
      * @param categoryId
      * @return
      */
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<Integer> getLastLevelCategoryByCategory(int categoryId,Integer categoryLevel) {
-
-        List<Integer> categoryIdList = new ArrayList<>();
-
-        //TODO: category_id必须>0
-        //TODO: 如果该分类已经是第三级(也是最后一级),返回该分类本身
-
-        //否则,递归查询该分类的子分类,直到最后一级
-        //TODO: 要从缓存(redis)读取
-    	List<Category> categoryListAll = categoryMapper.selectAllCategory(categoryLevel);
-    	categoryIdList = getChildCategories(categoryListAll,categoryId);
-    	List<Integer> categoryIds = new ArrayList<>();
-    	// 去重
-    	for(Integer i : categoryIdList){
-    		if(!categoryIds.contains(i)){
-    			categoryIds.add(i);
-    		}
-    	}
-        return categoryIds;
-    }
-    
-    /**
-     * 根据父节点的ID获取所有子节点
-     * @param categoryList 分类表
-     * @param parentCategoryId 传入的父节点ID
-     * @return String
-     */
-    private static List<Integer> getChildCategories(List<Category> categoryList, Integer parentCategoryId) {
-        if(CollectionUtil.isEmpty(categoryList)) return null;
-        List<Integer> subCategoryList = new ArrayList<Integer>();
-
-        for (Category category : categoryList) {
-            if (category.getParentCategoryId()==parentCategoryId) {
-            	subCategoryList.add(category.getId());
-            	subCategoryList.addAll(getChildCategories(categoryList,category.getId()));
-            }else if(category.getCategoryLevel() == 3){
-            	subCategoryList.add(category.getId());
-            	
+    public CategoryListResponse getLastLevelCategoryByCategory(int categoryId) {
+        CategoryListResponse categoryListResponse = new CategoryListResponse();
+        List<Category> categoryList = new ArrayList<>();
+        Category currentCategory = categoryMapper.selectByPrimaryKey(categoryId);
+        if (currentCategory == null) {
+            ErrorResponseUtil.setErrorResponse(categoryListResponse,"40404");
+            return categoryListResponse;
+        }
+        if (currentCategory.getCategoryLevel()==3) {
+            categoryList.add(currentCategory);
+        } else if (currentCategory.getCategoryLevel() ==2) {
+            CategoryListResponse categoryListResponse1 = getSubCategory(categoryId);
+            if (categoryListResponse1 != null && categoryListResponse1.getCategoryList() != null
+                    && categoryListResponse1.getCategoryList().size() > 0) {
+                categoryList = categoryListResponse1.getCategoryList();
+            } else {
+                ErrorResponseUtil.setErrorResponse(categoryListResponse,"40403");
+                return categoryListResponse;
+            }
+        } else if (currentCategory.getCategoryLevel() == 1) {
+            //先找二级类目,再遍历找三级类目
+            CategoryListResponse categoryListResponseSecondLevel = getSubCategory(categoryId);
+            if (categoryListResponseSecondLevel == null || CollectionUtil.isEmpty(categoryListResponseSecondLevel.getCategoryList())) {
+                ErrorResponseUtil.setErrorResponse(categoryListResponse,"40403");
+                return categoryListResponse;
+            }
+            List<Category> secondaryCategory =categoryListResponseSecondLevel.getCategoryList();
+            for (Category category : secondaryCategory) {
+                int secondLevelCategoryId = category.getId();
+                CategoryListResponse categoryListResponseThirdLevel = getSubCategory(secondLevelCategoryId);
+                if (categoryListResponseThirdLevel != null && CollectionUtil.isNotEmpty(categoryListResponseThirdLevel.getCategoryList())) {
+                    categoryList.addAll(categoryListResponseThirdLevel.getCategoryList());
+                }
             }
         }
-        return subCategoryList;
-    }
-    
-    /**
-     * 查询二级分类
-     *
-     * @param categoryParentId
-     * @return
-     */
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public CategorySecondResponse getCategoryByParentId(Integer categoryParentId){
-    	CategorySecondResponse categorySecondResponse = new CategorySecondResponse();
-    	
-    	if (categoryParentId == null) {
-    		categorySecondResponse.setResCode("40404");
-    		categorySecondResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40404"));
-            return categorySecondResponse;
-        }
-    	
-//    	Category firstCategory = categoryMapper.selectByPrimaryKey(categoryParentId);
-//    	CategoryFirstVo categoryFirstVo = new CategoryFirstVo();
-//    	if(firstCategory!=null){
-//    		categoryFirstVo.setId(firstCategory.getId());
-//    		categoryFirstVo.setCategoryIconSmall(firstCategory.getCategoryIconSmall());
-//    		categoryFirstVo.setCategoryIconBig(firstCategory.getCategoryIconBig());   
-//    		categoryFirstVo.setCategoryLevel(firstCategory.getCategoryLevel());
-//    	}
-//    	categorySecondResponse.setCategoryFirstVo(categoryFirstVo);
-    	
-    	List<Category> categoryList = categoryMapper.selectCategoryByParentId(categoryParentId);
-    	List<SubCategoryVoList> subCategoryVoList = new ArrayList<SubCategoryVoList>();
-    	for(Category category : categoryList){
-    		SubCategoryVoList vo = new SubCategoryVoList();
-    		vo.setId(category.getId());
-    		vo.setCategoryName(category.getCategoryName());  
-    		vo.setCategoryLevel(category.getCategoryLevel());
-    		subCategoryVoList.add(vo);
-    	}
-    	categorySecondResponse.setSubCategoryList(subCategoryVoList);
-    	return categorySecondResponse;
+
+        categoryListResponse.setCategoryList(categoryList);
+
+        return categoryListResponse;
     }
 }

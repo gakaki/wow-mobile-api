@@ -198,4 +198,9 @@ public class DesignerServiceImpl implements DesignerService {
     	productDesignerResponse.setDesignerList(designerMapper.selectAll());
     	return productDesignerResponse;
     }
+
+    @Override
+    public List<SimpleDesigner> getAllSimpleDesigners() {
+        return designerMapper.getAllSimpleDesigners();
+    }
 }

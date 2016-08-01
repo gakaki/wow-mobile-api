@@ -3,6 +3,7 @@ package com.wow.common.page;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
@@ -74,11 +75,15 @@ public class PagePlugin implements Interceptor {
                 if (parameterObject == null) {
                     throw new NullPointerException("parameterObject尚未实例化！");
                 } else {
+                    Connection connection = (Connection) ivk.getArgs()[0];
                     String sql = boundSql.getSql();
+                    int count = getCount(connection, boundSql, parameterObject, mappedStatement);
+
                     PageModel page = null;
                     if (parameterObject instanceof PageModel) { //参数就是Page实体
                         page = (PageModel) parameterObject;
                         page.setEntityOrField(true); //见com.jalan.entity.Page.entityOrField 注释
+                        page.setTotalResult(count);
                     } else { //参数为某个实体，该实体拥有Page属性
                         Field pageField = ReflectHelper.getFieldByFieldName(parameterObject, "page");
                         if (pageField != null) {
@@ -86,6 +91,7 @@ public class PagePlugin implements Interceptor {
                             if (page == null)
                                 page = new PageModel();
                             page.setEntityOrField(false); //见com.jalan.entity.Page.entityOrField 注释
+                            page.setTotalResult(count);
                             ReflectHelper.setValueByFieldName(parameterObject, "page", page); //通过反射，对实体对象设置分页对象
                         } else {
                             throw new NoSuchFieldException(parameterObject.getClass().getName() + "不存在 page 属性！");
@@ -96,9 +102,62 @@ public class PagePlugin implements Interceptor {
                 }
             }
         }
-        
+
         return ivk.proceed();
     }
+
+    /**
+     * 获取结果集总记录数
+     * 
+     * @param connection
+     * @param boundSql
+     * @param parameterObject
+     * @param mappedStatement
+     * @return
+     */
+    private int getCount(Connection connection, BoundSql boundSql, Object parameterObject, MappedStatement mappedStatement) {
+        //如果参数类型不是parameterObject 则返回0
+        if (!(parameterObject instanceof PageModel)) {
+            return 0;
+        }
+
+        PageModel page = (PageModel) parameterObject;
+        //如果不需要分页 则返回0
+        if (!page.getIsPage()) {
+            return 0;
+        }
+
+        String countSql = "select count(0) from (" + boundSql.getSql() + ")  tmp_count";
+        PreparedStatement countStmt = null;
+        ResultSet rs = null;
+        try {
+            countStmt = connection.prepareStatement(countSql);
+            BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(), countSql, boundSql
+                .getParameterMappings(), parameterObject);
+            setParameters(countStmt, mappedStatement, countBS, parameterObject);
+            rs = countStmt.executeQuery();
+            int count = 0;
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+            return count;
+        } catch (SQLException e) {
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (countStmt != null) {
+                    countStmt.close();
+                }
+
+            } catch (SQLException e) {
+            }
+        }
+
+        return 0;
+    }
+
 
     /**
      * 对SQL参数(?)设值,参考org.apache.ibatis.executor.parameter.DefaultParameterHandler
@@ -109,7 +168,7 @@ public class PagePlugin implements Interceptor {
      * @param parameterObject
      * @throws SQLException
      */
-    @SuppressWarnings({ "unchecked", "unused" })
+    @SuppressWarnings("unchecked")
     private void setParameters(PreparedStatement ps, MappedStatement mappedStatement, BoundSql boundSql, Object parameterObject) throws SQLException {
         ErrorContext.instance().activity("setting parameters").object(mappedStatement.getParameterMap().getId());
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();

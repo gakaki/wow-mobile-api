@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import com.wow.attribute.vo.response.CategoryListResponse;
+import com.wow.common.enums.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,6 @@ import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.constant.BizConstant;
-import com.wow.common.enums.ApplicablePeopleEnum;
-import com.wow.common.enums.ApplicableSceneEnum;
-import com.wow.common.enums.MaterialEnum;
-import com.wow.common.enums.StyleEnum;
 import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
@@ -177,7 +175,7 @@ public class ProductServiceImpl implements ProductService {
         product.setProductName(productName);
         product.setSellingPoint(sellingPoint);
         product.setStyleId(styleId);
-        product.setProductStatus((byte)0);
+        product.setProductStatus(ProductStatusEnum.ORDER_STATUS_SHELVE.getKey().byteValue());
 
         List<Integer> applicableSceneIds = productCreateRequest.getApplicableSceneList();
         List<ColorSpecVo> colorSpecVoList = productCreateRequest.getColorSpecVoList();
@@ -547,11 +545,19 @@ public class ProductServiceImpl implements ProductService {
     	ProductVoResponse productVoResponse = new ProductVoResponse();
     	
     	ProductQueryVo pqv = (ProductQueryVo)page.getModel();
-    	List<Integer> categoryIdList = categoryService.getLastLevelCategoryByCategory(pqv.getCategoryId(),pqv.getCategoryLevel());
+        CategoryListResponse categoryListResponse = categoryService.getLastLevelCategoryByCategory(pqv.getCategoryId());
+        List<Category> categoryList = categoryListResponse.getCategoryList();
+
+        List<Integer> categoryIdList = new ArrayList<>();
+
+        for (Category category: categoryList) {
+            categoryIdList.add(category.getId());
+        }
+
+        logger.info("categoryIdList:" + categoryIdList);
+
     	pqv.setCategoryIdList(categoryIdList);
     	page.setModel(pqv);
-//        System.out.println("categoryIdList=" + categoryIdList);
-//        System.out.println(((ProductQueryVo)page.getModel()).getCategoryIdList());
 
         List<PageData> dataList = null;
         
@@ -561,9 +567,13 @@ public class ProductServiceImpl implements ProductService {
     		dataList = productMapper.selectOrderbyTotalSoldListPage(page);
     	if(pqv.getSortBy() == 3)
     		dataList = productMapper.selectOrderbySellPriceListPage(page);
-    	
+
+        logger.info("result size:" + dataList.size());
+
     	List<ProductVo> productList = Arrays.asList(JsonUtil.fromJSON(dataList, ProductVo[].class));
-    	
+
+        logger.info("productList size:" + productList.size());
+
     	if(productList.size()>0){
     		List<Integer> productIds = new ArrayList<Integer>();
             for(ProductVo productVo:productList){
@@ -587,10 +597,11 @@ public class ProductServiceImpl implements ProductService {
             	if(MapUtil.isNotEmpty(priceMap) && priceMap.get(productVo.getProductId()) != null){
             		productVo.setSellPrice(priceMap.get(productVo.getProductId()).getSellPrice());
             	}
+            	list.add(productVo);
         	}
         	productVoResponse.setProductVoList(list);
-    	}  	
-    	
+    	}
+        logger.info("productList size:" + productVoResponse.getProductVoList().size());
         return productVoResponse;
     }
 

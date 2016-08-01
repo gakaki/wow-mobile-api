@@ -105,7 +105,7 @@ public class DictionaryController extends BaseController{
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-            List<Dictionary> dictionaryList=DictionaryUtil.getKeyGroup("country_channel");
+            List<Dictionary> dictionaryList=DictionaryUtil.getKeyGroup(BizConstant.DICTIONARY_GROUP_COUNTRY);
             if(dictionaryList==null) {
                 DictionaryRequest dictionaryRequest=new DictionaryRequest();
                 dictionaryRequest.setKeyGroupCon(BizConstant.DICTIONARY_GROUP_COUNTRY);
