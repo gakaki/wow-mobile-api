@@ -20,6 +20,9 @@ public class OrderItemVo implements Serializable {
     //发货单产品id
     @JsonIgnore
     private Integer deliveryOrderId;
+    
+    //发货单产品id
+    private Integer saleOrderItemId;
 
     //用户购买的产品id
     private Integer productId;
@@ -48,6 +51,14 @@ public class OrderItemVo implements Serializable {
     //是否需要发货
     @JsonIgnore
     private Boolean isShippedOut;
+    
+    public Integer getSaleOrderItemId() {
+        return saleOrderItemId;
+    }
+
+    public void setSaleOrderItemId(Integer saleOrderItemId) {
+        this.saleOrderItemId = saleOrderItemId;
+    }
 
     public Boolean getIsShippedOut() {
         return isShippedOut;

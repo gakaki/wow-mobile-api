@@ -16,10 +16,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class AdminOrderItemVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     //订单id
     @JsonIgnore
     private Integer saleOrderId;
+
+    //订单项目id
+    private Integer saleOrderItemId;
 
     //用户购买的产品id
     private Integer productId;
@@ -51,6 +54,14 @@ public class AdminOrderItemVo implements Serializable {
 
     public void setSaleOrderId(Integer saleOrderId) {
         this.saleOrderId = saleOrderId;
+    }
+
+    public Integer getSaleOrderItemId() {
+        return saleOrderItemId;
+    }
+
+    public void setSaleOrderItemId(Integer saleOrderItemId) {
+        this.saleOrderItemId = saleOrderItemId;
     }
 
     public String getSpecImg() {

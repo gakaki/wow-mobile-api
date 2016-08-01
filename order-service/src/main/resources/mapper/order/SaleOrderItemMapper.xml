@@ -413,6 +413,7 @@
     <!-- 查询订单id查询产品明细 -->
   <select id="selectByOrderId"   resultType="com.wow.order.vo.OrderItemVo"  parameterType="Integer" >
 	       SELECT 
+	              so.id saleOrderItemId,
 				  so.product_id productId,
 				  so.product_name productName,
 				  so.delivery_order_id deliveryOrderId,
