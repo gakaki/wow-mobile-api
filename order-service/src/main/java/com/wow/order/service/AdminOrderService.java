@@ -1,6 +1,8 @@
 package com.wow.order.service;
 
 import com.wow.order.vo.AdminOrderListQuery;
+import com.wow.order.vo.OrderDetailQuery;
+import com.wow.order.vo.response.AdminOrderDetailResponse;
 import com.wow.order.vo.response.AdminOrderListResponse;
 
 /**
@@ -17,4 +19,13 @@ public interface AdminOrderService {
      * @return
      */
     AdminOrderListResponse queryOrderListPage(AdminOrderListQuery query);
+
+    /**
+     * 查询订单明细
+     * 
+     * @param query
+     * @return
+     */
+    AdminOrderDetailResponse queryOrderDetail(OrderDetailQuery query);
+
 }

@@ -14,41 +14,41 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class OrderItemVo implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
-    //用户购买的产品id
-    private Integer productId;
-    
     //发货单产品id
     @JsonIgnore
     private Integer deliveryOrderId;
 
+    //用户购买的产品id
+    private Integer productId;
+
     //产品名称
     private String productName;
-    
+
     //用户购买的产品数量 范围为1-127
     private Byte productQty;
-    
+
     //产品销售价格 单价
     private BigDecimal sellPrice;
-    
+
     //产品总价 产品销售价乘以数量
     private BigDecimal sellTotalAmount;
-    
+
     //产品颜色
     private String color;
 
     //产品规格值
     private String spec;
-    
+
     //产品规格图片
     private String specImg;
-    
+
     //是否需要发货
     @JsonIgnore
     private Boolean isShippedOut;
-    
+
     public Boolean getIsShippedOut() {
         return isShippedOut;
     }

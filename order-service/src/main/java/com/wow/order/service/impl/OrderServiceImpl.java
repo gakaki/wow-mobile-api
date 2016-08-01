@@ -768,15 +768,18 @@ public class OrderServiceImpl implements OrderService {
         orderDetailResponse.setOrderId(saleOrder.getId());
         orderDetailResponse.setOrderCode(saleOrder.getOrderCode());
 
+        //设置订单金额
         orderDetailResponse.setReceiverName(saleOrder.getReceiverName());
         orderDetailResponse.setReceiverMobile(saleOrder.getReceiverMobile());
         orderDetailResponse.setReceiverAddress(saleOrder.getReceiverAddress());
 
+        //设置订单金额相关
         orderDetailResponse.setOrderAmount(saleOrder.getOrderAmount());
         orderDetailResponse.setDeliveryFee(saleOrder.getDeliveryFee());
         orderDetailResponse.setCouponAmount(saleOrder.getPreferentialAmount());
         orderDetailResponse.setTotalProductQty(saleOrder.getTotalProductQty());
 
+        //设置订单状态 支付状态 支付方式
         orderDetailResponse.setOrderStatus(saleOrder.getOrderStatus());
         orderDetailResponse.setOrderStatusName(SaleOrderStatusEnum.get(saleOrder.getOrderStatus().intValue()));
         orderDetailResponse.setPaymentStatus(saleOrder.getPaymentStatus());
