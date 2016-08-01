@@ -8,8 +8,6 @@ public class CategoryFirstVo {
 
     private String categoryIconBg;
 
-    private Byte categoryLevel;
-
 	public Integer getId() {
 		return id;
 	}
@@ -32,15 +30,6 @@ public class CategoryFirstVo {
 
 	public void setCategoryIconBg(String categoryIconBg) {
 		this.categoryIconBg = categoryIconBg;
-	}
-
-	public Byte getCategoryLevel() {
-		return categoryLevel;
-	}
-
-	public void setCategoryLevel(Byte categoryLevel) {
-		this.categoryLevel = categoryLevel;
-	}
-    
+	}   
     
 }
