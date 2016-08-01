@@ -12,47 +12,58 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  * @version $Id: V1.0 2016年7月14日 下午4:28:55 Exp $
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class ShoppingCartResultVo implements Serializable{
-    
+public class ShoppingCartResultVo implements Serializable {
+
     /**  */
     private static final long serialVersionUID = 1L;
 
     //购物车id
     private Integer shoppingCartId;
-    
+
     //产品id
     private Integer productId;
-    
+
     //产品名称
     private String productName;
-    
+
+    //产品状态
+    private Byte productStatus;
+
+    //产品状态名称
+    private String productStatusName;
+
     //产品销售价格
     private BigDecimal sellPrice;
-    
+
     //产品数量范围为1-127
     private Byte productQty;
-    
+
     //产品总价 产品销售价乘以数量
     private BigDecimal productTotalAmount;
-    
+
     //产品当前可用库存数目 默认为0(即没有库存)
-    private Short productStock=0;
+    private Short productStock = 0;
 
     //产品颜色
     private String color;
-    
+
     //产品规格值
     private String specImg;
-    
+
     //规格名
     private String specName;
-    
-    //产品状态
-    private Byte productStatus;
-    
-    //产品状态名称
-    private String productStatusName;
-    
+
+    //用户是否选中
+    private Boolean isSelected;
+
+    public Boolean getIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(Boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
     public String getSpecName() {
         return specName;
     }

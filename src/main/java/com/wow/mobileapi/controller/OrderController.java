@@ -11,26 +11,19 @@ import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
-import com.wow.common.util.DateUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
-import com.wow.mobileapi.request.order.AdminOrderListRequest;
-import com.wow.mobileapi.request.order.OrderDeliverRequest;
 import com.wow.mobileapi.request.order.OrderDetailRequest;
 import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
 import com.wow.mobileapi.request.order.OrderSettleRequest;
-import com.wow.order.service.AdminOrderService;
 import com.wow.order.service.OrderService;
-import com.wow.order.vo.AdminOrderListQuery;
-import com.wow.order.vo.OrderDeliverQuery;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
-import com.wow.order.vo.response.AdminOrderListResponse;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
@@ -47,9 +40,6 @@ public class OrderController extends BaseController {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private AdminOrderService adminOrderService;
 
     /**
      * 获取用户购买的产品结算信息
@@ -81,7 +71,6 @@ public class OrderController extends BaseController {
             //设置用户id
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);
-            query.setShoppingCartIds(orderSettleRequest.getShoppingCartIds());
 
             orderSettleResponse = orderService.settleOrder(query);
             //如果处理失败 则返回错误信息
@@ -125,6 +114,7 @@ public class OrderController extends BaseController {
         try {
             OrderQuery query = new OrderQuery();
             BeanUtil.copyProperties(orderRequest, query);
+            
             //设置用户id
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);
@@ -249,90 +239,6 @@ public class OrderController extends BaseController {
             }
         } catch (Exception e) {
             logger.error("取消订单错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-
-        return apiResponse;
-    }
-
-    /**
-     * 订单发货
-     * 
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/deliver", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-    public ApiResponse deliverGoods(ApiRequest request) {
-        OrderDeliverRequest orderDeliverRequest = JsonUtil.fromJSON(request.getParamJson(), OrderDeliverRequest.class);
-        ApiResponse apiResponse = new ApiResponse();
-        //判断json格式参数是否有误
-        if (orderDeliverRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        CommonResponse commonResponse = null;
-        try {
-            OrderDeliverQuery query = new OrderDeliverQuery();
-            BeanUtil.copyProperties(orderDeliverRequest, query);
-
-            commonResponse = orderService.deliverGoods(query);
-            //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
-            }
-        } catch (Exception e) {
-            logger.error("订单发货错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-
-        return apiResponse;
-    }
-
-    /**
-     * 获取用户购买的产品结算信息
-     * 
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/getList", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-    public ApiResponse selectAdminOrderList(ApiRequest request) {
-        AdminOrderListRequest orderListRequest = JsonUtil.fromJSON(request.getParamJson(), AdminOrderListRequest.class);
-        ApiResponse apiResponse = new ApiResponse();
-        //判断json格式参数是否有误
-        if (orderListRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        AdminOrderListResponse orderListResponse = null;
-        try {
-            AdminOrderListQuery query = new AdminOrderListQuery();
-            BeanUtil.copyProperties(orderListRequest, query);
-
-            //设置订单开始日期
-            if (StringUtil.isNotEmpty(orderListRequest.getBeginDate())) {
-                query.setBeginDateFormat(DateUtil.setBeginDate(orderListRequest.getBeginDate()));
-            }
-
-            //设置订单结束日期
-            if (StringUtil.isNotEmpty(orderListRequest.getEndDate())) {
-                query.setEndDateFormat(DateUtil.setEndDate(orderListRequest.getEndDate()));
-            }
-
-            //获取用户userId
-            Integer endUserId = getUserIdByTokenChannel(request);
-            query.setEndUserId(endUserId);
-
-            orderListResponse = adminOrderService.queryOrderListPage(query);
-            //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(orderListResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, orderListResponse);
-            } else {
-                apiResponse.setData(orderListResponse);
-            }
-        } catch (Exception e) {
-            logger.error("获取订单列表错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
 

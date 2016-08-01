@@ -16,8 +16,8 @@ import com.wow.user.vo.ShoppingCartResultVo;
 public class OrderQuery implements Serializable {
     /**  */
     private static final long serialVersionUID = 1L;
-
-    //购物车id列表
+    
+    //用户订购的购物车id列表
     private List<Integer> shoppingCartIds;
 
     //用户id
@@ -28,7 +28,7 @@ public class OrderQuery implements Serializable {
 
     //优惠券id
     private Integer couponId;
-
+    
     //订单总价 客户端传递 用以校验价格是否发生变化
     private BigDecimal orderAmount;
 
@@ -65,6 +65,14 @@ public class OrderQuery implements Serializable {
     //总件数
     private Integer totalProductQty;
     
+    public List<Integer> getShoppingCartIds() {
+        return shoppingCartIds;
+    }
+
+    public void setShoppingCartIds(List<Integer> shoppingCartIds) {
+        this.shoppingCartIds = shoppingCartIds;
+    }
+
     public Integer getTotalProductQty() {
         return totalProductQty;
     }
@@ -143,14 +151,6 @@ public class OrderQuery implements Serializable {
 
     public void setShoppingCartResult(List<ShoppingCartResultVo> shoppingCartResult) {
         this.shoppingCartResult = shoppingCartResult;
-    }
-
-    public List<Integer> getShoppingCartIds() {
-        return shoppingCartIds;
-    }
-
-    public void setShoppingCartIds(List<Integer> shoppingCartIds) {
-        this.shoppingCartIds = shoppingCartIds;
     }
 
     public Integer getEndUserId() {

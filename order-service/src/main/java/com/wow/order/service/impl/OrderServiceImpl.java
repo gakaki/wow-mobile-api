@@ -25,6 +25,7 @@ import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.IpConvertUtil;
 import com.wow.common.util.JsonUtil;
+import com.wow.common.util.MapUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.StringUtil;
@@ -59,6 +60,9 @@ import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
+import com.wow.price.model.ProductPrice;
+import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.FreezeStockVo;
 import com.wow.stock.vo.ProductQtyVo;
@@ -102,6 +106,9 @@ public class OrderServiceImpl implements OrderService {
     private StockService stockService;
 
     @Autowired
+    private PriceService priceService;
+
+    @Autowired
     private DeliveryOrderMapper deliveryOrderMapper;
 
     /**
@@ -116,14 +123,6 @@ public class OrderServiceImpl implements OrderService {
         OrderResponse orderResponse = new OrderResponse();
 
         /*** 业务校验开始*/
-        //如果用户购物车id列表为空  则返回错误提示
-        if (CollectionUtil.isEmpty(query.getShoppingCartIds())) {
-            orderResponse.setResCode("40304");
-            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40304"));
-
-            return orderResponse;
-        }
-
         //如果收货地址不存在 则返回错误提示
         ShippingInfo shippingInfo = shippingInfoMapper.selectByPrimaryKey(query.getShippingInfoId());
         if (shippingInfo == null) {
@@ -134,12 +133,12 @@ public class OrderServiceImpl implements OrderService {
         }
 
         ShoppingCartQueryVo shoppingCartQuery = new ShoppingCartQueryVo();
-        shoppingCartQuery.setShoppingCartIds(query.getShoppingCartIds());
+        shoppingCartQuery.setEndUserId(query.getEndUserId());
 
-        //根据用户购物车id列表 获取用户购物车信息列表
+        //获取用户选中的购物车信息列表
         List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByShoppingCartIds(shoppingCartQuery);
 
-        //如果用户购物车状态不同步 则返回错误提示
+        //如果未找到用户选中的产品 则直接返回错误
         if (CollectionUtil.isEmpty(shoppingCartResult)) {
             orderResponse.setResCode("40311");
             orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40311"));
@@ -147,16 +146,26 @@ public class OrderServiceImpl implements OrderService {
             return orderResponse;
         }
 
-        //如果用户购物车状态不同步 则返回错误提示
-        if (query.getShoppingCartIds().size() != shoppingCartResult.size()) {
-            orderResponse.setResCode("40311");
-            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40311"));
+        //购物车产品id列表
+        List<Integer> productIds = getProductIds(shoppingCartResult);
+        //调用获取产品价格服务
+        ProductListPriceResponse priceResponse = priceService.batchGetProductPrice(productIds);
+
+        //判断服务是否调用成功 如果处理失败 则返回错误信息
+        if (ErrorCodeUtil.isFailedResponse(priceResponse.getResCode())) {
+            orderResponse.setResCode(priceResponse.getResCode());
+            orderResponse.setResMsg(priceResponse.getResMsg());
 
             return orderResponse;
         }
 
-        //设置用户购买的产品信息列表
+        //设置产品价格
+        setProductPrice(shoppingCartResult, priceResponse.getMap());
+
+        //设置结算的产品信息
         query.setShoppingCartResult(shoppingCartResult);
+        //设置用户购买的购物车产品信息
+        query.setShoppingCartIds(getShoppingCartIds(shoppingCartResult));
 
         //计算订单总金额
         BigDecimal orderAmount = calculateOrderPrice(query);
@@ -204,8 +213,11 @@ public class OrderServiceImpl implements OrderService {
 
         //保存订单项目仓库信息
         List<SaleOrderItemWarehouse> orderItemWareHouses = wrapAllOrderItemWareHouse(saleOrderItems, query);
-
-        saleOrderItemWarehouseMapper.batchInsertSelective(orderItemWareHouses);
+        
+        //如果有实际库存则保存冻结的库存信息
+        if (CollectionUtil.isNotEmpty(orderItemWareHouses)) {
+            saleOrderItemWarehouseMapper.batchInsertSelective(orderItemWareHouses);
+        }
 
         //写入客户提交订单日志
         SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40357"));
@@ -226,6 +238,19 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setOrderCode(saleOrder.getOrderCode());
 
         return orderResponse;
+    }
+
+    /*
+     * 获取用户购买的购物车id列表
+     */
+    private List<Integer> getShoppingCartIds(List<ShoppingCartResultVo> shoppingCartResult) {
+        List<Integer> shoppingCartIds = new ArrayList<>(shoppingCartResult.size());
+
+        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            shoppingCartIds.add(shoppingCart.getShoppingCartId());
+        }
+
+        return shoppingCartIds;
     }
 
     /**
@@ -768,15 +793,18 @@ public class OrderServiceImpl implements OrderService {
         orderDetailResponse.setOrderId(saleOrder.getId());
         orderDetailResponse.setOrderCode(saleOrder.getOrderCode());
 
+        //设置订单金额
         orderDetailResponse.setReceiverName(saleOrder.getReceiverName());
         orderDetailResponse.setReceiverMobile(saleOrder.getReceiverMobile());
         orderDetailResponse.setReceiverAddress(saleOrder.getReceiverAddress());
 
+        //设置订单金额相关
         orderDetailResponse.setOrderAmount(saleOrder.getOrderAmount());
         orderDetailResponse.setDeliveryFee(saleOrder.getDeliveryFee());
         orderDetailResponse.setCouponAmount(saleOrder.getPreferentialAmount());
         orderDetailResponse.setTotalProductQty(saleOrder.getTotalProductQty());
 
+        //设置订单状态 支付状态 支付方式
         orderDetailResponse.setOrderStatus(saleOrder.getOrderStatus());
         orderDetailResponse.setOrderStatusName(SaleOrderStatusEnum.get(saleOrder.getOrderStatus().intValue()));
         orderDetailResponse.setPaymentStatus(saleOrder.getPaymentStatus());
@@ -834,29 +862,80 @@ public class OrderServiceImpl implements OrderService {
     public OrderSettleResponse settleOrder(OrderSettleQuery query) {
         OrderSettleResponse response = new OrderSettleResponse();
 
-        // 业务校验开始
-        //判断用户购物车id列表是否为空
-        if (CollectionUtil.isEmpty(query.getShoppingCartIds())) {
-            response.setResCode("40304");
-            response.setResMsg(ErrorCodeUtil.getErrorMsg("40304"));
+        ShoppingCartQueryVo shoppingCartQuery = new ShoppingCartQueryVo();
+        shoppingCartQuery.setEndUserId(query.getEndUserId());
+
+        //获取用户选中的购物车信息列表
+        List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByShoppingCartIds(shoppingCartQuery);
+
+        if (CollectionUtil.isEmpty(shoppingCartResult)) {
+            response.setResCode("40311");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40311"));
+            
+            return response;
+        }
+
+        //购物车产品id列表
+        List<Integer> productIds = getProductIds(shoppingCartResult);
+        //调用获取产品价格服务
+        ProductListPriceResponse priceResponse = priceService.batchGetProductPrice(productIds);
+
+        //判断服务是否调用成功 如果处理失败 则返回错误信息
+        if (ErrorCodeUtil.isFailedResponse(priceResponse.getResCode())) {
+            response.setResCode(priceResponse.getResCode());
+            response.setResMsg(priceResponse.getResMsg());
 
             return response;
         }
         //业务校验结束
 
-        ShoppingCartQueryVo shoppingCartQuery = new ShoppingCartQueryVo();
-        shoppingCartQuery.setShoppingCartIds(query.getShoppingCartIds());
+        //设置产品价格
+        setProductPrice(shoppingCartResult, priceResponse.getMap());
 
-        //根据用户购物车id列表 获取用户购物车信息列表
-        List<ShoppingCartResultVo> shoppingCartResult = shoppingCartMapper.queryByShoppingCartIds(shoppingCartQuery);
-
-        if (CollectionUtil.isEmpty(shoppingCartResult)) {
-            return response;
-        }
-
+        //包装订单结算信息
         wrapOrderSettleResponse(response, shoppingCartResult);
 
         return response;
+    }
+
+    /**
+     * 获取产品id列表
+     * 
+     * @param shoppingCartResult
+     * @return
+     */
+    private List<Integer> getProductIds(List<ShoppingCartResultVo> shoppingCartResult) {
+        List<Integer> productIds = new ArrayList<>(shoppingCartResult.size());
+
+        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            productIds.add(shoppingCart.getProductId());
+        }
+
+        return productIds;
+    }
+
+    /**
+     * 设置产品价格
+     * 
+     * @param shoppingCartResult
+     * @param map
+     */
+    private void setProductPrice(List<ShoppingCartResultVo> shoppingCartResult, Map<Integer, ProductPrice> map) {
+        if (MapUtil.isEmpty(map)) {
+            return;
+        }
+
+        ProductPrice productPrice = null;
+
+        //设置产品可用库存信息
+        for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
+            productPrice = map.get(shoppingCart.getProductId());
+
+            //设置产品库存
+            if (productPrice != null) {
+                shoppingCart.setSellPrice(productPrice.getSellPrice());
+            }
+        }
     }
 
     /**
@@ -878,7 +957,7 @@ public class OrderServiceImpl implements OrderService {
             long productPrice = NumberUtil.convertToFen(orderSettle.getSellPrice());
             //计算该产品销售总价( 产品单价乘以数量)
             long sellTotalAmount = productPrice * orderSettle.getProductQty();
-            orderSettle.setSellTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+            orderSettle.setProductTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
 
             //计算订单总价
             totalPrice += sellTotalAmount;
