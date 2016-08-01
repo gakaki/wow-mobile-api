@@ -81,6 +81,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             return response;
         }
+        
+        //如果产品未上架 则直接返回错误提示
+        if (product.getProductStatus().intValue() == ProductStatusEnum.PRODUCT_STATUS_TO_BE_SHELVE.getKey()) {
+            response.setResCode("40325");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40325"));
+
+            return response;
+        }
 
         //如果产品已下架 则直接返回错误提示
         if (product.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_OFF_SHELVE.getKey()) {
@@ -279,7 +287,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         BigDecimal totalPrice = calculateShoppingCartPrice(shoppingCartResult);
 
         response.setShoppingCartResult(shoppingCartResult);
-        response.setTotalPrice(totalPrice);
+        response.setTotalAmount(totalPrice);
 
         return response;
     }
@@ -389,7 +397,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
                 long productPrice = NumberUtil.convertToFen(shoppingCart.getSellPrice());
                 long sellTotalAmount = productPrice * shoppingCart.getProductQty();
-                shoppingCart.setSellTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+                shoppingCart.setProductTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
 
                 //仅计算已经上架的产品价格
                 if (shoppingCart.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_SHELVE.getKey()) {

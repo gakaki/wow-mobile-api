@@ -63,8 +63,12 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         }
         if (query.getCurrentPage() != null) {
             model.setCurrentPage(query.getCurrentPage());
+            //仅在第一页时获取相应的分页记录
+            if(query.getCurrentPage()==1){
+                model.setIsPage(true);
+            }
         }
-        model.setIsPage(true);
+        
         model.setModel(query);
 
         List<PageData> pageDataList = saleOrderMapper.selectForAdminListPage(model);
