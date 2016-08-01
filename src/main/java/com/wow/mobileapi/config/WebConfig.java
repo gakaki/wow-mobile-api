@@ -25,7 +25,21 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(logInterceptor).addPathPatterns("/**");
         registry.addInterceptor(authInterceptor).addPathPatterns("/v1/order/**");
+
         registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/shippinginfo/**"); //收货信息
+
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/brand/favorite");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/brand/favorite-list");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/brand/is-favorite");
+
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/designer/favorite");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/designer/favorite-list");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/designer/is-favorite");
+
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/product/favorite");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/product/favorite-list");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/product/is-favorite");
+
         registry.addInterceptor(authInterceptor).addPathPatterns("/v1/cart/**");
     }
 
