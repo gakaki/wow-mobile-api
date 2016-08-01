@@ -328,6 +328,7 @@
 				  p.product_name productName,
 				  p.color_display_name color,
 				  p.product_color_img specImg,
+				  p.spec_name specName,
 				  p.product_status productStatus
 			FROM
 			  shopping_cart sc
@@ -337,7 +338,7 @@
 			  AND sc.end_user_id = #{endUserId}
 	</select>
 	
-	<!-- 获取用户购物车信息列表明细 -->
+	<!-- 根据购物车id列表获取购物车信息 -->
 	<select id="queryByShoppingCartIds"   resultType="com.wow.user.vo.ShoppingCartResultVo"
 		parameterType="com.wow.user.vo.ShoppingCartQueryVo">
 			SELECT 
@@ -347,6 +348,7 @@
 				  p.product_name productName,
 				  p.color_display_name color,
 				  p.product_color_img specImg,
+				  p.spec_name specName,
 				  p.product_status productStatus,
 				  pp.sell_price sellPrice
 			FROM
