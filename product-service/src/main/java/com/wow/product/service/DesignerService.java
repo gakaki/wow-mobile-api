@@ -5,6 +5,7 @@ import java.util.List;
 import com.wow.product.model.Designer;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductDesigner;
+import com.wow.product.model.SimpleDesigner;
 import com.wow.product.vo.response.ProductDesignerResponse;
 import com.wow.product.vo.response.ProductDesignerVoResponse;
 
@@ -122,4 +123,11 @@ public interface DesignerService {
      * @return
      */
     public ProductDesignerResponse getAllDesigners();
+
+    /**
+     * 查询所有设计师
+     *
+     * @return
+     */
+    public List<SimpleDesigner> getAllSimpleDesigners();
 }

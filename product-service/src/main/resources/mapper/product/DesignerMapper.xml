@@ -14,6 +14,12 @@
     <result column="is_active" property="isActive" jdbcType="BIT" />
     <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
   </resultMap>
+
+  <resultMap id="SimpleResultMap" type="com.wow.product.model.SimpleDesigner" >
+    <id column="id" property="designerId" jdbcType="INTEGER" />
+    <result column="designer_name" property="designerName" jdbcType="VARCHAR" />
+  </resultMap>
+
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -305,6 +311,12 @@
   </update>
   <select id="selectAll" resultMap="BaseResultMap">
     select 
+    <include refid="Base_Column_List" />
+    from designer where is_deleted = false
+  </select>
+
+  <select id="getAllSimpleDesigners" resultMap="SimpleResultMap">
+    select
     <include refid="Base_Column_List" />
     from designer where is_deleted = false
   </select>
