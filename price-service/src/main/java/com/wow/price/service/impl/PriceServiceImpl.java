@@ -1,9 +1,18 @@
 package com.wow.price.service.impl;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
 import com.wow.price.mapper.ProductPriceChangeLogMapper;
 import com.wow.price.mapper.ProductPriceMapper;
 import com.wow.price.model.ProductPrice;
@@ -11,15 +20,6 @@ import com.wow.price.model.ProductPriceChangeLog;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.price.vo.ProductPriceResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zhengzhiqing on 16/6/17.
@@ -165,4 +165,27 @@ public class PriceServiceImpl implements PriceService {
         return productPriceChangeLogMapper.selectPriceChangeLogsByProductId(productId);
     }
 
+    /**
+     * 定时任务执行
+     * 
+     * @param updateStartTime
+     * @param updateEndTime
+     * @return
+     */
+    public List<ProductPrice> selectPriceChangedProduct(String updateStartTime,String updateEndTime){
+    	return productPriceMapper.selectPriceChangedProduct(updateStartTime, updateEndTime);
+    }
+    
+    /**
+     * 定时任务执行
+     * 
+     * 修改系列品的最小价格
+     * @param productId
+     * @param sellPrice
+     * @return
+     */
+    public int updateProductMinPrice(int productId,BigDecimal sellPrice){
+    	return productPriceMapper.updateProductMinPrice(productId, sellPrice);
+    }
+    
 }

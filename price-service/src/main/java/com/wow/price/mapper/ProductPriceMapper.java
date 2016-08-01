@@ -1,9 +1,12 @@
 package com.wow.price.mapper;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.price.model.ProductPrice;
 import com.wow.price.model.ProductPriceExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface ProductPriceMapper {
     int countByExample(ProductPriceExample example);
@@ -32,9 +35,10 @@ public interface ProductPriceMapper {
 
     List<ProductPrice> selectByProductIds(@Param("productIds") List<Integer> productIds);
     
-//    List<ProductPrice> selectPriceChangedProduct(@Param("updateTime") String updateTime);
+    List<ProductPrice> selectPriceChangedProduct(@Param("updateStartTime") String updateStartTime,@Param("updateEndTime") String updateEndTime);
     
-
+    int updateProductMinPrice(@Param("productId") int productId,@Param("sellPrice") BigDecimal sellPrice);
+    
 //    /**
 //     * 查找系列品的价格(取售价最低的子品)
 //     * @param productId
