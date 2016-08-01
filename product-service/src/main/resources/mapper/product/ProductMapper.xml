@@ -35,7 +35,7 @@
     <result column="style_id" property="styleId" jdbcType="TINYINT" />
     <result column="verbose_info" property="verboseInfo" jdbcType="VARCHAR" />
     <result column="tips" property="tips" jdbcType="VARCHAR" />
-    <result column="applicable_people" property="applicablePeople" jdbcType="TINYINT" />
+    <result column="applicable_people" property="applicablePeople" jdbcType="VARCHAR" />
     <result column="applicable_scene_text" property="applicableSceneText" jdbcType="VARCHAR" />
     <result column="need_assemble" property="needAssemble" jdbcType="BIT" />
     <result column="assemble_tips" property="assembleTips" jdbcType="VARCHAR" />
@@ -380,7 +380,7 @@
         #{originCountryId,jdbcType=VARCHAR},
       </if>
       <if test="originProvinceId != null" >
-        #{originProvinceId,jdbcType=INTEGER}
+        #{originProvinceId,jdbcType=INTEGER},
       </if>
       <if test="originCity != null" >
         #{originCity,jdbcType=VARCHAR},
@@ -657,7 +657,7 @@
       style_id = #{record.styleId,jdbcType=TINYINT},
       verbose_info = #{record.verboseInfo,jdbcType=VARCHAR},
       tips = #{record.tips,jdbcType=VARCHAR},
-      applicable_people = #{record.applicablePeople,jdbcType=TINYINT},
+      applicable_people = #{record.applicablePeople,jdbcType=VARCHAR},
       applicable_scene_text = #{record.applicableSceneText,jdbcType=VARCHAR},
       need_assemble = #{record.needAssemble,jdbcType=BIT},
       assemble_tips = #{record.assembleTips,jdbcType=VARCHAR},
@@ -775,7 +775,7 @@
         tips = #{tips,jdbcType=VARCHAR},
       </if>
       <if test="applicablePeople != null" >
-        applicable_people = #{applicablePeople,jdbcType=TINYINT},
+        applicable_people = #{applicablePeople,jdbcType=VARCHAR},
       </if>
       <if test="applicableSceneText != null" >
         applicable_scene_text = #{applicableSceneText,jdbcType=VARCHAR},
@@ -853,7 +853,7 @@
       style_id = #{styleId,jdbcType=TINYINT},
       verbose_info = #{verboseInfo,jdbcType=VARCHAR},
       tips = #{tips,jdbcType=VARCHAR},
-      applicable_people = #{applicablePeople,jdbcType=TINYINT},
+      applicable_people = #{applicablePeople,jdbcType=VARCHAR},
       applicable_scene_text = #{applicableSceneText,jdbcType=VARCHAR},
       need_assemble = #{needAssemble,jdbcType=BIT},
       assemble_tips = #{assembleTips,jdbcType=VARCHAR},

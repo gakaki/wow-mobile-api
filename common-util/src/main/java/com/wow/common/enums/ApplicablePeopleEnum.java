@@ -10,29 +10,29 @@ import java.util.Map;
  * @version $Id: V1.0 2016年7月15日 下午3:59:10 Exp $
  */
 public enum ApplicablePeopleEnum {
-	//适用人群:0-通用,1-成人,2-男性,3-女性,4-儿童,5-老人
-    GENERAL(1, "通用"),
-    ADULTS(2, "成人"),
-	MALE(3, "男性"),
-	FEMALE(4, "女性"),
-	CHILDREN(5, "儿童"),
-	OLD(6, "老人");
-	private Integer key;
+	GENERAL("general", "通用"),
+	ADULTS("adult", "成人"),
+	MALE("male", "男性"),
+	FEMALE("female", "女性"),
+	CHILDREN("children", "儿童"),
+	OLD("elder", "老人");
+	private String key;
 
 	private String value;
 
-	private static Map<Integer, String> applicablePeopleMap = null;
+	private static Map<String, String> applicablePeopleMap = null;
 
 	static {
-		 applicablePeopleMap = new HashMap<Integer, String>(3);
-		 ApplicablePeopleEnum[] elements = ApplicablePeopleEnum.values();
+		applicablePeopleMap = new HashMap<String, String>(3);
+		ApplicablePeopleEnum[] elements = ApplicablePeopleEnum.values();
 
 		for (ApplicablePeopleEnum element:elements) {
+			element.
 			applicablePeopleMap.put(element.getKey(), element.getValue());
 		}
 	}
 
-	private ApplicablePeopleEnum(Integer key, String value) {
+	private ApplicablePeopleEnum(String key, String value) {
 		this.key = key;
 		this.value = value;
 	}
@@ -41,11 +41,11 @@ public enum ApplicablePeopleEnum {
 		return this.value;
 	}
 
-	public Integer getKey() {
+	public String getKey() {
 		return this.key;
 	}
 
-	public static String get(Integer key) {
+	public static String get(String key) {
 		return applicablePeopleMap.get(key);
 	}
 

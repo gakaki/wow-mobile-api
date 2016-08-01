@@ -85,7 +85,7 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
             HashSet<Integer> productApplicableScenes1=new HashSet<>();
             for(ProductApplicableScene productApplicableScene:productApplicableScenes)
             {
-                productApplicableScenes1.add(productApplicableScene.getApplicableSceneId());
+                //productApplicableScenes1.add(productApplicableScene.getApplicableSceneId());
             }
             return getApplicableSceneById(new ArrayList<Integer>(productApplicableScenes1));
         }
