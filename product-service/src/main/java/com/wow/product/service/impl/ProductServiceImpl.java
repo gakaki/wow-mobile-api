@@ -146,7 +146,7 @@ public class ProductServiceImpl implements ProductService {
         subProductMinPrice.setCostPrice(BigDecimal.ZERO);
         BigDecimal minPrice = null;
 
-        byte applicablePeople = productCreateRequest.getApplicablePeople();
+        String applicablePeople = productCreateRequest.getApplicablePeople();
         int brandId = productCreateRequest.getBrandId();
         int categoryId = productCreateRequest.getCategoryId();
         String detailDescription = productCreateRequest.getDetailDescription();
@@ -154,8 +154,8 @@ public class ProductServiceImpl implements ProductService {
         short width = productCreateRequest.getWidth();
         short height = productCreateRequest.getHeight();
         String originCity = productCreateRequest.getOriginCity();
-//        int originCountryId = productCreateRequest.getOriginCountryId();
         String originCountryId = productCreateRequest.getOriginCountryId();
+        int originProvinceId=productCreateRequest.getOriginProvinceId();
         String productModel = productCreateRequest.getProductModel();
         String productName = productCreateRequest.getProductName();
         String sellingPoint = productCreateRequest.getSellingPoint();
@@ -170,6 +170,7 @@ public class ProductServiceImpl implements ProductService {
         product.setHeight(height);
         product.setSizeText("L"+length + "xW" + width + "xH" + height + "cm");
         product.setOriginCity(originCity);
+        product.setOriginProvinceId(originProvinceId);
         product.setOriginCountryId(originCountryId);
         product.setProductModel(productModel);
         product.setProductName(productName);
@@ -177,7 +178,7 @@ public class ProductServiceImpl implements ProductService {
         product.setStyleId(styleId);
         product.setProductStatus(ProductStatusEnum.ORDER_STATUS_SHELVE.getKey().byteValue());
 
-        List<Integer> applicableSceneIds = productCreateRequest.getApplicableSceneList();
+        List<String> applicableSceneTexts = productCreateRequest.getApplicableSceneList();
         List<ColorSpecVo> colorSpecVoList = productCreateRequest.getColorSpecVoList();
         List<ProductImgVo> productImgVoList = productCreateRequest.getProductImgVoList();
         List<DesignerVo> designerVoList = productCreateRequest.getDesignerVoList();
@@ -225,14 +226,14 @@ public class ProductServiceImpl implements ProductService {
         //创建产品适用场景绑定
         String applicableSceneText = "";
         List<ProductApplicableScene> productApplicableSceneList = new ArrayList<>();
-        for (Integer applicableSceneId : applicableSceneIds) {
+        for (String text : applicableSceneTexts) {
             ProductApplicableScene productApplicableScene = new ProductApplicableScene();
 
             productApplicableScene.setProductId(productId);
-            productApplicableScene.setApplicableSceneId(applicableSceneId);
+            productApplicableScene.setApplicableSceneId(text);
             productApplicableSceneList.add(productApplicableScene);
 
-            applicableSceneText += ApplicableSceneEnum.get(applicableSceneId) + ",";
+            applicableSceneText += ApplicableSceneEnum.get(text) + ",";
         }
         applicableSceneService.createProductApplicableScene(productApplicableSceneList);
 
@@ -636,7 +637,7 @@ public class ProductServiceImpl implements ProductService {
             productParameter.setNeedAssemble(product.getNeedAssemble());
 
             productParameter.setStyle(StyleEnum.get((int)product.getStyleId()));
-            productParameter.setApplicablePeople(ApplicablePeopleEnum.get((int)product.getApplicablePeople()));
+            productParameter.setApplicablePeople(ApplicablePeopleEnum.get(product.getApplicablePeople()));
 
             productResponse.setProductParameter(productParameter);
         } else {

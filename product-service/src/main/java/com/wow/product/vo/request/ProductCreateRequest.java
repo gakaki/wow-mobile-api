@@ -16,7 +16,6 @@ public class ProductCreateRequest implements Serializable {
     private String productModel;
     private int brandId;
     private List<DesignerVo> designerVoList;
-    //    private int originCountryId;
     private String originCountryId;
     private String originCity;
     private int originProvinceId;
@@ -24,9 +23,9 @@ public class ProductCreateRequest implements Serializable {
     private short length;
     private short width;
     private short height;
-    private byte applicablePeople;
+    private String applicablePeople;
     private boolean canCustomized;
-    private List<Integer> applicableSceneList;
+    private List<String> applicableSceneList;
     private List<Integer> materialList;
     private String detailDescription; //商品描述
     private List<ColorSpecVo> colorSpecVoList;
@@ -144,11 +143,11 @@ public class ProductCreateRequest implements Serializable {
         this.height = height;
     }
 
-    public byte getApplicablePeople() {
+    public String getApplicablePeople() {
         return applicablePeople;
     }
 
-    public void setApplicablePeople(byte applicablePeople) {
+    public void setApplicablePeople(String applicablePeople) {
         this.applicablePeople = applicablePeople;
     }
 
@@ -160,11 +159,11 @@ public class ProductCreateRequest implements Serializable {
         this.canCustomized = canCustomized;
     }
 
-    public List<Integer> getApplicableSceneList() {
+    public List<String> getApplicableSceneList() {
         return applicableSceneList;
     }
 
-    public void setApplicableSceneList(List<Integer> applicableSceneList) {
+    public void setApplicableSceneList(List<String> applicableSceneList) {
         this.applicableSceneList = applicableSceneList;
     }
 

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.wow.product.model.ProductApplicableScene" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="product_id" property="productId" jdbcType="INTEGER" />
-    <result column="applicable_scene_id" property="applicableSceneId" jdbcType="INTEGER" />
+    <result column="applicable_scene_id" property="applicableSceneId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -182,7 +182,7 @@
         product_id = #{record.productId,jdbcType=INTEGER},
       </if>
       <if test="record.applicableSceneId != null" >
-        applicable_scene_id = #{record.applicableSceneId,jdbcType=INTEGER},
+        applicable_scene_id = #{record.applicableSceneId,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -208,7 +208,7 @@
     update product_applicable_scene
     set id = #{record.id,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
-      applicable_scene_id = #{record.applicableSceneId,jdbcType=INTEGER},
+      applicable_scene_id = #{record.applicableSceneId,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -225,7 +225,7 @@
         product_id = #{productId,jdbcType=INTEGER},
       </if>
       <if test="applicableSceneId != null" >
-        applicable_scene_id = #{applicableSceneId,jdbcType=INTEGER},
+        applicable_scene_id = #{applicableSceneId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -248,7 +248,7 @@
   <update id="updateByPrimaryKey" parameterType="com.wow.product.model.ProductApplicableScene" >
     update product_applicable_scene
     set product_id = #{productId,jdbcType=INTEGER},
-      applicable_scene_id = #{applicableSceneId,jdbcType=INTEGER},
+      applicable_scene_id = #{applicableSceneId,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

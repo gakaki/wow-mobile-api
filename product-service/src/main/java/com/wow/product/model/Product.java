@@ -37,8 +37,6 @@ public class Product implements Serializable {
 
     private String seoKey;
 
-    //private Integer originCountryId;
-
     private String originCountryId;
 
     private Integer originProvinceId;
@@ -73,7 +71,7 @@ public class Product implements Serializable {
 
     private String tips;
 
-    private Byte applicablePeople;
+    private String applicablePeople;
 
     private String applicableSceneText;
 
@@ -375,11 +373,11 @@ public class Product implements Serializable {
         this.tips = tips == null ? null : tips.trim();
     }
 
-    public Byte getApplicablePeople() {
+    public String getApplicablePeople() {
         return applicablePeople;
     }
 
-    public void setApplicablePeople(Byte applicablePeople) {
+    public void setApplicablePeople(String applicablePeople) {
         this.applicablePeople = applicablePeople;
     }
 
