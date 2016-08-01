@@ -1,12 +1,13 @@
 package com.wow.price.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.wow.common.response.CommonResponse;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.model.ProductPriceChangeLog;
 import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.price.vo.ProductPriceResponse;
-
-import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/17.
@@ -69,5 +70,20 @@ public interface PriceService {
      * @return
      */
     List<ProductPriceChangeLog> getPriceChangeLog(int productId);
+    
+    /**
+     * 更新时间
+     * @param updateTime
+     * @return
+     */
+    List<ProductPrice> selectPriceChangedProduct(String updateStartTime,String updateEndTime);
+    
+    /**
+     * 修改系列品的最小价格
+     * @param productId
+     * @param sellPrice
+     * @return
+     */
+    int updateProductMinPrice(int productId,BigDecimal sellPrice);
 
 }
