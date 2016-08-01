@@ -21,6 +21,8 @@ public class ShoppingCart implements Serializable {
 
     private Date updateTime;
 
+    private Boolean isSelected;
+
     private Boolean isDeleted;
 
     private static final long serialVersionUID = 1L;
@@ -89,6 +91,14 @@ public class ShoppingCart implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public Boolean getIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(Boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
     public Boolean getIsDeleted() {
         return isDeleted;
     }
@@ -111,6 +121,7 @@ public class ShoppingCart implements Serializable {
         sb.append(", weight=").append(weight);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
+        sb.append(", isSelected=").append(isSelected);
         sb.append(", isDeleted=").append(isDeleted);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

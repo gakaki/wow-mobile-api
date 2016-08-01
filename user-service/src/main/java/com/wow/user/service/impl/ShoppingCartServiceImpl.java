@@ -81,7 +81,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             return response;
         }
-        
+
         //如果产品未上架 则直接返回错误提示
         if (product.getProductStatus().intValue() == ProductStatusEnum.PRODUCT_STATUS_TO_BE_SHELVE.getKey()) {
             response.setResCode("40325");
@@ -266,8 +266,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             return response;
         }
 
-        //设置产品服务
-        setProductPrie(shoppingCartResult, priceResponse.getMap());
+        //设置产品价格
+        setProductPrice(shoppingCartResult, priceResponse.getMap());
 
         //调用获取产品库存服务
         AvailableStocksResponse stocksResponse = stockService.batchGetAvailableStock(productIds);
@@ -298,7 +298,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      * @param shoppingCartResult
      * @param map
      */
-    private void setProductPrie(List<ShoppingCartResultVo> shoppingCartResult, Map<Integer, ProductPrice> map) {
+    private void setProductPrice(List<ShoppingCartResultVo> shoppingCartResult, Map<Integer, ProductPrice> map) {
         if (MapUtil.isEmpty(map)) {
             return;
         }
@@ -391,18 +391,26 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         long totalPrice = 0L;
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
-            if (shoppingCart.getProductStatus() != null) {
-                //转化产品状态名称
-                shoppingCart.setProductStatusName(ProductStatusEnum.get((int) shoppingCart.getProductStatus()));
+            //判断产品状态是否为空
+            if (shoppingCart.getProductStatus() == null) {
+                continue;
+            }
 
-                long productPrice = NumberUtil.convertToFen(shoppingCart.getSellPrice());
-                long sellTotalAmount = productPrice * shoppingCart.getProductQty();
-                shoppingCart.setProductTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+            //转化产品状态名称
+            shoppingCart.setProductStatusName(ProductStatusEnum.get((int) shoppingCart.getProductStatus()));
 
-                //仅计算已经上架的产品价格
-                if (shoppingCart.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_SHELVE.getKey()) {
-                    totalPrice += sellTotalAmount;
-                }
+            long productPrice = NumberUtil.convertToFen(shoppingCart.getSellPrice());
+            long sellTotalAmount = productPrice * shoppingCart.getProductQty();
+            shoppingCart.setProductTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+
+            //是否已上架
+            boolean isShelve = shoppingCart.getProductStatus().intValue() == ProductStatusEnum.ORDER_STATUS_SHELVE
+                .getKey();
+            //是否已选中
+            boolean isSelected = shoppingCart.getIsSelected() == null ? false : shoppingCart.getIsSelected();
+            //仅计算已经上架并且用户选中的购物车产品价格
+            if (isShelve && isSelected) {
+                totalPrice += sellTotalAmount;
             }
 
         }
@@ -444,6 +452,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         newShoppingCart.setCreateTime(DateUtil.currentDate());
         newShoppingCart.setUpdateTime(DateUtil.currentDate());
         newShoppingCart.setIsDeleted(Boolean.FALSE); //默认不删除
+        shoppingCart.setIsSelected(Boolean.TRUE);//默认选中
 
         return newShoppingCart;
     }
@@ -467,10 +476,43 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public int getProductQtyInCart(int endUserId) {
         Integer cnt = shoppingCartMapper.getProductQtyInCart(endUserId);
-        if (cnt == null) {
-            cnt = 0;
+
+        return cnt == null ? 0 : cnt;
+    }
+
+    @Override
+    public CommonResponse selectOrCancelShoppingCart(ShoppingCartQueryVo query) {
+        CommonResponse response = new CommonResponse();
+
+        // 业务校验开始
+        //判断相关的购物车信息id是否为空
+        if (query.getShoppingCartId() == null) {
+            response.setResCode("40303");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40303"));
+
+            return response;
         }
-        return cnt;
+
+        ShoppingCart shoppingCart = shoppingCartMapper.selectByPrimaryKey(query.getShoppingCartId());
+
+        //判断购物车id是否存在
+        if (shoppingCart == null) {
+            response.setResCode("40302");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40302"));
+
+            return response;
+        }
+
+        //修改用户购物车信息
+        ShoppingCart targetShoppingCart = new ShoppingCart();
+
+        targetShoppingCart.setId(shoppingCart.getId());
+        targetShoppingCart.setIsSelected(query.getIsSelected());
+        targetShoppingCart.setUpdateTime(DateUtil.currentDate());
+
+        shoppingCartMapper.updateByPrimaryKeySelective(targetShoppingCart);
+
+        return response;
     }
 
 }

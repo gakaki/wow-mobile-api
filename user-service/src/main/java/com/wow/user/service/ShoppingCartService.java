@@ -54,4 +54,11 @@ public interface ShoppingCartService {
      */
     ShoppingCartResponse queryShoppingCartByUserId(ShoppingCartQueryVo query);
 
+    /**
+     * 选择购物车中的产品
+     * @param shoppingCart
+     * @return
+     */
+    CommonResponse selectOrCancelShoppingCart(ShoppingCartQueryVo query);
+
 }
