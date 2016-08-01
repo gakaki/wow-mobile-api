@@ -239,6 +239,9 @@
       <if test="originCountryId != null" >
         origin_country_id,
       </if>
+      <if test="originProvinceId != null" >
+        origin_province_id,
+      </if>
       <if test="originCity != null" >
         origin_city,
       </if>
