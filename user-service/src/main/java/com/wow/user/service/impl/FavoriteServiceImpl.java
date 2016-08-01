@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -85,12 +86,47 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     /**
+     * 查询用户是否喜欢一个品牌
+     *
+     * @param endUserId
+     * @param brandId
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public FavoriteCommonResponse isUserFavoriteBrand(Integer endUserId, Integer brandId) {
+        EndUserFavoriteBrand endUserFavoriteBrand = new EndUserFavoriteBrand();
+        FavoriteCommonResponse favoriteCommonResponse = new FavoriteCommonResponse();
+
+        if (brandId == null) {
+            favoriteCommonResponse.setResCode("40204");
+            favoriteCommonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40204"));
+            return favoriteCommonResponse;
+        }
+
+        EndUserFavoriteBrandExample endUserFavoriteBrandExample = new EndUserFavoriteBrandExample();
+        EndUserFavoriteBrandExample.Criteria criteria = endUserFavoriteBrandExample.createCriteria();
+        criteria.andEndUserIdEqualTo(endUserId);
+        criteria.andBrandIdEqualTo(brandId);
+        List<EndUserFavoriteBrand> list = endUserFavoriteBrandMapper.selectByExample(endUserFavoriteBrandExample);
+
+        if (CollectionUtil.isEmpty(list)) {
+            favoriteCommonResponse.setFavorite(false);
+        } else {
+            endUserFavoriteBrand = list.get(0);
+            favoriteCommonResponse.setFavorite(endUserFavoriteBrand.getIsFavorite());
+        }
+        return favoriteCommonResponse;
+    }
+
+    /**
      * 查询用户喜欢的品牌
      *
      * @param endUserId
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public FavoriteBrandResponse getFavoriteBrand(Integer endUserId) {
         FavoriteBrandResponse favoriteBrandResponse = new FavoriteBrandResponse();
         List<FavoriteBrandVo> favoriteBrandVoList = endUserFavoriteBrandMapper.selectFavoriteBrand(endUserId);
@@ -145,12 +181,47 @@ public class FavoriteServiceImpl implements FavoriteService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public FavoriteDesignerResponse getFavoriteDesigner(Integer endUserId) {
         FavoriteDesignerResponse favoriteDesignerResponse = new FavoriteDesignerResponse();
         //TODO
         List<FavoriteDesignerVo> favoriteDesignerVoList = endUserFavoriteDesignerMapper.selectFavoriteDesigner(endUserId);
         favoriteDesignerResponse.setFavoriteDesignerVoList(favoriteDesignerVoList);
         return favoriteDesignerResponse;
+    }
+
+    /**
+     * 查询用户是否喜欢一个设计师
+     *
+     * @param endUserId
+     * @param designerId
+     * @return
+     */
+    @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public FavoriteCommonResponse isUserFavoriteDesigner(Integer endUserId, Integer designerId) {
+        EndUserFavoriteDesigner endUserFavoriteDesigner = new EndUserFavoriteDesigner();
+        FavoriteCommonResponse favoriteCommonResponse = new FavoriteCommonResponse();
+
+        if (designerId == null) {
+            favoriteCommonResponse.setResCode("40205");
+            favoriteCommonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40205"));
+            return favoriteCommonResponse;
+        }
+
+        EndUserFavoriteDesignerExample endUserFavoriteDesignerExample = new EndUserFavoriteDesignerExample();
+        EndUserFavoriteDesignerExample.Criteria criteria = endUserFavoriteDesignerExample.createCriteria();
+        criteria.andEndUserIdEqualTo(endUserId);
+        criteria.andDesignerIdEqualTo(designerId);
+        List<EndUserFavoriteDesigner> list = endUserFavoriteDesignerMapper.selectByExample(endUserFavoriteDesignerExample);
+
+        if (CollectionUtil.isEmpty(list)) {
+            favoriteCommonResponse.setFavorite(false);
+        } else {
+            endUserFavoriteDesigner = list.get(0);
+            favoriteCommonResponse.setFavorite(endUserFavoriteDesigner.getIsFavorite());
+        }
+        return favoriteCommonResponse;
     }
 
     /**
@@ -200,6 +271,7 @@ public class FavoriteServiceImpl implements FavoriteService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public FavoriteProductResponse getFavoriteProduct(Integer endUserId) {
 
         FavoriteProductResponse favoriteProductResponse = new FavoriteProductResponse();
@@ -210,57 +282,126 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     /**
-     * 用户喜欢场景
+     * 查询用户是否喜欢一个产品
      *
      * @param endUserId
-     * @param sceneId
+     * @param productId
      * @return
      */
     @Override
-    public FavoriteCommonResponse updateFavoriteScene(Integer endUserId, Integer sceneId) {
-        EndUserFavoriteScene endUserFavoriteScene = new EndUserFavoriteScene();
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public FavoriteCommonResponse isUserFavoriteProduct(Integer endUserId, Integer productId) {
+        EndUserFavoriteProduct endUserFavoriteProduct = new EndUserFavoriteProduct();
         FavoriteCommonResponse favoriteCommonResponse = new FavoriteCommonResponse();
-        if (sceneId == null) {
+
+        if (productId == null) {
             favoriteCommonResponse.setResCode("40202");
             favoriteCommonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40202"));
             return favoriteCommonResponse;
         }
 
-        //如果没找到记录,新增
-        //如果找到记录,is_favorite取反
-        EndUserFavoriteSceneExample endUserFavoriteSceneExample = new EndUserFavoriteSceneExample();
-        EndUserFavoriteSceneExample.Criteria criteria = endUserFavoriteSceneExample.createCriteria();
+        EndUserFavoriteProductExample endUserFavoriteProductExample = new EndUserFavoriteProductExample();
+        EndUserFavoriteProductExample.Criteria criteria = endUserFavoriteProductExample.createCriteria();
         criteria.andEndUserIdEqualTo(endUserId);
-        criteria.andSceneIdEqualTo(sceneId);
-        List<EndUserFavoriteScene> list = endUserFavoriteSceneMapper.selectByExample(endUserFavoriteSceneExample);
+        criteria.andProductIdEqualTo(productId);
+        List<EndUserFavoriteProduct> list = endUserFavoriteProductMapper.selectByExample(endUserFavoriteProductExample);
 
         if (CollectionUtil.isEmpty(list)) {
-            //新增
-            endUserFavoriteScene.setEndUserId(endUserId);
-            endUserFavoriteScene.setSceneId(sceneId);
-            endUserFavoriteScene.setIsFavorite(true);
-            endUserFavoriteSceneMapper.insertSelective(endUserFavoriteScene);
-            favoriteCommonResponse.setFavorite(true);
+            favoriteCommonResponse.setFavorite(false);
         } else {
-            endUserFavoriteScene = list.get(0);
-            favoriteCommonResponse.setFavorite(!endUserFavoriteScene.getIsFavorite());
-            endUserFavoriteScene.setIsFavorite(!endUserFavoriteScene.getIsFavorite());
-            endUserFavoriteSceneMapper.updateByPrimaryKeySelective(endUserFavoriteScene);
+            endUserFavoriteProduct = list.get(0);
+            favoriteCommonResponse.setFavorite(endUserFavoriteProduct.getIsFavorite());
         }
         return favoriteCommonResponse;
     }
 
-    /**
-     * 查询用户喜欢的场景
-     *
-     * @param endUserId
-     * @return
-     */
-    @Override
-    public FavoriteSceneResponse getFavoriteScene(Integer endUserId) {
-        FavoriteSceneResponse favoriteSceneResponse = new FavoriteSceneResponse();
-        List<FavoriteSceneVo> favoriteSceneVoList = endUserFavoriteSceneMapper.selectFavoriteScene(endUserId);
-        favoriteSceneResponse.setFavoriteSceneVoList(favoriteSceneVoList);
-        return favoriteSceneResponse;
-    }
+//    /**
+//     * 用户喜欢场景
+//     *
+//     * @param endUserId
+//     * @param sceneId
+//     * @return
+//     */
+//    @Override
+//    public FavoriteCommonResponse updateFavoriteScene(Integer endUserId, Integer sceneId) {
+//        EndUserFavoriteScene endUserFavoriteScene = new EndUserFavoriteScene();
+//        FavoriteCommonResponse favoriteCommonResponse = new FavoriteCommonResponse();
+//        if (sceneId == null) {
+//            favoriteCommonResponse.setResCode("40202");
+//            favoriteCommonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40202"));
+//            return favoriteCommonResponse;
+//        }
+//
+//        //如果没找到记录,新增
+//        //如果找到记录,is_favorite取反
+//        EndUserFavoriteSceneExample endUserFavoriteSceneExample = new EndUserFavoriteSceneExample();
+//        EndUserFavoriteSceneExample.Criteria criteria = endUserFavoriteSceneExample.createCriteria();
+//        criteria.andEndUserIdEqualTo(endUserId);
+//        criteria.andSceneIdEqualTo(sceneId);
+//        List<EndUserFavoriteScene> list = endUserFavoriteSceneMapper.selectByExample(endUserFavoriteSceneExample);
+//
+//        if (CollectionUtil.isEmpty(list)) {
+//            //新增
+//            endUserFavoriteScene.setEndUserId(endUserId);
+//            endUserFavoriteScene.setSceneId(sceneId);
+//            endUserFavoriteScene.setIsFavorite(true);
+//            endUserFavoriteSceneMapper.insertSelective(endUserFavoriteScene);
+//            favoriteCommonResponse.setFavorite(true);
+//        } else {
+//            endUserFavoriteScene = list.get(0);
+//            favoriteCommonResponse.setFavorite(!endUserFavoriteScene.getIsFavorite());
+//            endUserFavoriteScene.setIsFavorite(!endUserFavoriteScene.getIsFavorite());
+//            endUserFavoriteSceneMapper.updateByPrimaryKeySelective(endUserFavoriteScene);
+//        }
+//        return favoriteCommonResponse;
+//    }
+//
+//    /**
+//     * 查询用户喜欢的场景
+//     *
+//     * @param endUserId
+//     * @return
+//     */
+//    @Override
+//    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+//    public FavoriteSceneResponse getFavoriteScene(Integer endUserId) {
+//        FavoriteSceneResponse favoriteSceneResponse = new FavoriteSceneResponse();
+//        List<FavoriteSceneVo> favoriteSceneVoList = endUserFavoriteSceneMapper.selectFavoriteScene(endUserId);
+//        favoriteSceneResponse.setFavoriteSceneVoList(favoriteSceneVoList);
+//        return favoriteSceneResponse;
+//    }
+//
+//    /**
+//     * 查询用户是否喜欢一个场景
+//     *
+//     * @param endUserId
+//     * @param sceneId
+//     * @return
+//     */
+//    @Override
+//    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+//    public FavoriteCommonResponse isUserFavoriteScene(Integer endUserId, Integer sceneId) {
+//        EndUserFavoriteScene endUserFavoriteScene = new EndUserFavoriteScene();
+//        FavoriteCommonResponse favoriteCommonResponse = new FavoriteCommonResponse();
+//
+//        if (sceneId == null) {
+//            favoriteCommonResponse.setResCode("40202");
+//            favoriteCommonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40202"));
+//            return favoriteCommonResponse;
+//        }
+//
+//        EndUserFavoriteSceneExample endUserFavoriteSceneExample = new EndUserFavoriteSceneExample();
+//        EndUserFavoriteSceneExample.Criteria criteria = endUserFavoriteSceneExample.createCriteria();
+//        criteria.andEndUserIdEqualTo(endUserId);
+//        criteria.andSceneIdEqualTo(sceneId);
+//        List<EndUserFavoriteScene> list = endUserFavoriteSceneMapper.selectByExample(endUserFavoriteSceneExample);
+//
+//        if (CollectionUtil.isEmpty(list)) {
+//            favoriteCommonResponse.setFavorite(false);
+//        } else {
+//            endUserFavoriteScene = list.get(0);
+//            favoriteCommonResponse.setFavorite(endUserFavoriteScene.getIsFavorite());
+//        }
+//        return favoriteCommonResponse;
+//    }
 }
