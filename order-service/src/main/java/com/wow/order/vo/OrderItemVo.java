@@ -20,6 +20,9 @@ public class OrderItemVo implements Serializable {
     //发货单产品id
     @JsonIgnore
     private Integer deliveryOrderId;
+    
+    //发货单产品id
+    private Integer saleOrderItemId;
 
     //用户购买的产品id
     private Integer productId;
@@ -34,13 +37,13 @@ public class OrderItemVo implements Serializable {
     private BigDecimal sellPrice;
 
     //产品总价 产品销售价乘以数量
-    private BigDecimal sellTotalAmount;
+    private BigDecimal productTotalAmount;
 
     //产品颜色
     private String color;
 
     //产品规格值
-    private String spec;
+    private String specName;
 
     //产品规格图片
     private String specImg;
@@ -48,6 +51,14 @@ public class OrderItemVo implements Serializable {
     //是否需要发货
     @JsonIgnore
     private Boolean isShippedOut;
+    
+    public Integer getSaleOrderItemId() {
+        return saleOrderItemId;
+    }
+
+    public void setSaleOrderItemId(Integer saleOrderItemId) {
+        this.saleOrderItemId = saleOrderItemId;
+    }
 
     public Boolean getIsShippedOut() {
         return isShippedOut;
@@ -73,12 +84,12 @@ public class OrderItemVo implements Serializable {
         this.specImg = specImg;
     }
 
-    public BigDecimal getSellTotalAmount() {
-        return sellTotalAmount;
+    public BigDecimal getProductTotalAmount() {
+        return productTotalAmount;
     }
 
-    public void setSellTotalAmount(BigDecimal sellTotalAmount) {
-        this.sellTotalAmount = sellTotalAmount;
+    public void setProductTotalAmount(BigDecimal productTotalAmount) {
+        this.productTotalAmount = productTotalAmount;
     }
 
     public Integer getProductId() {
@@ -113,12 +124,12 @@ public class OrderItemVo implements Serializable {
         this.color = color;
     }
 
-    public String getSpec() {
-        return spec;
+    public String getSpecName() {
+        return specName;
     }
 
-    public void setSpec(String spec) {
-        this.spec = spec;
+    public void setSpecName(String specName) {
+        this.specName = specName;
     }
 
     public BigDecimal getSellPrice() {
