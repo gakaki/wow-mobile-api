@@ -881,7 +881,7 @@ public class OrderServiceImpl implements OrderService {
             long productPrice = NumberUtil.convertToFen(orderSettle.getSellPrice());
             //计算该产品销售总价( 产品单价乘以数量)
             long sellTotalAmount = productPrice * orderSettle.getProductQty();
-            orderSettle.setSellTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
+            orderSettle.setProductTotalAmount(NumberUtil.convertToYuan(sellTotalAmount));
 
             //计算订单总价
             totalPrice += sellTotalAmount;

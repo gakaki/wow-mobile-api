@@ -30,6 +30,7 @@ import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
+import com.wow.order.vo.response.AdminOrderDetailResponse;
 import com.wow.order.vo.response.AdminOrderListResponse;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
@@ -333,6 +334,42 @@ public class OrderController extends BaseController {
             }
         } catch (Exception e) {
             logger.error("获取订单列表错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 获取订单明细 后台用
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getAdminOrderDetail", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    public ApiResponse getAdminOrderDetail(ApiRequest request) {
+        OrderDetailRequest orderDetailRequest = JsonUtil.fromJSON(request.getParamJson(), OrderDetailRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+        //判断json格式参数是否有误
+        if (orderDetailRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        AdminOrderDetailResponse orderDetailResponse = null;
+        try {
+            OrderDetailQuery query = new OrderDetailQuery();
+            query.setOrderCode(orderDetailRequest.getOrderCode());
+
+            orderDetailResponse = adminOrderService.queryOrderDetail(query);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(orderDetailResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, orderDetailResponse);
+            } else {
+                apiResponse.setData(orderDetailResponse);
+            }
+        } catch (Exception e) {
+            logger.error("获取订单明细错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
 

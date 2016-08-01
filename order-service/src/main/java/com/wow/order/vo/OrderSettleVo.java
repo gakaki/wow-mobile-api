@@ -21,7 +21,7 @@ public class OrderSettleVo implements Serializable {
 
     //用户购买的产品id
     private Integer productId;
-    
+
     //产品名称
     private String productName;
 
@@ -30,22 +30,33 @@ public class OrderSettleVo implements Serializable {
 
     //产品销售价格 单价
     private BigDecimal sellPrice;
-    
+
     //产品总价 产品销售价乘以数量
-    private BigDecimal sellTotalAmount;
-    
+    private BigDecimal productTotalAmount;
+
     //产品颜色
     private String color;
+
+    //产品规格名称
+    private String specName;
 
     //产品规格图片
     private String specImg;
 
-    public BigDecimal getSellTotalAmount() {
-        return sellTotalAmount;
+    public String getSpecName() {
+        return specName;
     }
 
-    public void setSellTotalAmount(BigDecimal sellTotalAmount) {
-        this.sellTotalAmount = sellTotalAmount;
+    public void setSpecName(String specName) {
+        this.specName = specName;
+    }
+
+    public BigDecimal getProductTotalAmount() {
+        return productTotalAmount;
+    }
+
+    public void setProductTotalAmount(BigDecimal productTotalAmount) {
+        this.productTotalAmount = productTotalAmount;
     }
 
     public Integer getProductId() {
