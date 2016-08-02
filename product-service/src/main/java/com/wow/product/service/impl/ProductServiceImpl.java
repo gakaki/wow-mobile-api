@@ -198,6 +198,7 @@ public class ProductServiceImpl implements ProductService {
         Product parentProduct = new Product();
         parentProduct.setId(productId);
         //创建产品设计师绑定
+        List<ProductDesigner> productDesignerList=new ArrayList<ProductDesigner>();
         for (DesignerVo designerVo : designerVoList) {
             ProductDesigner productDesigner = new ProductDesigner();
             int designerId = designerVo.getDesignerId();
@@ -205,9 +206,10 @@ public class ProductServiceImpl implements ProductService {
             productDesigner.setDesignerId(designerId);
             productDesigner.setIsPrimary(isPrimary);
             productDesigner.setProductId(productId);
-            designerService.createProductDesigner(productDesigner);
+            productDesignerList.add(productDesigner);
+//            designerService.createProductDesigner(productDesigner);
         }
-
+        designerService.addProductDesignersByBatch(productDesignerList);
         //创建产品材质绑定
         String materialText = "";
         List<ProductMaterial> productMaterialList = new ArrayList<ProductMaterial>();
@@ -388,11 +390,13 @@ public class ProductServiceImpl implements ProductService {
      * @return
      */
     public int addProductImages(List<ProductImage> productImages) {
-        if (CollectionUtil.isNotEmpty(productImages)) {
+        /*if (CollectionUtil.isNotEmpty(productImages)) {
             for (ProductImage productImage : productImages) {
                 addProductImage(productImage);
             }
-        }
+        }*/
+        if (CollectionUtil.isNotEmpty(productImages))
+            productImageMapper.addByBatch(productImages);
         return 0;
     }
 
@@ -512,11 +516,13 @@ public class ProductServiceImpl implements ProductService {
     }
     @Override
     public int createProductMaterial(List<ProductMaterial> productMaterials) {
-        if(!productMaterials.isEmpty())
+        /*if(!productMaterials.isEmpty())
             for(ProductMaterial productMaterial:productMaterials)
             {
                 productMaterialMapper.insertSelective(productMaterial);
-            }
+            }*/
+        if(!productMaterials.isEmpty())
+            productMaterialMapper.addByBatch(productMaterials);
         return 0;
     }
 

@@ -34,4 +34,6 @@ public interface ProductImageMapper {
     ProductImage selectProductPrimaryOneImg(Integer productId);
 
     List<ProductImage> selectProductListPrimaryOneImg(@Param("productIds") List<Integer> productIds);
+
+    int addByBatch(List<ProductImage> list);
 }

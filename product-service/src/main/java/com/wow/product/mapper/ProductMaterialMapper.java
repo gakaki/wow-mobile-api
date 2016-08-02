@@ -27,4 +27,6 @@ public interface ProductMaterialMapper {
     int updateByPrimaryKeySelective(ProductMaterial record);
 
     int updateByPrimaryKey(ProductMaterial record);
+
+    int addByBatch(List<ProductMaterial> list);
 }

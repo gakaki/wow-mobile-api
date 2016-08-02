@@ -130,4 +130,11 @@ public interface DesignerService {
      * @return
      */
     public List<SimpleDesigner> getAllSimpleDesigners();
+
+    /**
+     * 批量插入产品设计师关联信息
+     * @param list
+     * @return
+     */
+    int addProductDesignersByBatch(List<ProductDesigner> list);
 }

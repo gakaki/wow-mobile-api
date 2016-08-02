@@ -94,11 +94,13 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
 
     @Override
     public int createProductApplicableScene(List<ProductApplicableScene> applicableScenes) {
-        if(!applicableScenes.isEmpty())
+        /*if(!applicableScenes.isEmpty())
             for(ProductApplicableScene productApplicableScene:applicableScenes)
             {
                 productApplicableSceneMapper.insertSelective(productApplicableScene);
-            }
+            }*/
+        if(!applicableScenes.isEmpty())
+            productApplicableSceneMapper.addByBatch(applicableScenes);
         return 0;
     }
 

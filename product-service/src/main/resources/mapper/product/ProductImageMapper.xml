@@ -356,4 +356,15 @@
     and pi.sort_order = temp.sort_order
     where pi.is_primary = 1;
   </select>
+
+  <insert id="addByBatch" parameterType="java.util.List">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_image (product_id, img_desc,img_url,is_primary,sort_order)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.productId,jdbcType=INTEGER}, #{item.imgDesc,jdbcType=VARCHAR},#{item.imgUrl,jdbcType=VARCHAR},#{item.isPrimary,jdbcType=BIT},#{item.sortOrder,jdbcType=TINYINT})
+    </foreach>
+  </insert>
 </mapper>
