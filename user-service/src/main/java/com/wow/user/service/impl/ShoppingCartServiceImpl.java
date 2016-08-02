@@ -82,6 +82,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             return response;
         }
 
+        //如果产品类型不是普通品 则无法加入到购物车
+        if (product.getProductType().byteValue() != CommonConstant.ONE.byteValue()) {
+            response.setResCode("40327");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40327"));
+
+            return response;
+        }
+
         //如果产品未上架 则直接返回错误提示
         if (product.getProductStatus().intValue() == ProductStatusEnum.PRODUCT_STATUS_TO_BE_SHELVE.getKey()) {
             response.setResCode("40325");
@@ -103,7 +111,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (shoppingCart.getProductQty() == null) {
             shoppingCart.setProductQty((byte) 1);
         }
-        
+
         ShoppingCart newShoppingCart = getShoppingCartByExample(shoppingCart);
         //如果该产品已经加入到购物车 则对该产品数量进行增加操作
         if (newShoppingCart != null) {
