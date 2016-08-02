@@ -27,4 +27,6 @@ public interface ProductDesignerMapper {
     int updateByPrimaryKeySelective(ProductDesigner record);
 
     int updateByPrimaryKey(ProductDesigner record);
+
+    int addByBatch(List<ProductDesigner> list);
 }

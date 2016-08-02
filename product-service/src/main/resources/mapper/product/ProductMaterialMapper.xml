@@ -255,4 +255,15 @@
       is_deleted = #{isDeleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <insert id="addByBatch" parameterType="java.util.List">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_material (product_id, material_id,is_deleted)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.productId,jdbcType=INTEGER}, #{item.materialId,jdbcType=INTEGER}, #{item.isDeleted,jdbcType=BIT})
+    </foreach>
+  </insert>
 </mapper>

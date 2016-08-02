@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
 import com.wow.product.model.Brand;
+import com.wow.product.vo.BrandListVo;
 
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ProductBrandResponse extends CommonResponse {
@@ -13,6 +14,7 @@ public class ProductBrandResponse extends CommonResponse {
 	
 	private Brand brand;
 	private List<Brand> brandList;
+	private List<BrandListVo> brandListVo;
 	private List<String> brandFirstLetterList;
 	
 	public List<Brand> getBrandList() {
@@ -32,6 +34,12 @@ public class ProductBrandResponse extends CommonResponse {
 	}
 	public void setBrand(Brand brand) {
 		this.brand = brand;
+	}
+	public List<BrandListVo> getBrandListVo() {
+		return brandListVo;
+	}
+	public void setBrandListVo(List<BrandListVo> brandListVo) {
+		this.brandListVo = brandListVo;
 	}
 	
 	

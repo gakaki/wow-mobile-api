@@ -936,5 +936,31 @@
     and p.product_type = 2
     order by p.id desc
   </select>
+
+
+
+
+  <select id="selectProductByBrandIdListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+    select
+    p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
+    from product p
+    inner join product_price pp on pp.product_id=p.id
+    where p.is_deleted = false
+    and p.brand_id = #{model.brandId}
+    and p.product_type = 2
+    order by p.id desc
+  </select>
+
+  <select id="selectProductByDesignerIdListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+    select
+    p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
+    from product p
+    inner join product_designer pd on pd.product_id=p.id
+    inner join product_price pp on pp.product_id=p.id
+    where p.is_deleted = false
+    and pd.designer_id=#{model.designerId}
+    and p.product_type = 2
+    order by p.id desc
+  </select>
   
 </mapper>
