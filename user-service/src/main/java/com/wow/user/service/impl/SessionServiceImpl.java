@@ -82,6 +82,7 @@ public class SessionServiceImpl implements SessionService {
             loginResponseVo.setSelfIntroduction(endUser.getSelfIntroduction());
             loginResponseVo.setSex(endUser.getSex());
             loginResponseVo.setProductQtyInCart(getProductQtyInCartByUserId(endUser.getId()));
+            loginResponseVo.setMobile(endUser.getMobile());
             loginResponse.setLoginResponseVo(loginResponseVo);
         } else {
             ErrorResponseUtil.setErrorResponse(loginResponse,"40101");
