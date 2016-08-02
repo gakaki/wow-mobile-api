@@ -586,6 +586,66 @@ public class ShoppingCartExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsSelectedIsNull() {
+            addCriterion("is_selected is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedIsNotNull() {
+            addCriterion("is_selected is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedEqualTo(Boolean value) {
+            addCriterion("is_selected =", value, "isSelected");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedNotEqualTo(Boolean value) {
+            addCriterion("is_selected <>", value, "isSelected");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedGreaterThan(Boolean value) {
+            addCriterion("is_selected >", value, "isSelected");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_selected >=", value, "isSelected");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedLessThan(Boolean value) {
+            addCriterion("is_selected <", value, "isSelected");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_selected <=", value, "isSelected");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedIn(List<Boolean> values) {
+            addCriterion("is_selected in", values, "isSelected");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedNotIn(List<Boolean> values) {
+            addCriterion("is_selected not in", values, "isSelected");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_selected between", value1, value2, "isSelected");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSelectedNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_selected not between", value1, value2, "isSelected");
+            return (Criteria) this;
+        }
+
         public Criteria andIsDeletedIsNull() {
             addCriterion("is_deleted is null");
             return (Criteria) this;

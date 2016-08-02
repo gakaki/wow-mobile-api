@@ -71,7 +71,6 @@ public class OrderController extends BaseController {
             //设置用户id
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);
-            query.setShoppingCartIds(orderSettleRequest.getShoppingCartIds());
 
             orderSettleResponse = orderService.settleOrder(query);
             //如果处理失败 则返回错误信息
@@ -115,6 +114,7 @@ public class OrderController extends BaseController {
         try {
             OrderQuery query = new OrderQuery();
             BeanUtil.copyProperties(orderRequest, query);
+            
             //设置用户id
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);

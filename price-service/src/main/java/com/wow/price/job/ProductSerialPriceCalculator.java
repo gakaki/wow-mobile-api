@@ -26,7 +26,8 @@ public class ProductSerialPriceCalculator {
     
     @Scheduled(cron = "0 0 1 * * ?") //每天1点跑一次
     public void adjustProductSerialPrice() {
-    	logger.info("开始更新最小价格变更的系列产品");
+    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	logger.info("开始更新最小价格变更的系列产品"+df.format(new Date()));
     	
     	SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
     	Date nowDate = new Date();
@@ -43,6 +44,6 @@ public class ProductSerialPriceCalculator {
     		priceService.updateProductMinPrice(productPrice.getProductId(), productPrice.getSellPrice());
     	}
     	
-    	logger.info("结束更新最小价格变更的系列产品");
+    	logger.info("结束更新最小价格变更的系列产品"+df.format(new Date())+",更新结果明细："+priceChangedProductList);
     }
 }
