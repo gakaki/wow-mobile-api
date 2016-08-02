@@ -569,12 +569,12 @@ public class ProductServiceImpl implements ProductService {
 
         List<PageData> dataList = null;
         
-    	/*if(pqv.getSortBy() == 1 || pqv.getSortBy() == null)*/
-        dataList = productMapper.selectProductsByCategoryIdListPage(page);
-    	/*if(pqv.getSortBy() == 2)
-    		dataList = productMapper.selectOrderbyTotalSoldListPage(page);
+    	if(pqv.getSortBy() == 1 || pqv.getSortBy() == null)
+        dataList = productMapper.selectProductsByCategoryIdOrderById(page);
+    	if(pqv.getSortBy() == 2)
+    		dataList = productMapper.selectProductsByCategoryIdOrderBySummary(page);
     	if(pqv.getSortBy() == 3)
-    		dataList = productMapper.selectOrderbySellPriceListPage(page);*/
+    		dataList = productMapper.selectProductsByCategoryIdOrderByPrice(page);
 
         logger.info("result size:" + dataList.size());
 
