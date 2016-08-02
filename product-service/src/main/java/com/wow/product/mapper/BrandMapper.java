@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.wow.product.model.Brand;
 import com.wow.product.model.BrandExample;
-import com.wow.product.vo.BrandVo;
+import com.wow.product.vo.BrandListVo;
 
 public interface BrandMapper {
     int countByExample(BrandExample example);
@@ -34,4 +34,6 @@ public interface BrandMapper {
     int updateByPrimaryKey(Brand record);
     
     List<String> selectBrandFirstLetter();
+    
+    List<BrandListVo> selectAllList();
 }

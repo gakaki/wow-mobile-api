@@ -1,5 +1,14 @@
 package com.wow.product.service.impl;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.product.mapper.BrandMapper;
 import com.wow.product.model.Brand;
@@ -8,14 +17,6 @@ import com.wow.product.service.BrandService;
 import com.wow.product.vo.BrandVo;
 import com.wow.product.vo.response.ProductBrandResponse;
 import com.wow.product.vo.response.ProductBrandVoResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/18.
@@ -123,6 +124,18 @@ public class BrandServiceImpl implements BrandService {
     public ProductBrandResponse getAllBrands() {
     	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
     	productBrandResponse.setBrandList(brandMapper.selectAll());
+    	return productBrandResponse;
+    }
+
+    /**
+     * 查询所有品牌
+     * 移动端调用
+     * @return
+     */
+    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+    public ProductBrandResponse getAllBrandsList() {
+    	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
+    	productBrandResponse.setBrandListVo(brandMapper.selectAllList());
     	return productBrandResponse;
     }
 

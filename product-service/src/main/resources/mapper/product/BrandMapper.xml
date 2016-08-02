@@ -299,4 +299,9 @@
     	brand_name_first_letter as brandFirstLetter
     from brand group by brand_name_first_letter order by brand_name_first_letter asc
   </select>
+  <select id="selectAllList" resultType="com.wow.product.vo.BrandListVo" >
+    select
+    	id,brand_cname brandCname,brand_ename brandEname,brand_logo_img brandLogoImg,brand_name_first_letter brandNameFirstLetter
+    from brand order by brand_name_first_letter
+  </select>
 </mapper>

@@ -37,12 +37,12 @@ public class BrandController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-        	ProductBrandResponse productBrandResponse = brandService.getAllBrands();
+        	ProductBrandResponse productBrandResponse = brandService.getAllBrandsList();
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productBrandResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productBrandResponse);
             }else {
-                apiResponse.setData(productBrandResponse.getBrandList());
+                apiResponse.setData(productBrandResponse.getBrandListVo());
             }
         } catch (Exception e) {
             logger.error("查找productBrand_find错误---" + e);
