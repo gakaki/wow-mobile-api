@@ -871,7 +871,7 @@
   </update>
 
  <!-- user foreach -->
-  <select id="selectOrderByShelfTimeListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductsByCategoryIdListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
     select
     p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
@@ -883,10 +883,20 @@
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
     </foreach>
-    order by p.on_shelf_time ${model.ascText}
+    <choose>
+      <when test="model.sortBy==1">
+        order by p.on_shelf_time ${model.ascText}
+      </when>
+      <when test="model.sortBy==2">
+        order by ps.total_sold_qty ${model.ascText}
+      </when>
+      <when test="model.sortBy==3">
+        order by pp.sell_price ${model.ascText}
+      </when>
+    </choose>
   </select>
   
-  <select id="selectOrderbyTotalSoldListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <!--<select id="selectProductsByCategoryIdListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
   	select
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
@@ -915,7 +925,7 @@
       #{model.categoryIdList[${index}]}
     </foreach>
     order by pp.sell_price ${model.ascText}
-  </select>
+  </select>-->
   
   <select id="selectProductByBrandId" resultType="com.wow.product.vo.ProductVo" parameterType="map">
   	select
