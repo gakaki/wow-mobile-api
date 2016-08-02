@@ -203,4 +203,9 @@ public class DesignerServiceImpl implements DesignerService {
     public List<SimpleDesigner> getAllSimpleDesigners() {
         return designerMapper.getAllSimpleDesigners();
     }
+
+    @Override
+    public int addProductDesignersByBatch(List<ProductDesigner> list) {
+        return productDesignerMapper.addByBatch(list);
+    }
 }

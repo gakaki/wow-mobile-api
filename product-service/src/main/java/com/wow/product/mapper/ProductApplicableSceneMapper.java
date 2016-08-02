@@ -27,4 +27,6 @@ public interface ProductApplicableSceneMapper {
     int updateByPrimaryKeySelective(ProductApplicableScene record);
 
     int updateByPrimaryKey(ProductApplicableScene record);
+
+    int addByBatch(List<ProductApplicableScene> list);
 }
