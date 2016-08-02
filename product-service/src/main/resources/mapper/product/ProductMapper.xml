@@ -878,6 +878,7 @@
     inner join product_price pp on pp.product_id=p.id
     where p.is_deleted = false
     and p.product_type = 2
+    and p.product_status=1
     and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
@@ -893,6 +894,7 @@
     left join product_summary ps on ps.product_id=p.id
     where p.is_deleted = false
     and p.product_type = 2
+    and p.product_status=1
     and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
@@ -907,6 +909,7 @@
     inner join product_price pp on pp.product_id=p.id
     where p.is_deleted = false
     and p.product_type = 2
+    and p.product_status=1
     and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
@@ -948,6 +951,7 @@
     where p.is_deleted = false
     and p.brand_id = #{model.brandId}
     and p.product_type = 2
+    and p.product_status=1
     order by p.id desc
   </select>
 
@@ -960,7 +964,7 @@
     where p.is_deleted = false
     and pd.designer_id=#{model.designerId}
     and p.product_type = 2
+    and p.product_status=1
     order by p.id desc
   </select>
-  
 </mapper>
