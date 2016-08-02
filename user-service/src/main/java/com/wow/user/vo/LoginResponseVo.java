@@ -27,8 +27,6 @@ public class LoginResponseVo implements Serializable {
 
     private int productQtyInCart;
 
-    private String mobile;
-
     public String getSessionToken() {
         return sessionToken;
     }
@@ -99,13 +97,5 @@ public class LoginResponseVo implements Serializable {
 
     public void setProductQtyInCart(int productQtyInCart) {
         this.productQtyInCart = productQtyInCart;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 }
