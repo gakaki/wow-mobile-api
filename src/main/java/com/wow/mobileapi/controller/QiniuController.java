@@ -1,6 +1,7 @@
 
 package com.wow.mobileapi.controller;
 
+import com.qiniu.util.StringMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,11 +63,12 @@ public class QiniuController {
      * @param bucketname 上传的文件桶名称
      * @return
      */
-    private String getUpToken(String bucketname) {
+    private String getUpToken(String bucketname,String key) {
         //密钥配置
         Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
         //获取token
-        String token = auth.uploadToken(bucketname);
+        //insert only 设置为0 才能同一url 覆盖 上传
+        String token = auth.uploadToken(bucketname,key,3600,new StringMap().put("insertOnly", 0 ));
 
         //七牛云默认失效时间为3600s,由于从七牛返回服务器到存入缓存有延迟 所以减少10s,确保获取的token有效
         RedisUtil.set(CommonConstant.QINIU_TOKEN, token, 3590L);
