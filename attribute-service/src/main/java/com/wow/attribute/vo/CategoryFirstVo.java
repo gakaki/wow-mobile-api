@@ -6,9 +6,7 @@ public class CategoryFirstVo {
     
     private String categoryIconSmall;
 
-    private String categoryIconBig;
-
-    private Byte categoryLevel;
+    private String categoryIconBg;
 
 	public Integer getId() {
 		return id;
@@ -26,21 +24,12 @@ public class CategoryFirstVo {
 		this.categoryIconSmall = categoryIconSmall;
 	}
 
-	public String getCategoryIconBig() {
-		return categoryIconBig;
+	public String getCategoryIconBg() {
+		return categoryIconBg;
 	}
 
-	public void setCategoryIconBig(String categoryIconBig) {
-		this.categoryIconBig = categoryIconBig;
-	}
-
-	public Byte getCategoryLevel() {
-		return categoryLevel;
-	}
-
-	public void setCategoryLevel(Byte categoryLevel) {
-		this.categoryLevel = categoryLevel;
-	}
-    
+	public void setCategoryIconBg(String categoryIconBg) {
+		this.categoryIconBg = categoryIconBg;
+	}   
     
 }
