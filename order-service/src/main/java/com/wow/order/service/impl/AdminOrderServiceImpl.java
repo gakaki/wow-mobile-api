@@ -197,7 +197,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         List<OrderItemVo> unShipOutOrderItems = getUnShipOutOrderItems(orderItems);
 
         orderDetailResponse.setUnShipOutOrderItems(unShipOutOrderItems);
-        
+
         //如果订单状态为部分发货以后状态是 才显示发货单信息
         if (saleOrder.getOrderStatus().byteValue() >= SaleOrderStatusEnum.PARTIAL_SHIPPED.getKey().byteValue()) {
             //获取发货单信息
@@ -206,28 +206,9 @@ public class AdminOrderServiceImpl implements AdminOrderService {
             orderDetailResponse.setDeliveryOrders(deliveryOrderVos);
         }
 
-        //对象转换
-        //        String json = JsonUtil.pojo2Json(orderItems);
-        //        List<AdminOrderItemVo> adminOrderItems = Arrays.asList(JsonUtil.fromJSON(json, AdminOrderItemVo[].class));
-        //
-        //        orderDetailResponse.setOrderItems(adminOrderItems);
-
-        //        //获取订单对应的运单信息
-        //        List<DeliveryOrder> deliveryOrders = selectByOrderId(saleOrder.getId());
-        //
-        //        //如果有相关的运单信息 则进行对象封装
-        //        if (CollectionUtil.isNotEmpty(deliveryOrders)) {
-        //            json = JsonUtil.pojo2Json(deliveryOrders);
-        //            List<AdminDeliveryOrderVo> adminDeliveryOrders = Arrays
-        //                .asList(JsonUtil.fromJSON(json, AdminDeliveryOrderVo[].class));
-        //
-        //            orderDetailResponse.setDeliveryOrders(adminDeliveryOrders);
-        //        }
-
         return orderDetailResponse;
     }
-    
-    
+
     /**
      * 获取发货单信息
      * 
@@ -260,7 +241,6 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         return deliveryOrderVos;
     }
 
-
     /**
      * 获取未发货清单列表
      * 
@@ -278,8 +258,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
         return unShipOutOrderItems;
     }
-    
-    
+
     /**
      * 获取发货单对应的商品信息
      * 
@@ -301,7 +280,6 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
         return map;
     }
-
 
     /**
      * 设置订单明细
@@ -350,6 +328,5 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
         return saleOrderMapper.selectOnlyByExample(saleOrderExample);
     }
-
 
 }

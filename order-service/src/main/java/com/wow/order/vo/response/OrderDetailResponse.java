@@ -70,8 +70,8 @@ public class OrderDetailResponse extends CommonResponse {
     //订单创建时间
     private String orderCreateTimeFormat;
 
-    //发货单列表
-    private List<DeliveryOrderVo> deliveryOrders;
+    //发货包裹列表
+    private List<DeliveryOrderVo> packages;
 
     //未发货清单列表
     private List<OrderItemVo> unShipOutOrderItems;
@@ -108,12 +108,12 @@ public class OrderDetailResponse extends CommonResponse {
         this.paymentStatusName = paymentStatusName;
     }
 
-    public List<DeliveryOrderVo> getDeliveryOrders() {
-        return deliveryOrders;
+    public List<DeliveryOrderVo> getPackages() {
+        return packages;
     }
 
-    public void setDeliveryOrders(List<DeliveryOrderVo> deliveryOrders) {
-        this.deliveryOrders = deliveryOrders;
+    public void setPackages(List<DeliveryOrderVo> packages) {
+        this.packages = packages;
     }
 
     public String getReceiverName() {

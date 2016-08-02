@@ -18,6 +18,7 @@ import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.order.OrderDetailRequest;
 import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
+import com.wow.mobileapi.request.order.OrderSettleRequest;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
@@ -74,7 +75,45 @@ public class OrderController extends BaseController {
     }
 
     /**
-     * 获取用户购买的产品结算信息
+     * 立即购买
+     * 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/buyNow", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    public ApiResponse buyNow(ApiRequest request) {
+        OrderSettleRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderSettleRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+        
+        //判断json格式参数是否有误
+        if (orderRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        OrderSettleResponse orderSettleResponse=null;
+        try {
+            OrderSettleQuery query = new OrderSettleQuery();
+            query.setProductId(orderRequest.getProductId());
+            query.setProductQty(orderRequest.getProductQty());
+
+            orderSettleResponse = orderService.buyNow(query);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(orderSettleResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, orderSettleResponse);
+            } else {
+                apiResponse.setData(orderSettleResponse);
+            }
+        } catch (Exception e) {
+            logger.error("获取产品结算信息错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 创建订单
      * 
      * @param request
      * @return
@@ -100,12 +139,12 @@ public class OrderController extends BaseController {
         try {
             OrderQuery query = new OrderQuery();
             BeanUtil.copyProperties(orderRequest, query);
-            
+
             //设置用户id
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);
 
-            orderResponse = orderService.createOrder(query);
+            orderResponse = orderService.createOrderFromCart(query);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(orderResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderResponse);

@@ -19,6 +19,12 @@ public class OrderQuery implements Serializable {
     
     //用户订购的购物车id列表
     private List<Integer> shoppingCartIds;
+    
+    //产品id 立即购买使用
+    private Integer productId;
+    
+    //用户购买的产品数量 范围为1-127 默认为1  立即购买使用
+    private Byte productQty;
 
     //用户id
     private Integer endUserId;
@@ -65,6 +71,22 @@ public class OrderQuery implements Serializable {
     //总件数
     private Integer totalProductQty;
     
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public Byte getProductQty() {
+        return productQty;
+    }
+
+    public void setProductQty(Byte productQty) {
+        this.productQty = productQty;
+    }
+
     public List<Integer> getShoppingCartIds() {
         return shoppingCartIds;
     }
