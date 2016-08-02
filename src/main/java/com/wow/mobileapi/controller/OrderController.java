@@ -18,7 +18,6 @@ import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.order.OrderDetailRequest;
 import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
-import com.wow.mobileapi.request.order.OrderSettleRequest;
 import com.wow.order.service.OrderService;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderListQuery;
@@ -49,20 +48,7 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/settle", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
     public ApiResponse settleOrder(ApiRequest request) {
-        OrderSettleRequest orderSettleRequest = JsonUtil.fromJSON(request.getParamJson(), OrderSettleRequest.class);
         ApiResponse apiResponse = new ApiResponse();
-        //判断json格式参数是否有误
-        if (orderSettleRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(orderSettleRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
 
         OrderSettleResponse orderSettleResponse = null;
         try {
