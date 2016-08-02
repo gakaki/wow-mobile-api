@@ -36,6 +36,17 @@ public class OrderRequest extends ApiRequest {
     //订单备注
     private String remark;
     
+    //客户端ip
+    private String orderIp;
+    
+    public String getOrderIp() {
+        return orderIp;
+    }
+
+    public void setOrderIp(String orderIp) {
+        this.orderIp = orderIp;
+    }
+
     public Byte getOrderSource() {
         return orderSource;
     }

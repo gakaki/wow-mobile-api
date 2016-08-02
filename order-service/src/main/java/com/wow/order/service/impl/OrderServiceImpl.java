@@ -927,11 +927,11 @@ public class OrderServiceImpl implements OrderService {
 
         ProductPrice productPrice = null;
 
-        //设置产品可用库存信息
+        //设置产品价格
         for (ShoppingCartResultVo shoppingCart : shoppingCartResult) {
             productPrice = map.get(shoppingCart.getProductId());
 
-            //设置产品库存
+            //设置产品价格
             if (productPrice != null) {
                 shoppingCart.setSellPrice(productPrice.getSellPrice());
             }

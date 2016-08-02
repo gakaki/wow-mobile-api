@@ -1,39 +1,87 @@
 
 package com.wow.mobileapi.controller;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qiniu.util.Auth;
-import com.qiniu.util.StringMap;
+import com.wow.common.constant.CommonConstant;
+import com.wow.common.request.ApiRequest;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.RedisUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.mobileapi.request.sdk.QiniuRequest;
+import com.wow.mobileapi.response.sdk.QiniuResponse;
 
-@Component
+@PropertySource(value = "classpath:/qiniu.properties")
 @RestController
 public class QiniuController {
 
-    //设置好账号的ACCESS_KEY和SECRET_KEY
-    String ACCESS_KEY = "l4bcP6bByVSJWgqOeKxHGtCyXl3L3bWlLh9wOLYu";
-    String SECRET_KEY = "kevimwWUrbsidQLFRD00zadC0RSUt7qZOFHUW7OY";
-    //要上传的空间
-    String bucketname = "usericon";
+    //设置账号的ACCESS_KEY
+    @Value("${qiniu.access_key}")
+    private String ACCESS_KEY;
 
+    //设置账号的SECRET_KEY
+    @Value("${qiniu.access_key}")
+    private String SECRET_KEY;
+
+    /**
+     * 获取七牛token
+     * 
+     * @param file_path
+     * @return
+     */
     @RequestMapping("/v1/qiniutoken")
-    public String qiniutoken(@RequestParam("file_path") String file_path) {
-        //上传到七牛后保存的文件名
-        String res = getUpToken(file_path);
-        return res;
+    public ApiResponse getQiniutoken(ApiRequest request) {
+        ApiResponse apiResponse = new ApiResponse();
+
+        QiniuRequest qiniuRequest = JsonUtil.fromJSON(request.getParamJson(), QiniuRequest.class);
+
+        //从redis中获取token
+        String token = getUpTokenFromRedis(qiniuRequest.getBucket());
+
+        //获取token
+        if (StringUtil.isEmpty(token)) {
+            token = getUpToken(qiniuRequest.getBucket());
+        }
+
+        QiniuResponse qiniuResponse = new QiniuResponse();
+        qiniuResponse.setToken(token);
+
+        apiResponse.setData(qiniuResponse);
+
+        return apiResponse;
     }
 
-    // 覆盖上传
-    public String getUpToken(String key) {
+    /**
+     * 获取token
+     * 
+     * @param bucketname 上传的文件桶名称
+     * @return
+     */
+    private String getUpToken(String bucketname) {
         //密钥配置
         Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
-        //<bucket>:<key>，表示只允许用户上传指定key的文件。在这种格式下文件默认允许“修改”，已存在同名资源则会被本次覆盖。
-        //如果希望只能上传指定key的文件，并且不允许修改，那么可以将下面的 insertOnly 属性值设为 1。
-        //第三个参数是token的过期时间
-        return auth.uploadToken(bucketname, key, 3600, new StringMap().put("insertOnly", 1));
+        //获取token
+        String token = auth.uploadToken(bucketname);
+
+        //七牛云默认失效时间为3600s,由于从七牛返回服务器到存入缓存有延迟 所以减少10s,确保获取的token有效
+        RedisUtil.set(CommonConstant.QINIU_TOKEN, token, 3590L);
+
+        return token;
+    }
+
+    /**
+     * 
+     * 从redis 中获取相应的token
+     * @param bucketname
+     * @return
+     */
+    private String getUpTokenFromRedis(String bucketname) {
+        return (String) RedisUtil.get(CommonConstant.QINIU_TOKEN);
     }
 
 }

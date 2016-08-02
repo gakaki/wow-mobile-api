@@ -97,31 +97,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             return response;
         }
-
-        //判断加入的产品是否有库存 如果库存不足 则直接返回
-        AvailableStockResponse availableStockResponse = stockService.getAvailableStock(shoppingCart.getProductId());
-        if (ErrorCodeUtil.isFailedResponse(availableStockResponse.getResCode())) {
-            response.setResCode(availableStockResponse.getResCode());
-            response.setResMsg(ErrorCodeUtil.getErrorMsg(availableStockResponse.getResCode()));
-
-            return response;
-        }
+        //业务校验结束
 
         //如果购物车数量为空 则默认为1
         if (shoppingCart.getProductQty() == null) {
             shoppingCart.setProductQty((byte) 1);
         }
-
-        //判断库存是否可用 如果当前可用库存小于要加入购物车的数量 则直接返回
-        AvailableStockVo availableStockVo = availableStockResponse.getAvailableStockVo();
-        if (availableStockVo == null || availableStockVo.getTotalAvailableStockQty() < shoppingCart.getProductQty()) {
-            response.setResCode("50608");
-            response.setResMsg(ErrorCodeUtil.getErrorMsg("50608"));
-
-            return response;
-        }
-        //业务校验结束
-
+        
         ShoppingCart newShoppingCart = getShoppingCartByExample(shoppingCart);
         //如果该产品已经加入到购物车 则对该产品数量进行增加操作
         if (newShoppingCart != null) {
