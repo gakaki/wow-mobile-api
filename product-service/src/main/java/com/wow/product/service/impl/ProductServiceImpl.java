@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.common.enums.*;
+import com.wow.product.vo.ProductListQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -800,5 +801,113 @@ public class ProductServiceImpl implements ProductService {
     	
         
     	return productVoResponse;
+    }
+
+    @Override
+    public ProductVoResponse selectProductByBrandIdListPage(ProductListQuery query) {
+        ProductVoResponse productVoResponse = new ProductVoResponse();
+        if (query.getBrandId() == null) {
+            productVoResponse.setResCode("40204");
+            productVoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40204"));
+            return productVoResponse;
+        }
+        PageModel model = new PageModel();
+        if (query.getPageSize() != null) {
+            model.setShowCount(query.getPageSize());
+        }
+        if (query.getCurrentPage() != null) {
+            model.setCurrentPage(query.getCurrentPage());
+            //仅在第一页时获取相应的分页记录
+            if (query.getCurrentPage() == 1) {
+                model.setIsPage(true);
+            }
+        }
+        model.setModel(query);
+        List<PageData> pageDataList = productMapper.selectProductByBrandIdListPage(model);
+        if(pageDataList.size()>0){
+            List<ProductVo> productVoList = Arrays.asList(JsonUtil.fromJSON(pageDataList, ProductVo[].class));
+            List<Integer> productIds = new ArrayList<Integer>();
+            for(ProductVo productVo:productVoList){
+                productIds.add(productVo.getProductId());
+            }
+            //批量查询价格
+            ProductListPriceResponse batchGetProductPrice = priceService.batchGetProductPrice(productIds);
+            Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
+            if (batchGetProductPrice != null && MapUtil.isNotEmpty(batchGetProductPrice.getMap())) {
+                priceMap = batchGetProductPrice.getMap();
+            }
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = this.selectProductListPrimaryOneImg(productIds);
+            List<ProductVo> returnProductVoList = new ArrayList<ProductVo>();
+            for(ProductVo productVo:productVoList){
+                if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productVo.getProductId()) != null){
+                    productVo.setProductImg(productImageMap.get(productVo.getProductId()).getImgUrl());
+                }
+                if(MapUtil.isNotEmpty(priceMap) && priceMap.get(productVo.getProductId()) != null){
+                    productVo.setSellPrice(priceMap.get(productVo.getProductId()).getSellPrice());
+                }
+                returnProductVoList.add(productVo);
+            }
+            productVoResponse.setProductVoList(returnProductVoList);
+            productVoResponse.setCurrentPage(query.getCurrentPage());
+            productVoResponse.setPageSize(query.getPageSize());
+            productVoResponse.setTotalPage(model.getTotalPage());
+            productVoResponse.setTotalResult(model.getTotalResult());
+        }
+        return productVoResponse;
+    }
+
+    @Override
+    public ProductVoResponse selectProductByDesignerIdListPage(ProductListQuery query) {
+        ProductVoResponse productVoResponse = new ProductVoResponse();
+        if (query.getDesignerId() == null) {
+            productVoResponse.setResCode("40205");
+            productVoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40205"));
+            return productVoResponse;
+        }
+        PageModel model = new PageModel();
+        if (query.getPageSize() != null) {
+            model.setShowCount(query.getPageSize());
+        }
+        if (query.getCurrentPage() != null) {
+            model.setCurrentPage(query.getCurrentPage());
+            //仅在第一页时获取相应的分页记录
+            if (query.getCurrentPage() == 1) {
+                model.setIsPage(true);
+            }
+        }
+        model.setModel(query);
+        List<PageData> pageDataList = productMapper.selectProductByDesignerIdListPage(model);
+        if(pageDataList.size()>0){
+            List<ProductVo> productVoList = Arrays.asList(JsonUtil.fromJSON(pageDataList, ProductVo[].class));
+            List<Integer> productIds = new ArrayList<Integer>();
+            for(ProductVo productVo:productVoList){
+                productIds.add(productVo.getProductId());
+            }
+            //批量查询价格
+            ProductListPriceResponse batchGetProductPrice = priceService.batchGetProductPrice(productIds);
+            Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
+            if (batchGetProductPrice != null && MapUtil.isNotEmpty(batchGetProductPrice.getMap())) {
+                priceMap = batchGetProductPrice.getMap();
+            }
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = this.selectProductListPrimaryOneImg(productIds);
+            List<ProductVo> returnProductVoList = new ArrayList<ProductVo>();
+            for(ProductVo productVo:productVoList){
+                if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productVo.getProductId()) != null){
+                    productVo.setProductImg(productImageMap.get(productVo.getProductId()).getImgUrl());
+                }
+                if(MapUtil.isNotEmpty(priceMap) && priceMap.get(productVo.getProductId()) != null){
+                    productVo.setSellPrice(priceMap.get(productVo.getProductId()).getSellPrice());
+                }
+                returnProductVoList.add(productVo);
+            }
+            productVoResponse.setProductVoList(returnProductVoList);
+            productVoResponse.setCurrentPage(query.getCurrentPage());
+            productVoResponse.setPageSize(query.getPageSize());
+            productVoResponse.setTotalPage(model.getTotalPage());
+            productVoResponse.setTotalResult(model.getTotalResult());
+        }
+        return productVoResponse;
     }
 }

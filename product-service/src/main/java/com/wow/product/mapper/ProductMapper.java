@@ -48,4 +48,8 @@ public interface ProductMapper {
     List<ProductVo> selectProductByBrandId(@Param("bradnId") Integer bradnId);
 
     List<ProductVo> selectProductByDesignerId(@Param("designerId") Integer designerId);
+
+    List<PageData> selectProductByBrandIdListPage(PageModel model);
+
+    List<PageData> selectProductByDesignerIdListPage(PageModel model);
 }
