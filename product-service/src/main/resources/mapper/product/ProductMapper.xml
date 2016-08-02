@@ -948,6 +948,7 @@
     where p.is_deleted = false
     and p.brand_id = #{model.brandId}
     and p.product_type = 2
+    and p.product_type=1
     order by p.id desc
   </select>
 
@@ -960,7 +961,7 @@
     where p.is_deleted = false
     and pd.designer_id=#{model.designerId}
     and p.product_type = 2
+    and p.product_type=1
     order by p.id desc
   </select>
-  
 </mapper>
