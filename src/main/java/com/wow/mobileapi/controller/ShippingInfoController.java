@@ -66,7 +66,6 @@ public class ShippingInfoController extends BaseController {
             }
         } catch (Exception e) {
             logger.error("创建收货信息发生错误---" + e);
-            e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;

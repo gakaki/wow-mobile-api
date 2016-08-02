@@ -33,6 +33,9 @@ public class OrderDetailResponse extends CommonResponse {
 
     //收款人详细地址 省市区加详细地址
     private String receiverAddress;
+    
+    //产品总价
+    private BigDecimal productAmount;
 
     //订单总价
     private BigDecimal orderAmount;
@@ -73,6 +76,14 @@ public class OrderDetailResponse extends CommonResponse {
     //未发货清单列表
     private List<OrderItemVo> unShipOutOrderItems;
     
+    public BigDecimal getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(BigDecimal productAmount) {
+        this.productAmount = productAmount;
+    }
+
     public List<OrderItemVo> getUnShipOutOrderItems() {
         return unShipOutOrderItems;
     }

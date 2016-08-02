@@ -800,6 +800,7 @@ public class OrderServiceImpl implements OrderService {
 
         //设置订单金额相关
         orderDetailResponse.setOrderAmount(saleOrder.getOrderAmount());
+        orderDetailResponse.setProductAmount(saleOrder.getProductAmount());
         orderDetailResponse.setDeliveryFee(saleOrder.getDeliveryFee());
         orderDetailResponse.setCouponAmount(saleOrder.getPreferentialAmount());
         orderDetailResponse.setTotalProductQty(saleOrder.getTotalProductQty());

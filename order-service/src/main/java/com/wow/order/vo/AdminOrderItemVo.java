@@ -48,6 +48,17 @@ public class AdminOrderItemVo implements Serializable {
     //产品规格图片
     private String specImg;
     
+    //是否需要发货
+    private Boolean isShippedOut;
+    
+    public Boolean getIsShippedOut() {
+        return isShippedOut;
+    }
+
+    public void setIsShippedOut(Boolean isShippedOut) {
+        this.isShippedOut = isShippedOut;
+    }
+
     public Integer getSaleOrderId() {
         return saleOrderId;
     }
