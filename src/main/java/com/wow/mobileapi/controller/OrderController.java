@@ -25,6 +25,7 @@ import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
+import com.wow.order.vo.response.OrderDirectResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
@@ -91,18 +92,18 @@ public class OrderController extends BaseController {
             return apiResponse;
         }
 
-        OrderSettleResponse orderSettleResponse=null;
+        OrderDirectResponse orderDirectResponse=null;
         try {
             OrderSettleQuery query = new OrderSettleQuery();
             query.setProductId(orderRequest.getProductId());
             query.setProductQty(orderRequest.getProductQty());
 
-            orderSettleResponse = orderService.buyNow(query);
+            orderDirectResponse = orderService.buyNow(query);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(orderSettleResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, orderSettleResponse);
+            if (ErrorCodeUtil.isFailedResponse(orderDirectResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, orderDirectResponse);
             } else {
-                apiResponse.setData(orderSettleResponse);
+                apiResponse.setData(orderDirectResponse);
             }
         } catch (Exception e) {
             logger.error("获取产品结算信息错误---" + e);

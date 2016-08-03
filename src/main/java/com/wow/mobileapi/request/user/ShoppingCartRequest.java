@@ -33,9 +33,20 @@ public class ShoppingCartRequest extends ApiRequest {
     //是否删除
     private Boolean isDeleted;
     
+    //是否选中
+    private Boolean isSelected;
+    
     //更新时间 修改购物车数量和删除购物车信息时使用
     private Date updateTime;
     
+    public Boolean getIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(Boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
     public Date getUpdateTime() {
         return updateTime;
     }

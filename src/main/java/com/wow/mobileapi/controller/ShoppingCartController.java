@@ -198,13 +198,13 @@ public class ShoppingCartController extends BaseController {
     }
 
     /**
-     * 添加指定的产品到购物车
+     * 取消购物车中选中的产品
      * 
      * @param request
      * @return
      */
-    @RequestMapping(value = "/select", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
-    public ApiResponse selectShoppingCart(ApiRequest request) {
+    @RequestMapping(value = "/selectOrCancel", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    public ApiResponse selectOrCancelShoppingCart(ApiRequest request) {
         ShoppingCartRequest shoppingCartRequest = JsonUtil.fromJSON(request.getParamJson(), ShoppingCartRequest.class);
         ApiResponse apiResponse = new ApiResponse();
 
@@ -217,7 +217,7 @@ public class ShoppingCartController extends BaseController {
         try {
             ShoppingCartQueryVo query = new ShoppingCartQueryVo();
             query.setShoppingCartId(shoppingCartRequest.getShoppingCartId());
-            query.setIsSelected(Boolean.TRUE);
+            query.setIsSelected(shoppingCartRequest.getIsSelected());
 
             CommonResponse commonResponse = shoppingCartService.selectOrCancelShoppingCart(query);
             //如果处理失败 则返回错误信息
@@ -225,42 +225,7 @@ public class ShoppingCartController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("选中购物车错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-
-        return apiResponse;
-    }
-
-    /**
-     * 取消选中的购物车
-     * 
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/cancelSelect", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
-    public ApiResponse cancelSelectShoppingCart(ApiRequest request) {
-        ShoppingCartRequest shoppingCartRequest = JsonUtil.fromJSON(request.getParamJson(), ShoppingCartRequest.class);
-        ApiResponse apiResponse = new ApiResponse();
-
-        //判断json格式参数是否有误
-        if (shoppingCartRequest == null) {
-            setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        try {
-            ShoppingCartQueryVo query = new ShoppingCartQueryVo();
-            query.setShoppingCartId(shoppingCartRequest.getShoppingCartId());
-            query.setIsSelected(Boolean.FALSE);
-
-            CommonResponse commonResponse = shoppingCartService.selectOrCancelShoppingCart(query);
-            //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, commonResponse);
-            }
-        } catch (Exception e) {
-            logger.error("取消选中购物车错误---" + e);
+            logger.error("选中或者取消购物车错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
 

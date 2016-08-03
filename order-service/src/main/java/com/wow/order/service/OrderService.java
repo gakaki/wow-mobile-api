@@ -12,6 +12,7 @@ import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
+import com.wow.order.vo.response.OrderDirectResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
@@ -37,7 +38,7 @@ public interface OrderService {
      * @param orderVo
      * @return
      */
-    OrderSettleResponse buyNow(OrderSettleQuery query);
+    OrderDirectResponse buyNow(OrderSettleQuery query);
 
     /**
      * 下单

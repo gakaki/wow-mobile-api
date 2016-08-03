@@ -504,6 +504,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             return response;
         }
+        
+        //如果选中状态为null则默认为取消操作
+        if (query.getIsSelected() == null) {
+            query.setIsSelected(Boolean.FALSE);
+        }
 
         ShoppingCart shoppingCart = shoppingCartMapper.selectByPrimaryKey(query.getShoppingCartId());
 
