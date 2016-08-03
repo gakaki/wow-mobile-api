@@ -538,11 +538,7 @@ public class ProductServiceImpl implements ProductService {
     	if(pqv.getSortBy() == 3)
     		dataList = productMapper.selectProductsByCategoryIdOrderByPrice(page);
 
-        logger.info("result size:" + dataList.size());
-
     	List<ProductVo> productList = Arrays.asList(JsonUtil.fromJSON(dataList, ProductVo[].class));
-
-        logger.info("productList size:" + productList.size());
 
     	if(productList.size()>0){
     		List<Integer> productIds = new ArrayList<Integer>();
@@ -571,7 +567,6 @@ public class ProductServiceImpl implements ProductService {
         	}
         	productVoResponse.setProductVoList(list);
     	}
-        logger.info("productList size:" + productVoResponse.getProductVoList().size());
         return productVoResponse;
     }
 
