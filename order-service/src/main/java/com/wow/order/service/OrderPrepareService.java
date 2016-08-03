@@ -1,11 +1,9 @@
 package com.wow.order.service;
 
-import com.wow.order.vo.OrderVo;
+import java.util.List;
+
 import com.wow.order.vo.PackageVo;
 import com.wow.user.model.ShoppingCart;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 订单预处理服务

@@ -1,10 +1,5 @@
 package com.wow.user.service;
 
-import com.wow.user.model.EndUserFollowBrand;
-import com.wow.user.model.EndUserFollowDesigner;
-import com.wow.user.model.EndUserFollowProduct;
-import com.wow.user.model.EndUserFollowScene;
-
 /**
  * 用户关注服务
  * Created by zhengzhiqing on 16/6/30.

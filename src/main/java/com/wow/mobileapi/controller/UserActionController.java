@@ -1,5 +1,17 @@
 package com.wow.mobileapi.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
@@ -9,25 +21,16 @@ import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.mobileapi.request.user.FavoriteBrandRequest;
 import com.wow.mobileapi.request.user.FavoriteDesignerRequest;
 import com.wow.mobileapi.request.user.FavoriteProductRequest;
-import com.wow.mobileapi.request.user.FavoriteSceneRequest;
 import com.wow.product.model.ProductImage;
 import com.wow.product.service.ProductService;
 import com.wow.user.service.FavoriteService;
 import com.wow.user.vo.FavoriteBrandVo;
 import com.wow.user.vo.FavoriteDesignerVo;
 import com.wow.user.vo.FavoriteProductVo;
-import com.wow.user.vo.FavoriteSceneVo;
-import com.wow.user.vo.response.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import com.wow.user.vo.response.FavoriteBrandResponse;
+import com.wow.user.vo.response.FavoriteCommonResponse;
+import com.wow.user.vo.response.FavoriteDesignerResponse;
+import com.wow.user.vo.response.FavoriteProductResponse;
 
 @RestController
 public class UserActionController extends BaseController {
