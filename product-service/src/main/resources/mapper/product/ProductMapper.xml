@@ -871,7 +871,7 @@
   </update>
 
  <!-- user foreach -->
-  <select id="selectOrderByShelfTimeListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductsByCategoryIdListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
     select
     p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
@@ -886,7 +886,7 @@
     order by p.on_shelf_time ${model.ascText}
   </select>
   
-  <select id="selectOrderbyTotalSoldListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductsByCategoryIdOrderBySummary" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
   	select
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
@@ -902,7 +902,7 @@
     order by ps.total_sold_qty ${model.ascText}
   </select>
   
-  <select id="selectOrderbySellPriceListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductsByCategoryIdOrderByPrice" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
   	select
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
@@ -917,7 +917,7 @@
     order by pp.sell_price ${model.ascText}
   </select>
   
-  <select id="selectProductByBrandId" resultType="com.wow.product.vo.ProductVo" parameterType="map">
+  <select id="selectProductsByCategoryIdOrderById" resultType="com.wow.product.vo.ProductVo" parameterType="map">
   	select
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
