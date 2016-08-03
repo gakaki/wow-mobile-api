@@ -401,7 +401,7 @@ public class OrderServiceImpl implements OrderService {
 
         saleOrder.setEndUserRemark(query.getRemark());
         saleOrder.setTotalProductQty(query.getTotalProductQty());//设置总的商品件数
-        saleOrder.setUnShipOutQty(query.getShoppingCartIds().size()); //设置未发货的商品数 默认为用户订购的产品数
+        saleOrder.setUnShipOutQty(query.getShoppingCartResult().size()); //设置未发货的商品数 默认为用户订购的产品数
 
         //设置收货人地址信息
         ShippingInfo shippingInfo = query.getShippingInfo();
@@ -410,7 +410,9 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setReceiverProvince(shippingInfo.getProvinceName());
         saleOrder.setReceiverCity(shippingInfo.getCityName());
         saleOrder.setReceiverCounty(shippingInfo.getCountyName());
-        saleOrder.setReceiverAddress(shippingInfo.getAddressDetail());
+        //设置收件人详细地址 省市区加上地址信息
+        String addressDetail = getAddressDetail(shippingInfo);
+        saleOrder.setReceiverAddress(addressDetail);
         saleOrder.setReceiverMobile(shippingInfo.getReceiverMobile());
         saleOrder.setReceiverPostcode(shippingInfo.getReceiverPostcode());
 
@@ -429,6 +431,23 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setUpdateTime(DateUtil.currentDate());
 
         return saleOrder;
+    }
+
+    /**
+     * 获取收货人地址详细信息
+     * 
+     * @param shippingInfo
+     * @return
+     */
+    private String getAddressDetail(ShippingInfo shippingInfo) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(shippingInfo.getProvinceName());
+        sb.append(shippingInfo.getCityName());
+        sb.append(shippingInfo.getCountyName());
+        sb.append(shippingInfo.getAddressDetail());
+
+        return sb.toString();
     }
 
     /**
@@ -1390,7 +1409,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse createOrderFromDirect(OrderQuery query) {
         OrderResponse orderResponse = new OrderResponse();
-        
+
         //校验产品id是否为空
         if (query.getProductId() == null) {
             orderResponse.setResCode("40316");
@@ -1443,6 +1462,9 @@ public class OrderServiceImpl implements OrderService {
         if (query.getProductQty() == null) {
             query.setProductQty((byte) 1);
         }
+
+        //设置总的产品件数
+        query.setTotalProductQty(query.getProductQty().intValue());
 
         //设置产品价格
         ShoppingCartResultVo shoppingCartResultVo = setProductPrice(product, priceResponse.getMap());

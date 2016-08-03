@@ -15,7 +15,6 @@ import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.user.ShoppingCartRequest;
-import com.wow.user.model.ShoppingCart;
 import com.wow.user.service.ShoppingCartService;
 import com.wow.user.vo.ShoppingCartQueryVo;
 import com.wow.user.vo.response.ShoppingCartResponse;
@@ -60,15 +59,15 @@ public class ShoppingCartController extends BaseController {
         }
         try {
             //包装购物车对象
-            ShoppingCart shoppingCart = new ShoppingCart();
+            ShoppingCartQueryVo shoppingCartQuery = new ShoppingCartQueryVo();
 
             //设置用户id
             Integer endUserId = getUserIdByTokenChannel(request);
-            shoppingCart.setEndUserId(endUserId);
-            shoppingCart.setProductId(shoppingCartRequest.getProductId());
-            shoppingCart.setProductQty(shoppingCartRequest.getProductQty());
+            shoppingCartQuery.setEndUserId(endUserId);
+            shoppingCartQuery.setProductId(shoppingCartRequest.getProductId());
+            shoppingCartQuery.setProductQty(shoppingCartRequest.getProductQty());
 
-            CommonResponse commonResponse = shoppingCartService.addProductIntoCart(shoppingCart);
+            CommonResponse commonResponse = shoppingCartService.addProductIntoCart(shoppingCartQuery);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);

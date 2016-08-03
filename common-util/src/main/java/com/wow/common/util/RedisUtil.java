@@ -1,6 +1,8 @@
 package com.wow.common.util;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -73,6 +75,32 @@ public class RedisUtil {
         ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
         result = operations.get(key);
         return result;
+    }
+
+    /**
+     * 批量获取缓存缓存
+     *
+     * @param key
+     * @return
+     */
+    public static List<Object> multiGet(final Collection<Serializable> keys) {
+        ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+        
+        return operations.multiGet(keys);
+    }
+
+    /**
+    * 读取缓存转化为指定的类型
+    * 
+    * @param key
+    * @param clazz
+    * @return
+    */
+    public static <T> T get(final String key, final Class<T> clazz) {
+        Object result = null;
+        ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+        result = operations.get(key);
+        return (T) result;
     }
 
     /**

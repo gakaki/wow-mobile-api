@@ -143,8 +143,14 @@ public class OrderController extends BaseController {
             //设置用户id
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);
-
-            orderResponse = orderService.createOrderFromCart(query);
+            //如果是从购物车进行结算 则调用createOrderFromCart
+            if(orderRequest.getProductId()==null){
+                orderResponse = orderService.createOrderFromCart(query);
+            } else{
+                //如果是立即购买 则调用createOrderFromDirect
+                orderResponse = orderService.createOrderFromDirect(query);
+            }
+           
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(orderResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderResponse);

@@ -34,9 +34,6 @@ public class AttributeServiceImpl implements AttributeService {
     @Autowired
     private CategoryAttributeService categoryAttributeService;
 
-    private  final  int error=-1;
-
-    private AttributeExample attributeExample;
     // Table: attribute
     /**
      * 创建属性

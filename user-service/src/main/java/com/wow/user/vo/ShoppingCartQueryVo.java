@@ -1,6 +1,7 @@
 package com.wow.user.vo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,28 @@ public class ShoppingCartQueryVo implements Serializable {
 
     //更新时间 修改购物车数量和删除购物车信息时使用
     private Date updateTime;
+    
+    //产品销售价快照  保存到购物车时使用
+    private BigDecimal sellPrice;
+    
+    //产品重量快照 保存到购物车时使用
+    private BigDecimal weight;
+    
+    public BigDecimal getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(BigDecimal sellPrice) {
+        this.sellPrice = sellPrice;
+    }
+
+    public BigDecimal getWeight() {
+        return weight;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
 
     public Boolean getIsSelected() {
         return isSelected;
