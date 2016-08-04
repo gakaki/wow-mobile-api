@@ -10,6 +10,8 @@ public class DeliveryOrder implements Serializable {
 
     private Byte deliveryMothod;
 
+    private String deliveryCompanyCode;
+
     private String deliveryCompanyName;
 
     private String deliveryOrderNo;
@@ -44,6 +46,14 @@ public class DeliveryOrder implements Serializable {
 
     public void setDeliveryMothod(Byte deliveryMothod) {
         this.deliveryMothod = deliveryMothod;
+    }
+
+    public String getDeliveryCompanyCode() {
+        return deliveryCompanyCode;
+    }
+
+    public void setDeliveryCompanyCode(String deliveryCompanyCode) {
+        this.deliveryCompanyCode = deliveryCompanyCode == null ? null : deliveryCompanyCode.trim();
     }
 
     public String getDeliveryCompanyName() {
@@ -95,6 +105,7 @@ public class DeliveryOrder implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", saleOrderId=").append(saleOrderId);
         sb.append(", deliveryMothod=").append(deliveryMothod);
+        sb.append(", deliveryCompanyCode=").append(deliveryCompanyCode);
         sb.append(", deliveryCompanyName=").append(deliveryCompanyName);
         sb.append(", deliveryOrderNo=").append(deliveryOrderNo);
         sb.append(", shipOutDate=").append(shipOutDate);
