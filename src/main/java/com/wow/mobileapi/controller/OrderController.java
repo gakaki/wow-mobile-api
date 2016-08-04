@@ -13,8 +13,6 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.order.OrderDetailRequest;
 import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
@@ -25,7 +23,6 @@ import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
-import com.wow.order.vo.response.OrderDirectResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
@@ -92,18 +89,18 @@ public class OrderController extends BaseController {
             return apiResponse;
         }
 
-        OrderDirectResponse orderDirectResponse=null;
+        OrderSettleResponse orderSettleResponse=null;
         try {
             OrderSettleQuery query = new OrderSettleQuery();
             query.setProductId(orderRequest.getProductId());
             query.setProductQty(orderRequest.getProductQty());
 
-            orderDirectResponse = orderService.buyNow(query);
+            orderSettleResponse = orderService.buyNow(query);
             //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(orderDirectResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, orderDirectResponse);
+            if (ErrorCodeUtil.isFailedResponse(orderSettleResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, orderSettleResponse);
             } else {
-                apiResponse.setData(orderDirectResponse);
+                apiResponse.setData(orderSettleResponse);
             }
         } catch (Exception e) {
             logger.error("获取产品结算信息错误---" + e);
@@ -126,13 +123,6 @@ public class OrderController extends BaseController {
         //判断json格式参数是否有误
         if (orderRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(orderRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
 

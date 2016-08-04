@@ -57,7 +57,6 @@ import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.OrderSettleVo;
 import com.wow.order.vo.response.OrderDetailResponse;
-import com.wow.order.vo.response.OrderDirectResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
@@ -1289,7 +1288,7 @@ public class OrderServiceImpl implements OrderService {
         deliveryOrder.setSaleOrderId(query.getOrderId());
         deliveryOrder.setDeliveryMothod(query.getDeliveryMothod());
         //从数据字典中获取配送公司名称
-        String companyName = DictionaryUtil.getValue("deliveryCompany", query.getDeliveryCompanyCode());
+        String companyName = DictionaryUtil.getValue("delivery_company", query.getDeliveryCompanyCode());
         deliveryOrder.setDeliveryCompanyName(companyName);
         deliveryOrder.setDeliveryOrderNo(query.getDeliveryOrderNo()); //设置配送单号
         deliveryOrder.setShipOutDate(DateUtil.currentDate()); //设置配送日期
@@ -1322,8 +1321,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDirectResponse buyNow(OrderSettleQuery query) {
-        OrderDirectResponse response = new OrderDirectResponse();
+    public OrderSettleResponse buyNow(OrderSettleQuery query) {
+        OrderSettleResponse response = new OrderSettleResponse();
 
         //校验产品id是否为空
         if (query.getProductId() == null) {
@@ -1380,11 +1379,7 @@ public class OrderServiceImpl implements OrderService {
         shoppingCartResultVo.setProductTotalAmount(NumberUtil.convertToYuan(productTotalPrice));
 
         //包装购物车结算信息
-        OrderSettleResponse orderSettleResponse = wrapOrderSettleResponse(new OrderSettleResponse(), Arrays
-            .asList(shoppingCartResultVo));
-        orderSettleResponse.getOrderSettles();
-
-        wrapOrderDirectResponse(orderSettleResponse, response);
+        wrapOrderSettleResponse(response, Arrays.asList(shoppingCartResultVo));
 
         return response;
     }
@@ -1395,18 +1390,18 @@ public class OrderServiceImpl implements OrderService {
      * @param orderSettleResponse
      * @param response
      */
-    private void wrapOrderDirectResponse(OrderSettleResponse orderSettleResponse, OrderDirectResponse response) {
-        //设置结算产品基本信息
-        List<OrderSettleVo> orderSettles = orderSettleResponse.getOrderSettles();
-        if (CollectionUtil.isNotEmpty(orderSettles)) {
-            OrderSettleVo orderSettleVo = orderSettles.get(0);
-            BeanUtil.copyProperties(orderSettleVo, response);
-        }
-
-        //设置运费和订单总金额
-        response.setDeliveryFee(orderSettleResponse.getDeliveryFee());
-        response.setTotalAmount(orderSettleResponse.getTotalAmount());
-    }
+    //    private void wrapOrderDirectResponse(OrderSettleResponse orderSettleResponse, OrderDirectResponse response) {
+    //        //设置结算产品基本信息
+    //        List<OrderSettleVo> orderSettles = orderSettleResponse.getOrderSettles();
+    //        if (CollectionUtil.isNotEmpty(orderSettles)) {
+    //            OrderSettleVo orderSettleVo = orderSettles.get(0);
+    //            BeanUtil.copyProperties(orderSettleVo, response);
+    //        }
+    //
+    //        //设置运费和订单总金额
+    //        response.setDeliveryFee(orderSettleResponse.getDeliveryFee());
+    //        response.setTotalAmount(orderSettleResponse.getTotalAmount());
+    //    }
 
     /**
      * 设置产品价格
