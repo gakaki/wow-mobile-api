@@ -574,11 +574,11 @@ public class ProductServiceImpl implements ProductService {
         List<PageData> dataList = null;
         
     	if(pqv.getSortBy() == 1 || pqv.getSortBy() == null)
-        dataList = productMapper.selectProductsByCategoryIdOrderById(page);
+        dataList = productMapper.selectProductByCategoryOrderByOnShelfTime(page);
     	if(pqv.getSortBy() == 2)
-    		dataList = productMapper.selectProductsByCategoryIdOrderBySummary(page);
+    		dataList = productMapper.selectProductByCategoryOrderBySoldQty(page);
     	if(pqv.getSortBy() == 3)
-    		dataList = productMapper.selectProductsByCategoryIdOrderByPrice(page);
+    		dataList = productMapper.selectProductByCategoryOrderBySellPrice(page);
 
     	List<ProductVo> productList = Arrays.asList(JsonUtil.fromJSON(dataList, ProductVo[].class));
 
