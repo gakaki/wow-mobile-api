@@ -26,7 +26,7 @@ import com.wow.order.vo.response.ChargeResponse;
  * Created by zhengzhiqing on 16/7/2.
  */
 @RestController
-@RequestMapping(value = "/v1/order")
+@RequestMapping(value = "/v1/pay")
 public class PayController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(PayController.class);

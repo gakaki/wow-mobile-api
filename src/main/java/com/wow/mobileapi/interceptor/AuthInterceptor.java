@@ -1,14 +1,8 @@
 package com.wow.mobileapi.interceptor;
 
-import com.wow.common.response.ApiResponse;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.mobileapi.constant.ApiConstant;
-import com.wow.mobileapi.constant.ErrorCodeConstant;
-import com.wow.user.service.SessionService;
-import com.wow.user.vo.response.TokenValidateResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +10,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.wow.common.response.ApiResponse;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.mobileapi.constant.ApiConstant;
+import com.wow.mobileapi.constant.ErrorCodeConstant;
+import com.wow.user.service.SessionService;
+import com.wow.user.vo.response.TokenValidateResponse;
 
 /**
  * 拦截未登录的用户
