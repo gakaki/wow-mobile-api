@@ -38,12 +38,15 @@ public interface ProductMapper {
     int updateByPrimaryKeyWithBLOBs(Product record);
 
     int updateByPrimaryKey(Product record);
+
+    //按分类查询产品并按销量排序
+    List<PageData> selectProductByCategoryOrderBySoldQty(PageModel page);
+
+    //按分类查询产品并按价格排序
+    List<PageData> selectProductByCategoryOrderBySellPrice(PageModel page);
     
-    List<PageData> selectProductsByCategoryIdOrderBySummary(PageModel page);
-    
-    List<PageData> selectProductsByCategoryIdOrderByPrice(PageModel page);
-    
-    List<PageData> selectProductsByCategoryIdOrderById(PageModel page);
+    //按分类查询产品并按上架时间排序
+    List<PageData> selectProductByCategoryOrderByOnShelfTime(PageModel page);
     
     List<ProductVo> selectProductByBrandId(@Param("brandId") Integer brandId);
 
