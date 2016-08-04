@@ -180,6 +180,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             return response;
         }
 
+        //判断购物车id是否已经被删除
+        if (shoppingCart.getIsDeleted()) {
+            response.setResCode("40328");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40328"));
+
+            return response;
+        }
+
         //判断加入的产品是否有库存 如果库存不足 则直接返回
         AvailableStockResponse availableStockResponse = stockService.getAvailableStock(shoppingCart.getProductId());
         if (ErrorCodeUtil.isFailedResponse(availableStockResponse.getResCode())) {
@@ -227,6 +235,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (CollectionUtil.isEmpty(query.getShoppingCartIds())) {
             response.setResCode("40302");
             response.setResMsg(ErrorCodeUtil.getErrorMsg("40302"));
+
+            return response;
+        }
+
+        ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
+        ShoppingCartExample.Criteria criteria = shoppingCartExample.createCriteria();
+        criteria.andIdIn(query.getShoppingCartIds());
+        criteria.andIsDeletedEqualTo(Boolean.FALSE);
+
+        List<ShoppingCart> shoppingCarts= shoppingCartMapper.selectByExample(shoppingCartExample);
+        
+        //如果需要删除的购物车列表和参数请求的不一致 则直接返回错误
+        if(shoppingCarts.size()!=query.getShoppingCartIds().size()){
+            response.setResCode("40329");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40329"));
 
             return response;
         }

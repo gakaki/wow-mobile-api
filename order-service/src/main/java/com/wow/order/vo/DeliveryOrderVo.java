@@ -15,6 +15,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class DeliveryOrderVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
+    //快递公司code
+    private String deliveryCompanyCode;
 
     //快递公司名称
     private String deliveryCompanyName;
@@ -24,6 +27,14 @@ public class DeliveryOrderVo implements Serializable {
 
     //订单项目
     private List<OrderItemVo> orderItems;
+    
+    public String getDeliveryCompanyCode() {
+        return deliveryCompanyCode;
+    }
+
+    public void setDeliveryCompanyCode(String deliveryCompanyCode) {
+        this.deliveryCompanyCode = deliveryCompanyCode;
+    }
 
     public String getDeliveryCompanyName() {
         return deliveryCompanyName;

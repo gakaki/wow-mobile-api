@@ -86,6 +86,7 @@ import com.wow.user.vo.ShoppingCartResultVo;
 @Service
 @Transactional("orderTransactionManager")
 public class OrderServiceImpl implements OrderService {
+
     @Autowired
     private ShoppingCartMapper shoppingCartMapper;
 
@@ -789,6 +790,7 @@ public class OrderServiceImpl implements OrderService {
         DeliveryOrderVo deliveryOrderVo = null;
         for (DeliveryOrder deliveryOrder : deliveryOrders) {
             deliveryOrderVo = new DeliveryOrderVo();
+            deliveryOrderVo.setDeliveryCompanyCode(deliveryOrder.getDeliveryCompanyCode());
             deliveryOrderVo.setDeliveryCompanyName(deliveryOrder.getDeliveryCompanyName());
             deliveryOrderVo.setDeliveryOrderNo(deliveryOrder.getDeliveryOrderNo());
 
@@ -1007,6 +1009,8 @@ public class OrderServiceImpl implements OrderService {
 
         //设置订单项信息
         response.setOrderSettles(orderSettles);
+        //设置订单产品总价(不包含运费)
+        response.setProductTotalAmount(NumberUtil.convertToYuan(totalPrice));
 
         //计算订单运费
         long deliveryfee = calculateDeliveryFee(totalPrice);
@@ -1288,6 +1292,7 @@ public class OrderServiceImpl implements OrderService {
         deliveryOrder.setSaleOrderId(query.getOrderId());
         deliveryOrder.setDeliveryMothod(query.getDeliveryMothod());
         //从数据字典中获取配送公司名称
+        deliveryOrder.setDeliveryCompanyCode(query.getDeliveryCompanyCode());
         String companyName = DictionaryUtil.getValue("delivery_company", query.getDeliveryCompanyCode());
         deliveryOrder.setDeliveryCompanyName(companyName);
         deliveryOrder.setDeliveryOrderNo(query.getDeliveryOrderNo()); //设置配送单号
