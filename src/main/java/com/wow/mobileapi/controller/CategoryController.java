@@ -22,7 +22,6 @@ import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
-import com.wow.mobileapi.response.category.SubCategory;
 
 @RestController
 public class CategoryController extends BaseController {

@@ -455,14 +455,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         newShoppingCart.setEndUserId(query.getEndUserId());
         newShoppingCart.setProductId(query.getProductId());
-        
+
         newShoppingCart.setProductQty(query.getProductQty());
         newShoppingCart.setProductPrice(query.getSellPrice());
         newShoppingCart.setWeight(query.getWeight());
-        
+
         newShoppingCart.setCreateTime(DateUtil.currentDate());
         newShoppingCart.setUpdateTime(DateUtil.currentDate());
-        
+
         newShoppingCart.setIsDeleted(Boolean.FALSE); //默认不删除
         newShoppingCart.setIsSelected(Boolean.TRUE);//默认选中
 
@@ -497,37 +497,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         CommonResponse response = new CommonResponse();
 
         // 业务校验开始
-        //判断相关的购物车信息id是否为空
-        if (query.getShoppingCartId() == null) {
-            response.setResCode("40303");
-            response.setResMsg(ErrorCodeUtil.getErrorMsg("40303"));
-
-            return response;
-        }
-        
-        //如果选中状态为null则默认为取消操作
-        if (query.getIsSelected() == null) {
-            query.setIsSelected(Boolean.FALSE);
-        }
-
-        ShoppingCart shoppingCart = shoppingCartMapper.selectByPrimaryKey(query.getShoppingCartId());
-
-        //判断购物车id是否存在
-        if (shoppingCart == null) {
+        //判断相关的购物车id列表是否存在
+        if (CollectionUtil.isEmpty(query.getShoppingCartIds())) {
             response.setResCode("40302");
             response.setResMsg(ErrorCodeUtil.getErrorMsg("40302"));
 
             return response;
         }
 
-        //修改用户购物车信息
-        ShoppingCart targetShoppingCart = new ShoppingCart();
+        //选中或者取消用户指定的购物车信息
+        query.setUpdateTime(DateUtil.currentDate());
 
-        targetShoppingCart.setId(shoppingCart.getId());
-        targetShoppingCart.setIsSelected(query.getIsSelected());
-        targetShoppingCart.setUpdateTime(DateUtil.currentDate());
-
-        shoppingCartMapper.updateByPrimaryKeySelective(targetShoppingCart);
+        shoppingCartMapper.updateByPrimaryKeys(query);
 
         return response;
     }

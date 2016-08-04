@@ -312,9 +312,20 @@
 		</if>
 	</select>
 
-   <!-- 删除用户购物车 -->
+   <!-- 批量修改用户购物车 -->
 	<update id="updateByPrimaryKeys" parameterType="com.wow.user.vo.ShoppingCartQueryVo">
-			update shopping_cart set  is_deleted = #{isDeleted}, update_time= #{updateTime}
+			update shopping_cart 
+			<set>
+					<if test="isDeleted != null">
+					   is_deleted = #{isDeleted}, 
+				  </if>
+				  <if test="isSelected != null">
+					   is_selected = #{isSelected}, 
+				  </if>
+				   <if test="updateTime != null">
+					   update_time = #{updateTime}
+				  </if>
+			</set>
 			     where id in
 			   <foreach close=")" collection="shoppingCartIds" item="item" open="(" separator=",">
 	                    #{item}
