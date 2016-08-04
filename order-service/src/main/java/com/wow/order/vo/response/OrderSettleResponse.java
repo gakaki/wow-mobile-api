@@ -20,12 +20,23 @@ public class OrderSettleResponse extends CommonResponse {
 
     //结算产品列表
     private List<OrderSettleVo> orderSettles;
+    
+    //订单产品总价
+    private BigDecimal productTotalAmount;
 
     //订单运费 默认为0.00
     private BigDecimal deliveryFee;
-
+    
     //订单总价
     private BigDecimal totalAmount;
+    
+    public BigDecimal getProductTotalAmount() {
+        return productTotalAmount;
+    }
+
+    public void setProductTotalAmount(BigDecimal productTotalAmount) {
+        this.productTotalAmount = productTotalAmount;
+    }
 
     public List<OrderSettleVo> getOrderSettles() {
         return orderSettles;

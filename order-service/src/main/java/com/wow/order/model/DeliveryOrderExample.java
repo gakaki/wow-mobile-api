@@ -285,6 +285,76 @@ public class DeliveryOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andDeliveryCompanyCodeIsNull() {
+            addCriterion("delivery_company_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeIsNotNull() {
+            addCriterion("delivery_company_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeEqualTo(String value) {
+            addCriterion("delivery_company_code =", value, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeNotEqualTo(String value) {
+            addCriterion("delivery_company_code <>", value, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeGreaterThan(String value) {
+            addCriterion("delivery_company_code >", value, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("delivery_company_code >=", value, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeLessThan(String value) {
+            addCriterion("delivery_company_code <", value, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeLessThanOrEqualTo(String value) {
+            addCriterion("delivery_company_code <=", value, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeLike(String value) {
+            addCriterion("delivery_company_code like", value, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeNotLike(String value) {
+            addCriterion("delivery_company_code not like", value, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeIn(List<String> values) {
+            addCriterion("delivery_company_code in", values, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeNotIn(List<String> values) {
+            addCriterion("delivery_company_code not in", values, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeBetween(String value1, String value2) {
+            addCriterion("delivery_company_code between", value1, value2, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeNotBetween(String value1, String value2) {
+            addCriterion("delivery_company_code not between", value1, value2, "deliveryCompanyCode");
+            return (Criteria) this;
+        }
+
         public Criteria andDeliveryCompanyNameIsNull() {
             addCriterion("delivery_company_name is null");
             return (Criteria) this;
@@ -612,6 +682,11 @@ public class DeliveryOrderExample {
 
         public Criteria andCreateByNotBetween(String value1, String value2) {
             addCriterion("create_by not between", value1, value2, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryCompanyCodeLikeInsensitive(String value) {
+            addCriterion("upper(delivery_company_code) like", value.toUpperCase(), "deliveryCompanyCode");
             return (Criteria) this;
         }
 
