@@ -14,19 +14,14 @@ import java.security.spec.X509EncodedKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.wow.common.util.StringUtil;
+
 public class WebhooksVerifyUtil {
 
-    private static String pubKeyPath = "E:/rsa_file/pingpp.rsa.public.key.pem";
+    public static String pubKeyPath = "";
 
     private static String pubKeyContent = "";
 
-    static {
-        try {
-            pubKeyContent = getStringFromFile(pubKeyPath);
-        } catch (Exception e) {
-        }
-    }
-    
     /**
      * 将字符串进行64位编码
      * 
@@ -43,8 +38,12 @@ public class WebhooksVerifyUtil {
      * @return
      * @throws Exception
      */
-    private static String getStringFromFile(String filePath) throws Exception {
-        FileInputStream in = new FileInputStream(filePath);
+    private static String getStringFromFile() throws Exception {
+        if (StringUtil.isNotEmpty(pubKeyContent)) {
+            return pubKeyContent;
+        }
+
+        FileInputStream in = new FileInputStream(pubKeyPath);
         InputStreamReader inReader = new InputStreamReader(in, "UTF-8");
         BufferedReader bf = new BufferedReader(inReader);
         StringBuilder sb = new StringBuilder();
@@ -65,7 +64,9 @@ public class WebhooksVerifyUtil {
             }
         }
 
-        return sb.toString();
+        pubKeyContent = sb.toString();
+
+        return pubKeyContent;
     }
 
     /**
@@ -74,7 +75,7 @@ public class WebhooksVerifyUtil {
      * @throws Exception
      */
     public static PublicKey getPubKey() throws Exception {
-        String pubKeyString = pubKeyContent;
+        String pubKeyString = getStringFromFile();
         pubKeyString = pubKeyString.replaceAll("(-+BEGIN PUBLIC KEY-+\\r?\\n|-+END PUBLIC KEY-+\\r?\\n?)", "");
         byte[] keyBytes = decodeBase64(pubKeyString);
 

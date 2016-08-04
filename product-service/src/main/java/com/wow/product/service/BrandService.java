@@ -2,10 +2,9 @@ package com.wow.product.service;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wow.product.model.Brand;
+import com.wow.product.vo.response.ProductBrandAllResponse;
+import com.wow.product.vo.response.ProductBrandFirstLetterResponse;
 import com.wow.product.vo.response.ProductBrandResponse;
 import com.wow.product.vo.response.ProductBrandVoResponse;
 
@@ -73,13 +72,13 @@ public interface BrandService {
     *
     * @return
     */
-    ProductBrandResponse selectBrandFirstLetter();
+    ProductBrandFirstLetterResponse selectBrandFirstLetter();
     
     /**
      * 查询所有品牌
      * 移动端调用
      * @return
      */
-    ProductBrandResponse getAllBrandsList();
+    ProductBrandAllResponse getAllBrandsList();
 
 }

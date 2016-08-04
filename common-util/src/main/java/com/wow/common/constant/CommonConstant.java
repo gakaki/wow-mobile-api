@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.wow.common.util.DictionaryUtil;
+
 /**
  * 系统相关设置的常量
  * 
@@ -15,7 +17,7 @@ public class CommonConstant {
     public static final BigDecimal THRESHOLD = new BigDecimal("199.00");
 
     //运费
-    public static final BigDecimal DELIVERYFEE = new BigDecimal("0.00");
+    public static final BigDecimal DELIVERYFEE = new BigDecimal(DictionaryUtil.getValue("order", "order_deliveryFee"));
 
     //定义数值为0.00的BigDecimal
     public static final BigDecimal ZEROB_IGDECIMAL = new BigDecimal("0.00");
@@ -63,7 +65,7 @@ public class CommonConstant {
 
     //七牛token
     public static final String QINIU_TOKEN = "qiniu_token";
-    
+
     //订单支付状态
     //支付情况note:  1: paid     2: unpay
     private static final Map<Byte, String> PAY_STATUS_MAP = new HashMap<Byte, String>() {
