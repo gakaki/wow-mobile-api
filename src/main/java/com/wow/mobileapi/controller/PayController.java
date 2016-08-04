@@ -55,7 +55,7 @@ public class PayController extends BaseController {
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(chargeResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, chargeResponse);
-            }else{
+            } else {
                 apiResponse.setData(chargeResponse);
             }
         } catch (Exception e) {
@@ -91,10 +91,14 @@ public class PayController extends BaseController {
             logger.info("signature " + signature);
             // 解析异步通知数据
             CommonResponse commonResponse = payService.webhooks(content, signature);
+            //处理失败则返回错误提示 并返回500错误码
             if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
+                response.setStatus(500);
+            } else {
+                //处理成功则返回200通知
+                response.setStatus(200);
             }
-            response.setStatus(200);
         } catch (Exception e) {
             response.setStatus(500);
             logger.error("获取通知内容错误", e);
