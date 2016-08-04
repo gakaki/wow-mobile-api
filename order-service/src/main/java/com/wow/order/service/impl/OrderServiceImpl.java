@@ -1289,7 +1289,7 @@ public class OrderServiceImpl implements OrderService {
         deliveryOrder.setSaleOrderId(query.getOrderId());
         deliveryOrder.setDeliveryMothod(query.getDeliveryMothod());
         //从数据字典中获取配送公司名称
-        String companyName = DictionaryUtil.getValue("deliveryCompany", query.getDeliveryCompanyCode());
+        String companyName = DictionaryUtil.getValue("delivery_company", query.getDeliveryCompanyCode());
         deliveryOrder.setDeliveryCompanyName(companyName);
         deliveryOrder.setDeliveryOrderNo(query.getDeliveryOrderNo()); //设置配送单号
         deliveryOrder.setShipOutDate(DateUtil.currentDate()); //设置配送日期

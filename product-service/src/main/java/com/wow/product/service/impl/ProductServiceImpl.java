@@ -1,6 +1,21 @@
 package com.wow.product.service.impl;
 
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.attribute.model.Attribute;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
@@ -13,29 +28,52 @@ import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.*;
+import com.wow.common.util.BeanUtil;
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.DictionaryUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.MapUtil;
+import com.wow.common.util.RandomGenerator;
+import com.wow.common.util.StringUtil;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
-import com.wow.product.mapper.*;
-import com.wow.product.model.*;
-import com.wow.product.service.*;
+import com.wow.product.mapper.MaterialMapper;
+import com.wow.product.mapper.ProductAttributeMapper;
+import com.wow.product.mapper.ProductImageMapper;
+import com.wow.product.mapper.ProductMapper;
+import com.wow.product.mapper.ProductMaterialMapper;
+import com.wow.product.model.Material;
+import com.wow.product.model.MaterialExample;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductApplicableScene;
+import com.wow.product.model.ProductAttribute;
+import com.wow.product.model.ProductDesigner;
+import com.wow.product.model.ProductExample;
+import com.wow.product.model.ProductImage;
+import com.wow.product.model.ProductImageExample;
+import com.wow.product.model.ProductMaterial;
+import com.wow.product.model.ProductMaterialExample;
+import com.wow.product.model.ProductSerial;
+import com.wow.product.service.ApplicableSceneService;
+import com.wow.product.service.BrandService;
+import com.wow.product.service.DesignerService;
+import com.wow.product.service.ProductSerialService;
+import com.wow.product.service.ProductService;
 import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.ProductVo;
-import com.wow.product.vo.request.*;
+import com.wow.product.vo.request.ColorSpecVo;
+import com.wow.product.vo.request.DesignerVo;
+import com.wow.product.vo.request.ProductCreateRequest;
+import com.wow.product.vo.request.ProductImgVo;
+import com.wow.product.vo.request.ProductQueryVo;
+import com.wow.product.vo.request.SpecVo;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductParameter;
 import com.wow.product.vo.response.ProductResponse;
 import com.wow.product.vo.response.ProductVoResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 
 /**
@@ -519,7 +557,11 @@ public class ProductServiceImpl implements ProductService {
         List<Category> categoryList = categoryListResponse.getCategoryList();
 
         List<Integer> categoryIdList = new ArrayList<>();
-
+        if (categoryList == null) {
+            categoryListResponse.setResCode("40404");
+            ErrorResponseUtil.setErrorResponse(productVoResponse,"40404");
+            return productVoResponse;
+        }
         for (Category category: categoryList) {
             categoryIdList.add(category.getId());
         }
@@ -532,11 +574,11 @@ public class ProductServiceImpl implements ProductService {
         List<PageData> dataList = null;
         
     	if(pqv.getSortBy() == 1 || pqv.getSortBy() == null)
-        dataList = productMapper.selectProductsByCategoryIdOrderById(page);
+        dataList = productMapper.selectProductByCategoryOrderByOnShelfTime(page);
     	if(pqv.getSortBy() == 2)
-    		dataList = productMapper.selectProductsByCategoryIdOrderBySummary(page);
+    		dataList = productMapper.selectProductByCategoryOrderBySoldQty(page);
     	if(pqv.getSortBy() == 3)
-    		dataList = productMapper.selectProductsByCategoryIdOrderByPrice(page);
+    		dataList = productMapper.selectProductByCategoryOrderBySellPrice(page);
 
     	List<ProductVo> productList = Arrays.asList(JsonUtil.fromJSON(dataList, ProductVo[].class));
 

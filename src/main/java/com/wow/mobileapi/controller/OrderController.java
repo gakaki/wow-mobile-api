@@ -13,8 +13,6 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.order.OrderDetailRequest;
 import com.wow.mobileapi.request.order.OrderListRequest;
 import com.wow.mobileapi.request.order.OrderRequest;
@@ -126,13 +124,6 @@ public class OrderController extends BaseController {
         //判断json格式参数是否有误
         if (orderRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
-            return apiResponse;
-        }
-
-        String errorMsg = ValidatorUtil.getError(orderRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
 
