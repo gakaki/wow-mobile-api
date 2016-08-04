@@ -1,6 +1,7 @@
 
 package com.wow.mobileapi.controller;
 
+import com.qiniu.util.StringMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +23,12 @@ public class QiniuController {
     private String ACCESS_KEY;
 
     //设置账号的SECRET_KEY
-    @Value("${qiniu.access_key}")
+    @Value("${qiniu.secret_key}")
     private String SECRET_KEY;
 
     /**
      * 获取七牛token
      * 
-     * @param file_path
      * @return
      */
     @RequestMapping("/v1/qiniutoken")
@@ -57,9 +57,8 @@ public class QiniuController {
     private String getUpToken(String bucketname, String key) {
         //密钥配置
         Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
-        //获取token
-        String token = auth.uploadToken(bucketname, key);
 
+        String token = auth.uploadToken(bucketname, key,60*60,new StringMap().put("insertOnly",0));
         return token;
     }
 

@@ -14,7 +14,7 @@ import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
 import com.wow.product.service.BrandService;
 import com.wow.product.vo.response.ProductBrandAllResponse;
-import com.wow.product.vo.response.ProductBrandResponse;
+import com.wow.product.vo.response.ProductBrandFirstLetterResponse;
 import com.wow.product.vo.response.ProductBrandVoResponse;
 
 /**
@@ -63,12 +63,11 @@ public class BrandController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-        	ProductBrandResponse productBrandFirstLetterResponse = brandService.selectBrandFirstLetter();
+        	ProductBrandFirstLetterResponse productBrandFirstLetterResponse = brandService.selectBrandFirstLetter();
             //如果处理失败 则返回错误信息
             if(ErrorCodeUtil.isFailedResponse(productBrandFirstLetterResponse.getResCode())){
             	setServiceErrorResponse(apiResponse, productBrandFirstLetterResponse);
             }else {
-            	productBrandFirstLetterResponse.setBrandFirstLetterList(productBrandFirstLetterResponse.getBrandFirstLetterList());
                 apiResponse.setData(productBrandFirstLetterResponse.getBrandFirstLetterList());
             }
         } catch (Exception e) {
