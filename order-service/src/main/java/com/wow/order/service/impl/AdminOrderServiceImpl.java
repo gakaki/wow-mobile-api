@@ -230,6 +230,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         DeliveryOrderVo deliveryOrderVo = null;
         for (DeliveryOrder deliveryOrder : deliveryOrders) {
             deliveryOrderVo = new DeliveryOrderVo();
+            deliveryOrderVo.setDeliveryCompanyCode(deliveryOrder.getDeliveryCompanyCode());
             deliveryOrderVo.setDeliveryCompanyName(deliveryOrder.getDeliveryCompanyName());
             deliveryOrderVo.setDeliveryOrderNo(deliveryOrder.getDeliveryOrderNo());
 
