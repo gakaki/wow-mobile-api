@@ -4,6 +4,22 @@ public class CategorySecondVo {
 
 	private Integer id;
     private String categoryName;
+	private String categoryIconSmall;
+	private String categoryDesc;
+
+	public String getCategoryDesc() {
+		return categoryDesc;
+	}
+
+	public void setCategoryDesc(String categoryDesc) {
+		this.categoryDesc = categoryDesc;
+	}
+
+
+	public String getCategoryIconSmall() { return categoryIconSmall; }
+
+	public void setCategoryIconSmall(String categoryIconSmall) { this.categoryIconSmall = categoryIconSmall; }
+
 
 	public Integer getId() {
 		return id;

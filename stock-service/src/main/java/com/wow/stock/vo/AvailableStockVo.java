@@ -2,13 +2,14 @@ package com.wow.stock.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
  */
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-public class AvailableStockVo {
+public class AvailableStockVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

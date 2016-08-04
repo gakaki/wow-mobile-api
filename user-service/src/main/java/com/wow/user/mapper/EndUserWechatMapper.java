@@ -1,12 +1,11 @@
 package com.wow.user.mapper;
 
-import com.wow.user.model.EndUser;
-import com.wow.user.model.EndUserWechat;
-import com.wow.user.model.EndUserWechatExample;
 import java.util.List;
 
-import com.wow.user.vo.WechatBindStatusVo;
 import org.apache.ibatis.annotations.Param;
+
+import com.wow.user.model.EndUserWechat;
+import com.wow.user.model.EndUserWechatExample;
 
 public interface EndUserWechatMapper {
     int countByExample(EndUserWechatExample example);

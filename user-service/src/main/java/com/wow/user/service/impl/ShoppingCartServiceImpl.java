@@ -21,6 +21,7 @@ import com.wow.common.util.NumberUtil;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
+import com.wow.price.vo.ProductPriceResponse;
 import com.wow.product.model.Product;
 import com.wow.product.service.ProductService;
 import com.wow.stock.service.StockService;
@@ -61,12 +62,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      * @return
      */
     @Override
-    public CommonResponse addProductIntoCart(ShoppingCart shoppingCart) {
+    public CommonResponse addProductIntoCart(ShoppingCartQueryVo query) {
         CommonResponse response = new CommonResponse();
 
         // 业务校验开始
         //如果产品id为空 则直接返回
-        if (shoppingCart.getProductId() == null) {
+        if (query.getProductId() == null) {
             response.setResCode("40316");
             response.setResMsg(ErrorCodeUtil.getErrorMsg("40316"));
 
@@ -74,10 +75,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
 
         //判断相关的产品id是否存在
-        Product product = productService.getProductById(shoppingCart.getProductId());
+        Product product = productService.getProductById(query.getProductId());
         if (product == null) {
             response.setResCode("40301");
             response.setResMsg(ErrorCodeUtil.getErrorMsg("40301"));
+
+            return response;
+        }
+
+        //如果产品类型不是普通品 则无法加入到购物车
+        if (product.getProductType().byteValue() != CommonConstant.ONE.byteValue()) {
+            response.setResCode("40327");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40327"));
 
             return response;
         }
@@ -97,45 +106,44 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
             return response;
         }
-
-        //判断加入的产品是否有库存 如果库存不足 则直接返回
-        AvailableStockResponse availableStockResponse = stockService.getAvailableStock(shoppingCart.getProductId());
-        if (ErrorCodeUtil.isFailedResponse(availableStockResponse.getResCode())) {
-            response.setResCode(availableStockResponse.getResCode());
-            response.setResMsg(ErrorCodeUtil.getErrorMsg(availableStockResponse.getResCode()));
-
-            return response;
-        }
-
-        //如果购物车数量为空 则默认为1
-        if (shoppingCart.getProductQty() == null) {
-            shoppingCart.setProductQty((byte) 1);
-        }
-
-        //判断库存是否可用 如果当前可用库存小于要加入购物车的数量 则直接返回
-        AvailableStockVo availableStockVo = availableStockResponse.getAvailableStockVo();
-        if (availableStockVo == null || availableStockVo.getTotalAvailableStockQty() < shoppingCart.getProductQty()) {
-            response.setResCode("50608");
-            response.setResMsg(ErrorCodeUtil.getErrorMsg("50608"));
-
-            return response;
-        }
         //业务校验结束
 
-        ShoppingCart newShoppingCart = getShoppingCartByExample(shoppingCart);
+        //如果购物车数量为空 则默认为1
+        if (query.getProductQty() == null) {
+            query.setProductQty((byte) 1);
+        }
+
+        //调用获取产品价格服务
+        ProductPriceResponse priceResponse = priceService.getProductPrice(product.getId());
+
+        //判断服务是否调用成功 如果处理失败 则返回错误信息
+        if (ErrorCodeUtil.isFailedResponse(priceResponse.getResCode())) {
+            response.setResCode(priceResponse.getResCode());
+            response.setResMsg(priceResponse.getResMsg());
+
+            return response;
+        }
+
+        ProductPrice productPrice = priceResponse.getProductPrice();
+
+        //设置产品的价格和重量快照
+        query.setSellPrice(productPrice == null ? BigDecimal.ZERO : productPrice.getSellPrice());
+        query.setWeight(product.getWeight());
+
+        ShoppingCart shoppingCart = getShoppingCartByExample(query);
         //如果该产品已经加入到购物车 则对该产品数量进行增加操作
-        if (newShoppingCart != null) {
+        if (shoppingCart != null) {
             ShoppingCart targetShoppingCart = new ShoppingCart();
 
-            targetShoppingCart.setId(newShoppingCart.getId());
+            targetShoppingCart.setId(shoppingCart.getId());
             //对购物车中的产品数量进行增加
-            targetShoppingCart.setProductQty((byte) (newShoppingCart.getProductQty() + shoppingCart.getProductQty()));
+            targetShoppingCart.setProductQty((byte) (shoppingCart.getProductQty() + query.getProductQty()));
             targetShoppingCart.setUpdateTime(DateUtil.currentDate());
 
             shoppingCartMapper.updateByPrimaryKeySelective(targetShoppingCart);
         } else {
             //否则将该产品加入到用户购物车表
-            shoppingCart = wrapShoppingCart(shoppingCart);
+            shoppingCart = wrapShoppingCart(query);
 
             shoppingCartMapper.insertSelective(shoppingCart);
         }
@@ -424,13 +432,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      * @param request
      * @return
      */
-    private ShoppingCart getShoppingCartByExample(ShoppingCart shoppingCart) {
+    private ShoppingCart getShoppingCartByExample(ShoppingCartQueryVo query) {
         //判断该产品用户是否已经加入到购物车
         ShoppingCartExample shoppingCartExample = new ShoppingCartExample();
         ShoppingCartExample.Criteria criteria = shoppingCartExample.createCriteria();
 
-        criteria.andEndUserIdEqualTo(shoppingCart.getEndUserId());
-        criteria.andProductIdEqualTo(shoppingCart.getProductId());
+        criteria.andEndUserIdEqualTo(query.getEndUserId());
+        criteria.andProductIdEqualTo(query.getProductId());
         criteria.andIsDeletedEqualTo(Boolean.FALSE);
 
         return shoppingCartMapper.selectUniqueByExample(shoppingCartExample);
@@ -442,17 +450,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      * @param shoppingCart2
      * @return
      */
-    private ShoppingCart wrapShoppingCart(ShoppingCart shoppingCart) {
+    private ShoppingCart wrapShoppingCart(ShoppingCartQueryVo query) {
         ShoppingCart newShoppingCart = new ShoppingCart();
 
-        //根据token获取用户id 方法待定
-        newShoppingCart.setEndUserId(shoppingCart.getEndUserId());
-        newShoppingCart.setProductId(shoppingCart.getProductId());
-        newShoppingCart.setProductQty(shoppingCart.getProductQty());
+        newShoppingCart.setEndUserId(query.getEndUserId());
+        newShoppingCart.setProductId(query.getProductId());
+        
+        newShoppingCart.setProductQty(query.getProductQty());
+        newShoppingCart.setProductPrice(query.getSellPrice());
+        newShoppingCart.setWeight(query.getWeight());
+        
         newShoppingCart.setCreateTime(DateUtil.currentDate());
         newShoppingCart.setUpdateTime(DateUtil.currentDate());
+        
         newShoppingCart.setIsDeleted(Boolean.FALSE); //默认不删除
-        shoppingCart.setIsSelected(Boolean.TRUE);//默认选中
+        newShoppingCart.setIsSelected(Boolean.TRUE);//默认选中
 
         return newShoppingCart;
     }
@@ -491,6 +503,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             response.setResMsg(ErrorCodeUtil.getErrorMsg("40303"));
 
             return response;
+        }
+        
+        //如果选中状态为null则默认为取消操作
+        if (query.getIsSelected() == null) {
+            query.setIsSelected(Boolean.FALSE);
         }
 
         ShoppingCart shoppingCart = shoppingCartMapper.selectByPrimaryKey(query.getShoppingCartId());

@@ -23,11 +23,8 @@ import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.constant.BizConstant;
-import com.wow.common.enums.ApplicablePeopleEnum;
-import com.wow.common.enums.ApplicableSceneEnum;
 import com.wow.common.enums.MaterialEnum;
 import com.wow.common.enums.ProductStatusEnum;
-import com.wow.common.enums.StyleEnum;
 import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
@@ -65,6 +62,7 @@ import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ColorSpecVo;
 import com.wow.product.vo.request.DesignerVo;
@@ -238,8 +236,7 @@ public class ProductServiceImpl implements ProductService {
             productApplicableScene.setProductId(productId);
             productApplicableScene.setApplicableSceneId(text);
             productApplicableSceneList.add(productApplicableScene);
-
-            applicableSceneText += ApplicableSceneEnum.get(text) + ",";
+            applicableSceneText += DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_APPLICABLE_SCENE,text).getKeyValue() + ",";
         }
         applicableSceneService.createProductApplicableScene(productApplicableSceneList);
 
@@ -561,11 +558,10 @@ public class ProductServiceImpl implements ProductService {
 
         List<Integer> categoryIdList = new ArrayList<>();
         if (categoryList == null) {
-        	productVoResponse.setResCode("40404");
+            categoryListResponse.setResCode("40404");
             ErrorResponseUtil.setErrorResponse(productVoResponse,"40404");
             return productVoResponse;
         }
-        
         for (Category category: categoryList) {
             categoryIdList.add(category.getId());
         }
@@ -578,17 +574,13 @@ public class ProductServiceImpl implements ProductService {
         List<PageData> dataList = null;
         
     	if(pqv.getSortBy() == 1 || pqv.getSortBy() == null)
-    		dataList = productMapper.selectOrderByShelfTimeListPage(page);
+        dataList = productMapper.selectProductsByCategoryIdOrderById(page);
     	if(pqv.getSortBy() == 2)
-    		dataList = productMapper.selectOrderbyTotalSoldListPage(page);
+    		dataList = productMapper.selectProductsByCategoryIdOrderBySummary(page);
     	if(pqv.getSortBy() == 3)
-    		dataList = productMapper.selectOrderbySellPriceListPage(page);
-
-        logger.info("result size:" + dataList.size());
+    		dataList = productMapper.selectProductsByCategoryIdOrderByPrice(page);
 
     	List<ProductVo> productList = Arrays.asList(JsonUtil.fromJSON(dataList, ProductVo[].class));
-
-        logger.info("productList size:" + productList.size());
 
     	if(productList.size()>0){
     		List<Integer> productIds = new ArrayList<Integer>();
@@ -617,7 +609,6 @@ public class ProductServiceImpl implements ProductService {
         	}
         	productVoResponse.setProductVoList(list);
     	}
-        logger.info("productList size:" + productVoResponse.getProductVoList().size());
         return productVoResponse;
     }
 
@@ -646,14 +637,17 @@ public class ProductServiceImpl implements ProductService {
             //产品参数
             ProductParameter productParameter = new ProductParameter();
             productParameter.setApplicableSceneText(product.getApplicableSceneText());
-//            productParameter.setOrigin(CountryEnum.get((int)product.getOriginCountryId()) + "," + product.getOriginCity());
-            productParameter.setOrigin(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_COUNTRY,product.getOriginCountryId()).getKeyValue()+ "," + product.getOriginCity());
+            String origin = DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_COUNTRY,product.getOriginCountryId()).getKeyValue();
+            String city = product.getOriginCity();
+            if (StringUtil.isNotEmpty(city)) {
+                origin = origin + "," + city;
+            }
+            productParameter.setOrigin(origin);
             productParameter.setMaterialText(product.getMaterialText());
             productParameter.setNeedAssemble(product.getNeedAssemble());
 
-            productParameter.setStyle(StyleEnum.get((int)product.getStyleId()));
-            productParameter.setApplicablePeople(ApplicablePeopleEnum.get(product.getApplicablePeople()));
-
+            productParameter.setStyle(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_STYLE,String.valueOf(product.getStyleId())).getKeyValue());
+            productParameter.setApplicablePeople(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_APPLICABLE_PEOPLE,product.getApplicablePeople()).getKeyValue());
             productResponse.setProductParameter(productParameter);
         } else {
             ErrorResponseUtil.setErrorResponse(productResponse,"40202");
@@ -809,5 +803,113 @@ public class ProductServiceImpl implements ProductService {
     	
         
     	return productVoResponse;
+    }
+
+    @Override
+    public ProductVoResponse selectProductByBrandIdListPage(ProductListQuery query) {
+        ProductVoResponse productVoResponse = new ProductVoResponse();
+        if (query.getBrandId() == null) {
+            productVoResponse.setResCode("40204");
+            productVoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40204"));
+            return productVoResponse;
+        }
+        PageModel model = new PageModel();
+        if (query.getPageSize() != null) {
+            model.setShowCount(query.getPageSize());
+        }
+        if (query.getCurrentPage() != null) {
+            model.setCurrentPage(query.getCurrentPage());
+            //仅在第一页时获取相应的分页记录
+            if (query.getCurrentPage() == 1) {
+                model.setIsPage(true);
+            }
+        }
+        model.setModel(query);
+        List<PageData> pageDataList = productMapper.selectProductByBrandIdListPage(model);
+        if(pageDataList.size()>0){
+            List<ProductVo> productVoList = Arrays.asList(JsonUtil.fromJSON(pageDataList, ProductVo[].class));
+            List<Integer> productIds = new ArrayList<Integer>();
+            for(ProductVo productVo:productVoList){
+                productIds.add(productVo.getProductId());
+            }
+            //批量查询价格
+            ProductListPriceResponse batchGetProductPrice = priceService.batchGetProductPrice(productIds);
+            Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
+            if (batchGetProductPrice != null && MapUtil.isNotEmpty(batchGetProductPrice.getMap())) {
+                priceMap = batchGetProductPrice.getMap();
+            }
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = this.selectProductListPrimaryOneImg(productIds);
+            List<ProductVo> returnProductVoList = new ArrayList<ProductVo>();
+            for(ProductVo productVo:productVoList){
+                if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productVo.getProductId()) != null){
+                    productVo.setProductImg(productImageMap.get(productVo.getProductId()).getImgUrl());
+                }
+                if(MapUtil.isNotEmpty(priceMap) && priceMap.get(productVo.getProductId()) != null){
+                    productVo.setSellPrice(priceMap.get(productVo.getProductId()).getSellPrice());
+                }
+                returnProductVoList.add(productVo);
+            }
+            productVoResponse.setProductVoList(returnProductVoList);
+            productVoResponse.setCurrentPage(query.getCurrentPage());
+            productVoResponse.setPageSize(query.getPageSize());
+            productVoResponse.setTotalPage(model.getTotalPage());
+            productVoResponse.setTotalResult(model.getTotalResult());
+        }
+        return productVoResponse;
+    }
+
+    @Override
+    public ProductVoResponse selectProductByDesignerIdListPage(ProductListQuery query) {
+        ProductVoResponse productVoResponse = new ProductVoResponse();
+        if (query.getDesignerId() == null) {
+            productVoResponse.setResCode("40205");
+            productVoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40205"));
+            return productVoResponse;
+        }
+        PageModel model = new PageModel();
+        if (query.getPageSize() != null) {
+            model.setShowCount(query.getPageSize());
+        }
+        if (query.getCurrentPage() != null) {
+            model.setCurrentPage(query.getCurrentPage());
+            //仅在第一页时获取相应的分页记录
+            if (query.getCurrentPage() == 1) {
+                model.setIsPage(true);
+            }
+        }
+        model.setModel(query);
+        List<PageData> pageDataList = productMapper.selectProductByDesignerIdListPage(model);
+        if(pageDataList.size()>0){
+            List<ProductVo> productVoList = Arrays.asList(JsonUtil.fromJSON(pageDataList, ProductVo[].class));
+            List<Integer> productIds = new ArrayList<Integer>();
+            for(ProductVo productVo:productVoList){
+                productIds.add(productVo.getProductId());
+            }
+            //批量查询价格
+            ProductListPriceResponse batchGetProductPrice = priceService.batchGetProductPrice(productIds);
+            Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
+            if (batchGetProductPrice != null && MapUtil.isNotEmpty(batchGetProductPrice.getMap())) {
+                priceMap = batchGetProductPrice.getMap();
+            }
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = this.selectProductListPrimaryOneImg(productIds);
+            List<ProductVo> returnProductVoList = new ArrayList<ProductVo>();
+            for(ProductVo productVo:productVoList){
+                if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productVo.getProductId()) != null){
+                    productVo.setProductImg(productImageMap.get(productVo.getProductId()).getImgUrl());
+                }
+                if(MapUtil.isNotEmpty(priceMap) && priceMap.get(productVo.getProductId()) != null){
+                    productVo.setSellPrice(priceMap.get(productVo.getProductId()).getSellPrice());
+                }
+                returnProductVoList.add(productVo);
+            }
+            productVoResponse.setProductVoList(returnProductVoList);
+            productVoResponse.setCurrentPage(query.getCurrentPage());
+            productVoResponse.setPageSize(query.getPageSize());
+            productVoResponse.setTotalPage(model.getTotalPage());
+            productVoResponse.setTotalResult(model.getTotalResult());
+        }
+        return productVoResponse;
     }
 }

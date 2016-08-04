@@ -3,7 +3,6 @@ package com.wow.attribute.service;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
-import com.wow.attribute.vo.response.CategoryVoListResponse;
 import com.wow.common.response.CommonResponse;
 
 /**

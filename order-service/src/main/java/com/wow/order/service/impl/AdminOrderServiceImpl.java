@@ -29,10 +29,10 @@ import com.wow.order.model.DeliveryOrderExample;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderExample;
 import com.wow.order.service.AdminOrderService;
-import com.wow.order.vo.AdminDeliveryOrderVo;
 import com.wow.order.vo.AdminOrderItemVo;
 import com.wow.order.vo.AdminOrderListQuery;
 import com.wow.order.vo.AdminOrderListVo;
+import com.wow.order.vo.DeliveryOrderVo;
 import com.wow.order.vo.OrderDetailQuery;
 import com.wow.order.vo.OrderItemVo;
 import com.wow.order.vo.response.AdminOrderDetailResponse;
@@ -193,25 +193,92 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         //获取订单对应的商品信息
         List<OrderItemVo> orderItems = saleOrderItemMapper.selectByOrderId(saleOrder.getId());
 
-        //对象转换
-        String json = JsonUtil.pojo2Json(orderItems);
-        List<AdminOrderItemVo> adminOrderItems = Arrays.asList(JsonUtil.fromJSON(json, AdminOrderItemVo[].class));
+        //处理未发货的商品清单
+        List<OrderItemVo> unShipOutOrderItems = getUnShipOutOrderItems(orderItems);
 
-        orderDetailResponse.setOrderItems(adminOrderItems);
+        orderDetailResponse.setUnShipOutOrderItems(unShipOutOrderItems);
 
-        //获取订单对应的运单信息
-        List<DeliveryOrder> deliveryOrders = selectByOrderId(saleOrder.getId());
+        //如果订单状态为部分发货以后状态是 才显示发货单信息
+        if (saleOrder.getOrderStatus().byteValue() >= SaleOrderStatusEnum.PARTIAL_SHIPPED.getKey().byteValue()) {
+            //获取发货单信息
+            List<DeliveryOrderVo> deliveryOrderVos = getDeliveryOrderInfo(saleOrder.getId(), orderItems);
 
-        //如果有相关的运单信息 则进行对象封装
-        if (CollectionUtil.isNotEmpty(deliveryOrders)) {
-            json = JsonUtil.pojo2Json(deliveryOrders);
-            List<AdminDeliveryOrderVo> adminDeliveryOrders = Arrays
-                .asList(JsonUtil.fromJSON(json, AdminDeliveryOrderVo[].class));
-
-            orderDetailResponse.setDeliveryOrders(adminDeliveryOrders);
+            orderDetailResponse.setDeliveryOrders(deliveryOrderVos);
         }
 
         return orderDetailResponse;
+    }
+
+    /**
+     * 获取发货单信息
+     * 
+     * @param orderId
+     * @param orderItems
+     * @return
+     */
+    private List<DeliveryOrderVo> getDeliveryOrderInfo(Integer orderId, List<OrderItemVo> orderItems) {
+        DeliveryOrderExample deliveryOrderExample = new DeliveryOrderExample();
+        DeliveryOrderExample.Criteria criteria = deliveryOrderExample.createCriteria();
+        criteria.andSaleOrderIdEqualTo(orderId);
+
+        List<DeliveryOrder> deliveryOrders = deliveryOrderMapper.selectByExample(deliveryOrderExample);
+
+        //获取发货单对应的商品信息
+        Map<Integer, List<OrderItemVo>> map = getDeliveryOrderMap(orderItems);
+
+        List<DeliveryOrderVo> deliveryOrderVos = new ArrayList<DeliveryOrderVo>(deliveryOrders.size());
+        DeliveryOrderVo deliveryOrderVo = null;
+        for (DeliveryOrder deliveryOrder : deliveryOrders) {
+            deliveryOrderVo = new DeliveryOrderVo();
+            deliveryOrderVo.setDeliveryCompanyName(deliveryOrder.getDeliveryCompanyName());
+            deliveryOrderVo.setDeliveryOrderNo(deliveryOrder.getDeliveryOrderNo());
+
+            deliveryOrderVo.setOrderItems(map.get(deliveryOrder.getId()));
+
+            deliveryOrderVos.add(deliveryOrderVo);
+        }
+
+        return deliveryOrderVos;
+    }
+
+    /**
+     * 获取未发货清单列表
+     * 
+     * @param orderItems
+     * @return
+     */
+    private List<OrderItemVo> getUnShipOutOrderItems(List<OrderItemVo> orderItems) {
+        List<OrderItemVo> unShipOutOrderItems = new ArrayList<OrderItemVo>(orderItems.size());
+
+        for (OrderItemVo orderItemVo : orderItems) {
+            if (!orderItemVo.getIsShippedOut()) {
+                unShipOutOrderItems.add(orderItemVo);
+            }
+        }
+
+        return unShipOutOrderItems;
+    }
+
+    /**
+     * 获取发货单对应的商品信息
+     * 
+     * @param orderItems
+     * @return
+     */
+    private Map<Integer, List<OrderItemVo>> getDeliveryOrderMap(List<OrderItemVo> orderItems) {
+        Map<Integer, List<OrderItemVo>> map = new HashMap<Integer, List<OrderItemVo>>();
+
+        for (OrderItemVo orderItemVo : orderItems) {
+            if (map.containsKey(orderItemVo.getDeliveryOrderId())) {
+                map.get(orderItemVo.getDeliveryOrderId()).add(orderItemVo);
+            } else {
+                List<OrderItemVo> orderItemList = new ArrayList<OrderItemVo>();
+                orderItemList.add(orderItemVo);
+                map.put(orderItemVo.getDeliveryOrderId(), orderItemList);
+            }
+        }
+
+        return map;
     }
 
     /**
@@ -231,6 +298,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
         //设置订单金额
         orderDetailResponse.setOrderAmount(saleOrder.getOrderAmount());
+        orderDetailResponse.setProductAmount(saleOrder.getProductAmount());
         orderDetailResponse.setDeliveryFee(saleOrder.getDeliveryFee());
         orderDetailResponse.setCouponAmount(saleOrder.getPreferentialAmount());
 
@@ -259,21 +327,6 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         criteria.andOrderCodeEqualTo(orderCode);
 
         return saleOrderMapper.selectOnlyByExample(saleOrderExample);
-    }
-
-    /**
-     * 根据订单号获取运单信息
-     * 
-     * @param orderCode
-     * @return
-     */
-    private List<DeliveryOrder> selectByOrderId(Integer saleOrderId) {
-        //根据订单号获取订单
-        DeliveryOrderExample deliveryOrderExample = new DeliveryOrderExample();
-        DeliveryOrderExample.Criteria criteria = deliveryOrderExample.createCriteria();
-        criteria.andSaleOrderIdEqualTo(saleOrderId);
-
-        return deliveryOrderMapper.selectByExample(deliveryOrderExample);
     }
 
 }

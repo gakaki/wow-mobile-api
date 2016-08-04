@@ -1,9 +1,6 @@
 package com.wow.mobileapi.response.product;
 
-import com.wow.product.vo.request.SpecVo;
-
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/7/23.

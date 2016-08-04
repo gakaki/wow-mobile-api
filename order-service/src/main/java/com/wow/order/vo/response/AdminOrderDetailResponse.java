@@ -5,8 +5,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
-import com.wow.order.vo.AdminDeliveryOrderVo;
 import com.wow.order.vo.AdminOrderItemVo;
+import com.wow.order.vo.DeliveryOrderVo;
+import com.wow.order.vo.OrderItemVo;
 
 /**
  * 后台订单明细接口响应类
@@ -33,6 +34,9 @@ public class AdminOrderDetailResponse extends CommonResponse {
 
     //收款人详细地址 省市区加详细地址
     private String receiverAddress;
+
+    //产品总价
+    private BigDecimal productAmount;
 
     //订单总价
     private BigDecimal orderAmount;
@@ -70,15 +74,34 @@ public class AdminOrderDetailResponse extends CommonResponse {
     //商品清单列表
     private List<AdminOrderItemVo> orderItems;
 
-    //物流信息列表
-    private List<AdminDeliveryOrderVo> deliveryOrders;
+    //发货单列表
+    private List<DeliveryOrderVo> deliveryOrders;
 
-    public List<AdminDeliveryOrderVo> getDeliveryOrders() {
+    //未发货清单列表
+    private List<OrderItemVo> unShipOutOrderItems;
+
+    public BigDecimal getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(BigDecimal productAmount) {
+        this.productAmount = productAmount;
+    }
+
+    public List<DeliveryOrderVo> getDeliveryOrders() {
         return deliveryOrders;
     }
 
-    public void setDeliveryOrders(List<AdminDeliveryOrderVo> deliveryOrders) {
+    public void setDeliveryOrders(List<DeliveryOrderVo> deliveryOrders) {
         this.deliveryOrders = deliveryOrders;
+    }
+
+    public List<OrderItemVo> getUnShipOutOrderItems() {
+        return unShipOutOrderItems;
+    }
+
+    public void setUnShipOutOrderItems(List<OrderItemVo> unShipOutOrderItems) {
+        this.unShipOutOrderItems = unShipOutOrderItems;
     }
 
     public BigDecimal getPaidAmount() {

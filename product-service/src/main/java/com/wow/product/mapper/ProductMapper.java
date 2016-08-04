@@ -39,13 +39,17 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
     
-    List<PageData> selectOrderByShelfTimeListPage(PageModel page);
+    List<PageData> selectProductsByCategoryIdOrderBySummary(PageModel page);
     
-    List<PageData> selectOrderbyTotalSoldListPage(PageModel page);
+    List<PageData> selectProductsByCategoryIdOrderByPrice(PageModel page);
     
-    List<PageData> selectOrderbySellPriceListPage(PageModel page);
+    List<PageData> selectProductsByCategoryIdOrderById(PageModel page);
     
     List<ProductVo> selectProductByBrandId(@Param("brandId") Integer brandId);
 
     List<ProductVo> selectProductByDesignerId(@Param("designerId") Integer designerId);
+
+    List<PageData> selectProductByBrandIdListPage(PageModel model);
+
+    List<PageData> selectProductByDesignerIdListPage(PageModel model);
 }

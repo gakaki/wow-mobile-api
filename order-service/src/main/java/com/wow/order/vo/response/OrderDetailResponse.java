@@ -28,11 +28,14 @@ public class OrderDetailResponse extends CommonResponse {
     //收货人名称
     private String receiverName;
 
-    //收款人手机号码
+    //收货人手机号码
     private String receiverMobile;
 
-    //收款人详细地址 省市区加详细地址
+    //收货人详细地址 省市区加详细地址
     private String receiverAddress;
+    
+    //产品总价
+    private BigDecimal productAmount;
 
     //订单总价
     private BigDecimal orderAmount;
@@ -67,12 +70,20 @@ public class OrderDetailResponse extends CommonResponse {
     //订单创建时间
     private String orderCreateTimeFormat;
 
-    //发货单列表
-    private List<DeliveryOrderVo> deliveryOrders;
+    //发货包裹列表
+    private List<DeliveryOrderVo> packages;
 
     //未发货清单列表
     private List<OrderItemVo> unShipOutOrderItems;
     
+    public BigDecimal getProductAmount() {
+        return productAmount;
+    }
+
+    public void setProductAmount(BigDecimal productAmount) {
+        this.productAmount = productAmount;
+    }
+
     public List<OrderItemVo> getUnShipOutOrderItems() {
         return unShipOutOrderItems;
     }
@@ -97,12 +108,12 @@ public class OrderDetailResponse extends CommonResponse {
         this.paymentStatusName = paymentStatusName;
     }
 
-    public List<DeliveryOrderVo> getDeliveryOrders() {
-        return deliveryOrders;
+    public List<DeliveryOrderVo> getPackages() {
+        return packages;
     }
 
-    public void setDeliveryOrders(List<DeliveryOrderVo> deliveryOrders) {
-        this.deliveryOrders = deliveryOrders;
+    public void setPackages(List<DeliveryOrderVo> packages) {
+        this.packages = packages;
     }
 
     public String getReceiverName() {

@@ -12,6 +12,7 @@ import com.wow.order.vo.OrderListQuery;
 import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
+import com.wow.order.vo.response.OrderDirectResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
@@ -24,7 +25,7 @@ import com.wow.order.vo.response.OrderSettleResponse;
 public interface OrderService {
 
     /**
-     * 订单结算
+     * 购物车结算
      * 
      * @param orderVo
      * @return
@@ -32,11 +33,26 @@ public interface OrderService {
     OrderSettleResponse settleOrder(OrderSettleQuery query);
 
     /**
+     * 立即购买结算
+     * 
+     * @param orderVo
+     * @return
+     */
+    OrderDirectResponse buyNow(OrderSettleQuery query);
+
+    /**
      * 下单
      *
      * @param orderVo
      */
-    OrderResponse createOrder(OrderQuery query);
+    OrderResponse createOrderFromCart(OrderQuery query);
+
+    /**
+     * 立即购买下单
+     *
+     * @param orderVo
+     */
+    OrderResponse createOrderFromDirect(OrderQuery query);
 
     /**
      * 查询用户订单列表
@@ -108,12 +124,12 @@ public interface OrderService {
      * @param order
      */
     boolean deliverDelayedGoods(SaleOrder order);
-    
+
     /**
      * 自动取消订单
      * 
      * @param timeoutMinute
      * @return
      */
-    CommonResponse autoCancelOrder(int  timeoutMinute);
+    CommonResponse autoCancelOrder(int timeoutMinute);
 }

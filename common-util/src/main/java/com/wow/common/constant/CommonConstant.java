@@ -19,10 +19,10 @@ public class CommonConstant {
 
     //定义数值为0.00的BigDecimal
     public static final BigDecimal ZEROB_IGDECIMAL = new BigDecimal("0.00");
-    
+
     //除数常量 100
     public static final BigDecimal HUNDRED_IGDECIMAL = new BigDecimal("100");
-    
+
     //是
     public static final int MAX_PAGE = 100;
 
@@ -60,6 +60,9 @@ public class CommonConstant {
     public static final Byte SIX = 6;
 
     public static final int PRODUCT_CODE_MAX = 100000000;
+
+    //七牛token
+    public static final String QINIU_TOKEN = "qiniu_token";
     
     //订单支付状态
     //支付情况note:  1: paid     2: unpay
@@ -108,7 +111,7 @@ public class CommonConstant {
     public static String getPayMethodName(Byte code) {
         return PAY_METHOD_MAP.get(code);
     }
-    
+
     /** 取得支付状态描述.*/
     public static String getPayStatusName(Byte code) {
         return PAY_STATUS_MAP.get(code);

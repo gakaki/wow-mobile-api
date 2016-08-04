@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wow.product.vo.ProductListQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -440,9 +441,11 @@ public class ProductController extends BaseController {
     public ApiResponse getProductByBrandId(ApiRequest apiRequest) {
         logger.info("start to get product_brand on page");
         ApiResponse apiResponse = new ApiResponse();
-        ProductQueryRequest productQueryRequest = JsonUtil
-                .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
-        
+//        ProductQueryRequest productQueryRequest = JsonUtil
+//                .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+
+        ProductListQuery productQueryRequest = JsonUtil
+                .fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
         //判断json格式参数是否有误
         if (productQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -450,7 +453,8 @@ public class ProductController extends BaseController {
         }
         
         try {
-        	ProductVoResponse productVoResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
+        	//ProductVoResponse productVoResponse = productService.selectProductByBrandId(productQueryRequest.getBrandId());
+            ProductVoResponse productVoResponse = productService.selectProductByBrandIdListPage(productQueryRequest);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productVoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productVoResponse);
@@ -473,9 +477,10 @@ public class ProductController extends BaseController {
     public ApiResponse getProductByDesignerId(ApiRequest apiRequest) {
         logger.info("start to get product_designer on page");
         ApiResponse apiResponse = new ApiResponse();
-        ProductQueryRequest productQueryRequest = JsonUtil
-                .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
-        
+//        ProductQueryRequest productQueryRequest = JsonUtil
+//                .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        ProductListQuery productQueryRequest = JsonUtil
+                .fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
         //判断json格式参数是否有误
         if (productQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -483,7 +488,8 @@ public class ProductController extends BaseController {
         }
         
         try {
-        	ProductVoResponse productVoResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
+//        	ProductVoResponse productVoResponse = productService.selectProductByDesignerId(productQueryRequest.getDesignerId());
+            ProductVoResponse productVoResponse = productService.selectProductByDesignerIdListPage(productQueryRequest);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productVoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productVoResponse);

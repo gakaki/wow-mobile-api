@@ -871,13 +871,14 @@
   </update>
 
  <!-- user foreach -->
-  <select id="selectOrderByShelfTimeListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductsByCategoryIdListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
     select
     p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
     inner join product_price pp on pp.product_id=p.id
     where p.is_deleted = false
     and p.product_type = 2
+    and p.product_status=1
     and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
@@ -885,7 +886,7 @@
     order by p.on_shelf_time ${model.ascText}
   </select>
   
-  <select id="selectOrderbyTotalSoldListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductsByCategoryIdOrderBySummary" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
   	select
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
@@ -893,6 +894,7 @@
     left join product_summary ps on ps.product_id=p.id
     where p.is_deleted = false
     and p.product_type = 2
+    and p.product_status=1
     and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
@@ -900,13 +902,14 @@
     order by ps.total_sold_qty ${model.ascText}
   </select>
   
-  <select id="selectOrderbySellPriceListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductsByCategoryIdOrderByPrice" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
   	select
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
     inner join product_price pp on pp.product_id=p.id
     where p.is_deleted = false
     and p.product_type = 2
+    and p.product_status=1
     and p.category_id in
     <foreach item="categoryId" index="index" collection="model.categoryIdList" open="(" separator="," close=")">
       #{model.categoryIdList[${index}]}
@@ -914,7 +917,7 @@
     order by pp.sell_price ${model.ascText}
   </select>
   
-  <select id="selectProductByBrandId" resultType="com.wow.product.vo.ProductVo" parameterType="map">
+  <select id="selectProductsByCategoryIdOrderById" resultType="com.wow.product.vo.ProductVo" parameterType="map">
   	select
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
@@ -936,5 +939,32 @@
     and p.product_type = 2
     order by p.id desc
   </select>
-  
+
+
+
+
+  <select id="selectProductByBrandIdListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+    select
+    p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
+    from product p
+    inner join product_price pp on pp.product_id=p.id
+    where p.is_deleted = false
+    and p.brand_id = #{model.brandId}
+    and p.product_type = 2
+    and p.product_status=1
+    order by p.id desc
+  </select>
+
+  <select id="selectProductByDesignerIdListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+    select
+    p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
+    from product p
+    inner join product_designer pd on pd.product_id=p.id
+    inner join product_price pp on pp.product_id=p.id
+    where p.is_deleted = false
+    and pd.designer_id=#{model.designerId}
+    and p.product_type = 2
+    and p.product_status=1
+    order by p.id desc
+  </select>
 </mapper>
