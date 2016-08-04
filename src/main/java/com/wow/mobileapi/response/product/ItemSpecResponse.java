@@ -1,13 +1,11 @@
 package com.wow.mobileapi.response.product;
 
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
-
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by fangying@wowdsgn on 2016/7/14.

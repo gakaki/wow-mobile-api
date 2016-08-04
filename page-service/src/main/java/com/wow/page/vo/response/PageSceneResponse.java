@@ -12,6 +12,8 @@ import java.util.List;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class PageSceneResponse extends CommonResponse {
 
+    /**  */
+    private static final long serialVersionUID = 1L;
     private List<Scene> sceneList;
 
     public List<Scene> getSceneList() {

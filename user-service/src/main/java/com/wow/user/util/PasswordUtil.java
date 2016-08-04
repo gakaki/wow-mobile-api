@@ -1,6 +1,5 @@
 package com.wow.user.util;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 /**
@@ -13,7 +12,8 @@ public class PasswordUtil {
         String res = PasswordUtil.MD5(salt + pwd) + ':' + salt;
         return res;
     }
-    public static boolean passwordHashValidate(String pwd,String pwdHash) {
+
+    public static boolean passwordHashValidate(String pwd, String pwdHash) {
         String[] hash = pwdHash.split(":");
         String hashPart1 = hash[0];
         String hashPart2 = hash[1];
@@ -23,34 +23,35 @@ public class PasswordUtil {
         return pwdDigest.equals(hashPart1);
 
     }
+
     //todo
-    private static String randomString(){
-        int defaultLen  = 32;
+    private static String randomString() {
+        int defaultLen = 32;
 
         String chars = "";
 
-        String CHARS_LOWERS   = "abcdefghijklmnopqrstuvwxyz";
-        String CHARS_UPPERS   = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String CHARS_DIGITS   = "0123456789";
+        String CHARS_LOWERS = "abcdefghijklmnopqrstuvwxyz";
+        String CHARS_UPPERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String CHARS_DIGITS = "0123456789";
 
-        if ( chars == null || chars.isEmpty() ) {
+        if (chars == null || chars.isEmpty()) {
             // is emtpy
-            chars  = CHARS_LOWERS + CHARS_UPPERS + CHARS_DIGITS;
+            chars = CHARS_LOWERS + CHARS_UPPERS + CHARS_DIGITS;
         }
 
         String str = "";
 
-        for ( int i = 0,  lc = chars.length() - 1 ; i < defaultLen; i++) {
+        for (int i = 0, lc = chars.length() - 1; i < defaultLen; i++) {
             long mtRandRes = mtRand(0, lc);
-            int  mtRandResInt = Math.toIntExact(mtRandRes);
-            System.out.print( mtRandResInt) ;
-            str  += chars.charAt(mtRandResInt);
+            int mtRandResInt = Math.toIntExact(mtRandRes);
+            System.out.print(mtRandResInt);
+            str += chars.charAt(mtRandResInt);
         }
 
         return str;
     }
 
-    public static long mtRand(long min, long max){
+    public static long mtRand(long min, long max) {
 
         Random rnd = new Random();
 
@@ -75,15 +76,13 @@ public class PasswordUtil {
             byte[] array = md.digest(md5.getBytes());
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < array.length; ++i) {
-                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
             }
-            res =  sb.toString();
+            res = sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
         }
-        catch (java.security.NoSuchAlgorithmException e) {
-            throw e;
-        }finally {
-            return res;
-        }
+
+        return res;
     }
 
 }

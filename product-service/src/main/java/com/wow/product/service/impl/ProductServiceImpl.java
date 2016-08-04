@@ -1,17 +1,32 @@
 package com.wow.product.service.impl;
 
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
+import com.wow.attribute.model.Attribute;
+import com.wow.attribute.model.Category;
+import com.wow.attribute.service.AttributeService;
+import com.wow.attribute.service.CategoryService;
 import com.wow.attribute.vo.response.CategoryListResponse;
-import com.wow.common.enums.*;
+import com.wow.attribute.vo.response.CategoryResponse;
+import com.wow.common.constant.BizConstant;
+import com.wow.common.enums.MaterialEnum;
+import com.wow.common.enums.ProductStatusEnum;
+import com.wow.common.page.PageData;
+import com.wow.common.page.PageModel;
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.*;
+import com.wow.price.model.ProductPrice;
+import com.wow.price.service.PriceService;
+import com.wow.price.vo.ProductListPriceResponse;
+import com.wow.product.mapper.*;
+import com.wow.product.model.*;
+import com.wow.product.service.*;
 import com.wow.product.vo.ProductListQuery;
+import com.wow.product.vo.ProductVo;
+import com.wow.product.vo.request.*;
+import com.wow.product.vo.response.ProductImgResponse;
+import com.wow.product.vo.response.ProductParameter;
+import com.wow.product.vo.response.ProductResponse;
+import com.wow.product.vo.response.ProductVoResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,60 +34,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wow.attribute.model.Attribute;
-import com.wow.attribute.model.Category;
-import com.wow.attribute.service.AttributeService;
-import com.wow.attribute.service.CategoryService;
-import com.wow.attribute.vo.response.CategoryResponse;
-import com.wow.common.constant.BizConstant;
-import com.wow.common.page.PageData;
-import com.wow.common.page.PageModel;
-import com.wow.common.response.CommonResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.DictionaryUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.MapUtil;
-import com.wow.common.util.RandomGenerator;
-import com.wow.common.util.StringUtil;
-import com.wow.price.model.ProductPrice;
-import com.wow.price.service.PriceService;
-import com.wow.price.vo.ProductListPriceResponse;
-import com.wow.product.mapper.MaterialMapper;
-import com.wow.product.mapper.ProductAttributeMapper;
-import com.wow.product.mapper.ProductImageMapper;
-import com.wow.product.mapper.ProductMapper;
-import com.wow.product.mapper.ProductMaterialMapper;
-import com.wow.product.model.Material;
-import com.wow.product.model.MaterialExample;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductApplicableScene;
-import com.wow.product.model.ProductAttribute;
-import com.wow.product.model.ProductDesigner;
-import com.wow.product.model.ProductExample;
-import com.wow.product.model.ProductImage;
-import com.wow.product.model.ProductImageExample;
-import com.wow.product.model.ProductMaterial;
-import com.wow.product.model.ProductMaterialExample;
-import com.wow.product.model.ProductSerial;
-import com.wow.product.service.ApplicableSceneService;
-import com.wow.product.service.BrandService;
-import com.wow.product.service.DesignerService;
-import com.wow.product.service.ProductSerialService;
-import com.wow.product.service.ProductService;
-import com.wow.product.vo.ProductVo;
-import com.wow.product.vo.request.ColorSpecVo;
-import com.wow.product.vo.request.DesignerVo;
-import com.wow.product.vo.request.ProductCreateRequest;
-import com.wow.product.vo.request.ProductImgVo;
-import com.wow.product.vo.request.ProductQueryVo;
-import com.wow.product.vo.request.SpecVo;
-import com.wow.product.vo.response.ProductImgResponse;
-import com.wow.product.vo.response.ProductParameter;
-import com.wow.product.vo.response.ProductResponse;
-import com.wow.product.vo.response.ProductVoResponse;
+import java.math.BigDecimal;
+import java.util.*;
 
 
 /**
@@ -235,8 +198,7 @@ public class ProductServiceImpl implements ProductService {
             productApplicableScene.setProductId(productId);
             productApplicableScene.setApplicableSceneId(text);
             productApplicableSceneList.add(productApplicableScene);
-
-            applicableSceneText += ApplicableSceneEnum.get(text) + ",";
+            applicableSceneText += DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_APPLICABLE_SCENE,text).getKeyValue() + ",";
         }
         applicableSceneService.createProductApplicableScene(productApplicableSceneList);
 
@@ -576,11 +538,7 @@ public class ProductServiceImpl implements ProductService {
     	if(pqv.getSortBy() == 3)
     		dataList = productMapper.selectProductsByCategoryIdOrderByPrice(page);
 
-        logger.info("result size:" + dataList.size());
-
     	List<ProductVo> productList = Arrays.asList(JsonUtil.fromJSON(dataList, ProductVo[].class));
-
-        logger.info("productList size:" + productList.size());
 
     	if(productList.size()>0){
     		List<Integer> productIds = new ArrayList<Integer>();
@@ -609,7 +567,6 @@ public class ProductServiceImpl implements ProductService {
         	}
         	productVoResponse.setProductVoList(list);
     	}
-        logger.info("productList size:" + productVoResponse.getProductVoList().size());
         return productVoResponse;
     }
 
@@ -638,14 +595,17 @@ public class ProductServiceImpl implements ProductService {
             //产品参数
             ProductParameter productParameter = new ProductParameter();
             productParameter.setApplicableSceneText(product.getApplicableSceneText());
-//            productParameter.setOrigin(CountryEnum.get((int)product.getOriginCountryId()) + "," + product.getOriginCity());
-            productParameter.setOrigin(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_COUNTRY,product.getOriginCountryId()).getKeyValue()+ "," + product.getOriginCity());
+            String origin = DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_COUNTRY,product.getOriginCountryId()).getKeyValue();
+            String city = product.getOriginCity();
+            if (StringUtil.isNotEmpty(city)) {
+                origin = origin + "," + city;
+            }
+            productParameter.setOrigin(origin);
             productParameter.setMaterialText(product.getMaterialText());
             productParameter.setNeedAssemble(product.getNeedAssemble());
 
-            productParameter.setStyle(StyleEnum.get((int)product.getStyleId()));
-            productParameter.setApplicablePeople(ApplicablePeopleEnum.get(product.getApplicablePeople()));
-
+            productParameter.setStyle(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_STYLE,String.valueOf(product.getStyleId())).getKeyValue());
+            productParameter.setApplicablePeople(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_APPLICABLE_PEOPLE,product.getApplicablePeople()).getKeyValue());
             productResponse.setProductParameter(productParameter);
         } else {
             ErrorResponseUtil.setErrorResponse(productResponse,"40202");

@@ -61,8 +61,12 @@ public class CategoryController extends BaseController {
                 List<CategorySecondVo> subCategoryList = new ArrayList<>();
                 for (Category category: categoryListResponse.getCategoryList()) {
                 	CategorySecondVo subCategory = new CategorySecondVo();
+
                     subCategory.setId(category.getId());
                     subCategory.setCategoryName(category.getCategoryName());
+                    subCategory.setCategoryIconSmall(category.getCategoryIconSmall());
+                    subCategory.setCategoryDesc(category.getCategoryDesc());
+
                     subCategoryList.add(subCategory);
                 }
                 subCategoryResponse.setCategoryList(subCategoryList);

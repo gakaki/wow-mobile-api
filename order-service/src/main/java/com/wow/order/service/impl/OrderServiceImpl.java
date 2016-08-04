@@ -57,6 +57,7 @@ import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.OrderSettleVo;
 import com.wow.order.vo.response.OrderDetailResponse;
+import com.wow.order.vo.response.OrderDirectResponse;
 import com.wow.order.vo.response.OrderListResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
@@ -401,7 +402,7 @@ public class OrderServiceImpl implements OrderService {
 
         saleOrder.setEndUserRemark(query.getRemark());
         saleOrder.setTotalProductQty(query.getTotalProductQty());//设置总的商品件数
-        saleOrder.setUnShipOutQty(query.getShoppingCartIds().size()); //设置未发货的商品数 默认为用户订购的产品数
+        saleOrder.setUnShipOutQty(query.getShoppingCartResult().size()); //设置未发货的商品数 默认为用户订购的产品数
 
         //设置收货人地址信息
         ShippingInfo shippingInfo = query.getShippingInfo();
@@ -410,7 +411,9 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setReceiverProvince(shippingInfo.getProvinceName());
         saleOrder.setReceiverCity(shippingInfo.getCityName());
         saleOrder.setReceiverCounty(shippingInfo.getCountyName());
-        saleOrder.setReceiverAddress(shippingInfo.getAddressDetail());
+        //设置收件人详细地址 省市区加上地址信息
+        String addressDetail = getAddressDetail(shippingInfo);
+        saleOrder.setReceiverAddress(addressDetail);
         saleOrder.setReceiverMobile(shippingInfo.getReceiverMobile());
         saleOrder.setReceiverPostcode(shippingInfo.getReceiverPostcode());
 
@@ -429,6 +432,23 @@ public class OrderServiceImpl implements OrderService {
         saleOrder.setUpdateTime(DateUtil.currentDate());
 
         return saleOrder;
+    }
+
+    /**
+     * 获取收货人地址详细信息
+     * 
+     * @param shippingInfo
+     * @return
+     */
+    private String getAddressDetail(ShippingInfo shippingInfo) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(shippingInfo.getProvinceName());
+        sb.append(shippingInfo.getCityName());
+        sb.append(shippingInfo.getCountyName());
+        sb.append(shippingInfo.getAddressDetail());
+
+        return sb.toString();
     }
 
     /**
@@ -1302,8 +1322,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderSettleResponse buyNow(OrderSettleQuery query) {
-        OrderSettleResponse response = new OrderSettleResponse();
+    public OrderDirectResponse buyNow(OrderSettleQuery query) {
+        OrderDirectResponse response = new OrderDirectResponse();
 
         //校验产品id是否为空
         if (query.getProductId() == null) {
@@ -1360,9 +1380,32 @@ public class OrderServiceImpl implements OrderService {
         shoppingCartResultVo.setProductTotalAmount(NumberUtil.convertToYuan(productTotalPrice));
 
         //包装购物车结算信息
-        wrapOrderSettleResponse(response, Arrays.asList(shoppingCartResultVo));
+        OrderSettleResponse orderSettleResponse = wrapOrderSettleResponse(new OrderSettleResponse(), Arrays
+            .asList(shoppingCartResultVo));
+        orderSettleResponse.getOrderSettles();
+
+        wrapOrderDirectResponse(orderSettleResponse, response);
 
         return response;
+    }
+
+    /**
+     * 包装立即购买的返回响应类
+     * 
+     * @param orderSettleResponse
+     * @param response
+     */
+    private void wrapOrderDirectResponse(OrderSettleResponse orderSettleResponse, OrderDirectResponse response) {
+        //设置结算产品基本信息
+        List<OrderSettleVo> orderSettles = orderSettleResponse.getOrderSettles();
+        if (CollectionUtil.isNotEmpty(orderSettles)) {
+            OrderSettleVo orderSettleVo = orderSettles.get(0);
+            BeanUtil.copyProperties(orderSettleVo, response);
+        }
+
+        //设置运费和订单总金额
+        response.setDeliveryFee(orderSettleResponse.getDeliveryFee());
+        response.setTotalAmount(orderSettleResponse.getTotalAmount());
     }
 
     /**
@@ -1390,7 +1433,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse createOrderFromDirect(OrderQuery query) {
         OrderResponse orderResponse = new OrderResponse();
-        
+
         //校验产品id是否为空
         if (query.getProductId() == null) {
             orderResponse.setResCode("40316");
@@ -1443,6 +1486,9 @@ public class OrderServiceImpl implements OrderService {
         if (query.getProductQty() == null) {
             query.setProductQty((byte) 1);
         }
+
+        //设置总的产品件数
+        query.setTotalProductQty(query.getProductQty().intValue());
 
         //设置产品价格
         ShoppingCartResultVo shoppingCartResultVo = setProductPrice(product, priceResponse.getMap());

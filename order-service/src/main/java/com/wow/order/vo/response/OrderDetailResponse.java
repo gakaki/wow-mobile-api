@@ -28,10 +28,10 @@ public class OrderDetailResponse extends CommonResponse {
     //收货人名称
     private String receiverName;
 
-    //收款人手机号码
+    //收货人手机号码
     private String receiverMobile;
 
-    //收款人详细地址 省市区加详细地址
+    //收货人详细地址 省市区加详细地址
     private String receiverAddress;
     
     //产品总价

@@ -16,7 +16,7 @@ public interface ShoppingCartService {
      * @param shoppingCart
      * @return
      */
-    CommonResponse addProductIntoCart(ShoppingCart shoppingCart);
+    CommonResponse addProductIntoCart(ShoppingCartQueryVo query);
 
     /**
      * 修改购物车里的产品

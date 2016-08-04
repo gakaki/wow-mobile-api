@@ -1,8 +1,17 @@
 package com.wow.mobileapi.controller;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wow.common.constant.BizConstant;
 import com.wow.common.model.Dictionary;
-import com.wow.common.model.DictionaryExample;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.request.DictionaryRequest;
 import com.wow.common.response.ApiResponse;
@@ -12,12 +21,6 @@ import com.wow.common.service.DictionaryService;
 import com.wow.common.util.BeanUtil;
 import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.JsonUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Created by win7 on 2016/7/27.
