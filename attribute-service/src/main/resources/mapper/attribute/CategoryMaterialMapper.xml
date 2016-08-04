@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.wow.attribute.mapper.CategoryMapper" >
+<mapper namespace="com.wow.attribute.mapper.CategoryMaterialMapper" >
     <resultMap id="BaseResultMap" type="com.wow.attribute.model.CategoryMaterial" >
         <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="category_id" property="categoryId" jdbcType="INTEGER" />
-        <collection property="materialList" javaType="ArrayList"></collection>
+        <result column="material_id" property="material" jdbcType="VARCHAR" />
     </resultMap>
-    <select id="queryMaterialsByCategory" parameterType="categoryId" resultMap="BaseResultMap">
+    <select id="queryMaterialsByCategory" parameterType="int" resultMap="BaseResultMap">
         select id,category_id,material_id from category_material where category_id=#{categoryId}
     </select>
 </mapper>

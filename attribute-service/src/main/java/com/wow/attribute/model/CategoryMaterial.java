@@ -12,9 +12,7 @@ public class CategoryMaterial implements Serializable {
 
     private int id;
 
-    private int categoryId;
-
-    private List<String> materialList;
+    private String material;
 
     public int getId() {
         return id;
@@ -24,19 +22,11 @@ public class CategoryMaterial implements Serializable {
         this.id = id;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public String getMaterial() {
+        return material;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public List<String> getMaterialList() {
-        return materialList;
-    }
-
-    public void setMaterialList(List<String> materialList) {
-        this.materialList = materialList;
+    public void setMaterial(String material) {
+        this.material = material;
     }
 }

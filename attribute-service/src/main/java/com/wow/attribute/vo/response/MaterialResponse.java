@@ -9,13 +9,13 @@ public class MaterialResponse extends CommonResponse {
 
 	private static final long serialVersionUID = 1L;
 	
-	private CategoryMaterial categoryMaterial;
+	private List<CategoryMaterial> materialList;
 
-	public CategoryMaterial getCategoryMaterial() {
-		return categoryMaterial;
+	public List<CategoryMaterial> getMaterialList() {
+		return materialList;
 	}
 
-	public void setCategoryMaterial(CategoryMaterial categoryMaterial) {
-		this.categoryMaterial = categoryMaterial;
+	public void setMaterialList(List<CategoryMaterial> materialList) {
+		this.materialList = materialList;
 	}
 }
