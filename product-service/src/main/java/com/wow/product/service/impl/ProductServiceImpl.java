@@ -9,8 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import com.wow.attribute.vo.response.CategoryListResponse;
-import com.wow.common.enums.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +20,14 @@ import com.wow.attribute.model.Attribute;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
+import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.constant.BizConstant;
+import com.wow.common.enums.ApplicablePeopleEnum;
+import com.wow.common.enums.ApplicableSceneEnum;
+import com.wow.common.enums.MaterialEnum;
+import com.wow.common.enums.ProductStatusEnum;
+import com.wow.common.enums.StyleEnum;
 import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
@@ -556,7 +560,12 @@ public class ProductServiceImpl implements ProductService {
         List<Category> categoryList = categoryListResponse.getCategoryList();
 
         List<Integer> categoryIdList = new ArrayList<>();
-
+        if (categoryList == null) {
+        	productVoResponse.setResCode("40404");
+            ErrorResponseUtil.setErrorResponse(productVoResponse,"40404");
+            return productVoResponse;
+        }
+        
         for (Category category: categoryList) {
             categoryIdList.add(category.getId());
         }
