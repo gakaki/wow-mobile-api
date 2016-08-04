@@ -212,7 +212,9 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
         ShippingInfoListResponse shippingInfoListResponse = new ShippingInfoListResponse();
 
         ShippingInfoExample shippingInfoExample = new ShippingInfoExample();
+        shippingInfoExample.setOrderByClause("is_default desc");
         ShippingInfoExample.Criteria criteria = shippingInfoExample.createCriteria();
+
         criteria.andEndUserIdEqualTo(endUserId);
         criteria.andIsDeletedEqualTo(false);
 
