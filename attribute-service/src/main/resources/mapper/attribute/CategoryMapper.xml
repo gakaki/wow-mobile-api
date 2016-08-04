@@ -75,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, category_name, parent_category_id, category_level, category_desc, category_icon_small, 
+    id, category_name, parent_category_id, category_level, category_desc, category_icon_small,
     category_icon_big, create_time, create_by, update_time, update_by, is_deleted, path
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.attribute.model.CategoryExample" >
@@ -112,14 +112,14 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into category (category_name, parent_category_id, category_level, 
-      category_desc, category_icon_small, category_icon_big, 
-      create_time, create_by, update_time, 
+    insert into category (category_name, parent_category_id, category_level,
+      category_desc, category_icon_small, category_icon_big,
+      create_time, create_by, update_time,
       update_by, is_deleted, path
       )
-    values (#{categoryName,jdbcType=VARCHAR}, #{parentCategoryId,jdbcType=INTEGER}, #{categoryLevel,jdbcType=TINYINT}, 
-      #{categoryDesc,jdbcType=VARCHAR}, #{categoryIconSmall,jdbcType=VARCHAR}, #{categoryIconBig,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+    values (#{categoryName,jdbcType=VARCHAR}, #{parentCategoryId,jdbcType=INTEGER}, #{categoryLevel,jdbcType=TINYINT},
+      #{categoryDesc,jdbcType=VARCHAR}, #{categoryIconSmall,jdbcType=VARCHAR}, #{categoryIconBig,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
       #{updateBy,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT}, #{path,jdbcType=VARCHAR}
       )
   </insert>
