@@ -5,7 +5,18 @@ public class CategorySecondVo {
 	private Integer id;
     private String categoryName;
 	private String categoryIconSmall;
+	private String categoryIconBig;
 	private String categoryDesc;
+
+	public String getCategoryIconBig() {
+		return categoryIconBig;
+	}
+
+	public void setCategoryIconBig(String categoryIconBig) {
+		this.categoryIconBig = categoryIconBig;
+	}
+
+
 
 	public String getCategoryDesc() {
 		return categoryDesc;

@@ -64,6 +64,7 @@ public class CategoryController extends BaseController {
                     subCategory.setId(category.getId());
                     subCategory.setCategoryName(category.getCategoryName());
                     subCategory.setCategoryIconSmall(category.getCategoryIconSmall());
+                    subCategory.setCategoryIconBig(category.getCategoryIconBig());
                     subCategory.setCategoryDesc(category.getCategoryDesc());
 
                     subCategoryList.add(subCategory);
