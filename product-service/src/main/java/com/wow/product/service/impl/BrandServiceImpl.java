@@ -16,6 +16,7 @@ import com.wow.product.model.BrandExample;
 import com.wow.product.service.BrandService;
 import com.wow.product.vo.BrandVo;
 import com.wow.product.vo.response.ProductBrandAllResponse;
+import com.wow.product.vo.response.ProductBrandFirstLetterResponse;
 import com.wow.product.vo.response.ProductBrandResponse;
 import com.wow.product.vo.response.ProductBrandVoResponse;
 
@@ -146,8 +147,8 @@ public class BrandServiceImpl implements BrandService {
      * @return
      */
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public ProductBrandResponse selectBrandFirstLetter(){
-    	ProductBrandResponse productBrandResponse = new ProductBrandResponse();
+    public ProductBrandFirstLetterResponse selectBrandFirstLetter(){
+    	ProductBrandFirstLetterResponse productBrandResponse = new ProductBrandFirstLetterResponse();
     	productBrandResponse.setBrandFirstLetterList(brandMapper.selectBrandFirstLetter());
     	return productBrandResponse;
     }

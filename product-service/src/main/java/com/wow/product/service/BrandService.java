@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.wow.product.model.Brand;
 import com.wow.product.vo.response.ProductBrandAllResponse;
+import com.wow.product.vo.response.ProductBrandFirstLetterResponse;
 import com.wow.product.vo.response.ProductBrandResponse;
 import com.wow.product.vo.response.ProductBrandVoResponse;
 
@@ -71,7 +72,7 @@ public interface BrandService {
     *
     * @return
     */
-    ProductBrandResponse selectBrandFirstLetter();
+    ProductBrandFirstLetterResponse selectBrandFirstLetter();
     
     /**
      * 查询所有品牌

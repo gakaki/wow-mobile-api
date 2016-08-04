@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
@@ -44,7 +43,6 @@ public class AdminOrderListVo implements Serializable {
     private String receiverMobile;
 
     //订单创建时间
-    @JsonIgnore
     private Date orderCreateTime;
 
     //订单创建时间
