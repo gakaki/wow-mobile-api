@@ -923,7 +923,7 @@
     from product p
     inner join product_price pp on pp.product_id=p.id
     where p.is_deleted = false
-    and p.brand_id = #{bradnId}
+    and p.brand_id = #{brandId}
     and p.product_type = 2
     order by p.id desc
   </select>

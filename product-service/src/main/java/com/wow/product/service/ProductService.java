@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.wow.attribute.model.Attribute;
-import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
-import com.wow.price.model.ProductPrice;
 import com.wow.product.model.Material;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductAttribute;
@@ -154,9 +152,8 @@ public interface ProductService {
 
     /**
      * 根据分类查询产品
-     * @param category
-     * @param sortBy 1:上架时间 2:销量 3:价格
-     * @param asc 是否升序
+     * @param page
+     * @param page
      * @return
      */
     ProductVoResponse getProductByCategoryIdListPage(PageModel page);
@@ -216,5 +213,4 @@ public interface ProductService {
      * @return
      */
     ProductVoResponse selectProductByDesignerIdListPage(ProductListQuery query);
-
 }
