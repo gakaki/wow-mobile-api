@@ -12,8 +12,6 @@ import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.user.ShoppingCartRequest;
 import com.wow.user.service.ShoppingCartService;
 import com.wow.user.vo.ShoppingCartQueryVo;
@@ -51,12 +49,6 @@ public class ShoppingCartController extends BaseController {
             return apiResponse;
         }
 
-        String errorMsg = ValidatorUtil.getError(shoppingCartRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
         try {
             //包装购物车对象
             ShoppingCartQueryVo shoppingCartQuery = new ShoppingCartQueryVo();
@@ -97,12 +89,6 @@ public class ShoppingCartController extends BaseController {
             return apiResponse;
         }
 
-        String errorMsg = ValidatorUtil.getError(shoppingCartRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
         try {
             //包装购物车查询对象
             ShoppingCartQueryVo query = new ShoppingCartQueryVo();
@@ -140,12 +126,6 @@ public class ShoppingCartController extends BaseController {
             return apiResponse;
         }
 
-        String errorMsg = ValidatorUtil.getError(shoppingCartRequest);
-        //如果校验错误 则返回
-        if (StringUtil.isNotEmpty(errorMsg)) {
-            setInvalidParameterResponse(apiResponse, errorMsg);
-            return apiResponse;
-        }
         try {
             //包装购物车查询对象
             ShoppingCartQueryVo query = new ShoppingCartQueryVo();
@@ -231,7 +211,7 @@ public class ShoppingCartController extends BaseController {
 
         return apiResponse;
     }
-    
+
     /**
      * 取消购物车中选中的产品
      * 
