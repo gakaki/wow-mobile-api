@@ -62,7 +62,9 @@ import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.ProductListPageVo;
 import com.wow.product.vo.ProductListQuery;
+import com.wow.product.vo.ProductListVo;
 import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ColorSpecVo;
 import com.wow.product.vo.request.DesignerVo;
@@ -71,9 +73,13 @@ import com.wow.product.vo.request.ProductImgVo;
 import com.wow.product.vo.request.ProductQueryVo;
 import com.wow.product.vo.request.SpecVo;
 import com.wow.product.vo.response.ProductImgResponse;
+import com.wow.product.vo.response.ProductPageResponse;
 import com.wow.product.vo.response.ProductParameter;
 import com.wow.product.vo.response.ProductResponse;
 import com.wow.product.vo.response.ProductVoResponse;
+import com.wow.stock.service.StockService;
+import com.wow.stock.vo.AvailableStockVo;
+import com.wow.stock.vo.response.AvailableStocksResponse;
 
 
 /**
@@ -121,6 +127,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private PriceService priceService;
+
+    @Autowired
+    private StockService stockService;
 
     /**
      * @param product
@@ -912,4 +921,70 @@ public class ProductServiceImpl implements ProductService {
         }
         return productVoResponse;
     }
+    
+    /**
+     * 分页查询产品列表
+     * @param query
+     * @return
+     */
+    public ProductPageResponse getProductListPage(PageModel pageModel){
+    	ProductPageResponse productPageResponse = new ProductPageResponse();
+    	
+    	List<PageData> pageDataList = productMapper.selectProductListPage(pageModel);
+    	if(pageDataList.size()>0){
+            List<ProductVo> productVoList = Arrays.asList(JsonUtil.fromJSON(pageDataList, ProductVo[].class));
+            List<Integer> productIds = new ArrayList<Integer>();
+            for(ProductVo productVo:productVoList){
+                productIds.add(productVo.getProductId());
+            }
+            // 批量查产品信息
+            List<ProductListVo> productList = productMapper.selectProductByProductIds(productIds);
+            
+            List<Integer> subProductIds = new ArrayList<Integer>();
+            for(ProductListVo product : productList){
+            	subProductIds.add(product.getSubProductId());
+            }
+
+            //批量查询主图
+            Map<Integer, ProductImage> productImageMap = this.selectProductListPrimaryOneImg(productIds);
+            for(ProductVo productVo:productVoList){
+                if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productVo.getProductId()) != null){
+                    productVo.setProductImg(productImageMap.get(productVo.getProductId()).getImgUrl());
+                }
+            }
+            
+            //批量查库存
+            Map<Integer, Integer> availableStockMap = new HashMap<Integer, Integer>();
+            AvailableStocksResponse availableStocksResponse = stockService.batchGetAvailableStock(subProductIds);
+            if (availableStocksResponse != null && CollectionUtil.isNotEmpty(availableStocksResponse.getAvailableStockVoList())) {
+                List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
+                for (AvailableStockVo availableStockVo : availableStockVoList) {
+                    availableStockMap.put(availableStockVo.getProductId(), availableStockVo.getTotalAvailableStockQty());
+                }
+            }
+
+            //循环赋值返回
+            List<ProductListPageVo> volist = new ArrayList<ProductListPageVo>();
+            for(ProductVo productVo:productVoList){
+            	ProductListPageVo vo = new ProductListPageVo();
+            	List<ProductListVo> plist = new ArrayList<ProductListVo>();
+            	vo.setProductVo(productVo);
+            	if(productList!=null){
+            		for(ProductListVo product : productList){
+                		if((product.getProductId()).equals(productVo.getProductId())){
+                			//设置库存数
+                			product.setStockQty(availableStockMap.get(product.getProductId()));
+                			plist.add(product);
+                		}
+                	}
+                	vo.setProductListVo(plist);
+            	}
+            	volist.add(vo);
+            }
+            productPageResponse.setProductListPageVo(volist);
+    	}
+    	
+    	return productPageResponse;
+    }
+    
 }
