@@ -6,6 +6,7 @@ import java.util.Map;
 import com.wow.attribute.model.Attribute;
 import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
+import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.product.model.Material;
 import com.wow.product.model.Product;
@@ -221,5 +222,5 @@ public interface ProductService {
      * @param query
      * @return
      */
-    GroupProductResponse queryProductByTopicGroupListPage(ProductListQuery query);
+    ApiResponse queryProductByTopicGroupListPage(ProductListQuery query);
 }

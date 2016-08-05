@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.wow.common.constant.ErrorCodeConstant;
+import com.wow.common.response.ApiResponse;
 import com.wow.product.model.*;
 import com.wow.product.vo.response.*;
 import org.slf4j.Logger;
@@ -903,12 +904,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public GroupProductResponse queryProductByTopicGroupListPage(ProductListQuery query) {
+    public ApiResponse queryProductByTopicGroupListPage(ProductListQuery query) {
+        ApiResponse resp=new ApiResponse();
         GroupProductResponse groupProductResponse = new GroupProductResponse();
         if (query==null||query.getGroupId() == null) {
-            groupProductResponse.setResCode(ErrorCodeConstant.INVALID_PARAMJSON);
-            groupProductResponse.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INVALID_PARAMJSON));
-            return groupProductResponse;
+            resp.setResCode(ErrorCodeConstant.INVALID_PARAMJSON);
+            resp.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INVALID_PARAMJSON));
+            return resp;
         }
         switch(query.getColumn()){
             case 1:query.setOrderColumn("product_summary.total_sold_qty");break;
@@ -940,6 +942,7 @@ public class ProductServiceImpl implements ProductService {
             groupProductResponse.setTotalPage(model.getTotalPage());
             groupProductResponse.setTotalResult(model.getTotalResult());
         }
-        return groupProductResponse;
+        resp.setData(groupProductResponse);
+        return resp;
     }
 }
