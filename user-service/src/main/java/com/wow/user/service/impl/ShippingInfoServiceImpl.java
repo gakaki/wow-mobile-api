@@ -219,13 +219,15 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
         criteria.andIsDeletedEqualTo(false);
 
         List<ShippingInfoResult> shippingInfoResultList = shippingInfoMapper.selectByUserId(shippingInfoExample);
-        if (CollectionUtil.isEmpty(shippingInfoResultList)) {
-            shippingInfoListResponse.setResCode("50104");
-            shippingInfoListResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50104"));
-        } else {
-            shippingInfoListResponse.setShippingInfoResultList(shippingInfoResultList);
-        }
 
+//        if (CollectionUtil.isEmpty(shippingInfoResultList)) {
+//            shippingInfoListResponse.setResCode("50104");
+//            shippingInfoListResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50104"));
+//        } else {
+//        shippingInfoListResponse.setShippingInfoResultList(shippingInfoResultList);
+//        }
+
+        shippingInfoListResponse.setShippingInfoResultList(shippingInfoResultList);
         return shippingInfoListResponse;
     }
 
@@ -249,8 +251,8 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
         ShippingInfo defaultShippingInfo;
 
         if (CollectionUtil.isEmpty(shippingInfoList)) {
-            shippingInfoResponse.setResCode("50102");
-            shippingInfoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50102"));
+//            shippingInfoResponse.setResCode("50102");
+//            shippingInfoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50102"));
         } else if (shippingInfoList.size() > 1) {
             shippingInfoResponse.setResCode("50103");
             shippingInfoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50103"));
