@@ -22,7 +22,10 @@ import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.price.vo.ProductPriceResponse;
+import com.wow.product.mapper.ProductSerialMapper;
 import com.wow.product.model.Product;
+import com.wow.product.model.ProductSerial;
+import com.wow.product.model.ProductSerialExample;
 import com.wow.product.service.ProductService;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
@@ -54,6 +57,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
     private PriceService priceService;
+
+    @Autowired
+    private ProductSerialMapper productSerialMapper;
 
     /**
      * 添加商品到购物车 暂不考虑组合产品 仅在用户登录的情况下调用
@@ -131,8 +137,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         query.setWeight(product.getWeight());
 
         ShoppingCart shoppingCart = getShoppingCartByExample(query);
-        //如果该产品已经加入到购物车 则对该产品数量进行增加操作
-        if (shoppingCart != null) {
+        //如果该产品未加入到购物车则新增
+        if (shoppingCart == null) {
+            shoppingCart = wrapShoppingCart(query);
+
+            shoppingCartMapper.insertSelective(shoppingCart);
+        } else {
+            //如果该产品已经加入到购物车 则对该产品数量进行增加操作
             ShoppingCart targetShoppingCart = new ShoppingCart();
 
             targetShoppingCart.setId(shoppingCart.getId());
@@ -141,11 +152,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             targetShoppingCart.setUpdateTime(DateUtil.currentDate());
 
             shoppingCartMapper.updateByPrimaryKeySelective(targetShoppingCart);
-        } else {
-            //否则将该产品加入到用户购物车表
-            shoppingCart = wrapShoppingCart(query);
-
-            shoppingCartMapper.insertSelective(shoppingCart);
         }
 
         return response;
@@ -244,10 +250,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         criteria.andIdIn(query.getShoppingCartIds());
         criteria.andIsDeletedEqualTo(Boolean.FALSE);
 
-        List<ShoppingCart> shoppingCarts= shoppingCartMapper.selectByExample(shoppingCartExample);
-        
+        List<ShoppingCart> shoppingCarts = shoppingCartMapper.selectByExample(shoppingCartExample);
+
         //如果需要删除的购物车列表和参数请求的不一致 则直接返回错误
-        if(shoppingCarts.size()!=query.getShoppingCartIds().size()){
+        if (shoppingCarts.size() != query.getShoppingCartIds().size()) {
             response.setResCode("40329");
             response.setResMsg(ErrorCodeUtil.getErrorMsg("40329"));
 
@@ -479,6 +485,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         newShoppingCart.setEndUserId(query.getEndUserId());
         newShoppingCart.setProductId(query.getProductId());
 
+        //获取父产品信息
+        ProductSerial parentProduct = getParentProduct(query.getProductId());
+        newShoppingCart.setParentProductId(parentProduct == null ? 0 : parentProduct.getProductId());
+
         newShoppingCart.setProductQty(query.getProductQty());
         newShoppingCart.setProductPrice(query.getSellPrice());
         newShoppingCart.setWeight(query.getWeight());
@@ -490,6 +500,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         newShoppingCart.setIsSelected(Boolean.TRUE);//默认选中
 
         return newShoppingCart;
+    }
+
+    /**
+     * 根据产品id获取父产品信息
+     * 
+     * @param productId
+     * @return
+     */
+    private ProductSerial getParentProduct(Integer productId) {
+        ProductSerialExample productSerialExample = new ProductSerialExample();
+        ProductSerialExample.Criteria criteria = productSerialExample.createCriteria();
+        criteria.andSubProductIdEqualTo(productId);
+
+        return productSerialMapper.selectUniqueByExample(productSerialExample);
     }
 
     /**

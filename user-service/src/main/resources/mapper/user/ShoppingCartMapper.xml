@@ -5,6 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="end_user_id" jdbcType="INTEGER" property="endUserId" />
     <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="parent_product_id" jdbcType="INTEGER" property="parentProductId" />
     <result column="product_qty" jdbcType="TINYINT" property="productQty" />
     <result column="product_price" jdbcType="DECIMAL" property="productPrice" />
     <result column="weight" jdbcType="DECIMAL" property="weight" />
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, end_user_id, product_id, product_qty, product_price, weight, create_time, update_time, 
-    is_selected, is_deleted
+    id, end_user_id, product_id, parent_product_id, product_qty, product_price, weight, 
+    create_time, update_time, is_selected, is_deleted
   </sql>
   <select id="selectByExample" parameterType="com.wow.user.model.ShoppingCartExample" resultMap="BaseResultMap">
     select
@@ -109,14 +110,14 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into shopping_cart (end_user_id, product_id, product_qty, 
-      product_price, weight, create_time, 
-      update_time, is_selected, is_deleted
-      )
-    values (#{endUserId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{productQty,jdbcType=TINYINT}, 
-      #{productPrice,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{isSelected,jdbcType=BIT}, #{isDeleted,jdbcType=BIT}
-      )
+    insert into shopping_cart (end_user_id, product_id, parent_product_id, 
+      product_qty, product_price, weight, 
+      create_time, update_time, is_selected, 
+      is_deleted)
+    values (#{endUserId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{parentProductId,jdbcType=INTEGER}, 
+      #{productQty,jdbcType=TINYINT}, #{productPrice,jdbcType=DECIMAL}, #{weight,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isSelected,jdbcType=BIT}, 
+      #{isDeleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.user.model.ShoppingCart">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -129,6 +130,9 @@
       </if>
       <if test="productId != null">
         product_id,
+      </if>
+      <if test="parentProductId != null">
+        parent_product_id,
       </if>
       <if test="productQty != null">
         product_qty,
@@ -158,6 +162,9 @@
       </if>
       <if test="productId != null">
         #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="parentProductId != null">
+        #{parentProductId,jdbcType=INTEGER},
       </if>
       <if test="productQty != null">
         #{productQty,jdbcType=TINYINT},
@@ -200,6 +207,9 @@
       <if test="record.productId != null">
         product_id = #{record.productId,jdbcType=INTEGER},
       </if>
+      <if test="record.parentProductId != null">
+        parent_product_id = #{record.parentProductId,jdbcType=INTEGER},
+      </if>
       <if test="record.productQty != null">
         product_qty = #{record.productQty,jdbcType=TINYINT},
       </if>
@@ -231,6 +241,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       end_user_id = #{record.endUserId,jdbcType=INTEGER},
       product_id = #{record.productId,jdbcType=INTEGER},
+      parent_product_id = #{record.parentProductId,jdbcType=INTEGER},
       product_qty = #{record.productQty,jdbcType=TINYINT},
       product_price = #{record.productPrice,jdbcType=DECIMAL},
       weight = #{record.weight,jdbcType=DECIMAL},
@@ -250,6 +261,9 @@
       </if>
       <if test="productId != null">
         product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="parentProductId != null">
+        parent_product_id = #{parentProductId,jdbcType=INTEGER},
       </if>
       <if test="productQty != null">
         product_qty = #{productQty,jdbcType=TINYINT},
@@ -279,6 +293,7 @@
     update shopping_cart
     set end_user_id = #{endUserId,jdbcType=INTEGER},
       product_id = #{productId,jdbcType=INTEGER},
+      parent_product_id = #{parentProductId,jdbcType=INTEGER},
       product_qty = #{productQty,jdbcType=TINYINT},
       product_price = #{productPrice,jdbcType=DECIMAL},
       weight = #{weight,jdbcType=DECIMAL},
@@ -289,6 +304,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   
+  <!-- 自定义sql开始 -->
   <select id="selectByEndUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
@@ -338,6 +354,7 @@
 				  sc.id shoppingCartId,
 				  sc.product_qty productQty,
 				  sc.is_selected isSelected,
+				  sc.parent_product_id parentProductId,
 				  p.id productId,
 				  p.product_name productName,
 				  p.color_display_name color,

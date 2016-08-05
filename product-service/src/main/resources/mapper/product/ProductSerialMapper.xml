@@ -282,4 +282,13 @@
     and product.is_deleted = false
     order by product.id
   </select>
+  
+   <select id="selectUniqueByExample"  resultMap="BaseResultMap"  parameterType="com.wow.product.model.ProductSerialExample" >
+		    select
+		    <include refid="Base_Column_List" />
+		    from product_serial
+		    <if test="_parameter != null" >
+		      <include refid="Example_Where_Clause" />
+		    </if>
+  </select>
 </mapper>
