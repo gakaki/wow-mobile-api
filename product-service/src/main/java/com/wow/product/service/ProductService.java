@@ -4,15 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.wow.attribute.model.Attribute;
-import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
+import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
 import com.wow.product.model.Material;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductAttribute;
 import com.wow.product.model.ProductImage;
 import com.wow.product.model.ProductMaterial;
-import com.wow.product.vo.ProductListVo;
 import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.response.ProductImgResponse;
@@ -224,4 +223,11 @@ public interface ProductService {
      */
     ProductPageResponse getProductListPage(PageModel pageModel);
     
+
+    /**
+     * 根据专题所属分组获取商品
+     * @param query
+     * @return
+     */
+    ApiResponse queryProductByTopicGroupListPage(ProductListQuery query);
 }

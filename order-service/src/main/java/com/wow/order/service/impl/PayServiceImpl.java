@@ -33,6 +33,7 @@ import com.wow.order.model.SaleOrderExample;
 import com.wow.order.model.SaleOrderLog;
 import com.wow.order.model.SaleOrderPay;
 import com.wow.order.service.PayService;
+import com.wow.order.util.WebhooksVerifyUtil;
 import com.wow.order.vo.ChargeRequest;
 import com.wow.order.vo.response.ChargeResponse;
 
@@ -53,6 +54,9 @@ public class PayServiceImpl implements PayService {
     @Value("${ppp.privateKeyFilePath}")
     private String privateKeyFilePath;
 
+    @Value("${ppp.publicKeyFilePath}")
+    private String publicKeyFilePath;
+
     @Autowired
     private SaleOrderMapper saleOrderMapper;
 
@@ -71,6 +75,8 @@ public class PayServiceImpl implements PayService {
         Pingpp.apiKey = apiKey;
         // 设置私钥路径，用于请求签名
         Pingpp.privateKeyPath = privateKeyFilePath;
+        //设置ping++公钥路径
+        WebhooksVerifyUtil.pubKeyPath = publicKeyFilePath;
     }
 
     /**
@@ -173,15 +179,15 @@ public class PayServiceImpl implements PayService {
 
         /*** 业务校验开始*/
         // 验证通知签名 
-        //        boolean isVerify = WebhooksVerifyUtil.verifyData(content, signature);
-        //
-        //        //如果验证签名错误  则直接返回
-        //        if (!isVerify) {
-        //            commonResponse.setResCode("40318");
-        //            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40318"));
-        //
-        //            return commonResponse;
-        //        }
+        boolean isVerify = WebhooksVerifyUtil.verifyData(content, signature);
+
+        //如果验证签名错误  则直接返回
+        if (!isVerify) {
+            commonResponse.setResCode("40318");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40318"));
+
+            return commonResponse;
+        }
 
         // 解析异步通知数据
         Event event = Webhooks.eventParse(content);

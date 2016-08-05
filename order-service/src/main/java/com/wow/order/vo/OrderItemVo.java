@@ -26,6 +26,9 @@ public class OrderItemVo implements Serializable {
 
     //用户购买的产品id
     private Integer productId;
+    
+    //父产品id
+    private Integer parentProductId;
 
     //产品名称
     private String productName;
@@ -52,6 +55,14 @@ public class OrderItemVo implements Serializable {
     @JsonIgnore
     private Boolean isShippedOut;
     
+    public Integer getParentProductId() {
+        return parentProductId;
+    }
+
+    public void setParentProductId(Integer parentProductId) {
+        this.parentProductId = parentProductId;
+    }
+
     public Integer getSaleOrderItemId() {
         return saleOrderItemId;
     }

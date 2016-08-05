@@ -11,6 +11,8 @@ public class ShoppingCart implements Serializable {
 
     private Integer productId;
 
+    private Integer parentProductId;
+
     private Byte productQty;
 
     private BigDecimal productPrice;
@@ -49,6 +51,14 @@ public class ShoppingCart implements Serializable {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getParentProductId() {
+        return parentProductId;
+    }
+
+    public void setParentProductId(Integer parentProductId) {
+        this.parentProductId = parentProductId;
     }
 
     public Byte getProductQty() {
@@ -116,6 +126,7 @@ public class ShoppingCart implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", endUserId=").append(endUserId);
         sb.append(", productId=").append(productId);
+        sb.append(", parentProductId=").append(parentProductId);
         sb.append(", productQty=").append(productQty);
         sb.append(", productPrice=").append(productPrice);
         sb.append(", weight=").append(weight);

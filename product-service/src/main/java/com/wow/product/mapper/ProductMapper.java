@@ -62,4 +62,6 @@ public interface ProductMapper {
     //按产品ID批量查询产品列表信息
     List<ProductListVo> selectProductByProductIds(@Param("productIds") List<Integer> productIds);
     
+
+    List<PageData> queryProductByTopicGroupListPage(PageModel model);
 }

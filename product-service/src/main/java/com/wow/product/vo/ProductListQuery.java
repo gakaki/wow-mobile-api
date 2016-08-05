@@ -15,6 +15,16 @@ public class ProductListQuery extends PageQuery implements Serializable {
 
     private Integer designerId;
 
+    private Integer groupId;
+
+    private int column;
+
+    private int type;
+
+    private String orderColumn;
+
+    private String orderType;
+
     public Integer getBrandId() {
         return brandId;
     }
@@ -29,5 +39,45 @@ public class ProductListQuery extends PageQuery implements Serializable {
 
     public void setDesignerId(Integer designerId) {
         this.designerId = designerId;
+    }
+
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getOrderColumn() {
+        return orderColumn;
+    }
+
+    public void setOrderColumn(String orderColumn) {
+        this.orderColumn = orderColumn;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 }

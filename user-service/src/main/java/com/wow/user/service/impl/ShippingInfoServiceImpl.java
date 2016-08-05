@@ -1,13 +1,5 @@
 package com.wow.user.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
@@ -21,6 +13,13 @@ import com.wow.user.service.ShippingInfoService;
 import com.wow.user.vo.ShippingInfoResult;
 import com.wow.user.vo.response.ShippingInfoListResponse;
 import com.wow.user.vo.response.ShippingInfoResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zhengzhiqing on 16/6/30.
@@ -104,7 +103,7 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
      * 根据区域id查询相关区域信息
      * 
      * @param areas
-     * @param integer
+     * @param id
      */
     private Area findById(List<Area> areas, Integer id) {
         for (Area area : areas) {
@@ -143,7 +142,6 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
                     shippingInfoMapper.updateByPrimaryKeySelective(currentDefaultShippingInfo);
                 }
             }
-            //return setAsDefaultShippingInfo(shippingInfo.getId(), shippingInfo.getEndUserId());
         }
 
         wrapShippingInfo(shippingInfo);
@@ -194,9 +192,15 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
     @Override
     public CommonResponse deleteShippingInfo(int shippingInfoId) {
         CommonResponse commonResponse = new CommonResponse();
+        ShippingInfoExample shippingInfoExample = new ShippingInfoExample();
+        ShippingInfoExample.Criteria criteria = shippingInfoExample.createCriteria();
+        criteria.andIdEqualTo(shippingInfoId);
 
-        shippingInfoMapper.deleteByPrimaryKey(shippingInfoId);
+        ShippingInfo shippingInfo = new ShippingInfo();
+        shippingInfo.setId(shippingInfoId);
+        shippingInfo.setIsDeleted(true);
 
+        shippingInfoMapper.updateByExampleSelective(shippingInfo, shippingInfoExample);
         return commonResponse;
     }
 
@@ -219,13 +223,8 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
         criteria.andIsDeletedEqualTo(false);
 
         List<ShippingInfoResult> shippingInfoResultList = shippingInfoMapper.selectByUserId(shippingInfoExample);
-        if (CollectionUtil.isEmpty(shippingInfoResultList)) {
-            shippingInfoListResponse.setResCode("50104");
-            shippingInfoListResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50104"));
-        } else {
-            shippingInfoListResponse.setShippingInfoResultList(shippingInfoResultList);
-        }
 
+        shippingInfoListResponse.setShippingInfoResultList(shippingInfoResultList);
         return shippingInfoListResponse;
     }
 
@@ -249,8 +248,7 @@ public class ShippingInfoServiceImpl implements ShippingInfoService {
         ShippingInfo defaultShippingInfo;
 
         if (CollectionUtil.isEmpty(shippingInfoList)) {
-            shippingInfoResponse.setResCode("50102");
-            shippingInfoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50102"));
+
         } else if (shippingInfoList.size() > 1) {
             shippingInfoResponse.setResCode("50103");
             shippingInfoResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50103"));

@@ -346,6 +346,66 @@ public class SaleOrderItemExample {
             return (Criteria) this;
         }
 
+        public Criteria andParentProductIdIsNull() {
+            addCriterion("parent_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdIsNotNull() {
+            addCriterion("parent_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdEqualTo(Integer value) {
+            addCriterion("parent_product_id =", value, "parentProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdNotEqualTo(Integer value) {
+            addCriterion("parent_product_id <>", value, "parentProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdGreaterThan(Integer value) {
+            addCriterion("parent_product_id >", value, "parentProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("parent_product_id >=", value, "parentProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdLessThan(Integer value) {
+            addCriterion("parent_product_id <", value, "parentProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdLessThanOrEqualTo(Integer value) {
+            addCriterion("parent_product_id <=", value, "parentProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdIn(List<Integer> values) {
+            addCriterion("parent_product_id in", values, "parentProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdNotIn(List<Integer> values) {
+            addCriterion("parent_product_id not in", values, "parentProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdBetween(Integer value1, Integer value2) {
+            addCriterion("parent_product_id between", value1, value2, "parentProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentProductIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("parent_product_id not between", value1, value2, "parentProductId");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderItemAmountIsNull() {
             addCriterion("order_item_amount is null");
             return (Criteria) this;

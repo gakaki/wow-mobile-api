@@ -750,9 +750,6 @@
                 <if test="model.orderStatus != null">
                      AND so.order_status = #{model.orderStatus}
                 </if>
-                 <if test="model.endUserId!= null">
-                     AND so.end_user_id = #{model.endUserId}
-                </if>
                 <if test="model.productName!= null  and model.productName!=''">
 	                   AND EXISTS 
 						  (SELECT 

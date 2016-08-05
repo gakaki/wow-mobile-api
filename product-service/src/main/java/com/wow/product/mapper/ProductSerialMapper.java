@@ -31,4 +31,13 @@ public interface ProductSerialMapper {
     int updateByPrimaryKey(ProductSerial record);
 
     List<Product> selectProductSerials(@Param("productId") Integer productId);
+    
+    /**
+     * 根据查询条件获取惟一记录
+     * 
+     * @param example
+     * @return
+     */
+    ProductSerial selectUniqueByExample(ProductSerialExample example);
+
 }
