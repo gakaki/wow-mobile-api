@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import com.wow.common.constant.ErrorCodeConstant;
+import com.wow.product.model.*;
+import com.wow.product.vo.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,18 +48,6 @@ import com.wow.product.mapper.ProductAttributeMapper;
 import com.wow.product.mapper.ProductImageMapper;
 import com.wow.product.mapper.ProductMapper;
 import com.wow.product.mapper.ProductMaterialMapper;
-import com.wow.product.model.Material;
-import com.wow.product.model.MaterialExample;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductApplicableScene;
-import com.wow.product.model.ProductAttribute;
-import com.wow.product.model.ProductDesigner;
-import com.wow.product.model.ProductExample;
-import com.wow.product.model.ProductImage;
-import com.wow.product.model.ProductImageExample;
-import com.wow.product.model.ProductMaterial;
-import com.wow.product.model.ProductMaterialExample;
-import com.wow.product.model.ProductSerial;
 import com.wow.product.service.ApplicableSceneService;
 import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
@@ -70,10 +61,6 @@ import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.request.ProductImgVo;
 import com.wow.product.vo.request.ProductQueryVo;
 import com.wow.product.vo.request.SpecVo;
-import com.wow.product.vo.response.ProductImgResponse;
-import com.wow.product.vo.response.ProductParameter;
-import com.wow.product.vo.response.ProductResponse;
-import com.wow.product.vo.response.ProductVoResponse;
 
 
 /**
@@ -911,5 +898,46 @@ public class ProductServiceImpl implements ProductService {
             productVoResponse.setTotalResult(model.getTotalResult());
         }
         return productVoResponse;
+    }
+
+    @Override
+    public GroupProductResponse queryProductByTopicGroupListPage(ProductListQuery query) {
+        GroupProductResponse groupProductResponse = new GroupProductResponse();
+        if (query==null||query.getGroupId() == null) {
+            groupProductResponse.setResCode(ErrorCodeConstant.INVALID_PARAMJSON);
+            groupProductResponse.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INVALID_PARAMJSON));
+            return groupProductResponse;
+        }
+        switch(query.getColumn()){
+            case 1:query.setOrderColumn("product_summary.total_sold_qty");break;
+            case 2:query.setOrderColumn("product_price.sell_price");break;
+            default :query.setOrderColumn("product_short_list_in_topic.sort_order");break;
+        }
+        switch (query.getType()){
+            case 1:query.setOrderType("desc");break;
+            default:query.setOrderType("asc");
+        }
+        PageModel model = new PageModel();
+        if (query.getPageSize() != null) {
+            model.setShowCount(query.getPageSize());
+        }
+        if (query.getCurrentPage() != null) {
+            model.setCurrentPage(query.getCurrentPage());
+            //仅在第一页时获取相应的分页记录
+            if (query.getCurrentPage() == 1) {
+                model.setIsPage(true);
+            }
+        }
+        model.setModel(query);
+        List<PageData> pageDataList = productMapper.queryProductByTopicGroupListPage(model);
+        if(pageDataList.size()>0){
+            List<GroupProduct> productList = Arrays.asList(JsonUtil.fromJSON(pageDataList, GroupProduct[].class));
+            groupProductResponse.setProductList(productList);
+            groupProductResponse.setCurrentPage(query.getCurrentPage());
+            groupProductResponse.setPageSize(query.getPageSize());
+            groupProductResponse.setTotalPage(model.getTotalPage());
+            groupProductResponse.setTotalResult(model.getTotalResult());
+        }
+        return groupProductResponse;
     }
 }
