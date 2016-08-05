@@ -13,6 +13,8 @@ public class SaleOrderItem implements Serializable {
 
     private Integer productId;
 
+    private Integer parentProductId;
+
     private BigDecimal orderItemAmount;
 
     private BigDecimal orderItemPrice;
@@ -69,6 +71,14 @@ public class SaleOrderItem implements Serializable {
 
     public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getParentProductId() {
+        return parentProductId;
+    }
+
+    public void setParentProductId(Integer parentProductId) {
+        this.parentProductId = parentProductId;
     }
 
     public BigDecimal getOrderItemAmount() {
@@ -177,6 +187,7 @@ public class SaleOrderItem implements Serializable {
         sb.append(", saleOrderId=").append(saleOrderId);
         sb.append(", deliveryOrderId=").append(deliveryOrderId);
         sb.append(", productId=").append(productId);
+        sb.append(", parentProductId=").append(parentProductId);
         sb.append(", orderItemAmount=").append(orderItemAmount);
         sb.append(", orderItemPrice=").append(orderItemPrice);
         sb.append(", orderItemQty=").append(orderItemQty);

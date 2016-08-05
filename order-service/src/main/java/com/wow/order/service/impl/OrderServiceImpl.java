@@ -64,7 +64,10 @@ import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.product.mapper.ProductMapper;
+import com.wow.product.mapper.ProductSerialMapper;
 import com.wow.product.model.Product;
+import com.wow.product.model.ProductSerial;
+import com.wow.product.model.ProductSerialExample;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.FreezeStockVo;
 import com.wow.stock.vo.ProductQtyVo;
@@ -116,6 +119,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private ProductSerialMapper productSerialMapper;
 
     /**
      * 下单
@@ -470,6 +476,7 @@ public class OrderServiceImpl implements OrderService {
 
             saleOrderItem.setSaleOrderId(query.getOrderId());
             saleOrderItem.setProductId(shoppingCart.getProductId());
+            saleOrderItem.setParentProductId(shoppingCart.getParentProductId());
             saleOrderItem.setProductName(shoppingCart.getProductName());
 
             saleOrderItem.setOrderItemPrice(shoppingCart.getSellPrice());
@@ -1374,7 +1381,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //设置产品价格
-        ShoppingCartResultVo shoppingCartResultVo = setProductPrice(product, priceResponse.getMap());
+        ShoppingCartResultVo shoppingCartResultVo = wrapShoppingCart(product, priceResponse.getMap());
         //设置产品数量
         shoppingCartResultVo.setProductQty(query.getProductQty());
         //计算产品总价
@@ -1415,10 +1422,14 @@ public class OrderServiceImpl implements OrderService {
      * @param map
      * @return
      */
-    private ShoppingCartResultVo setProductPrice(Product product, Map<Integer, ProductPrice> map) {
+    private ShoppingCartResultVo wrapShoppingCart(Product product, Map<Integer, ProductPrice> map) {
         ProductPrice productPrice = map.get(product.getId());
 
         ShoppingCartResultVo shoppingCartResultVo = new ShoppingCartResultVo();
+
+        //获取父产品信息
+        ProductSerial parentProduct = getParentProduct(product.getId());
+        shoppingCartResultVo.setParentProductId(parentProduct == null ? 0 : parentProduct.getProductId());
 
         shoppingCartResultVo.setProductId(product.getId());
         shoppingCartResultVo.setProductName(product.getProductName());
@@ -1491,7 +1502,7 @@ public class OrderServiceImpl implements OrderService {
         query.setTotalProductQty(query.getProductQty().intValue());
 
         //设置产品价格
-        ShoppingCartResultVo shoppingCartResultVo = setProductPrice(product, priceResponse.getMap());
+        ShoppingCartResultVo shoppingCartResultVo = wrapShoppingCart(product, priceResponse.getMap());
         //设置产品数量
         shoppingCartResultVo.setProductQty(query.getProductQty());
         query.setShoppingCartResult(Arrays.asList(shoppingCartResultVo));
@@ -1530,6 +1541,20 @@ public class OrderServiceImpl implements OrderService {
         saveOrder(query, orderResponse);
 
         return orderResponse;
+    }
+
+    /**
+     * 根据产品id获取父产品信息
+     * 
+     * @param productId
+     * @return
+     */
+    private ProductSerial getParentProduct(Integer productId) {
+        ProductSerialExample productSerialExample = new ProductSerialExample();
+        ProductSerialExample.Criteria criteria = productSerialExample.createCriteria();
+        criteria.andSubProductIdEqualTo(productId);
+
+        return productSerialMapper.selectUniqueByExample(productSerialExample);
     }
 
 }
