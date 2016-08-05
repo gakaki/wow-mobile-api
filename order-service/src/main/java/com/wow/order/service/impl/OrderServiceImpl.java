@@ -1397,25 +1397,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 包装立即购买的返回响应类
-     * 
-     * @param orderSettleResponse
-     * @param response
-     */
-    //    private void wrapOrderDirectResponse(OrderSettleResponse orderSettleResponse, OrderDirectResponse response) {
-    //        //设置结算产品基本信息
-    //        List<OrderSettleVo> orderSettles = orderSettleResponse.getOrderSettles();
-    //        if (CollectionUtil.isNotEmpty(orderSettles)) {
-    //            OrderSettleVo orderSettleVo = orderSettles.get(0);
-    //            BeanUtil.copyProperties(orderSettleVo, response);
-    //        }
-    //
-    //        //设置运费和订单总金额
-    //        response.setDeliveryFee(orderSettleResponse.getDeliveryFee());
-    //        response.setTotalAmount(orderSettleResponse.getTotalAmount());
-    //    }
-
-    /**
      * 设置产品价格
      * 
      * @param product
