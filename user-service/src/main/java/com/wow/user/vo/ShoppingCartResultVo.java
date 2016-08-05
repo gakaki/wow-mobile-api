@@ -22,6 +22,9 @@ public class ShoppingCartResultVo implements Serializable {
 
     //产品id
     private Integer productId;
+    
+    //父产品id
+    private Integer parentProductId;
 
     //产品名称
     private String productName;
@@ -55,6 +58,14 @@ public class ShoppingCartResultVo implements Serializable {
 
     //用户是否选中
     private Boolean isSelected;
+    
+    public Integer getParentProductId() {
+        return parentProductId;
+    }
+
+    public void setParentProductId(Integer parentProductId) {
+        this.parentProductId = parentProductId;
+    }
 
     public Boolean getIsSelected() {
         return isSelected;
