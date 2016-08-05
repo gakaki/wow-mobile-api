@@ -55,4 +55,6 @@ public interface ProductMapper {
     List<PageData> selectProductByBrandIdListPage(PageModel model);
 
     List<PageData> selectProductByDesignerIdListPage(PageModel model);
+
+    List<PageData> queryProductByTopicGroupListPage(PageModel model);
 }
