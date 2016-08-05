@@ -128,7 +128,7 @@ public class ProductController extends BaseController {
 
             //主设计师
             Designer designer = designerService.getPrimaryDesignerByProduct(productId);
-            if (designer != null) {
+            if (designer != null&&designer.getId()!=null) {
                 itemDetailResponse.setDesignerId(designer.getId());
                 itemDetailResponse.setDesignerName(designer.getDesignerName());
                 itemDetailResponse.setDesignerPhoto(designer.getDesignerPhoto());
