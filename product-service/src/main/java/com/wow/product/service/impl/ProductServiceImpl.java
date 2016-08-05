@@ -984,6 +984,10 @@ public class ProductServiceImpl implements ProductService {
             	volist.add(vo);
             }
             productPageResponse.setProductListPageVo(volist);
+            productPageResponse.setCurrentPage(pageModel.getCurrentPage());
+            productPageResponse.setPageSize(pageModel.getShowCount());
+            productPageResponse.setTotalPage(pageModel.getTotalPage());
+            productPageResponse.setTotalResult(pageModel.getTotalResult());
     	}
     	
     	return productPageResponse;
