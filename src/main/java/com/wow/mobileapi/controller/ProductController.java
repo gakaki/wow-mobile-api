@@ -505,7 +505,6 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "/v1/product/queryProductByTopicGroupListPage", method = RequestMethod.GET)
     public ApiResponse queryProductByTopicGroupListPage(ApiRequest apiRequest) {
         logger.info("start to get product_brand on page");
-        ApiResponse apiResponse = new ApiResponse();
         ProductListQuery productQueryRequest = JsonUtil
                 .fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
         return productService.queryProductByTopicGroupListPage(productQueryRequest);
