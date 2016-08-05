@@ -161,7 +161,7 @@ public class ProductServiceImpl implements ProductService {
         product.setOriginCity(originCity);
         product.setOriginProvinceId(originProvinceId);
         product.setOriginCountryId(originCountryId);
-        product.setProductModel(productModel);
+        product.setProductModel(productModel==null?"":productModel);
         product.setProductName(productName);
         product.setSellingPoint(sellingPoint);
         product.setStyleId(styleId);
@@ -188,17 +188,19 @@ public class ProductServiceImpl implements ProductService {
         parentProduct.setId(productId);
         //创建产品设计师绑定
         List<ProductDesigner> productDesignerList=new ArrayList<ProductDesigner>();
-        for (DesignerVo designerVo : designerVoList) {
-            ProductDesigner productDesigner = new ProductDesigner();
-            int designerId = designerVo.getDesignerId();
-            boolean isPrimary = designerVo.isPrimary();
-            productDesigner.setDesignerId(designerId);
-            productDesigner.setIsPrimary(isPrimary);
-            productDesigner.setProductId(productId);
-            productDesignerList.add(productDesigner);
+        if(designerVoList!=null&&!designerVoList.isEmpty()) {
+            for (DesignerVo designerVo : designerVoList) {
+                ProductDesigner productDesigner = new ProductDesigner();
+                int designerId = designerVo.getDesignerId();
+                boolean isPrimary = designerVo.isPrimary();
+                productDesigner.setDesignerId(designerId);
+                productDesigner.setIsPrimary(isPrimary);
+                productDesigner.setProductId(productId);
+                productDesignerList.add(productDesigner);
 //            designerService.createProductDesigner(productDesigner);
+            }
+            designerService.addProductDesignersByBatch(productDesignerList);
         }
-        designerService.addProductDesignersByBatch(productDesignerList);
         //创建产品材质绑定
         String materialText = "";
         List<ProductMaterial> productMaterialList = new ArrayList<ProductMaterial>();
