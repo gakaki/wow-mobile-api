@@ -92,4 +92,11 @@ public interface TopicService {
      * @return
      */
     List<ProductShortListInTopic> getProductShortListInTopic(int topicId);
+
+    /**
+     * 根据分组查询主题
+     * @param groupId
+     * @return
+     */
+    List<Topic> getTopicByGroup(int groupId);
 }

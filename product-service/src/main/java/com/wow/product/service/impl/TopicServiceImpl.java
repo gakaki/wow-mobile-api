@@ -115,4 +115,12 @@ public class TopicServiceImpl implements TopicService {
         productShortListInTopicExample.or().andIsDeletedEqualTo(false).andTopicIdEqualTo(topicId);
         return productShortListInTopicMapper.selectByExample(productShortListInTopicExample);
     }
+
+    @Override
+    public List<Topic> getTopicByGroup(int groupId) {
+        TopicExample example=new TopicExample();
+        TopicExample.Criteria criteria=example.createCriteria();
+        criteria.andGroupIdEqualTo(groupId);
+        return topicMapper.selectByExample(example);
+    }
 }

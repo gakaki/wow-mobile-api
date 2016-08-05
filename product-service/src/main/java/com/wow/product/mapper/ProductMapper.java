@@ -44,10 +44,10 @@ public interface ProductMapper {
 
     //按分类查询产品并按价格排序
     List<PageData> selectProductByCategoryOrderBySellPrice(PageModel page);
-    
+
     //按分类查询产品并按上架时间排序
     List<PageData> selectProductByCategoryOrderByOnShelfTime(PageModel page);
-    
+
     List<ProductVo> selectProductByBrandId(@Param("brandId") Integer brandId);
 
     List<ProductVo> selectProductByDesignerId(@Param("designerId") Integer designerId);
