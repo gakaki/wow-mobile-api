@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by win7 on 2016/8/4.
  */
 @RestController
-@CrossOrigin(maxAge = 3600)
 public class TopicController extends BaseController{
 
     private static final Logger logger = LoggerFactory.getLogger(TopicController.class);

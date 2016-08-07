@@ -18,6 +18,8 @@ public class CategoryVoListResponse extends CommonResponse {
 //	private CategoryFirstVo categoryFirstVo;
 	
     private List<CategorySecondVo> categoryList;
+
+    private String bgImg;
     
 //    public CategoryFirstVo getCategoryFirstVo() {
 //		return categoryFirstVo;
@@ -33,5 +35,13 @@ public class CategoryVoListResponse extends CommonResponse {
 
     public void setCategoryList(List<CategorySecondVo> categoryList) {
         this.categoryList = categoryList;
+    }
+
+    public String getBgImg() {
+        return bgImg;
+    }
+
+    public void setBgImg(String bgImg) {
+        this.bgImg = bgImg;
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by win7 on 2016/8/5.
  */
-public class GroupProductResponse extends ApiResponse {
+public class GroupProductResponse {
 
     private static final long serialVersionUID = 1L;
 
