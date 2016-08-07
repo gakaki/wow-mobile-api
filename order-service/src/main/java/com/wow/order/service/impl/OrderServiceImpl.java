@@ -58,7 +58,6 @@ import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.OrderSettleVo;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
-import com.wow.order.vo.response.OrderPayResultResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
 import com.wow.price.model.ProductPrice;
@@ -1561,8 +1560,15 @@ public class OrderServiceImpl implements OrderService {
 
             return commonResponse;
         }
-        /*** 业务校验结束*/
 
+        //如果订单支付状态为未支付  则直接返回错误提示
+        if (saleOrder.getPaymentStatus().byteValue() == CommonConstant.UNPAY.byteValue()) {
+            commonResponse.setResCode("40323");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40323"));
+
+            return commonResponse;
+        }
+        
         //如果订单状态不为待收货状态 则返回提示错误
         if (saleOrder.getOrderStatus().intValue() != SaleOrderStatusEnum.TO_BE_RECEIVED.getKey().intValue()) {
             commonResponse.setResCode("40330");
@@ -1570,6 +1576,7 @@ public class OrderServiceImpl implements OrderService {
 
             return commonResponse;
         }
+        /*** 业务校验结束*/
 
         //更新订单状态为交易完成
         SaleOrder targetSaleOrder = new SaleOrder();
