@@ -3,8 +3,6 @@ package com.wow.mobileapi.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,16 +50,18 @@ public class UserActionController extends BaseController {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        FavoriteBrandRequest favoriteBrandRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteBrandRequest.class);
-        
+        FavoriteBrandRequest favoriteBrandRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), FavoriteBrandRequest.class);
+
         //判断json格式参数是否有误
         if (favoriteBrandRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        
+
         try {
-            FavoriteCommonResponse favoriteCommonResponse = favoriteService.updateFavoriteBrand(endUserId, favoriteBrandRequest.getBrandId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService
+                .updateFavoriteBrand(endUserId, favoriteBrandRequest.getBrandId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, favoriteCommonResponse);
@@ -118,7 +118,8 @@ public class UserActionController extends BaseController {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        FavoriteBrandRequest favoriteBrandRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteBrandRequest.class);
+        FavoriteBrandRequest favoriteBrandRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), FavoriteBrandRequest.class);
 
         //判断json格式参数是否有误
         if (favoriteBrandRequest == null) {
@@ -127,7 +128,8 @@ public class UserActionController extends BaseController {
         }
 
         try {
-            FavoriteCommonResponse favoriteCommonResponse = favoriteService.isUserFavoriteBrand(endUserId, favoriteBrandRequest.getBrandId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService
+                .isUserFavoriteBrand(endUserId, favoriteBrandRequest.getBrandId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, favoriteCommonResponse);
@@ -152,16 +154,18 @@ public class UserActionController extends BaseController {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        FavoriteDesignerRequest favoriteDesignerRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteDesignerRequest.class);
-        
+        FavoriteDesignerRequest favoriteDesignerRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), FavoriteDesignerRequest.class);
+
         //判断json格式参数是否有误
         if (favoriteDesignerRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        
+
         try {
-            FavoriteCommonResponse favoriteCommonResponse = favoriteService.updateFavoriteDesigner(endUserId, favoriteDesignerRequest.getDesignerId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService
+                .updateFavoriteDesigner(endUserId, favoriteDesignerRequest.getDesignerId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, favoriteCommonResponse);
@@ -191,7 +195,7 @@ public class UserActionController extends BaseController {
         }
 
         try {
-        	FavoriteDesignerResponse favoriteDesignerResponse = favoriteService.getFavoriteDesigner(endUserId);
+            FavoriteDesignerResponse favoriteDesignerResponse = favoriteService.getFavoriteDesigner(endUserId);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(favoriteDesignerResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, favoriteDesignerResponse);
@@ -218,7 +222,8 @@ public class UserActionController extends BaseController {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        FavoriteDesignerRequest favoriteDesignerRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteDesignerRequest.class);
+        FavoriteDesignerRequest favoriteDesignerRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), FavoriteDesignerRequest.class);
 
         //判断json格式参数是否有误
         if (favoriteDesignerRequest == null) {
@@ -227,7 +232,8 @@ public class UserActionController extends BaseController {
         }
 
         try {
-            FavoriteCommonResponse favoriteCommonResponse = favoriteService.isUserFavoriteDesigner(endUserId, favoriteDesignerRequest.getDesignerId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService
+                .isUserFavoriteDesigner(endUserId, favoriteDesignerRequest.getDesignerId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, favoriteCommonResponse);
@@ -241,7 +247,6 @@ public class UserActionController extends BaseController {
         }
         return apiResponse;
     }
-    
 
     /**
      * 新增用户喜欢的产品
@@ -253,16 +258,18 @@ public class UserActionController extends BaseController {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        FavoriteProductRequest favoriteProductRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteProductRequest.class);
-        
+        FavoriteProductRequest favoriteProductRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), FavoriteProductRequest.class);
+
         //判断json格式参数是否有误
         if (favoriteProductRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        
+
         try {
-            FavoriteCommonResponse favoriteCommonResponse = favoriteService.updateFavoriteProduct(endUserId, favoriteProductRequest.getProductId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService
+                .updateFavoriteProduct(endUserId, favoriteProductRequest.getProductId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, favoriteCommonResponse);
@@ -277,47 +284,41 @@ public class UserActionController extends BaseController {
         return apiResponse;
     }
 
-
-
     /**
      * 查询用户喜欢的产品列表
      * @param apiRequest
      * @return
      */
     @RequestMapping(value = "/v1/user/product/favorite-list", method = RequestMethod.GET)
-    public ApiResponse getFavoriteProduct(ApiRequest apiRequest, HttpServletRequest request) {
+    public ApiResponse getFavoriteProduct(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        //TODO: 此处污染了接口
-        logger.info("get favorite product, endUserId=" + request.getAttribute("endUserId"));
-//        Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        Integer endUserId = (Integer)request.getAttribute("endUserId");
+        Integer endUserId = getUserIdByTokenChannel(apiRequest);
         if (endUserId == null) {
             ErrorResponseUtil.setErrorResponse(apiResponse, ErrorCodeConstant.INVALID_TOKEN);
             return apiResponse;
         }
 
         try {
-        	FavoriteProductResponse favoriteProductResponse = favoriteService.getFavoriteProduct(endUserId);
+            FavoriteProductResponse favoriteProductResponse = favoriteService.getFavoriteProduct(endUserId);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(favoriteProductResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, favoriteProductResponse);
             } else {
                 List<FavoriteProductVo> favoriteProductVoList = favoriteProductResponse.getFavoriteProductVoList();
                 List<FavoriteProductVo> list = new ArrayList<FavoriteProductVo>();
-                
+
                 for (FavoriteProductVo favoriteProductVo : favoriteProductVoList) {
-                	ProductImage pi = productService.selectProductPrimaryOneImg(favoriteProductVo.getProductId());
-                	if(pi!=null){
-                		favoriteProductVo.setProductImg(pi.getImgUrl());
-                		list.add(favoriteProductVo);
-                	}
+                    ProductImage pi = productService.selectProductPrimaryOneImg(favoriteProductVo.getProductId());
+                    if (pi != null) {
+                        favoriteProductVo.setProductImg(pi.getImgUrl());
+                        list.add(favoriteProductVo);
+                    }
                 }
                 favoriteProductResponse.setFavoriteProductVoList(favoriteProductVoList);
                 apiResponse.setData(favoriteProductResponse);
             }
         } catch (Exception e) {
             logger.error("查找用户喜欢的产品错误---" + e);
-            e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -333,7 +334,8 @@ public class UserActionController extends BaseController {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
-        FavoriteProductRequest favoriteProductRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteProductRequest.class);
+        FavoriteProductRequest favoriteProductRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), FavoriteProductRequest.class);
 
         //判断json格式参数是否有误
         if (favoriteProductRequest == null) {
@@ -342,7 +344,8 @@ public class UserActionController extends BaseController {
         }
 
         try {
-            FavoriteCommonResponse favoriteCommonResponse = favoriteService.isUserFavoriteProduct(endUserId, favoriteProductRequest.getProductId());
+            FavoriteCommonResponse favoriteCommonResponse = favoriteService
+                .isUserFavoriteProduct(endUserId, favoriteProductRequest.getProductId());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, favoriteCommonResponse);
@@ -357,69 +360,69 @@ public class UserActionController extends BaseController {
         return apiResponse;
     }
 
-//    /**
-//     * 新增用户喜欢的场景
-//     * @param apiRequest
-//     * @return
-//     */
-//    @RequestMapping(value = "/v1/user/scene/favorite", method = RequestMethod.POST)
-//    public ApiResponse favoriteScene(ApiRequest apiRequest) {
-//
-//        ApiResponse apiResponse = new ApiResponse();
-//        Integer endUserId = getUserIdByTokenChannel(apiRequest);
-//        FavoriteSceneRequest favoriteSceneRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteSceneRequest.class);
-//
-//        //判断json格式参数是否有误
-//        if (favoriteSceneRequest == null) {
-//            setParamJsonParseErrorResponse(apiResponse);
-//            return apiResponse;
-//        }
-//
-//        try {
-//            FavoriteCommonResponse favoriteCommonResponse = favoriteService.updateFavoriteScene(endUserId, favoriteSceneRequest.getSceneId());
-//            //如果处理失败 则返回错误信息
-//            if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
-//                setServiceErrorResponse(apiResponse, favoriteCommonResponse);
-//                return apiResponse;
-//            } else {
-//                apiResponse.setData(favoriteCommonResponse);
-//            }
-//        } catch (Exception e) {
-//            logger.error("新增用户喜欢的场景发生错误---" + e);
-//            setInternalErrorResponse(apiResponse);
-//        }
-//        return apiResponse;
-//    }
-//
-//    /**
-//     * 查询用户喜欢的场景列表
-//     * @param apiRequest
-//     * @return
-//     */
-//    @RequestMapping(value = "/v1/user/scene/favorite-list", method = RequestMethod.GET)
-//    public ApiResponse getFavoriteScene(ApiRequest apiRequest) {
-//        ApiResponse apiResponse = new ApiResponse();
-//        Integer endUserId = getUserIdByTokenChannel(apiRequest);
-//        if (endUserId == null) {
-//            ErrorResponseUtil.setErrorResponse(apiResponse, ErrorCodeConstant.INVALID_TOKEN);
-//            return apiResponse;
-//        }
-//
-//        try {
-//        	FavoriteSceneResponse favoriteSceneResponse = favoriteService.getFavoriteScene(endUserId);
-//            //如果处理失败 则返回错误信息
-//            if (ErrorCodeUtil.isFailedResponse(favoriteSceneResponse.getResCode())) {
-//                setServiceErrorResponse(apiResponse, favoriteSceneResponse);
-//            } else {
-//                List<FavoriteSceneVo> favoriteSceneVoList = favoriteSceneResponse.getFavoriteSceneVoList();
-//                favoriteSceneResponse.setFavoriteSceneVoList(favoriteSceneVoList);
-//                apiResponse.setData(favoriteSceneResponse);
-//            }
-//        } catch (Exception e) {
-//            logger.error("查找用户喜欢的场景错误---" + e);
-//            e.printStackTrace();
-//            setInternalErrorResponse(apiResponse);
-//        }
-//        return apiResponse;
-//    }
+    //    /**
+    //     * 新增用户喜欢的场景
+    //     * @param apiRequest
+    //     * @return
+    //     */
+    //    @RequestMapping(value = "/v1/user/scene/favorite", method = RequestMethod.POST)
+    //    public ApiResponse favoriteScene(ApiRequest apiRequest) {
+    //
+    //        ApiResponse apiResponse = new ApiResponse();
+    //        Integer endUserId = getUserIdByTokenChannel(apiRequest);
+    //        FavoriteSceneRequest favoriteSceneRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), FavoriteSceneRequest.class);
+    //
+    //        //判断json格式参数是否有误
+    //        if (favoriteSceneRequest == null) {
+    //            setParamJsonParseErrorResponse(apiResponse);
+    //            return apiResponse;
+    //        }
+    //
+    //        try {
+    //            FavoriteCommonResponse favoriteCommonResponse = favoriteService.updateFavoriteScene(endUserId, favoriteSceneRequest.getSceneId());
+    //            //如果处理失败 则返回错误信息
+    //            if (ErrorCodeUtil.isFailedResponse(favoriteCommonResponse.getResCode())) {
+    //                setServiceErrorResponse(apiResponse, favoriteCommonResponse);
+    //                return apiResponse;
+    //            } else {
+    //                apiResponse.setData(favoriteCommonResponse);
+    //            }
+    //        } catch (Exception e) {
+    //            logger.error("新增用户喜欢的场景发生错误---" + e);
+    //            setInternalErrorResponse(apiResponse);
+    //        }
+    //        return apiResponse;
+    //    }
+    //
+    //    /**
+    //     * 查询用户喜欢的场景列表
+    //     * @param apiRequest
+    //     * @return
+    //     */
+    //    @RequestMapping(value = "/v1/user/scene/favorite-list", method = RequestMethod.GET)
+    //    public ApiResponse getFavoriteScene(ApiRequest apiRequest) {
+    //        ApiResponse apiResponse = new ApiResponse();
+    //        Integer endUserId = getUserIdByTokenChannel(apiRequest);
+    //        if (endUserId == null) {
+    //            ErrorResponseUtil.setErrorResponse(apiResponse, ErrorCodeConstant.INVALID_TOKEN);
+    //            return apiResponse;
+    //        }
+    //
+    //        try {
+    //        	FavoriteSceneResponse favoriteSceneResponse = favoriteService.getFavoriteScene(endUserId);
+    //            //如果处理失败 则返回错误信息
+    //            if (ErrorCodeUtil.isFailedResponse(favoriteSceneResponse.getResCode())) {
+    //                setServiceErrorResponse(apiResponse, favoriteSceneResponse);
+    //            } else {
+    //                List<FavoriteSceneVo> favoriteSceneVoList = favoriteSceneResponse.getFavoriteSceneVoList();
+    //                favoriteSceneResponse.setFavoriteSceneVoList(favoriteSceneVoList);
+    //                apiResponse.setData(favoriteSceneResponse);
+    //            }
+    //        } catch (Exception e) {
+    //            logger.error("查找用户喜欢的场景错误---" + e);
+    //            e.printStackTrace();
+    //            setInternalErrorResponse(apiResponse);
+    //        }
+    //        return apiResponse;
+    //    }
 }

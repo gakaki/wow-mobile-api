@@ -8,6 +8,7 @@ import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.product.model.Product;
 import com.wow.product.model.ProductExample;
+import com.wow.product.vo.ProductListVo;
 import com.wow.product.vo.ProductVo;
 
 public interface ProductMapper {
@@ -44,10 +45,10 @@ public interface ProductMapper {
 
     //按分类查询产品并按价格排序
     List<PageData> selectProductByCategoryOrderBySellPrice(PageModel page);
-
+    
     //按分类查询产品并按上架时间排序
     List<PageData> selectProductByCategoryOrderByOnShelfTime(PageModel page);
-
+    
     List<ProductVo> selectProductByBrandId(@Param("brandId") Integer brandId);
 
     List<ProductVo> selectProductByDesignerId(@Param("designerId") Integer designerId);
@@ -55,6 +56,12 @@ public interface ProductMapper {
     List<PageData> selectProductByBrandIdListPage(PageModel model);
 
     List<PageData> selectProductByDesignerIdListPage(PageModel model);
+    
+    //后台产品列表分页查询
+    List<PageData> selectProductListPage(PageModel page);
+    //按产品ID批量查询产品列表信息
+    List<ProductListVo> selectProductByProductIds(@Param("productIds") List<Integer> productIds);
+    
 
     List<PageData> queryProductByTopicGroupListPage(PageModel model);
 }
