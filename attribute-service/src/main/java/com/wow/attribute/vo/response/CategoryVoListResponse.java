@@ -13,17 +13,19 @@ import com.wow.common.response.CommonResponse;
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class CategoryVoListResponse extends CommonResponse {
 
-	private CategoryFirstVo categoryFirstVo;
+    private static final long serialVersionUID = 1L;
+
+//	private CategoryFirstVo categoryFirstVo;
 	
     private List<CategorySecondVo> categoryList;
     
-    public CategoryFirstVo getCategoryFirstVo() {
-		return categoryFirstVo;
-	}
-
-	public void setCategoryFirstVo(CategoryFirstVo categoryFirstVo) {
-		this.categoryFirstVo = categoryFirstVo;
-	}
+//    public CategoryFirstVo getCategoryFirstVo() {
+//		return categoryFirstVo;
+//	}
+//
+//	public void setCategoryFirstVo(CategoryFirstVo categoryFirstVo) {
+//		this.categoryFirstVo = categoryFirstVo;
+//	}
 
 	public List<CategorySecondVo> getCategoryList() {
         return categoryList;

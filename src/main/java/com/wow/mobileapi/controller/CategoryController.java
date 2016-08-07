@@ -55,9 +55,14 @@ public class CategoryController extends BaseController {
                 setServiceErrorResponse(apiResponse, categoryListResponse);
             }else{
             	CategoryFirstVo categoryFirstVo = categoryListResponse.getCategoryFirstVo();
-            	subCategoryResponse.setCategoryFirstVo(categoryFirstVo);
+                CategorySecondVo categoryVo = new CategorySecondVo();
+                categoryVo.setId(categoryFirstVo.getId());
+                categoryVo.setCategoryIconSmall(categoryFirstVo.getCategoryIconSmall());
+
+//            	subCategoryResponse.setCategoryFirstVo(categoryFirstVo);
             	
                 List<CategorySecondVo> subCategoryList = new ArrayList<>();
+                subCategoryList.add(categoryVo);
                 for (Category category: categoryListResponse.getCategoryList()) {
                 	CategorySecondVo subCategory = new CategorySecondVo();
 
