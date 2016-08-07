@@ -9,6 +9,7 @@
     <result column="category_desc" property="categoryDesc" jdbcType="VARCHAR" />
     <result column="category_icon_small" property="categoryIconSmall" jdbcType="VARCHAR" />
     <result column="category_icon_big" property="categoryIconBig" jdbcType="VARCHAR" />
+    <result column="category_icon_bg" property="categoryIconBg" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -76,7 +77,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, category_name, parent_category_id, category_level, category_desc, category_icon_small,
-    category_icon_big, create_time, create_by, update_time, update_by, is_deleted, path
+    category_icon_big,category_icon_bg, create_time, create_by, update_time, update_by, is_deleted, path
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.attribute.model.CategoryExample" >
     select
