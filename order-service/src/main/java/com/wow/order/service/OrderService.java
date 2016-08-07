@@ -13,6 +13,7 @@ import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
+import com.wow.order.vo.response.OrderPayResultResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
 
@@ -130,5 +131,13 @@ public interface OrderService {
      * @param timeoutMinute
      * @return
      */
-    CommonResponse autoCancelOrder(int timeoutMinute);
+    CommonResponse autoCancel(int timeoutMinute);
+
+    /**
+     * 确认收货 订单完成
+     *
+     * @param order 订单号
+     */
+    CommonResponse confirmReceiving(OrderDetailQuery query);
+
 }

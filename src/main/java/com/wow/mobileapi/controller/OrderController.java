@@ -82,14 +82,14 @@ public class OrderController extends BaseController {
     public ApiResponse buyNow(ApiRequest request) {
         OrderSettleRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderSettleRequest.class);
         ApiResponse apiResponse = new ApiResponse();
-        
+
         //判断json格式参数是否有误
         if (orderRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
 
-        OrderSettleResponse orderSettleResponse=null;
+        OrderSettleResponse orderSettleResponse = null;
         try {
             OrderSettleQuery query = new OrderSettleQuery();
             query.setProductId(orderRequest.getProductId());
@@ -135,13 +135,13 @@ public class OrderController extends BaseController {
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);
             //如果是从购物车进行结算 则调用createOrderFromCart
-            if(orderRequest.getProductId()==null){
+            if (orderRequest.getProductId() == null) {
                 orderResponse = orderService.createOrderFromCart(query);
-            } else{
+            } else {
                 //如果是立即购买 则调用createOrderFromDirect
                 orderResponse = orderService.createOrderFromDirect(query);
             }
-           
+
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(orderResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderResponse);
@@ -261,6 +261,40 @@ public class OrderController extends BaseController {
             }
         } catch (Exception e) {
             logger.error("取消订单错误---" + e);
+            setInternalErrorResponse(apiResponse);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 
+     * 用户确认收货
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/confirm", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+    public ApiResponse confirmReceiving(ApiRequest request) {
+        OrderDetailRequest orderDetailRequest = JsonUtil.fromJSON(request.getParamJson(), OrderDetailRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+        //判断json格式参数是否有误
+        if (orderDetailRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        CommonResponse commonResponse = null;
+        try {
+            OrderDetailQuery query = new OrderDetailQuery();
+            query.setOrderCode(orderDetailRequest.getOrderCode());
+
+            commonResponse = orderService.confirmReceiving(query);
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, commonResponse);
+            }
+        } catch (Exception e) {
+            logger.error("订单确认收货错误---" + e);
             setInternalErrorResponse(apiResponse);
         }
 

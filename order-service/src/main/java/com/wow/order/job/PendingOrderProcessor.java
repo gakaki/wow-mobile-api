@@ -77,7 +77,7 @@ public class PendingOrderProcessor {
         logger.info("自动取消订单开始");
         //查询20分钟以内没有支付的订单
         try {
-            orderService.autoCancelOrder(20);
+            orderService.autoCancel(20);
         } catch (Exception e) {
             logger.error("自动取消订单错误-----" + e);
         }

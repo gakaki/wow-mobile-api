@@ -21,21 +21,27 @@ import com.wow.common.constant.CommonConstant;
 import com.wow.common.enums.SaleOrderStatusEnum;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.DateUtil;
+import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.common.util.StringUtil;
 import com.wow.order.mapper.SaleOrderLogMapper;
 import com.wow.order.mapper.SaleOrderMapper;
+import com.wow.order.mapper.SaleOrderPayChargeMapper;
 import com.wow.order.mapper.SaleOrderPayMapper;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderExample;
 import com.wow.order.model.SaleOrderLog;
 import com.wow.order.model.SaleOrderPay;
+import com.wow.order.model.SaleOrderPayCharge;
+import com.wow.order.model.SaleOrderPayChargeExample;
+import com.wow.order.model.SaleOrderPayExample;
 import com.wow.order.service.PayService;
 import com.wow.order.util.WebhooksVerifyUtil;
 import com.wow.order.vo.ChargeRequest;
 import com.wow.order.vo.response.ChargeResponse;
+import com.wow.order.vo.response.OrderPayResultResponse;
 
 /**
  * Created by zhengzhiqing on 16/7/25.
@@ -62,6 +68,9 @@ public class PayServiceImpl implements PayService {
 
     @Autowired
     private SaleOrderPayMapper saleOrderPayMapper;
+
+    @Autowired
+    private SaleOrderPayChargeMapper saleOrderPayChargeMapper;
 
     @Autowired
     private SaleOrderLogMapper saleOrderLogMapper;
@@ -160,11 +169,41 @@ public class PayServiceImpl implements PayService {
             Charge charge = Charge.create(chargeMap);
             // 传到客户端请先转成字符串 .toString(), 调该方法，会自动转成正确的 JSON 字符串
             chargeResponse.setCharge(charge.toString());
+
+            //保存交易凭据
+            savePayCharge(charge);
         } catch (PingppException e) {
             ErrorResponseUtil.setErrorResponse(chargeResponse, "40361");
         }
 
         return chargeResponse;
+    }
+
+    /**
+     * 保存ping++支付交易凭据
+     * 
+     * @param charge
+     */
+    private void savePayCharge(Charge charge) {
+        if (charge == null) {
+            return;
+        }
+
+        //根据订单号查询相应的支付凭据
+        SaleOrderPayCharge saleOrderCharge = queryPayChargeByOrderCode(charge.getOrderNo());
+        //如果凭据已经存在 则直接返回
+        if (saleOrderCharge != null) {
+            return;
+        }
+
+        //保存凭据信息
+        SaleOrderPayCharge saleOrderPayCharge = new SaleOrderPayCharge();
+
+        saleOrderPayCharge.setChargeId(charge.getId());
+        saleOrderPayCharge.setOrderCode(charge.getOrderNo());
+        saleOrderPayCharge.setCreateTime(DateUtil.currentDate());
+
+        saleOrderPayChargeMapper.insertSelective(saleOrderPayCharge);
     }
 
     /**
@@ -249,8 +288,7 @@ public class PayServiceImpl implements PayService {
 
         //写入客户订单支付成功日志
         SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40317"));
-        saleOrderLogMapper.insertSelective(warpOrderLog);
-        /*** 业务处理结束*/
+        saleOrderLogMapper.insertSelective(warpOrderLog);/*** 业务处理结束*/
 
         return commonResponse;
     }
@@ -301,4 +339,106 @@ public class PayServiceImpl implements PayService {
 
         return saleOrderMapper.selectOnlyByExample(saleOrderExample);
     }
+
+    /**
+     * 根据订单号获取订单支付信息
+     * 
+     * @param orderCode
+     * @return
+     */
+    private SaleOrderPay selectPayResultByOrderCode(String orderCode) {
+        //根据订单号获取订单支付结果
+        SaleOrderPayExample saleOrderPayExample = new SaleOrderPayExample();
+        SaleOrderPayExample.Criteria criteria = saleOrderPayExample.createCriteria();
+        criteria.andOrderCodeEqualTo(orderCode);
+
+        return saleOrderPayMapper.selectOnlyByExample(saleOrderPayExample);
+    }
+
+    @Override
+    public OrderPayResultResponse queryOrderPayResult(String orderCode) {
+        OrderPayResultResponse response = new OrderPayResultResponse();
+
+        //查询订单支付结果
+        SaleOrderPay saleOrderPay = selectPayResultByOrderCode(orderCode);
+
+        //如果未收到支付通知 则需调用ping++订单支付查询接口 查询支付是否成功
+        if (saleOrderPay == null) {
+            Charge retrieve = queryPayResult(orderCode);
+
+            wrapPayResult(response, retrieve);
+
+            return response;
+        }
+
+        response.setOrderCode(orderCode);
+        response.setPayAmount(saleOrderPay.getAmount());
+        response.setPaymentChannel(saleOrderPay.getChannel());
+        response.setPaymentChannelName(DictionaryUtil.getValue("pay_channel", saleOrderPay.getChannel()));
+
+        return response;
+    }
+
+    /**
+     * 包装订单支付结果
+     * 
+     * @param response
+     * @param retrieve
+     * @return
+     */
+    private OrderPayResultResponse wrapPayResult(OrderPayResultResponse response, Charge retrieve) {
+        //如果未查找到交易记录 则返回交易错误信息
+        if (retrieve == null) {
+            response.setResCode("40363");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40363"));
+
+            return response;
+        }
+
+        //如果订单未支付成功 则直接返回错误
+        if (!retrieve.getPaid()) {
+            response.setResCode("40323");
+            response.setResMsg(ErrorCodeUtil.getErrorMsg("40323"));
+
+            return response;
+        }
+
+        response.setPayAmount(NumberUtil.convertToYuan(retrieve.getAmount()));
+        response.setOrderCode(retrieve.getOrderNo());
+        response.setPaymentChannel(retrieve.getChannel());
+        response.setPaymentChannelName(DictionaryUtil.getValue("pay_channel", retrieve.getChannel()));
+
+        return response;
+    }
+
+    /**
+     * 根据订单号查询支付结果
+     * 
+     * @param orderCode
+     * @return
+     */
+    private Charge queryPayResult(String orderCode) {
+        SaleOrderPayCharge saleOrderCharge = queryPayChargeByOrderCode(orderCode);
+        if (saleOrderCharge == null) {
+            return null;
+        }
+
+        Charge retrieve = null;
+        try {
+            retrieve = Charge.retrieve(saleOrderCharge.getChargeId());
+        } catch (Exception e) {
+        }
+
+        return retrieve;
+    }
+
+    private SaleOrderPayCharge queryPayChargeByOrderCode(String orderCode) {
+        SaleOrderPayChargeExample example = new SaleOrderPayChargeExample();
+        SaleOrderPayChargeExample.Criteria criteria = example.createCriteria();
+        criteria.andOrderCodeEqualTo(orderCode);
+
+        SaleOrderPayCharge saleOrderCharge = saleOrderPayChargeMapper.selectOnlyByExample(example);
+        return saleOrderCharge;
+    }
+
 }

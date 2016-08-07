@@ -58,6 +58,7 @@ import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.OrderSettleVo;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
+import com.wow.order.vo.response.OrderPayResultResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
 import com.wow.price.model.ProductPrice;
@@ -1310,7 +1311,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CommonResponse autoCancelOrder(int timeoutMinute) {
+    public CommonResponse autoCancel(int timeoutMinute) {
         CommonResponse commonResponse = new CommonResponse();
 
         //查询超过20分钟仍然没有支付的订单列表
@@ -1395,25 +1396,6 @@ public class OrderServiceImpl implements OrderService {
 
         return response;
     }
-
-    /**
-     * 包装立即购买的返回响应类
-     * 
-     * @param orderSettleResponse
-     * @param response
-     */
-    //    private void wrapOrderDirectResponse(OrderSettleResponse orderSettleResponse, OrderDirectResponse response) {
-    //        //设置结算产品基本信息
-    //        List<OrderSettleVo> orderSettles = orderSettleResponse.getOrderSettles();
-    //        if (CollectionUtil.isNotEmpty(orderSettles)) {
-    //            OrderSettleVo orderSettleVo = orderSettles.get(0);
-    //            BeanUtil.copyProperties(orderSettleVo, response);
-    //        }
-    //
-    //        //设置运费和订单总金额
-    //        response.setDeliveryFee(orderSettleResponse.getDeliveryFee());
-    //        response.setTotalAmount(orderSettleResponse.getTotalAmount());
-    //    }
 
     /**
      * 设置产品价格
@@ -1555,6 +1537,54 @@ public class OrderServiceImpl implements OrderService {
         criteria.andSubProductIdEqualTo(productId);
 
         return productSerialMapper.selectUniqueByExample(productSerialExample);
+    }
+
+    @Override
+    public CommonResponse confirmReceiving(OrderDetailQuery query) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        /*** 业务校验开始*/
+        //如果订单号是否为空  则直接返回错误提示
+        if (StringUtil.isEmpty(query.getOrderCode())) {
+            commonResponse.setResCode("40358");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40358"));
+
+            return commonResponse;
+        }
+
+        //根据订单号获取订单
+        SaleOrder saleOrder = selectByOrderCode(query.getOrderCode());
+        //如果订单号不存在  则直接返回错误提示
+        if (saleOrder == null) {
+            commonResponse.setResCode("40359");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40359"));
+
+            return commonResponse;
+        }
+        /*** 业务校验结束*/
+
+        //如果订单状态不为待收货状态 则返回提示错误
+        if (saleOrder.getOrderStatus().intValue() != SaleOrderStatusEnum.TO_BE_RECEIVED.getKey().intValue()) {
+            commonResponse.setResCode("40330");
+            commonResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40330"));
+
+            return commonResponse;
+        }
+
+        //更新订单状态为交易完成
+        SaleOrder targetSaleOrder = new SaleOrder();
+
+        targetSaleOrder.setId(saleOrder.getId());
+        targetSaleOrder.setOrderStatus(SaleOrderStatusEnum.COMPLETED.getKey().byteValue());
+        targetSaleOrder.setUpdateTime(DateUtil.currentDate());
+
+        saleOrderMapper.updateByPrimaryKeySelective(targetSaleOrder);
+
+        //写入订单确认收货完成的日志
+        SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40362"));
+        saleOrderLogMapper.insertSelective(warpOrderLog);
+
+        return commonResponse;
     }
 
 }

@@ -18,9 +18,11 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.StreamUtil;
+import com.wow.mobileapi.request.order.OrderDetailRequest;
 import com.wow.order.service.PayService;
 import com.wow.order.vo.ChargeRequest;
 import com.wow.order.vo.response.ChargeResponse;
+import com.wow.order.vo.response.OrderPayResultResponse;
 
 /**
  * Created by zhengzhiqing on 16/7/2.
@@ -102,6 +104,41 @@ public class PayController extends BaseController {
         } catch (Exception e) {
             response.setStatus(500);
             logger.error("获取通知内容错误", e);
+        }
+
+        return apiResponse;
+    }
+
+    /**
+     * 查询支付结果
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/payResult", method = RequestMethod.GET)
+    public ApiResponse selectPayResult(ApiRequest request) {
+        OrderDetailRequest orderDetailRequest = JsonUtil.fromJSON(request.getParamJson(), OrderDetailRequest.class);
+        ApiResponse apiResponse = new ApiResponse();
+        //判断json格式参数是否有误
+        if (orderDetailRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        try {
+            // 获取支付结果
+            OrderPayResultResponse payResultResponse = payService
+                .queryOrderPayResult(orderDetailRequest.getOrderCode());
+
+            //处理失败则返回错误提示
+            if (ErrorCodeUtil.isFailedResponse(payResultResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, payResultResponse);
+            } else {
+                apiResponse.setData(payResultResponse);
+            }
+        } catch (Exception e) {
+            logger.error("获取支付结果信息错误", e);
+            setInternalErrorResponse(apiResponse);
         }
 
         return apiResponse;

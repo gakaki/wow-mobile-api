@@ -1,9 +1,11 @@
 package com.wow.order.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.order.model.SaleOrderPay;
 import com.wow.order.model.SaleOrderPayExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
 public interface SaleOrderPayMapper {
     int countByExample(SaleOrderPayExample example);
@@ -27,4 +29,7 @@ public interface SaleOrderPayMapper {
     int updateByPrimaryKeySelective(SaleOrderPay record);
 
     int updateByPrimaryKey(SaleOrderPay record);
+
+    SaleOrderPay selectOnlyByExample(SaleOrderPayExample example);
+
 }
