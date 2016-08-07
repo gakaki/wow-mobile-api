@@ -374,7 +374,6 @@
 			SELECT 
 				  sc.id shoppingCartId,
 				  sc.product_qty productQty,
-				  sc.parent_product_id parentProductId,
 				  p.id productId,
 				  p.product_name productName,
 				  p.color_display_name color,
