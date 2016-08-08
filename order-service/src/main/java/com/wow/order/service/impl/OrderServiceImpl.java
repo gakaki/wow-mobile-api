@@ -19,6 +19,7 @@ import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.BeanUtil;
+import com.wow.common.util.CodeGenerator;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
 import com.wow.common.util.DictionaryUtil;
@@ -27,7 +28,6 @@ import com.wow.common.util.IpConvertUtil;
 import com.wow.common.util.JsonUtil;
 import com.wow.common.util.MapUtil;
 import com.wow.common.util.NumberUtil;
-import com.wow.common.util.RandomGenerator;
 import com.wow.common.util.StringUtil;
 import com.wow.order.mapper.DeliveryOrderMapper;
 import com.wow.order.mapper.SaleOrderItemMapper;
@@ -397,7 +397,7 @@ public class OrderServiceImpl implements OrderService {
         SaleOrder saleOrder = new SaleOrder();
 
         saleOrder.setEndUserId(query.getEndUserId());
-        saleOrder.setOrderCode(RandomGenerator.createRandom(true, 10));
+        saleOrder.setOrderCode(CodeGenerator.createOrderNo(query.getEndUserId()));
         saleOrder.setEndUserCouponId(query.getEndUserId());
 
         //设置订单总金额 优惠金额 运费等
@@ -734,15 +734,15 @@ public class OrderServiceImpl implements OrderService {
 
             return orderDetailResponse;
         }
-        
+
         //如果用户查看的订单不是自己的 不允许查看
-        if(saleOrder.getEndUserId().intValue()!=query.getEndUserId().intValue()){
+        if (saleOrder.getEndUserId().intValue() != query.getEndUserId().intValue()) {
             orderDetailResponse.setResCode("40331");
             orderDetailResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40331"));
 
             return orderDetailResponse;
         }
-        
+
         /*** 业务校验结束*/
 
         //设置订单明细
@@ -1577,7 +1577,7 @@ public class OrderServiceImpl implements OrderService {
 
             return commonResponse;
         }
-        
+
         //如果订单状态不为待收货状态 则返回提示错误
         if (saleOrder.getOrderStatus().intValue() != SaleOrderStatusEnum.TO_BE_RECEIVED.getKey().intValue()) {
             commonResponse.setResCode("40330");

@@ -5,15 +5,12 @@ package com.wow.common.util;
  */
 public class CodeGenerator {
 
-    private static String getMode(int mode,int len) {
-        String valueOf = String.valueOf(System.nanoTime() % mode);
-        if (valueOf.length() < len) {
-            int count = len-valueOf.length();
-            for (int i = 0; i < count; i++) {
-                valueOf += "0";
-            }
-        }
-        return valueOf;
+    private static String convertStr(long num,int length){
+        return String.format("%0"+length+"d", num%((int)Math.pow(10,length)));
+    }
+
+    private static String getRandomTime(int mode,int len) {
+        return convertStr(System.nanoTime() % mode, len);
     }
 
     private static String getRandomInt(int count){
@@ -35,9 +32,23 @@ public class CodeGenerator {
      */
     public static String createCode(int mode,int length,int count,String suffix){
         StringBuilder sb = new StringBuilder();
-        sb.append(getMode(mode,length));
+        sb.append(getRandomTime(mode,length));
         sb.append(getRandomInt(count));
         sb.append(suffix);
+        return sb.toString();
+    }
+
+    /**
+     *
+     * @param mode 整数,用作模运算
+     * @param length 模运算位数
+     * @param count 随机数位数
+     * @return
+     */
+    public static String createCode(int mode,int length,int count){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getRandomTime(mode,length));
+        sb.append(getRandomInt(count));
         return sb.toString();
     }
 
@@ -46,8 +57,8 @@ public class CodeGenerator {
      * @param userId
      * @return
      */
-    public static String createOrderNo(String userId){
-        return createCode(9999,4,3,userId);
+    public static String createOrderNo(int userId){
+        return createCode(9999,4,3,convertStr(userId,3));
     }
 
     /**
@@ -55,6 +66,6 @@ public class CodeGenerator {
      * @return
      */
     public static String createProductCode(){
-        return createCode(9999,4,4,"");
+        return createCode(9999,4,4);
     }
 }

@@ -35,4 +35,10 @@ public interface ProductSummaryService {
      * @return
      */
     int updateProductSummary(ProductSummary productSummary);
+
+    /**
+     * 每天统计历史总销量
+     * @return
+     */
+    int addSummaryByDate();
 }
