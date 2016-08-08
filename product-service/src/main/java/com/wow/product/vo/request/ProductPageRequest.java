@@ -10,15 +10,15 @@ public class ProductPageRequest extends PageQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    private String productName;
-    private Integer categoryId;
+    private String productName;//产品名称
+    private Integer categoryId;//最子集产品分类ID
     private List<Integer> categoryIds;
-    private String productCode;
-    private String brandName;
-    private String designerName;
-    private Integer productStatus;
-    private BigDecimal beginSellPrice;
-    private BigDecimal endSellPrice;
+    private String productCode;//SKU
+    private String brandName;//品牌名称
+    private String designerName;//设计师名称
+    private Integer productStatus;//上架状态
+    private BigDecimal beginSellPrice;//价格区间（小）
+    private BigDecimal endSellPrice;//价格区间（大）
     
 	public String getProductName() {
 		return productName;
