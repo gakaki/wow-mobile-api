@@ -218,7 +218,14 @@ public class OrderController extends BaseController {
 
         OrderDetailResponse orderDetailResponse = null;
         try {
-            orderDetailResponse = orderService.queryOrderDetailByOrderCode(orderDetailRequest.getOrderCode());
+            OrderDetailQuery query = new OrderDetailQuery();
+
+            query.setOrderCode(orderDetailRequest.getOrderCode());
+            //设置用户id
+            Integer endUserId = getUserIdByTokenChannel(request);
+            query.setEndUserId(endUserId);
+
+            orderDetailResponse = orderService.queryOrderDetailByOrderCode(query);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(orderDetailResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, orderDetailResponse);

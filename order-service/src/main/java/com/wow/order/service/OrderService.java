@@ -13,7 +13,6 @@ import com.wow.order.vo.OrderQuery;
 import com.wow.order.vo.OrderSettleQuery;
 import com.wow.order.vo.response.OrderDetailResponse;
 import com.wow.order.vo.response.OrderListResponse;
-import com.wow.order.vo.response.OrderPayResultResponse;
 import com.wow.order.vo.response.OrderResponse;
 import com.wow.order.vo.response.OrderSettleResponse;
 
@@ -87,7 +86,7 @@ public interface OrderService {
      * @param orderCode
      * @return
      */
-    OrderDetailResponse queryOrderDetailByOrderCode(String orderCode);
+    OrderDetailResponse queryOrderDetailByOrderCode(OrderDetailQuery query);
 
     /**
      * @param orderId
