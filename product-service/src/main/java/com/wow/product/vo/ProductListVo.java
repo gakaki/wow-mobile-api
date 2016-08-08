@@ -11,7 +11,6 @@ public class ProductListVo implements Serializable {
 	private Integer productId;//产品ID
 	private Integer subProductId;//子品ID
 	private String productName;//产品名称
-	private String brandName;//品牌名称
     private String specName;//规格名称
     private String productCode;//sku
     private BigDecimal sellPrice;//售价
@@ -37,12 +36,6 @@ public class ProductListVo implements Serializable {
 	}
 	public void setProductName(String productName) {
 		this.productName = productName;
-	}
-	public String getBrandName() {
-		return brandName;
-	}
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
 	}
 	public String getSpecName() {
 		return specName;
