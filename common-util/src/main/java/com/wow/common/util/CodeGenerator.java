@@ -42,12 +42,30 @@ public class CodeGenerator {
     }
 
     /**
+     *
+     * @param mode 整数,用作模运算
+     * @param length 模运算位数
+     * @param count 随机数位数
+     * @return
+     */
+    public static String createCode(int mode,int length,int count){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getMode(mode,length));
+        sb.append(getRandomInt(count));
+        return sb.toString();
+    }
+
+    private static String getMode(int num){
+        return String.format("%03d", num%1000);
+    }
+
+    /**
      * 生成订单号
      * @param userId
      * @return
      */
-    public static String createOrderNo(String userId){
-        return createCode(9999,4,3,userId);
+    public static String createOrderNo(int userId){
+        return createCode(9999,4,3,getMode(userId));
     }
 
     /**
@@ -55,6 +73,6 @@ public class CodeGenerator {
      * @return
      */
     public static String createProductCode(){
-        return createCode(9999,4,4,"");
+        return createCode(9999,4,4);
     }
 }
