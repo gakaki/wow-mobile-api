@@ -26,6 +26,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(logInterceptor).addPathPatterns("/**");
         registry.addInterceptor(authInterceptor).addPathPatterns("/v1/order/**");
         registry.addInterceptor(authInterceptor).addPathPatterns("/v1/pay/charge");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/v1/pay/payResult");
 
         registry.addInterceptor(authInterceptor).addPathPatterns("/v1/user/shippinginfo/**"); //收货信息
 
