@@ -246,11 +246,11 @@
     insert into product_summary(product_id,total_sold_qty,update_time,is_deleted)
     select tmp.product_id,sum(tmp.counts),date_add(now(),interval -1 day),0 from (
       select product_id,count(1) as counts from sale_order_item
-      where date_format(update_time,'%Y-%m-%d')=date_format(date_add(now(),interval -1 day),'%Y-%m-%d')
+      where update_time between date_format(date_add(now(),interval -1 day),'%Y-%m-%d 00:00:00') and date_format(date_add(now(),interval -1 day),'%Y-%m-%d 23:59:59')
       group by product_id
       union all
       select product_id,total_sold_qty as counts from product_summary
-      where date_format(update_time,'%Y-%m-%d')=date_format(date_add(now(),interval -2 day),'%Y-%m-%d')
+      where update_time between date_format(date_add(now(),interval -2 day),'%Y-%m-%d 00:00:00') and date_format(date_add(now(),interval -2 day),'%Y-%m-%d 23:59:59');
     ) tmp
     group by tmp.product_id
   </insert>
