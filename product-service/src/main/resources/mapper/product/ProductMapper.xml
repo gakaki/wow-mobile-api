@@ -973,12 +973,51 @@
   
   <!-- 后台产品列表分页查询 -->
   <select id="selectProductListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
-  	select
-    	p.id as productId,p.product_name as productName,b.brand_cname as brandName
-    from product p 
-    left join brand b on b.id=p.brand_id
-    where p.product_type=2 
-    order by p.create_time desc
+  	select ps.product_id as productId,p.product_name as productName,b.brand_cname as brandName
+		from product_serial ps
+		left join product p on p.id=ps.product_id
+		left join brand b on b.id=p.brand_id
+		<if test="model.designerName!= null and model.designerName!=''">
+			left join product_designer pd on pd.product_id=p.id
+			left join designer d on d.id=pd.designer_id
+		</if>
+		<if test="model.beginSellPrice!= null and model.endSellPrice!=null">
+			left join product_price pp on pp.product_id=p.id
+		</if>
+		where p.product_type=2
+		<if test="model.productName!= null and model.productName!=''">
+	        and p.product_name like concat('%',#{model.productName},'%')
+	    </if>
+	    <if test="model.categoryId!= null and model.categoryId!=''">
+	        and p.category_id in 
+		    <foreach item="categoryId" index="index" collection="model.categoryIds" open="(" separator="," close=")">
+		      #{model.categoryIds[${index}]}
+		    </foreach>
+	    </if>
+	    <if test="model.productCode!= null and model.productCode!=''">
+	        and p.product_code like concat('%',#{model.productCode},'%')
+	    </if>
+	    <if test="model.brandName!= null and model.brandName!=''">
+	        and b.brand_cname like concat('%',#{model.brandName},'%')
+	    </if>
+	    <if test="model.productStatus!= null and model.productStatus!=''">
+	        and p.product_status = #{model.productStatus}
+	    </if>
+		GROUP BY ps.product_id having 1=1
+		<if test="model.designerName!= null and model.designerName!=''">
+			and GROUP_CONCAT(d.designer_name) concat('%',#{model.designerName},'%')
+		</if>
+		<if test="model.beginSellPrice!= null and model.beginSellPrice!=''">
+			<![CDATA[
+				and MIN(pp.sell_price) >= #{model.beginSellPrice}
+			]]>
+		</if>
+		<if test="model.endSellPrice!= null and model.endSellPrice!=''">
+			<![CDATA[
+				and MAX(pp.sell_price) <= #{model.endSellPrice}
+			]]>
+		</if>
+	order by p.create_time desc
   </select>
 
   <!-- 按产品ID批量查询产品列表信息 -->
