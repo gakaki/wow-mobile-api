@@ -6,6 +6,9 @@ build
 .idea
 .idea/libaries/
 .idea/modules/
+.classpath
+.project
+.settings
 Gradle__aopalliance_aopalliance_1_0.xml
 Gradle__ch_qos_logback_logback_classic_1_1_7.xml
 Gradle__ch_qos_logback_logback_core_1_1_7.xml
