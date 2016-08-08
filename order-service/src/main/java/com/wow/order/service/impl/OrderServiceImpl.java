@@ -713,12 +713,12 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public OrderDetailResponse queryOrderDetailByOrderCode(String orderCode) {
+    public OrderDetailResponse queryOrderDetailByOrderCode(OrderDetailQuery query) {
         OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
 
         /*** 业务校验开始*/
         //如果订单号是否为空  则直接返回错误提示
-        if (StringUtil.isEmpty(orderCode)) {
+        if (StringUtil.isEmpty(query.getOrderCode())) {
             orderDetailResponse.setResCode("40358");
             orderDetailResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40358"));
 
@@ -726,7 +726,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //根据订单号获取订单
-        SaleOrder saleOrder = selectByOrderCode(orderCode);
+        SaleOrder saleOrder = selectByOrderCode(query.getOrderCode());
         //如果订单号不存在  则直接返回错误提示
         if (saleOrder == null) {
             orderDetailResponse.setResCode("40359");
@@ -734,6 +734,15 @@ public class OrderServiceImpl implements OrderService {
 
             return orderDetailResponse;
         }
+        
+        //如果用户查看的订单不是自己的 不允许查看
+        if(saleOrder.getEndUserId().intValue()!=query.getEndUserId().intValue()){
+            orderDetailResponse.setResCode("40331");
+            orderDetailResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40331"));
+
+            return orderDetailResponse;
+        }
+        
         /*** 业务校验结束*/
 
         //设置订单明细

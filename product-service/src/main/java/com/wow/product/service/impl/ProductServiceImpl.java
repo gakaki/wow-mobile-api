@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import com.wow.common.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +31,6 @@ import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.DictionaryUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.MapUtil;
-import com.wow.common.util.RandomGenerator;
-import com.wow.common.util.StringUtil;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
@@ -333,7 +325,8 @@ public class ProductServiceImpl implements ProductService {
      */
     private String generateProductCode() {
         //TODO: 要求是数字,且不重复
-        return RandomGenerator.createRandom(true, 8);
+        return CodeGenerator.createProductCode();
+        //return RandomGenerator.createRandom(true, 8);
     }
 
 
