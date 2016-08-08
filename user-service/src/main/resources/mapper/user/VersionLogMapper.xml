@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.user.mapper.VersionLogMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.user.model.VersionLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="app_type" property="appType" jdbcType="TINYINT" />
+    <result column="plat_form" property="platForm" jdbcType="TINYINT" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="build_version" property="buildVersion" jdbcType="VARCHAR" />
+    <result column="publish_date" property="publishDate" jdbcType="TIMESTAMP" />
+    <result column="publish_log" property="publishLog" jdbcType="VARCHAR" />
+    <result column="is_required_upgrade" property="isRequiredUpgrade" jdbcType="BIT" />
+    <result column="upgrade_url" property="upgradeUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, app_type, plat_form, version, build_version, publish_date, publish_log, is_required_upgrade, 
+    upgrade_url, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.user.model.VersionLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from version_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="userByClause != null" >
+      user by ${userByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from version_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from version_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wow.user.model.VersionLogExample" >
+    delete from version_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wow.user.model.VersionLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id"  order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into version_log (app_type, plat_form, version, 
+      build_version, publish_date, publish_log, 
+      is_required_upgrade, upgrade_url, create_time
+      )
+    values (#{appType,jdbcType=TINYINT}, #{platForm,jdbcType=TINYINT}, #{version,jdbcType=VARCHAR}, 
+      #{buildVersion,jdbcType=VARCHAR}, #{publishDate,jdbcType=TIMESTAMP}, #{publishLog,jdbcType=VARCHAR}, 
+      #{isRequiredUpgrade,jdbcType=BIT}, #{upgradeUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wow.user.model.VersionLog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into version_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="appType != null" >
+        app_type,
+      </if>
+      <if test="platForm != null" >
+        plat_form,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="buildVersion != null" >
+        build_version,
+      </if>
+      <if test="publishDate != null" >
+        publish_date,
+      </if>
+      <if test="publishLog != null" >
+        publish_log,
+      </if>
+      <if test="isRequiredUpgrade != null" >
+        is_required_upgrade,
+      </if>
+      <if test="upgradeUrl != null" >
+        upgrade_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="appType != null" >
+        #{appType,jdbcType=TINYINT},
+      </if>
+      <if test="platForm != null" >
+        #{platForm,jdbcType=TINYINT},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="buildVersion != null" >
+        #{buildVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishLog != null" >
+        #{publishLog,jdbcType=VARCHAR},
+      </if>
+      <if test="isRequiredUpgrade != null" >
+        #{isRequiredUpgrade,jdbcType=BIT},
+      </if>
+      <if test="upgradeUrl != null" >
+        #{upgradeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wow.user.model.VersionLogExample" resultType="java.lang.Integer" >
+    select count(*) from version_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update version_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.appType != null" >
+        app_type = #{record.appType,jdbcType=TINYINT},
+      </if>
+      <if test="record.platForm != null" >
+        plat_form = #{record.platForm,jdbcType=TINYINT},
+      </if>
+      <if test="record.version != null" >
+        version = #{record.version,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buildVersion != null" >
+        build_version = #{record.buildVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.publishDate != null" >
+        publish_date = #{record.publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.publishLog != null" >
+        publish_log = #{record.publishLog,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isRequiredUpgrade != null" >
+        is_required_upgrade = #{record.isRequiredUpgrade,jdbcType=BIT},
+      </if>
+      <if test="record.upgradeUrl != null" >
+        upgrade_url = #{record.upgradeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update version_log
+    set id = #{record.id,jdbcType=INTEGER},
+      app_type = #{record.appType,jdbcType=TINYINT},
+      plat_form = #{record.platForm,jdbcType=TINYINT},
+      version = #{record.version,jdbcType=VARCHAR},
+      build_version = #{record.buildVersion,jdbcType=VARCHAR},
+      publish_date = #{record.publishDate,jdbcType=TIMESTAMP},
+      publish_log = #{record.publishLog,jdbcType=VARCHAR},
+      is_required_upgrade = #{record.isRequiredUpgrade,jdbcType=BIT},
+      upgrade_url = #{record.upgradeUrl,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.user.model.VersionLog" >
+    update version_log
+    <set >
+      <if test="appType != null" >
+        app_type = #{appType,jdbcType=TINYINT},
+      </if>
+      <if test="platForm != null" >
+        plat_form = #{platForm,jdbcType=TINYINT},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="buildVersion != null" >
+        build_version = #{buildVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishLog != null" >
+        publish_log = #{publishLog,jdbcType=VARCHAR},
+      </if>
+      <if test="isRequiredUpgrade != null" >
+        is_required_upgrade = #{isRequiredUpgrade,jdbcType=BIT},
+      </if>
+      <if test="upgradeUrl != null" >
+        upgrade_url = #{upgradeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wow.user.model.VersionLog" >
+    update version_log
+    set app_type = #{appType,jdbcType=TINYINT},
+      plat_form = #{platForm,jdbcType=TINYINT},
+      version = #{version,jdbcType=VARCHAR},
+      build_version = #{buildVersion,jdbcType=VARCHAR},
+      publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      publish_log = #{publishLog,jdbcType=VARCHAR},
+      is_required_upgrade = #{isRequiredUpgrade,jdbcType=BIT},
+      upgrade_url = #{upgradeUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <!-- 自定义开始 -->
+   <!-- 获取相关app类型指定平台的最新版本号 -->
+      <select id="selectLatestVersion"  resultMap="BaseResultMap"  parameterType="com.wow.user.vo.VersionLogQuery" >
+		    select 
+		    <include refid="Base_Column_List" />
+		    from version_log
+		    where app_type = #{appType} and plat_form = #{platForm} and version&gt;#{version} order by create_time desc limit 1
+  </select>
+  
+</mapper>
