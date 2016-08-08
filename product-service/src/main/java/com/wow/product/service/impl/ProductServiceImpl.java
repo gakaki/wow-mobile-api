@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import com.wow.common.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,15 @@ import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
+import com.wow.common.util.BeanUtil;
+import com.wow.common.util.CodeGenerator;
+import com.wow.common.util.CollectionUtil;
+import com.wow.common.util.DictionaryUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.MapUtil;
+import com.wow.common.util.StringUtil;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
@@ -65,6 +73,7 @@ import com.wow.product.vo.request.ColorSpecVo;
 import com.wow.product.vo.request.DesignerVo;
 import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.request.ProductImgVo;
+import com.wow.product.vo.request.ProductPageRequest;
 import com.wow.product.vo.request.ProductQueryVo;
 import com.wow.product.vo.request.SpecVo;
 import com.wow.product.vo.response.GroupProductResponse;
@@ -579,7 +588,7 @@ public class ProductServiceImpl implements ProductService {
         List<PageData> dataList = null;
         
     	if(pqv.getSortBy() == 1 || pqv.getSortBy() == null)
-        dataList = productMapper.selectProductByCategoryOrderByOnShelfTime(page);
+    		dataList = productMapper.selectProductByCategoryOrderByOnShelfTime(page);
     	if(pqv.getSortBy() == 2)
     		dataList = productMapper.selectProductByCategoryOrderBySoldQty(page);
     	if(pqv.getSortBy() == 3)
@@ -925,7 +934,27 @@ public class ProductServiceImpl implements ProductService {
      */
     public ProductPageResponse getProductListPage(PageModel pageModel){
     	ProductPageResponse productPageResponse = new ProductPageResponse();
+    	//初始化产品分类查询条件
+    	ProductPageRequest ppqv = (ProductPageRequest)pageModel.getModel();
+    	if(ppqv.getCategoryId()!=null){
+    		CategoryListResponse categoryListResponse = categoryService.getLastLevelCategoryByCategory(ppqv.getCategoryId());
+            List<Category> categoryList = categoryListResponse.getCategoryList();
+
+            List<Integer> categoryIds = new ArrayList<>();
+            if (categoryList == null) {
+                categoryListResponse.setResCode("40404");
+                ErrorResponseUtil.setErrorResponse(productPageResponse,"40404");
+                return productPageResponse;
+            }
+            for (Category category: categoryList) {
+                categoryIds.add(category.getId());
+            }
+
+        	ppqv.setCategoryIds(categoryIds);
+        	pageModel.setModel(ppqv);
+    	}
     	
+    	//查询符合条件的产品ids
     	List<PageData> pageDataList = productMapper.selectProductListPage(pageModel);
     	if(pageDataList.size()>0){
             List<ProductPageVo> productVoList = Arrays.asList(JsonUtil.fromJSON(pageDataList, ProductPageVo[].class));
@@ -950,14 +979,16 @@ public class ProductServiceImpl implements ProductService {
             }
             
             //批量查库存
-            Map<Integer, Integer> availableStockMap = new HashMap<Integer, Integer>();
-            AvailableStocksResponse availableStocksResponse = stockService.batchGetAvailableStock(subProductIds);
-            if (availableStocksResponse != null && CollectionUtil.isNotEmpty(availableStocksResponse.getAvailableStockVoList())) {
-                List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
-                for (AvailableStockVo availableStockVo : availableStockVoList) {
-                    availableStockMap.put(availableStockVo.getProductId(), availableStockVo.getTotalAvailableStockQty());
+        	Map<Integer, Integer> availableStockMap = new HashMap<Integer, Integer>();
+            if(subProductIds.size()>0){
+                AvailableStocksResponse availableStocksResponse = stockService.batchGetAvailableStock(subProductIds);
+                if (availableStocksResponse != null && CollectionUtil.isNotEmpty(availableStocksResponse.getAvailableStockVoList())) {
+                    List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
+                    for (AvailableStockVo availableStockVo : availableStockVoList) {
+                        availableStockMap.put(availableStockVo.getProductId(), availableStockVo.getTotalAvailableStockQty());
+                    }
                 }
-            }
+            }            
 
             //循环赋值返回
             List<ProductListPageVo> volist = new ArrayList<ProductListPageVo>();
@@ -968,9 +999,11 @@ public class ProductServiceImpl implements ProductService {
             	if(productList!=null){
             		for(ProductListVo product : productList){
                 		if((product.getProductId()).equals(productVo.getProductId())){
-                			//设置库存数
-                			product.setStockQty(availableStockMap.get(product.getProductId()));
-                			plist.add(product);
+                			if(availableStockMap != null){
+                				//设置库存数
+                    			product.setStockQty(availableStockMap.get(product.getProductId()));
+                			}
+                			plist.add(product);                			
                 		}
                 	}
                 	vo.setProductListVo(plist);
