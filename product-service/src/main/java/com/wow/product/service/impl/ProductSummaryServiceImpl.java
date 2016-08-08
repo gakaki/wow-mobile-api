@@ -40,4 +40,9 @@ public class ProductSummaryServiceImpl implements ProductSummaryService {
     public int updateProductSummary(ProductSummary productSummary) {
         return productSummaryMapper.updateByPrimaryKeySelective(productSummary);
     }
+
+    @Override
+    public int addSummaryByDate() {
+        return productSummaryMapper.addSummaryByDate();
+    }
 }

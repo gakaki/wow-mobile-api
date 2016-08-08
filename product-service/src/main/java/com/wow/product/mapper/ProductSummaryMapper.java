@@ -27,4 +27,6 @@ public interface ProductSummaryMapper {
     int updateByPrimaryKeySelective(ProductSummary record);
 
     int updateByPrimaryKey(ProductSummary record);
+
+    int addSummaryByDate();
 }
