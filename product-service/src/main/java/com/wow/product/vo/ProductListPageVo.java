@@ -7,16 +7,16 @@ public class ProductListPageVo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private ProductVo productVo;
+	private ProductPageVo productPageVo;
 	
 	private List<ProductListVo> productListVo;
 
-	public ProductVo getProductVo() {
-		return productVo;
+	public ProductPageVo getProductPageVo() {
+		return productPageVo;
 	}
 
-	public void setProductVo(ProductVo productVo) {
-		this.productVo = productVo;
+	public void setProductPageVo(ProductPageVo productPageVo) {
+		this.productPageVo = productPageVo;
 	}
 
 	public List<ProductListVo> getProductListVo() {

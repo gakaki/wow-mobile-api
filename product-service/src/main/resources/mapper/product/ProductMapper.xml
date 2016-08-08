@@ -974,19 +974,21 @@
   <!-- 后台产品列表分页查询 -->
   <select id="selectProductListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
   	select
-    	p.id as productId,p.product_name as productName
-    from product p where p.product_type=2 order by p.create_time desc
+    	p.id as productId,p.product_name as productName,b.brand_cname as brandName
+    from product p 
+    left join brand b on b.id=p.brand_id
+    where p.product_type=2 
+    order by p.create_time desc
   </select>
 
   <!-- 按产品ID批量查询产品列表信息 -->
   <select id="selectProductByProductIds" resultType="com.wow.product.vo.ProductListVo">
   	select
-    	psr.product_id as productId,psr.sub_product_id as subProductId,p.product_name as productName,b.brand_cname as brandName,p.spec_name as specName,p.product_code as productCode,
+    	psr.product_id as productId,psr.sub_product_id as subProductId,p.product_name as productName,p.spec_name as specName,p.product_code as productCode,
     	pp.sell_price as sellPrice,ps.total_sold_qty as totalSoldQty,p.product_status as productStatus,p.create_time as createTime
     from product_serial psr
     inner join product p on psr.sub_product_id=p.id
     left join product_price pp on pp.product_id=p.id
-    left join brand b on b.id=p.brand_id
     left join product_summary ps on ps.product_id=p.id
     where p.is_deleted = false
     and p.product_type = 1

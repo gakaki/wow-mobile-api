@@ -59,6 +59,7 @@ import com.wow.product.service.ProductService;
 import com.wow.product.vo.ProductListPageVo;
 import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.ProductListVo;
+import com.wow.product.vo.ProductPageVo;
 import com.wow.product.vo.ProductVo;
 import com.wow.product.vo.request.ColorSpecVo;
 import com.wow.product.vo.request.DesignerVo;
@@ -927,10 +928,10 @@ public class ProductServiceImpl implements ProductService {
     	
     	List<PageData> pageDataList = productMapper.selectProductListPage(pageModel);
     	if(pageDataList.size()>0){
-            List<ProductVo> productVoList = Arrays.asList(JsonUtil.fromJSON(pageDataList, ProductVo[].class));
+            List<ProductPageVo> productVoList = Arrays.asList(JsonUtil.fromJSON(pageDataList, ProductPageVo[].class));
             List<Integer> productIds = new ArrayList<Integer>();
-            for(ProductVo productVo:productVoList){
-                productIds.add(productVo.getProductId());
+            for(ProductPageVo productPageVo:productVoList){
+                productIds.add(productPageVo.getProductId());
             }
             // 批量查产品信息
             List<ProductListVo> productList = productMapper.selectProductByProductIds(productIds);
@@ -942,9 +943,9 @@ public class ProductServiceImpl implements ProductService {
 
             //批量查询主图
             Map<Integer, ProductImage> productImageMap = this.selectProductListPrimaryOneImg(productIds);
-            for(ProductVo productVo:productVoList){
-                if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productVo.getProductId()) != null){
-                    productVo.setProductImg(productImageMap.get(productVo.getProductId()).getImgUrl());
+            for(ProductPageVo productPageVo:productVoList){
+                if(MapUtil.isNotEmpty(productImageMap) && productImageMap.get(productPageVo.getProductId()) != null){
+                    productPageVo.setProductImg(productImageMap.get(productPageVo.getProductId()).getImgUrl());
                 }
             }
             
@@ -960,10 +961,10 @@ public class ProductServiceImpl implements ProductService {
 
             //循环赋值返回
             List<ProductListPageVo> volist = new ArrayList<ProductListPageVo>();
-            for(ProductVo productVo:productVoList){
+            for(ProductPageVo productVo:productVoList){
             	ProductListPageVo vo = new ProductListPageVo();
             	List<ProductListVo> plist = new ArrayList<ProductListVo>();
-            	vo.setProductVo(productVo);
+            	vo.setProductPageVo(productVo);
             	if(productList!=null){
             		for(ProductListVo product : productList){
                 		if((product.getProductId()).equals(productVo.getProductId())){
