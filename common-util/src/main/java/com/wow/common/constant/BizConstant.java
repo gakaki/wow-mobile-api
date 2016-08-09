@@ -29,6 +29,7 @@ public interface BizConstant {
     public static final byte LINK_TYPE_DESIGNER = 5;
     public static final byte LINK_TYPE_PRODUCT = 6;
     public static final byte LINK_TYPE_CATEGORY = 7;
+    public static final byte LINK_TYPE_TOPIC = 8;
 
     //产品分类级别
     public static final byte PAGE_CATEGORY_LEVEL = 1;
