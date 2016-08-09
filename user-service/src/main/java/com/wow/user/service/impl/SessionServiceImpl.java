@@ -400,9 +400,10 @@ public class SessionServiceImpl implements SessionService {
         boolean isValid = false;
 
         EndUserSession endUserSession = null;
-        Object key=null;
-        if((key=RedisUtil.get("session-"+sessionToken+"-"+loginChannel))!=null)
-            endUserSession=(EndUserSession) RedisUtil.get(key.toString());
+        Object key=RedisUtil.get("session-"+sessionToken+"-"+loginChannel);
+        if(key!=null) {
+            endUserSession = (EndUserSession) RedisUtil.get(key.toString());
+        }
         if(endUserSession!=null){
             isValid = true;
             long interval=System.currentTimeMillis()-endUserSession.getLastRefreshTime().getTime();
@@ -412,7 +413,8 @@ public class SessionServiceImpl implements SessionService {
             }
         }
         tokenValidateResponse.setValid(isValid);
-        tokenValidateResponse.setEndUserId(endUserSession.getEndUserId());
+        if(endUserSession!=null)
+            tokenValidateResponse.setEndUserId(endUserSession.getEndUserId());
         return tokenValidateResponse;
     }
 
