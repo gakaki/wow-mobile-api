@@ -218,7 +218,7 @@ public class ProductServiceImpl implements ProductService {
         String applicableSceneText;
     }
 
-    private ProductApplicableSceneList createProductApplicableSceneList(Integer productId, List<String> applicableSceneTexts) {
+    private ProductApplicableSceneList buildProductApplicableSceneList(Integer productId, List<String> applicableSceneTexts) {
         if (CollectionUtil.isEmpty(applicableSceneTexts)) {
             return null;
         }
@@ -249,7 +249,7 @@ public class ProductServiceImpl implements ProductService {
         String productMaterialText;
     }
 
-    private ProductMaterialList createProductMaterialList(Integer productId, List<Integer> materialIds) {
+    private ProductMaterialList buildProductMaterialList(Integer productId, List<Integer> materialIds) {
         if (CollectionUtil.isEmpty(materialIds)) {
             return null;
         }
@@ -274,7 +274,7 @@ public class ProductServiceImpl implements ProductService {
         return productMaterialList;
     }
 
-    private List<ProductDesigner> createProductDesignerList(Integer productId, List<DesignerVo> designerVoList) {
+    private List<ProductDesigner> buildProductDesignerList(Integer productId, List<DesignerVo> designerVoList) {
         if (CollectionUtil.isEmpty(designerVoList)) {
             return null;
         }
@@ -324,9 +324,9 @@ public class ProductServiceImpl implements ProductService {
         ProductDetailInfo productInfo = productUpdateRequest.getInfo();
         Product product = createProductFromProductInfo(productId, productInfo);
 
-        List<ProductDesigner> productDesigners = createProductDesignerList(productId, productInfo.getDesignerVoList());
-        ProductMaterialList productMaterialList = createProductMaterialList(productId, productInfo.getMaterialList());
-        ProductApplicableSceneList productApplicableSceneList = createProductApplicableSceneList(productId, productInfo.getApplicableSceneList());
+        List<ProductDesigner> productDesigners = buildProductDesignerList(productId, productInfo.getDesignerVoList());
+        ProductMaterialList productMaterialList = buildProductMaterialList(productId, productInfo.getMaterialList());
+        ProductApplicableSceneList productApplicableSceneList = buildProductApplicableSceneList(productId, productInfo.getApplicableSceneList());
 
         if (productDesigners != null) {
             designerService.replaceProductDesigners(productId, productDesigners);
@@ -441,17 +441,17 @@ public class ProductServiceImpl implements ProductService {
 
         //创建产品设计师绑定
         if (CollectionUtil.isNotEmpty(designerVoList)) {
-            List<ProductDesigner> productDesignerList = createProductDesignerList(productId, designerVoList);
+            List<ProductDesigner> productDesignerList = buildProductDesignerList(productId, designerVoList);
             designerService.addProductDesignersByBatch(productDesignerList);
         }
 
         //创建产品材质绑定
-        ProductMaterialList materialList = createProductMaterialList(productId, materialIds);
+        ProductMaterialList materialList = buildProductMaterialList(productId, materialIds);
         createProductMaterial(materialList.productMaterialList);
         parentProduct.setMaterialText(materialList.productMaterialText);
 
         //创建产品适用场景绑定
-        ProductApplicableSceneList productApplicableSceneList = createProductApplicableSceneList(productId, applicableSceneTexts);
+        ProductApplicableSceneList productApplicableSceneList = buildProductApplicableSceneList(productId, applicableSceneTexts);
         applicableSceneService.createProductApplicableScene(productApplicableSceneList.applicableSceneList);
         parentProduct.setApplicableSceneText(productApplicableSceneList.applicableSceneText);
 
