@@ -410,7 +410,7 @@ public class ProductServiceImpl implements ProductService {
         product.setLength(length);
         product.setWidth(width);
         product.setHeight(height);
-        product.setSizeText("L"+length + "xW" + width + "xH" + height + "cm");
+        product.setSizeText(buildProductSizeText(length, width, height));
         product.setOriginCity(originCity);
         product.setOriginProvinceId(originProvinceId);
         product.setOriginCountryId(originCountryId);
@@ -439,53 +439,24 @@ public class ProductServiceImpl implements ProductService {
         int productId = product.getId();
         Product parentProduct = new Product();
         parentProduct.setId(productId);
+
         //创建产品设计师绑定
-        List<ProductDesigner> productDesignerList=new ArrayList<ProductDesigner>();
-        if(designerVoList!=null&&!designerVoList.isEmpty()) {
-            for (DesignerVo designerVo : designerVoList) {
-                ProductDesigner productDesigner = new ProductDesigner();
-                int designerId = designerVo.getDesignerId();
-                boolean isPrimary = designerVo.isPrimary();
-                productDesigner.setDesignerId(designerId);
-                productDesigner.setIsPrimary(isPrimary);
-                productDesigner.setProductId(productId);
-                productDesignerList.add(productDesigner);
-//            designerService.createProductDesigner(productDesigner);
-            }
+        if (CollectionUtil.isNotEmpty(designerVoList)) {
+            List<ProductDesigner> productDesignerList = createProductDesignerList(productId, designerVoList);
             designerService.addProductDesignersByBatch(productDesignerList);
         }
+
         //创建产品材质绑定
-        String materialText = "";
-        List<ProductMaterial> productMaterialList = new ArrayList<ProductMaterial>();
-        for (int materialId : materialIds) {
-            ProductMaterial productMaterial = new ProductMaterial();
-            productMaterial.setProductId(productId);
-            productMaterial.setMaterialId(materialId);
-            productMaterialList.add(productMaterial);
-            materialText += MaterialUtil.getMaterialById(materialId) + ",";
-        }
-        createProductMaterial(productMaterialList);
-        if (StringUtil.isNotEmpty(materialText)) {
-            parentProduct.setMaterialText(materialText.substring(0,materialText.length()-1));
-        }
+        ProductMaterialList materialList = createProductMaterialList(productId, materialIds);
+        createProductMaterial(materialList.productMaterialList);
+        parentProduct.setMaterialText(materialList.productMaterialText);
 
         //创建产品适用场景绑定
-        String applicableSceneText = "";
-        List<ProductApplicableScene> productApplicableSceneList = new ArrayList<>();
-        for (String text : applicableSceneTexts) {
-            ProductApplicableScene productApplicableScene = new ProductApplicableScene();
+        ProductApplicableSceneList productApplicableSceneList = createProductApplicableSceneList(productId, applicableSceneTexts);
+        applicableSceneService.createProductApplicableScene(productApplicableSceneList.applicableSceneList);
+        parentProduct.setApplicableSceneText(productApplicableSceneList.applicableSceneText);
 
-            productApplicableScene.setProductId(productId);
-            productApplicableScene.setApplicableSceneId(text);
-            productApplicableSceneList.add(productApplicableScene);
-            applicableSceneText += DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_APPLICABLE_SCENE,text).getKeyValue() + ",";
-        }
-        applicableSceneService.createProductApplicableScene(productApplicableSceneList);
-
-        if (StringUtil.isNotEmpty(applicableSceneText)) {
-            //TODO: 将适用场景和材质进行逗号分隔,插入
-            parentProduct.setApplicableSceneText(applicableSceneText.substring(0,applicableSceneText.length()-1));
-        }
+        //TODO: 将适用场景和材质进行逗号分隔,插入
 
         updateProduct(parentProduct);
 
@@ -735,10 +706,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<Material> getMaterialInProduct(Integer productId) {
-
-        ProductMaterialExample productMaterialExample=new ProductMaterialExample();
-        productMaterialExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo(productId);
-        List<ProductMaterial> productMaterials=productMaterialMapper.selectByExample(productMaterialExample);
+        List<ProductMaterial> productMaterials=getProductMaterials(productId);
         if(!productMaterials.isEmpty())
         {
             List<Integer> materialIds=new ArrayList<>();
