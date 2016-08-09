@@ -406,6 +406,7 @@ public class SessionServiceImpl implements SessionService {
         }
         if(endUserSession!=null){
             isValid = true;
+            tokenValidateResponse.setEndUserId(endUserSession.getEndUserId());
             long interval=System.currentTimeMillis()-endUserSession.getLastRefreshTime().getTime();
             if(interval<sessionExpirationTime*0.25){
                 endUserSession.setLastRefreshTime(Calendar.getInstance().getTime());
@@ -413,8 +414,6 @@ public class SessionServiceImpl implements SessionService {
             }
         }
         tokenValidateResponse.setValid(isValid);
-        if(endUserSession!=null)
-            tokenValidateResponse.setEndUserId(endUserSession.getEndUserId());
         return tokenValidateResponse;
     }
 
