@@ -191,14 +191,21 @@ public class PayServiceImpl implements PayService {
         }
 
         //根据订单号查询相应的支付凭据
-        SaleOrderPayCharge saleOrderCharge = queryPayChargeByOrderCode(charge.getOrderNo());
-        //如果凭据已经存在 则直接返回
-        if (saleOrderCharge != null) {
+        SaleOrderPayCharge saleOrderPayCharge = queryPayChargeByOrderCode(charge.getOrderNo());
+        //如果凭据已经存在 则更新相关的凭据
+        if (saleOrderPayCharge != null) {
+            SaleOrderPayCharge targetSaleOrderCharge=new SaleOrderPayCharge();
+            
+            targetSaleOrderCharge.setId(saleOrderPayCharge.getId());
+            targetSaleOrderCharge.setChargeId(charge.getId());
+
+            saleOrderPayChargeMapper.updateByPrimaryKeySelective(targetSaleOrderCharge);
+
             return;
         }
 
         //保存凭据信息
-        SaleOrderPayCharge saleOrderPayCharge = new SaleOrderPayCharge();
+        saleOrderPayCharge = new SaleOrderPayCharge();
 
         saleOrderPayCharge.setChargeId(charge.getId());
         saleOrderPayCharge.setOrderCode(charge.getOrderNo());
