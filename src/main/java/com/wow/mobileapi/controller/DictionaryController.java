@@ -49,7 +49,7 @@ public class DictionaryController extends BaseController{
             }
             apiResponse.setData(commonResponse);
         } catch (Exception e) {
-            logger.error("字典信息增加addDictionary错误---" + e);
+            logger.error("字典信息增加addDictionary错误---" ,e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -71,7 +71,7 @@ public class DictionaryController extends BaseController{
             }
             apiResponse.setData(commonResponse);
         } catch (Exception e) {
-            logger.error("字典信息删除delDictionary错误---" + e);
+            logger.error("字典信息删除delDictionary错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -92,7 +92,7 @@ public class DictionaryController extends BaseController{
             }
             apiResponse.setData(commonResponse);
         } catch (Exception e) {
-            logger.error("字典信息更新updateDictionary错误---" + e);
+            logger.error("字典信息更新updateDictionary错误---" , e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -118,7 +118,7 @@ public class DictionaryController extends BaseController{
             dictionaryResponse.setDictionaryList(dictionaryList);
             apiResponse.setData(dictionaryResponse);
         } catch (Exception e) {
-            logger.error("字典信息查找findNextLevelArea错误---" + e);
+            logger.error("字典信息查找findNextLevelArea错误---" ,e);
             setInternalErrorResponse(apiResponse);
         }
 

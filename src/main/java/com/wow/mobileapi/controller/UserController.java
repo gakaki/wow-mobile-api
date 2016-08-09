@@ -89,7 +89,7 @@ public class UserController extends BaseController {
                 apiResponse.setData(userResponse.getEndUser());
             }
         } catch (Exception e) {
-            logger.error("查找用户信息错误---" + e);
+            logger.error("查找用户信息错误---" , e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
@@ -177,13 +177,13 @@ public class UserController extends BaseController {
                         apiResponse.setData(loginResponse.getLoginResponseVo());
                     }
                 } catch (Exception e) {
-                    logger.error("login发生错误---" + e);
+                    logger.error("login发生错误---", e);
                     e.printStackTrace();
                     setInternalErrorResponse(apiResponse);
                 }
             }
         } catch (Exception e) {
-            logger.error("注册发生错误---" + e);
+            logger.error("注册发生错误---" ,e);
             setInternalErrorResponse(apiResponse);
         }
         logger.info("用户注册,返回结果:" + JsonUtil.pojo2Json(apiResponse));
@@ -239,7 +239,7 @@ public class UserController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("修改用户发生错误---" + e);
+            logger.error("修改用户发生错误---" ,e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
