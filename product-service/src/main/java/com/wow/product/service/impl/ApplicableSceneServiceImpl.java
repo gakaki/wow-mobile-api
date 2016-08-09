@@ -27,6 +27,7 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
     private ApplicableSceneMapper applicableSceneMapper;
     @Autowired
     private ProductApplicableSceneMapper productApplicableSceneMapper;
+
     @Override
     public int createApplicableScene(ApplicableScene applicableScene) {
         return applicableSceneMapper.insertSelective(applicableScene);
@@ -114,4 +115,20 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
         return 0;
     }
 
+    private static ProductApplicableScene createDeletedProductApplicableSceneRecord() {
+        ProductApplicableScene record = new ProductApplicableScene();
+        record.setIsDeleted(true);
+        return record;
+    }
+
+    private static final ProductApplicableScene deletedProductApplicableSceneRecord = createDeletedProductApplicableSceneRecord();
+
+    @Override
+    public int replaceProductApplicableScene(Integer productId, List<ProductApplicableScene> applicableScenes) {
+        ProductApplicableSceneExample example = new ProductApplicableSceneExample();
+        example.or().andProductIdEqualTo(productId);
+        productApplicableSceneMapper.updateByExampleSelective(deletedProductApplicableSceneRecord, example);
+
+        return createProductApplicableScene(applicableScenes);
+    }
 }

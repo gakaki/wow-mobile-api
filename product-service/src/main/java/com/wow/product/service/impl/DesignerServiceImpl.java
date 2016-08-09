@@ -216,4 +216,22 @@ public class DesignerServiceImpl implements DesignerService {
     public int addProductDesignersByBatch(List<ProductDesigner> list) {
         return productDesignerMapper.addByBatch(list);
     }
+
+    private static ProductDesigner createDeletedProductDesignerRecord() {
+        ProductDesigner record = new ProductDesigner();
+        record.setIsDeleted(true);
+        return record;
+    }
+
+    private static final ProductDesigner deletedProductDesignerRecord = createDeletedProductDesignerRecord();
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int replaceProductDesigners(Integer productId, List<ProductDesigner> designers) {
+        ProductDesignerExample example = new ProductDesignerExample();
+        example.or().andProductIdEqualTo(productId);
+        productDesignerMapper.updateByExampleSelective(deletedProductDesignerRecord, example);
+
+        return productDesignerMapper.addByBatch(designers);
+    }
 }

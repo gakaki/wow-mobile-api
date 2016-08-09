@@ -10,6 +10,7 @@ import com.wow.common.response.CommonResponse;
 import com.wow.product.model.*;
 import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.request.ProductCreateRequest;
+import com.wow.product.vo.request.ProductUpdateRequest;
 import com.wow.product.vo.response.ProductDetailResponse;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductPageResponse;
@@ -63,6 +64,27 @@ public interface ProductService {
      * @return
      */
     ProductDetailResponse getProductDetail(Integer productId);
+
+    /**
+     * 更新产品的描述信息
+     * @param productUpdateRequest
+     * @return
+     */
+    CommonResponse updateProductInfo(ProductUpdateRequest productUpdateRequest);
+
+    /**
+     * 更新子产品信息
+     * @param productUpdateRequest
+     * @return
+     */
+    CommonResponse updateProductSerials(ProductUpdateRequest productUpdateRequest);
+
+    /**
+     * 更新产品的图文信息
+     * @param productUpdateRequest
+     * @return
+     */
+    CommonResponse updateProductImages(ProductUpdateRequest productUpdateRequest);
 
     /**
      * 更新产品
