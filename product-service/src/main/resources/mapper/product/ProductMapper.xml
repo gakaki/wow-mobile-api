@@ -1054,13 +1054,14 @@
     order by ${model.orderColumn} ${model.OrderType}
   </select>
 
-  <select id="selectProductInTopic" resultType="com.wow.product.vo.ProductInTopicVo"  parameterType="java.lang.Integer">
-    select pslit.product_id productId, p.product_name productName, pp.sell_price sellPrice, pslit.sort_order sortOrder
+  <select id="selectProductInTopic" resultType="com.wow.product.vo.ProductVo"  parameterType="java.lang.Integer">
+    select pslit.product_id productId, p.product_name productName, pp.sell_price sellPrice
     from product_short_list_in_topic pslit
     inner join product_price pp
     on pslit.product_id = pp.product_id
     inner join product p
     on p.id = pslit.product_id
     where pslit.topic_id = #{topicId,jdbcType=INTEGER}
+    order by pslit.sort_order asc
   </select>
 </mapper>

@@ -1294,18 +1294,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductInTopicResponse getProductInTopic(int topicId) {
         ProductInTopicResponse resp=new ProductInTopicResponse();
-        List<ProductInTopicVo> productInTopicVoList = productMapper.selectProductInTopic(topicId);
+        List<ProductVo> productVoList = productMapper.selectProductInTopic(topicId);
         List<Integer> productIdList = new ArrayList<>();
-        for (ProductInTopicVo product : productInTopicVoList) {
+        for (ProductVo product : productVoList) {
             productIdList.add(product.getProductId());
         }
         Map<Integer, ProductImage> productImgMap = selectProductListPrimaryOneImg(productIdList);
-        for (ProductInTopicVo product : productInTopicVoList) {
+        for (ProductVo product : productVoList) {
             if (productImgMap.get(product.getProductId()) != null) {
                 product.setProductImg(productImgMap.get(product.getProductId()).getImgUrl());
             }
         }
-        resp.setProductList(productInTopicVoList);
+        resp.setProductList(productVoList);
         return resp;
     }
 }

@@ -2,7 +2,6 @@ package com.wow.product.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.common.response.CommonResponse;
-import com.wow.product.vo.ProductInTopicVo;
 import com.wow.product.vo.ProductVo;
 
 import java.util.List;
@@ -15,13 +14,13 @@ public class ProductInTopicResponse extends CommonResponse{
 
     private static final long serialVersionUID = 1L;
 
-    private List<ProductInTopicVo> productList;
+    private List<ProductVo> productList;
 
-    public List<ProductInTopicVo> getProductList() {
+    public List<ProductVo> getProductList() {
         return productList;
     }
 
-    public void setProductList(List<ProductInTopicVo> productList) {
+    public void setProductList(List<ProductVo> productList) {
         this.productList = productList;
     }
 }
