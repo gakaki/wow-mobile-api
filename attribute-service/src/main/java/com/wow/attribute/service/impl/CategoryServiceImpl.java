@@ -1,6 +1,7 @@
 package com.wow.attribute.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,30 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryResponse;
     }
 
+    /**
+     * 查询指定类目的路径
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public CategoryListResponse getCategoryPath(Integer categoryId) {
+        final int noParentCategory = 0;
+        ArrayList<Category> categories = new ArrayList<>(3);
+        while (categoryId != null) {
+            Category category = categoryMapper.selectByPrimaryKey(categoryId);
+            if (category == null) {
+                break;
+            }
+            categories.add(category);
+            categoryId = category.getParentCategoryId();
+        }
+        Collections.reverse(categories);
 
+        CategoryListResponse response = new CategoryListResponse();
+        response.setCategoryList(categories);
+        return response;
+    }
 
     /**
      * 查询指定类目的子类目

@@ -49,6 +49,14 @@ public interface CategoryService {
     CategoryListResponse getSubCategory(int categoryId);
 
     /**
+     * 查询指定类目的路径
+     *
+     * @param categoryId
+     * @return
+     */
+    CategoryListResponse getCategoryPath(Integer categoryId);
+
+    /**
      * 查询指定类目的父类目
      *
      * @param categoryId

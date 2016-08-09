@@ -273,7 +273,7 @@
   </update>
   <!--根据系列主品查询所有子品信息-->
   <select id="selectProductSerials" resultType="com.wow.product.model.Product" parameterType="java.lang.Integer" >
-    select product.id id, product.weight weight, product.product_color_img productColorImg,
+    select product.id id, product.weight weight, product.color_id colorId, product.product_color_img productColorImg,
     product.color_display_name colorDisplayName, product.spec_name specName, product.size_text sizeText
     from product inner join product_serial
     on product_serial.sub_product_id = product.id
