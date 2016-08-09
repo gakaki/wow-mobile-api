@@ -1,11 +1,13 @@
 package com.wow.product.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wow.price.model.ProductPrice;
 import com.wow.product.model.Product;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductDetailSerial {
     private Integer productId;
 

@@ -2,9 +2,13 @@ package com.wow.user.vo;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /**
  * Created by zhengzhiqing on 16/7/16.
  */
+@JsonInclude(Include.NON_NULL)
 public class LoginResponseVo implements Serializable {
 
     private static final long serialVersionUID = 1L;

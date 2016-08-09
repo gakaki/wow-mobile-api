@@ -1,27 +1,9 @@
 package com.wow.mobileapi.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.EncodeDecodeUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
+import com.wow.common.util.*;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.mobileapi.request.user.LoginByWechatRequest;
 import com.wow.mobileapi.request.user.LoginRequest;
@@ -35,6 +17,16 @@ import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
 import com.wow.user.vo.response.TokenValidateResponse;
 import com.wow.user.vo.response.UserResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 登录、登出
@@ -56,7 +48,7 @@ public class SessionController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value="/v1/session/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/session/login", method = RequestMethod.POST)
     public ApiResponse login(ApiRequest apiRequest, HttpServletRequest request) {
 
         ApiResponse apiResponse = new ApiResponse();
@@ -91,8 +83,7 @@ public class SessionController extends BaseController {
                 apiResponse.setData(loginResponseVo);
             }
         } catch (Exception e) {
-            logger.error("login发生错误---" + e);
-            e.printStackTrace();
+            logger.error("login发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -104,11 +95,12 @@ public class SessionController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value="/v1/session/login/wechat", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/session/login/wechat", method = RequestMethod.POST)
     public ApiResponse loginByWechat(ApiRequest apiRequest, HttpServletRequest request) {
 
         ApiResponse apiResponse = new ApiResponse();
-        LoginByWechatRequest loginByWechatRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), LoginByWechatRequest.class);
+        LoginByWechatRequest loginByWechatRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), LoginByWechatRequest.class);
         //判断json格式参数是否有误
         if (loginByWechatRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -122,13 +114,13 @@ public class SessionController extends BaseController {
             return apiResponse;
         }
 
-        String openId =loginByWechatRequest.getOpenId();
+        String openId = loginByWechatRequest.getOpenId();
         //根据微信ID判断该微信是否已经绑定手机。如果没有,返回未绑定。如果已绑定,进行微信登录。
         UserResponse userResponse = userService.getUserByOpenId(openId);
         logger.info("endUser:" + userResponse.getEndUser());
-        if (userResponse ==null || userResponse.getEndUser() ==null) {
+        if (userResponse == null || userResponse.getEndUser() == null) {
             Map<String, Boolean> map = new HashMap<String, Boolean>();
-            map.put("isOpenIdBinded",false);
+            map.put("isOpenIdBinded", false);
             apiResponse.setData(map);
             return apiResponse;
         }
@@ -151,8 +143,7 @@ public class SessionController extends BaseController {
                 apiResponse.setData(loginResponseVo);
             }
         } catch (Exception e) {
-            logger.error("微信登录发生错误---" + e);
-            e.printStackTrace();
+            logger.error("微信登录发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -163,7 +154,7 @@ public class SessionController extends BaseController {
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value="/v1/session/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/session/logout", method = RequestMethod.POST)
     public ApiResponse logout(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
 
@@ -178,19 +169,20 @@ public class SessionController extends BaseController {
         byte channel = apiRequest.getChannel();
 
         TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(sessionToken, channel);
-        if (tokenValidateResponse == null || ! tokenValidateResponse.isValid()) {
+        if (tokenValidateResponse == null || !tokenValidateResponse.isValid()) {
             ErrorResponseUtil.setErrorResponse(apiResponse, ErrorCodeConstant.INVALID_TOKEN);
             return apiResponse;
         }
 
         try {
-            CommonResponse commonResponse = sessionService.logout(apiRequest.getSessionToken(), apiRequest.getChannel());
+            CommonResponse commonResponse = sessionService
+                .logout(apiRequest.getSessionToken(), apiRequest.getChannel());
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(commonResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("logout发生错误---" + e);
+            logger.error("logout发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;

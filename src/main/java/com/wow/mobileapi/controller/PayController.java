@@ -61,7 +61,7 @@ public class PayController extends BaseController {
                 apiResponse.setData(chargeResponse);
             }
         } catch (Exception e) {
-            logger.error("请求支付凭证错误---" + e);
+            logger.error("请求支付凭证错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 

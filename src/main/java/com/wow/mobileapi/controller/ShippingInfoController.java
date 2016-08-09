@@ -69,7 +69,7 @@ public class ShippingInfoController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("创建收货信息发生错误---" + e);
+            logger.error("创建收货信息发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -117,7 +117,7 @@ public class ShippingInfoController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("修改收货信息发生错误---" + e);
+            logger.error("修改收货信息发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -152,7 +152,7 @@ public class ShippingInfoController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("删除收货信息发生错误---" + e);
+            logger.error("删除收货信息发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -177,7 +177,7 @@ public class ShippingInfoController extends BaseController {
                 apiResponse.setData(shippingInfoListResponse);
             }
         } catch (Exception e) {
-            logger.error("查询所有收货信息发生错误---" + e);
+            logger.error("查询所有收货信息发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -204,7 +204,7 @@ public class ShippingInfoController extends BaseController {
                 apiResponse.setData(shippingInfoResponse.getShippingInfo());
             }
         } catch (Exception e) {
-            logger.error("查询默认收货信息发生错误---" + e);
+            logger.error("查询默认收货信息发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -242,7 +242,7 @@ public class ShippingInfoController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("设置默认收货信息发生错误---" + e);
+            logger.error("设置默认收货信息发生错误---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }

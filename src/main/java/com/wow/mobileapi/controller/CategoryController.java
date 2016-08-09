@@ -79,7 +79,7 @@ public class CategoryController extends BaseController {
                 apiResponse.setData(subCategoryResponse);
             }
         } catch (Exception e) {
-            logger.error("获取二级子分类---" + e);
+            logger.error("获取二级子分类---" , e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }

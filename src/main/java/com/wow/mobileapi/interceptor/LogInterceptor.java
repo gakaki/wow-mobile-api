@@ -24,7 +24,6 @@ public class LogInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
 
-        logger.info(">>>>>>>>>>> http request info <<<<<<<<<<<<<<<");
         StringBuffer sb = new StringBuffer();
         sb.append("\n");
         sb.append(request.getMethod());
@@ -52,9 +51,6 @@ public class LogInterceptor implements HandlerInterceptor {
         }
         sb = new StringBuffer(s);
         sb.append("\n");
-        //Do not read the request body in interceptor or filter
-//        String body = charReader(request);
-//        sb.append("\n" + body + "\n");
 
         logger.info(sb.toString());
 
@@ -65,14 +61,12 @@ public class LogInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request,
                            HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
-        logger.info(">>>>>>>>>>> postHandle <<<<<<<<<<<<<<<");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request,
                                 HttpServletResponse response, Object handler, Exception ex)
             throws Exception {
-        logger.info(">>>>>>>>>>> afterCompletion <<<<<<<<<<<<<<<");
     }
 
 

@@ -67,7 +67,7 @@ public class PageController extends BaseController {
                 apiResponse.setData(pageBannerVoResponse);
             }
         } catch (Exception e) {
-            logger.error("查找Banner错误---" + e);
+            logger.error("查找Banner错误---" , e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -91,7 +91,7 @@ public class PageController extends BaseController {
                 apiResponse.setData(pageProductsResponse);
             }
         } catch (Exception e) {
-            logger.error("查找product_find错误---" + e);
+            logger.error("查找product_find错误---" , e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -111,7 +111,7 @@ public class PageController extends BaseController {
                 apiResponse.setData(pageCategoryResponse);
             }
         } catch (Exception e) {
-            logger.error("查找category_find错误---" + e);
+            logger.error("查找category_find错误---" , e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
