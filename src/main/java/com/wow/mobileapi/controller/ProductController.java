@@ -6,6 +6,7 @@ import com.wow.common.response.ApiResponse;
 import com.wow.common.util.*;
 import com.wow.mobileapi.request.product.ProductInfoRequest;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
+import com.wow.mobileapi.request.topic.TopicQueryRequest;
 import com.wow.mobileapi.response.product.*;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
@@ -23,6 +24,7 @@ import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.request.ProductImgVo;
 import com.wow.product.vo.request.ProductQueryVo;
 import com.wow.product.vo.response.ProductImgResponse;
+import com.wow.product.vo.response.ProductInTopicResponse;
 import com.wow.product.vo.response.ProductResponse;
 import com.wow.product.vo.response.ProductVoResponse;
 import com.wow.stock.service.StockService;
@@ -496,14 +498,42 @@ public class ProductController extends BaseController {
     }
 
     /**
-     * 根据品牌查询产品列表
+     * 根据专题查询产品列表
      * @param apiRequest
      * @return
      */
-    @RequestMapping(value = "/v1/product/queryProductByTopicGroup", method = RequestMethod.GET)
-    public ApiResponse queryProductByTopicGroup(ApiRequest apiRequest) {
-        logger.info("start to get product_brand on page");
-        ProductListQuery productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
-        return productService.queryProductByTopicGroup(productQueryRequest);
+    @RequestMapping(value = "/v1/topic/product", method = RequestMethod.GET)
+    public ApiResponse getProductInTopic(ApiRequest apiRequest) {
+        logger.info("start to get product in topic");
+        ApiResponse apiResponse = new ApiResponse();
+        TopicQueryRequest topicQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), TopicQueryRequest.class);
+        //判断json格式参数是否有误
+        if (topicQueryRequest == null) {
+            setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(topicQueryRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
+        try {
+            ProductInTopicResponse productInTopicResponse = productService.getProductInTopic(topicQueryRequest.getTopicId());
+            //如果处理失败 则返回错误信息
+            if (ErrorCodeUtil.isFailedResponse(productInTopicResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productInTopicResponse);
+            } else {
+                apiResponse.setData(productInTopicResponse);
+            }
+        } catch (Exception e) {
+            logger.error("根据专题查询产品列表错误---", e);
+            setInternalErrorResponse(apiResponse);
+        }
+        return apiResponse;
+//        ProductListQuery productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
+//        return productService.queryProductByTopicGroup(productQueryRequest);
     }
 }
