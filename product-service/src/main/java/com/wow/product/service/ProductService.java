@@ -14,6 +14,7 @@ import com.wow.product.model.ProductImage;
 import com.wow.product.model.ProductMaterial;
 import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.request.ProductCreateRequest;
+import com.wow.product.vo.response.ProductDetailResponse;
 import com.wow.product.vo.response.ProductImgResponse;
 import com.wow.product.vo.response.ProductPageResponse;
 import com.wow.product.vo.response.ProductResponse;
@@ -59,6 +60,13 @@ public interface ProductService {
      * @return
      */
     List<Product> getProductByBrandId(int brandId);
+
+    /**
+     * 查询产品详细信息
+     * @param productId
+     * @return
+     */
+    ProductDetailResponse getProductDetail(Integer productId);
 
     /**
      * 更新产品

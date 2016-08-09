@@ -66,6 +66,9 @@ public class ProductServiceImpl implements ProductService {
     private  ProductMaterialMapper productMaterialMapper;
 
     @Autowired
+    private ProductApplicableSceneMapper productApplicableSceneMapper;
+
+    @Autowired
     private MaterialMapper materialMapper;
 
     @Autowired
@@ -97,6 +100,76 @@ public class ProductServiceImpl implements ProductService {
     public int createProduct(Product product) {
         int productId = productMapper.insertSelective(product);
         return productId;
+    }
+
+    private List<ProductMaterial> getProductMaterials(Integer productId) {
+        ProductMaterialExample productMaterialExample = new ProductMaterialExample();
+        productMaterialExample.or().andProductIdEqualTo(productId);
+        return productMaterialMapper.selectByExample(productMaterialExample);
+    }
+
+    private List<ProductApplicableScene> getProductApplicableScenes(Integer productId) {
+        ProductApplicableSceneExample example = new ProductApplicableSceneExample();
+        example.or().andProductIdEqualTo(productId);
+        return productApplicableSceneMapper.selectByExample(example);
+    }
+
+    private ProductDetailInfo getProductDetailInfo(Integer productId) {
+        Product product = getProductById(productId);
+
+        ProductDetailInfo productInfo = new ProductDetailInfo();
+        productInfo.setupBaseInfo(product);
+
+        List<ProductDesigner> productDesigners = designerService.getProductDesigners(productId);
+        productInfo.setupDesigners(productDesigners);
+
+        List<ProductMaterial> productMaterials = getProductMaterials(productId);
+        productInfo.setupMaterials(productMaterials);
+
+        List<ProductApplicableScene> productApplicableScenes = getProductApplicableScenes(productId);
+        productInfo.setupApplicableScenes(productApplicableScenes);
+
+        return productInfo;
+    }
+
+    private Map<Integer, ProductPrice> getProductPriceMap(List<Integer> productIds) {
+        ProductListPriceResponse priceList = priceService.batchGetProductPrice(productIds);
+        if (priceList == null) {
+            return Collections.emptyMap();
+        }
+        return priceList.getMap();
+    }
+
+    private List<ProductDetailSerial> getProductDetailSerials(Integer productId) {
+        List<Product> subProducts = productSerialService.getProductSerialsDetail(productId);
+        if (subProducts == null || subProducts.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<ProductDetailSerial> productDetailSerials = ListUtil.transform(subProducts, ProductDetailSerial::createFromProduct);
+
+        List<Integer> subProductIds = ListUtil.transform(subProducts, Product::getId);
+        Map<Integer, ProductPrice> priceMap = getProductPriceMap(subProductIds);
+        productDetailSerials.forEach(serial -> serial.setupPriceFromPriceMap(priceMap));
+
+        return productDetailSerials;
+    }
+
+    private List<ProductDetailImage> getProductDetailImages(Integer productId) {
+        List<ProductImage> productImages = getProductImages(productId);
+        return ListUtil.transform(productImages, ProductDetailImage::createFromProductImage);
+    }
+
+    @Override
+    public ProductDetailResponse getProductDetail(Integer productId) {
+        ProductDetailResponse response = new ProductDetailResponse();
+        response.setProductId(productId);
+
+        response.setInfo(getProductDetailInfo(productId));
+        response.setSerials(getProductDetailSerials(productId));
+        response.setImages(getProductDetailImages(productId));
+
+        return response;
     }
 
     /**
