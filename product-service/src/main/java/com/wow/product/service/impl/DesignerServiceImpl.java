@@ -152,6 +152,14 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public List<ProductDesigner> getProductDesigners(Integer productId) {
+        ProductDesignerExample productDesignerExample = new ProductDesignerExample();
+        productDesignerExample.or().andProductIdEqualTo(productId);
+        return productDesignerMapper.selectByExample(productDesignerExample);
+    }
+
+    @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public Designer getPrimaryDesignerByProduct(int productId) {
         Designer designer = new Designer();

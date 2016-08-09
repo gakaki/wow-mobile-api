@@ -103,6 +103,14 @@ public interface DesignerService {
     List<Designer> getDesignersByProduct(int productId);
 
     /**
+     * 查询产品的设计师记录
+     *
+     * @param productId
+     * @return
+     */
+    List<ProductDesigner> getProductDesigners(Integer productId);
+
+    /**
      * 查询产品的主设计师
      * @param productId
      * @return
