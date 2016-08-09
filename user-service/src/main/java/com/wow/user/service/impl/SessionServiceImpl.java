@@ -349,9 +349,11 @@ public class SessionServiceImpl implements SessionService {
      */
     public CommonResponse logout(String sessionToken, byte loginChannel) {
         CommonResponse commonResponse = new CommonResponse();
-        EndUserSession endUserSession= (EndUserSession) RedisUtil.get("session-"+sessionToken);
-        RedisUtil.remove("user-"+endUserSession.getEndUserId()+"-"+loginChannel);
-        RedisUtil.remove("session-"+sessionToken);
+        EndUserSession endUserSession= (EndUserSession) RedisUtil.get("session-"+sessionToken+"-"+loginChannel);
+        if(endUserSession!=null) {
+            RedisUtil.remove("user-" + endUserSession.getEndUserId() + "-" + loginChannel);
+            RedisUtil.remove("session-" + sessionToken + "-" + loginChannel);
+        }
         endUserSession=null;
         return commonResponse;
     }
