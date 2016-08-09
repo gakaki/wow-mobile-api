@@ -153,8 +153,8 @@ public class PayServiceImpl implements PayService {
         //订单总金额, 人民币单位：分（如订单总金额为 1 元，此处请填 100）
         chargeMap.put("amount", NumberUtil.convertToFen(saleOrder.getOrderAmount()));
         chargeMap.put("currency", "cny");//货币类型固定为人民币
-        chargeMap.put("subject", "来自尖叫设计的商品");
-        chargeMap.put("body", "尖叫订单支付");
+        chargeMap.put("subject", "上海尖叫互动文化传媒有限公司");
+        chargeMap.put("body", "尖叫设计订单支付");
         // 推荐使用 8-20 位，要求数字或字母，不允许其他字符
         chargeMap.put("order_no", chargeRequest.getOrderNo());
         // 支付使用的第三方支付渠道取值，具体取值请见数据字典
