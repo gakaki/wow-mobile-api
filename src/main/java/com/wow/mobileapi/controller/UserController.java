@@ -1,32 +1,11 @@
 package com.wow.mobileapi.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.EncodeDecodeUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
+import com.wow.common.util.*;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
-import com.wow.mobileapi.request.user.CaptchaRequest;
-import com.wow.mobileapi.request.user.RegisterAndBindWechatRequest;
-import com.wow.mobileapi.request.user.RegisterRequest;
-import com.wow.mobileapi.request.user.ResetPwdRequest;
-import com.wow.mobileapi.request.user.UserCheckRequest;
-import com.wow.mobileapi.request.user.UserUpdateRequest;
+import com.wow.mobileapi.request.user.*;
 import com.wow.mobileapi.response.user.BindWechatResponse;
 import com.wow.mobileapi.util.HttpRequestUtil;
 import com.wow.user.constant.SmsTemplate;
@@ -37,11 +16,16 @@ import com.wow.user.service.SessionService;
 import com.wow.user.service.UserService;
 import com.wow.user.vo.LoginResponseVo;
 import com.wow.user.vo.LoginVo;
-import com.wow.user.vo.response.LoginResponse;
-import com.wow.user.vo.response.RegisterBindStatusResponse;
-import com.wow.user.vo.response.RegisterResponse;
-import com.wow.user.vo.response.UserCheckResponse;
-import com.wow.user.vo.response.UserResponse;
+import com.wow.user.vo.response.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class UserController extends BaseController {
@@ -89,8 +73,7 @@ public class UserController extends BaseController {
                 apiResponse.setData(userResponse.getEndUser());
             }
         } catch (Exception e) {
-            logger.error("查找用户信息错误---" + e);
-            e.printStackTrace();
+            logger.error("查找用户信息错误---",e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -102,12 +85,12 @@ public class UserController extends BaseController {
      * @return
      */
     private String getCaptchaOnServer(String mobile) {
-        String captchaOnServer = "111111"; //TODO, hard code for test only
-//        //get from redis
-//        Object captcha = RedisUtil.get(mobile);
-//        if (captcha != null) {
-//            captchaOnServer = (String) captcha;
-//        }
+        String captchaOnServer = "";
+        //get from redis
+        Object captcha = RedisUtil.get(mobile);
+        if (captcha != null) {
+            captchaOnServer = (String) captcha;
+        }
         return captchaOnServer;
     }
 
@@ -177,13 +160,12 @@ public class UserController extends BaseController {
                         apiResponse.setData(loginResponse.getLoginResponseVo());
                     }
                 } catch (Exception e) {
-                    logger.error("login发生错误---" + e);
-                    e.printStackTrace();
+                    logger.error("login发生错误---",e);
                     setInternalErrorResponse(apiResponse);
                 }
             }
         } catch (Exception e) {
-            logger.error("注册发生错误---" + e);
+            logger.error("注册发生错误---",e);
             setInternalErrorResponse(apiResponse);
         }
         logger.info("用户注册,返回结果:" + JsonUtil.pojo2Json(apiResponse));
@@ -239,7 +221,7 @@ public class UserController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("修改用户发生错误---" + e);
+            logger.error("修改用户发生错误---",e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -282,7 +264,7 @@ public class UserController extends BaseController {
                 apiResponse.setData(userCheckResponse.isExistedUser());
             }
         } catch (Exception e) {
-            logger.error("根据手机号判断用户是否存在发生错误---" + e);
+            logger.error("根据手机号判断用户是否存在发生错误---",e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -318,7 +300,7 @@ public class UserController extends BaseController {
                 apiResponse.setData(userCheckResponse.isExistedUser());
             }
         } catch (Exception e) {
-            logger.error("根据昵称判断用户是否存在发生错误---" + e);
+            logger.error("根据昵称判断用户是否存在发生错误---",e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -367,7 +349,7 @@ public class UserController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("发送验证码发生错误---" + e);
+            logger.error("发送验证码发生错误---",e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -416,7 +398,7 @@ public class UserController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("发送验证码发生错误---" + e);
+            logger.error("发送验证码发生错误---",e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -466,7 +448,7 @@ public class UserController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("发送验证码发生错误---" + e);
+            logger.error("发送验证码发生错误---",e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -546,7 +528,7 @@ public class UserController extends BaseController {
                 }
                 endUserId = registerResponse.getEndUserId();
             } catch (Exception e) {
-                logger.error("注册和绑定微信发生错误---" + e);
+                logger.error("注册和绑定微信发生错误---",e);
                 setInternalErrorResponse(apiResponse);
                 return apiResponse;
             }
@@ -569,7 +551,7 @@ public class UserController extends BaseController {
                 return apiResponse;
             }
         } catch (Exception e) {
-            logger.error("绑定微信发生错误---" + e);
+            logger.error("绑定微信发生错误---",e);
             setInternalErrorResponse(apiResponse);
             return apiResponse;
         }
@@ -594,7 +576,7 @@ public class UserController extends BaseController {
                 }
             }
         } catch (Exception ignore) {
-            logger.error("覆写昵称和头像错误--" + ignore);
+            logger.error("覆写昵称和头像错误--",ignore);
         }
 
         //进行一次自动登录
@@ -621,8 +603,7 @@ public class UserController extends BaseController {
                 apiResponse.setData(bindWechatResponse);
             }
         } catch (Exception e) {
-            logger.error("login发生错误---" + e);
-            e.printStackTrace();
+            logger.error("login发生错误---",e);
             setInternalErrorResponse(apiResponse);
             return apiResponse;
         }
@@ -674,7 +655,7 @@ public class UserController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("重置密码发生错误---" + e);
+            logger.error("重置密码发生错误---",e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
