@@ -51,6 +51,14 @@ public class ProductListQuery extends PageQuery implements Serializable {
         this.groupId = groupId;
     }
 
+    public Integer getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(Integer topicId) {
+        this.topicId = topicId;
+    }
+
     public int getColumn() {
         return column;
     }
