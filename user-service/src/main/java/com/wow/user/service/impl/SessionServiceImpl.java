@@ -294,11 +294,11 @@ public class SessionServiceImpl implements SessionService {
     private void addOrUpdateSessionOnRedis(EndUserSession endUserSession){
         EndUserSession session=null;
         if((session=(EndUserSession)RedisUtil.get("user-"+endUserSession.getEndUserId()+"-"+endUserSession.getLoginChannel()))!=null){
-            RedisUtil.remove("session-"+session.getSessionToken());
+            RedisUtil.remove("session-"+session.getSessionToken()+"-"+session.getLoginChannel());
             session=null;
         }
         RedisUtil.set("user-"+endUserSession.getEndUserId()+"-"+endUserSession.getLoginChannel(),endUserSession,sessionExpirationTime);
-        RedisUtil.set("session-"+endUserSession.getSessionToken(),"user-"+endUserSession.getEndUserId()+"-"+endUserSession.getLoginChannel(),sessionExpirationTime);
+        RedisUtil.set("session-"+endUserSession.getSessionToken()+"-"+endUserSession.getLoginChannel(),"user-"+endUserSession.getEndUserId()+"-"+endUserSession.getLoginChannel(),sessionExpirationTime);
     }
 
     /**
@@ -400,9 +400,9 @@ public class SessionServiceImpl implements SessionService {
         boolean isValid = false;
 
         EndUserSession endUserSession = null;
-        String key=null;
-        if((key=RedisUtil.get("session-"+sessionToken).toString())!=null)
-            endUserSession=(EndUserSession) RedisUtil.get(key);
+        Object key=null;
+        if((key=RedisUtil.get("session-"+sessionToken+"-"+loginChannel))!=null)
+            endUserSession=(EndUserSession) RedisUtil.get(key.toString());
         if(endUserSession!=null){
             isValid = true;
             long interval=System.currentTimeMillis()-endUserSession.getLastRefreshTime().getTime();
