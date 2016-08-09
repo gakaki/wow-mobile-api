@@ -104,13 +104,13 @@ public class ProductServiceImpl implements ProductService {
 
     private List<ProductMaterial> getProductMaterials(Integer productId) {
         ProductMaterialExample productMaterialExample = new ProductMaterialExample();
-        productMaterialExample.or().andProductIdEqualTo(productId);
+        productMaterialExample.or().andProductIdEqualTo(productId).andIsDeletedEqualTo(false);
         return productMaterialMapper.selectByExample(productMaterialExample);
     }
 
     private List<ProductApplicableScene> getProductApplicableScenes(Integer productId) {
         ProductApplicableSceneExample example = new ProductApplicableSceneExample();
-        example.or().andProductIdEqualTo(productId);
+        example.or().andProductIdEqualTo(productId).andIsDeletedEqualTo(false);
         return productApplicableSceneMapper.selectByExample(example);
     }
 
