@@ -65,7 +65,7 @@ public class ShoppingCartController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("添加产品到购物车错误---" + e);
+            logger.error("添加产品到购物车错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -102,7 +102,7 @@ public class ShoppingCartController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("修改购物车产品数量错误---" + e);
+            logger.error("修改购物车产品数量错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -138,7 +138,7 @@ public class ShoppingCartController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("删除购物车产品错误---" + e);
+            logger.error("删除购物车产品错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -170,7 +170,7 @@ public class ShoppingCartController extends BaseController {
                 apiResponse.setData(shoppingCartResponse);
             }
         } catch (Exception e) {
-            logger.error("获取用户购物车产品错误---" + e);
+            logger.error("获取用户购物车产品错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -205,7 +205,7 @@ public class ShoppingCartController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("选中或者取消购物车错误---" + e);
+            logger.error("选中或者取消购物车错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -240,7 +240,7 @@ public class ShoppingCartController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("选中或者取消购物车错误---" + e);
+            logger.error("选中或者取消购物车错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
