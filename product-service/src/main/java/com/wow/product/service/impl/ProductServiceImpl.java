@@ -1,21 +1,6 @@
 package com.wow.product.service.impl;
 
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wow.attribute.model.Attribute;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
@@ -30,61 +15,32 @@ import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.CodeGenerator;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.DictionaryUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.MapUtil;
-import com.wow.common.util.StringUtil;
+import com.wow.common.util.*;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
-import com.wow.product.mapper.MaterialMapper;
-import com.wow.product.mapper.ProductAttributeMapper;
-import com.wow.product.mapper.ProductImageMapper;
-import com.wow.product.mapper.ProductMapper;
-import com.wow.product.mapper.ProductMaterialMapper;
-import com.wow.product.model.GroupProduct;
-import com.wow.product.model.Material;
-import com.wow.product.model.MaterialExample;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductApplicableScene;
-import com.wow.product.model.ProductAttribute;
-import com.wow.product.model.ProductDesigner;
-import com.wow.product.model.ProductExample;
-import com.wow.product.model.ProductImage;
-import com.wow.product.model.ProductImageExample;
-import com.wow.product.model.ProductMaterial;
-import com.wow.product.model.ProductMaterialExample;
-import com.wow.product.model.ProductSerial;
+import com.wow.product.mapper.*;
+import com.wow.product.model.*;
 import com.wow.product.service.ApplicableSceneService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
-import com.wow.product.vo.ProductListPageVo;
-import com.wow.product.vo.ProductListQuery;
-import com.wow.product.vo.ProductListVo;
-import com.wow.product.vo.ProductPageVo;
-import com.wow.product.vo.ProductVo;
-import com.wow.product.vo.request.ColorSpecVo;
+import com.wow.product.vo.*;
+import com.wow.product.vo.request.*;
 import com.wow.product.vo.request.DesignerVo;
-import com.wow.product.vo.request.ProductCreateRequest;
-import com.wow.product.vo.request.ProductImgVo;
-import com.wow.product.vo.request.ProductPageRequest;
-import com.wow.product.vo.request.ProductQueryVo;
-import com.wow.product.vo.request.SpecVo;
-import com.wow.product.vo.response.GroupProductResponse;
-import com.wow.product.vo.response.ProductImgResponse;
-import com.wow.product.vo.response.ProductPageResponse;
-import com.wow.product.vo.response.ProductParameter;
-import com.wow.product.vo.response.ProductResponse;
-import com.wow.product.vo.response.ProductVoResponse;
+import com.wow.product.vo.response.*;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
 import com.wow.stock.vo.response.AvailableStocksResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 
 /**
@@ -652,10 +608,11 @@ public class ProductServiceImpl implements ProductService {
             ProductParameter productParameter = new ProductParameter();
             productParameter.setApplicableSceneText(product.getApplicableSceneText());
             String origin = DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_COUNTRY,product.getOriginCountryId()).getKeyValue();
-            String city = product.getOriginCity();
-            if (StringUtil.isNotEmpty(city)) {
-                origin = origin + "," + city;
-            }
+            //因为城市数据无法拿到,只显示国家
+//            String city = product.getOriginCity();
+//            if (StringUtil.isNotEmpty(city)) {
+//                origin = origin + "," + city;
+//            }
             productParameter.setOrigin(origin);
             productParameter.setMaterialText(product.getMaterialText());
             productParameter.setNeedAssemble(product.getNeedAssemble());
@@ -929,7 +886,7 @@ public class ProductServiceImpl implements ProductService {
     
     /**
      * 分页查询产品列表
-     * @param query
+     * @param pageModel
      * @return
      */
     public ProductPageResponse getProductListPage(PageModel pageModel){
