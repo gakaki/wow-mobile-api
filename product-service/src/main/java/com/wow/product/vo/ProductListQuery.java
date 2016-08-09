@@ -17,6 +17,8 @@ public class ProductListQuery extends PageQuery implements Serializable {
 
     private Integer groupId;
 
+    private Integer topicId;
+
     private int column;
 
     private int type;

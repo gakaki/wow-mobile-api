@@ -1048,9 +1048,23 @@
     where product.product_status=1
     and product.is_deleted=0
     and product_short_list_in_topic.is_deleted=0
-    and (product_image.id is null or product_image.is_deleted=0 and product_image.is_primary=0)
+    and (product_image.id is null or (product_image.is_deleted=0 and product_image.is_primary=0))
     and product_short_list_in_topic.short_list_in_topic=1
-    and product_short_list_in_topic.group_id=#{model.groupId}
+    and product_short_list_in_topic.topic_id=#{model.topicId}
     order by ${model.orderColumn} ${model.OrderType}
+  </select>
+
+  <select id="queryProductByTopicGroup" resultType="com.wow.product.model.GroupProduct"  parameterType="com.wow.product.vo.ProductListQuery">
+    select product.id,product_image.img_url,product.product_name,product_price.sell_price
+    from product
+    join product_short_list_in_topic on product.id=product_short_list_in_topic.product_id
+    join product_price on product.id=product_price.product_id
+    left join product_image on product.id=product_image.product_id
+    where product.product_status=1
+    and product.is_deleted=0
+    and product_short_list_in_topic.is_deleted=0
+    and (product_image.id is null or (product_image.is_deleted=0 and product_image.is_primary=0))
+    and product_short_list_in_topic.short_list_in_topic=1
+    and product_short_list_in_topic.topic_id=#{topicId}
   </select>
 </mapper>

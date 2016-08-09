@@ -1093,4 +1093,19 @@ public class ProductServiceImpl implements ProductService {
         resp.setData(groupProductResponse);
         return resp;
     }
+
+    @Override
+    public ApiResponse queryProductByTopicGroup(ProductListQuery query) {
+        ApiResponse resp=new ApiResponse();
+        GroupProductResponse groupProductResponse = new GroupProductResponse();
+        if (query==null||query.getGroupId() == null) {
+            resp.setResCode(ErrorCodeConstant.INVALID_PARAMJSON);
+            resp.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INVALID_PARAMJSON));
+            return resp;
+        }
+        List<GroupProduct> list = productMapper.queryProductByTopicGroup(query);
+        groupProductResponse.setProductList(productMapper.queryProductByTopicGroup(query));
+        resp.setData(groupProductResponse);
+        return resp;
+    }
 }

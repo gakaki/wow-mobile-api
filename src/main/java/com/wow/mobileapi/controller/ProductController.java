@@ -509,4 +509,17 @@ public class ProductController extends BaseController {
                 .fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
         return productService.queryProductByTopicGroupListPage(productQueryRequest);
     }
+
+    /**
+     * 根据品牌查询产品列表
+     * @param apiRequest
+     * @return
+     */
+    @RequestMapping(value = "/v1/product/queryProductByTopicGroup", method = RequestMethod.GET)
+    public ApiResponse queryProductByTopicGroup(ApiRequest apiRequest) {
+        logger.info("start to get product_brand on page");
+        ProductListQuery productQueryRequest = JsonUtil
+                .fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
+        return productService.queryProductByTopicGroup(productQueryRequest);
+    }
 }
