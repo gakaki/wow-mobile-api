@@ -300,13 +300,15 @@ public class ProductServiceImpl implements ProductService {
 
     private static ProductMaterial deletedProductMaterialRecord = createDeletedProductMaterialRecord();
 
-    private int replaceProductMaterials(Integer productId, List<ProductMaterial> productMaterials) {
+    private int markProductMaterialsDeleted(Integer productId) {
         ProductMaterialExample example = new ProductMaterialExample();
         example.or().andProductIdEqualTo(productId);
-        productMaterialMapper.updateByExampleSelective(deletedProductMaterialRecord, example);
+        return productMaterialMapper.updateByExampleSelective(deletedProductMaterialRecord, example);
+    }
 
-        productMaterialMapper.addByBatch(productMaterials);
-        return 0;
+    private int replaceProductMaterials(Integer productId, List<ProductMaterial> productMaterials) {
+        markProductMaterialsDeleted(productId);
+        return productMaterialMapper.addByBatch(productMaterials);
     }
 
     /**
