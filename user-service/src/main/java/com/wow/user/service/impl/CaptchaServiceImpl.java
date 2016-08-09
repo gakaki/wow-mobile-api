@@ -37,7 +37,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
         //公共回传参数，在“消息返回”中会透传回该参数；举例：用户可以传入自己下级的会员ID，
         // 在消息返回时，该会员ID会包含在内，用户可以根据该会员ID识别是哪位会员使用了你的应用
-        req.setExtend( "13764641531 uid " );
+        req.setExtend(mobile);
         //短信类型，传入值请填写normal
         req.setSmsType("normal");
         //短信签名，传入的短信签名必须是在阿里大鱼“管理中心-短信签名管理”中的可用签名。如“阿里大鱼”已在短信签名管理中通过审核，
@@ -56,7 +56,6 @@ public class CaptchaServiceImpl implements CaptchaService {
         smsSender.sendValidateCode(req);
 
         //3. cache digit into redis
-        //TODO: 是否所有验证码的过期时间一样,还是需要配置?
         RedisUtil.set(mobile,randomNum,expirationTime);
 
         return commonResponse;
