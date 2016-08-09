@@ -1,38 +1,12 @@
 package com.wow.mobileapi.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.wow.common.page.PageModel;
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
-import com.wow.common.util.BeanUtil;
-import com.wow.common.util.CollectionUtil;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
-import com.wow.common.util.MapUtil;
-import com.wow.common.util.StringUtil;
-import com.wow.common.util.ValidatorUtil;
+import com.wow.common.util.*;
 import com.wow.mobileapi.request.product.ProductInfoRequest;
 import com.wow.mobileapi.request.product.ProductQueryRequest;
-import com.wow.mobileapi.response.product.ColorMapVo;
-import com.wow.mobileapi.response.product.ColorSpecVo;
-import com.wow.mobileapi.response.product.ItemDetailResponse;
-import com.wow.mobileapi.response.product.ItemSpecResponse;
-import com.wow.mobileapi.response.product.ProductImageResponse;
-import com.wow.mobileapi.response.product.SpecColorVo;
-import com.wow.mobileapi.response.product.SpecMapVo;
-import com.wow.mobileapi.response.product.SubProductInfo;
+import com.wow.mobileapi.response.product.*;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
@@ -54,6 +28,17 @@ import com.wow.product.vo.response.ProductVoResponse;
 import com.wow.stock.service.StockService;
 import com.wow.stock.vo.AvailableStockVo;
 import com.wow.stock.vo.response.AvailableStocksResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ProductController extends BaseController {
@@ -499,7 +484,7 @@ public class ProductController extends BaseController {
     }
 
     /**
-     * 根据品牌查询产品列表
+     * 根据品牌查询产品列表 - 分页
      * @param apiRequest
      * @return
      */

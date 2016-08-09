@@ -1,6 +1,7 @@
 package com.wow.mobileapi.request.user;
 
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 
 /**
@@ -10,11 +11,11 @@ public class UserInfoFromWechat implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
+    @NotBlank
     private String openId;
-    @NotNull
+    @NotBlank
     private String wechatNickName;
-    @NotNull
+    @NotBlank
     private String wechatAvatar;
 
     private Byte sex;
