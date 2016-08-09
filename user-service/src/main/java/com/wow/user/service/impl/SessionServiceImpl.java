@@ -349,9 +349,11 @@ public class SessionServiceImpl implements SessionService {
      */
     public CommonResponse logout(String sessionToken, byte loginChannel) {
         CommonResponse commonResponse = new CommonResponse();
-        EndUserSession endUserSession= (EndUserSession) RedisUtil.get("session-"+sessionToken);
-        RedisUtil.remove("user-"+endUserSession.getEndUserId()+"-"+loginChannel);
-        RedisUtil.remove("session-"+sessionToken);
+        EndUserSession endUserSession= (EndUserSession) RedisUtil.get("session-"+sessionToken+"-"+loginChannel);
+        if(endUserSession!=null) {
+            RedisUtil.remove("user-" + endUserSession.getEndUserId() + "-" + loginChannel);
+            RedisUtil.remove("session-" + sessionToken + "-" + loginChannel);
+        }
         endUserSession=null;
         return commonResponse;
     }
@@ -400,11 +402,13 @@ public class SessionServiceImpl implements SessionService {
         boolean isValid = false;
 
         EndUserSession endUserSession = null;
-        Object key=null;
-        if((key=RedisUtil.get("session-"+sessionToken+"-"+loginChannel))!=null)
-            endUserSession=(EndUserSession) RedisUtil.get(key.toString());
+        Object key=RedisUtil.get("session-"+sessionToken+"-"+loginChannel);
+        if(key!=null) {
+            endUserSession = (EndUserSession) RedisUtil.get(key.toString());
+        }
         if(endUserSession!=null){
             isValid = true;
+            tokenValidateResponse.setEndUserId(endUserSession.getEndUserId());
             long interval=System.currentTimeMillis()-endUserSession.getLastRefreshTime().getTime();
             if(interval<sessionExpirationTime*0.25){
                 endUserSession.setLastRefreshTime(Calendar.getInstance().getTime());
@@ -412,7 +416,6 @@ public class SessionServiceImpl implements SessionService {
             }
         }
         tokenValidateResponse.setValid(isValid);
-        tokenValidateResponse.setEndUserId(endUserSession.getEndUserId());
         return tokenValidateResponse;
     }
 
