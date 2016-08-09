@@ -97,7 +97,7 @@ public class BaseController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("查询Token发生错误---" + e);
+            logger.error("查询Token发生错误---" , e);
         }
         return endUserId;
     }

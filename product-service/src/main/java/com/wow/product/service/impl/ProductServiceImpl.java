@@ -35,6 +35,7 @@ import com.wow.stock.vo.response.AvailableStocksResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.SortDefinition;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,13 +105,13 @@ public class ProductServiceImpl implements ProductService {
 
     private List<ProductMaterial> getProductMaterials(Integer productId) {
         ProductMaterialExample productMaterialExample = new ProductMaterialExample();
-        productMaterialExample.or().andProductIdEqualTo(productId);
+        productMaterialExample.or().andProductIdEqualTo(productId).andIsDeletedEqualTo(false);
         return productMaterialMapper.selectByExample(productMaterialExample);
     }
 
     private List<ProductApplicableScene> getProductApplicableScenes(Integer productId) {
         ProductApplicableSceneExample example = new ProductApplicableSceneExample();
-        example.or().andProductIdEqualTo(productId);
+        example.or().andProductIdEqualTo(productId).andIsDeletedEqualTo(false);
         return productApplicableSceneMapper.selectByExample(example);
     }
 
@@ -170,6 +171,202 @@ public class ProductServiceImpl implements ProductService {
         response.setImages(getProductDetailImages(productId));
 
         return response;
+    }
+
+    private String buildProductSizeText(Short length, Short width, Short height) {
+        if (length == null || width == null || height == null) {
+            return null;
+        }
+        return buildProductSizeText(length, width, height);
+    }
+
+    private String buildProductSizeText(short length, short width, short height) {
+        return "L"+length + "xW" + width + "xH" + height + "cm";
+    }
+
+    private Product createProductFromProductInfo(Integer productId, ProductDetailInfo info) {
+        Product product = new Product();
+        product.setId(productId);
+        product.setProductName(info.getProductName());
+        product.setProductModel(info.getProductModel());
+        product.setSellingPoint(info.getSellingPoint());
+        product.setBrandId(info.getBrandId());
+        product.setOriginCountryId(info.getOriginCountryId());
+        product.setOriginProvinceId(info.getOriginProvinceId());
+        product.setOriginCity(info.getOriginCity());
+        if (product.getOriginCountryId() != null) {
+            if (product.getOriginCity() == null) {
+                product.setOriginCity("");
+            }
+            if (product.getOriginProvinceId() == null) {
+                product.setOriginProvinceId(0);
+            }
+        }
+        product.setStyleId(info.getStyleId());
+        product.setLength(info.getLength());
+        product.setWidth(info.getWidth());
+        product.setHeight(info.getHeight());
+        product.setSizeText(buildProductSizeText(product.getLength(), product.getWidth(), product.getHeight()));
+        product.setApplicablePeople(info.getApplicablePeople());
+        product.setCanCustomized(info.getCanCustomized());
+        product.setDetailDescription(info.getDetailDescription());
+        return product;
+    }
+
+    private class ProductApplicableSceneList {
+        List<ProductApplicableScene> applicableSceneList;
+        String applicableSceneText;
+    }
+
+    private ProductApplicableSceneList createProductApplicableSceneList(Integer productId, List<String> applicableSceneTexts) {
+        if (CollectionUtil.isEmpty(applicableSceneTexts)) {
+            return null;
+        }
+        //创建产品适用场景绑定
+        StringBuilder applicableSceneTextBuilder = new StringBuilder();
+        List<ProductApplicableScene> productApplicableSceneList = new ArrayList<>();
+        long i = 0;
+        for (String text : applicableSceneTexts) {
+            ProductApplicableScene productApplicableScene = new ProductApplicableScene();
+
+            productApplicableScene.setProductId(productId);
+            productApplicableScene.setApplicableSceneId(text);
+            productApplicableSceneList.add(productApplicableScene);
+            if (i != 0) {
+                applicableSceneTextBuilder.append(",");
+            }
+            ++i;
+            applicableSceneTextBuilder.append(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_APPLICABLE_SCENE,text).getKeyValue());
+        }
+        ProductApplicableSceneList productApplicableSceneInfo = new ProductApplicableSceneList();
+        productApplicableSceneInfo.applicableSceneList = productApplicableSceneList;
+        productApplicableSceneInfo.applicableSceneText = applicableSceneTextBuilder.toString();
+        return productApplicableSceneInfo;
+    }
+
+    private class ProductMaterialList {
+        List<ProductMaterial> productMaterialList;
+        String productMaterialText;
+    }
+
+    private ProductMaterialList createProductMaterialList(Integer productId, List<Integer> materialIds) {
+        if (CollectionUtil.isEmpty(materialIds)) {
+            return null;
+        }
+        //创建产品材质绑定
+        StringBuilder materialTextBuilder = new StringBuilder();
+        List<ProductMaterial> materialList = new ArrayList<ProductMaterial>();
+        long i = 0;
+        for (Integer materialId : materialIds) {
+            ProductMaterial productMaterial = new ProductMaterial();
+            productMaterial.setProductId(productId);
+            productMaterial.setMaterialId(materialId);
+            materialList.add(productMaterial);
+            if (i != 0) {
+                materialTextBuilder.append(",");
+            }
+            ++i;
+            materialTextBuilder.append(MaterialEnum.get(materialId));
+        }
+        ProductMaterialList productMaterialList = new ProductMaterialList();
+        productMaterialList.productMaterialList = materialList;
+        productMaterialList.productMaterialText = materialTextBuilder.toString();
+        return productMaterialList;
+    }
+
+    private List<ProductDesigner> createProductDesignerList(Integer productId, List<DesignerVo> designerVoList) {
+        if (CollectionUtil.isEmpty(designerVoList)) {
+            return null;
+        }
+        List<ProductDesigner> productDesignerList = new ArrayList<>();
+        for (DesignerVo designerVo : designerVoList) {
+            ProductDesigner productDesigner = new ProductDesigner();
+            int designerId = designerVo.getDesignerId();
+            boolean isPrimary = designerVo.isPrimary();
+            productDesigner.setDesignerId(designerId);
+            productDesigner.setIsPrimary(isPrimary);
+            productDesigner.setProductId(productId);
+            productDesignerList.add(productDesigner);
+        }
+        return productDesignerList;
+    }
+
+    private static ProductMaterial createDeletedProductMaterialRecord() {
+        ProductMaterial productMaterial = new ProductMaterial();
+        productMaterial.setIsDeleted(true);
+        return productMaterial;
+    }
+
+    private static ProductMaterial deletedProductMaterialRecord = createDeletedProductMaterialRecord();
+
+    private int replaceProductMaterials(Integer productId, List<ProductMaterial> productMaterials) {
+        ProductMaterialExample example = new ProductMaterialExample();
+        example.or().andProductIdEqualTo(productId);
+        productMaterialMapper.updateByExampleSelective(deletedProductMaterialRecord, example);
+
+        productMaterialMapper.addByBatch(productMaterials);
+        return 0;
+    }
+
+    /**
+     * 更新产品的描述信息
+     * @param productUpdateRequest
+     * @return
+     */
+    @Override
+    public CommonResponse updateProductInfo(ProductUpdateRequest productUpdateRequest) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        Integer productId = productUpdateRequest.getProductId();
+
+        ProductDetailInfo productInfo = productUpdateRequest.getInfo();
+        Product product = createProductFromProductInfo(productId, productInfo);
+
+        List<ProductDesigner> productDesigners = createProductDesignerList(productId, productInfo.getDesignerVoList());
+        ProductMaterialList productMaterialList = createProductMaterialList(productId, productInfo.getMaterialList());
+        ProductApplicableSceneList productApplicableSceneList = createProductApplicableSceneList(productId, productInfo.getApplicableSceneList());
+
+        if (productDesigners != null) {
+            designerService.replaceProductDesigners(productId, productDesigners);
+        }
+
+        if (productMaterialList != null) {
+            product.setMaterialText(productMaterialList.productMaterialText);
+            replaceProductMaterials(productId, productMaterialList.productMaterialList);
+        }
+
+        if (productApplicableSceneList != null) {
+            product.setApplicableSceneText(productApplicableSceneList.applicableSceneText);
+            applicableSceneService.replaceProductApplicableScene(productId, productApplicableSceneList.applicableSceneList);
+        }
+
+        updateProduct(product);
+
+        return commonResponse;
+    }
+
+    /**
+     * 更新子产品信息
+     * @param productUpdateRequest
+     * @return
+     */
+    @Override
+    public CommonResponse updateProductSerials(ProductUpdateRequest productUpdateRequest) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        return commonResponse;
+    }
+
+    /**
+     * 更新产品的图文信息
+     * @param productUpdateRequest
+     * @return
+     */
+    @Override
+    public CommonResponse updateProductImages(ProductUpdateRequest productUpdateRequest) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        return commonResponse;
     }
 
     /**

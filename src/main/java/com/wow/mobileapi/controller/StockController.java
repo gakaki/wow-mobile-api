@@ -65,11 +65,11 @@ public class StockController extends BaseController {
                 setServiceErrorResponse(apiResponse, availableStockResponse);
             } else {
                 AvailableStockVo availableStockVo = availableStockResponse.getAvailableStockVo();
-//                removeDuplicateResponse(availableStockVo);
+                //                removeDuplicateResponse(availableStockVo);
                 apiResponse.setData(availableStockVo);
             }
         } catch (Exception e) {
-            logger.error("查找可用库存发生错误---" + e);
+            logger.error("查找可用库存发生错误---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
@@ -84,7 +84,8 @@ public class StockController extends BaseController {
     @RequestMapping(value = "/v1/stocks/available", method = RequestMethod.GET)
     public ApiResponse getAvailableStocks(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        StockBatchQueryRequest stockBatchQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), StockBatchQueryRequest.class);
+        StockBatchQueryRequest stockBatchQueryRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), StockBatchQueryRequest.class);
         //判断json格式参数是否有误
         if (stockBatchQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -107,19 +108,18 @@ public class StockController extends BaseController {
                 setServiceErrorResponse(apiResponse, availableStocksResponse);
             } else {
                 List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
-//                for (AvailableStockVo availableStockVo : availableStockVoList) {
-//                    removeDuplicateResponse(availableStockVo);
-//                }
+                //                for (AvailableStockVo availableStockVo : availableStockVoList) {
+                //                    removeDuplicateResponse(availableStockVo);
+                //                }
                 apiResponse.setData(availableStockVoList);
             }
         } catch (Exception e) {
-            logger.error("批量查找可用库存发生错误---" + e);
+            logger.error("批量查找可用库存发生错误---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
     }
-
 
     /**
      * 根据productId查找可用库存
@@ -155,7 +155,7 @@ public class StockController extends BaseController {
                 apiResponse.setData(freezeStockResponse);
             }
         } catch (Exception e) {
-            logger.error("冻结库存发生错误---" + e);
+            logger.error("冻结库存发生错误---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }

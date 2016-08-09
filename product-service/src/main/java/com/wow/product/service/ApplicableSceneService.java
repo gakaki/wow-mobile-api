@@ -76,4 +76,12 @@ public interface ApplicableSceneService {
      * @return
      */
     int updateProductApplicableScene(List<ProductApplicableScene> applicableScenes);
+
+    /**
+     * 替换产品的应用场景
+     * @param productId
+     * @param applicableScenes
+     * @return
+     */
+    int replaceProductApplicableScene(Integer productId, List<ProductApplicableScene> applicableScenes);
 }

@@ -43,7 +43,7 @@ public class DesignerController extends BaseController {
                 apiResponse.setData(productDesignerResponse.getDesignerList());
             }
         } catch (Exception e) {
-            logger.error("查找设计师列表错误---" + e);
+            logger.error("查找设计师列表错误---" ,e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -74,7 +74,7 @@ public class DesignerController extends BaseController {
             	apiResponse.setData(productDesignerVoResponse.getDesignerVo());     
             }
         } catch (Exception e) {
-            logger.error("查找设计师详情错误---" + e);
+            logger.error("查找设计师详情错误---" , e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;

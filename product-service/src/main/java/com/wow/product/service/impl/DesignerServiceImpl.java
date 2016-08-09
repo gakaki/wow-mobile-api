@@ -155,7 +155,7 @@ public class DesignerServiceImpl implements DesignerService {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public List<ProductDesigner> getProductDesigners(Integer productId) {
         ProductDesignerExample productDesignerExample = new ProductDesignerExample();
-        productDesignerExample.or().andProductIdEqualTo(productId);
+        productDesignerExample.or().andProductIdEqualTo(productId).andIsDeletedEqualTo(false);
         return productDesignerMapper.selectByExample(productDesignerExample);
     }
 
@@ -215,5 +215,23 @@ public class DesignerServiceImpl implements DesignerService {
     @Override
     public int addProductDesignersByBatch(List<ProductDesigner> list) {
         return productDesignerMapper.addByBatch(list);
+    }
+
+    private static ProductDesigner createDeletedProductDesignerRecord() {
+        ProductDesigner record = new ProductDesigner();
+        record.setIsDeleted(true);
+        return record;
+    }
+
+    private static final ProductDesigner deletedProductDesignerRecord = createDeletedProductDesignerRecord();
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int replaceProductDesigners(Integer productId, List<ProductDesigner> designers) {
+        ProductDesignerExample example = new ProductDesignerExample();
+        example.or().andProductIdEqualTo(productId);
+        productDesignerMapper.updateByExampleSelective(deletedProductDesignerRecord, example);
+
+        return productDesignerMapper.addByBatch(designers);
     }
 }

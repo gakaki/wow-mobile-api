@@ -70,7 +70,7 @@ public class UserActionController extends BaseController {
                 apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
-            logger.error("新增用户喜欢的品牌发生错误---" + e);
+            logger.error("新增用户喜欢的品牌发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -101,7 +101,7 @@ public class UserActionController extends BaseController {
                 apiResponse.setData(favoriteBrandResponse);
             }
         } catch (Exception e) {
-            logger.error("查找用户喜欢的品牌错误---" + e);
+            logger.error("查找用户喜欢的品牌错误---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
@@ -138,7 +138,7 @@ public class UserActionController extends BaseController {
                 apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
-            logger.error("检查用户是否喜欢一个品牌发生错误---" + e);
+            logger.error("检查用户是否喜欢一个品牌发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -174,7 +174,7 @@ public class UserActionController extends BaseController {
                 apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
-            logger.error("新增用户喜欢的设计师发生错误---" + e);
+            logger.error("新增用户喜欢的设计师发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -205,7 +205,7 @@ public class UserActionController extends BaseController {
                 apiResponse.setData(favoriteDesignerResponse);
             }
         } catch (Exception e) {
-            logger.error("查找用户喜欢的设计师错误---" + e);
+            logger.error("查找用户喜欢的设计师错误---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
@@ -242,7 +242,7 @@ public class UserActionController extends BaseController {
                 apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
-            logger.error("检查用户是否喜欢一个设计师发生错误---" + e);
+            logger.error("检查用户是否喜欢一个设计师发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -278,7 +278,7 @@ public class UserActionController extends BaseController {
                 apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
-            logger.error("新增用户喜欢的产品发生错误---" + e);
+            logger.error("新增用户喜欢的产品发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -318,7 +318,7 @@ public class UserActionController extends BaseController {
                 apiResponse.setData(favoriteProductResponse);
             }
         } catch (Exception e) {
-            logger.error("查找用户喜欢的产品错误---" + e);
+            logger.error("查找用户喜欢的产品错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -354,7 +354,7 @@ public class UserActionController extends BaseController {
                 apiResponse.setData(favoriteCommonResponse);
             }
         } catch (Exception e) {
-            logger.error("检查用户是否喜欢一个产品发生错误---" + e);
+            logger.error("检查用户是否喜欢一个产品发生错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;

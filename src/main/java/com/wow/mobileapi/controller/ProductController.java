@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.wow.product.vo.ProductListQuery;
-import com.wow.product.vo.response.GroupProductResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +45,7 @@ import com.wow.product.service.BrandService;
 import com.wow.product.service.DesignerService;
 import com.wow.product.service.ProductSerialService;
 import com.wow.product.service.ProductService;
+import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.request.ProductImgVo;
 import com.wow.product.vo.request.ProductQueryVo;
 import com.wow.product.vo.response.ProductImgResponse;
@@ -90,7 +89,8 @@ public class ProductController extends BaseController {
     public ApiResponse getItemDetail(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ItemDetailResponse itemDetailResponse = new ItemDetailResponse();
-        ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        ProductQueryRequest productQueryRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
         //判断json格式参数是否有误
         if (productQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -128,7 +128,7 @@ public class ProductController extends BaseController {
 
             //主设计师
             Designer designer = designerService.getPrimaryDesignerByProduct(productId);
-            if (designer != null&&designer.getId()!=null) {
+            if (designer != null && designer.getId() != null) {
                 itemDetailResponse.setDesignerId(designer.getId());
                 itemDetailResponse.setDesignerName(designer.getDesignerName());
                 itemDetailResponse.setDesignerPhoto(designer.getDesignerPhoto());
@@ -175,7 +175,7 @@ public class ProductController extends BaseController {
                 apiResponse.setData(itemDetailResponse);
             }
         } catch (Exception e) {
-            logger.error("查找产品详情发生错误---" + e);
+            logger.error("查找产品详情发生错误---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
@@ -191,7 +191,8 @@ public class ProductController extends BaseController {
     public ApiResponse getItemSpecInfo(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ItemSpecResponse itemSpecResponse = new ItemSpecResponse();
-        ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        ProductQueryRequest productQueryRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
         //判断json格式参数是否有误
         if (productQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -211,7 +212,7 @@ public class ProductController extends BaseController {
             //获取系列品基本信息
             Product product = productService.getProductById(productId);
             if (product == null) {
-                ErrorResponseUtil.setErrorResponse(apiResponse,"40202");
+                ErrorResponseUtil.setErrorResponse(apiResponse, "40202");
                 return apiResponse;
             }
             itemSpecResponse.setProductId(productId);
@@ -226,7 +227,7 @@ public class ProductController extends BaseController {
             //获取系列品所有子品
             List<Product> subProductList = productSerialService.getProductSerialsDetail(productId);
             if (CollectionUtil.isEmpty(subProductList)) {
-                ErrorResponseUtil.setErrorResponse(apiResponse,"40203");
+                ErrorResponseUtil.setErrorResponse(apiResponse, "40203");
                 return apiResponse;
             }
             List<Integer> allProductIds = new ArrayList<>();//主品+子品的ID
@@ -241,10 +242,12 @@ public class ProductController extends BaseController {
             Map<Integer, Integer> availableStockMap = new HashMap<Integer, Integer>();
             //批量查库存
             AvailableStocksResponse availableStocksResponse = stockService.batchGetAvailableStock(subProductIds);
-            if (availableStocksResponse != null && CollectionUtil.isNotEmpty(availableStocksResponse.getAvailableStockVoList())) {
+            if (availableStocksResponse != null && CollectionUtil
+                .isNotEmpty(availableStocksResponse.getAvailableStockVoList())) {
                 List<AvailableStockVo> availableStockVoList = availableStocksResponse.getAvailableStockVoList();
                 for (AvailableStockVo availableStockVo : availableStockVoList) {
-                    availableStockMap.put(availableStockVo.getProductId(), availableStockVo.getTotalAvailableStockQty());
+                    availableStockMap
+                        .put(availableStockVo.getProductId(), availableStockVo.getTotalAvailableStockQty());
                 }
             }
             Map<Integer, ProductPrice> priceMap = new HashMap<Integer, ProductPrice>();
@@ -254,7 +257,7 @@ public class ProductController extends BaseController {
                 priceMap = productPriceListResponse.getMap();
             }
 
-            if(priceMap.get(productId)!=null) {
+            if (priceMap.get(productId) != null) {
                 itemSpecResponse.setProductPrice(priceMap.get(productId).getSellPrice());
             }
 
@@ -279,7 +282,7 @@ public class ProductController extends BaseController {
                     colorSpecVo.setColorDisplayName(colorDisplayName);
                     colorSpecVo.setSpecMapVoList(new ArrayList<>());
                     colorSpecVoList.add(colorSpecVo);
-                    colorSepcVoMap.put(colorDisplayName,colorSpecVo);
+                    colorSepcVoMap.put(colorDisplayName, colorSpecVo);
                 }
 
                 String specName = subProduct.getSpecName();
@@ -292,7 +295,7 @@ public class ProductController extends BaseController {
                     specColorVo.setSpecName(specName);
                     specColorVo.setColorMapVoList(new ArrayList<>());
                     specColorVoList.add(specColorVo);
-                    specColorVoMap.put(specName,specColorVo);
+                    specColorVoMap.put(specName, specColorVo);
                 }
 
                 SubProductInfo subProductInfo = new SubProductInfo();
@@ -302,7 +305,7 @@ public class ProductController extends BaseController {
                 subProductInfo.setWeight(subProduct.getWeight());
 
                 //设置库存
-                if(availableStockMap.containsKey(subProductId) && availableStockMap.get(subProductId) > 0) {
+                if (availableStockMap.containsKey(subProductId) && availableStockMap.get(subProductId) > 0) {
                     subProductInfo.setHasStock(true);
                     subProductInfo.setAvailableStock(availableStockMap.get(subProductId));
                 } else {
@@ -311,7 +314,7 @@ public class ProductController extends BaseController {
                 }
 
                 //设置价格
-                if(priceMap.containsKey(subProductId) && priceMap.get(subProductId) != null) {
+                if (priceMap.containsKey(subProductId) && priceMap.get(subProductId) != null) {
                     subProductInfo.setSellPrice(priceMap.get(subProductId).getSellPrice());
                 } else {
                     setInternalErrorResponse(apiResponse);
@@ -337,7 +340,7 @@ public class ProductController extends BaseController {
 
             apiResponse.setData(itemSpecResponse);
         } catch (Exception e) {
-            logger.error("查找产品规格发生错误---" + e);
+            logger.error("查找产品规格发生错误---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
@@ -353,7 +356,8 @@ public class ProductController extends BaseController {
     public ApiResponse getProductNonPrimaryImgs(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
         ProductImageResponse productImageResponse = new ProductImageResponse();
-        ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+        ProductQueryRequest productQueryRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
         //判断json格式参数是否有误
         if (productQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -381,7 +385,7 @@ public class ProductController extends BaseController {
                 apiResponse.setData(productImageResponse);
             }
         } catch (Exception e) {
-            logger.error("查找产品详情发生错误---" + e);
+            logger.error("查找产品详情发生错误---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
@@ -396,8 +400,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "/v1/category/product", method = RequestMethod.GET)
     public ApiResponse getProductListByCategory(ApiRequest apiRequest) {
         ApiResponse apiResponse = new ApiResponse();
-        ProductInfoRequest productInfoRequest = JsonUtil
-                .fromJSON(apiRequest.getParamJson(), ProductInfoRequest.class);
+        ProductInfoRequest productInfoRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductInfoRequest.class);
         //判断json格式参数是否有误
         if (productInfoRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
@@ -417,16 +420,16 @@ public class ProductController extends BaseController {
         ProductQueryVo pqv = new ProductQueryVo();
         BeanUtil.copyProperties(productInfoRequest, pqv);
         page.setModel(pqv);
-        
+
         try {
-        	ProductVoResponse productVoResponse = productService.getProductByCategoryIdListPage(page);
+            ProductVoResponse productVoResponse = productService.getProductByCategoryIdListPage(page);
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productVoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productVoResponse);
-            } 
+            }
             apiResponse.setData(productVoResponse);
         } catch (Exception e) {
-            logger.error("按分类查询产品列表---" + e);
+            logger.error("按分类查询产品列表---", e);
             e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
@@ -442,14 +445,13 @@ public class ProductController extends BaseController {
     public ApiResponse getProductByBrandId(ApiRequest apiRequest) {
         logger.info("start to get product_brand on page");
         ApiResponse apiResponse = new ApiResponse();
-        ProductListQuery productQueryRequest = JsonUtil
-                .fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
+        ProductListQuery productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
         //判断json格式参数是否有误
         if (productQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        
+
         try {
             ProductVoResponse productVoResponse = productService.selectProductByBrandIdListPage(productQueryRequest);
             //如果处理失败 则返回错误信息
@@ -459,7 +461,7 @@ public class ProductController extends BaseController {
                 apiResponse.setData(productVoResponse);
             }
         } catch (Exception e) {
-            logger.error("查找product_brand错误---" + e);
+            logger.error("查找product_brand错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -474,14 +476,13 @@ public class ProductController extends BaseController {
     public ApiResponse getProductByDesignerId(ApiRequest apiRequest) {
         logger.info("start to get product_designer on page");
         ApiResponse apiResponse = new ApiResponse();
-        ProductListQuery productQueryRequest = JsonUtil
-                .fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
+        ProductListQuery productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
         //判断json格式参数是否有误
         if (productQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        
+
         try {
             ProductVoResponse productVoResponse = productService.selectProductByDesignerIdListPage(productQueryRequest);
             //如果处理失败 则返回错误信息
@@ -491,7 +492,7 @@ public class ProductController extends BaseController {
                 apiResponse.setData(productVoResponse);
             }
         } catch (Exception e) {
-            logger.error("查找product_designer错误---" + e);
+            logger.error("查找product_designer错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -505,8 +506,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "/v1/product/queryProductByTopicGroupListPage", method = RequestMethod.GET)
     public ApiResponse queryProductByTopicGroupListPage(ApiRequest apiRequest) {
         logger.info("start to get product_brand on page");
-        ProductListQuery productQueryRequest = JsonUtil
-                .fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
+        ProductListQuery productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
         return productService.queryProductByTopicGroupListPage(productQueryRequest);
     }
 
@@ -518,8 +518,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "/v1/product/queryProductByTopicGroup", method = RequestMethod.GET)
     public ApiResponse queryProductByTopicGroup(ApiRequest apiRequest) {
         logger.info("start to get product_brand on page");
-        ProductListQuery productQueryRequest = JsonUtil
-                .fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
+        ProductListQuery productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductListQuery.class);
         return productService.queryProductByTopicGroup(productQueryRequest);
     }
 }

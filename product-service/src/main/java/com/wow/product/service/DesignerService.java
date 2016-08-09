@@ -145,4 +145,11 @@ public interface DesignerService {
      * @return
      */
     int addProductDesignersByBatch(List<ProductDesigner> list);
+
+    /**
+     * 替换产品的设计师关联信息
+     * @param designers
+     * @return
+     */
+    int replaceProductDesigners(Integer productId, List<ProductDesigner> designers);
 }

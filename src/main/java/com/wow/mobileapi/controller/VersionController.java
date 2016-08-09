@@ -66,7 +66,7 @@ public class VersionController extends BaseController {
                 apiResponse.setData(versionLogResponse);
             }
         } catch (Exception e) {
-            logger.error("检查版本更新错误---" + e);
+            logger.error("检查版本更新错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 

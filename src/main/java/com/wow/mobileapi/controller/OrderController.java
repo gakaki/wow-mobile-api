@@ -65,7 +65,7 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderSettleResponse);
             }
         } catch (Exception e) {
-            logger.error("获取产品结算信息错误---" + e);
+            logger.error("获取产品结算信息错误---" ,e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -103,7 +103,7 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderSettleResponse);
             }
         } catch (Exception e) {
-            logger.error("获取产品结算信息错误---" + e);
+            logger.error("获取产品结算信息错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -150,7 +150,7 @@ public class OrderController extends BaseController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("创建订单错误---" + e);
+            logger.error("创建订单错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -193,7 +193,7 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderListResponse);
             }
         } catch (Exception e) {
-            logger.error("查询订单列表错误---" + e);
+            logger.error("查询订单列表错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -233,7 +233,7 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderDetailResponse);
             }
         } catch (Exception e) {
-            logger.error("查询订单明细错误---" + e);
+            logger.error("查询订单明细错误---",e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -267,7 +267,7 @@ public class OrderController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("取消订单错误---" + e);
+            logger.error("取消订单错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -301,7 +301,7 @@ public class OrderController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("订单确认收货错误---" + e);
+            logger.error("订单确认收货错误---" ,e);
             setInternalErrorResponse(apiResponse);
         }
 
