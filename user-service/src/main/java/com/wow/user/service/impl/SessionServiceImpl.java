@@ -214,7 +214,7 @@ public class SessionServiceImpl implements SessionService {
         List<EndUserSession> endUserSessions = endUserSessionMapper.selectByExample(endUserSessionExample);
         if (CollectionUtil.isNotEmpty(endUserSessions)) {
             endUserSession = endUserSessions.get(0);
-        }
+        } 
         return endUserSession;
     }
 
