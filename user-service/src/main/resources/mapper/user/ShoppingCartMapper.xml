@@ -346,6 +346,9 @@
 			   <foreach close=")" collection="shoppingCartIds" item="item" open="(" separator=",">
 	                    #{item}
 	          </foreach>
+             <if test="expectIsDeleted != null">
+				   and is_deleted = #{expectIsDeleted}
+			  </if>
 	</update>
 	
 	<!-- 获取用户购物车信息列表明细 -->

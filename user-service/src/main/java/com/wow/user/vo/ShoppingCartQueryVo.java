@@ -32,6 +32,9 @@ public class ShoppingCartQueryVo implements Serializable {
 
     //是否删除
     private Boolean isDeleted;
+    
+    //期望的删除状态
+    private Boolean expectIsDeleted;
 
     //是否选中
     private Boolean isSelected;
@@ -45,6 +48,14 @@ public class ShoppingCartQueryVo implements Serializable {
     //产品重量快照 保存到购物车时使用
     private BigDecimal weight;
     
+    public Boolean getExpectIsDeleted() {
+        return expectIsDeleted;
+    }
+
+    public void setExpectIsDeleted(Boolean expectIsDeleted) {
+        this.expectIsDeleted = expectIsDeleted;
+    }
+
     public BigDecimal getSellPrice() {
         return sellPrice;
     }
