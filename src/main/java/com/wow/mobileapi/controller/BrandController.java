@@ -38,15 +38,15 @@ public class BrandController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-        	ProductBrandAllResponse productBrandResponse = brandService.getAllBrandsList();
+            ProductBrandAllResponse productBrandResponse = brandService.getAllBrandsList();
             //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productBrandResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productBrandResponse);
-            }else {
+            } else {
                 apiResponse.setData(productBrandResponse);
             }
         } catch (Exception e) {
-            logger.error("查找productBrand_find错误---" + e);
+            logger.error("查找productBrand_find错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -63,20 +63,20 @@ public class BrandController extends BaseController {
         ApiResponse apiResponse = new ApiResponse();
 
         try {
-        	ProductBrandFirstLetterResponse productBrandFirstLetterResponse = brandService.selectBrandFirstLetter();
+            ProductBrandFirstLetterResponse productBrandFirstLetterResponse = brandService.selectBrandFirstLetter();
             //如果处理失败 则返回错误信息
-            if(ErrorCodeUtil.isFailedResponse(productBrandFirstLetterResponse.getResCode())){
-            	setServiceErrorResponse(apiResponse, productBrandFirstLetterResponse);
-            }else {
+            if (ErrorCodeUtil.isFailedResponse(productBrandFirstLetterResponse.getResCode())) {
+                setServiceErrorResponse(apiResponse, productBrandFirstLetterResponse);
+            } else {
                 apiResponse.setData(productBrandFirstLetterResponse.getBrandFirstLetterList());
             }
         } catch (Exception e) {
-            logger.error("查找productFirstLetter_find错误---" + e);
+            logger.error("查找productFirstLetter_find错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
     }
-    
+
     /**
      * 查询品牌详情
      * @param apiRequest
@@ -86,26 +86,28 @@ public class BrandController extends BaseController {
     public ApiResponse getProductBrandDetail(ApiRequest apiRequest) {
         logger.info("start to get productBrand_detail on page");
         ApiResponse apiResponse = new ApiResponse();
-        ProductQueryRequest productQueryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
-        
+        ProductQueryRequest productQueryRequest = JsonUtil
+            .fromJSON(apiRequest.getParamJson(), ProductQueryRequest.class);
+
         //判断json格式参数是否有误
         if (productQueryRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
             return apiResponse;
         }
-        
+
         try {
-        	ProductBrandVoResponse productBrandVoResponse = brandService.getBrandVoById(productQueryRequest.getBrandId());
-        	
-        	//如果处理失败 则返回错误信息
+            ProductBrandVoResponse productBrandVoResponse = brandService
+                .getBrandVoById(productQueryRequest.getBrandId());
+
+            //如果处理失败 则返回错误信息
             if (ErrorCodeUtil.isFailedResponse(productBrandVoResponse.getResCode())) {
                 setServiceErrorResponse(apiResponse, productBrandVoResponse);
             } else {
-            	apiResponse.setData(productBrandVoResponse.getBrandVo());     
-            }        	
-                   
+                apiResponse.setData(productBrandVoResponse.getBrandVo());
+            }
+
         } catch (Exception e) {
-            logger.error("查找productBrand_detail错误---" + e);
+            logger.error("查找productBrand_detail错误---", e);
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
