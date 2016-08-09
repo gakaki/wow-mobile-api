@@ -139,25 +139,25 @@ public class PageController extends BaseController {
 //        return apiResponse;
 //    }
 //
-    @RequestMapping(value = "/v1/page/topics", method = RequestMethod.GET)
-    public ApiResponse getTopicsOnHomePage(ApiRequest apiRequest) {
-        logger.info("start to get topics on page");
-
-        ApiResponse apiResponse = new ApiResponse();
-
-        try {
-            PageTopicResponse pageTopicResponse = pageConfigService.getTopicsByPageType(BizConstant.PAGE_TYPE_HOME);
-            //如果处理失败 则返回错误信息
-            if (ErrorCodeUtil.isFailedResponse(pageTopicResponse.getResCode())) {
-                setServiceErrorResponse(apiResponse, pageTopicResponse);
-            } else {
-                apiResponse.setData(pageTopicResponse);
-            }
-        } catch (Exception e) {
-            logger.error("查找Topic错误---" + e);
-            setInternalErrorResponse(apiResponse);
-        }
-
-        return apiResponse;
-    }
+//    @RequestMapping(value = "/v1/page/topics", method = RequestMethod.GET)
+//    public ApiResponse getTopicsOnHomePage(ApiRequest apiRequest) {
+//        logger.info("start to get topics on page");
+//
+//        ApiResponse apiResponse = new ApiResponse();
+//
+//        try {
+//            PageTopicResponse pageTopicResponse = pageConfigService.getTopicsByPageType(BizConstant.PAGE_TYPE_HOME);
+//            //如果处理失败 则返回错误信息
+//            if (ErrorCodeUtil.isFailedResponse(pageTopicResponse.getResCode())) {
+//                setServiceErrorResponse(apiResponse, pageTopicResponse);
+//            } else {
+//                apiResponse.setData(pageTopicResponse);
+//            }
+//        } catch (Exception e) {
+//            logger.error("查找Topic错误---" + e);
+//            setInternalErrorResponse(apiResponse);
+//        }
+//
+//        return apiResponse;
+//    }
 }

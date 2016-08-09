@@ -27,12 +27,12 @@ public interface PageConfigService {
      */
     PageSceneResponse getScenesByPageType(int pageType);
 
-    /**
-     * 根据页面类型查询应该显示的Topic
-     * @param pageType
-     * @return
-     */
-    PageTopicResponse getTopicsByPageType(int pageType);
+//    /**
+//     * 根据页面类型查询应该显示的Topic
+//     * @param pageType
+//     * @return
+//     */
+//    PageTopicResponse getTopicsByPageType(int pageType);
 
     /**
      * 根据页面类型查询页面上的商品配置
