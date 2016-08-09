@@ -40,6 +40,7 @@ import com.wow.order.model.SaleOrderPayExample;
 import com.wow.order.service.PayService;
 import com.wow.order.util.WebhooksVerifyUtil;
 import com.wow.order.vo.ChargeRequest;
+import com.wow.order.vo.SaleOrderVo;
 import com.wow.order.vo.response.ChargeResponse;
 import com.wow.order.vo.response.OrderPayResultResponse;
 
@@ -249,8 +250,24 @@ public class PayServiceImpl implements PayService {
         }
 
         charge = (Charge) eventData.getObject();
+
+        //保存支付结果到数据库
+        processPayResult(commonResponse, charge);
+
+        return commonResponse;
+    }
+
+    /**
+     * 处理支付结果
+     * @param commonResponse 
+     * 
+     * @param charge
+     * @return 
+     */
+    private CommonResponse processPayResult(CommonResponse commonResponse, Charge charge) {
         //根据订单号获取订单信息
         SaleOrder saleOrder = selectByOrderCode(charge.getOrderNo());
+
         //如果订单不存在 则直接返回不处理
         if (saleOrder == null) {
             commonResponse.setResCode("40308");
@@ -268,27 +285,35 @@ public class PayServiceImpl implements PayService {
         }
 
         /*** 业务处理开始*/
-        SaleOrder targetSaleOrder = new SaleOrder();
-        targetSaleOrder.setId(saleOrder.getId());
+        SaleOrderVo saleOrderVo = new SaleOrderVo();
+
+        saleOrderVo.setId(saleOrder.getId());
         //设置订单状态为待发货
-        targetSaleOrder.setOrderStatus(SaleOrderStatusEnum.TO_BE_SHIPPED.getKey().byteValue());
+        saleOrderVo.setOrderStatus(SaleOrderStatusEnum.TO_BE_SHIPPED.getKey().byteValue());
         //设置订单支付状态已支付
-        targetSaleOrder.setPaymentStatus(CommonConstant.YES);
-        targetSaleOrder.setPaidTime(DateUtil.convertToDate(charge.getTimePaid()));
-        targetSaleOrder.setUpdateTime(DateUtil.currentDate());
+        saleOrderVo.setPaymentStatus(CommonConstant.PAID);
+        //设置期望的订单支付状态为未支付
+        saleOrderVo.setExpectPaymentStatus(CommonConstant.UNPAY);
+        saleOrderVo.setPaidTime(DateUtil.convertToDate(charge.getTimePaid()));
+        saleOrderVo.setUpdateTime(DateUtil.currentDate());
 
         //修改订单状态
-        saleOrderMapper.updateByPrimaryKeySelective(targetSaleOrder);
+        int count = saleOrderMapper.updateByPrimaryByIdAndStatus(saleOrderVo);
 
-        //保存订单支付明细
-        SaleOrderPay orderPay = wrapOrderPay(charge);
-        orderPay.setSaleOrderId(saleOrder.getId());
+        //如果订单状态修改成功 保存支付明细和日志
+        if (count > 0) {
+            //保存订单支付明细
+            SaleOrderPay orderPay = wrapOrderPay(charge);
+            orderPay.setSaleOrderId(saleOrder.getId());
 
-        saleOrderPayMapper.insertSelective(orderPay);
+            saleOrderPayMapper.insertSelective(orderPay);
 
-        //写入客户订单支付成功日志
-        SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40317"));
-        saleOrderLogMapper.insertSelective(warpOrderLog);/*** 业务处理结束*/
+            //写入客户订单支付成功日志
+            SaleOrderLog warpOrderLog = warpOrderLog(saleOrder.getId(), ErrorCodeUtil.getErrorMsg("40317"));
+            saleOrderLogMapper.insertSelective(warpOrderLog);
+        }
+
+        /*** 业务处理结束*/
 
         return commonResponse;
     }
@@ -366,6 +391,10 @@ public class PayServiceImpl implements PayService {
         if (saleOrderPay == null) {
             Charge retrieve = queryPayResult(orderCode);
 
+            //保存支付结果到数据库
+            processPayResult(new CommonResponse(), retrieve);
+
+            //包装支付结果
             wrapPayResult(response, retrieve);
 
             return response;

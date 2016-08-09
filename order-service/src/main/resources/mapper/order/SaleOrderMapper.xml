@@ -708,6 +708,122 @@
 	    order by order_create_time desc
   </select>
   
+    <!--修改订单并加上指定的订单状态 防止并发 -->
+    <update id="updateByPrimaryByIdAndStatus"  parameterType="com.wow.order.vo.SaleOrderVo">
+	    update sale_order
+	    <set>
+	      <if test="orderCode != null">
+	        order_code = #{orderCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="endUserId != null">
+	        end_user_id = #{endUserId,jdbcType=INTEGER},
+	      </if>
+	      <if test="productAmount != null">
+	        product_amount = #{productAmount,jdbcType=DECIMAL},
+	      </if>
+	      <if test="deliveryFee != null">
+	        delivery_fee = #{deliveryFee,jdbcType=DECIMAL},
+	      </if>
+	      <if test="orderAmount != null">
+	        order_amount = #{orderAmount,jdbcType=DECIMAL},
+	      </if>
+	      <if test="totalProductQty != null">
+	        total_product_qty = #{totalProductQty,jdbcType=INTEGER},
+	      </if>
+	      <if test="unShipOutQty != null">
+	        un_ship_out_qty = #{unShipOutQty,jdbcType=INTEGER},
+	      </if>
+	      <if test="receiverName != null">
+	        receiver_name = #{receiverName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="receiverProvince != null">
+	        receiver_province = #{receiverProvince,jdbcType=VARCHAR},
+	      </if>
+	      <if test="receiverCity != null">
+	        receiver_city = #{receiverCity,jdbcType=VARCHAR},
+	      </if>
+	      <if test="receiverCounty != null">
+	        receiver_county = #{receiverCounty,jdbcType=VARCHAR},
+	      </if>
+	      <if test="receiverTown != null">
+	        receiver_town = #{receiverTown,jdbcType=VARCHAR},
+	      </if>
+	      <if test="receiverAddress != null">
+	        receiver_address = #{receiverAddress,jdbcType=VARCHAR},
+	      </if>
+	      <if test="receiverPostcode != null">
+	        receiver_postcode = #{receiverPostcode,jdbcType=CHAR},
+	      </if>
+	      <if test="receiverMobile != null">
+	        receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+	      </if>
+	      <if test="endUserRemark != null">
+	        end_user_remark = #{endUserRemark,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderStatus != null">
+	        order_status = #{orderStatus,jdbcType=TINYINT},
+	      </if>
+	      <if test="paymentStatus != null">
+	        payment_status = #{paymentStatus,jdbcType=TINYINT},
+	      </if>
+	      <if test="paymentMethod != null">
+	        payment_method = #{paymentMethod,jdbcType=TINYINT},
+	      </if>
+	      <if test="paidTime != null">
+	        paid_time = #{paidTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="isUseCoupon != null">
+	        is_use_coupon = #{isUseCoupon,jdbcType=BIT},
+	      </if>
+	      <if test="preferentialAmount != null">
+	        preferential_amount = #{preferentialAmount,jdbcType=DECIMAL},
+	      </if>
+	      <if test="endUserCouponId != null">
+	        end_user_coupon_id = #{endUserCouponId,jdbcType=INTEGER},
+	      </if>
+	      <if test="cancelRequestTime != null">
+	        cancel_request_time = #{cancelRequestTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="cancelReason != null">
+	        cancel_reason = #{cancelReason,jdbcType=VARCHAR},
+	      </if>
+	      <if test="cancelApprovedTime != null">
+	        cancel_approved_time = #{cancelApprovedTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="refundApprovalStatus != null">
+	        refund_approval_status = #{refundApprovalStatus,jdbcType=TINYINT},
+	      </if>
+	      <if test="refundApprovalTime != null">
+	        refund_approval_time = #{refundApprovalTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="operatorName != null">
+	        operator_name = #{operatorName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderSource != null">
+	        order_source = #{orderSource,jdbcType=TINYINT},
+	      </if>
+	      <if test="orderIp != null">
+	        order_ip = #{orderIp,jdbcType=BIGINT},
+	      </if>
+	      <if test="sellerRemark != null">
+	        seller_remark = #{sellerRemark,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderCreateTime != null">
+	        order_create_time = #{orderCreateTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="updateTime != null">
+	        update_time = #{updateTime,jdbcType=TIMESTAMP},
+	      </if>
+	    </set>
+	     where id = #{id}
+        <if test="expectOrderStatus != null">
+          and  order_status = #{expectOrderStatus}
+      </if>
+         <if test="expectPaymentStatus != null">
+          and  payment_status = #{expectPaymentStatus}
+      </if>
+  </update>
+  
         <!-- 查询超过20分钟仍然没有支付的订单列表 -->
   <select id="selectTimeOutUnpayOrder"   resultType="com.wow.order.model.SaleOrder"  parameterType="Integer" >
 	      SELECT 

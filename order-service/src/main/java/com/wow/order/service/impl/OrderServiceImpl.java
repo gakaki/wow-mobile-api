@@ -144,6 +144,14 @@ public class OrderServiceImpl implements OrderService {
             return orderResponse;
         }
 
+        //校验订单来源是否为空
+        if (query.getOrderSource() == null) {
+            orderResponse.setResCode("40332");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40332"));
+
+            return orderResponse;
+        }
+
         ShoppingCartQueryVo shoppingCartQuery = new ShoppingCartQueryVo();
         shoppingCartQuery.setEndUserId(query.getEndUserId());
 
@@ -1439,6 +1447,14 @@ public class OrderServiceImpl implements OrderService {
         if (query.getProductId() == null) {
             orderResponse.setResCode("40316");
             orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40316"));
+
+            return orderResponse;
+        }
+
+        //校验订单来源是否为空
+        if (query.getOrderSource() == null) {
+            orderResponse.setResCode("40332");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40332"));
 
             return orderResponse;
         }

@@ -8,6 +8,7 @@ import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
 import com.wow.order.model.SaleOrder;
 import com.wow.order.model.SaleOrderExample;
+import com.wow.order.vo.SaleOrderVo;
 
 public interface SaleOrderMapper {
     int countByExample(SaleOrderExample example);
@@ -46,4 +47,6 @@ public interface SaleOrderMapper {
      * @return
      */
     List<SaleOrder> selectTimeOutUnpayOrder(int timeoutMinute);
+
+    int updateByPrimaryByIdAndStatus(SaleOrderVo saleOrderVo);
 }
