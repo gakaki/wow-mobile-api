@@ -384,18 +384,12 @@ public class PayServiceImpl implements PayService {
     public OrderPayResultResponse queryOrderPayResult(String orderCode) {
         OrderPayResultResponse response = new OrderPayResultResponse();
 
-        //查询订单支付结果
+        //从本地查询订单支付结果
         SaleOrderPay saleOrderPay = selectPayResultByOrderCode(orderCode);
 
         //如果未收到支付通知 则需调用ping++订单支付查询接口 查询支付是否成功
         if (saleOrderPay == null) {
-            Charge retrieve = queryPayResult(orderCode);
-
-            //保存支付结果到数据库
-            processPayResult(new CommonResponse(), retrieve);
-
-            //包装支付结果
-            wrapPayResult(response, retrieve);
+            response = getPayResultFromPingPlus(orderCode, response);
 
             return response;
         }
@@ -409,13 +403,15 @@ public class PayServiceImpl implements PayService {
     }
 
     /**
-     * 包装订单支付结果
+     * 根据订单号查询ping++支付结果
      * 
+     * @param orderCode
      * @param response
-     * @param retrieve
      * @return
      */
-    private OrderPayResultResponse wrapPayResult(OrderPayResultResponse response, Charge retrieve) {
+    private OrderPayResultResponse getPayResultFromPingPlus(String orderCode, OrderPayResultResponse response) {
+        Charge retrieve = queryPayResult(orderCode);
+
         //如果未查找到交易记录 则返回交易错误信息
         if (retrieve == null) {
             response.setResCode("40363");
@@ -432,6 +428,10 @@ public class PayServiceImpl implements PayService {
             return response;
         }
 
+        //保存支付结果到数据库
+        processPayResult(new CommonResponse(), retrieve);
+
+        //包装支付响应结果
         response.setPayAmount(NumberUtil.convertToYuan(retrieve.getAmount()));
         response.setOrderCode(retrieve.getOrderNo());
         response.setPaymentChannel(retrieve.getChannel());
@@ -441,7 +441,7 @@ public class PayServiceImpl implements PayService {
     }
 
     /**
-     * 根据订单号查询支付结果
+     * 根据订单号向ping++发起查询支付结果请求
      * 
      * @param orderCode
      * @return
@@ -461,6 +461,12 @@ public class PayServiceImpl implements PayService {
         return retrieve;
     }
 
+    /**
+     * 根据订单号查询交易凭据id
+     * 
+     * @param orderCode
+     * @return
+     */
     private SaleOrderPayCharge queryPayChargeByOrderCode(String orderCode) {
         SaleOrderPayChargeExample example = new SaleOrderPayChargeExample();
         SaleOrderPayChargeExample.Criteria criteria = example.createCriteria();

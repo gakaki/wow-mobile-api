@@ -263,6 +263,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         //删除用户指定产品的购物车信息
         query.setIsDeleted(Boolean.TRUE);
         query.setUpdateTime(DateUtil.currentDate());
+        //设置期望的删除标记为未删除(丢弃已经删除的防并发)
+        query.setExpectIsDeleted(Boolean.FALSE);
 
         shoppingCartMapper.updateByPrimaryKeys(query);
 
