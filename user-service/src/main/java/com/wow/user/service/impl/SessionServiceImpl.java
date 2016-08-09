@@ -233,6 +233,7 @@ public class SessionServiceImpl implements SessionService {
         Date now = new Date();
         //token生成算法,暂用UUID,可以替换
         String sessionToken = UUID.randomUUID().toString();
+        String oldToken=null;
         if (endUserSession == null) {
             logger.info("首次登录");
             endUserSession = new EndUserSession();
@@ -245,9 +246,10 @@ public class SessionServiceImpl implements SessionService {
             endUserSession.setLogoutTime(null);
             endUserSession.setSessionToken(sessionToken);
             endUserSession.setUserAgentInfo(loginVo.getUserAgent());
-            addOrUpdateSessionOnRedis(endUserSession);
+            addOrUpdateSessionOnRedis(endUserSession,oldToken);
         } else {
             logger.info("修改会话");
+            oldToken=endUserSession.getSessionToken();
             endUserSession.setIsLogout(false);
             endUserSession.setLastLoginIp(loginIp);
             endUserSession.setLastRefreshTime(now);
@@ -257,7 +259,7 @@ public class SessionServiceImpl implements SessionService {
             endUserSession.setSessionToken(sessionToken);
             endUserSession.setUserAgentInfo(loginVo.getUserAgent());
             //此处不用updateByPrimaryKeySelective,因为setLogoutTime(null)
-            addOrUpdateSessionOnRedis(endUserSession);
+            addOrUpdateSessionOnRedis(endUserSession,oldToken);
         }
         logger.info("endUserSession=" + endUserSession);
         //记录登录日志
@@ -291,11 +293,9 @@ public class SessionServiceImpl implements SessionService {
      * 添加或修改用户sessionToken相关信息
      * @param endUserSession
      */
-    private void addOrUpdateSessionOnRedis(EndUserSession endUserSession){
-        EndUserSession session=null;
-        if((session=(EndUserSession)RedisUtil.get("user-"+endUserSession.getEndUserId()+"-"+endUserSession.getLoginChannel()))!=null){
-            RedisUtil.remove("session-"+session.getSessionToken()+"-"+session.getLoginChannel());
-            session=null;
+    private void addOrUpdateSessionOnRedis(EndUserSession endUserSession,String oldToken){
+        if(oldToken!=null){
+            RedisUtil.remove("session-"+oldToken+"-"+endUserSession.getLoginChannel());
         }
         RedisUtil.set("user-"+endUserSession.getEndUserId()+"-"+endUserSession.getLoginChannel(),endUserSession,sessionExpirationTime);
         RedisUtil.set("session-"+endUserSession.getSessionToken()+"-"+endUserSession.getLoginChannel(),"user-"+endUserSession.getEndUserId()+"-"+endUserSession.getLoginChannel(),sessionExpirationTime);
@@ -412,7 +412,7 @@ public class SessionServiceImpl implements SessionService {
             long interval=System.currentTimeMillis()-endUserSession.getLastRefreshTime().getTime();
             if(interval<sessionExpirationTime*0.25){
                 endUserSession.setLastRefreshTime(Calendar.getInstance().getTime());
-                addOrUpdateSessionOnRedis(endUserSession);
+                addOrUpdateSessionOnRedis(endUserSession,endUserSession.getSessionToken());
             }
         }
         tokenValidateResponse.setValid(isValid);
