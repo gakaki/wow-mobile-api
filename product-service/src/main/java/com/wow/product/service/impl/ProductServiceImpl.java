@@ -1055,7 +1055,7 @@ public class ProductServiceImpl implements ProductService {
     public ApiResponse queryProductByTopicGroupListPage(ProductListQuery query) {
         ApiResponse resp=new ApiResponse();
         GroupProductResponse groupProductResponse = new GroupProductResponse();
-        if (query==null||query.getGroupId() == null) {
+        if (query==null||query.getTopicId() == null) {
             resp.setResCode(ErrorCodeConstant.INVALID_PARAMJSON);
             resp.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INVALID_PARAMJSON));
             return resp;
@@ -1098,7 +1098,7 @@ public class ProductServiceImpl implements ProductService {
     public ApiResponse queryProductByTopicGroup(ProductListQuery query) {
         ApiResponse resp=new ApiResponse();
         GroupProductResponse groupProductResponse = new GroupProductResponse();
-        if (query==null||query.getGroupId() == null) {
+        if (query==null||query.getTopicId() == null) {
             resp.setResCode(ErrorCodeConstant.INVALID_PARAMJSON);
             resp.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INVALID_PARAMJSON));
             return resp;
