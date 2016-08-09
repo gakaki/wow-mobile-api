@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wow.common.util.DateUtil;
 import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.StringUtil;
 import com.wow.user.mapper.VersionLogMapper;
 import com.wow.user.model.VersionLog;
 import com.wow.user.model.VersionLogExample;
@@ -29,16 +28,6 @@ public class VersionLogServiceImpl implements VersionLogService {
     @Override
     public VersionLogResponse checkVersion(VersionLogQuery query) {
         VersionLogResponse versionLogResponse = new VersionLogResponse();
-
-        /*** 业务校验开始*/
-        //如果版本号 app类型或者平台类型为空 则返回错误提示
-        if (query.getAppType() == null || query.getPlatForm() == null || StringUtil.isEmpty(query.getVersion())) {
-            versionLogResponse.setResCode("40305");
-            versionLogResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40305"));
-
-            return versionLogResponse;
-        }
-        /*** 业务校验结束*/
 
         //获取最新的版本号
         VersionLog versionLog = versionLogMapper.selectLatestVersion(query);

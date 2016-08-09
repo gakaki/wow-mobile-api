@@ -44,7 +44,7 @@ public class HttpRequestUtil {
     }
 
     /**
-     * 获取访问者User-Agentdfdfdf
+     * 获取访问者User-Agent
      *
      * @param request
      * @return
