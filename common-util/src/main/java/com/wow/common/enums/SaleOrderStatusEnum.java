@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public enum SaleOrderStatusEnum  {
      //订单状态：0 待付款  1待发货  2部分发货  3待收货  4已完成 5已取消 6交易关闭
-    TO_BE_PAID(0, "代付款"), 
+    TO_BE_PAID(0, "待付款"),
     TO_BE_SHIPPED(1, "待发货"), 
     PARTIAL_SHIPPED(2, "部分发货"),
     TO_BE_RECEIVED(3, "待收货"), 
