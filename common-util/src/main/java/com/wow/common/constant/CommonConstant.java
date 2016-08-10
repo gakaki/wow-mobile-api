@@ -4,10 +4,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.wow.common.util.DictionaryUtil;
-import com.wow.common.util.NumberUtil;
-import com.wow.common.util.StringUtil;
-
 /**
  * 系统相关设置的常量
  * 
@@ -20,20 +16,6 @@ public class CommonConstant {
 
     //除数常量 100
     public static final BigDecimal HUNDRED_IGDECIMAL = new BigDecimal("100");
-
-    //运费阀值
-    public static final BigDecimal THRESHOLD = convertStringToDecimal(DictionaryUtil
-        .getValue("order", "order_deliveryFee_threshold"));
-
-    //运费阀值 long类型
-    public static final long THRESHOLD_LONG = NumberUtil.convertToFen(CommonConstant.THRESHOLD);
-
-    //运费
-    public static final BigDecimal DELIVERYFEE = convertStringToDecimal(DictionaryUtil
-        .getValue("order", "order_deliveryFee"));
-
-    //运费 long类型
-    public static final long DELIVERYFEE_LONG = NumberUtil.convertToFen(CommonConstant.DELIVERYFEE);
 
     //是
     public static final int MAX_PAGE = 100;
@@ -127,20 +109,6 @@ public class CommonConstant {
     /** 取得支付状态描述.*/
     public static String getPayStatusName(Byte code) {
         return PAY_STATUS_MAP.get(code);
-    }
-
-    /**
-     * 将字符串转换为Decimal
-     * 如果字符串为"" 则返回0.00
-     * @param vlaue
-     * @return
-     */
-    private static BigDecimal convertStringToDecimal(String vlaue) {
-        if (StringUtil.isBlank(vlaue)) {
-            return ZERO_BIGDECIMAL;
-        }
-
-        return new BigDecimal(vlaue);
     }
 
 }
