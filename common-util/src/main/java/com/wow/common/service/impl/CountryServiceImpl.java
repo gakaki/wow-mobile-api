@@ -21,4 +21,9 @@ public class CountryServiceImpl implements CountryService {
     public List<Country> queryAllCountry() {
         return countryMapper.queryAllCountry();
     }
+
+    @Override
+    public Country queryCountryById(int id) {
+        return countryMapper.queryCountryById(id);
+    }
 }

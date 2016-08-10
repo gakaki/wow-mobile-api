@@ -10,4 +10,6 @@ import java.util.List;
 public interface BaseMaterialMapper {
 
     List<BaseMaterial> queryAllMaterial();
+
+    BaseMaterial queryMaterialById(int id);
 }

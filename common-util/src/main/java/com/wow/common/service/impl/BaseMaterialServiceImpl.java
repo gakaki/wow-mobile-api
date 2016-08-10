@@ -20,4 +20,9 @@ public class BaseMaterialServiceImpl implements BaseMaterialService {
     public List<BaseMaterial> queryAllMaterial(){
         return materialMapper.queryAllMaterial();
     }
+
+    @Override
+    public BaseMaterial queryMaterialById(int id) {
+        return  materialMapper.queryMaterialById(id);
+    }
 }

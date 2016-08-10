@@ -18,7 +18,15 @@ public class CountryUtil {
             .getBean("countryMapper", CountryMapper.class);
 
     public static String getCountryById(int id){
-        return RedisUtil.get("c_"+id).toString();
+        Object v=RedisUtil.get("c_"+id);
+        if(v==null){
+            Country country=countryMapper.queryCountryById(id);
+            if(country==null)
+                return null;
+            v=country.getName();
+            RedisUtil.set("c_"+id,country.getName());
+        }
+        return v.toString();
     }
 
     public static void addAllCountry(List<Country> list){

@@ -10,4 +10,6 @@ import java.util.List;
 public interface CountryMapper {
 
     public List<Country> queryAllCountry();
+
+    public Country queryCountryById(int id);
 }

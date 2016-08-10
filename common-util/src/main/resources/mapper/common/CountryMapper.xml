@@ -9,5 +9,9 @@
   <select id="queryAllCountry" resultMap="BaseResultMap">
     select id,cn_name from country
   </select>
+
+  <select id="queryCountryById" resultMap="BaseResultMap" parameterType="int">
+    select id,cn_name from country where id=#{id}
+  </select>
   
 </mapper>

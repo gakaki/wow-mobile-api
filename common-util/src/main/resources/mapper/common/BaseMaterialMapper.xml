@@ -9,5 +9,9 @@
   <select id="queryAllMaterial" resultMap="BaseResultMap">
     select id,material_name from material where is_deleted=0
   </select>
+
+  <select id="queryMaterialById" resultMap="BaseResultMap" parameterType="int">
+    select id,material_name from material where iid=#{id}
+  </select>
   
 </mapper>

@@ -3,6 +3,7 @@ package com.wow.common.util;
 import com.wow.common.factory.SpringBeanFactory;
 import com.wow.common.mapper.BaseMaterialMapper;
 import com.wow.common.model.BaseMaterial;
+import com.wow.common.model.Country;
 import com.wow.common.service.BaseMaterialService;
 
 import java.util.List;
@@ -16,7 +17,15 @@ public class MaterialDataUtil {
             .getBean("baseMaterialMapper", BaseMaterialMapper.class);
 
     public static String getMaterialById(int id){
-        return RedisUtil.get("m_"+id).toString();
+        Object v=RedisUtil.get("m_"+id);
+        if(v==null){
+            BaseMaterial baseMaterial=baseMaterialMapper.queryMaterialById(id);
+            if(baseMaterial==null)
+                return null;
+            v=baseMaterial.getName();
+            RedisUtil.set("m_"+id,baseMaterial.getName());
+        }
+        return v.toString();
     }
 
     public static void addAllMaterial(List<BaseMaterial> list){

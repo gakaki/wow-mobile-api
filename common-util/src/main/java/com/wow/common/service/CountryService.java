@@ -14,4 +14,11 @@ public interface CountryService {
      * @return
      */
     List<Country> queryAllCountry();
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    Country queryCountryById(int id);
 }

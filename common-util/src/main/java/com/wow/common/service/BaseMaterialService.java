@@ -14,4 +14,11 @@ public interface BaseMaterialService {
      * @return
      */
     List<BaseMaterial> queryAllMaterial();
+
+    /**
+     * 根据材质id获取材质
+     * @param id
+     * @return
+     */
+    BaseMaterial queryMaterialById(int id);
 }
