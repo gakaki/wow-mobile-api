@@ -2,9 +2,6 @@ package com.wow.product.mapper;
 
 import java.util.List;
 
-import com.wow.product.model.GroupProduct;
-import com.wow.product.vo.ProductListQuery;
-import com.wow.product.vo.response.GroupProductResponse;
 import org.apache.ibatis.annotations.Param;
 
 import com.wow.common.page.PageData;
@@ -68,5 +65,5 @@ public interface ProductMapper {
 
     List<PageData> queryProductByTopicGroupListPage(PageModel model);
 
-    List<GroupProduct> queryProductByTopicGroup(ProductListQuery query);
+    List<ProductVo> selectProductInTopic(@Param("topicId") Integer topicId);
 }

@@ -1292,17 +1292,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ApiResponse queryProductByTopicGroup(ProductListQuery query) {
-        ApiResponse resp=new ApiResponse();
-        GroupProductResponse groupProductResponse = new GroupProductResponse();
-        if (query==null||query.getTopicId() == null) {
-            resp.setResCode(ErrorCodeConstant.INVALID_PARAMJSON);
-            resp.setResMsg(ErrorCodeUtil.getErrorMsg(ErrorCodeConstant.INVALID_PARAMJSON));
-            return resp;
+    public ProductInTopicResponse getProductInTopic(int topicId) {
+        ProductInTopicResponse resp=new ProductInTopicResponse();
+        List<ProductVo> productVoList = productMapper.selectProductInTopic(topicId);
+        List<Integer> productIdList = new ArrayList<>();
+        for (ProductVo product : productVoList) {
+            productIdList.add(product.getProductId());
         }
-        List<GroupProduct> list = productMapper.queryProductByTopicGroup(query);
-        groupProductResponse.setProductList(productMapper.queryProductByTopicGroup(query));
-        resp.setData(groupProductResponse);
+        Map<Integer, ProductImage> productImgMap = selectProductListPrimaryOneImg(productIdList);
+        for (ProductVo product : productVoList) {
+            if (productImgMap.get(product.getProductId()) != null) {
+                product.setProductImg(productImgMap.get(product.getProductId()).getImgUrl());
+            }
+        }
+        resp.setProductList(productVoList);
         return resp;
     }
 }

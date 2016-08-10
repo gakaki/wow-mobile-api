@@ -3,6 +3,7 @@ package com.wow.mobileapi.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wow.common.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
-import com.wow.common.util.ErrorCodeUtil;
-import com.wow.common.util.ErrorResponseUtil;
-import com.wow.common.util.JsonUtil;
 import com.wow.mobileapi.constant.ErrorCodeConstant;
 import com.wow.mobileapi.request.user.FavoriteBrandRequest;
 import com.wow.mobileapi.request.user.FavoriteDesignerRequest;
@@ -46,7 +44,7 @@ public class UserActionController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/v1/user/brand/favorite", method = RequestMethod.POST)
-    public ApiResponse favoriteUpdate(ApiRequest apiRequest) {
+    public ApiResponse updateBrandFavoriteStatus(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
@@ -56,6 +54,13 @@ public class UserActionController extends BaseController {
         //判断json格式参数是否有误
         if (favoriteBrandRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(favoriteBrandRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
 
@@ -127,6 +132,13 @@ public class UserActionController extends BaseController {
             return apiResponse;
         }
 
+        String errorMsg = ValidatorUtil.getError(favoriteBrandRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
+            return apiResponse;
+        }
+
         try {
             FavoriteCommonResponse favoriteCommonResponse = favoriteService
                 .isUserFavoriteBrand(endUserId, favoriteBrandRequest.getBrandId());
@@ -145,12 +157,12 @@ public class UserActionController extends BaseController {
     }
 
     /**
-     * 新增用户喜欢的设计师
+     * 用户喜欢/不喜欢设计师
      * @param apiRequest
      * @return
      */
     @RequestMapping(value = "/v1/user/designer/favorite", method = RequestMethod.POST)
-    public ApiResponse favoriteDesigner(ApiRequest apiRequest) {
+    public ApiResponse updateDesignerFavoriteStatus(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
@@ -160,6 +172,13 @@ public class UserActionController extends BaseController {
         //判断json格式参数是否有误
         if (favoriteDesignerRequest == null) {
             setParamJsonParseErrorResponse(apiResponse);
+            return apiResponse;
+        }
+
+        String errorMsg = ValidatorUtil.getError(favoriteDesignerRequest);
+        //如果校验错误 则返回
+        if (StringUtil.isNotEmpty(errorMsg)) {
+            setInvalidParameterResponse(apiResponse, errorMsg);
             return apiResponse;
         }
 
@@ -206,7 +225,6 @@ public class UserActionController extends BaseController {
             }
         } catch (Exception e) {
             logger.error("查找用户喜欢的设计师错误---", e);
-            e.printStackTrace();
             setInternalErrorResponse(apiResponse);
         }
         return apiResponse;
@@ -254,7 +272,7 @@ public class UserActionController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/v1/user/product/favorite", method = RequestMethod.POST)
-    public ApiResponse favoriteProduct(ApiRequest apiRequest) {
+    public ApiResponse updateProductFavoriteStatus(ApiRequest apiRequest) {
 
         ApiResponse apiResponse = new ApiResponse();
         Integer endUserId = getUserIdByTokenChannel(apiRequest);
@@ -388,7 +406,7 @@ public class UserActionController extends BaseController {
     //                apiResponse.setData(favoriteCommonResponse);
     //            }
     //        } catch (Exception e) {
-    //            logger.error("新增用户喜欢的场景发生错误---" + e);
+    //            logger.error("新增用户喜欢的场景发生错误---",e);
     //            setInternalErrorResponse(apiResponse);
     //        }
     //        return apiResponse;
@@ -419,7 +437,7 @@ public class UserActionController extends BaseController {
     //                apiResponse.setData(favoriteSceneResponse);
     //            }
     //        } catch (Exception e) {
-    //            logger.error("查找用户喜欢的场景错误---" + e);
+    //            logger.error("查找用户喜欢的场景错误---",e);
     //            e.printStackTrace();
     //            setInternalErrorResponse(apiResponse);
     //        }
