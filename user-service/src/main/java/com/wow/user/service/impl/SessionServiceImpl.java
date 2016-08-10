@@ -4,7 +4,6 @@ import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.IpConvertUtil;
-import com.wow.common.util.RedisUtil;
 import com.wow.user.constant.ThirdPartyPlatformType;
 import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.EndUserSessionMapper;
@@ -30,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -149,7 +147,7 @@ public class SessionServiceImpl implements SessionService {
      * @param endUserId
      * @param thirdPartyPlatformType - 第三方登录平台(如微信,QQ,微博等)
      */
-    /*private EndUserSession saveOrUpdateSession(LoginVo loginVo,
+    private EndUserSession saveOrUpdateSession(LoginVo loginVo,
                                      int endUserId, Integer thirdPartyPlatformType) {
         EndUserSession endUserSession = getSessionByUserIdAndChannel(endUserId, loginVo.getLoginChannel());
         long loginIp = IpConvertUtil.ipToLong(loginVo.getLoginIp());
@@ -172,7 +170,6 @@ public class SessionServiceImpl implements SessionService {
         } else {
             logger.info("修改会话");
             endUserSession.setIsLogout(false);
-            endUserSession.setIsActive(true);
             endUserSession.setLastLoginIp(loginIp);
             endUserSession.setLastRefreshTime(now);
             endUserSession.setLastLoginTime(now);
@@ -198,7 +195,7 @@ public class SessionServiceImpl implements SessionService {
         logger.info("endUserLoginLog:" + endUserLoginLog);
         loginLogService.addLoginLog(endUserLoginLog);
         return endUserSession;
-    }*/
+    }
 
     /**
      * 根据userId和登录渠道查询会话
@@ -219,87 +216,6 @@ public class SessionServiceImpl implements SessionService {
             endUserSession = endUserSessions.get(0);
         }
         return endUserSession;
-    }
-
-    /**
-     * 创建或更新会话信息,记录登录日志
-     * @param loginVo
-     * @param endUserId
-     * @param thirdPartyPlatformType - 第三方登录平台(如微信,QQ,微博等)
-     */
-    private EndUserSession saveOrUpdateSession(LoginVo loginVo,
-                                               int endUserId, Integer thirdPartyPlatformType) {
-        EndUserSession endUserSession = getSessionByUserIdAndChannelOnRedis(endUserId, loginVo.getLoginChannel());
-        long loginIp = IpConvertUtil.ipToLong(loginVo.getLoginIp());
-        Date now = new Date();
-        //token生成算法,暂用UUID,可以替换
-        String sessionToken = UUID.randomUUID().toString();
-        String oldToken=null;
-        if (endUserSession == null) {
-            logger.info("首次登录");
-            endUserSession = new EndUserSession();
-            endUserSession.setEndUserId(endUserId);
-            endUserSession.setIsLogout(false);
-            endUserSession.setLastLoginIp(loginIp);
-            endUserSession.setLastRefreshTime(now);
-            endUserSession.setLastLoginTime(now);
-            endUserSession.setLoginChannel(loginVo.getLoginChannel());
-            endUserSession.setLogoutTime(null);
-            endUserSession.setSessionToken(sessionToken);
-            endUserSession.setUserAgentInfo(loginVo.getUserAgent());
-            addOrUpdateSessionOnRedis(endUserSession,oldToken);
-        } else {
-            logger.info("修改会话");
-            oldToken=endUserSession.getSessionToken();
-            endUserSession.setIsLogout(false);
-            endUserSession.setLastLoginIp(loginIp);
-            endUserSession.setLastRefreshTime(now);
-            endUserSession.setLastLoginTime(now);
-            endUserSession.setLoginChannel(loginVo.getLoginChannel());
-            endUserSession.setLogoutTime(null);
-            endUserSession.setSessionToken(sessionToken);
-            endUserSession.setUserAgentInfo(loginVo.getUserAgent());
-            //此处不用updateByPrimaryKeySelective,因为setLogoutTime(null)
-            addOrUpdateSessionOnRedis(endUserSession,oldToken);
-        }
-        logger.info("endUserSession=" + endUserSession);
-        //记录登录日志
-        EndUserLoginLog endUserLoginLog = new EndUserLoginLog();
-        endUserLoginLog.setUserAgentInfo(loginVo.getUserAgent());
-        endUserLoginLog.setLoginChannel(loginVo.getLoginChannel());
-        endUserLoginLog.setEndUserId(endUserId);
-        endUserLoginLog.setLoginIp(loginIp);
-        endUserLoginLog.setLoginTime(now);
-        endUserLoginLog.setSessionToken(sessionToken);
-        if (thirdPartyPlatformType != null) {
-            endUserLoginLog.setThirdPartyPlatformType(thirdPartyPlatformType.byteValue());
-        }
-        logger.info("endUserLoginLog:" + endUserLoginLog);
-        loginLogService.addLoginLog(endUserLoginLog);
-        return endUserSession;
-    }
-
-    /**
-     * 根据userId和登录渠道查询会话
-     *
-     * @param userId
-     * @param loginChannel
-     * @return
-     */
-    private EndUserSession getSessionByUserIdAndChannelOnRedis (int userId, byte loginChannel) {
-        return (EndUserSession) RedisUtil.get("user-"+userId+"-"+loginChannel);
-    }
-
-    /**
-     * 添加或修改用户sessionToken相关信息
-     * @param endUserSession
-     */
-    private void addOrUpdateSessionOnRedis(EndUserSession endUserSession,String oldToken){
-        if(oldToken!=null){
-            RedisUtil.remove("session-"+oldToken+"-"+endUserSession.getLoginChannel());
-        }
-        RedisUtil.set("user-"+endUserSession.getEndUserId()+"-"+endUserSession.getLoginChannel(),endUserSession,sessionExpirationTime);
-        RedisUtil.set("session-"+endUserSession.getSessionToken()+"-"+endUserSession.getLoginChannel(),"user-"+endUserSession.getEndUserId()+"-"+endUserSession.getLoginChannel(),sessionExpirationTime);
     }
 
     /**
@@ -328,7 +244,7 @@ public class SessionServiceImpl implements SessionService {
      * @param loginChannel
      * @return
      */
-    /*public CommonResponse logout(String sessionToken, byte loginChannel) {
+    public CommonResponse logout(String sessionToken, byte loginChannel) {
         CommonResponse commonResponse = new CommonResponse();
         EndUserSession endUserSession = new EndUserSession();
         endUserSession.setIsLogout(true);
@@ -339,23 +255,6 @@ public class SessionServiceImpl implements SessionService {
         criteria.andLoginChannelEqualTo(loginChannel);
         endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
         return commonResponse;
-    }*/
-
-    /**
-     * 用户登出
-     *
-     * @param sessionToken
-     * @param loginChannel
-     * @return
-     */
-    public CommonResponse logout(String sessionToken, byte loginChannel) {
-        CommonResponse commonResponse = new CommonResponse();
-        Object key= RedisUtil.get("session-"+sessionToken+"-"+loginChannel);
-        if(key!=null) {
-            RedisUtil.remove(key.toString());
-            RedisUtil.remove("session-" + sessionToken + "-" + loginChannel);
-        }
-        return commonResponse;
     }
 
     /**
@@ -365,7 +264,7 @@ public class SessionServiceImpl implements SessionService {
      * @param loginChannel
      * @return
      */
-    /*@Override
+    @Override
     public TokenValidateResponse isValidSessionToken(String sessionToken, byte loginChannel) {
         TokenValidateResponse tokenValidateResponse = new TokenValidateResponse();
         boolean isValid = false;
@@ -386,36 +285,6 @@ public class SessionServiceImpl implements SessionService {
         if (endUserId != null) {
             tokenValidateResponse.setEndUserId(endUserId);
         }
-        return tokenValidateResponse;
-    }*/
-
-    /**
-     * 判断是否有效session
-     *
-     * @param sessionToken
-     * @param loginChannel
-     * @return
-     */
-    @Override
-    public TokenValidateResponse isValidSessionToken(String sessionToken, byte loginChannel) {
-        TokenValidateResponse tokenValidateResponse = new TokenValidateResponse();
-        boolean isValid = false;
-
-        EndUserSession endUserSession = null;
-        Object key=RedisUtil.get("session-"+sessionToken+"-"+loginChannel);
-        if(key!=null) {
-            endUserSession = (EndUserSession) RedisUtil.get(key.toString());
-        }
-        if(endUserSession!=null){
-            isValid = true;
-            tokenValidateResponse.setEndUserId(endUserSession.getEndUserId());
-            long interval=System.currentTimeMillis()-endUserSession.getLastRefreshTime().getTime();
-            if(interval<sessionExpirationTime*0.25){
-                endUserSession.setLastRefreshTime(Calendar.getInstance().getTime());
-                addOrUpdateSessionOnRedis(endUserSession,endUserSession.getSessionToken());
-            }
-        }
-        tokenValidateResponse.setValid(isValid);
         return tokenValidateResponse;
     }
 
