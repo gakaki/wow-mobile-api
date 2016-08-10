@@ -1,10 +1,26 @@
 package com.wow.mobileapi.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wow.common.request.ApiRequest;
 import com.wow.common.response.ApiResponse;
 import com.wow.common.response.CommonResponse;
-import com.wow.common.util.*;
-import com.wow.mobileapi.constant.ErrorCodeConstant;
+import com.wow.common.util.BeanUtil;
+import com.wow.common.util.EncodeDecodeUtil;
+import com.wow.common.util.ErrorCodeUtil;
+import com.wow.common.util.JsonUtil;
+import com.wow.common.util.StringUtil;
+import com.wow.common.util.ValidatorUtil;
 import com.wow.mobileapi.request.user.LoginByWechatRequest;
 import com.wow.mobileapi.request.user.LoginRequest;
 import com.wow.mobileapi.util.HttpRequestUtil;
@@ -15,18 +31,7 @@ import com.wow.user.vo.LoginResponseVo;
 import com.wow.user.vo.LoginVo;
 import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
-import com.wow.user.vo.response.TokenValidateResponse;
 import com.wow.user.vo.response.UserResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 登录、登出
@@ -165,8 +170,8 @@ public class SessionController extends BaseController {
             return apiResponse;
         }
 
-        String sessionToken = apiRequest.getSessionToken();
-        byte channel = apiRequest.getChannel();
+//        String sessionToken = apiRequest.getSessionToken();
+//        byte channel = apiRequest.getChannel();
 
 //        TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(sessionToken, channel);
 //        if (tokenValidateResponse == null || !tokenValidateResponse.isValid()) {
