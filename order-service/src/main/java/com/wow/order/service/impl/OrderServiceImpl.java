@@ -135,6 +135,22 @@ public class OrderServiceImpl implements OrderService {
         OrderResponse orderResponse = new OrderResponse();
 
         /*** 业务校验开始*/
+        //校验订单来源是否为空
+        if (query.getOrderSource() == null) {
+            orderResponse.setResCode("40332");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40332"));
+
+            return orderResponse;
+        }
+        
+        //如果订单金额为空 则直接返回错误
+        if (query.getOrderAmount() == null) {
+            orderResponse.setResCode("40334");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40334"));
+
+            return orderResponse;
+        }
+        
         //如果收货地址不存在 则返回错误提示
         ShippingInfo shippingInfo = shippingInfoMapper.selectByPrimaryKey(query.getShippingInfoId());
         if (shippingInfo == null) {
@@ -143,11 +159,11 @@ public class OrderServiceImpl implements OrderService {
 
             return orderResponse;
         }
-
-        //校验订单来源是否为空
-        if (query.getOrderSource() == null) {
-            orderResponse.setResCode("40332");
-            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40332"));
+        
+        //如果收货地址已删除 则返回收货地址无效错误
+        if (shippingInfo.getIsDeleted()) {
+            orderResponse.setResCode("40333");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40333"));
 
             return orderResponse;
         }
