@@ -8,7 +8,7 @@ public class ProductApplicableScene implements Serializable {
 
     private Integer productId;
 
-    private String applicableSceneId;
+    private Integer applicableSceneId;
 
     private Date createTime;
 
@@ -38,11 +38,11 @@ public class ProductApplicableScene implements Serializable {
         this.productId = productId;
     }
 
-    public String getApplicableSceneId() {
+    public Integer getApplicableSceneId() {
         return applicableSceneId;
     }
 
-    public void setApplicableSceneId(String applicableSceneId) {
+    public void setApplicableSceneId(Integer applicableSceneId) {
         this.applicableSceneId = applicableSceneId;
     }
 

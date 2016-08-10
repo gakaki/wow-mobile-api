@@ -217,7 +217,7 @@ public class ProductServiceImpl implements ProductService {
         String applicableSceneText;
     }
 
-    private ProductApplicableSceneList buildProductApplicableSceneList(Integer productId, List<String> applicableSceneTexts) {
+    private ProductApplicableSceneList buildProductApplicableSceneList(Integer productId, List<Integer> applicableSceneTexts) {
         if (CollectionUtil.isEmpty(applicableSceneTexts)) {
             return null;
         }
@@ -225,17 +225,17 @@ public class ProductServiceImpl implements ProductService {
         StringBuilder applicableSceneTextBuilder = new StringBuilder();
         List<ProductApplicableScene> productApplicableSceneList = new ArrayList<>();
         long i = 0;
-        for (String text : applicableSceneTexts) {
+        for (Integer keyId : applicableSceneTexts) {
             ProductApplicableScene productApplicableScene = new ProductApplicableScene();
 
             productApplicableScene.setProductId(productId);
-            productApplicableScene.setApplicableSceneId(text);
+            productApplicableScene.setApplicableSceneId(keyId);
             productApplicableSceneList.add(productApplicableScene);
             if (i != 0) {
                 applicableSceneTextBuilder.append(",");
             }
             ++i;
-            applicableSceneTextBuilder.append(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_APPLICABLE_SCENE,text).getKeyValue());
+            applicableSceneTextBuilder.append(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_APPLICABLE_SCENE,keyId).getKeyValue());
         }
         ProductApplicableSceneList productApplicableSceneInfo = new ProductApplicableSceneList();
         productApplicableSceneInfo.applicableSceneList = productApplicableSceneList;
@@ -411,7 +411,7 @@ public class ProductServiceImpl implements ProductService {
         subProductMinPrice.setCostPrice(BigDecimal.ZERO);
         BigDecimal minPrice = null;
 
-        String applicablePeople = productCreateRequest.getApplicablePeople();
+        Integer applicablePeople = productCreateRequest.getApplicablePeople();
         int brandId = productCreateRequest.getBrandId();
         int categoryId = productCreateRequest.getCategoryId();
         String detailDescription = productCreateRequest.getDetailDescription();
@@ -443,7 +443,7 @@ public class ProductServiceImpl implements ProductService {
         product.setStyleId(styleId);
         product.setProductStatus(ProductStatusEnum.ORDER_STATUS_SHELVE.getKey().byteValue());
 
-        List<String> applicableSceneTexts = productCreateRequest.getApplicableSceneList();
+        List<Integer> applicableSceneTexts = productCreateRequest.getApplicableSceneList();
         List<ColorSpecVo> colorSpecVoList = productCreateRequest.getColorSpecVoList();
         List<ProductImgVo> productImgVoList = productCreateRequest.getProductImgVoList();
         List<DesignerVo> designerVoList = productCreateRequest.getDesignerVoList();
@@ -882,7 +882,7 @@ public class ProductServiceImpl implements ProductService {
             productParameter.setMaterialText(product.getMaterialText());
             productParameter.setNeedAssemble(product.getNeedAssemble());
 
-            productParameter.setStyle(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_STYLE,String.valueOf(product.getStyleId())).getKeyValue());
+            productParameter.setStyle(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_STYLE,(int)product.getStyleId()).getKeyValue());
             productParameter.setApplicablePeople(DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_APPLICABLE_PEOPLE,product.getApplicablePeople()).getKeyValue());
             productResponse.setProductParameter(productParameter);
         } else {

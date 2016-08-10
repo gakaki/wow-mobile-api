@@ -25,9 +25,9 @@ public class ProductDetailInfo {
     private Short length;
     private Short width;
     private Short height;
-    private String applicablePeople;
+    private Integer applicablePeople;
     private Boolean canCustomized;
-    private List<String> applicableSceneList;
+    private List<Integer> applicableSceneList;
     private List<Integer> materialList;
     private String detailDescription;
 
@@ -69,7 +69,7 @@ public class ProductDetailInfo {
     }
 
     public void setupApplicableScenes(List<ProductApplicableScene> productApplicableScenes) {
-        List<String> applicableSceneList = new ArrayList<>(productApplicableScenes.size());
+        List<Integer> applicableSceneList = new ArrayList<>(productApplicableScenes.size());
         for (ProductApplicableScene applicableScene:productApplicableScenes) {
             applicableSceneList.add(applicableScene.getApplicableSceneId());
         }
@@ -180,11 +180,11 @@ public class ProductDetailInfo {
         this.height = height;
     }
 
-    public String getApplicablePeople() {
+    public Integer getApplicablePeople() {
         return applicablePeople;
     }
 
-    public void setApplicablePeople(String applicablePeople) {
+    public void setApplicablePeople(Integer applicablePeople) {
         this.applicablePeople = applicablePeople;
     }
 
@@ -196,11 +196,11 @@ public class ProductDetailInfo {
         this.canCustomized = canCustomized;
     }
 
-    public List<String> getApplicableSceneList() {
+    public List<Integer> getApplicableSceneList() {
         return applicableSceneList;
     }
 
-    public void setApplicableSceneList(List<String> applicableSceneList) {
+    public void setApplicableSceneList(List<Integer> applicableSceneList) {
         this.applicableSceneList = applicableSceneList;
     }
 

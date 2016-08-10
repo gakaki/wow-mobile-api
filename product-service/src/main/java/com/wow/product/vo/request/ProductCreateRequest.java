@@ -10,33 +10,33 @@ public class ProductCreateRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int categoryId;
+    private Integer categoryId;
     private String productName;
     private String sellingPoint;
     private String productModel;
-    private int brandId;
+    private Integer brandId;
 
-    private int originCountryId;
+    private Integer originCountryId;
     private String originCity;
-    private int originProvinceId;
-    private byte styleId;
-    private short length;
-    private short width;
-    private short height;
-    private String applicablePeople;
+    private Integer originProvinceId;
+    private Byte styleId;
+    private Short length;
+    private Short width;
+    private Short height;
+    private Integer applicablePeople;
     private boolean canCustomized;
-    private List<String> applicableSceneList;
+    private List<Integer> applicableSceneList;
     private List<Integer> materialList;
     private String detailDescription; //商品描述
     private List<DesignerVo> designerVoList;
     private List<ColorSpecVo> colorSpecVoList;
     private List<ProductImgVo> productImgVoList;
 
-    public int getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -64,38 +64,20 @@ public class ProductCreateRequest implements Serializable {
         this.productModel = productModel;
     }
 
-    public int getBrandId() {
+    public Integer getBrandId() {
         return brandId;
     }
 
-    public void setBrandId(int brandId) {
+    public void setBrandId(Integer brandId) {
         this.brandId = brandId;
     }
 
-
-
-    /*public int getOriginCountryId() {
+    public Integer getOriginCountryId() {
         return originCountryId;
     }
 
-    public void setOriginCountryId(int originCountryId) {
+    public void setOriginCountryId(Integer originCountryId) {
         this.originCountryId = originCountryId;
-    }*/
-
-    public int getOriginCountryId() {
-        return originCountryId;
-    }
-
-    public void setOriginCountryId(int originCountryId) {
-        this.originCountryId = originCountryId;
-    }
-
-    public int getOriginProvinceId() {
-        return originProvinceId;
-    }
-
-    public void setOriginProvinceId(int originProvinceId) {
-        this.originProvinceId = originProvinceId;
     }
 
     public String getOriginCity() {
@@ -106,11 +88,19 @@ public class ProductCreateRequest implements Serializable {
         this.originCity = originCity;
     }
 
-    public byte getStyleId() {
+    public Integer getOriginProvinceId() {
+        return originProvinceId;
+    }
+
+    public void setOriginProvinceId(Integer originProvinceId) {
+        this.originProvinceId = originProvinceId;
+    }
+
+    public Byte getStyleId() {
         return styleId;
     }
 
-    public void setStyleId(byte styleId) {
+    public void setStyleId(Byte styleId) {
         this.styleId = styleId;
     }
 
@@ -138,11 +128,11 @@ public class ProductCreateRequest implements Serializable {
         this.height = height;
     }
 
-    public String getApplicablePeople() {
+    public Integer getApplicablePeople() {
         return applicablePeople;
     }
 
-    public void setApplicablePeople(String applicablePeople) {
+    public void setApplicablePeople(Integer applicablePeople) {
         this.applicablePeople = applicablePeople;
     }
 
@@ -154,11 +144,11 @@ public class ProductCreateRequest implements Serializable {
         this.canCustomized = canCustomized;
     }
 
-    public List<String> getApplicableSceneList() {
+    public List<Integer> getApplicableSceneList() {
         return applicableSceneList;
     }
 
-    public void setApplicableSceneList(List<String> applicableSceneList) {
+    public void setApplicableSceneList(List<Integer> applicableSceneList) {
         this.applicableSceneList = applicableSceneList;
     }
 

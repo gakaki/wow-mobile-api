@@ -71,7 +71,7 @@ public class Product implements Serializable {
 
     private String tips;
 
-    private String applicablePeople;
+    private Integer applicablePeople;
 
     private String applicableSceneText;
 
@@ -373,11 +373,11 @@ public class Product implements Serializable {
         this.tips = tips == null ? null : tips.trim();
     }
 
-    public String getApplicablePeople() {
+    public Integer getApplicablePeople() {
         return applicablePeople;
     }
 
-    public void setApplicablePeople(String applicablePeople) {
+    public void setApplicablePeople(Integer applicablePeople) {
         this.applicablePeople = applicablePeople;
     }
 

@@ -41,4 +41,7 @@ public interface BizConstant {
     public static final String DICTIONARY_GROUP_APPLICABLE_SCENE="applicable_scene";
     public static final String DICTIONARY_GROUP_STYLE="style";
 
+    //支付方式
+
+
 }
