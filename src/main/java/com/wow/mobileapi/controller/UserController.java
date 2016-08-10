@@ -127,8 +127,10 @@ public class UserController extends BaseController {
         String captchaOnServer = getCaptchaOnServer(mobile);
         if (StringUtil.isEmpty(captchaOnServer)) {
             ErrorResponseUtil.setErrorResponse(apiResponse,"40102");
+            return apiResponse;
         } else if (!captcha.equals(captchaOnServer)) {
             ErrorResponseUtil.setErrorResponse(apiResponse, "40103");
+            return apiResponse;
         }
 
         try {

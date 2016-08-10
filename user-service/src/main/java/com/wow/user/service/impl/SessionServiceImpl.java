@@ -170,7 +170,6 @@ public class SessionServiceImpl implements SessionService {
         } else {
             logger.info("修改会话");
             endUserSession.setIsLogout(false);
-            endUserSession.setIsActive(true);
             endUserSession.setLastLoginIp(loginIp);
             endUserSession.setLastRefreshTime(now);
             endUserSession.setLastLoginTime(now);
