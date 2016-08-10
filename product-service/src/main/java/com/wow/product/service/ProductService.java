@@ -83,6 +83,12 @@ public interface ProductService {
     CommonResponse updateProductImages(ProductUpdateRequest productUpdateRequest);
 
     /**
+     * 删除产品
+     * @param productId
+     */
+    CommonResponse deleteProduct(Integer productId);
+
+    /**
      * 更新产品
      *
      * @param product
@@ -157,7 +163,7 @@ public interface ProductService {
      * @param productId
      * @return
      */
-    List<String> getMaterialInProduct(Integer productId);
+    List<Material> getMaterialInProduct(Integer productId);
 
     /**
      * 批量设置产品的材质

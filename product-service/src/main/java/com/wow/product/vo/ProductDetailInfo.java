@@ -18,7 +18,7 @@ public class ProductDetailInfo {
     private String productModel;
     private Integer brandId;
     private List<DesignerVo> designerVoList;
-    private String originCountryId;
+    private Integer originCountryId;
     private String originCity;
     private Integer originProvinceId;
     private Byte styleId;
@@ -28,7 +28,7 @@ public class ProductDetailInfo {
     private String applicablePeople;
     private Boolean canCustomized;
     private List<String> applicableSceneList;
-    private List<String> materialList;
+    private List<Integer> materialList;
     private String detailDescription;
 
     public void setupBaseInfo(Product product) {
@@ -61,7 +61,7 @@ public class ProductDetailInfo {
     }
 
     public void setupMaterials(List<ProductMaterial> productMaterials) {
-        List<String> materialList = new ArrayList<>(productMaterials.size());
+        List<Integer> materialList = new ArrayList<>(productMaterials.size());
         for (ProductMaterial productMaterial : productMaterials) {
             materialList.add(productMaterial.getMaterialId());
         }
@@ -124,11 +124,11 @@ public class ProductDetailInfo {
         this.designerVoList = designerVoList;
     }
 
-    public String getOriginCountryId() {
+    public Integer getOriginCountryId() {
         return originCountryId;
     }
 
-    public void setOriginCountryId(String originCountryId) {
+    public void setOriginCountryId(Integer originCountryId) {
         this.originCountryId = originCountryId;
     }
 
@@ -204,11 +204,11 @@ public class ProductDetailInfo {
         this.applicableSceneList = applicableSceneList;
     }
 
-    public List<String> getMaterialList() {
+    public List<Integer> getMaterialList() {
         return materialList;
     }
 
-    public void setMaterialList(List<String> materialList) {
+    public void setMaterialList(List<Integer> materialList) {
         this.materialList = materialList;
     }
 

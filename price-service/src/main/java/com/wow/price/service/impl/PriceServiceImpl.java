@@ -18,6 +18,7 @@ import com.wow.price.mapper.ProductPriceChangeLogMapper;
 import com.wow.price.mapper.ProductPriceMapper;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.model.ProductPriceChangeLog;
+import com.wow.price.model.ProductPriceExample;
 import com.wow.price.service.PriceService;
 import com.wow.price.vo.ProductListPriceResponse;
 import com.wow.price.vo.ProductPriceResponse;
@@ -34,6 +35,14 @@ public class PriceServiceImpl implements PriceService {
 
     @Autowired
     ProductPriceChangeLogMapper productPriceChangeLogMapper;
+
+    private static ProductPrice createDeletedProductPriceRecord() {
+        ProductPrice record = new ProductPrice();
+        record.setIsDeleted(true);
+        return record;
+    }
+
+    private static final ProductPrice deletedProductPriceRecord = createDeletedProductPriceRecord();
 
     /**
      * 创建产品价格(一般在首次产品上架的时候)
@@ -89,6 +98,17 @@ public class PriceServiceImpl implements PriceService {
         }
         productPriceResponse.setProductPrice(productPrice);
         return productPriceResponse;
+    }
+
+    /**
+     * 标记产品价格为已删除
+     * @param productIds
+     * @return
+     */
+    public int markProductPricesDeleted(List<Integer> productIds) {
+        ProductPriceExample example = new ProductPriceExample();
+        example.or().andProductIdIn(productIds);
+        return productPriceMapper.updateByExampleSelective(deletedProductPriceRecord, example);
     }
 
 //    /**

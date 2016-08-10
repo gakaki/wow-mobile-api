@@ -16,7 +16,7 @@ public class ProductCreateRequest implements Serializable {
     private String productModel;
     private int brandId;
 
-    private String originCountryId;
+    private int originCountryId;
     private String originCity;
     private int originProvinceId;
     private byte styleId;
@@ -26,7 +26,7 @@ public class ProductCreateRequest implements Serializable {
     private String applicablePeople;
     private boolean canCustomized;
     private List<String> applicableSceneList;
-    private List<String> materialList;
+    private List<Integer> materialList;
     private String detailDescription; //商品描述
     private List<DesignerVo> designerVoList;
     private List<ColorSpecVo> colorSpecVoList;
@@ -82,11 +82,11 @@ public class ProductCreateRequest implements Serializable {
         this.originCountryId = originCountryId;
     }*/
 
-    public String getOriginCountryId() {
+    public int getOriginCountryId() {
         return originCountryId;
     }
 
-    public void setOriginCountryId(String originCountryId) {
+    public void setOriginCountryId(int originCountryId) {
         this.originCountryId = originCountryId;
     }
 
@@ -162,11 +162,11 @@ public class ProductCreateRequest implements Serializable {
         this.applicableSceneList = applicableSceneList;
     }
 
-    public List<String> getMaterialList() {
+    public List<Integer> getMaterialList() {
         return materialList;
     }
 
-    public void setMaterialList(List<String> materialList) {
+    public void setMaterialList(List<Integer> materialList) {
         this.materialList = materialList;
     }
 

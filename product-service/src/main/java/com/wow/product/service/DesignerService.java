@@ -147,6 +147,13 @@ public interface DesignerService {
     int addProductDesignersByBatch(List<ProductDesigner> list);
 
     /**
+     * 标记产品的所有设计师记录为删除
+     * @param productId
+     * @return
+     */
+    int markProductDesignersDeleted(Integer productId);
+
+    /**
      * 替换产品的设计师关联信息
      * @param designers
      * @return

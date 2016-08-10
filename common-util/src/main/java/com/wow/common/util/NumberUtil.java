@@ -253,7 +253,7 @@ public class NumberUtil {
      */
     public static BigDecimal convertToYuan(long amount) {
         if (amount == 0) {
-            return CommonConstant.ZEROB_IGDECIMAL;
+            return CommonConstant.ZERO_BIGDECIMAL;
         }
 
         BigDecimal divide = div(new BigDecimal(String.valueOf(amount)), CommonConstant.HUNDRED_IGDECIMAL);
