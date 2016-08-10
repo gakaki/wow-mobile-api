@@ -1473,6 +1473,14 @@ public class OrderServiceImpl implements OrderService {
             return orderResponse;
         }
 
+        //如果订单金额为空 则直接返回错误
+        if (query.getOrderAmount() == null) {
+            orderResponse.setResCode("40334");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40334"));
+
+            return orderResponse;
+        }
+        
         Product product = productMapper.selectByPrimaryKey(query.getProductId());
 
         //校验产品是否存在
@@ -1488,6 +1496,14 @@ public class OrderServiceImpl implements OrderService {
         if (shippingInfo == null) {
             orderResponse.setResCode("40305");
             orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40305"));
+
+            return orderResponse;
+        }
+        
+        //如果收货地址已删除 则返回收货地址无效错误
+        if (shippingInfo.getIsDeleted()) {
+            orderResponse.setResCode("40333");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40333"));
 
             return orderResponse;
         }
