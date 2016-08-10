@@ -17,13 +17,13 @@ public class OrderDeliverQuery implements Serializable {
 
     //用户id
     private Integer endUserId;
-    
+
     //订单号
     private String orderCode;
 
     //订单id
     private Integer orderId;
-    
+
     //配送方式1. 尖叫合作物流，2. 供应商合作物流 3.京东 4.日日顺
     private Byte deliveryMothod;
 
@@ -32,7 +32,7 @@ public class OrderDeliverQuery implements Serializable {
 
     //运单号
     private String deliveryOrderNo;
-    
+
     public Byte getDeliveryMothod() {
         return deliveryMothod;
     }

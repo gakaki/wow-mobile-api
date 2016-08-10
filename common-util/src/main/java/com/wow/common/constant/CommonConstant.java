@@ -71,16 +71,16 @@ public class CommonConstant {
 
     //订单支付方式
     //1:网上支付-微信 2.网上支付-支付宝 3.货到付现金 4.货到刷卡 5.货到支付宝扫码支付 6.货到微信扫码支付
-    private static final Map<Byte, String> PAY_METHOD_MAP = new HashMap<Byte, String>() {
+    private static final Map<String, String> PAY_METHOD_MAP = new HashMap<String, String>() {
         /**  */
         private static final long serialVersionUID = 1L;
         {
-            put(ONE, "微信");
-            put(TWO, "支付宝");
-            put(THREE, "货到付现金");
-            put(FOUR, "货到刷卡");
-            put(FIVE, "支付宝扫码支付");
-            put(SIX, "微信扫码支付");
+            put("wx", "微信");
+            put("alipay", "支付宝");
+            //            put(THREE, "货到付现金");
+            //            put(FOUR, "货到刷卡");
+            //            put(FIVE, "支付宝扫码支付");
+            //            put(SIX, "微信扫码支付");
         }
     };
 
@@ -96,13 +96,28 @@ public class CommonConstant {
         }
     };
 
+    //配送公司每次 rrs日日顺  shunfeng 顺丰速运
+    private static final Map<String, String> DELIVERY_COMPANY_MAP = new HashMap<String, String>() {
+        /**  */
+        private static final long serialVersionUID = 1L;
+        {
+            put("shunfeng", "顺丰速运");
+            put("rrs", "日日顺");
+        }
+    };
+
+    /** 取得配送公司描述.*/
+    public static String getDeliveryCompanyName(String code) {
+        return DELIVERY_COMPANY_MAP.get(code);
+    }
+
     /** 取得配送方式描述.*/
     public static String getDeliveryMothodName(Byte code) {
         return DELIVERY_MOTHOD_MAP.get(code);
     }
 
     /** 取得支付方式描述.*/
-    public static String getPayMethodName(Byte code) {
+    public static String getPayMethodName(String code) {
         return PAY_METHOD_MAP.get(code);
     }
 

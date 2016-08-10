@@ -22,7 +22,6 @@ import com.wow.common.util.BeanUtil;
 import com.wow.common.util.CodeGenerator;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.DateUtil;
-import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.IpConvertUtil;
 import com.wow.common.util.JsonUtil;
@@ -1332,7 +1331,7 @@ public class OrderServiceImpl implements OrderService {
         deliveryOrder.setDeliveryMothod(query.getDeliveryMothod());
         //从数据字典中获取配送公司名称
         deliveryOrder.setDeliveryCompanyCode(query.getDeliveryCompanyCode());
-        String companyName = DictionaryUtil.getValue("delivery_company", query.getDeliveryCompanyCode());
+        String companyName = CommonConstant.getDeliveryCompanyName(query.getDeliveryCompanyCode());
         deliveryOrder.setDeliveryCompanyName(companyName);
         deliveryOrder.setDeliveryOrderNo(query.getDeliveryOrderNo()); //设置配送单号
         deliveryOrder.setShipOutDate(DateUtil.currentDate()); //设置配送日期
