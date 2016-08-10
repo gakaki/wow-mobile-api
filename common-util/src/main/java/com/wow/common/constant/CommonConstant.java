@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.NumberUtil;
+import com.wow.common.util.StringUtil;
 
 /**
  * 系统相关设置的常量
@@ -14,24 +15,25 @@ import com.wow.common.util.NumberUtil;
  * @version $Id: V1.0 2016年7月17日 下午12:00:40 Exp $
  */
 public class CommonConstant {
+    //定义数值为0.00的BigDecimal
+    public static final BigDecimal ZERO_BIGDECIMAL = new BigDecimal("0.00");
+
+    //除数常量 100
+    public static final BigDecimal HUNDRED_IGDECIMAL = new BigDecimal("100");
+
     //运费阀值
-    public static final BigDecimal THRESHOLD = new BigDecimal(DictionaryUtil
+    public static final BigDecimal THRESHOLD = convertStringToDecimal(DictionaryUtil
         .getValue("order", "order_deliveryFee_threshold"));
 
     //运费阀值 long类型
     public static final long THRESHOLD_LONG = NumberUtil.convertToFen(CommonConstant.THRESHOLD);
 
     //运费
-    public static final BigDecimal DELIVERYFEE = new BigDecimal(DictionaryUtil.getValue("order", "order_deliveryFee"));
+    public static final BigDecimal DELIVERYFEE = convertStringToDecimal(DictionaryUtil
+        .getValue("order", "order_deliveryFee"));
 
     //运费 long类型
     public static final long DELIVERYFEE_LONG = NumberUtil.convertToFen(CommonConstant.DELIVERYFEE);
-
-    //定义数值为0.00的BigDecimal
-    public static final BigDecimal ZEROB_IGDECIMAL = new BigDecimal("0.00");
-
-    //除数常量 100
-    public static final BigDecimal HUNDRED_IGDECIMAL = new BigDecimal("100");
 
     //是
     public static final int MAX_PAGE = 100;
@@ -125,6 +127,20 @@ public class CommonConstant {
     /** 取得支付状态描述.*/
     public static String getPayStatusName(Byte code) {
         return PAY_STATUS_MAP.get(code);
+    }
+
+    /**
+     * 将字符串转换为Decimal
+     * 如果字符串为"" 则返回0.00
+     * @param vlaue
+     * @return
+     */
+    private static BigDecimal convertStringToDecimal(String vlaue) {
+        if (StringUtil.isBlank(vlaue)) {
+            return ZERO_BIGDECIMAL;
+        }
+
+        return new BigDecimal(vlaue);
     }
 
 }

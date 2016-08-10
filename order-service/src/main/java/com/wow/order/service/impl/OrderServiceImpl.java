@@ -541,7 +541,7 @@ public class OrderServiceImpl implements OrderService {
         List<ShoppingCartResultVo> shoppingCartResult = query.getShoppingCartResult();
 
         if (CollectionUtil.isEmpty(shoppingCartResult)) {
-            return CommonConstant.ZEROB_IGDECIMAL;
+            return CommonConstant.ZERO_BIGDECIMAL;
         }
 
         long totalPrice = 0L;
