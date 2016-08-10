@@ -35,14 +35,6 @@ public class Dictionary implements Serializable {
         this.keyId = keyId;
     }
 
-    public Boolean getValid() {
-        return isValid;
-    }
-
-    public void setValid(Boolean valid) {
-        isValid = valid;
-    }
-
     public String getKeyValue() {
         return keyValue;
     }
