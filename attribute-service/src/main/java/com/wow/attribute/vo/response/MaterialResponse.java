@@ -1,6 +1,6 @@
 package com.wow.attribute.vo.response;
 
-import com.wow.attribute.model.CategoryMaterial;
+import com.wow.attribute.model.Material;
 import com.wow.common.response.CommonResponse;
 
 import java.util.List;
@@ -9,13 +9,13 @@ public class MaterialResponse extends CommonResponse {
 
 	private static final long serialVersionUID = 1L;
 	
-	private List<CategoryMaterial> materialList;
+	private List<Material> materialList;
 
-	public List<CategoryMaterial> getMaterialList() {
+	public List<Material> getMaterialList() {
 		return materialList;
 	}
 
-	public void setMaterialList(List<CategoryMaterial> materialList) {
+	public void setMaterialList(List<Material> materialList) {
 		this.materialList = materialList;
 	}
 }

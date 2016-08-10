@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wow.attribute.mapper.CategoryMaterialMapper" >
-    <resultMap id="BaseResultMap" type="com.wow.attribute.model.CategoryMaterial" >
+    <resultMap id="BaseResultMap" type="com.wow.attribute.model.Material" >
         <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="material_id" property="material" jdbcType="VARCHAR" />
+        <result column="material_name" property="name" jdbcType="VARCHAR" />
     </resultMap>
     <select id="queryMaterialsByCategory" parameterType="int" resultMap="BaseResultMap">
-        select id,category_id,material_id from category_material where category_id=#{categoryId}
+        select material.id,material.material_name from category_material,material where category_material.material_id=material_id and category_id=#{categoryId}
     </select>
 </mapper>

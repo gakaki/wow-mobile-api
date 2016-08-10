@@ -64,7 +64,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     /**
      * 添加商品到购物车 暂不考虑组合产品 仅在用户登录的情况下调用
      *
-     * @param shoppingCart
+     * @param query
      * @return
      */
     @Override

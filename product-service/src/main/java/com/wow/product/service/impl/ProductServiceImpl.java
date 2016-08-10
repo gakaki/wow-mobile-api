@@ -5,6 +5,7 @@ import com.wow.attribute.model.Attribute;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
+import com.wow.attribute.util.MaterialUtil;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.constant.BizConstant;
@@ -194,7 +195,7 @@ public class ProductServiceImpl implements ProductService {
         product.setOriginCountryId(info.getOriginCountryId());
         product.setOriginProvinceId(info.getOriginProvinceId());
         product.setOriginCity(info.getOriginCity());
-        if (product.getOriginCountryId() != null) {
+        if (product.getOriginCountryId() != 0) {
             if (product.getOriginCity() == null) {
                 product.setOriginCity("");
             }
@@ -249,7 +250,7 @@ public class ProductServiceImpl implements ProductService {
         String productMaterialText;
     }
 
-    private ProductMaterialList createProductMaterialList(Integer productId, List<String> materialIds) {
+    private ProductMaterialList createProductMaterialList(Integer productId, List<Integer> materialIds) {
         if (CollectionUtil.isEmpty(materialIds)) {
             return null;
         }
@@ -257,7 +258,7 @@ public class ProductServiceImpl implements ProductService {
         StringBuilder materialTextBuilder = new StringBuilder();
         List<ProductMaterial> materialList = new ArrayList<ProductMaterial>();
         long i = 0;
-        for (String materialId : materialIds) {
+        for (Integer materialId : materialIds) {
             ProductMaterial productMaterial = new ProductMaterial();
             productMaterial.setProductId(productId);
             productMaterial.setMaterialId(materialId);
@@ -393,7 +394,7 @@ public class ProductServiceImpl implements ProductService {
         short width = productCreateRequest.getWidth();
         short height = productCreateRequest.getHeight();
         String originCity = productCreateRequest.getOriginCity();
-        String originCountryId = productCreateRequest.getOriginCountryId();
+        int originCountryId = productCreateRequest.getOriginCountryId();
         int originProvinceId=productCreateRequest.getOriginProvinceId();
         String productModel = productCreateRequest.getProductModel();
         String productName = productCreateRequest.getProductName();
@@ -421,7 +422,7 @@ public class ProductServiceImpl implements ProductService {
         List<ColorSpecVo> colorSpecVoList = productCreateRequest.getColorSpecVoList();
         List<ProductImgVo> productImgVoList = productCreateRequest.getProductImgVoList();
         List<DesignerVo> designerVoList = productCreateRequest.getDesignerVoList();
-        List<String> materialIds = productCreateRequest.getMaterialList();
+        List<Integer> materialIds = productCreateRequest.getMaterialList();
 
         //统统存成系列品
         if(CollectionUtil.isEmpty(colorSpecVoList)) {
@@ -454,12 +455,12 @@ public class ProductServiceImpl implements ProductService {
         //创建产品材质绑定
         String materialText = "";
         List<ProductMaterial> productMaterialList = new ArrayList<ProductMaterial>();
-        for (String materialId : materialIds) {
+        for (int materialId : materialIds) {
             ProductMaterial productMaterial = new ProductMaterial();
             productMaterial.setProductId(productId);
             productMaterial.setMaterialId(materialId);
             productMaterialList.add(productMaterial);
-            materialText += materialId + ",";
+            materialText += MaterialUtil.getMaterialById(materialId) + ",";
         }
         createProductMaterial(productMaterialList);
         if (StringUtil.isNotEmpty(materialText)) {
@@ -731,31 +732,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<String> getMaterialInProduct(Integer productId) {
+    public List<Material> getMaterialInProduct(Integer productId) {
 
         ProductMaterialExample productMaterialExample=new ProductMaterialExample();
         productMaterialExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo(productId);
         List<ProductMaterial> productMaterials=productMaterialMapper.selectByExample(productMaterialExample);
         if(!productMaterials.isEmpty())
         {
-            List<String> materialIds=new ArrayList<String>();
+            List<Integer> materialIds=new ArrayList<>();
             for(ProductMaterial productMaterial:productMaterials)
             {
                 materialIds.add(productMaterial.getMaterialId());
             }
-//            return getMaterialById(new ArrayList<>(materialIds));
-            return materialIds;
+            return getMaterialById(new ArrayList<>(materialIds));
         }
 
         return null;
     }
 
-//    private  List<Material> getMaterialById(List<String> ids)
-//    {
-//        MaterialExample example=new MaterialExample();
-//        example.or().andIdIn(ids).andIsDeletedEqualTo(false);
-//        return materialMapper.selectByExample(example);
-//    }
+    private  List<Material> getMaterialById(List<Integer> ids)
+    {
+        MaterialExample example=new MaterialExample();
+        example.or().andIdIn(ids).andIsDeletedEqualTo(false);
+        return materialMapper.selectByExample(example);
+    }
     @Override
     public int createProductMaterial(List<ProductMaterial> productMaterials) {
         /*if(!productMaterials.isEmpty())
@@ -878,7 +878,8 @@ public class ProductServiceImpl implements ProductService {
             //产品参数
             ProductParameter productParameter = new ProductParameter();
             productParameter.setApplicableSceneText(product.getApplicableSceneText());
-            String origin = DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_COUNTRY,product.getOriginCountryId()).getKeyValue();
+//            String origin = DictionaryUtil.getDictionary(BizConstant.DICTIONARY_GROUP_COUNTRY,product.getOriginCountryId()).getKeyValue();
+            String origin = CountryUtil.getCountryById(product.getOriginCountryId());
             //因为城市数据无法拿到,只显示国家
 //            String city = product.getOriginCity();
 //            if (StringUtil.isNotEmpty(city)) {
