@@ -16,6 +16,10 @@ public class ProductDetailImage {
 
     private Byte sortOrder;
 
+    public boolean isModifed() {
+        return imgUrl != null || imgDesc != null || sortOrder != null;
+    }
+
     public static ProductDetailImage createFromProductImage(ProductImage productImage) {
         ProductDetailImage image = new ProductDetailImage();
         image.setId(productImage.getId());
@@ -24,6 +28,16 @@ public class ProductDetailImage {
         image.setPrimary(productImage.getIsPrimary());
         image.setSortOrder(productImage.getSortOrder());
         return image;
+    }
+
+    public ProductImage buildProductImage() {
+        ProductImage productImage = new ProductImage();
+        productImage.setId(getId());
+        productImage.setImgUrl(getImgUrl());
+        productImage.setImgDesc(getImgDesc());
+        productImage.setIsPrimary(isPrimary());
+        productImage.setSortOrder(getSortOrder());
+        return productImage;
     }
 
     public Integer getId() {
