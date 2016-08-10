@@ -24,5 +24,42 @@ public class OrderVo {
      * 订单总金额=商品金额+运费
      */
     private BigDecimal orderTotalAmount;
+    public int getEndUserId() {
+        return endUserId;
+    }
+    public void setEndUserId(int endUserId) {
+        this.endUserId = endUserId;
+    }
+    public ShippingInfo getShippingInfo() {
+        return shippingInfo;
+    }
+    public void setShippingInfo(ShippingInfo shippingInfo) {
+        this.shippingInfo = shippingInfo;
+    }
+    public InvoiceVo getInvoiceVo() {
+        return invoiceVo;
+    }
+    public void setInvoiceVo(InvoiceVo invoiceVo) {
+        this.invoiceVo = invoiceVo;
+    }
+    public List<PackageVo> getPackageList() {
+        return packageList;
+    }
+    public void setPackageList(List<PackageVo> packageList) {
+        this.packageList = packageList;
+    }
+    public PaymentVo getPaymentVo() {
+        return paymentVo;
+    }
+    public void setPaymentVo(PaymentVo paymentVo) {
+        this.paymentVo = paymentVo;
+    }
+    public BigDecimal getOrderTotalAmount() {
+        return orderTotalAmount;
+    }
+    public void setOrderTotalAmount(BigDecimal orderTotalAmount) {
+        this.orderTotalAmount = orderTotalAmount;
+    }
+    
 
 }

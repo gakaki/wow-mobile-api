@@ -34,4 +34,42 @@ public class PackageVo {
      * 备注
      */
     private String remarks;
+    public String getPackageName() {
+        return packageName;
+    }
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+    public List<ShoppingCart> getProductList() {
+        return productList;
+    }
+    public void setProductList(List<ShoppingCart> productList) {
+        this.productList = productList;
+    }
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+    public BigDecimal getTotalPackageWeight() {
+        return totalPackageWeight;
+    }
+    public void setTotalPackageWeight(BigDecimal totalPackageWeight) {
+        this.totalPackageWeight = totalPackageWeight;
+    }
+    public int getFreight() {
+        return freight;
+    }
+    public void setFreight(int freight) {
+        this.freight = freight;
+    }
+    public String getRemarks() {
+        return remarks;
+    }
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+    
+    
 }

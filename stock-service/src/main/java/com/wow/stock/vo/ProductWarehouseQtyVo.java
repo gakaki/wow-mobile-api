@@ -1,9 +1,11 @@
 package com.wow.stock.vo;
 
+import java.io.Serializable;
+
 /**
  * Created by zhengzhiqing on 16/6/30.
  */
-public class ProductWarehouseQtyVo {
+public class ProductWarehouseQtyVo implements Serializable{
 
     private static final long serialVersionUID = 1L;
 

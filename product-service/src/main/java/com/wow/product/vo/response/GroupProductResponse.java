@@ -1,16 +1,14 @@
 package com.wow.product.vo.response;
 
-import com.wow.common.response.ApiResponse;
-import com.wow.common.response.CommonResponse;
-import com.wow.product.model.GroupProduct;
-import com.wow.product.vo.ProductVo;
-
+import java.io.Serializable;
 import java.util.List;
+
+import com.wow.product.model.GroupProduct;
 
 /**
  * Created by win7 on 2016/8/5.
  */
-public class GroupProductResponse {
+public class GroupProductResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
