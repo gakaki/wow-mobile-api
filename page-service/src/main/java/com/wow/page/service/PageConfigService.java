@@ -20,12 +20,12 @@ public interface PageConfigService {
      */
     PageBannerResponse getBannersByPageType(byte pageType);
 
-    /**
-     * 根据页面类型查询应该显示的场景
-     * @param pageType
-     * @return
-     */
-    PageSceneResponse getScenesByPageType(int pageType);
+//    /**
+//     * 根据页面类型查询应该显示的场景
+//     * @param pageType
+//     * @return
+//     */
+//    PageSceneResponse getScenesByPageType(int pageType);
 
 //    /**
 //     * 根据页面类型查询应该显示的Topic

@@ -101,41 +101,33 @@ public class PageConfigServiceImpl implements PageConfigService {
         criteria.andActiveToGreaterThan(now);
 
         List<PageBannerConfig> pageBannerConfigList = pageBannerConfigMapper.selectByExample(pageBannerConfigExample);
-        if (CollectionUtil.isNotEmpty(pageBannerConfigList)) {
-            pageBannerResponse.setPageBannerConfigList(pageBannerConfigList);
-        } else {
-            pageBannerResponse.setResCode("50301");
-            pageBannerResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50301"));
-        }
+        pageBannerResponse.setPageBannerConfigList(pageBannerConfigList);
         return pageBannerResponse;
     }
 
-    /**
-     * 根据页面类型查询应该显示的场景
-     * @param pageType
-     * @return
-     */
-    @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    @Cacheable(value = "PageCache",key="'SCENES_IN_PAGE_TYPE_'+#pageType")
-    public PageSceneResponse getScenesByPageType(int pageType) {
-        PageSceneResponse pageSceneResponse = new PageSceneResponse();
-        List<PageSceneConfig> pageSceneConfigList =  pageSceneConfigMapper.selectByPageType(pageType);
-        List<Scene> scenes =new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(pageSceneConfigList)) {
-            for (PageSceneConfig pageSceneConfig : pageSceneConfigList) {
-                Scene scene = sceneService.getSceneById(pageSceneConfig.getSceneId());
-                if (scene != null) {
-                    scenes.add(scene);
-                }
-            }
-            pageSceneResponse.setSceneList(scenes);
-        } else {
-            pageSceneResponse.setResCode("50302");
-            pageSceneResponse.setResMsg(ErrorCodeUtil.getErrorMsg("50302"));
-        }
-        return pageSceneResponse;
-    }
+//    /**
+//     * 根据页面类型查询应该显示的场景
+//     * @param pageType
+//     * @return
+//     */
+//    @Override
+//    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+//    @Cacheable(value = "PageCache",key="'SCENES_IN_PAGE_TYPE_'+#pageType")
+//    public PageSceneResponse getScenesByPageType(int pageType) {
+//        PageSceneResponse pageSceneResponse = new PageSceneResponse();
+//        List<PageSceneConfig> pageSceneConfigList =  pageSceneConfigMapper.selectByPageType(pageType);
+//        List<Scene> scenes =new ArrayList<>();
+//        if (CollectionUtil.isNotEmpty(pageSceneConfigList)) {
+//            for (PageSceneConfig pageSceneConfig : pageSceneConfigList) {
+//                Scene scene = sceneService.getSceneById(pageSceneConfig.getSceneId());
+//                if (scene != null) {
+//                    scenes.add(scene);
+//                }
+//            }
+//            pageSceneResponse.setSceneList(scenes);
+//        }
+//        return pageSceneResponse;
+//    }
 
 //    /**
 //     * 根据页面类型查询应该显示的Topic
