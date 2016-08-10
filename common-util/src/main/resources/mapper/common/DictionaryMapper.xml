@@ -1,34 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wow.common.mapper.DictionaryMapper">
-  <resultMap id="BaseResultMap" type="com.wow.common.model.Dictionary">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="key_id" jdbcType="INTEGER" property="keyId" />
-    <result column="key_value" jdbcType="VARCHAR" property="keyValue" />
-    <result column="key_group" jdbcType="VARCHAR" property="keyGroup" />
-    <result column="key_desc" jdbcType="VARCHAR" property="keyDesc" />
-    <result column="key_order" jdbcType="SMALLINT" property="keyOrder" />
-    <result column="is_valid" jdbcType="BIT" property="isValid" />
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.common.mapper.DictionaryMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.common.model.Dictionary" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="key_id" property="keyId" jdbcType="INTEGER" />
+    <result column="key_value" property="keyValue" jdbcType="VARCHAR" />
+    <result column="key_group" property="keyGroup" jdbcType="VARCHAR" />
+    <result column="key_desc" property="keyDesc" jdbcType="VARCHAR" />
+    <result column="key_order" property="keyOrder" jdbcType="SMALLINT" />
+    <result column="is_valid" property="isValid" jdbcType="BIT" />
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -39,25 +39,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue">
+                <when test="criterion.singleValue" >
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue">
+                <when test="criterion.betweenValue" >
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue">
+                <when test="criterion.listValue" >
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>
                 </when>
@@ -68,41 +68,41 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List" >
     id, key_id, key_value, key_group, key_desc, key_order, is_valid
   </sql>
-  <select id="selectByExample" parameterType="com.wow.common.model.DictionaryExample" resultMap="BaseResultMap">
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.common.model.DictionaryExample" >
     select
-    <if test="distinct">
+    <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
     from dictionary
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null">
+    <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from dictionary
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from dictionary
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.wow.common.model.DictionaryExample">
+  <delete id="deleteByExample" parameterType="com.wow.common.model.DictionaryExample" >
     delete from dictionary
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.wow.common.model.Dictionary">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="com.wow.common.model.Dictionary" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into dictionary (key_id, key_value, key_group, 
@@ -112,88 +112,88 @@
       #{keyDesc,jdbcType=VARCHAR}, #{keyOrder,jdbcType=SMALLINT}, #{isValid,jdbcType=BIT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.wow.common.model.Dictionary">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+  <insert id="insertSelective" parameterType="com.wow.common.model.Dictionary" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into dictionary
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="keyId != null">
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="keyId != null" >
         key_id,
       </if>
-      <if test="keyValue != null">
+      <if test="keyValue != null" >
         key_value,
       </if>
-      <if test="keyGroup != null">
+      <if test="keyGroup != null" >
         key_group,
       </if>
-      <if test="keyDesc != null">
+      <if test="keyDesc != null" >
         key_desc,
       </if>
-      <if test="keyOrder != null">
+      <if test="keyOrder != null" >
         key_order,
       </if>
-      <if test="isValid != null">
+      <if test="isValid != null" >
         is_valid,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="keyId != null">
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="keyId != null" >
         #{keyId,jdbcType=INTEGER},
       </if>
-      <if test="keyValue != null">
+      <if test="keyValue != null" >
         #{keyValue,jdbcType=VARCHAR},
       </if>
-      <if test="keyGroup != null">
+      <if test="keyGroup != null" >
         #{keyGroup,jdbcType=VARCHAR},
       </if>
-      <if test="keyDesc != null">
+      <if test="keyDesc != null" >
         #{keyDesc,jdbcType=VARCHAR},
       </if>
-      <if test="keyOrder != null">
+      <if test="keyOrder != null" >
         #{keyOrder,jdbcType=SMALLINT},
       </if>
-      <if test="isValid != null">
+      <if test="isValid != null" >
         #{isValid,jdbcType=BIT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.wow.common.model.DictionaryExample" resultType="java.lang.Integer">
+  <select id="countByExample" parameterType="com.wow.common.model.DictionaryExample" resultType="java.lang.Integer" >
     select count(*) from dictionary
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
+  <update id="updateByExampleSelective" parameterType="map" >
     update dictionary
-    <set>
-      <if test="record.id != null">
+    <set >
+      <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.keyId != null">
+      <if test="record.keyId != null" >
         key_id = #{record.keyId,jdbcType=INTEGER},
       </if>
-      <if test="record.keyValue != null">
+      <if test="record.keyValue != null" >
         key_value = #{record.keyValue,jdbcType=VARCHAR},
       </if>
-      <if test="record.keyGroup != null">
+      <if test="record.keyGroup != null" >
         key_group = #{record.keyGroup,jdbcType=VARCHAR},
       </if>
-      <if test="record.keyDesc != null">
+      <if test="record.keyDesc != null" >
         key_desc = #{record.keyDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.keyOrder != null">
+      <if test="record.keyOrder != null" >
         key_order = #{record.keyOrder,jdbcType=SMALLINT},
       </if>
-      <if test="record.isValid != null">
+      <if test="record.isValid != null" >
         is_valid = #{record.isValid,jdbcType=BIT},
       </if>
     </set>
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
+  <update id="updateByExample" parameterType="map" >
     update dictionary
     set id = #{record.id,jdbcType=INTEGER},
       key_id = #{record.keyId,jdbcType=INTEGER},
@@ -202,276 +202,37 @@
       key_desc = #{record.keyDesc,jdbcType=VARCHAR},
       key_order = #{record.keyOrder,jdbcType=SMALLINT},
       is_valid = #{record.isValid,jdbcType=BIT}
-    <if test="_parameter != null">
+    <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wow.common.model.Dictionary">
+  <update id="updateByPrimaryKeySelective" parameterType="com.wow.common.model.Dictionary" >
     update dictionary
-    <set>
-      <if test="keyId != null">
+    <set >
+      <if test="keyId != null" >
         key_id = #{keyId,jdbcType=INTEGER},
       </if>
-      <if test="keyValue != null">
+      <if test="keyValue != null" >
         key_value = #{keyValue,jdbcType=VARCHAR},
       </if>
-      <if test="keyGroup != null">
+      <if test="keyGroup != null" >
         key_group = #{keyGroup,jdbcType=VARCHAR},
       </if>
-      <if test="keyDesc != null">
+      <if test="keyDesc != null" >
         key_desc = #{keyDesc,jdbcType=VARCHAR},
       </if>
-      <if test="keyOrder != null">
+      <if test="keyOrder != null" >
         key_order = #{keyOrder,jdbcType=SMALLINT},
       </if>
-      <if test="isValid != null">
+      <if test="isValid != null" >
         is_valid = #{isValid,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.common.model.Dictionary">
+  <update id="updateByPrimaryKey" parameterType="com.wow.common.model.Dictionary" >
     update dictionary
     set key_id = #{keyId,jdbcType=INTEGER},
-      key_value = #{keyValue,jdbcType=VARCHAR},
-      key_group = #{keyGroup,jdbcType=VARCHAR},
-      key_desc = #{keyDesc,jdbcType=VARCHAR},
-      key_order = #{keyOrder,jdbcType=SMALLINT},
-      is_valid = #{isValid,jdbcType=BIT}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <resultMap id="BaseResultMap" type="com.wow.common.model.Dictionary">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="key_name" jdbcType="VARCHAR" property="keyName" />
-    <result column="key_value" jdbcType="VARCHAR" property="keyValue" />
-    <result column="key_group" jdbcType="VARCHAR" property="keyGroup" />
-    <result column="key_desc" jdbcType="VARCHAR" property="keyDesc" />
-    <result column="key_order" jdbcType="SMALLINT" property="keyOrder" />
-    <result column="is_valid" jdbcType="BIT" property="isValid" />
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    id, key_name, key_value, key_group, key_desc, key_order, is_valid
-  </sql>
-  <select id="selectByExample" parameterType="com.wow.common.model.DictionaryExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from dictionary
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from dictionary
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from dictionary
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.wow.common.model.DictionaryExample">
-    delete from dictionary
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.wow.common.model.Dictionary">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into dictionary (key_name, key_value, key_group, 
-      key_desc, key_order, is_valid
-      )
-    values (#{keyName,jdbcType=VARCHAR}, #{keyValue,jdbcType=VARCHAR}, #{keyGroup,jdbcType=VARCHAR}, 
-      #{keyDesc,jdbcType=VARCHAR}, #{keyOrder,jdbcType=SMALLINT}, #{isValid,jdbcType=BIT}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.wow.common.model.Dictionary">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into dictionary
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="keyName != null">
-        key_name,
-      </if>
-      <if test="keyValue != null">
-        key_value,
-      </if>
-      <if test="keyGroup != null">
-        key_group,
-      </if>
-      <if test="keyDesc != null">
-        key_desc,
-      </if>
-      <if test="keyOrder != null">
-        key_order,
-      </if>
-      <if test="isValid != null">
-        is_valid,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="keyName != null">
-        #{keyName,jdbcType=VARCHAR},
-      </if>
-      <if test="keyValue != null">
-        #{keyValue,jdbcType=VARCHAR},
-      </if>
-      <if test="keyGroup != null">
-        #{keyGroup,jdbcType=VARCHAR},
-      </if>
-      <if test="keyDesc != null">
-        #{keyDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="keyOrder != null">
-        #{keyOrder,jdbcType=SMALLINT},
-      </if>
-      <if test="isValid != null">
-        #{isValid,jdbcType=BIT},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.wow.common.model.DictionaryExample" resultType="java.lang.Integer">
-    select count(*) from dictionary
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update dictionary
-    <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.keyName != null">
-        key_name = #{record.keyName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.keyValue != null">
-        key_value = #{record.keyValue,jdbcType=VARCHAR},
-      </if>
-      <if test="record.keyGroup != null">
-        key_group = #{record.keyGroup,jdbcType=VARCHAR},
-      </if>
-      <if test="record.keyDesc != null">
-        key_desc = #{record.keyDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="record.keyOrder != null">
-        key_order = #{record.keyOrder,jdbcType=SMALLINT},
-      </if>
-      <if test="record.isValid != null">
-        is_valid = #{record.isValid,jdbcType=BIT},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update dictionary
-    set id = #{record.id,jdbcType=INTEGER},
-      key_name = #{record.keyName,jdbcType=VARCHAR},
-      key_value = #{record.keyValue,jdbcType=VARCHAR},
-      key_group = #{record.keyGroup,jdbcType=VARCHAR},
-      key_desc = #{record.keyDesc,jdbcType=VARCHAR},
-      key_order = #{record.keyOrder,jdbcType=SMALLINT},
-      is_valid = #{record.isValid,jdbcType=BIT}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.wow.common.model.Dictionary">
-    update dictionary
-    <set>
-      <if test="keyName != null">
-        key_name = #{keyName,jdbcType=VARCHAR},
-      </if>
-      <if test="keyValue != null">
-        key_value = #{keyValue,jdbcType=VARCHAR},
-      </if>
-      <if test="keyGroup != null">
-        key_group = #{keyGroup,jdbcType=VARCHAR},
-      </if>
-      <if test="keyDesc != null">
-        key_desc = #{keyDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="keyOrder != null">
-        key_order = #{keyOrder,jdbcType=SMALLINT},
-      </if>
-      <if test="isValid != null">
-        is_valid = #{isValid,jdbcType=BIT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.wow.common.model.Dictionary">
-    update dictionary
-    set key_name = #{keyName,jdbcType=VARCHAR},
       key_value = #{keyValue,jdbcType=VARCHAR},
       key_group = #{keyGroup,jdbcType=VARCHAR},
       key_desc = #{keyDesc,jdbcType=VARCHAR},

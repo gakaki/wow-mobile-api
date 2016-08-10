@@ -1,7 +1,5 @@
 package com.wow.common.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.wow.common.mapper.DictionaryMapper;
 import com.wow.common.model.Dictionary;
 import com.wow.common.model.DictionaryExample;
