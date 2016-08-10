@@ -16,6 +16,7 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'org.hidetake.ssh'
 
+
 allprojects {
 
     apply plugin: 'java'
@@ -100,22 +101,54 @@ dependencies {
     compile 'com.wow:common-util:1.0-SNAPSHOT'
 }
 
+ssh.settings {
+    knownHosts = allowAnyHosts
+}
+
+springBoot {
+    executable = true
+}
 remotes {
+
     intranetServer {
         host = '10.0.60.121'
         user = 'root'
         password = " "
     }
+    stagingServer {
+        host = '114.55.132.84'
+        user = 'root'
+        identity = file("${System.properties['user.home']}${File.separator}.ssh${File.separator}id_rsa")
+    }
+    productionServer {
+        host = '114.55.176.124'
+        user = 'root'
+        identity = file("id_rsa.txt")
+    }
 }
 
-task deploy << {
+
+//做成function更好
+
+task deploy_staging << {
+
     ssh.run {
-        session(remotes.intranetServer) {
-            put from: 'build/libs/mobile-api-1.0-SNAPSHOT.jar', into: '/data/server/'
-            execute 'chmod -R 777 /data/server/'
-            execute 'systemctl daemon-reload'
-            execute 'systemctl stop wowdsgn.service'
-            execute 'systemctl start wowdsgn.service'
+        session(remotes.stagingServer) {
+            put from: 'build/libs/mobile-api-1.0-SNAPSHOT.jar', into: '/wowdsgn/mobile-api/mobile-api'
+            execute 'chmod -R 777 /wowdsgn/'
+//            execute 'cp -a /wowdsgn/config/application.properties /wowdsgn/${api_type}/application.properties'
+            execute 'systemctl restart mobile-api.service'
+        }
+    }
+}
+task deploy_production << {
+
+    ssh.run {
+        session(remotes.productionServer) {
+            put from: 'build/libs/mobile-api-1.0-SNAPSHOT.jar', into: '/wowdsgn/mobile-api/mobile-api'
+            execute 'chmod -R 777 /wowdsgn/'
+//            execute 'cp -a /wowdsgn/config/application.properties /wowdsgn/mobile-api/application.properties'
+            execute 'systemctl restart mobile-api.service'
         }
     }
 }
