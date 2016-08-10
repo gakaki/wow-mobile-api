@@ -78,7 +78,7 @@ public class OrderController extends BaseController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/buyNow", produces = "application/json;charset=UTF-8", method = RequestMethod.GET)
+    @RequestMapping(value = "/buyNow", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
     public ApiResponse buyNow(ApiRequest request) {
         OrderSettleRequest orderRequest = JsonUtil.fromJSON(request.getParamJson(), OrderSettleRequest.class);
         ApiResponse apiResponse = new ApiResponse();

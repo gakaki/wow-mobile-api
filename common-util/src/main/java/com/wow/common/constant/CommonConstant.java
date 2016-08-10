@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.wow.common.util.DictionaryUtil;
+import com.wow.common.util.NumberUtil;
 
 /**
  * 系统相关设置的常量
@@ -14,10 +15,17 @@ import com.wow.common.util.DictionaryUtil;
  */
 public class CommonConstant {
     //运费阀值
-    public static final BigDecimal THRESHOLD = new BigDecimal("199.00");
+    public static final BigDecimal THRESHOLD = new BigDecimal(DictionaryUtil
+        .getValue("order", "order_deliveryFee_threshold"));
+
+    //运费阀值 long类型
+    public static final long THRESHOLD_LONG = NumberUtil.convertToFen(CommonConstant.THRESHOLD);
 
     //运费
     public static final BigDecimal DELIVERYFEE = new BigDecimal(DictionaryUtil.getValue("order", "order_deliveryFee"));
+
+    //运费 long类型
+    public static final long DELIVERYFEE_LONG = NumberUtil.convertToFen(CommonConstant.DELIVERYFEE);
 
     //定义数值为0.00的BigDecimal
     public static final BigDecimal ZEROB_IGDECIMAL = new BigDecimal("0.00");

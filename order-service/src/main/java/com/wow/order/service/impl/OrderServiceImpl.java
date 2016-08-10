@@ -501,10 +501,8 @@ public class OrderServiceImpl implements OrderService {
                 //设置该产品使用的库存总数和虚拟库存总数
                 saleOrderItem.setFrozenWarehouseStockTotalQty(freezeStockVo.getFrozenWarehouseStockTotalQty());
                 saleOrderItem.setFrozenVirtualStockQty(freezeStockVo.getFrozenVirtualStockQty());
-                //如果使用虚拟库存的话 则设置虚拟库存是否准备 默认为null
-                if (freezeStockVo.getFrozenVirtualStockQty() > 0) {
-                    saleOrderItem.setIsVirtualStockReady(Boolean.FALSE); //默认为未准备好
-                }
+                //设置虚拟库存是否准备 默认为未准备好
+                saleOrderItem.setIsVirtualStockReady(Boolean.FALSE);
             }
 
             saleOrderItem.setNeedAssemble(Boolean.FALSE);
@@ -526,10 +524,10 @@ public class OrderServiceImpl implements OrderService {
      */
     private long calculateDeliveryFee(long orderPrice) {
         //订单金额小于指定的阀值时计算运费
-        if (orderPrice < NumberUtil.convertToFen(CommonConstant.THRESHOLD)) {
-            return NumberUtil.convertToFen(CommonConstant.DELIVERYFEE);
+        if (orderPrice <CommonConstant.THRESHOLD_LONG) {
+            return CommonConstant.DELIVERYFEE_LONG;
         }
-
+        
         return 0L;
     }
 

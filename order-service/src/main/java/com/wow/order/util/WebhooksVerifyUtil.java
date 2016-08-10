@@ -43,28 +43,34 @@ public class WebhooksVerifyUtil {
             return pubKeyContent;
         }
 
-        FileInputStream in = new FileInputStream(pubKeyPath);
-        InputStreamReader inReader = new InputStreamReader(in, "UTF-8");
-        BufferedReader bf = new BufferedReader(inReader);
-        StringBuilder sb = new StringBuilder();
-        String line;
-        try {
-            while ((line = bf.readLine()) != null) {
-                if (sb.length() != 0) {
-                    sb.append("\n");
-                }
-                sb.append(line);
+        //防止多线程并发
+        synchronized (pubKeyContent) {
+            if (StringUtil.isNotEmpty(pubKeyContent)) {
+                return pubKeyContent;
             }
-        } finally {
+            FileInputStream in = new FileInputStream(pubKeyPath);
+            InputStreamReader inReader = new InputStreamReader(in, "UTF-8");
+            BufferedReader bf = new BufferedReader(inReader);
+            StringBuilder sb = new StringBuilder();
+            String line;
             try {
-                if (bf != null) {
-                    bf.close();
+                while ((line = bf.readLine()) != null) {
+                    if (sb.length() != 0) {
+                        sb.append("\n");
+                    }
+                    sb.append(line);
                 }
-            } catch (IOException e) {
+            } finally {
+                try {
+                    if (bf != null) {
+                        bf.close();
+                    }
+                } catch (IOException e) {
+                }
             }
-        }
 
-        pubKeyContent = sb.toString();
+            pubKeyContent = sb.toString();
+        }
 
         return pubKeyContent;
     }
