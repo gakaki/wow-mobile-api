@@ -29,6 +29,14 @@ public class ProductSerialServiceImpl implements ProductSerialService {
     ProductService productService;
 
 
+    private static ProductSerial createDeletedProductSerialRecord() {
+        ProductSerial productSerial = new ProductSerial();
+        productSerial.setIsDeleted(true);
+        return productSerial;
+    }
+
+    private static final ProductSerial deletedProductSerialRecord = createDeletedProductSerialRecord();
+
     /**
      * 创建系列产品
      * @param productSerials
@@ -112,6 +120,19 @@ public class ProductSerialServiceImpl implements ProductSerialService {
         ProductSerial productSerial = new ProductSerial();
         productSerial.setIsDeleted(true);
         return productSerialMapper.updateByExampleSelective(productSerial, productSerialExample);
+    }
+
+    /**
+     * 删除系列产品下的子产品
+     * @param productId
+     * @param subProductIds
+     * @return
+     */
+    @Override
+    public int deleteSubProducts(Integer productId, List<Integer> subProductIds) {
+        ProductSerialExample productSerialExample = new ProductSerialExample();
+        productSerialExample.or().andProductIdEqualTo(productId).andSubProductIdIn(subProductIds);
+        return productSerialMapper.updateByExampleSelective(deletedProductSerialRecord, productSerialExample);
     }
 
     /**

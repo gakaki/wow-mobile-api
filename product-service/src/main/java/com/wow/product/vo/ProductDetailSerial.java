@@ -38,6 +38,21 @@ public class ProductDetailSerial {
         setWeight(product.getWeight());
     }
 
+    public void fillProduct(Product product) {
+        product.setId(getProductId());
+        product.setColorId(getColorId());
+        product.setColorDisplayName(getColorName());
+        product.setProductColorImg(getColorImg());
+        product.setSpecName(getSpecName());
+        product.setWeight(getWeight());
+    }
+
+    public Product exportAsProduct() {
+        Product product = new Product();
+        fillProduct(product);
+        return product;
+    }
+
     public void setupPriceFromPriceMap(Map<Integer, ProductPrice> prices) {
         ProductPrice productPrice = prices.get(getProductId());
         if (productPrice == null) {

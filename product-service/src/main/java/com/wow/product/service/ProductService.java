@@ -11,6 +11,7 @@ import com.wow.product.model.*;
 import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.request.ProductUpdateRequest;
+import com.wow.product.vo.request.ProductUpdateSerialsRequest;
 import com.wow.product.vo.response.*;
 
 /**
@@ -70,10 +71,10 @@ public interface ProductService {
 
     /**
      * 更新子产品信息
-     * @param productUpdateRequest
+     * @param productUpdateSerialsRequest
      * @return
      */
-    CommonResponse updateProductSerials(ProductUpdateRequest productUpdateRequest);
+    CommonResponse updateProductSerials(ProductUpdateSerialsRequest productUpdateSerialsRequest);
 
     /**
      * 更新产品的图文信息
