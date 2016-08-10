@@ -83,6 +83,12 @@ public interface ProductService {
     CommonResponse updateProductImages(ProductUpdateRequest productUpdateRequest);
 
     /**
+     * 删除产品
+     * @param productId
+     */
+    CommonResponse deleteProduct(Integer productId);
+
+    /**
      * 更新产品
      *
      * @param product

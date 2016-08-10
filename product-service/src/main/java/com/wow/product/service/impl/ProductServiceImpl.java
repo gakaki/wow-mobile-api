@@ -371,6 +371,31 @@ public class ProductServiceImpl implements ProductService {
         return commonResponse;
     }
 
+    private List<Integer> getSubProductIds(Integer productId) {
+        List<ProductSerial> productSerialList = productSerialService.getProductSerials(productId);
+        return ListUtil.transform(productSerialList, ProductSerial::getSubProductId);
+    }
+
+    /**
+     * 删除产品
+     * @param productId
+     */
+    @Override
+    public CommonResponse deleteProduct(Integer productId) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        markProductMaterialsDeleted(productId);
+        designerService.markProductDesignersDeleted(productId);
+        applicableSceneService.markProductApplicableScenesDeleted(productId);
+
+        List<Integer> allProductIds = getSubProductIds(productId);
+        allProductIds.add(productId);
+        priceService.markProductPricesDeleted(allProductIds);
+        productSerialService.deleteProductSerial(productId);
+
+        return commonResponse;
+    }
+
     /**
      * 创建产品(注意要调用生码接口)
      *
