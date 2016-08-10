@@ -29,6 +29,7 @@ import com.wow.common.util.JsonUtil;
 import com.wow.common.util.MapUtil;
 import com.wow.common.util.NumberUtil;
 import com.wow.common.util.StringUtil;
+import com.wow.order.constant.OrderConstant;
 import com.wow.order.mapper.DeliveryOrderMapper;
 import com.wow.order.mapper.SaleOrderItemMapper;
 import com.wow.order.mapper.SaleOrderItemWarehouseMapper;
@@ -142,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
 
             return orderResponse;
         }
-        
+
         //如果订单金额为空 则直接返回错误
         if (query.getOrderAmount() == null) {
             orderResponse.setResCode("40334");
@@ -150,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
 
             return orderResponse;
         }
-        
+
         //如果收货地址不存在 则返回错误提示
         ShippingInfo shippingInfo = shippingInfoMapper.selectByPrimaryKey(query.getShippingInfoId());
         if (shippingInfo == null) {
@@ -159,7 +160,7 @@ public class OrderServiceImpl implements OrderService {
 
             return orderResponse;
         }
-        
+
         //如果收货地址已删除 则返回收货地址无效错误
         if (shippingInfo.getIsDeleted()) {
             orderResponse.setResCode("40333");
@@ -540,10 +541,10 @@ public class OrderServiceImpl implements OrderService {
      */
     private long calculateDeliveryFee(long orderPrice) {
         //订单金额小于指定的阀值时计算运费
-        if (orderPrice <CommonConstant.THRESHOLD_LONG) {
-            return CommonConstant.DELIVERYFEE_LONG;
+        if (orderPrice < OrderConstant.THRESHOLD_LONG) {
+            return OrderConstant.DELIVERYFEE_LONG;
         }
-        
+
         return 0L;
     }
 
@@ -1473,6 +1474,14 @@ public class OrderServiceImpl implements OrderService {
             return orderResponse;
         }
 
+        //如果订单金额为空 则直接返回错误
+        if (query.getOrderAmount() == null) {
+            orderResponse.setResCode("40334");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40334"));
+
+            return orderResponse;
+        }
+
         Product product = productMapper.selectByPrimaryKey(query.getProductId());
 
         //校验产品是否存在
@@ -1488,6 +1497,14 @@ public class OrderServiceImpl implements OrderService {
         if (shippingInfo == null) {
             orderResponse.setResCode("40305");
             orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40305"));
+
+            return orderResponse;
+        }
+
+        //如果收货地址已删除 则返回收货地址无效错误
+        if (shippingInfo.getIsDeleted()) {
+            orderResponse.setResCode("40333");
+            orderResponse.setResMsg(ErrorCodeUtil.getErrorMsg("40333"));
 
             return orderResponse;
         }
