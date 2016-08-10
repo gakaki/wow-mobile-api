@@ -425,7 +425,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      */
     private BigDecimal calculateShoppingCartPrice(List<ShoppingCartResultVo> shoppingCartResult) {
         if (CollectionUtil.isEmpty(shoppingCartResult)) {
-            return CommonConstant.ZEROB_IGDECIMAL;
+            return CommonConstant.ZERO_BIGDECIMAL;
         }
 
         long totalPrice = 0L;
