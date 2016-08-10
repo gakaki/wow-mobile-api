@@ -176,10 +176,10 @@ public class ProductServiceImpl implements ProductService {
         if (length == null || width == null || height == null) {
             return null;
         }
-        return buildProductSizeText(length, width, height);
+        return buildProductSizeTextStr(length, width, height);
     }
 
-    private String buildProductSizeText(short length, short width, short height) {
+    private String buildProductSizeTextStr(short length, short width, short height) {
         return "L"+length + "xW" + width + "xH" + height + "cm";
     }
 
@@ -412,19 +412,19 @@ public class ProductServiceImpl implements ProductService {
         BigDecimal minPrice = null;
 
         Integer applicablePeople = productCreateRequest.getApplicablePeople();
-        int brandId = productCreateRequest.getBrandId();
-        int categoryId = productCreateRequest.getCategoryId();
+        Integer brandId = productCreateRequest.getBrandId();
+        Integer categoryId = productCreateRequest.getCategoryId();
         String detailDescription = productCreateRequest.getDetailDescription();
-        short length = productCreateRequest.getLength();
-        short width = productCreateRequest.getWidth();
-        short height = productCreateRequest.getHeight();
+        Short length = productCreateRequest.getLength();
+        Short width = productCreateRequest.getWidth();
+        Short height = productCreateRequest.getHeight();
         String originCity = productCreateRequest.getOriginCity();
-        int originCountryId = productCreateRequest.getOriginCountryId();
-        int originProvinceId=productCreateRequest.getOriginProvinceId();
+        Integer originCountryId = productCreateRequest.getOriginCountryId();
+        Integer originProvinceId=productCreateRequest.getOriginProvinceId();
         String productModel = productCreateRequest.getProductModel();
         String productName = productCreateRequest.getProductName();
         String sellingPoint = productCreateRequest.getSellingPoint();
-        byte styleId = productCreateRequest.getStyleId();
+        Byte styleId = productCreateRequest.getStyleId();
 
         product.setApplicablePeople(applicablePeople);
         product.setBrandId(brandId);

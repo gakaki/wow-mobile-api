@@ -2,6 +2,7 @@ package com.wow.mobileapi.controller;
 
 import java.util.List;
 
+import com.wow.common.service.CountryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,71 +33,8 @@ public class DictionaryController extends BaseController{
     private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
 
     @Autowired
-    private DictionaryService dictionaryService;
+    private CountryService countryService;
 
-    @RequestMapping(value="/v1/dictionary/add",method = RequestMethod.POST)
-    public ApiResponse addDictionary(ApiRequest apiRequest){
-        ApiResponse apiResponse = new ApiResponse();
-        DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);
-        try {
-            Dictionary dictionary=new Dictionary();
-            BeanUtil.copyProperties(dictionaryRequest,dictionary);
-            int count=dictionaryService.createDictionary(dictionary);
-            CommonResponse commonResponse = new CommonResponse();
-            if(count==0) {
-                commonResponse.setResCode("4000");
-                commonResponse.setResMsg("字典信息增加失败");
-            }
-            apiResponse.setData(commonResponse);
-        } catch (Exception e) {
-            logger.error("字典信息增加addDictionary错误---" ,e);
-            setInternalErrorResponse(apiResponse);
-        }
-        return apiResponse;
-    }
-
-    @RequestMapping(value="/v1/dictionary/del",method = RequestMethod.POST)
-    public ApiResponse delDictionary(ApiRequest apiRequest){
-        ApiResponse apiResponse = new ApiResponse();
-        DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);
-        try {
-            Dictionary dictionary=new Dictionary();
-            BeanUtil.copyProperties(dictionaryRequest,dictionary);
-            dictionary.setIsValid(false);
-            int count=dictionaryService.updateDictionary(dictionary,dictionaryRequest);
-            CommonResponse commonResponse = new CommonResponse();
-            if(count==0) {
-                commonResponse.setResCode("4000");
-                commonResponse.setResMsg("字典信息删除失败");
-            }
-            apiResponse.setData(commonResponse);
-        } catch (Exception e) {
-            logger.error("字典信息删除delDictionary错误---", e);
-            setInternalErrorResponse(apiResponse);
-        }
-        return apiResponse;
-    }
-
-    @RequestMapping(value="/v1/dictionary/update",method = RequestMethod.POST)
-    public ApiResponse updateDictionary(ApiRequest apiRequest){
-        ApiResponse apiResponse = new ApiResponse();
-        DictionaryRequest dictionaryRequest = JsonUtil.fromJSON(apiRequest.getParamJson(), DictionaryRequest.class);
-        try {
-            Dictionary dictionary=new Dictionary();
-            BeanUtil.copyProperties(dictionaryRequest,dictionary);
-            int count=dictionaryService.updateDictionary(dictionary,dictionaryRequest);
-            CommonResponse commonResponse = new CommonResponse();
-            if(count==0) {
-                commonResponse.setResCode("4000");
-                commonResponse.setResMsg("字典信息更新失败");
-            }
-            apiResponse.setData(commonResponse);
-        } catch (Exception e) {
-            logger.error("字典信息更新updateDictionary错误---" , e);
-            setInternalErrorResponse(apiResponse);
-        }
-        return apiResponse;
-    }
 
     /**
      *
@@ -106,23 +44,7 @@ public class DictionaryController extends BaseController{
     @RequestMapping(value="/v1/dictionary/query",method = RequestMethod.GET)
     public ApiResponse queryDictionary(ApiRequest apiRequest){
         ApiResponse apiResponse = new ApiResponse();
-
-        try {
-            List<Dictionary> dictionaryList=DictionaryUtil.getKeyGroup(BizConstant.DICTIONARY_GROUP_COUNTRY);
-            if(dictionaryList==null) {
-                DictionaryRequest dictionaryRequest=new DictionaryRequest();
-                dictionaryRequest.setKeyGroupCon(BizConstant.DICTIONARY_GROUP_COUNTRY);
-                dictionaryList = dictionaryService.queryDictionary(dictionaryRequest);
-            }
-            DictionaryResponse dictionaryResponse = new DictionaryResponse();
-            dictionaryResponse.setDictionaryList(dictionaryList);
-            apiResponse.setData(dictionaryResponse);
-        } catch (Exception e) {
-            logger.error("字典信息查找findNextLevelArea错误---" ,e);
-            setInternalErrorResponse(apiResponse);
-        }
-
-
+        apiResponse.setData(countryService.queryAllCountry());
         return apiResponse;
     }
 }
