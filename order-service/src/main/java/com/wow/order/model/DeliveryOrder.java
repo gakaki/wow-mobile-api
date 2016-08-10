@@ -53,7 +53,7 @@ public class DeliveryOrder implements Serializable {
     }
 
     public void setDeliveryCompanyCode(String deliveryCompanyCode) {
-        this.deliveryCompanyCode = deliveryCompanyCode == null ? null : deliveryCompanyCode.trim();
+        this.deliveryCompanyCode = deliveryCompanyCode;
     }
 
     public String getDeliveryCompanyName() {

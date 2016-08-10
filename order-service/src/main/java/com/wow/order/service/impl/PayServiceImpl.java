@@ -21,7 +21,6 @@ import com.wow.common.constant.CommonConstant;
 import com.wow.common.enums.SaleOrderStatusEnum;
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.DateUtil;
-import com.wow.common.util.DictionaryUtil;
 import com.wow.common.util.ErrorCodeUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.NumberUtil;
@@ -404,7 +403,7 @@ public class PayServiceImpl implements PayService {
         response.setOrderCode(orderCode);
         response.setPayAmount(saleOrderPay.getAmount());
         response.setPaymentChannel(saleOrderPay.getChannel());
-        response.setPaymentChannelName(DictionaryUtil.getValue("pay_channel", saleOrderPay.getChannel()));
+        response.setPaymentChannelName(CommonConstant.getPayMethodName(saleOrderPay.getChannel()));
 
         return response;
     }
@@ -442,7 +441,7 @@ public class PayServiceImpl implements PayService {
         response.setPayAmount(NumberUtil.convertToYuan(retrieve.getAmount()));
         response.setOrderCode(retrieve.getOrderNo());
         response.setPaymentChannel(retrieve.getChannel());
-        response.setPaymentChannelName(DictionaryUtil.getValue("pay_channel", retrieve.getChannel()));
+        response.setPaymentChannelName(CommonConstant.getPayMethodName(retrieve.getChannel()));
 
         return response;
     }
