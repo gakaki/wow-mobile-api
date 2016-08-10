@@ -6,6 +6,6 @@
         <result column="material_name" property="name" jdbcType="VARCHAR" />
     </resultMap>
     <select id="queryMaterialsByCategory" parameterType="int" resultMap="BaseResultMap">
-        select material.id,material.material_name from category_material,material where category_material.material_id=material_id and category_id=#{categoryId}
+        select distinct material.id,material.material_name from category_material,material where category_material.material_id=material_id and category_id=#{categoryId}
     </select>
 </mapper>
