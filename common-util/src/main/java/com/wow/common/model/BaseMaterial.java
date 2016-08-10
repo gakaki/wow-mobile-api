@@ -1,11 +1,11 @@
-package com.wow.attribute.model;
+package com.wow.common.model;
 
 import java.io.Serializable;
 
 /**
  * Created by win7 on 2016/8/4.
  */
-public class Material implements Serializable {
+public class BaseMaterial implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

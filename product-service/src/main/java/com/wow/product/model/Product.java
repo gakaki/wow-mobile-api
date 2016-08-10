@@ -37,7 +37,7 @@ public class Product implements Serializable {
 
     private String seoKey;
 
-    private int originCountryId;
+    private Integer originCountryId;
 
     private Integer originProvinceId;
 
@@ -237,11 +237,11 @@ public class Product implements Serializable {
         this.originCountryId = originCountryId;
     }*/
 
-    public int getOriginCountryId() {
+    public Integer getOriginCountryId() {
         return originCountryId;
     }
 
-    public void setOriginCountryId(int originCountryId) {
+    public void setOriginCountryId(Integer originCountryId) {
         this.originCountryId = originCountryId;
     }
 

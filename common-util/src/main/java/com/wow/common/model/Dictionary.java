@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Dictionary implements Serializable {
     private Integer id;
 
-    private String keyName;
+    private Integer keyId;
 
     private String keyValue;
 
@@ -27,12 +27,12 @@ public class Dictionary implements Serializable {
         this.id = id;
     }
 
-    public String getKeyName() {
-        return keyName;
+    public Integer getKeyId() {
+        return keyId;
     }
 
-    public void setKeyName(String keyName) {
-        this.keyName = keyName == null ? null : keyName.trim();
+    public void setKeyId(Integer keyId) {
+        this.keyId = keyId;
     }
 
     public String getKeyValue() {
@@ -82,7 +82,7 @@ public class Dictionary implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", keyName=").append(keyName);
+        sb.append(", keyId=").append(keyId);
         sb.append(", keyValue=").append(keyValue);
         sb.append(", keyGroup=").append(keyGroup);
         sb.append(", keyDesc=").append(keyDesc);

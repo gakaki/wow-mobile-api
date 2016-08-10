@@ -5,7 +5,6 @@ import com.wow.attribute.model.Attribute;
 import com.wow.attribute.model.Category;
 import com.wow.attribute.service.AttributeService;
 import com.wow.attribute.service.CategoryService;
-import com.wow.attribute.util.MaterialUtil;
 import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.constant.BizConstant;
@@ -266,7 +265,7 @@ public class ProductServiceImpl implements ProductService {
                 materialTextBuilder.append(",");
             }
             ++i;
-            materialTextBuilder.append(materialId);
+            materialTextBuilder.append(MaterialDataUtil.getMaterialById(materialId));
         }
         ProductMaterialList productMaterialList = new ProductMaterialList();
         productMaterialList.productMaterialList = materialList;

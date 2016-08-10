@@ -14,29 +14,8 @@ public interface DictionaryService {
 
     /**
      *
-     * @param dictionary
-     * @return
-     */
-    int createDictionary(Dictionary dictionary);
-
-    /**
-     *
-     * @param dictionaryId
-     * @return
-     */
-    int deleteDictionary(int dictionaryId);
-
-    /**
-     *
      * @return
      */
     List<Dictionary> queryDictionary(DictionaryRequest dictionaryRequest);
 
-    /**
-     *
-     * @param dictionary
-     * @param dictionaryRequest
-     * @return
-     */
-     int updateDictionary(Dictionary dictionary,DictionaryRequest dictionaryRequest);
 }

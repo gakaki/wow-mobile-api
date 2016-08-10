@@ -26,49 +26,15 @@ public class DictionaryServiceImpl implements DictionaryService {
     private DictionaryMapper dictionaryMapper;
 
     @Override
-    public int createDictionary(Dictionary dictionary) {
-        return dictionaryMapper.insertSelective(dictionary);
-    }
-
-    @Override
-    public int deleteDictionary(int dictionaryId) {
-        return dictionaryMapper.deleteByPrimaryKey(dictionaryId);
-    }
-
-    @Override
     public List<Dictionary> queryDictionary(DictionaryRequest dictionaryRequest) {
         DictionaryExample example=new DictionaryExample();
         DictionaryExample.Criteria criteria=example.createCriteria();
-        if(null!=dictionaryRequest.getIdCon())
-            criteria.andIdEqualTo(dictionaryRequest.getIdCon());
-        if(null!=dictionaryRequest.getKeyNameCon())
-            criteria.andKeyNameEqualTo(dictionaryRequest.getKeyNameCon());
-        if(null!=dictionaryRequest.getKeyValueCon())
-            criteria.andKeyValueEqualTo(dictionaryRequest.getKeyValueCon());
-        if(null!=dictionaryRequest.getKeyGroupCon())
-            criteria.andKeyGroupEqualTo(dictionaryRequest.getKeyGroupCon());
-        if(null!=dictionaryRequest.getKeyOrderCon())
-            criteria.andKeyOrderEqualTo(dictionaryRequest.getKeyOrderCon());
+
+        if(null!=dictionaryRequest.getKeyId())
+            criteria.andKeyIdEqualTo(dictionaryRequest.getKeyId());
+        if(null!=dictionaryRequest.getKeyGroup())
+            criteria.andKeyGroupEqualTo(dictionaryRequest.getKeyGroup());
         criteria.andIsValidEqualTo(true);
         return dictionaryMapper.selectByExample(example);
-    }
-
-    @Override
-    public int updateDictionary(Dictionary dictionary,DictionaryRequest dictionaryRequest) {
-        DictionaryExample example=new DictionaryExample();
-        DictionaryExample.Criteria criteria=example.createCriteria();
-        if(null!=dictionaryRequest.getIdCon())
-            criteria.andIdEqualTo(dictionaryRequest.getIdCon());
-        if(null!=dictionaryRequest.getKeyNameCon())
-            criteria.andKeyNameEqualTo(dictionaryRequest.getKeyNameCon());
-        if(null!=dictionaryRequest.getKeyValueCon())
-            criteria.andKeyValueEqualTo(dictionaryRequest.getKeyValueCon());
-        if(null!=dictionaryRequest.getKeyGroupCon())
-            criteria.andKeyGroupEqualTo(dictionaryRequest.getKeyGroupCon());
-        if(null!=dictionaryRequest.getKeyOrderCon())
-            criteria.andKeyOrderEqualTo(dictionaryRequest.getKeyOrderCon());
-        if(dictionaryRequest.getValidCon()!=null)
-            criteria.andIsValidEqualTo(dictionaryRequest.getValidCon());
-        return dictionaryMapper.updateByExampleSelective(dictionary,example);
     }
 }

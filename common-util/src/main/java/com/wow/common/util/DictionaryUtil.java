@@ -61,7 +61,7 @@ public class DictionaryUtil {
     private static void groupBy(List<Dictionary> dictionaryList) {
         //对数据字典进行分组
         for (Dictionary dictionary : dictionaryList) {
-            keyMap.put(generateKey(dictionary.getKeyGroup(), dictionary.getKeyName()), dictionary);
+            keyMap.put(generateKey(dictionary.getKeyGroup(), dictionary.getKeyId()), dictionary);
 
             if (groupMap.containsKey(dictionary.getKeyGroup())) {
                 groupMap.get(dictionary.getKeyGroup()).add(dictionary);
@@ -74,11 +74,12 @@ public class DictionaryUtil {
     }
 
     /**
-     * 生成key
-     * 
-     * @param dictionary
+     *
+     * @param keyGroup
+     * @param key
+     * @return
      */
-    private static String generateKey(final String keyGroup, final String key) {
+    private static String generateKey(final String keyGroup, final Integer key) {
         StringBuilder sb = new StringBuilder();
         sb.append(keyGroup).append("_").append(key);
 
@@ -86,9 +87,9 @@ public class DictionaryUtil {
     }
 
     /**
-     * 根据组id获取组下的全部字典信息
      *
-     * @param keys
+     * @param keyGroup
+     * @return
      */
     public static List<Dictionary> getKeyGroup(final String keyGroup) {
         if (groupMap.containsKey(keyGroup)) {
@@ -105,7 +106,7 @@ public class DictionaryUtil {
      * @param key
      * @return
      */
-    public static Dictionary getDictionary(final String keyGroup, final String key) {
+    public static Dictionary getDictionary(final String keyGroup, final Integer key) {
         return keyMap.get(generateKey(keyGroup, key));
     }
 
@@ -116,7 +117,7 @@ public class DictionaryUtil {
      * @param key
      * @return
      */
-    public static String getValue(final String keyGroup, final String key) {
+    public static String getValue(final String keyGroup, final Integer key) {
         Dictionary dictionary = getDictionary(keyGroup, key);
 
         return dictionary == null ? "" : dictionary.getKeyValue();
