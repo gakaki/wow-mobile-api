@@ -8,7 +8,7 @@ public class ProductMaterial implements Serializable {
 
     private Integer productId;
 
-    private Integer materialId;
+    private String materialId;
 
     private Date createTime;
 
@@ -38,11 +38,11 @@ public class ProductMaterial implements Serializable {
         this.productId = productId;
     }
 
-    public Integer getMaterialId() {
+    public String getMaterialId() {
         return materialId;
     }
 
-    public void setMaterialId(Integer materialId) {
+    public void setMaterialId(String materialId) {
         this.materialId = materialId;
     }
 
