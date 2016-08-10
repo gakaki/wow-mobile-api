@@ -137,71 +137,71 @@ public class PageConfigServiceImpl implements PageConfigService {
         return pageSceneResponse;
     }
 
-    /**
-     * 根据页面类型查询应该显示的Topic
-     * @param pageType
-     * @return
-     */
-    @Override
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    @Cacheable(value = "PageCache",key="'TOPICS_IN_PAGE_TYPE_'+#pageType")
-    public PageTopicResponse getTopicsByPageType(int pageType) {
-        PageTopicResponse pageTopicResponse = new PageTopicResponse();
-        List<PageTopicConfig> topicList = pageTopicConfigMapper.selectByPageType(pageType);
-        List<PageTopicVo> pageTopicVos=new ArrayList<>();
-        if(!topicList.isEmpty())
-            topicList.forEach(new Consumer<PageTopicConfig>() {
-                @Override
-                public void accept(PageTopicConfig pageTopicConfig) {
-                    Topic topic= topicService.getTopicById(pageTopicConfig.getTopicId());
-                    if(topic!=null) {
-                        PageTopicVo pageTopicVo=new PageTopicVo();
-                        pageTopicVo.setGroupId(topic.getGroupId());
-                        pageTopicVo.setId(topic.getId());
-                        pageTopicVo.setTopicContentDetails(topic.getTopicContentDetails());
-                        pageTopicVo.setTopicDesc(topic.getTopicDesc());
-                        pageTopicVo.setTopicImg(topic.getTopicImg());
-                        pageTopicVo.setTopicImgLink(topic.getTopicImgLink());
-                        pageTopicVo.setTopicMainTitle(topic.getTopicMainTitle());
-                        pageTopicVo.setTopicName(topic.getTopicName());
-                        pageTopicVo.setTopicType(topic.getTopicType());
-                        List<ProductImageVo> productImageVos=new ArrayList<ProductImageVo>();
-                        List<ProductShortListInTopic> productShortListInTopics=topicService.getProductShortListInTopic(topic.getId());
-                        topicService.getProductShortListInTopic(topic.getId()).stream().filter(o->o.getShortListInTopic()==true).toArray();
-                        if(!productShortListInTopics.isEmpty()) {
-                            productShortListInTopics.forEach(new Consumer<ProductShortListInTopic>() {
-                                @Override
-                                public void accept(ProductShortListInTopic productShortListInTopic) {
-                                    if (productShortListInTopic.getShortListInTopic()) {
-                                        List<ProductImage> productImages = productService.getProductImages(productShortListInTopic.getProductId());
-                                        if (!productImages.isEmpty()) {
-                                            productImages.forEach(new Consumer<ProductImage>() {
-                                                @Override
-                                                public void accept(ProductImage productImage) {
-                                                    ProductImageVo productImageVo = new ProductImageVo();
-                                                    productImageVo.setGroupId(productShortListInTopic.getGroupId());
-                                                    productImageVo.setSortOrder(productShortListInTopic.getSortOrder());
-                                                    productImageVo.setProductId(productImageVo.getProductId());
-                                                    productImageVo.setImgDesc(productImage.getImgDesc());
-                                                    productImageVo.setImgName(productImage.getImgName());
-                                                    productImageVo.setImgUrl(productImage.getImgUrl());
-                                                    productImageVo.setViewPlatform(productImage.getViewPlatform());
-                                                    productImageVos.add(productImageVo);
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                        pageTopicVo.setImages(productImageVos);
-                        pageTopicVos.add(pageTopicVo);
-                    }
-                }
-            });
-        pageTopicResponse.setPageTopicVoList(pageTopicVos);
-        return pageTopicResponse;
-    }
+//    /**
+//     * 根据页面类型查询应该显示的Topic
+//     * @param pageType
+//     * @return
+//     */
+//    @Override
+//    @Transactional(propagation= Propagation.NOT_SUPPORTED)
+//    @Cacheable(value = "PageCache",key="'TOPICS_IN_PAGE_TYPE_'+#pageType")
+//    public PageTopicResponse getTopicsByPageType(int pageType) {
+//        PageTopicResponse pageTopicResponse = new PageTopicResponse();
+//        List<PageTopicConfig> topicList = pageTopicConfigMapper.selectByPageType(pageType);
+//        List<PageTopicVo> pageTopicVos=new ArrayList<>();
+//        if(!topicList.isEmpty())
+//            topicList.forEach(new Consumer<PageTopicConfig>() {
+//                @Override
+//                public void accept(PageTopicConfig pageTopicConfig) {
+//                    Topic topic= topicService.getTopicById(pageTopicConfig.getTopicId());
+//                    if(topic!=null) {
+//                        PageTopicVo pageTopicVo=new PageTopicVo();
+//                        pageTopicVo.setGroupId(topic.getGroupId());
+//                        pageTopicVo.setId(topic.getId());
+//                        pageTopicVo.setTopicContentDetails(topic.getTopicContentDetails());
+//                        pageTopicVo.setTopicDesc(topic.getTopicDesc());
+//                        pageTopicVo.setTopicImg(topic.getTopicImg());
+//                        pageTopicVo.setTopicImgLink(topic.getTopicImgLink());
+//                        pageTopicVo.setTopicMainTitle(topic.getTopicMainTitle());
+//                        pageTopicVo.setTopicName(topic.getTopicName());
+//                        pageTopicVo.setTopicType(topic.getTopicType());
+//                        List<ProductImageVo> productImageVos=new ArrayList<ProductImageVo>();
+//                        List<ProductShortListInTopic> productShortListInTopics=topicService.getProductShortListInTopic(topic.getId());
+//                        topicService.getProductShortListInTopic(topic.getId()).stream().filter(o->o.getShortListInTopic()==true).toArray();
+//                        if(!productShortListInTopics.isEmpty()) {
+//                            productShortListInTopics.forEach(new Consumer<ProductShortListInTopic>() {
+//                                @Override
+//                                public void accept(ProductShortListInTopic productShortListInTopic) {
+//                                    if (productShortListInTopic.getShortListInTopic()) {
+//                                        List<ProductImage> productImages = productService.getProductImages(productShortListInTopic.getProductId());
+//                                        if (!productImages.isEmpty()) {
+//                                            productImages.forEach(new Consumer<ProductImage>() {
+//                                                @Override
+//                                                public void accept(ProductImage productImage) {
+//                                                    ProductImageVo productImageVo = new ProductImageVo();
+//                                                    productImageVo.setGroupId(productShortListInTopic.getGroupId());
+//                                                    productImageVo.setSortOrder(productShortListInTopic.getSortOrder());
+//                                                    productImageVo.setProductId(productImageVo.getProductId());
+//                                                    productImageVo.setImgDesc(productImage.getImgDesc());
+//                                                    productImageVo.setImgName(productImage.getImgName());
+//                                                    productImageVo.setImgUrl(productImage.getImgUrl());
+//                                                    productImageVo.setViewPlatform(productImage.getViewPlatform());
+//                                                    productImageVos.add(productImageVo);
+//                                                }
+//                                            });
+//                                        }
+//                                    }
+//                                }
+//                            });
+//                        }
+//                        pageTopicVo.setImages(productImageVos);
+//                        pageTopicVos.add(pageTopicVo);
+//                    }
+//                }
+//            });
+//        pageTopicResponse.setPageTopicVoList(pageTopicVos);
+//        return pageTopicResponse;
+//    }
 
     /**
      * 根据页面类型查询页面上的商品配置

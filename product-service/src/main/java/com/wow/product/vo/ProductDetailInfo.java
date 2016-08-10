@@ -18,7 +18,7 @@ public class ProductDetailInfo {
     private String productModel;
     private Integer brandId;
     private List<DesignerVo> designerVoList;
-    private String originCountryId;
+    private Integer originCountryId;
     private String originCity;
     private Integer originProvinceId;
     private Byte styleId;
@@ -124,11 +124,11 @@ public class ProductDetailInfo {
         this.designerVoList = designerVoList;
     }
 
-    public String getOriginCountryId() {
+    public Integer getOriginCountryId() {
         return originCountryId;
     }
 
-    public void setOriginCountryId(String originCountryId) {
+    public void setOriginCountryId(Integer originCountryId) {
         this.originCountryId = originCountryId;
     }
 

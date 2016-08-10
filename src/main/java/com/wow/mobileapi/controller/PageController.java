@@ -11,6 +11,7 @@ import com.wow.page.service.PageConfigService;
 import com.wow.page.vo.response.PageBannerResponse;
 import com.wow.page.vo.response.PageCategoryResponse;
 import com.wow.page.vo.response.PageProductResponse;
+import com.wow.page.vo.response.PageTopicResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,7 +151,7 @@ public class PageController extends BaseController {
 //            if (ErrorCodeUtil.isFailedResponse(pageTopicResponse.getResCode())) {
 //                setServiceErrorResponse(apiResponse, pageTopicResponse);
 //            } else {
-//                apiResponse.setData(pageTopicResponse.getPageTopicVoList());
+//                apiResponse.setData(pageTopicResponse);
 //            }
 //        } catch (Exception e) {
 //            logger.error("查找Topic错误---" + e);

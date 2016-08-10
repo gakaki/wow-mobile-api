@@ -15,8 +15,8 @@ public class ProductCreateRequest implements Serializable {
     private String sellingPoint;
     private String productModel;
     private int brandId;
-    private List<DesignerVo> designerVoList;
-    private String originCountryId;
+
+    private int originCountryId;
     private String originCity;
     private int originProvinceId;
     private byte styleId;
@@ -28,6 +28,7 @@ public class ProductCreateRequest implements Serializable {
     private List<String> applicableSceneList;
     private List<Integer> materialList;
     private String detailDescription; //商品描述
+    private List<DesignerVo> designerVoList;
     private List<ColorSpecVo> colorSpecVoList;
     private List<ProductImgVo> productImgVoList;
 
@@ -71,13 +72,7 @@ public class ProductCreateRequest implements Serializable {
         this.brandId = brandId;
     }
 
-    public List<DesignerVo> getDesignerVoList() {
-        return designerVoList;
-    }
 
-    public void setDesignerVoList(List<DesignerVo> designerVoList) {
-        this.designerVoList = designerVoList;
-    }
 
     /*public int getOriginCountryId() {
         return originCountryId;
@@ -87,11 +82,11 @@ public class ProductCreateRequest implements Serializable {
         this.originCountryId = originCountryId;
     }*/
 
-    public String getOriginCountryId() {
+    public int getOriginCountryId() {
         return originCountryId;
     }
 
-    public void setOriginCountryId(String originCountryId) {
+    public void setOriginCountryId(int originCountryId) {
         this.originCountryId = originCountryId;
     }
 
@@ -181,6 +176,14 @@ public class ProductCreateRequest implements Serializable {
 
     public void setDetailDescription(String detailDescription) {
         this.detailDescription = detailDescription;
+    }
+
+    public List<DesignerVo> getDesignerVoList() {
+        return designerVoList;
+    }
+
+    public void setDesignerVoList(List<DesignerVo> designerVoList) {
+        this.designerVoList = designerVoList;
     }
 
     public List<ColorSpecVo> getColorSpecVoList() {

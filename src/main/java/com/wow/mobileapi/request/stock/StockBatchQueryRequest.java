@@ -1,6 +1,7 @@
 package com.wow.mobileapi.request.stock;
 
 import com.wow.common.request.ApiRequest;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class StockBatchQueryRequest extends ApiRequest {
 
     private static final long serialVersionUID = 1L;
 
+    @NotEmpty
     List<Integer> productIdList;
 
     public List<Integer> getProductIdList() {

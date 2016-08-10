@@ -260,10 +260,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into product_material (product_id, material_id,is_deleted)
+    insert into product_material (product_id, material_id)
     values
     <foreach collection="list" item="item" separator=",">
-      (#{item.productId,jdbcType=INTEGER}, #{item.materialId,jdbcType=INTEGER}, #{item.isDeleted,jdbcType=BIT})
+      (#{item.productId,jdbcType=INTEGER}, #{item.materialId,jdbcType=INTEGER})
     </foreach>
   </insert>
 </mapper>

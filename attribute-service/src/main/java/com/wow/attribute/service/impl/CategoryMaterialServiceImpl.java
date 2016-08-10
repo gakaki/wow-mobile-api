@@ -1,7 +1,6 @@
 package com.wow.attribute.service.impl;
 
 import com.wow.attribute.mapper.CategoryMaterialMapper;
-import com.wow.attribute.model.CategoryMaterial;
 import com.wow.attribute.service.CategoryMaterialService;
 import com.wow.attribute.vo.response.MaterialResponse;
 import com.wow.common.util.ErrorCodeUtil;

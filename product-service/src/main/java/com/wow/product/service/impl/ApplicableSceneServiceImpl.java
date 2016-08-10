@@ -124,11 +124,15 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
     private static final ProductApplicableScene deletedProductApplicableSceneRecord = createDeletedProductApplicableSceneRecord();
 
     @Override
-    public int replaceProductApplicableScene(Integer productId, List<ProductApplicableScene> applicableScenes) {
+    public int markProductApplicableScenesDeleted(Integer productId) {
         ProductApplicableSceneExample example = new ProductApplicableSceneExample();
         example.or().andProductIdEqualTo(productId);
-        productApplicableSceneMapper.updateByExampleSelective(deletedProductApplicableSceneRecord, example);
+        return productApplicableSceneMapper.updateByExampleSelective(deletedProductApplicableSceneRecord, example);
+    }
 
+    @Override
+    public int replaceProductApplicableScene(Integer productId, List<ProductApplicableScene> applicableScenes) {
+        markProductApplicableScenesDeleted(productId);
         return createProductApplicableScene(applicableScenes);
     }
 }

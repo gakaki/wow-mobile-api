@@ -89,7 +89,9 @@ public class BaseController {
             String token = request.getSessionToken();
             byte channel = request.getChannel();
             //check whether token is valid, by search it from redis or mysql
+            logger.error("BaseController:getUserIdByTokenChannel" + token + "," + channel);
             TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(token,channel);
+            logger.error("isValid=" + tokenValidateResponse.isValid());
             if (tokenValidateResponse==null || !tokenValidateResponse.isValid()) {
                 logger.warn("session token is invalid:" + token);
             } else {

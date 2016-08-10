@@ -11,11 +11,7 @@ import com.wow.product.model.*;
 import com.wow.product.vo.ProductListQuery;
 import com.wow.product.vo.request.ProductCreateRequest;
 import com.wow.product.vo.request.ProductUpdateRequest;
-import com.wow.product.vo.response.ProductDetailResponse;
-import com.wow.product.vo.response.ProductImgResponse;
-import com.wow.product.vo.response.ProductPageResponse;
-import com.wow.product.vo.response.ProductResponse;
-import com.wow.product.vo.response.ProductVoResponse;
+import com.wow.product.vo.response.*;
 
 /**
  * 产品服务
@@ -85,6 +81,12 @@ public interface ProductService {
      * @return
      */
     CommonResponse updateProductImages(ProductUpdateRequest productUpdateRequest);
+
+    /**
+     * 删除产品
+     * @param productId
+     */
+    CommonResponse deleteProduct(Integer productId);
 
     /**
      * 更新产品
@@ -244,23 +246,23 @@ public interface ProductService {
 
     /**
      * 分页查询产品列表
-     * @param query
+     * @param pageModel
      * @return
      */
     ProductPageResponse getProductListPage(PageModel pageModel);
     
 
     /**
-     * 根据专题所属分组获取商品
+     * 根据专题查找产品
      * @param query
      * @return
      */
     ApiResponse queryProductByTopicGroupListPage(ProductListQuery query);
 
     /**
-     * 根据专题所属分组获取商品
-     * @param query
+     * 根据专题查找产品
+     * @param topicId
      * @return
      */
-    ApiResponse queryProductByTopicGroup(ProductListQuery query);
+    ProductInTopicResponse getProductInTopic(int topicId);
 }

@@ -1,8 +1,8 @@
 package com.wow.mobileapi.request.user;
 
 import com.wow.common.request.ApiRequest;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -12,11 +12,11 @@ public class RegisterRequest extends ApiRequest {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
+    @NotBlank
     private String captcha;
-    @NotNull
+    @NotBlank
     private String mobile;
-    @NotNull
+    @NotBlank
     private String password;
 
     private String userName;

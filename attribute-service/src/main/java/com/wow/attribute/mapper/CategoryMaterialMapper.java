@@ -1,6 +1,6 @@
 package com.wow.attribute.mapper;
 
-import com.wow.attribute.model.CategoryMaterial;
+import com.wow.attribute.model.Material;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface CategoryMaterialMapper {
 
-    List<CategoryMaterial> queryMaterialsByCategory(int categoryId);
+    List<Material> queryMaterialsByCategory(int categoryId);
 }

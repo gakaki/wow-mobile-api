@@ -77,6 +77,14 @@ public interface ApplicableSceneService {
      */
     int updateProductApplicableScene(List<ProductApplicableScene> applicableScenes);
 
+
+    /**
+     * 标记产品的应用场景为已删除
+     * @param productId
+     * @return
+     */
+    int markProductApplicableScenesDeleted(Integer productId);
+
     /**
      * 替换产品的应用场景
      * @param productId

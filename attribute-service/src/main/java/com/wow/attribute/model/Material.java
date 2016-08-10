@@ -6,13 +6,13 @@ import java.util.List;
 /**
  * Created by win7 on 2016/8/4.
  */
-public class CategoryMaterial implements Serializable {
+public class Material implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private int id;
 
-    private String material;
+    private String name;
 
     public int getId() {
         return id;
@@ -22,11 +22,11 @@ public class CategoryMaterial implements Serializable {
         this.id = id;
     }
 
-    public String getMaterial() {
-        return material;
+    public String getName() {
+        return name;
     }
 
-    public void setMaterial(String material) {
-        this.material = material;
+    public void setName(String name) {
+        this.name = name;
     }
 }

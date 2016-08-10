@@ -194,8 +194,8 @@ public class PayServiceImpl implements PayService {
         SaleOrderPayCharge saleOrderPayCharge = queryPayChargeByOrderCode(charge.getOrderNo());
         //如果凭据已经存在 则更新相关的凭据
         if (saleOrderPayCharge != null) {
-            SaleOrderPayCharge targetSaleOrderCharge=new SaleOrderPayCharge();
-            
+            SaleOrderPayCharge targetSaleOrderCharge = new SaleOrderPayCharge();
+
             targetSaleOrderCharge.setId(saleOrderPayCharge.getId());
             targetSaleOrderCharge.setChargeId(charge.getId());
 
@@ -301,7 +301,7 @@ public class PayServiceImpl implements PayService {
         saleOrderVo.setPaymentStatus(CommonConstant.PAID);
         //设置期望的订单支付状态为未支付
         saleOrderVo.setExpectPaymentStatus(CommonConstant.UNPAY);
-        saleOrderVo.setPaidTime(DateUtil.convertToDate(charge.getTimePaid()));
+        saleOrderVo.setPaidTime(DateUtil.currentDate()); //设置实际支付的时间 因为ping++支付返回的支付时间错误
         saleOrderVo.setUpdateTime(DateUtil.currentDate());
 
         //修改订单状态
