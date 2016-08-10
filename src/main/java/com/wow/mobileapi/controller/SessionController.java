@@ -168,11 +168,11 @@ public class SessionController extends BaseController {
         String sessionToken = apiRequest.getSessionToken();
         byte channel = apiRequest.getChannel();
 
-        TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(sessionToken, channel);
-        if (tokenValidateResponse == null || !tokenValidateResponse.isValid()) {
-            ErrorResponseUtil.setErrorResponse(apiResponse, ErrorCodeConstant.INVALID_TOKEN);
-            return apiResponse;
-        }
+//        TokenValidateResponse tokenValidateResponse = sessionService.isValidSessionToken(sessionToken, channel);
+//        if (tokenValidateResponse == null || !tokenValidateResponse.isValid()) {
+//            ErrorResponseUtil.setErrorResponse(apiResponse, ErrorCodeConstant.INVALID_TOKEN);
+//            return apiResponse;
+//        }
 
         try {
             CommonResponse commonResponse = sessionService

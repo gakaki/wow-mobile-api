@@ -38,6 +38,13 @@ public interface PriceService {
      */
     ProductPriceResponse getProductPrice(int productId);
 
+    /**
+     * 标记产品价格为已删除
+     * @param productIds
+     * @return
+     */
+    int markProductPricesDeleted(List<Integer> productIds);
+
 //    /**
 //     * 查询系列产品价格(取子品中售价最低的)
 //     *

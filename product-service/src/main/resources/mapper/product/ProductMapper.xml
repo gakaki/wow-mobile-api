@@ -871,7 +871,7 @@
   </update>
 
  <!-- 按分类查询产品并按上架时间排序 -->
-  <select id="selectProductByCategoryOrderByOnShelfTime" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductByCategoryOrderByOnShelfTimeListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
     select
     p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
@@ -887,7 +887,7 @@
   </select>
 
   <!-- 按分类查询产品并按销量排序 -->
-  <select id="selectProductByCategoryOrderBySoldQty" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductByCategoryOrderBySoldQtyListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
   	select
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
@@ -904,7 +904,7 @@
   </select>
 
   <!-- 按分类查询产品并按价格排序 -->
-  <select id="selectProductByCategoryOrderBySellPrice" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
+  <select id="selectProductByCategoryOrderBySellPriceListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
   	select
     	p.id as productId,p.product_name as productName,pp.sell_price as sellPrice
     from product p
