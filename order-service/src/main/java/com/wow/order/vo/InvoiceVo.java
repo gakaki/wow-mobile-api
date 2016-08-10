@@ -20,4 +20,30 @@ public class InvoiceVo {
      * 是否需要商品清单
      */
     private boolean isNeedProductList;
+    public int getInvoiceType() {
+        return invoiceType;
+    }
+    public void setInvoiceType(int invoiceType) {
+        this.invoiceType = invoiceType;
+    }
+    public int getInvoiceMethod() {
+        return invoiceMethod;
+    }
+    public void setInvoiceMethod(int invoiceMethod) {
+        this.invoiceMethod = invoiceMethod;
+    }
+    public int getInvoiceTitle() {
+        return invoiceTitle;
+    }
+    public void setInvoiceTitle(int invoiceTitle) {
+        this.invoiceTitle = invoiceTitle;
+    }
+    public boolean isNeedProductList() {
+        return isNeedProductList;
+    }
+    public void setNeedProductList(boolean isNeedProductList) {
+        this.isNeedProductList = isNeedProductList;
+    }
+    
+    
 }

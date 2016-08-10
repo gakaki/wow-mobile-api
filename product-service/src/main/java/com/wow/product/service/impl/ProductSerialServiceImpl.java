@@ -1,20 +1,19 @@
 package com.wow.product.service.impl;
 
-import com.wow.product.mapper.ProductSerialMapper;
-import com.wow.product.model.Product;
-import com.wow.product.model.ProductSerial;
-import com.wow.product.model.ProductSerialExample;
-import com.wow.product.service.BrandService;
-import com.wow.product.service.DesignerService;
-import com.wow.product.service.ProductSerialService;
-import com.wow.product.service.ProductService;
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.function.Consumer;
+import com.wow.product.mapper.ProductSerialMapper;
+import com.wow.product.model.Product;
+import com.wow.product.model.ProductSerial;
+import com.wow.product.model.ProductSerialExample;
+import com.wow.product.service.ProductSerialService;
+import com.wow.product.service.ProductService;
 
 /**
  * Created by fangying@wowdsgn on 2016/7/4.
@@ -28,12 +27,6 @@ public class ProductSerialServiceImpl implements ProductSerialService {
 
     @Autowired
     ProductService productService;
-
-    @Autowired
-    private BrandService brandService;
-
-    @Autowired
-    private DesignerService designerService;
 
 
     /**

@@ -1,16 +1,16 @@
 package com.wow.product.service.impl;
 
-import com.wow.product.mapper.SceneMapper;
-import com.wow.product.model.Scene;
-import com.wow.product.model.SceneExample;
-import com.wow.product.service.ProductCombineService;
-import com.wow.product.service.SceneService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.wow.product.mapper.SceneMapper;
+import com.wow.product.model.Scene;
+import com.wow.product.model.SceneExample;
+import com.wow.product.service.SceneService;
 
 /**
  * Created by fangying@wowdsgn on 2016/7/7.
@@ -20,8 +20,6 @@ import java.util.List;
 public class SceneServiceImpl implements SceneService {
     @Autowired
     private SceneMapper sceneMapper;
-    @Autowired
-    private ProductCombineService productCombineService;
     @Override
     public int createScene(Scene scene) {
         return sceneMapper.insertSelective(scene);
