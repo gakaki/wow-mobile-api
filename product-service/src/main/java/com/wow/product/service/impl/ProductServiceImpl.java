@@ -249,7 +249,7 @@ public class ProductServiceImpl implements ProductService {
         String productMaterialText;
     }
 
-    private ProductMaterialList createProductMaterialList(Integer productId, List<Integer> materialIds) {
+    private ProductMaterialList createProductMaterialList(Integer productId, List<String> materialIds) {
         if (CollectionUtil.isEmpty(materialIds)) {
             return null;
         }
@@ -257,7 +257,7 @@ public class ProductServiceImpl implements ProductService {
         StringBuilder materialTextBuilder = new StringBuilder();
         List<ProductMaterial> materialList = new ArrayList<ProductMaterial>();
         long i = 0;
-        for (Integer materialId : materialIds) {
+        for (String materialId : materialIds) {
             ProductMaterial productMaterial = new ProductMaterial();
             productMaterial.setProductId(productId);
             productMaterial.setMaterialId(materialId);
@@ -266,7 +266,7 @@ public class ProductServiceImpl implements ProductService {
                 materialTextBuilder.append(",");
             }
             ++i;
-            materialTextBuilder.append(MaterialEnum.get(materialId));
+            materialTextBuilder.append(materialId);
         }
         ProductMaterialList productMaterialList = new ProductMaterialList();
         productMaterialList.productMaterialList = materialList;
@@ -421,7 +421,7 @@ public class ProductServiceImpl implements ProductService {
         List<ColorSpecVo> colorSpecVoList = productCreateRequest.getColorSpecVoList();
         List<ProductImgVo> productImgVoList = productCreateRequest.getProductImgVoList();
         List<DesignerVo> designerVoList = productCreateRequest.getDesignerVoList();
-        List<Integer> materialIds = productCreateRequest.getMaterialList();
+        List<String> materialIds = productCreateRequest.getMaterialList();
 
         //统统存成系列品
         if(CollectionUtil.isEmpty(colorSpecVoList)) {
@@ -454,12 +454,12 @@ public class ProductServiceImpl implements ProductService {
         //创建产品材质绑定
         String materialText = "";
         List<ProductMaterial> productMaterialList = new ArrayList<ProductMaterial>();
-        for (Integer materialId : materialIds) {
+        for (String materialId : materialIds) {
             ProductMaterial productMaterial = new ProductMaterial();
             productMaterial.setProductId(productId);
             productMaterial.setMaterialId(materialId);
             productMaterialList.add(productMaterial);
-            materialText += MaterialEnum.get(materialId) + ",";
+            materialText += materialId + ",";
         }
         createProductMaterial(productMaterialList);
         if (StringUtil.isNotEmpty(materialText)) {
@@ -731,30 +731,31 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    public List<Material> getMaterialInProduct(Integer productId) {
+    public List<String> getMaterialInProduct(Integer productId) {
 
         ProductMaterialExample productMaterialExample=new ProductMaterialExample();
         productMaterialExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo(productId);
         List<ProductMaterial> productMaterials=productMaterialMapper.selectByExample(productMaterialExample);
         if(!productMaterials.isEmpty())
         {
-            HashSet<Integer> materialIds=new HashSet<>();
+            List<String> materialIds=new ArrayList<String>();
             for(ProductMaterial productMaterial:productMaterials)
             {
                 materialIds.add(productMaterial.getMaterialId());
             }
-            return getMaterialById(new ArrayList<>(materialIds));
+//            return getMaterialById(new ArrayList<>(materialIds));
+            return materialIds;
         }
 
         return null;
     }
 
-    private  List<Material> getMaterialById(List<Integer> ids)
-    {
-        MaterialExample example=new MaterialExample();
-        example.or().andIdIn(ids).andIsDeletedEqualTo(false);
-        return materialMapper.selectByExample(example);
-    }
+//    private  List<Material> getMaterialById(List<String> ids)
+//    {
+//        MaterialExample example=new MaterialExample();
+//        example.or().andIdIn(ids).andIsDeletedEqualTo(false);
+//        return materialMapper.selectByExample(example);
+//    }
     @Override
     public int createProductMaterial(List<ProductMaterial> productMaterials) {
         /*if(!productMaterials.isEmpty())

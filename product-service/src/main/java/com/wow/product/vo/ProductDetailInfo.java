@@ -28,7 +28,7 @@ public class ProductDetailInfo {
     private String applicablePeople;
     private Boolean canCustomized;
     private List<String> applicableSceneList;
-    private List<Integer> materialList;
+    private List<String> materialList;
     private String detailDescription;
 
     public void setupBaseInfo(Product product) {
@@ -61,7 +61,7 @@ public class ProductDetailInfo {
     }
 
     public void setupMaterials(List<ProductMaterial> productMaterials) {
-        List<Integer> materialList = new ArrayList<>(productMaterials.size());
+        List<String> materialList = new ArrayList<>(productMaterials.size());
         for (ProductMaterial productMaterial : productMaterials) {
             materialList.add(productMaterial.getMaterialId());
         }
@@ -204,11 +204,11 @@ public class ProductDetailInfo {
         this.applicableSceneList = applicableSceneList;
     }
 
-    public List<Integer> getMaterialList() {
+    public List<String> getMaterialList() {
         return materialList;
     }
 
-    public void setMaterialList(List<Integer> materialList) {
+    public void setMaterialList(List<String> materialList) {
         this.materialList = materialList;
     }
 
