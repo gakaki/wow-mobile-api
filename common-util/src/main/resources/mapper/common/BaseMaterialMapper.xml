@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wow.common.mapper.BaseMaterialMapper" >
+  <resultMap id="BaseResultMap" type="com.wow.common.model.BaseMaterial" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="material_name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="queryAllMaterial" resultMap="BaseResultMap">
+    select id,material_name from material where is_deleted=0
+  </select>
+  
+</mapper>

@@ -1,5 +1,7 @@
 package com.wow.common.factory;
 
+import com.wow.common.util.CountryUtil;
+import com.wow.common.util.MaterialDataUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -32,7 +34,10 @@ public class SpringBeanFactory implements ApplicationContextAware {
         
         //初始化数据字典
         DictionaryUtil.init();
-        
+
+        MaterialDataUtil.init();
+
+        CountryUtil.init();
         //初始化结束...
     }
 
