@@ -21,20 +21,6 @@ public class CommonConstant {
     //除数常量 100
     public static final BigDecimal HUNDRED_IGDECIMAL = new BigDecimal("100");
 
-    //运费阀值
-    public static final BigDecimal THRESHOLD = convertStringToDecimal(DictionaryUtil
-        .getValue("order", "order_deliveryFee_threshold"));
-
-    //运费阀值 long类型
-    public static final long THRESHOLD_LONG = NumberUtil.convertToFen(CommonConstant.THRESHOLD);
-
-    //运费
-    public static final BigDecimal DELIVERYFEE = convertStringToDecimal(DictionaryUtil
-        .getValue("order", "order_deliveryFee"));
-
-    //运费 long类型
-    public static final long DELIVERYFEE_LONG = NumberUtil.convertToFen(CommonConstant.DELIVERYFEE);
-
     //是
     public static final int MAX_PAGE = 100;
 
