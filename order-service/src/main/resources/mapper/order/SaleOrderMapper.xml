@@ -701,9 +701,15 @@
 	    from sale_order
 	    <where>
 	       end_user_id=#{model.endUserId}
-	       <if test="model.orderStatus != null">
-            and order_status = #{model.orderStatus}
-      </if>
+	           <if test="model.orderStatus != null">
+                   and order_status = #{model.orderStatus}
+              </if>
+               <if test="model.orderStatusList != null">
+                     and order_status in
+	             <foreach collection="model.orderStatusList"   item="item"  open="(" close=")"  separator="," >
+	                   #{item}
+	            </foreach>
+               </if>
 	    </where>
 	    order by order_create_time desc
   </select>
