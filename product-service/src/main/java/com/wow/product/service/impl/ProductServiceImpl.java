@@ -9,7 +9,6 @@ import com.wow.attribute.vo.response.CategoryListResponse;
 import com.wow.attribute.vo.response.CategoryResponse;
 import com.wow.common.constant.BizConstant;
 import com.wow.common.constant.ErrorCodeConstant;
-import com.wow.common.enums.MaterialEnum;
 import com.wow.common.enums.ProductStatusEnum;
 import com.wow.common.page.PageData;
 import com.wow.common.page.PageModel;
@@ -470,14 +469,69 @@ public class ProductServiceImpl implements ProductService {
         return commonResponse;
     }
 
+    private static ProductImage createDeletedProductImageRecord() {
+        ProductImage record = new ProductImage();
+        record.setIsDeleted(true);
+        return record;
+    }
+
+    private static final ProductImage deletedProductImageRecord = createDeletedProductImageRecord();
+
+    private int deleteProductImageList(Integer productId, List<Integer> imageList) {
+        if (CollectionUtil.isEmpty(imageList)) {
+            return 0;
+        }
+        ProductImageExample example = new ProductImageExample();
+        example.or().andIdIn(imageList).andProductIdEqualTo(productId);
+        return productImageMapper.updateByExampleSelective(deletedProductImageRecord, example);
+    }
+
+    /**
+     * 批量更新产品的图片信息, id 为 null 的图片为新增图片。
+     * @param productId
+     * @param productDetailImages
+     * @return
+     */
+    private int updateProductImageList(Integer productId, List<ProductDetailImage> productDetailImages) {
+        if (CollectionUtil.isEmpty(productDetailImages)) {
+            return 0;
+        }
+        int n = 0;
+        List<ProductImage> productImageList = new ArrayList<>();
+        for (ProductDetailImage productDetailImage : productDetailImages) {
+            if (!productDetailImage.isModifed()) {
+                continue;
+            }
+
+            ProductImage productImage = productDetailImage.buildProductImage();
+            if (productImage.getId() == null) {
+                productImage.setProductId(productId);
+                productImageList.add(productImage);
+                continue;
+            }
+
+            // Ensure that this image is attached to this product.
+            ProductImageExample productImageExample = new ProductImageExample();
+            productImageExample.or().andIdEqualTo(productImage.getId()).andProductIdEqualTo(productId);
+            productImage.setId(null);
+            n += productImageMapper.updateByExampleSelective(productImage, productImageExample);
+        }
+        return n + addProductImages(productImageList);
+    }
+
     /**
      * 更新产品的图文信息
-     * @param productUpdateRequest
+     * @param productUpdateImagesRequest
      * @return
      */
     @Override
-    public CommonResponse updateProductImages(ProductUpdateRequest productUpdateRequest) {
+    public CommonResponse updateProductImages(ProductUpdateImagesRequest productUpdateImagesRequest) {
         CommonResponse commonResponse = new CommonResponse();
+
+        Integer productId = productUpdateImagesRequest.getProductId();
+
+        deleteProductImageList(productId, productUpdateImagesRequest.getDeleteds());
+        updateProductImageList(productId, productUpdateImagesRequest.getUpdateds());
 
         return commonResponse;
     }
