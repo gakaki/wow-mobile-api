@@ -91,12 +91,24 @@ public class RedisUtil {
     }
 
     /**
-     * 批量设置缓存 建议每次最大不超过100个key
+     * 批量设置缓存 建议每次最大不超过50个key
      *
      * @param key
      * @return
      */
-    public static boolean multiSet(final Map<Serializable, Object> map) {
+    public static void multiSet(final Map<Serializable, Object> map) {
+        ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+
+        operations.multiSet(map);
+    }
+
+    /**
+     * 批量设置缓存 建议每次最大不超过50个key 如果包含的key中已经有数据存在 则不会set
+     *
+     * @param key
+     * @return
+     */
+    public static boolean multiSetIfAbsent(final Map<Serializable, Object> map) {
         ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
 
         return operations.multiSetIfAbsent(map);
