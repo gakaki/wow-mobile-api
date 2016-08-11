@@ -1,6 +1,7 @@
 package com.wow.order.vo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.wow.common.page.PageQuery;
 
@@ -18,6 +19,17 @@ public class OrderListQuery extends PageQuery implements Serializable {
 
     //订单状态
     private Byte orderStatus;
+    
+    //订单状态集合 支持获取多个订单状态的列表 如果orderStatus和orderStatusList都不为空 则优先按照orderStatus来查询
+    private List<Byte> orderStatusList;
+    
+    public List<Byte> getOrderStatusList() {
+        return orderStatusList;
+    }
+
+    public void setOrderStatusList(List<Byte> orderStatusList) {
+        this.orderStatusList = orderStatusList;
+    }
 
     public Byte getOrderStatus() {
         return orderStatus;

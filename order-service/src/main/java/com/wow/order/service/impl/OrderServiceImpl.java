@@ -1075,6 +1075,11 @@ public class OrderServiceImpl implements OrderService {
 
             return response;
         }
+        
+        //如果要查询的订单状态和订单列表都存在 则以单个订单状态为准
+        if(query.getOrderStatus()!=null  && CollectionUtil.isNotEmpty(query.getOrderStatusList())){
+            query.setOrderStatusList(null);
+        }
 
         //设置分页查询对象
         PageModel model = new PageModel();

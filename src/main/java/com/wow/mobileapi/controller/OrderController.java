@@ -65,7 +65,7 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderSettleResponse);
             }
         } catch (Exception e) {
-            logger.error("获取产品结算信息错误---" ,e);
+            logger.error("获取产品结算信息错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -178,10 +178,12 @@ public class OrderController extends BaseController {
         OrderListResponse orderListResponse = null;
         try {
             OrderListQuery query = new OrderListQuery();
+
             //设置用户id
             Integer endUserId = getUserIdByTokenChannel(request);
             query.setEndUserId(endUserId);
             query.setOrderStatus(orderListRequest.getOrderStatus());
+            query.setOrderStatusList(orderListRequest.getOrderStatusList());
             query.setPageSize(orderListRequest.getPageSize());
             query.setCurrentPage(orderListRequest.getCurrentPage());
 
@@ -233,7 +235,7 @@ public class OrderController extends BaseController {
                 apiResponse.setData(orderDetailResponse);
             }
         } catch (Exception e) {
-            logger.error("查询订单明细错误---",e);
+            logger.error("查询订单明细错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
@@ -301,7 +303,7 @@ public class OrderController extends BaseController {
                 setServiceErrorResponse(apiResponse, commonResponse);
             }
         } catch (Exception e) {
-            logger.error("订单确认收货错误---" ,e);
+            logger.error("订单确认收货错误---", e);
             setInternalErrorResponse(apiResponse);
         }
 
