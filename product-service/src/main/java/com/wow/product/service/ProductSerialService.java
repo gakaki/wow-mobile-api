@@ -57,6 +57,14 @@ public interface ProductSerialService {
     boolean isProductSerial(int productId);
 
     /**
+     * 删除系列产品下的子产品
+     * @param productId
+     * @param subProductIds
+     * @return
+     */
+    int deleteSubProducts(Integer productId, List<Integer> subProductIds);
+
+    /**
      * 查询系列品的主子品
      *
      * @param productId

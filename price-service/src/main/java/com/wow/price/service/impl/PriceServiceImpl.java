@@ -79,6 +79,19 @@ public class PriceServiceImpl implements PriceService {
     }
 
     /**
+     * 更新给定产品的价格
+     * @param productId
+     * @param productPrice
+     * @return
+     */
+    @Override
+    public int updateProductPriceSelectiveByProductId(Integer productId, ProductPrice productPrice) {
+        ProductPriceExample productPriceExample = new ProductPriceExample();
+        productPriceExample.or().andProductIdEqualTo(productId);
+        return productPriceMapper.updateByExampleSelective(productPrice, productPriceExample);
+    }
+
+    /**
      * 查询产品价格
      *
      * @param productId
