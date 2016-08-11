@@ -2,10 +2,10 @@ package com.wow.mobileapi.response.area;
 
 import java.util.List;
 
-import com.wow.common.response.CommonResponse;
+import com.wow.common.response.ApiResponse;
 import com.wow.user.model.Area;
 
-public class AreaResponse extends CommonResponse {
+public class AreaResponse extends ApiResponse {
 
 	private static final long serialVersionUID = 1L;
 	
