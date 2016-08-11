@@ -541,6 +541,20 @@ public class ProductServiceImpl implements ProductService {
         return ListUtil.transform(productSerialList, ProductSerial::getSubProductId);
     }
 
+    private static Product createDeletedProductRecord() {
+        Product record = new Product();
+        record.setIsDeleted(true);
+        return record;
+    }
+
+    private static final Product deletedProductRecord = createDeletedProductRecord();
+
+    private int markProductsDeleted(List<Integer> productIds) {
+        ProductExample example = new ProductExample();
+        example.or().andIdIn(productIds);
+        return productMapper.updateByExampleSelective(deletedProductRecord, example);
+    }
+
     /**
      * 删除产品
      * @param productId
@@ -549,12 +563,13 @@ public class ProductServiceImpl implements ProductService {
     public CommonResponse deleteProduct(Integer productId) {
         CommonResponse commonResponse = new CommonResponse();
 
+        List<Integer> allProductIds = getSubProductIds(productId);
+        allProductIds.add(productId);
+
+        markProductsDeleted(allProductIds);
         markProductMaterialsDeleted(productId);
         designerService.markProductDesignersDeleted(productId);
         applicableSceneService.markProductApplicableScenesDeleted(productId);
-
-        List<Integer> allProductIds = getSubProductIds(productId);
-        allProductIds.add(productId);
         priceService.markProductPricesDeleted(allProductIds);
         productSerialService.deleteProductSerial(productId);
 
