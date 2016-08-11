@@ -3,6 +3,7 @@ package com.wow.common.util;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -85,8 +86,20 @@ public class RedisUtil {
      */
     public static List<Object> multiGet(final Collection<Serializable> keys) {
         ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
-        
+
         return operations.multiGet(keys);
+    }
+
+    /**
+     * 批量设置缓存 建议每次最大不超过100个key
+     *
+     * @param key
+     * @return
+     */
+    public static boolean multiSet(final Map<Serializable, Object> map) {
+        ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+
+        return operations.multiSetIfAbsent(map);
     }
 
     /**

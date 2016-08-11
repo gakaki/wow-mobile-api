@@ -31,6 +31,15 @@ public interface PriceService {
     CommonResponse updateProductPrice(ProductPrice productPrice);
 
     /**
+     * 更新给定产品的价格
+     * @param productId
+     * @param productPrice
+     * @return
+     */
+    int updateProductPriceSelectiveByProductId(Integer productId, ProductPrice productPrice);
+
+
+    /**
      * 查询产品价格
      *
      * @param productId

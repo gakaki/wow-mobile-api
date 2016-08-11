@@ -75,8 +75,8 @@ public class CommonConstant {
         /**  */
         private static final long serialVersionUID = 1L;
         {
-            put("wx", "微信");
-            put("alipay", "支付宝");
+            put("wx", "微信支付");
+            put("alipay", "支付宝支付");
             //            put(THREE, "货到付现金");
             //            put(FOUR, "货到刷卡");
             //            put(FIVE, "支付宝扫码支付");
