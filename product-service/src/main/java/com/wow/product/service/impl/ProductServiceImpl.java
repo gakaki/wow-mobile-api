@@ -346,14 +346,126 @@ public class ProductServiceImpl implements ProductService {
         return commonResponse;
     }
 
+    private Product getMainProduct(Integer productId) {
+        ProductExample productExample = new ProductExample();
+        productExample.or().andIdEqualTo(productId).andProductTypeEqualTo(BizConstant.PRODUCT_TYPE_SERIAL).andIsDeletedEqualTo(false);
+        List<Product> products = productMapper.selectByExample(productExample);
+        if (CollectionUtil.isEmpty(products)) {
+            return null;
+        }
+        return products.get(0);
+    }
+
+    private int updateSubProducts(Product mainProduct, List<ProductDetailSerial> productDetailSerials) {
+        if (CollectionUtil.isEmpty(productDetailSerials)) {
+            return 0;
+        }
+        Product product = new Product();
+        ProductPrice productPrice = new ProductPrice();
+        int n = 0;
+        for (ProductDetailSerial productDetailSerial : productDetailSerials) {
+            productDetailSerial.fillProduct(product);
+            n += productMapper.updateByPrimaryKeySelective(product);
+
+            productPrice.setSellPrice(productDetailSerial.getSellPrice());
+            if (productPrice.getSellPrice() != null) {
+                priceService.updateProductPriceSelectiveByProductId(product.getId(), productPrice);
+            }
+        }
+        return n;
+    }
+
+    private int deleteSubProducts(Product mainProduct, List<Integer> deleteds) {
+        if (CollectionUtil.isEmpty(deleteds)) {
+            return 0;
+        }
+        priceService.markProductPricesDeleted(deleteds);
+        return productSerialService.deleteSubProducts(mainProduct.getId(), deleteds);
+    }
+
+    private int addProductPrices(List<ProductPrice> productPriceList) {
+        for (ProductPrice productPrice : productPriceList) {
+            priceService.createProductPrice(productPrice);
+        }
+        return productPriceList.size();
+    }
+
+    private static void copyPropertiesFromMainProduct(Product subProduct, Product mainProduct) {
+        subProduct.setProductName(mainProduct.getProductName());
+        subProduct.setProductModel(mainProduct.getProductModel());
+        subProduct.setCategoryId(mainProduct.getCategoryId());
+        subProduct.setBrandId(mainProduct.getBrandId());
+        subProduct.setMaterialText(mainProduct.getMaterialText());
+        subProduct.setSellingPoint(mainProduct.getSellingPoint());
+        subProduct.setApplicablePeople(mainProduct.getApplicablePeople());
+        subProduct.setDetailDescription(mainProduct.getDetailDescription());
+
+        subProduct.setOriginCountryId(mainProduct.getOriginCountryId());
+        subProduct.setOriginProvinceId(mainProduct.getOriginProvinceId());
+        subProduct.setOriginCity(mainProduct.getOriginCity());
+
+        subProduct.setLength(mainProduct.getLength());
+        subProduct.setWidth(mainProduct.getWidth());
+        subProduct.setHeight(mainProduct.getHeight());
+        subProduct.setSizeText(mainProduct.getSizeText());
+        subProduct.setStyleId(mainProduct.getStyleId());
+        subProduct.setProductStatus(mainProduct.getProductStatus());
+    }
+    
+    private int addSubProducts(Product mainProduct, List<ProductDetailSerial> productDetailSerials) {
+        if (CollectionUtil.isEmpty(productDetailSerials)) {
+            return 0;
+        }
+        int k = productDetailSerials.size();
+        List<ProductSerial> productSerials = new ArrayList<>(k);
+        List<ProductPrice> productPrices = new ArrayList<>(k);
+
+        for (ProductDetailSerial productDetailSerial : productDetailSerials) {
+            Product subProduct = new Product();
+            copyPropertiesFromMainProduct(subProduct, mainProduct);
+            productDetailSerial.fillProduct(subProduct);
+            subProduct.setId(null);
+            subProduct.setProductType(BizConstant.PRODUCT_TYPE_SERIAL_SUB);
+            subProduct.setProductCode(generateProductCode());
+            createProduct(subProduct);
+
+            Integer subProductId = subProduct.getId();
+
+            ProductSerial productSerial = new ProductSerial();
+            productSerial.setProductId(mainProduct.getId());
+            productSerial.setSubProductId(subProductId);
+            productSerials.add(productSerial);
+
+            //创建子品价格
+            ProductPrice productPrice = new ProductPrice();
+            productPrice.setProductId(subProductId);
+            productPrice.setSellPrice(productDetailSerial.getSellPrice());
+            productPrice.setCostPrice(BigDecimal.ZERO);
+            productPrices.add(productPrice);
+        }
+        productSerialService.createProductSerial(productSerials);
+        return addProductPrices(productPrices);
+    }
+
     /**
      * 更新子产品信息
-     * @param productUpdateRequest
+     * @param productUpdateSerialsRequest
      * @return
      */
     @Override
-    public CommonResponse updateProductSerials(ProductUpdateRequest productUpdateRequest) {
+    public CommonResponse updateProductSerials(ProductUpdateSerialsRequest productUpdateSerialsRequest) {
         CommonResponse commonResponse = new CommonResponse();
+
+        Integer mainProductId = productUpdateSerialsRequest.getProductId();
+        Product mainProduct = getMainProduct(mainProductId);
+        if (mainProduct == null) {
+            ErrorResponseUtil.setErrorResponse(commonResponse, "40202");
+            return commonResponse;
+        }
+
+        updateSubProducts(mainProduct, productUpdateSerialsRequest.getUpdateds());
+        deleteSubProducts(mainProduct, productUpdateSerialsRequest.getDeleteds());
+        addSubProducts(mainProduct, productUpdateSerialsRequest.getAddeds());
 
         return commonResponse;
     }

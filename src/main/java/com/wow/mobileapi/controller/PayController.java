@@ -80,7 +80,7 @@ public class PayController extends BaseController {
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            logger.error("设置请求编码错误---" + e);
+            logger.error("设置请求编码错误---" , e);
         }
 
         try {
