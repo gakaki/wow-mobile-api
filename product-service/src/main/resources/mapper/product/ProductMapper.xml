@@ -981,7 +981,7 @@
 			left join product_designer pd on pd.product_id=p.id
 			left join designer d on d.id=pd.designer_id
 		</if>
-		<if test="model.beginSellPrice!= null and model.endSellPrice!=null">
+		<if test="model.beginSellPrice!= null or model.endSellPrice!=null">
 			left join product_price pp on pp.product_id=p.id
 		</if>
 		where p.product_type=2
@@ -1005,7 +1005,7 @@
 	    </if>
 		GROUP BY ps.product_id having 1=1
 		<if test="model.designerName!= null and model.designerName!=''">
-			and GROUP_CONCAT(d.designer_name) concat('%',#{model.designerName},'%')
+			and GROUP_CONCAT(d.designer_name) like concat('%',#{model.designerName},'%')
 		</if>
 		<if test="model.beginSellPrice!= null and model.beginSellPrice!=''">
 			<![CDATA[
