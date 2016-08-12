@@ -1,6 +1,7 @@
 package com.wow.product.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class ProductPageVo implements Serializable {
 
@@ -13,6 +14,7 @@ public class ProductPageVo implements Serializable {
 	private String productName;
 	private String productImg;
 	private String brandName;//品牌名称
+    private Date createTime;//发布时间
 	
 	public Integer getProductId() {
 		return productId;
@@ -37,6 +39,12 @@ public class ProductPageVo implements Serializable {
 	}
 	public void setBrandName(String brandName) {
 		this.brandName = brandName;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	

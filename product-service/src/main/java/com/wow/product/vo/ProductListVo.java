@@ -2,7 +2,6 @@ package com.wow.product.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class ProductListVo implements Serializable {
 
@@ -17,7 +16,6 @@ public class ProductListVo implements Serializable {
     private Integer stockQty;//库存数
     private Integer totalSoldQty;//销量
     private Byte productStatus;//产品状态
-    private Date createTime;//发布时间
     
 	public Integer getProductId() {
 		return productId;
@@ -72,12 +70,6 @@ public class ProductListVo implements Serializable {
 	}
 	public void setProductStatus(Byte productStatus) {
 		this.productStatus = productStatus;
-	}
-	public Date getCreateTime() {
-		return createTime;
-	}
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
 	}
     
     
