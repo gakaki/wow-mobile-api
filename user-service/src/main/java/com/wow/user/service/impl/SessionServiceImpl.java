@@ -1,11 +1,22 @@
 package com.wow.user.service.impl;
 
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wow.common.response.CommonResponse;
 import com.wow.common.util.CollectionUtil;
 import com.wow.common.util.ErrorResponseUtil;
 import com.wow.common.util.IpConvertUtil;
 import com.wow.user.constant.ThirdPartyPlatformType;
-import com.wow.user.mapper.EndUserMapper;
 import com.wow.user.mapper.EndUserSessionMapper;
 import com.wow.user.model.EndUser;
 import com.wow.user.model.EndUserLoginLog;
@@ -21,17 +32,6 @@ import com.wow.user.vo.ThirdPartyLoginVo;
 import com.wow.user.vo.response.LoginResponse;
 import com.wow.user.vo.response.TokenValidateResponse;
 import com.wow.user.vo.response.UserResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by zhengzhiqing on 16/6/16.
@@ -41,9 +41,6 @@ import java.util.UUID;
 public class SessionServiceImpl implements SessionService {
 
     private static final Logger logger = LoggerFactory.getLogger(SessionServiceImpl.class);
-
-    @Autowired
-    private EndUserMapper endUserMapper;
 
     @Autowired
     private EndUserSessionMapper endUserSessionMapper;
@@ -72,7 +69,7 @@ public class SessionServiceImpl implements SessionService {
         //检查数据库,看手机号和密码是否匹配
         EndUser endUser = userService.authenticate(loginVo.getMobile(), loginVo.getPassword()).getEndUser();
         if (endUser != null) { //验证成功
-            EndUserSession endUserSession = saveOrUpdateSession(loginVo, endUser.getId(),null);
+            EndUserSession endUserSession = saveOrUpdateSession(loginVo, endUser.getId(), null);
             loginResponseVo.setSessionToken(endUserSession.getSessionToken());
             loginResponseVo.setNickName(endUser.getNickName());
             loginResponseVo.setAgeRange(endUser.getAgeRange());
@@ -84,7 +81,7 @@ public class SessionServiceImpl implements SessionService {
             loginResponseVo.setProductQtyInCart(getProductQtyInCartByUserId(endUser.getId()));
             loginResponse.setLoginResponseVo(loginResponseVo);
         } else {
-            ErrorResponseUtil.setErrorResponse(loginResponse,"40101");
+            ErrorResponseUtil.setErrorResponse(loginResponse, "40101");
         }
         return loginResponse;
     }
@@ -117,7 +114,7 @@ public class SessionServiceImpl implements SessionService {
                 loginVo.setLoginChannel(thirdPartyLoginVo.getLoginChannel());
                 loginVo.setMobile(endUser.getMobile());
                 loginVo.setUserAgent(thirdPartyLoginVo.getUserAgent());
-                EndUserSession endUserSession = saveOrUpdateSession(loginVo, endUser.getId(),thirdPartyPlatformType);
+                EndUserSession endUserSession = saveOrUpdateSession(loginVo, endUser.getId(), thirdPartyPlatformType);
                 loginResponseVo.setNickName(endUser.getNickName());
                 loginResponseVo.setSessionToken(endUserSession.getSessionToken());
                 loginResponseVo.setAgeRange(endUser.getAgeRange());
@@ -134,6 +131,7 @@ public class SessionServiceImpl implements SessionService {
         }
         return loginResponse;
     }
+
     /**
      * 查询该用户购物车商品数量
      */
@@ -147,8 +145,7 @@ public class SessionServiceImpl implements SessionService {
      * @param endUserId
      * @param thirdPartyPlatformType - 第三方登录平台(如微信,QQ,微博等)
      */
-    private EndUserSession saveOrUpdateSession(LoginVo loginVo,
-                                     int endUserId, Integer thirdPartyPlatformType) {
+    private EndUserSession saveOrUpdateSession(LoginVo loginVo, int endUserId, Integer thirdPartyPlatformType) {
         EndUserSession endUserSession = getSessionByUserIdAndChannel(endUserId, loginVo.getLoginChannel());
         long loginIp = IpConvertUtil.ipToLong(loginVo.getLoginIp());
         Date now = new Date();
@@ -204,8 +201,8 @@ public class SessionServiceImpl implements SessionService {
      * @param loginChannel
      * @return
      */
-    @Transactional(propagation= Propagation.NOT_SUPPORTED)
-    private EndUserSession getSessionByUserIdAndChannel (int userId, byte loginChannel) {
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    private EndUserSession getSessionByUserIdAndChannel(int userId, byte loginChannel) {
         EndUserSession endUserSession = null;
         EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
         EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
@@ -234,8 +231,6 @@ public class SessionServiceImpl implements SessionService {
         endUserSession.setLastRefreshTime(new Date());
         endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
     }
-
-
 
     /**
      * 用户登出
@@ -268,23 +263,22 @@ public class SessionServiceImpl implements SessionService {
     public TokenValidateResponse isValidSessionToken(String sessionToken, byte loginChannel) {
         TokenValidateResponse tokenValidateResponse = new TokenValidateResponse();
         boolean isValid = false;
-        Integer endUserId = null;
         long currentTime = System.currentTimeMillis();
+        //上次最早应该刷新的时间
         Date mustRefreshAfter = new Date(currentTime - sessionExpirationTime);
-        EndUserSession endUserSession = getValidSessionByTokenChannel(
-                sessionToken, loginChannel, mustRefreshAfter);
+
+        EndUserSession endUserSession = getValidSessionByTokenChannel(sessionToken, loginChannel, mustRefreshAfter);
         if (endUserSession != null && endUserSession.getId() != null) {
             isValid = true;
-            endUserId = endUserSession.getEndUserId();
+            tokenValidateResponse.setEndUserId(endUserSession.getEndUserId());
             //刷新过期时间,不是每次都刷新,仅仅在当前时间与上次刷新时间之间间隔 < 过期时间的25%处刷新
-            if (currentTime - endUserSession.getLastRefreshTime().getTime() < sessionExpirationTime*0.25) {
+            if (currentTime - endUserSession.getLastRefreshTime().getTime() < sessionExpirationTime * 0.25) {
                 refreshSession(endUserSession);
             }
         }
+
         tokenValidateResponse.setValid(isValid);
-        if (endUserId != null) {
-            tokenValidateResponse.setEndUserId(endUserId);
-        }
+
         return tokenValidateResponse;
     }
 
@@ -295,9 +289,7 @@ public class SessionServiceImpl implements SessionService {
      * @param mustRefreshAfter
      * @return
      */
-    private EndUserSession getValidSessionByTokenChannel(
-            String sessionToken, byte loginChannel, Date mustRefreshAfter) {
-        EndUserSession endUserSession = null;
+    private EndUserSession getValidSessionByTokenChannel(String sessionToken, byte loginChannel, Date mustRefreshAfter) {
         EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
         EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
         criteria.andSessionTokenEqualTo(sessionToken);
@@ -308,11 +300,14 @@ public class SessionServiceImpl implements SessionService {
 
         List<EndUserSession> endUserSessions = endUserSessionMapper.selectByExample(endUserSessionExample);
 
-        if (endUserSessions != null && endUserSessions.size()==1) {
+        EndUserSession endUserSession = null;
+
+        if (endUserSessions != null && endUserSessions.size() == 1) {
             endUserSession = endUserSessions.get(0);
         } else if (endUserSessions.size() > 1) {
             //异常,不应该有多条记录
         }
+
         return endUserSession;
 
     }
@@ -327,9 +322,9 @@ public class SessionServiceImpl implements SessionService {
     public CommonResponse invalidateSessionToken(int endUserId) {
         CommonResponse commonResponse = new CommonResponse();
         EndUserSessionExample endUserSessionExample = new EndUserSessionExample();
-        EndUserSessionExample.Criteria criteria=endUserSessionExample.createCriteria();
+        EndUserSessionExample.Criteria criteria = endUserSessionExample.createCriteria();
         criteria.andIdEqualTo(endUserId);
-        List<EndUserSession> endUserSessions=getAllActiveUserSession(endUserId);
+        List<EndUserSession> endUserSessions = getAllActiveUserSession(endUserId);
         for (EndUserSession endUserSession : endUserSessions) {
             endUserSession.setIsActive(false);
             endUserSessionMapper.updateByExampleSelective(endUserSession, endUserSessionExample);
