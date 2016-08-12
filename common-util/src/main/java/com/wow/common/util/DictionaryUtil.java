@@ -26,7 +26,7 @@ public class DictionaryUtil {
     //存放组对应的数据字典信息
     private static final Map<String, List<Dictionary>> groupMap = new HashMap<String, List<Dictionary>>();
     //存放key对应的数据字典信息
-    private static final Map<String, Dictionary> keyMap = new HashMap<String, Dictionary>(300);
+    private static final Map<String, Dictionary> keyMap = new HashMap<String, Dictionary>(50);
 
     /**
      * 初始化数据字典信息
