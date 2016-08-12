@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -205,8 +206,17 @@ public class PriceServiceImpl implements PriceService {
      * @param updateEndTime
      * @return
      */
-    public List<ProductPrice> selectPriceChangedProduct(String updateStartTime,String updateEndTime){
-    	return productPriceMapper.selectPriceChangedProduct(updateStartTime, updateEndTime);
+    public List<Integer> selectPriceChangedProductIds(String updateStartTime,String updateEndTime){
+    	return productPriceMapper.selectPriceChangedProductIds(updateStartTime, updateEndTime);
+    }
+    
+    /**
+     * 定时任务执行
+     * @param productIds
+     * @return
+     */
+    public List<ProductPrice> selectMinPriceByProductIds(@Param("productIds") List<Integer> productIds){
+    	return productPriceMapper.selectMinPriceByProductIds(productIds);
     }
     
     /**

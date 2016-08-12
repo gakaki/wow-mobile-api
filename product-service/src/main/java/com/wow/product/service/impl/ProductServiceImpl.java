@@ -192,7 +192,7 @@ public class ProductServiceImpl implements ProductService {
         product.setOriginCountryId(info.getOriginCountryId());
         product.setOriginProvinceId(info.getOriginProvinceId());
         product.setOriginCity(info.getOriginCity());
-        if (product.getOriginCountryId() != 0) {
+        if (product.getOriginCountryId() != null) {
             if (product.getOriginCity() == null) {
                 product.setOriginCity("");
             }
@@ -308,6 +308,10 @@ public class ProductServiceImpl implements ProductService {
         return productMaterialMapper.addByBatch(productMaterials);
     }
 
+    private int syncProductInfoFromMainProductSelective(Product product) {
+        return productMapper.syncProductInfoFromMainProductSelective(product);
+    }
+
     /**
      * 更新产品的描述信息
      * @param productUpdateRequest
@@ -341,6 +345,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         updateProduct(product);
+        syncProductInfoFromMainProductSelective(product);
 
         return commonResponse;
     }
@@ -361,6 +366,7 @@ public class ProductServiceImpl implements ProductService {
         }
         Product product = new Product();
         ProductPrice productPrice = new ProductPrice();
+        productPrice.setUpdateTime(new Date());
         int n = 0;
         for (ProductDetailSerial productDetailSerial : productDetailSerials) {
             productDetailSerial.fillProduct(product);

@@ -355,13 +355,22 @@
     and is_deleted = false
   </select>
 
-  <select id="selectPriceChangedProduct" resultType="com.wow.price.model.ProductPrice" parameterType="map">
+  <select id="selectPriceChangedProductIds" resultType="java.lang.Integer" parameterType="map">
   	<![CDATA[
-	  	SELECT ps.product_id as productId,MIN(pp.sell_price) as sellPrice 
+	  	SELECT ps.product_id as productId
 	  	FROM product_serial ps LEFT JOIN `product_price` pp on pp.product_id=ps.sub_product_id 
 	  	where pp.update_time>=#{updateStartTime} and pp.update_time<=#{updateEndTime}
-	  	GROUP BY ps.product_id;
+	  	GROUP BY ps.product_id
   	]]>
+  </select>
+
+  <select id="selectMinPriceByProductIds" resultType="com.wow.price.model.ProductPrice" parameterType="map">
+	  	select ps.product_id as productId,MIN(pp.sell_price) as sellPrice from product_serial ps
+ 		LEFT JOIN `product_price` pp on pp.product_id=ps.sub_product_id 
+		where ps.product_id in
+		<foreach collection="productIds" index="index" item="productId" open="(" separator="," close=")">
+	      #{productId,jdbcType=INTEGER}
+	    </foreach>
   </select>
   
   <update id="updateProductMinPrice" parameterType="com.wow.price.model.ProductPrice" >

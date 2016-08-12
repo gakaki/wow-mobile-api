@@ -973,7 +973,7 @@
   
   <!-- 后台产品列表分页查询 -->
   <select id="selectProductListPage" resultType="com.wow.common.page.PageData"  parameterType="com.wow.common.page.PageModel">
-  	select ps.product_id as productId,p.product_name as productName,b.brand_cname as brandName
+  	select ps.product_id as productId,p.product_name as productName,b.brand_cname as brandName,p.create_time as createTime
 		from product_serial ps
 		left join product p on p.id=ps.product_id
 		left join brand b on b.id=p.brand_id
@@ -1024,7 +1024,7 @@
   <select id="selectProductByProductIds" resultType="com.wow.product.vo.ProductListVo">
   	select
     	psr.product_id as productId,psr.sub_product_id as subProductId,p.product_name as productName,p.spec_name as specName,p.product_code as productCode,
-    	pp.sell_price as sellPrice,ps.total_sold_qty as totalSoldQty,p.product_status as productStatus,p.create_time as createTime
+    	pp.sell_price as sellPrice,ps.total_sold_qty as totalSoldQty,p.product_status as productStatus
     from product_serial psr
     inner join product p on psr.sub_product_id=p.id
     left join product_price pp on pp.product_id=p.id
@@ -1064,4 +1064,86 @@
     where pslit.topic_id = #{topicId,jdbcType=INTEGER}
     order by pslit.sort_order asc
   </select>
+
+  <update id="syncProductInfoFromMainProductSelective">
+    update product
+    <set >
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="productModel != null" >
+        product_model = #{productModel,jdbcType=VARCHAR},
+      </if>
+      <if test="materialText != null" >
+        material_text = #{materialText,jdbcType=VARCHAR},
+      </if>
+      <if test="sellingPoint != null" >
+        selling_point = #{sellingPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="detailDescription != null" >
+        detail_description = #{detailDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="originCountryId != null" >
+        origin_country_id = #{originCountryId,jdbcType=VARCHAR},
+      </if>
+      <if test="originProvinceId != null" >
+        origin_province_id=#{originProvinceId,jdbcType=INTEGER}
+      </if>
+      <if test="originCity != null" >
+        origin_city = #{originCity,jdbcType=VARCHAR},
+      </if>
+      <if test="length != null" >
+        length = #{length,jdbcType=SMALLINT},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=SMALLINT},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=SMALLINT},
+      </if>
+      <if test="sizeText != null" >
+        size_text = #{sizeText,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="weightText != null" >
+        weight_text = #{weightText,jdbcType=VARCHAR},
+      </if>
+      <if test="specName != null" >
+        spec_name = #{specName,jdbcType=VARCHAR},
+      </if>
+      <if test="colorId != null" >
+        color_id = #{colorId,jdbcType=TINYINT},
+      </if>
+      <if test="productColorImg != null" >
+        product_color_img = #{productColorImg,jdbcType=VARCHAR},
+      </if>
+      <if test="colorDisplayName != null" >
+        color_display_name = #{colorDisplayName,jdbcType=VARCHAR},
+      </if>
+      <if test="styleId != null" >
+        style_id = #{styleId,jdbcType=TINYINT},
+      </if>
+      <if test="applicablePeople != null" >
+        applicable_people = #{applicablePeople,jdbcType=VARCHAR},
+      </if>
+      <if test="productStatus != null" >
+        product_status = #{productStatus,jdbcType=TINYINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id in (select sub_product_id from product_serial where product_id = #{id,jdbcType=INTEGER} and is_deleted = false)
+  </update>
 </mapper>
