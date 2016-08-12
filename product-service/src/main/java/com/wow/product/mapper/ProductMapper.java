@@ -66,4 +66,11 @@ public interface ProductMapper {
     List<PageData> queryProductByTopicGroupListPage(PageModel model);
 
     List<ProductVo> selectProductInTopic(@Param("topicId") Integer topicId);
+
+    /**
+     * 同步主产品信息到子产品
+     * @param product
+     * @return
+     */
+    int syncProductInfoFromMainProductSelective(Product product);
 }

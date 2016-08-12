@@ -308,6 +308,10 @@ public class ProductServiceImpl implements ProductService {
         return productMaterialMapper.addByBatch(productMaterials);
     }
 
+    private int syncProductInfoFromMainProductSelective(Product product) {
+        return productMapper.syncProductInfoFromMainProductSelective(product);
+    }
+
     /**
      * 更新产品的描述信息
      * @param productUpdateRequest
@@ -341,6 +345,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         updateProduct(product);
+        syncProductInfoFromMainProductSelective(product);
 
         return commonResponse;
     }
