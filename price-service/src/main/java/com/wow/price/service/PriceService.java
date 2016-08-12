@@ -3,6 +3,8 @@ package com.wow.price.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.wow.common.response.CommonResponse;
 import com.wow.price.model.ProductPrice;
 import com.wow.price.model.ProductPriceChangeLog;
@@ -88,11 +90,18 @@ public interface PriceService {
     List<ProductPriceChangeLog> getPriceChangeLog(int productId);
     
     /**
-     * 更新时间
+     * 查询价格变更的系列品
      * @param updateTime
      * @return
      */
-    List<ProductPrice> selectPriceChangedProduct(String updateStartTime,String updateEndTime);
+    List<Integer> selectPriceChangedProductIds(String updateStartTime,String updateEndTime);
+    
+    /**
+     * 查询价格变更的系列品对应的最小价格
+     * @param productIds
+     * @return
+     */
+    List<ProductPrice> selectMinPriceByProductIds(@Param("productIds") List<Integer> productIds);
     
     /**
      * 修改系列品的最小价格

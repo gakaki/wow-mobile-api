@@ -35,8 +35,9 @@ public interface ProductPriceMapper {
 
     List<ProductPrice> selectByProductIds(@Param("productIds") List<Integer> productIds);
     
-    List<ProductPrice> selectPriceChangedProduct(@Param("updateStartTime") String updateStartTime,@Param("updateEndTime") String updateEndTime);
-    
+    /** 定时任务修改系列品最小价格 **/
+    List<Integer> selectPriceChangedProductIds(@Param("updateStartTime") String updateStartTime,@Param("updateEndTime") String updateEndTime);
+    List<ProductPrice> selectMinPriceByProductIds(@Param("productIds") List<Integer> productIds);
     int updateProductMinPrice(@Param("productId") int productId,@Param("sellPrice") BigDecimal sellPrice);
     
 //    /**
