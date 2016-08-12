@@ -1,8 +1,8 @@
 package com.wow.common.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class ListUtil {
 
@@ -16,6 +16,10 @@ public class ListUtil {
      * @return
      */
     public static <Result, From> List<Result> transform(List<From> list, Function<? super From, ? extends Result> mapper) {
-        return list.stream().map(mapper).collect(Collectors.toList());
+        List<Result> resultList = new ArrayList<Result>();
+        for (From from : list) {
+            resultList.add(mapper.apply(from));
+        }
+        return resultList;
     }
 }
