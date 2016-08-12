@@ -984,7 +984,7 @@
 		<if test="model.beginSellPrice!= null or model.endSellPrice!=null">
 			left join product_price pp on pp.product_id=p.id
 		</if>
-		where p.product_type=2
+		where p.product_type=2 and ps.is_deleted=false and p.is_deleted=false 
 		<if test="model.productName!= null and model.productName!=''">
 	        and p.product_name like concat('%',#{model.productName},'%')
 	    </if>
