@@ -22,7 +22,7 @@ public class PageBannerConfig implements Serializable {
 
     private Integer bannerLinkTargetId;
 
-    private String sortOrder;
+    private Integer sortOrder;
 
     private Date activeFrom;
 
@@ -104,12 +104,12 @@ public class PageBannerConfig implements Serializable {
         this.bannerLinkTargetId = bannerLinkTargetId;
     }
 
-    public String getSortOrder() {
+    public Integer getSortOrder() {
         return sortOrder;
     }
 
-    public void setSortOrder(String sortOrder) {
-        this.sortOrder = sortOrder == null ? null : sortOrder.trim();
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
     }
 
     public Date getActiveFrom() {
