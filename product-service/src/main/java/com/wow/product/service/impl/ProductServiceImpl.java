@@ -361,6 +361,7 @@ public class ProductServiceImpl implements ProductService {
         }
         Product product = new Product();
         ProductPrice productPrice = new ProductPrice();
+        productPrice.setUpdateTime(new Date());
         int n = 0;
         for (ProductDetailSerial productDetailSerial : productDetailSerials) {
             productDetailSerial.fillProduct(product);
