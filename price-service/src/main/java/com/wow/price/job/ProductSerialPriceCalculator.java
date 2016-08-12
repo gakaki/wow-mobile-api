@@ -38,12 +38,13 @@ public class ProductSerialPriceCalculator {
     	Date date = calendar.getTime();
     	String updateStartTime = dateFormater.format(date);
     	
-    	List<ProductPrice> priceChangedProductList = priceService.selectPriceChangedProduct(updateStartTime, updateEndTime);
+    	List<Integer> priceChangedProductIds = priceService.selectPriceChangedProductIds(updateStartTime, updateEndTime);
+    	List<ProductPrice> minPriceProductIdList = priceService.selectMinPriceByProductIds(priceChangedProductIds);
     	
-    	for(ProductPrice productPrice:priceChangedProductList){
+    	for(ProductPrice productPrice:minPriceProductIdList){
     		priceService.updateProductMinPrice(productPrice.getProductId(), productPrice.getSellPrice());
     	}
     	
-    	logger.info("结束更新最小价格变更的系列产品"+df.format(new Date())+",更新结果明细："+priceChangedProductList);
+    	logger.info("结束更新最小价格变更的系列产品"+df.format(new Date())+",更新结果明细："+minPriceProductIdList);
     }
 }
