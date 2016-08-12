@@ -192,7 +192,7 @@ public class ProductServiceImpl implements ProductService {
         product.setOriginCountryId(info.getOriginCountryId());
         product.setOriginProvinceId(info.getOriginProvinceId());
         product.setOriginCity(info.getOriginCity());
-        if (product.getOriginCountryId() != 0) {
+        if (product.getOriginCountryId() != null) {
             if (product.getOriginCity() == null) {
                 product.setOriginCity("");
             }
