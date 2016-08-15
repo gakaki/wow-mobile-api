@@ -271,7 +271,12 @@ public class NumberUtil {
             return 0L;
         }
 
-        return Long.parseLong(sellPrice.toString().replace(".", ""));
+        //如果价格有小数点 则替换小数点
+        if (sellPrice.toString().indexOf(".") >= 0) {
+            return Long.parseLong(sellPrice.toString().replace(".", ""));
+        }
+
+        return mul(sellPrice, CommonConstant.HUNDRED_IGDECIMAL).longValue();
     }
 
     /**
