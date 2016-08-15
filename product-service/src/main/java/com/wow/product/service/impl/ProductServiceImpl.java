@@ -65,9 +65,6 @@ public class ProductServiceImpl implements ProductService {
     private  ProductMaterialMapper productMaterialMapper;
 
     @Autowired
-    private ProductApplicableSceneMapper productApplicableSceneMapper;
-
-    @Autowired
     private MaterialMapper materialMapper;
 
     @Autowired
@@ -107,12 +104,6 @@ public class ProductServiceImpl implements ProductService {
         return productMaterialMapper.selectByExample(productMaterialExample);
     }
 
-    private List<ProductApplicableScene> getProductApplicableScenes(Integer productId) {
-        ProductApplicableSceneExample example = new ProductApplicableSceneExample();
-        example.or().andProductIdEqualTo(productId).andIsDeletedEqualTo(false);
-        return productApplicableSceneMapper.selectByExample(example);
-    }
-
     private ProductDetailInfo getProductDetailInfo(Integer productId) {
         Product product = getProductById(productId);
 
@@ -125,7 +116,7 @@ public class ProductServiceImpl implements ProductService {
         List<ProductMaterial> productMaterials = getProductMaterials(productId);
         productInfo.setupMaterials(productMaterials);
 
-        List<ProductApplicableScene> productApplicableScenes = getProductApplicableScenes(productId);
+        List<ProductApplicableScene> productApplicableScenes = applicableSceneService.getProductApplicableScenes(productId);
         productInfo.setupApplicableScenes(productApplicableScenes);
 
         return productInfo;

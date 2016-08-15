@@ -63,6 +63,12 @@ public interface ApplicableSceneService {
     List<ApplicableScene> getApplicableSceneInProduct(int productId);
 
     /**
+     * 查询产品使用的适用场景引用
+     * @param productId
+     * @return
+     */
+    List<ProductApplicableScene> getProductApplicableScenes(Integer productId);
+    /**
      * 产品适用场景
      *
      * @param applicableScenes

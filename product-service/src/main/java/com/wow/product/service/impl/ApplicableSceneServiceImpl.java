@@ -78,9 +78,7 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
     @Override
     @Transactional(propagation= Propagation.NOT_SUPPORTED)
     public List<ApplicableScene> getApplicableSceneInProduct(int productId) {
-        ProductApplicableSceneExample productApplicableSceneExample=new ProductApplicableSceneExample();
-        productApplicableSceneExample.or().andIsDeletedEqualTo(false).andProductIdEqualTo(productId);
-        List<ProductApplicableScene> productApplicableScenes=productApplicableSceneMapper.selectByExample(productApplicableSceneExample);
+        List<ProductApplicableScene> productApplicableScenes=getProductApplicableScenes(productId);
         if(!productApplicableScenes.isEmpty())
         {
             HashSet<Integer> productApplicableScenes1=new HashSet<>();
@@ -91,6 +89,18 @@ public class ApplicableSceneServiceImpl implements ApplicableSceneService {
             return getApplicableSceneById(new ArrayList<Integer>(productApplicableScenes1));
         }
         return null;
+    }
+
+    /**
+     * 查询产品使用的适用场景引用
+     * @param productId
+     * @return
+     */
+    @Override
+    public List<ProductApplicableScene> getProductApplicableScenes(Integer productId) {
+        ProductApplicableSceneExample example = new ProductApplicableSceneExample();
+        example.or().andProductIdEqualTo(productId).andIsDeletedEqualTo(false);
+        return productApplicableSceneMapper.selectByExample(example);
     }
 
     @Override
