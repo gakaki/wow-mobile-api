@@ -675,6 +675,16 @@ public class CouponExample {
             addCriterion("upper(coupon_desc) like", value.toUpperCase(), "couponDesc");
             return (Criteria) this;
         }
+
+        public Criteria andDeductionToGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("deduction>=", value, "deduction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeductionToLessThanOrEqualTo(String value) {
+            addCriterion("deduction<=", value, "deduction");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

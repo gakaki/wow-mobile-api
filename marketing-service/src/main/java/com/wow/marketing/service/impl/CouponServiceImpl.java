@@ -1,8 +1,13 @@
 package com.wow.marketing.service.impl;
 
+import com.wow.common.response.ApiResponse;
+import com.wow.common.response.CommonResponse;
+import com.wow.common.util.ErrorResponseUtil;
+import com.wow.marketing.mapper.CouponMapper;
 import com.wow.marketing.model.Coupon;
 import com.wow.marketing.model.EndUserCoupon;
 import com.wow.marketing.service.CouponService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,14 +22,21 @@ import java.util.List;
 public class CouponServiceImpl implements CouponService {
     //table: coupon
 
+    @Autowired
+    private CouponMapper couponMapper;
     /**
      * 创建抵用券
      *
      * @param coupon
      * @return
      */
-    public int createCoupon(Coupon coupon) {
-        return 1;
+    public ApiResponse createCoupon(Coupon coupon) {
+        ApiResponse apiResp = new ApiResponse();
+        if(couponMapper.insert(coupon)!=1){
+            ErrorResponseUtil.setErrorResponse(apiResp, "40201");
+            return apiResp;
+        }
+        return apiResp;
     }
 
     /**

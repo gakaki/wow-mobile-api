@@ -11,6 +11,7 @@
     <result column="min_amount_limit" property="minAmountLimit" jdbcType="SMALLINT" />
     <result column="effective_from" property="effectiveFrom" jdbcType="TIMESTAMP" />
     <result column="effective_to" property="effectiveTo" jdbcType="TIMESTAMP" />
+    <result column="deduction" property="deduction" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -72,7 +73,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, coupon_type, coupon_title, coupon_desc, coupon_limit_type, discount_rate, min_amount_limit, 
-    effective_from, effective_to
+    effective_from, effective_to,deduction
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wow.marketing.model.CouponExample" >
     select
@@ -110,10 +111,10 @@
     </selectKey>
     insert into coupon (coupon_type, coupon_title, coupon_desc, 
       coupon_limit_type, discount_rate, min_amount_limit, 
-      effective_from, effective_to)
+      effective_from, effective_to,deduction)
     values (#{couponType,jdbcType=TINYINT}, #{couponTitle,jdbcType=VARCHAR}, #{couponDesc,jdbcType=VARCHAR}, 
       #{couponLimitType,jdbcType=TINYINT}, #{discountRate,jdbcType=DECIMAL}, #{minAmountLimit,jdbcType=SMALLINT}, 
-      #{effectiveFrom,jdbcType=TIMESTAMP}, #{effectiveTo,jdbcType=TIMESTAMP})
+      #{effectiveFrom,jdbcType=TIMESTAMP}, #{effectiveTo,jdbcType=TIMESTAMP},#{deduction,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.wow.marketing.model.Coupon" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -145,6 +146,9 @@
       <if test="effectiveTo != null" >
         effective_to,
       </if>
+      <if test="deduction != null" >
+        deduction,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="couponType != null" >
@@ -170,6 +174,9 @@
       </if>
       <if test="effectiveTo != null" >
         #{effectiveTo,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deduction != null" >
+        #{deduction,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -225,6 +232,7 @@
       min_amount_limit = #{record.minAmountLimit,jdbcType=SMALLINT},
       effective_from = #{record.effectiveFrom,jdbcType=TIMESTAMP},
       effective_to = #{record.effectiveTo,jdbcType=TIMESTAMP}
+      deduction = #{record.deduction,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,6 +264,9 @@
       <if test="effectiveTo != null" >
         effective_to = #{effectiveTo,jdbcType=TIMESTAMP},
       </if>
+      <if test="deduction != null" >
+        deduction = #{deduction,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -268,7 +279,8 @@
       discount_rate = #{discountRate,jdbcType=DECIMAL},
       min_amount_limit = #{minAmountLimit,jdbcType=SMALLINT},
       effective_from = #{effectiveFrom,jdbcType=TIMESTAMP},
-      effective_to = #{effectiveTo,jdbcType=TIMESTAMP}
+      effective_to = #{effectiveTo,jdbcType=TIMESTAMP},
+      deduction = #{deduction,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
