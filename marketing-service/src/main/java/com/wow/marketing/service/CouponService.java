@@ -1,5 +1,7 @@
 package com.wow.marketing.service;
 
+import com.wow.common.response.ApiResponse;
+import com.wow.common.response.CommonResponse;
 import com.wow.marketing.model.Coupon;
 import com.wow.marketing.model.EndUserCoupon;
 
@@ -19,7 +21,7 @@ public interface CouponService {
      * @param coupon
      * @return
      */
-    int createCoupon(Coupon coupon);
+    ApiResponse createCoupon(Coupon coupon);
 
     /**
      * 更新抵用券

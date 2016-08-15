@@ -17,6 +17,8 @@ public class Coupon implements Serializable {
 
     private BigDecimal discountRate;
 
+    private BigDecimal deduction;
+
     private Short minAmountLimit;
 
     private Date effectiveFrom;
@@ -71,6 +73,14 @@ public class Coupon implements Serializable {
 
     public void setDiscountRate(BigDecimal discountRate) {
         this.discountRate = discountRate;
+    }
+
+    public BigDecimal getDeduction() {
+        return deduction;
+    }
+
+    public void setDeduction(BigDecimal deduction) {
+        this.deduction = deduction;
     }
 
     public Short getMinAmountLimit() {
