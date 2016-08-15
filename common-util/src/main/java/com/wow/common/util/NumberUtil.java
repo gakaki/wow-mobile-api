@@ -256,7 +256,7 @@ public class NumberUtil {
             return CommonConstant.ZERO_BIGDECIMAL;
         }
 
-        BigDecimal divide = div(new BigDecimal(String.valueOf(amount)), CommonConstant.HUNDRED_IGDECIMAL);
+        BigDecimal divide = div(new BigDecimal(String.valueOf(amount)), CommonConstant.HUNDRED_BIGDECIMAL);
 
         return toFixedTwo(divide);
     }
@@ -271,7 +271,12 @@ public class NumberUtil {
             return 0L;
         }
 
-        return Long.parseLong(sellPrice.toString().replace(".", ""));
+        //如果价格有小数点 则替换小数点
+        if (sellPrice.toString().indexOf(".") >= 0) {
+            return Long.parseLong(sellPrice.toString().replace(".", ""));
+        }
+
+        return mul(sellPrice, CommonConstant.HUNDRED_BIGDECIMAL).longValue();
     }
 
     /**
