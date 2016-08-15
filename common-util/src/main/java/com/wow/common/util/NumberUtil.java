@@ -256,7 +256,7 @@ public class NumberUtil {
             return CommonConstant.ZERO_BIGDECIMAL;
         }
 
-        BigDecimal divide = div(new BigDecimal(String.valueOf(amount)), CommonConstant.HUNDRED_IGDECIMAL);
+        BigDecimal divide = div(new BigDecimal(String.valueOf(amount)), CommonConstant.HUNDRED_BIGDECIMAL);
 
         return toFixedTwo(divide);
     }
@@ -276,7 +276,7 @@ public class NumberUtil {
             return Long.parseLong(sellPrice.toString().replace(".", ""));
         }
 
-        return mul(sellPrice, CommonConstant.HUNDRED_IGDECIMAL).longValue();
+        return mul(sellPrice, CommonConstant.HUNDRED_BIGDECIMAL).longValue();
     }
 
     /**
